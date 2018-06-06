@@ -3,8 +3,7 @@
 with lib;
 
 let
-  bashColor = "${config.userOptions.cole.bashColor}";
-  tmuxColor = "${config.userOptions.cole.tmuxColor}";
+  cfg = options.userOptions.cole;
   pubkeys = [
     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC9YAN+P0umXeSP/Cgd5ZvoD5gpmkdcrOjmHdonvBbptbMUbI/Zm0WahBDK0jO5vfJ/C6A1ci4quMGCRh98LRoFKFRoWdwlGFcFYcLkuG/AbE8ObNLHUxAwqrdNfIV6z0+zYi3XwVjxrEqyJ/auZRZ4JDDBha2y6Wpru8v9yg41ogeKDPgHwKOf/CKX77gCVnvkXiG5ltcEZAamEitSS8Mv8Rg/JfsUUwULb6yYGh+H6RECKriUAl9M+V11SOfv8MAdkXlYRrcqqwuDAheKxNGHEoGLBk+Fm+orRChckW1QcP89x6ioxpjN9VbJV0JARF+GgHObvvV+dGHZZL1N3jr8WtpHeJWxHPdBgTupDIA5HeL0OCoxgSyyfJncMl8odCyUqE+lqXVz+oURGeRxnIbgJ07dNnX6rFWRgQKrmdV4lt1i1F5Uux9IooYs/42sKKMUQZuBLTN4UzipPQM/DyDO01F0pdcaPEcIO+tp2U6gVytjHhZqEeqAMaUbq7a6ucAuYzczGZvkApc85nIo9jjW+4cfKZqV8BQfJM1YnflhAAplIq6b4Tzayvw1DLXd2c5rae+GlVCsVgpmOFyT6bftSon/HfxwBE4wKFYF7fo7/j6UbAeXwLafDhX+S5zSNR6so1epYlwcMLshXqyJePJNhtsRhpGLd9M3UqyGDAFoOQ== cardno:000607532298"
   ];
@@ -27,7 +26,7 @@ in
     programs.bash.promptInit = ''
       # Provide a nice prompt.
       PROMPT_COLOR="1;31m"
-      let $UID && PROMPT_COLOR="${bashColor}m"
+      let $UID && PROMPT_COLOR="${cfg.bashColor}m"
       PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]\\$\[\033[0m\] "
       if test "$TERM" = "xterm"; then
         PS1="\[\033]2;\h:\u:\w\007\]$PS1"
@@ -60,11 +59,11 @@ in
     programs.tmux = {
       enable = true;
       extraTmuxConf = ''
-        set -g status-style "bg=${tmuxColor}"
+        set -g status-style "bg=${cfg.tmuxColor}"
         set -g mouse
-        set -g pane-border-fg ${tmuxColor}
-        set -g pane-active-border-fg ${tmuxColor}
-        set -g pane-active-border-bg ${tmuxColor}
+        set -g pane-border-fg ${cfg.tmuxColor}
+        set -g pane-active-border-fg ${cfg.tmuxColor}
+        set -g pane-active-border-bg ${cfg.tmuxColor}
         set-option -sg escape-time 10
 
         set -g default-terminal "xterm-256color"
