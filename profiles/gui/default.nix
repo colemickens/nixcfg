@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = options.guiOptions;
+  cfg = config.guiOptions;
 in
 {
   imports = [
@@ -13,18 +13,22 @@ in
     guiOptions.desktopEnvironment = "gnome";
   };
 
-  hardware.pulseaudio.enable = true;
-  nixpkgs.config.pulseaudio = true;
+  #config = mkIf (cfg.desktopEnvironment == "kde") {
+  #  services.xserver.desktopManager.plasma5.enable = true;
+  #} // mkIf (cfg.desktopEnvironment == "gnome") {
+  #  services.xserver.displayManager.gdm.enable = true;
+  #  services.xserver.displayManager.gdm.autoLogin = { user = "cole"; enable = true; };
+  #  services.xserver.desktopManager.gnome3.enable = true;
+  #} //
+  config = { 
+    hardware.pulseaudio.enable = true;
+    nixpkgs.config.pulseaudio = true;
 
-  config = mkIf (cfg.desktopEnvironment == "kde") {
-    services.xserver.desktopManager.plasma5.enable = true;
-  } // mkIf (cfg.desktopEnvironment == "gnome") {
-    services.xserver.displayManager.gdm.enable = true;
-    services.xserver.displayManager.gdm.autoLogin = { user = "cole"; enable = true; };
-    services.xserver.desktopManager.gnome3.enable = true;
-  } // { 
     services = {
       xserver = {
+        displayManager.gdm.enable = true;
+        displayManager.gdm.autoLogin = { user = "cole"; enable = true; };
+        desktopManager.gnome3.enable = true;
         autorun = true;
         #videoDrivers = [ "intel" ];
         videoDrivers = [ "modesetting" ]; # let individual device profiles override this
@@ -60,6 +64,6 @@ in
       yubikey-personalization-gui
       zoom-us
     ];
-  }
-  }
+  };
+}
 

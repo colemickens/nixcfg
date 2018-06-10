@@ -26,7 +26,7 @@ in {
   # newer kernel
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  serivces.fwupdmgr.enable = true;
+  services.fwupd.enable = true;
 
   # pretty boot
   boot.plymouth.enable = true;
