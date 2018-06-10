@@ -15,6 +15,8 @@ in {
   time.timeZone = "America/Los_Angeles";
 
   services.xserver.videoDrivers = [ "nvidia" ];
+  #guiOptions.desktopEnvironment = "kde";
+
 
   hardware = {
     enableRedistributableFirmware = true;

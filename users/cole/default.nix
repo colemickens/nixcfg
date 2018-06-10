@@ -46,8 +46,6 @@ in
           git push;"
       }
       alias nixup="nix build --keep-going --no-link -f '<nixpkgs/nixos>' config.system.build.toplevel && sudo nixos-rebuild switch"
-      alias chimera="ssh -A chimera.mickens.io"
-      alias z="ssh -A z.mickens.io -p22"
       export SSH_PUBLIC_KEY="${builtins.elemAt pubkeys 0}"
       if [[ "$SSH_AUTH_SOCK" == "/run/user/$(id -u)/keyring/ssh" ]]; then
         export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"

@@ -1,25 +1,27 @@
 { config, lib, pkgs, ... }:
 
+with lib;
+
 let
   cfg = config.guiOptions;
 in
 {
+  options = {
+    guiOptions.desktopEnvironment = mkOption { type = types.string; default = "gnome"; };
+  };
+
   imports = [
     ../../users/cole
     ../common
   ];
 
-  options = {
-    guiOptions.desktopEnvironment = "gnome";
-  };
-
-  #config = mkIf (cfg.desktopEnvironment == "kde") {
-  #  services.xserver.desktopManager.plasma5.enable = true;
-  #} // mkIf (cfg.desktopEnvironment == "gnome") {
-  #  services.xserver.displayManager.gdm.enable = true;
-  #  services.xserver.displayManager.gdm.autoLogin = { user = "cole"; enable = true; };
-  #  services.xserver.desktopManager.gnome3.enable = true;
-  #} //
+#  config = mkIf (cfg.desktopEnvironment == "kde") {
+#    services.xserver.desktopManager.plasma5.enable = true;
+#  } // mkIf (cfg.desktopEnvironment == "gnome") {
+#    services.xserver.displayManager.gdm.enable = true;
+#    services.xserver.displayManager.gdm.autoLogin = { user = "cole"; enable = true; };
+#    services.xserver.desktopManager.gnome3.enable = true;
+#  } //
   config = { 
     hardware.pulseaudio.enable = true;
     nixpkgs.config.pulseaudio = true;
@@ -57,6 +59,7 @@ in
       gimp graphviz inkscape
       mplayer vlc
       multibootusb
+      gparted
       pavucontrol
       transmission
       virtmanager virtviewer

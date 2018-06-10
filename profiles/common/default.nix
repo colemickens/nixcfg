@@ -98,6 +98,8 @@ in
     ipfs
     less
     lsof
+    ms-sys
+    ntfs3g
     openssl
     parted
     pciutils
