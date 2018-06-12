@@ -122,6 +122,8 @@ in
 
     aria2 megatools youtube-dl
     pipes
+
+    wimlib
   ];
 }
 
