@@ -61,6 +61,7 @@ in
       multibootusb
       gparted
       pavucontrol
+      spotify
       transmission
       virtmanager virtviewer
       vscode
