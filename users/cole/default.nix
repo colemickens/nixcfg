@@ -11,7 +11,7 @@ in
 {
   options = {
     userOptions.cole = {
-      bashColor = mkOption { type = types.string; default = "0;32"; };
+      bashColor = mkOption { type = types.string; default = "1;32"; };
       tmuxColor = mkOption { type = types.string; default = "green"; };
     };
   };
