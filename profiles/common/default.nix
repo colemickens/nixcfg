@@ -6,6 +6,8 @@ in
   nix.binaryCachePublicKeys = [ "nix-cache.chimera.cloud-1:oA96DtZQ2OgdqxZoBvJ4aTcdilDggvYBZBXUi979c1w=" ]; # TODO: replace with correct key
   nix.trustedBinaryCaches = [ "nix-cache.chimera.cloud" ];
 
+  nix.trustedUsers = [ "cole" "@wheel" ];
+
   imports = [ ./yubikey-gpg.nix ];
 
   nixpkgs.config ={
@@ -107,6 +109,7 @@ in
     pmtools
     powertop
     psmisc
+    qrencode
     slop
     smbclient
     stow
@@ -124,6 +127,7 @@ in
     pipes
 
     wimlib
+    #networkmanager-wireguard
   ];
 }
 

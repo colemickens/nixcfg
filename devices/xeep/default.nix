@@ -11,7 +11,6 @@ in {
 
   userOptions.cole = { tmuxColor="magenta"; bashColor="1;35"; };
 
-  networking.hostName = "xeep";
   time.timeZone = "America/Los_Angeles";
 
   # hidpi stuff
@@ -43,5 +42,25 @@ in {
   powerManagement.enable = true;
   services.tlp.enable = true;
 
-  networking.networkmanager.enable = true;
+  networking = {
+    hostName = "xeep";
+    networkmanager.enable = true;
+
+    wireguard.interfaces = {
+      wg0 = {
+        ips = [ "10.100.0.3/32" ];
+        privateKeyFile = "/secrets/wireguard/xeep_private_key";
+        allowedIPsAsRoutes = false;
+
+        peers = [
+          { # chimera
+            allowedIPs = [ "0.0.0.0/0" ];
+            publicKey = "UTdm4YmQhaRKE/FxUubdRUF8YbDUl2cYIFgjnW7q5BA=";
+            endpoint = "chimera.mickens.io:51820";
+            persistentKeepalive = 25;
+          }
+        ];
+      };
+    };
+  };
 }
