@@ -6,7 +6,7 @@ in
   nix.binaryCachePublicKeys = [ "nix-cache.chimera.cloud-1:oA96DtZQ2OgdqxZoBvJ4aTcdilDggvYBZBXUi979c1w=" ]; # TODO: replace with correct key
   nix.trustedBinaryCaches = [ "nix-cache.chimera.cloud" ];
 
-  nix.trustedUsers = [ "cole" "@wheel" ];
+  nix.trustedUsers = [ "root" "cole" "@wheel" ];
 
   imports = [ ./yubikey-gpg.nix ];
 

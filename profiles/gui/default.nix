@@ -61,6 +61,7 @@ in
       multibootusb
       gparted
       pavucontrol
+      pulseaudio-dlna
       spotify
       transmission
       virtmanager virtviewer
