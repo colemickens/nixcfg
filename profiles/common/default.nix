@@ -128,6 +128,8 @@ in
 
     wimlib
     #networkmanager-wireguard
+
+    iptables
   ];
 }
 
