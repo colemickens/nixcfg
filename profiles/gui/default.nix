@@ -28,9 +28,11 @@ in
 
     services = {
       xserver = {
-        displayManager.gdm.enable = true;
-        displayManager.gdm.autoLogin = { user = "cole"; enable = true; };
-        desktopManager.gnome3.enable = true;
+        #displayManager.gdm.enable = true;
+        #displayManager.gdm.autoLogin = { user = "cole"; enable = true; };
+        #desktopManager.gnome3.enable = true;
+        displayManager.sddm.enable = true;
+        desktopManager.plasma5.enable = true;
         autorun = true;
         #videoDrivers = [ "intel" ];
         videoDrivers = [ "modesetting" ]; # let individual device profiles override this

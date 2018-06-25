@@ -4,6 +4,7 @@ let
 in {
   imports = [
     ../../profiles/gui
+    ../../profiles/cloudvm
     ./hardware-configuration.nix
   ];
 

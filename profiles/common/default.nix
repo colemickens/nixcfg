@@ -130,6 +130,7 @@ in
     #networkmanager-wireguard
 
     iptables
+    flameshot
   ];
 }
 
