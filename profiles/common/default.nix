@@ -131,6 +131,7 @@ in
 
     iptables
     flameshot
+    ksonnet
   ];
 }
 
