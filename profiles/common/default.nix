@@ -132,6 +132,7 @@ in
 
     iptables
     flameshot
+    jsonnet
     ksonnet
     patchelf
 

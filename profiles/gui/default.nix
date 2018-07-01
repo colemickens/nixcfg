@@ -73,6 +73,7 @@ in
 
       redshift-plasma-applet
       redshift
+      slack
     ];
   };
 }
