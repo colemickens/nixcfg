@@ -3,8 +3,8 @@
 let
 in {
   imports = [
-#    ../../profiles/mediaserver
     ../../profiles/mediaserver
+    ../../profiles/kazu
     ./hardware-configuration.nix
     ./network.nix
   ];
