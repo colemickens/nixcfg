@@ -70,6 +70,9 @@ in
       vscode
       yubikey-personalization-gui
       zoom-us
+
+      redshift-plasma-applet
+      redshift
     ];
   };
 }

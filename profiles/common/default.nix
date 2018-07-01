@@ -15,6 +15,7 @@ in
   };
 
   boot.kernel.sysctl = {
+    "fs.file-max" = 100000;
     "fs.inotify.max_user_instances" = 256;
     "fs.inotify.max_user_watches" = 500000;
   };
@@ -132,6 +133,12 @@ in
     iptables
     flameshot
     ksonnet
+    patchelf
+
+    nodejs
+    python2nix
+    minikube
+    ipvsadm
   ];
 }
 

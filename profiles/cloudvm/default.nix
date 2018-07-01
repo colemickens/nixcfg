@@ -8,11 +8,5 @@ in {
   ];
 
   networking.firewall.enable = false;
-
-  services = {
-    kubernetes = {
-      roles = [ "master" "node" ];
-    };
-  };
 }
 
