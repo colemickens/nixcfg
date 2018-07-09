@@ -38,7 +38,10 @@ in
         videoDrivers = [ "modesetting" ]; # let individual device profiles override this
         enable = true;
         layout = "us";
-        libinput.enable = true;
+        libinput = {
+          enable = true;
+          clickMethod = "clickfinger";
+        };
         useGlamor = true;
       };
     };
@@ -58,6 +61,7 @@ in
       arc-theme numix-icon-theme numix-icon-theme-circle tango-icon-theme
       firefox chromium google-chrome
       freerdpUnstable
+      kate
       gimp graphviz inkscape
       mplayer vlc
       multibootusb
@@ -73,6 +77,7 @@ in
 
       redshift-plasma-applet
       redshift
+
       slack
     ];
   };
