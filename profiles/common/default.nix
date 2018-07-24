@@ -134,12 +134,16 @@ in
     iptables
     flameshot
     jsonnet
+    #ksonnet
     patchelf
 
     nodejs
     python2nix
     minikube
     ipvsadm
+    rustup
+    yarn
+    binutils.bintools
   ];
 }
 
