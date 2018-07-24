@@ -24,6 +24,7 @@ in {
 
   # newer kernel
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.extraModulePackages = [ config.boot.kernelPackages.wireguard ];
 
   services.fwupd.enable = true;
 
@@ -45,22 +46,5 @@ in {
   networking = {
     hostName = "xeep";
     networkmanager.enable = true;
-
-    wireguard.interfaces = {
-      wg0 = {
-        ips = [ "10.100.0.3/32" ];
-        privateKeyFile = "/secrets/wireguard/xeep_private_key";
-        allowedIPsAsRoutes = false;
-
-        peers = [
-          { # chimera
-            allowedIPs = [ "0.0.0.0/0" ];
-            publicKey = "UTdm4YmQhaRKE/FxUubdRUF8YbDUl2cYIFgjnW7q5BA=";
-            endpoint = "chimera.mickens.io:51820";
-            persistentKeepalive = 25;
-          }
-        ];
-      };
-    };
   };
 }

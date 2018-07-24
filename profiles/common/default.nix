@@ -122,6 +122,7 @@ in
     weechat
     which
     wireguard
+    wireguard-tools
     usbutils
 
     aria2 megatools youtube-dl
@@ -133,7 +134,6 @@ in
     iptables
     flameshot
     jsonnet
-    ksonnet
     patchelf
 
     nodejs
