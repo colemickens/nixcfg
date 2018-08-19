@@ -34,8 +34,8 @@ in
         displayManager.sddm.enable = true;
         desktopManager.plasma5.enable = true;
         autorun = true;
-        #videoDrivers = [ "intel" ];
-        videoDrivers = [ "modesetting" ]; # let individual device profiles override this
+        videoDrivers = [ "intel" ];
+        #videoDrivers = [ "modesetting" ]; # let individual device profiles override this
         enable = true;
         layout = "us";
         libinput = {
@@ -79,6 +79,10 @@ in
       redshift
 
       slack
+      ark
+      keybase-gui
+      kbfs
+      signal-desktop
     ];
   };
 }

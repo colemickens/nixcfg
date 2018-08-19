@@ -7,7 +7,11 @@ in {
     ./hardware-configuration.nix
   ];
 
-  system.nixos.stateVersion = "18.09";
+  # TODO: reorganize this?
+  # vaapi stuff
+  environment.systemPackages = with pkgs; [ libva libva-full libva-utils ];
+
+  system.stateVersion = "18.09";
 
   userOptions.cole = { tmuxColor="magenta"; bashColor="1;35"; };
 

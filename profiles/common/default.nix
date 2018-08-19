@@ -41,6 +41,8 @@ in
         hinfo = true;
       };
     };
+    kbfs.enable = true;
+    keybase.enable = true;
     locate.enable = true;
     openssh = {
       enable = true;
@@ -70,7 +72,7 @@ in
     fzy ripgrep jq
     keybase
     git cvs git tig mercurial subversion #darcs
-    git-hub gist
+    gitAndTools.hub gist
 
     vim neovim
 
@@ -144,6 +146,10 @@ in
     rustup
     yarn
     binutils.bintools
+    wipe
+    go
+    nodePackages.dat
+    #nodePackages.beaker-browser
   ];
 }
 

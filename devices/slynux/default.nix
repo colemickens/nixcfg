@@ -3,6 +3,7 @@
 let
 in {
   imports = [
+    ../../profiles/common
     ../../profiles/gui
     ../../profiles/cloudvm
     ./hardware-configuration.nix

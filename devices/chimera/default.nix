@@ -3,13 +3,14 @@
 let
 in {
   imports = [
+    ../../profiles/common
     ../../profiles/mediaserver
     ../../profiles/kazu
     ./hardware-configuration.nix
     ./network.nix
   ];
 
-  system.nixos.stateVersion = "18.09"; # Did you read the comment?
+  system.stateVersion = "18.09"; # Did you read the comment?
 
   userOptions.cole = { tmuxColor="cyan"; bashColor="1;36"; };
 

@@ -3,6 +3,7 @@
 let
 in {
   imports = [
+    ../../profiles/common
     ../../profiles/cloudvm
     "${modulesPath}/virtualisation/azure-image.nix"
   ];
