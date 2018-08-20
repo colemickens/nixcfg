@@ -72,6 +72,7 @@ in
     fzy ripgrep jq
     keybase
     git cvs git tig mercurial subversion #darcs
+    pijul
     gitAndTools.hub gist
 
     vim neovim
@@ -150,6 +151,9 @@ in
     go
     nodePackages.dat
     #nodePackages.beaker-browser
+
+    # temporarily, we're leaving twitter
+    t
   ];
 }
 
