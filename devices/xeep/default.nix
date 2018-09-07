@@ -38,6 +38,7 @@ in {
   nix.nixPath = [ "/etc/nixos" "nixpkgs=/etc/nixpkgs" "nixos-config=/etc/nixos/configuration.nix" ];
 
   hardware = {
+    opengl.extraPackages = with pkgs; [ vaapiIntel ];
     enableRedistributableFirmware = true;
     cpu.intel.updateMicrocode = true;
     #enableAllFirmware = true;
