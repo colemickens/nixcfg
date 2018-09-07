@@ -12,9 +12,10 @@ in {
   # dev dependencies
   environment.systemPackages = with pkgs; [ mailcatcher ];
 
+  virtualisation.containerd.enable = true;
+
   services = {
     #kubelet.enable = true;
-    containerd.enable = true;
     #kubernetes = {
     #  roles = [ "master" "node" ];
     #};

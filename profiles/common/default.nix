@@ -154,6 +154,18 @@ in
 
     # temporarily, we're leaving twitter
     t
+
+    # python
+    #python3
+    #python36Packages.toolz
+    #python36Packages.pip
+    python
+
+    # nix related
+    go2nix
+
+    # cloud
+    packet
   ];
 }
 
