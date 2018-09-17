@@ -165,6 +165,7 @@ in
 
     # cloud
     packet
+    nodePackages.cloudflare-cli
   ];
 }
 

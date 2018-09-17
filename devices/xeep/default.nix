@@ -32,9 +32,6 @@ in {
 
   services.fwupd.enable = true;
 
-  # pretty boot
-  #boot.plymouth.enable = true;
-
   nix.nixPath = [ "/etc/nixos" "nixpkgs=/etc/nixpkgs" "nixos-config=/etc/nixos/configuration.nix" ];
 
   hardware = {
@@ -50,6 +47,7 @@ in {
 
   networking = {
     hostName = "xeep";
+    firewall.allowedTCPPorts = [ 3000 ];
     networkmanager.enable = true;
   };
 }
