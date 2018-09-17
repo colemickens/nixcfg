@@ -41,7 +41,7 @@ in
         hinfo = true;
       };
     };
-    kbfs.enable = true;
+    #kbfs.enable = true;
     keybase.enable = true;
     locate.enable = true;
     openssh = {
