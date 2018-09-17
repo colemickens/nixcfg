@@ -78,19 +78,19 @@
       passwordAuthentication = false;
     };
 
-    kubernetes = {
-      roles = [ "master" "node" ];
-      masterAddress = "apiserver.kix.cluster.lol";
+    #kubernetes = {
+    #  roles = [ "master" "node" ];
+    #  masterAddress = "apiserver.kix.cluster.lol";
 
       # TODO: implement/support
       # containerRuntime = "containerd";
       # untrustedRuntime = "kata";
 
-      easyCerts = true;
-      apiserver.extraSANs = [ "kix.cluster.lol" ];
+    #  easyCerts = true;
+    #  apiserver.extraSANs = [ "kix.cluster.lol" ];
 
-      kubelet.extraOpts = "--fail-swap-on=false"; # TODO: add the container runtime flag(s)
-    };
+    #  kubelet.extraOpts = "--fail-swap-on=false"; # TODO: add the container runtime flag(s)
+    #};
   };
 }
 
