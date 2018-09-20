@@ -4,15 +4,12 @@
 {
   imports = [
     /etc/nixos/packet.nix
+    ../../users/cole
   ];
 
-  networking.firewall.enable = false;
+  networking.firewall.enable = false; #TODO: reenable (we were told how on the github pr)
 
-  environment.systemPackages = with pkgs; [
-    cri-tools
-    # temporary:
-    ripgrep
-  ];
+  environment.systemPackages = with pkgs; [ cri-tools ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -78,19 +75,18 @@
       passwordAuthentication = false;
     };
 
-    #kubernetes = {
-    #  roles = [ "master" "node" ];
-    #  masterAddress = "apiserver.kix.cluster.lol";
+    kubernetes = {
+      roles = [ "master" "node" ];
+      masterAddress = "apiserver.kix.cluster.lol";
 
       # TODO: implement/support
       # containerRuntime = "containerd";
       # untrustedRuntime = "kata";
+      easyCerts = true;
+      apiserver.extraSANs = [ "kix.cluster.lol" ];
 
-    #  easyCerts = true;
-    #  apiserver.extraSANs = [ "kix.cluster.lol" ];
-
-    #  kubelet.extraOpts = "--fail-swap-on=false"; # TODO: add the container runtime flag(s)
-    #};
+      kubelet.extraOpts = "--fail-swap-on=false"; # TODO: add the container runtime flag(s)
+    };
   };
 }
 

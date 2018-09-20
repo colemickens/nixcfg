@@ -15,8 +15,11 @@ in
       tmuxColor = mkOption { type = types.string; default = "green"; };
     };
   };
-  #security.pki.certificateFiles = [ "/home/cole/code/colemickens/secrets/mitmproxy/mitmproxy-ca-cert.cer" ];
+
   config = {
+    # bare minimum applications I expect to be available:
+    environment.systemPackages = with pkgs; [ tmux git neovim htop ripgrep ];
+
     i18n = {
       consoleKeyMap = "us";
       defaultLocale = "en_US.UTF-8";
