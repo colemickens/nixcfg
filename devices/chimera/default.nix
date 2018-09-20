@@ -5,7 +5,6 @@ in {
   imports = [
     ../../profiles/common
     ../../profiles/mediaserver
-    ../../profiles/kube
     ./hardware-configuration.nix
     ./network.nix
   ];
