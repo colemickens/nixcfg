@@ -9,7 +9,7 @@ key="/etc/nixos/secrets/nix-cache.cluster.lol-1-secret"
 azkey="$(cat /etc/nixos/secrets/kixstorage-secret)"
 
 # build cache
-mkdir -p "/tmp/nixcache"
+mkdir -p "/tmp/nixcache/nar"
 nix copy --to 'file:///tmp/nixcache' "${target}"
 nix sign-paths --store 'file:///tmp/nixcache' -k "${key}" "${target}" -r
 

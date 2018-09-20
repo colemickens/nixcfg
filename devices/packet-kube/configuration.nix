@@ -52,7 +52,7 @@
   environment.noXlibs = true;
   virtualisation = {
     # it's weird about (docker-)runc, and it's not needed in general
-    docker.enable = false;
+    docker.enable = true;
 
     # the only CRI runtime available right now
     # TODO: this shouldbe set via kubelet's kubelet.containerRuntime = []; # TODO: it might already be?
