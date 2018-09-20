@@ -3,15 +3,15 @@
 set -x
 set -euo pipefail
 
+target="${1:-"/run/current-system"}"
+
 key="/etc/nixos/secrets/nix-cache.cluster.lol-1-secret"
 azkey="$(cat /etc/nixos/secrets/kixstorage-secret)"
 
 # build cache
-
 mkdir -p "/tmp/nixcache"
-nix copy --to 'file:///tmp/nixcache' '/run/current-system'
-nix sign-paths \
-  --store 'file:///tmp/nixcache' -k "${key}" '/run/current-system' -r
+nix copy --to 'file:///tmp/nixcache' "${target}"
+nix sign-paths --store 'file:///tmp/nixcache' -k "${key}" "${target}" -r
 
 # upload
 
@@ -38,6 +38,7 @@ if ! az storage container show --name nixcache ; then
     --public-access container
 fi
 
+# Find only the new files to upload
 rm -rf /tmp/nixcache-upload
 mkdir -p /tmp/nixcache-upload
 cd /tmp/nixcache
