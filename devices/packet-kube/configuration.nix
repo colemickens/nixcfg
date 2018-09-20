@@ -9,7 +9,7 @@
 
   networking.firewall.enable = false; #TODO: reenable (we were told how on the github pr)
 
-  environment.systemPackages = with pkgs; [ cri-tools ];
+  environment.systemPackages = with pkgs; [ cri-tools bind ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
