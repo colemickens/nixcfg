@@ -166,6 +166,8 @@ in
     # cloud
     packet
     nodePackages.cloudflare-cli
+    dep2nix
+    # azure-storage-azcopy # not in kata branch yet, hold off
   ];
 }
 
