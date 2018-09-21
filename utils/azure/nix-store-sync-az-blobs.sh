@@ -9,20 +9,20 @@ key="/etc/nixos/secrets/nix-cache.cluster.lol-1-secret"
 export AZURE_STORAGE_CONNECTION_STRING="$(cat /etc/nixos/secrets/kixstorage-secret)"
 
 # build cache
-#mkdir -p "/tmp/nixcache/nar"
-#nix copy --to 'file:///tmp/nixcache' "${target}"
-#nix sign-paths --store 'file:///tmp/nixcache' -k "${key}" "${target}" -r
+mkdir -p "/tmp/nixcache/nar"
+nix copy --to 'file:///tmp/nixcache' "${target}"
+nix sign-paths --store 'file:///tmp/nixcache' -k "${key}" "${target}" -r
 
 # upload
 
 function az() {
-  command az $@
-  #docker run \
-  #  --net=host \
-  #  --env AZURE_STORAGE_CONNECTION_STRING \
-  #  --volume "/tmp/nixcache:/tmp/nixcache:ro" \
-  #  --volume "/tmp/nixcache-upload:/tmp/nixcache-upload:ro" \
-  #    docker.io/microsoft/azure-cli az $@
+  #command az $@
+  docker run \
+    --net=host \
+    --env AZURE_STORAGE_CONNECTION_STRING \
+    --volume "/tmp/nixcache:/tmp/nixcache:ro" \
+    --volume "/tmp/nixcache-upload:/tmp/nixcache-upload:ro" \
+      docker.io/microsoft/azure-cli az $@
 }
 
 # only to clean?
