@@ -9,7 +9,10 @@
 
   networking.firewall.enable = false; #TODO: reenable (we were told how on the github pr)
 
-  environment.systemPackages = with pkgs; [ cri-tools bind azure-storage-azcopy ];
+  environment.systemPackages = with pkgs; [
+    cri-tools bind azure-storage-azcopy
+    kata-agent
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -67,6 +70,7 @@
     # TODO set this via the "containerd"/"crio" usage of the thing
     # TODO: should we be using application.kata-runtime.eanble instead since theres no service?
     kata-runtime.enable = true;
+    kata-agent.enable = true;
   };
 
   services = {
