@@ -18,7 +18,7 @@ in
 
   config = {
     # bare minimum applications I expect to be available:
-    environment.systemPackages = with pkgs; [ tmux git neovim htop ripgrep ];
+    environment.systemPackages = with pkgs; [ tmux git neovim htop ripgrep jq ];
 
     i18n = {
       consoleKeyMap = "us";

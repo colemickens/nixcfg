@@ -9,12 +9,15 @@ key="/etc/nixos/secrets/nix-cache.cluster.lol-1-secret"
 export AZURE_STORAGE_CONNECTION_STRING="$(cat /etc/nixos/secrets/kixstorage-secret)"
 
 # build cache
-mkdir -p "/tmp/nixcache/nar"
-nix copy --to 'file:///tmp/nixcache' "${target}"
-nix sign-paths --store 'file:///tmp/nixcache' -k "${key}" "${target}" -r
+#mkdir -p "/tmp/nixcache/nar"
+#nix copy --to 'file:///tmp/nixcache' "${target}"
+#nix sign-paths --store 'file:///tmp/nixcache' -k "${key}" "${target}" -r
+
+# prep staging dir (must do this before docker, else its done as root, I guess)
+rm -rf /tmp/nixcache-upload/*
+mkdir -p /tmp/nixcache-upload/nar
 
 # upload
-
 function az() {
   #command az $@
   docker run \
@@ -31,6 +34,7 @@ function az() {
 #  sleep 60
 #fi
 
+
 if ! az storage container show --name nixcache ; then
   az storage container create --help
 
@@ -40,8 +44,6 @@ if ! az storage container show --name nixcache ; then
 fi
 
 # Find only the new files to upload
-rm -rf /tmp/nixcache-upload
-mkdir -p /tmp/nixcache-upload/nar
 cd /tmp/nixcache
 az storage blob list --container-name nixcache | jq -r '.[].name' > /tmp/nixcache-skip
 find . ! -path . -type f | grep -vFf /tmp/nixcache-skip | while read -r a; do
@@ -52,5 +54,5 @@ time az storage blob upload-batch \
   --source /tmp/nixcache-upload \
   --destination nixcache \
 
-rm -rf /tmp/nixcache-upload
+# rm -rf /tmp/nixcache-upload
 
