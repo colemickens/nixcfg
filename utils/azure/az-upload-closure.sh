@@ -9,9 +9,9 @@ key="/etc/nixos/secrets/nix-cache.cluster.lol-1-secret"
 export AZURE_STORAGE_CONNECTION_STRING="$(cat /etc/nixos/secrets/kixstorage-secret)"
 
 # build cache
-#mkdir -p "/tmp/nixcache/nar"
-#nix copy --to 'file:///tmp/nixcache' "${target}"
-#nix sign-paths --store 'file:///tmp/nixcache' -k "${key}" "${target}" -r
+mkdir -p "/tmp/nixcache/nar"
+nix copy --to 'file:///tmp/nixcache' "${target}"
+nix sign-paths --store 'file:///tmp/nixcache' -k "${key}" "${target}" -r
 
 # prep staging dir (must do this before docker, else its done as root, I guess)
 rm -rf /tmp/nixcache-upload/*
