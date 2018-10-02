@@ -35,7 +35,9 @@ in {
   nix.nixPath = [ "/etc/nixos" "nixpkgs=/etc/nixpkgs" "nixos-config=/etc/nixos/configuration.nix" ];
 
   hardware = {
+    bluetooth.enable = true;
     opengl.extraPackages = with pkgs; [ vaapiIntel ];
+    pulseaudio.package = pkgs.pulseaudioFull;
     enableRedistributableFirmware = true;
     cpu.intel.updateMicrocode = true;
     #enableAllFirmware = true;

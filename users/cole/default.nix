@@ -24,7 +24,7 @@ in
       consoleKeyMap = "us";
       defaultLocale = "en_US.UTF-8";
     };
-    
+
     programs.bash.enableCompletion = true;
     programs.bash.promptInit = ''
       # Provide a nice prompt.
@@ -36,19 +36,6 @@ in
       fi
     '';
     programs.bash.interactiveShellInit = ''
-      function work_nixcfg() {
-        watch -n2 "\
-          cd /etc/nixcfg; \
-          git add devices/z;        git commit -m 'AUTO: DEVICES/Z CONFIG'; \
-          git add devices/z2;       git commit -m 'AUTO: DEVICES/Z2 CONFIG'; \
-          git add devices/slynux;   git commit -m 'AUTO: DEVICES/SLYNUX CONFIG'; \
-          git add devices/xeep;     git commit -m 'AUTO: DEVICES/XEEP CONFIG'; \
-          git add profiles/common;  git commit -m 'AUTO: PROFILES/COMMON CONFIG'; \
-          git add profiles/gui;     git commit -m 'AUTO: PROFILES/GUI CONFIG'; \
-          git add users/cole;       git commit -m 'AUTO: USERS/COLE CONFIG'; \
-          git push;"
-      }
-      alias nixup="nix build --keep-going --no-link -f '<nixpkgs/nixos>' config.system.build.toplevel && sudo nixos-rebuild switch"
       export SSH_PUBLIC_KEY="${builtins.elemAt pubkeys 0}"
       if [[ "$SSH_AUTH_SOCK" == "/run/user/$(id -u)/keyring/ssh" ]]; then
         export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
@@ -82,7 +69,7 @@ in
       description = "Cole Mickens";
       hashedPassword = "$6$rIU9KB8Q$2tHIz6wzkAGqM.F7IMjO9dyQzNeo7ksAUDOesw6pcr2AGD9lXqLHIKwZ0g/gIFSP59i06fZguavOtgUttiq6d.";
       shell = "/run/current-system/sw/bin/bash";
-      extraGroups = [ "wheel" "networkmanager" "kvm" "libvirtd" "docker" "transmission" "audio" "video"];
+      extraGroups = [ "wheel" "networkmanager" "kvm" "libvirtd" "docker" "transmission" "audio" "video" "sway" "sound" "pulse" ];
       uid = 1000;
       group = "cole";
       openssh.authorizedKeys.keys = pubkeys;

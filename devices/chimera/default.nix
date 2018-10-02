@@ -4,6 +4,7 @@ let
 in {
   imports = [
     ../../profiles/common
+    ../../profiles/common/ssh.nix
     ../../profiles/mediaserver
     ./hardware-configuration.nix
     ./network.nix

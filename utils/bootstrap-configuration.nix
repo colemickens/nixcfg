@@ -65,7 +65,7 @@ in
       if [[ ! -d /etc/nixpkgs ]]; then
         git clone https://github.com/colemickens/nixpkgs /etc/nixpkgs
         cd /etc/nixpkgs
-        git checkout kata
+        git checkout kata3
         git remote set-url origin "git@github.com:colemickens/nixpkgs.git" # TODO: remove this
       fi
 

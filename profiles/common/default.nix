@@ -3,62 +3,46 @@
 let
 in
 {
-  nix.trustedUsers = [ "root" "cole" "@wheel" ];
-
   imports = [ ./yubikey-gpg.nix ];
+
+  nix = {
+    binaryCachePublicKeys = [
+      "nix-cache.cluster.lol-1:Pa4IudNcMNF+S/CjNt5GmD8vVJBDf8mJDktXfPb33Ak="
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
+    ];
+    trustedBinaryCaches = [
+      "kixstorage.blob.core.windows.net/nixcache"
+      "cache.nixos.org"
+      "hydra.nixos.org"
+    ];
+    trustedUsers = [ "root" "cole" "@wheel" ];
+  };
 
   nixpkgs.config ={
     allowUnfree = true;
   };
 
-  boot.kernel.sysctl = {
-    "fs.file-max" = 100000;
-    "fs.inotify.max_user_instances" = 256;
-    "fs.inotify.max_user_watches" = 500000;
-  };
-  boot.tmpOnTmpfs = true;
-  boot.cleanTmpDir = true;
-  boot.supportedFilesystems = [ "btrfs" ];
-
-  virtualisation = {
-    docker.enable = true;
-    rkt.enable = true;
-    libvirtd.enable = true;
+  boot = {
+    tmpOnTmpfs = true;
+    cleanTmpDir = true;
+    supportedFilesystems = [ "btrfs" ];
+    kernel.sysctl = {
+      "fs.file-max" = 100000;
+      "fs.inotify.max_user_instances" = 256;
+      "fs.inotify.max_user_watches" = 500000;
+    };
   };
 
-  # common services
   services = {
-    avahi = {
-      enable = true;
-      nssmdns = true;
-      publish = {
-        enable = true;
-        userServices = true;
-        addresses = true;
-        hinfo = true;
-      };
-    };
-    #kbfs.enable = true;
-    keybase.enable = true;
-    locate.enable = true;
-    openssh = {
-      enable = true;
-      passwordAuthentication = false;
-      permitRootLogin = "no";
-    };
     timesyncd.enable = true;
+    pcscd.enable = true;
     upower.enable = true;
   };
 
-    # gpg/ssh
-  services.pcscd.enable = true;
-  programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
-
-  # user management
   users.mutableUsers = false;
   security.sudo.wheelNeedsPassword = false;
 
-  # NON-GUI APPS ONLY.
   environment.systemPackages = with pkgs ; [
     nox
 
@@ -164,7 +148,12 @@ in
     packet
     nodePackages.cloudflare-cli
     dep2nix
-    # azure-storage-azcopy # not in kata branch yet, hold off
+    azure-storage-azcopy # not in kata branch yet, hold off
+    yad
+    ranger
+    pinentry
+
+    bluez
   ];
 }
 
