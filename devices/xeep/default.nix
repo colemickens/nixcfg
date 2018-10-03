@@ -24,11 +24,12 @@ in {
   i18n.consoleFont = "ter-v32n";
 
   # ignore psmouse, errors on Dell HW
-  boot.blacklistedKernelModules = [ "psmouse" ];
+  boot.blacklistedKernelModules = [ "psmouse" "r1852" ];
 
   # newer kernel
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.extraModulePackages = [ config.boot.kernelPackages.wireguard ];
+  boot.kernelPatches = [ pkgs.kernelPatches.apple_magic_trackpad2_driver ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.wireguard config.boot.kernelPackages.r8153 ];
 
   services.fwupd.enable = true;
 

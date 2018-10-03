@@ -15,20 +15,20 @@
   #  - https://www.reddit.com/r/Dell/comments/8b6eci/xp_13_9370_battery_drain_while_suspended/
   #  - https://bugzilla.kernel.org/show_bug.cgi?id=199057
   #  - https://bugzilla.kernel.org/show_bug.cgi?id=196907
-    kernelParams = [ "mem_sleep_default=deep" ];
+    # TODO: see if this is still needed with the XPS 13. A BIOS update has changed things somewhat
+    #kernelParams = [ "mem_sleep_default=deep" ];
 
     extraModprobeConfig = ''
-      # thinkpad acpi
-      #options thinkpad_acpi fan_control=1
       # intel graphics
       options i915 modeset=1
       options i915 enable_guc=3
+      options i915 enable_gvt=1
       options i915 enable_fbc=1
-      options i915 enable_rc6=1
+      options i915 enable_psr=1
       options i915 fastboot=1
+    '';
       #options i915 lvds_downclock=1 #??
       #options i915 powersave=1 #??
-    '';
     initrd.luks.devices = [
       { 
         name = "root";
