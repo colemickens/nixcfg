@@ -24,12 +24,19 @@ in {
   i18n.consoleFont = "ter-v32n";
 
   # ignore psmouse, errors on Dell HW
-  boot.blacklistedKernelModules = [ "psmouse" "r1852" ];
+  boot.blacklistedKernelModules = [ "psmouse" ];
 
   # newer kernel
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelPatches = [ pkgs.kernelPatches.apple_magic_trackpad2_driver ];
-  boot.extraModulePackages = [ config.boot.kernelPackages.wireguard config.boot.kernelPackages.r8153 ];
+  boot.kernelPackages = pkgs.linuxPackages_testing;
+  boot.kernelPatches = [{
+    name = "apple-magic-trackpad2-driver";
+    patch = pkgs.fetchpatch {
+      name = "trackpad.patch";
+      url = "https://lkml.org/lkml/diff/2018/10/3/111/1";
+      sha256 = "10f555falis1n8x7y6sfp0v2la1nrfyry82bwmn7bpjni66jb6gf";
+    };
+  }];
+  boot.extraModulePackages = [ config.boot.kernelPackages.wireguard ];
 
   services.fwupd.enable = true;
 
@@ -54,3 +61,4 @@ in {
     networkmanager.enable = true;
   };
 }
+
