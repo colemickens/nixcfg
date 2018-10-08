@@ -41,15 +41,11 @@ in
   };
 
   nix = {
-    trustedBinaryCaches = [
-      https://kixstorage.blob.core.windows.net/nixcache
-      https://cache.nixos.org
-      https://hydra.nixos.org
-    ];
+    binaryCaches = [ https://kixstorage.blob.core.windows.net/nixcache https://cache.nixos.org ];
+    trustedBinaryCaches = [ https://kixstorage.blob.core.windows.net/nixcache https://cache.nixos.org ];
     binaryCachePublicKeys = [
       "nix-cache.cluster.lol-1:Pa4IudNcMNF+S/CjNt5GmD8vVJBDf8mJDktXfPb33Ak="
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-      "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
     ];
     nixPath = [
       "/etc/nixos"
