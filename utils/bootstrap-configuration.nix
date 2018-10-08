@@ -3,7 +3,7 @@
 
 let
   device = "packet-kube";
-  mypkgs = with pkgs; [ bash curl git nix tmux tar ];
+  mypkgs = with pkgs; [ bash curl git nix tmux gnutar ];
 in
 {
   environment.systemPackages = mypkgs;

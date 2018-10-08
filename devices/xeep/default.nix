@@ -7,8 +7,8 @@ let
     name = "apple-magic-trackpad2-driver";
     patch = pkgs.fetchpatch {
       name = "trackpad.patch";
-      url = "https://lkml.org/lkml/diff/2018/10/3/111/1";
-      sha256 = "10f555falis1n8x7y6sfp0v2la1nrfyry82bwmn7bpjni66jb6gf";
+      url = "https://lkml.org/lkml/diff/2018/9/21/38/1";
+      sha256 = "10f555falis1n8x7y6sfp0v2la1nrfyry82bwmn7bpjni66jb666";
     };
   };
   trackpadPatchV4 = {
@@ -46,7 +46,7 @@ in {
 
   # newer kernel
   boot.kernelPackages = pkgs.linuxPackages_testing;
-  boot.kernelPatches = [ trackpadPatchV4 ];
+  boot.kernelPatches = [ trackpadPatchV3 ];
   boot.extraModulePackages = [ config.boot.kernelPackages.wireguard ];
 
   services.fwupd.enable = true;
