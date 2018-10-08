@@ -6,6 +6,8 @@ in
   imports = [ ./yubikey-gpg.nix ];
 
   nix = {
+    # TODO: why is this not working with nixos-rebuild swithc locally to pul lfro mthese?
+    # --> I have to use the full command line...?
     binaryCachePublicKeys = [
       "nix-cache.cluster.lol-1:Pa4IudNcMNF+S/CjNt5GmD8vVJBDf8mJDktXfPb33Ak="
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="

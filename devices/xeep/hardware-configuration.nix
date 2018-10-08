@@ -7,7 +7,7 @@
 
   boot = {
     initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
-    kernelModules = [ "kvm-intel" ];
+    kernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
     extraModulePackages = [ ];
 
   # workaround Dell/NVME issue with s2idle
@@ -17,18 +17,15 @@
   #  - https://bugzilla.kernel.org/show_bug.cgi?id=196907
     # TODO: see if this is still needed with the XPS 13. A BIOS update has changed things somewhat
     #kernelParams = [ "mem_sleep_default=deep" ];
+    kernelParams = [
+      "i915.modeset=1"
+      "i915.enable_guc=2"
+      "i915.enable_gvt=1"
+      "i915.enable_fbc=1"
+      "i915.enable_psr=1"
+      "i915.fastboot=1"
+    ];
 
-    extraModprobeConfig = ''
-      # intel graphics
-      options i915 modeset=1
-      options i915 enable_guc=3
-      options i915 enable_gvt=1
-      options i915 enable_fbc=1
-      options i915 enable_psr=1
-      options i915 fastboot=1
-    '';
-      #options i915 lvds_downclock=1 #??
-      #options i915 powersave=1 #??
     initrd.luks.devices = [
       { 
         name = "root";

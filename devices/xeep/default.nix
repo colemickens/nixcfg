@@ -1,6 +1,24 @@
 { config, lib, pkgs, ... }:
 
 let
+  # TODO: fix the Url/hash for v3 patch
+  # compare adn contrast, v4 seems a lot worse
+  trackpadPatchV3 = {
+    name = "apple-magic-trackpad2-driver";
+    patch = pkgs.fetchpatch {
+      name = "trackpad.patch";
+      url = "https://lkml.org/lkml/diff/2018/10/3/111/1";
+      sha256 = "10f555falis1n8x7y6sfp0v2la1nrfyry82bwmn7bpjni66jb6gf";
+    };
+  };
+  trackpadPatchV4 = {
+    name = "apple-magic-trackpad2-driver";
+    patch = pkgs.fetchpatch {
+      name = "trackpad.patch";
+      url = "https://lkml.org/lkml/diff/2018/10/3/111/1";
+      sha256 = "10f555falis1n8x7y6sfp0v2la1nrfyry82bwmn7bpjni66jb6gf";
+    };
+  };
 in {
   imports = [
     ../../profiles/gui
@@ -28,14 +46,7 @@ in {
 
   # newer kernel
   boot.kernelPackages = pkgs.linuxPackages_testing;
-  boot.kernelPatches = [{
-    name = "apple-magic-trackpad2-driver";
-    patch = pkgs.fetchpatch {
-      name = "trackpad.patch";
-      url = "https://lkml.org/lkml/diff/2018/10/3/111/1";
-      sha256 = "10f555falis1n8x7y6sfp0v2la1nrfyry82bwmn7bpjni66jb6gf";
-    };
-  }];
+  boot.kernelPatches = [ trackpadPatchV4 ];
   boot.extraModulePackages = [ config.boot.kernelPackages.wireguard ];
 
   services.fwupd.enable = true;

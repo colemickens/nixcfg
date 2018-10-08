@@ -3,16 +3,13 @@
 
 let
   device = "packet-kube";
+  mypkgs = with pkgs; [ bash curl git nix tmux tar ];
 in
 {
+  environment.systemPackages = mypkgs;
   systemd.services.bootstrap-nixos = {
     description = "NixOS Bootstrap";
-    path = with pkgs; [
-      bash
-      curl
-      gitAndTools.gitFull
-      nix
-    ];
+    path = mypkgs;
     serviceConfig = {
      Type = "simple";
      ExecStart = "/etc/bootstrap-nixos.sh";
