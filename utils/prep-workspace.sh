@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 [[ ! -d /etc/nixpkgs ]] && sudo git clone https://github.com/colemickens/nixpkgs /etc/nixpkgs -b kata3
-[[ ! -d /etc/nixpkgs-sway ]] && sudo git worktree add /etc/nixpkgs/sway sway-wip
-[[ ! -d /etc/nixpkgs-cmpkgs ]] && sudo git worktree add /etc/nixpkgs/cmpkgs cmpkgs
+[[ ! -d /etc/nixpkgs-sway ]] && sudo git worktree add /etc/nixpkgs-sway sway-wip
+[[ ! -d /etc/nixpkgs-cmpkgs ]] && sudo git worktree add /etc/nixpkgs-cmpkgs cmpkgs
 
 sudo mkdir -p /etc/nixos/nixpkgs-mozilla
 sudo git clone https://github.com/mozilla/nixpkgs-mozilla /etc/nixos/nixpkgs-mozilla
