@@ -54,9 +54,15 @@ in
         sleep 5
       done
 
-      # misc for dev only, remove later
+      # TODO: move this vvv
       # TODO: declarative git repo management / my other idea gitbgsync
       # TODO: prototype + blog
+
+      # the config we link into place expects the azure-cli overlay
+      # this is temporary, hopefully... :/
+      if [[ ! -d /etc/nixos/azure-cli-nix ]]; then
+        git clone https://github.com/stesie/azure-cli-nix /etc/nixos/azure-cli-nix
+      fi
       if [[ ! -d /etc/nixpkgs ]]; then
         git clone https://github.com/colemickens/nixpkgs /etc/nixpkgs
         cd /etc/nixpkgs
