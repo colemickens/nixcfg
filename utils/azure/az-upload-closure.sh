@@ -24,13 +24,13 @@ mkdir -p /tmp/nixcache-upload/nar
 
 # upload
 function az() {
-  #command az $@
-  docker run \
-    --net=host \
-    --env AZURE_STORAGE_CONNECTION_STRING \
-    --volume "/tmp/nixcache:/tmp/nixcache:ro" \
-    --volume "/tmp/nixcache-upload:/tmp/nixcache-upload:ro" \
-      docker.io/microsoft/azure-cli az $@
+  command az $@
+#  docker run \
+#    --net=host \
+#    --env AZURE_STORAGE_CONNECTION_STRING \
+#    --volume "/tmp/nixcache:/tmp/nixcache:ro" \
+#    --volume "/tmp/nixcache-upload:/tmp/nixcache-upload:ro" \
+#      docker.io/microsoft/azure-cli az $@
 }
 
 if ! az storage container show --name nixcache ; then
