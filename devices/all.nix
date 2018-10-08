@@ -10,11 +10,15 @@ let
   pkgs = import nixpkgs {};
   patches = import ./xeep/patches.nix { inherit pkgs; };
   result = {
-    xeep    = (mkMachine { imports = [ ./xeep/default.nix {}]; });
+    xeel   = (mkMachine ./xeep/default.nix);
+    xeep   = (mkMachine { imports = [ ./xeep/default.nix {}]; });
     xeepV3 = (mkMachine { imports = [ ./xeep/default.nix {} ]; xeep.kernelPatches = [ patches.trackpadPatchV3 ]; });
     xeepV4 = (mkMachine { imports = [ ./xeep/default.nix {} ]; xeep.kernelPatches = [ patches.trackpadPatchV4 ]; });
 
-    altXeep = (mkMachine2 ./xeep/default.nix);
+    alt_xeel   = (mkMachine2 ./xeep/default.nix);
+    alt_xeep   = (mkMachine2 { imports = [ ./xeep/default.nix {} ]; });
+    alt_xeepV3 = (mkMachine2 { imports = [ ./xeep/default.nix {} ]; xeep.kernelPatches = [ patches.trackpadPatchV3 ]; });
+    alt_xeepV4 = (mkMachine2 { imports = [ ./xeep/default.nix {} ]; xeep.kernelPatches = [ patches.trackpadPatchV4 ]; });
 
     #chimera = (mkMachine ./chimera/default.nix);
     #packet-kube = (mkMachine ./packet-kube/default.nix); # TODO: this needs a custom nixpkgs!
