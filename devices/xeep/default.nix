@@ -19,6 +19,7 @@ let
       sha256 = "10f555falis1n8x7y6sfp0v2la1nrfyry82bwmn7bpjni66jb6gf";
     };
   };
+  trackpadPatch = trackpadPatchV3;
 in {
   imports = [
     ../../profiles/gui
@@ -46,7 +47,7 @@ in {
 
   # newer kernel
   boot.kernelPackages = pkgs.linuxPackages_testing;
-  boot.kernelPatches = [ trackpadPatchV3 ];
+  boot.kernelPatches = [ trackpadPatch ];
   boot.extraModulePackages = [ config.boot.kernelPackages.wireguard ];
 
   services.fwupd.enable = true;
