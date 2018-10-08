@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
-set -x
 
+# Clone nixpkgs
+# setup the other branches of nixpkgs, and the overlays we use
+
+set -x
 [[ ! -d /etc/nixpkgs ]] && sudo git clone https://github.com/colemickens/nixpkgs /etc/nixpkgs -b kata3
+
+cd /etc/nixpkgs
 [[ ! -d /etc/nixpkgs-sway ]] && sudo git worktree add /etc/nixpkgs-sway sway-wip
 [[ ! -d /etc/nixpkgs-cmpkgs ]] && sudo git worktree add /etc/nixpkgs-cmpkgs cmpkgs
 

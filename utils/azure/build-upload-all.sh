@@ -19,6 +19,7 @@ result="$(\
     "../../devices/all.nix" \
 )"
 
+# TODO: IIRC this actually just uploads the entire store... lol, so it's sorta overkill, but also still needs to run always (the last "dupe" could not be and could include a closure not previously copied)
 echo "${result}" | while read -r pth; do
   ./az-upload-closure.sh ${pth}
 done
