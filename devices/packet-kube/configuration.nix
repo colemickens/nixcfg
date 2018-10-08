@@ -1,6 +1,11 @@
 #!nix
 { config, lib, pkgs, ... }:
 
+let
+  apkgs = (import <nixpkgs> {
+    overlays = [(import /etc/nixos/azure-cli-nix/default.nix)];
+  });
+in
 {
   imports = [
     /etc/nixos/packet.nix
@@ -10,7 +15,8 @@
   networking.firewall.enable = false; #TODO: reenable (we were told how on the github pr)
 
   environment.systemPackages = with pkgs; [
-    cri-tools bind azure-storage-azcopy
+    cri-tools bind
+    azure-storage-azcopy apkgs.python36Packages.azure-cli
     kata-agent
   ];
 
