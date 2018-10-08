@@ -12,5 +12,7 @@ cd /etc/nixpkgs
 git worktree add ../nixpkgs-sway sway-wip
 git worktree add ../nixpkgs-cmpkgs cmpkgs
 
+sudo mkdir -p /etc/nixos/nixpkgs-mozilla
+sudo chown -R cole:cole /etc/nixos/nixpkgs-mozilla
 git clone https://github.com/mozilla/nixpkgs-mozilla /etc/nixos/nixpkgs-mozilla
 
