@@ -32,6 +32,7 @@ in
     };
 
     services = {
+      mingetty.autologinUser = "cole";
       flatpak.enable = true;
     };
 

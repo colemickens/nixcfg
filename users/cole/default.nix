@@ -36,10 +36,6 @@ in
       fi
     '';
     programs.bash.interactiveShellInit = ''
-      export SSH_PUBLIC_KEY="${builtins.elemAt pubkeys 0}"
-      if [[ "$SSH_AUTH_SOCK" == "/run/user/$(id -u)/keyring/ssh" ]]; then
-        export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
-      fi
       export PATH="$HOME/.local/bin:$PATH"
       export EDITOR="nvim"
       alias _nixup="sudo nixos-rebuild switch --option build-cores 0 --option extra-binary-caches \"https://kixstorage.blob.core.windows.net/nixcache https://cache.nixos.org\" --option trusted-public-keys \"nix-cache.cluster.lol-1:Pa4IudNcMNF+S/CjNt5GmD8vVJBDf8mJDktXfPb33Ak= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=\"";
@@ -47,6 +43,15 @@ in
       alias _redshift="export WLR_DRM_NO_ATOMIC=1; redshift -g 0.8 -t 4500:4500 -m wayland -l 47.6062:122.3321 -v"
       alias _bt="bluetoothctl power on; bluetoothctl connect 10:94:BB:AC:A6:40; bluetoothctl connect 70:F0:87:39:93:15";
       alias _yt="youtube-dl --write-info-json";
+
+      export SSH_PUBLIC_KEY="${builtins.elemAt pubkeys 0}"
+      if [[ "$SSH_AUTH_SOCK" == "/run/user/$(id -u)/keyring/ssh" ]]; then
+        export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+      fi
+
+      if [[ `tty` == "/dev/tty1" ]]; then
+        export WAYLAND_DEBUG=1; export WLR_DRM_NO_ATOMIC=1; sway &> ~/.local/sway-$(date '+%s').log
+      fi
     '';
     programs.ssh.startAgent = false;
     programs.tmux = {
