@@ -2,7 +2,9 @@
 set -x
 set -euo pipefail
 
-export NIX_PATH=/etc/nixos:nixpkgs=/etc/nixpkgs-cmpkgs:nixos-config=/etc/nixcfg/devices/xeep/default.nix
+nixosconfig="${1:-"/etc/nixcfg/devices/xeep/default.nix"}"
+
+export NIX_PATH=/etc/nixos:nixpkgs=/etc/nixpkgs-cmpkgs:nixos-config=${nixosconfig}
 
 result="$(\
   nix-build \
