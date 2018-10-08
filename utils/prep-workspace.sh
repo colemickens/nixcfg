@@ -16,3 +16,6 @@ sudo mkdir -p /etc/nixos/nixpkgs-mozilla
 sudo chown -R cole:cole /etc/nixos/nixpkgs-mozilla
 git clone https://github.com/mozilla/nixpkgs-mozilla /etc/nixos/nixpkgs-mozilla
 
+sudo mkdir -p /etc/nixos/azure-cli-nix
+sudo chown -R cole:cole /etc/nixos/azure-cli-nix
+git clone https://github.com/stesie/azure-cli-nix /etc/nixos/azure-cli-nix

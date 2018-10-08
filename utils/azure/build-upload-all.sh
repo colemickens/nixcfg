@@ -2,6 +2,15 @@
 set -x
 set -euo pipefail
 
+# TODO: for now this is hardcoded to expect a certain nixpkgs!
+# that is, cmpkgs
+
+# eventually the all.nix will specify the exact nixpkgs-{flavor} to use
+# or I can paramterize this and have different sets for different nixpkgs
+# (which would probably be fine because they'd probably be separate jobs anyway)
+
+export NIX_PATH=/etc/nixos:nixpkgs=/etc/nixpkgs-cmpkgs
+
 result="$(\
   nix-build \
     --option build-cores 0 \

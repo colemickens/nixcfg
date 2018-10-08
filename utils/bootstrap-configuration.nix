@@ -29,12 +29,10 @@ in
     trustedBinaryCaches = [
       https://kixstorage.blob.core.windows.net/nixcache
       https://cache.nixos.org
-      https://hydra.nixos.org
     ];
     binaryCachePublicKeys = [
       "nix-cache.cluster.lol-1:Pa4IudNcMNF+S/CjNt5GmD8vVJBDf8mJDktXfPb33Ak="
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-      "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
     ];
     nixPath = [
       "/etc/nixos"
@@ -59,9 +57,6 @@ in
       # misc for dev only, remove later
       # TODO: declarative git repo management / my other idea gitbgsync
       # TODO: prototype + blog
-      if [[ ! -d /etc/nixos/azure-cli-nix ]]; then
-        git clone https://github.com/stesie/azure-cli-nix /etc/nixos/azure-cli-nix
-      fi
       if [[ ! -d /etc/nixpkgs ]]; then
         git clone https://github.com/colemickens/nixpkgs /etc/nixpkgs
         cd /etc/nixpkgs
