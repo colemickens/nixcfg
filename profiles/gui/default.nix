@@ -7,7 +7,8 @@ let
     config = config.nixpkgs.config;
   }).pkgs;
   fpkgs = (import <nixpkgs> {
-    config.allowUnfree = true;
+    config = config.nixpkgs.config;
+    #config.allowUnfree = true;
     overlays = [(import /etc/nixos/nixpkgs-mozilla/firefox-overlay.nix)];
   }).latest;
 in

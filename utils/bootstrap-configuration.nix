@@ -59,6 +59,9 @@ in
       # misc for dev only, remove later
       # TODO: declarative git repo management / my other idea gitbgsync
       # TODO: prototype + blog
+      if [[ ! -d /etc/nixos/azure-cli-nix ]]; then
+        git clone https://github.com/stesie/azure-cli-nix /etc/nixos/azure-cli-nix
+      fi
       if [[ ! -d /etc/nixpkgs ]]; then
         git clone https://github.com/colemickens/nixpkgs /etc/nixpkgs
         cd /etc/nixpkgs

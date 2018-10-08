@@ -1,30 +1,17 @@
 { config, lib, pkgs, ... }:
 
 let
-  # TODO: fix the Url/hash for v3 patch
-  # compare adn contrast, v4 seems a lot worse
-  trackpadPatchV3 = {
-    name = "apple-magic-trackpad2-driver";
-    patch = pkgs.fetchpatch {
-      name = "trackpad.patch";
-      url = "https://lkml.org/lkml/diff/2018/9/21/38/1";
-      sha256 = "018wyjvw4wz79by38b1r6bkbl34p6686r66hg7g7vc0v24jkcafn";
-    };
-  };
-  trackpadPatchV4 = {
-    name = "apple-magic-trackpad2-driver";
-    patch = pkgs.fetchpatch {
-      name = "trackpad.patch";
-      url = "https://lkml.org/lkml/diff/2018/10/3/111/1";
-      sha256 = "10f555falis1n8x7y6sfp0v2la1nrfyry82bwmn7bpjni66jb6gf";
-    };
-  };
-  trackpadPatch = trackpadPatchV3;
+  patches = (import ./patches.nix { inherit config lib pkgs; });
+  cfg = config.xeep;
 in {
   imports = [
     ../../profiles/gui
     ./hardware-configuration.nix
   ];
+
+  options = { xeep.kernelPatches = lib.mkOption { default = [ patches.trackpadPatchV3 ]; }; };
+
+  config = {
 
   # TODO: reorganize this?
   # vaapi stuff
@@ -47,7 +34,7 @@ in {
 
   # newer kernel
   boot.kernelPackages = pkgs.linuxPackages_testing;
-  boot.kernelPatches = [ trackpadPatch ];
+  boot.kernelPatches = cfg.kernelPatches;
   boot.extraModulePackages = [ config.boot.kernelPackages.wireguard ];
 
   services.fwupd.enable = true;
@@ -71,6 +58,7 @@ in {
     hostName = "xeep";
     firewall.allowedTCPPorts = [ 3000 ];
     networkmanager.enable = true;
+  };
   };
 }
 

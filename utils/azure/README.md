@@ -1,31 +1,11 @@
-# Azure + NixOS = <3
+# Blah
 
-### Overview
+# TODO
 
-Let's build Kubernetes clusters on Azure in a more deterministic, flexible, testable, reliable manner.
+1. split out the azure bit into "./upload-store.sh /var/lib/nixcache" to sync our store to azure
+   (could make it trivial to add new sources, just implement recursive blob list, or even just two dirs)
 
+2. figure out how to unify the ./build-upload-all.sh which points to a single nix expr, with
+   ./build-upload-xeep.sh that does the whole thing for one machine with `NIX_PATH` specifically
 
-### Principles
-
-1. None
-
-
-### Research To-Do
-
-1. How important is the auto-scaler? It throws a wrench in the NixOps plans...
-
-
-### TODO
-
-1. Publish to more regions / more replicas?
-2. Package 'azure-cli' and remove docker usage in the scripts in this dir
-
-
-### Open Questions
-
-0. Azure CLI exit code / scripting guidance
-
-1. User Images
-
-2. 
 

@@ -1,6 +1,9 @@
 { config, lib, pkgs, ... }:
 
 let
+  apkgs = (import <nixpkgs> {
+    overlays = [(import /etc/nixos/azure-cli-nix/default.nix)];
+  });
 in
 {
   imports = [ ./yubikey-gpg.nix ];
@@ -148,9 +151,13 @@ in
 
     # cloud
     packet
-    nodePackages.cloudflare-cli
+    # for now install with nix-env -i until it's upstream
+    #nodePackages.cloudflare-cli
     dep2nix
+
+    apkgs.python36Packages.azure-cli
     azure-storage-azcopy # not in kata branch yet, hold off
+
     yad
     ranger
     pinentry
