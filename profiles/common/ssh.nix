@@ -1,9 +1,9 @@
-{ config, lib, pkgs, ... };
+{ config, lib, pkgs, ... }:
 
 let
 in
 {
-  openssh = {
+  services.openssh = {
     enable = true;
     passwordAuthentication = false;
     permitRootLogin = "no";
