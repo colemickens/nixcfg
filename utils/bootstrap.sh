@@ -10,14 +10,6 @@ device="${1:-"packet-kube"}"
 mv /etc/nixos/configuration.nix "/etc/nixos/configuration-old-$(date '+%s').nix" || true
 ln -s /etc/nixcfg/devices/${device}/configuration.nix /etc/nixos/configuration.nix
 
-# change into the '${device}' configuration now
-export NIX_PATH=nixpkgs=/etc/nixpkgs:nixos-config=/etc/nixos/configuration.nix
-rb="$(nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuild')/bin/nixos-rebuild";
-"${rb}" switch \
-  --option build-cores 0 \
-  --option extra-binary-caches "https://kixstorage.blob.core.windows.net/nixcache https://cache.nixos.org" \
-  --option trusted-public-keys "nix-cache.cluster.lol-1:Pa4IudNcMNF+S/CjNt5GmD8vVJBDf8mJDktXfPb33Ak= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-
 # other nixpkgs branches we use
 cd /etc/nixpkgs
 [[ ! -d /etc/nixpkgs-sway ]] && sudo git worktree add /etc/nixpkgs-sway sway-wip
@@ -30,6 +22,15 @@ sudo chown -R cole:cole /etc/nixcfg
 sudo chown -R cole:cole /etc/nixpkgs*
 sudo chown -R cole:cole /etc/nixos/nixpkgs-mozilla
 sudo chown -R cole:cole /etc/nixos/azure-cli-nix
+
+# change into the '${device}' configuration now
+export NIX_PATH=nixpkgs=/etc/nixpkgs:nixos-config=/etc/nixos/configuration.nix
+rb="$(nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuild')/bin/nixos-rebuild";
+"${rb}" switch \
+  --option build-cores 0 \
+  --option extra-binary-caches "https://kixstorage.blob.core.windows.net/nixcache https://cache.nixos.org" \
+  --option trusted-public-keys "nix-cache.cluster.lol-1:Pa4IudNcMNF+S/CjNt5GmD8vVJBDf8mJDktXfPb33Ak= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+
 
 sleep 120
 reboot
