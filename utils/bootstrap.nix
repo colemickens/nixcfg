@@ -13,7 +13,7 @@ let
   '';
 in
 {
-  environment.systemPackages = mypkgs;
+  environment.systemPackages = bootstrapPkgs;
   systemd.services.bootstrap = {
     description = "bootstrap";
     path = bootstrapPkgs;
