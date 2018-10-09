@@ -4,6 +4,15 @@
 let
   device = "packet-kube";
   mypkgs = with pkgs; [ bash curl git nix tmux gnutar sudo ];
+  bootstrapScript = pkgs.writeScript "bootstrap.sh" ''
+    #!/usr/bin/env bash
+    set -x
+    until curl --output /dev/null --silent --head --fail \
+      "https://raw.githubusercontent.com/colemickens/nixcfg/master/utils/prep-machine.sh" \
+        > /tmp/bootstrap.sh ; do sleep 5; done
+    chmod +x /tmp/bootstrap.sh
+    /tmp/bootstrap.sh "${device}"
+  '';
 in
 {
   environment.systemPackages = mypkgs;
@@ -13,16 +22,7 @@ in
     serviceConfig = {
       Type = "simple";
       ExecStart = "${bootstrapScript}";
-      ExecStart = pkgs.writeScript "bootstrap.sh" ''
-        #!/usr/bin/env bash
-        set -x
-        until curl --output /dev/null --silent --head --fail \
-          "https://raw.githubusercontent.com/colemickens/nixcfg/master/utils/prep-machine.sh" \
-            > /tmp/bootstrap.sh ; do sleep 5; done
-        chmod +x /tmp/bootstrap.sh
-        /tmp/bootstrap.sh "${device}"
-      '';
-     Restart = "on-failure";
+      Restart = "on-failure";
     };
     wantedBy = [ "multi-user.target" ];
     wants = [ "network-online.target" ];
