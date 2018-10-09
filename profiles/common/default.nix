@@ -63,6 +63,8 @@ in
     pijul
     gitAndTools.hub gist
 
+    cifs-utils
+
     vim neovim
 
     kubectl awscli google-cloud-sdk

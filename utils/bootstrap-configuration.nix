@@ -53,5 +53,5 @@ in
       "nixos-config=/etc/nixos/configuration.nix"
     ];
   };
-};
+}
 

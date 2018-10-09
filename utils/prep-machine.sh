@@ -4,6 +4,9 @@
 # rebuild the config, prep-workspace (aka, setup nixpkgs), reboot
 
 set -x
+
+device="${1:-"packet-kube"}"
+
 rm -f /etc/nixos/configuration.nix
 ln -s /etc/nixcfg/devices/${device}/configuration.nix /etc/nixos/configuration.nix
 
@@ -15,5 +18,6 @@ rb="$(nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.sys
   --option trusted-public-keys "nix-cache.cluster.lol-1:Pa4IudNcMNF+S/CjNt5GmD8vVJBDf8mJDktXfPb33Ak= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
 
 /etc/nixcfg/utils/prep-workspace.sh
+sleep 120 #TODO: remove, but leave as escape hatch for now
 reboot
 

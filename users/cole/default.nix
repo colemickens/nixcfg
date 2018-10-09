@@ -49,6 +49,7 @@ in
         export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
       fi
 
+      sleep 1
       if [[ `tty` == "/dev/tty1" ]]; then
         export WAYLAND_DEBUG=1; export WLR_DRM_NO_ATOMIC=1; sway &> ~/.local/sway-$(date '+%s').log
       fi

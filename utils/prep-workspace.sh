@@ -10,11 +10,8 @@ cd /etc/nixpkgs
 [[ ! -d /etc/nixpkgs-sway ]] && sudo git worktree add /etc/nixpkgs-sway sway-wip
 [[ ! -d /etc/nixpkgs-cmpkgs ]] && sudo git worktree add /etc/nixpkgs-cmpkgs cmpkgs
 
-sudo mkdir -p /etc/nixos/nixpkgs-mozilla
-sudo git clone https://github.com/mozilla/nixpkgs-mozilla /etc/nixos/nixpkgs-mozilla
-
-sudo mkdir -p /etc/nixos/azure-cli-nix
-sudo git clone https://github.com/stesie/azure-cli-nix /etc/nixos/azure-cli-nix
+[[ ! -d /etc/nixos/azure-cli-nix ]] && sudo git clone https://github.com/stesie/azure-cli-nix /etc/nixos/azure-cli-nix
+[[ ! -d /etc/nixos/nixpkgs-mozilla ]] && sudo git clone https://github.com/mozilla/nixpkgs-mozilla /etc/nixos/nixpkgs-mozilla
 
 sudo chown -R cole:cole /etc/nixcfg
 sudo chown -R cole:cole /etc/nixpkgs*
