@@ -34,5 +34,6 @@ sudo chown -R cole:cole /etc/nixpkgs*
 sudo chown -R cole:cole /etc/nixos/nixpkgs-mozilla
 sudo chown -R cole:cole /etc/nixos/azure-cli-nix
 
+sleep 120
 reboot
 
