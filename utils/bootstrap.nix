@@ -7,11 +7,9 @@ let
   bootstrapScript = pkgs.writeScript "bootstrap.sh" ''
     #!/usr/bin/env bash
     set -x
-    until curl --output /dev/null --silent --head --fail \
-      "https://raw.githubusercontent.com/colemickens/nixcfg/master/utils/prep-machine.sh" \
-        > /tmp/bootstrap.sh ; do sleep 5; done
-    chmod +x /tmp/bootstrap.sh
-    /tmp/bootstrap.sh "${device}"
+    [[ ! -d /etc/nixcfg ]] && sudo git clone https://github.com/colemickens/nixcfg /etc/nixcfg
+    cd /etc/nixcfg/utils
+    ./bootstrap.sh
   '';
 in
 {
