@@ -15,9 +15,10 @@ in
       ExecStart = "${bootstrapScript}";
       ExecStart = pkgs.writeScript "bootstrap.sh" ''
         #!/usr/bin/env bash
-        until $(curl --output /dev/null --silent --head --fail "https://raw.githubusercontent.com/colemickens/nixcfg/master/utils/prep-machine.sh" > /tmp/bootstrap.sh); do
-          printf '.'; sleep 5
-        done
+        set -x
+        until curl --output /dev/null --silent --head --fail \
+          "https://raw.githubusercontent.com/colemickens/nixcfg/master/utils/prep-machine.sh" \
+            > /tmp/bootstrap.sh ; do sleep 5; done
         chmod +x /tmp/bootstrap.sh
         /tmp/bootstrap.sh "${device}"
       '';
