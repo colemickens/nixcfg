@@ -22,7 +22,7 @@ cd /etc/nixpkgs
 [[ ! -d /etc/nixos/nixpkgs-mozilla ]] && sudo git clone https://github.com/mozilla/nixpkgs-mozilla /etc/nixos/nixpkgs-mozilla
 
 # make my normal user the owner
-sudo chown -R 1000:1000 "/etc/nixcfg" /etc/nixpkgs* "/etc/nixos/nixpkgs-mozilla" "/etc/nixos-azure-cli-nix"
+sudo chown -R 1000:1000 "/etc/nixcfg" /etc/nixpkgs* "/etc/nixos/nixpkgs-mozilla" "/etc/nixos/azure-cli-nix"
 
 # change into the '${device}' configuration now
 export NIX_PATH=nixpkgs=/etc/nixpkgs:nixos-config=/etc/nixos/configuration.nix
