@@ -5,7 +5,7 @@ set -euo pipefail
 device="${1:-"packet-kube"}"
 
 # clone nixpkgs
-[[ ! -d /etc/nixcfg ]] && sudo git clone https://github.com/colemickens/nixcfg /etc/nixcfg -b kata3
+[[ ! -d /etc/nixcfg ]] && sudo git clone https://github.com/colemickens/nixcfg /etc/nixcfg
 [[ ! -d /etc/nixpkgs ]] && sudo git clone https://github.com/colemickens/nixpkgs /etc/nixpkgs -b kata3
 (cd /etc/nixcfg; sudo git remote update; sudo git reset --hard origin/master;)
 
@@ -32,5 +32,6 @@ rb="$(nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.sys
   --option extra-binary-caches "https://kixstorage.blob.core.windows.net/nixcache https://cache.nixos.org" \
   --option trusted-public-keys "nix-cache.cluster.lol-1:Pa4IudNcMNF+S/CjNt5GmD8vVJBDf8mJDktXfPb33Ak= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
 
+sleep 180
 reboot
 
