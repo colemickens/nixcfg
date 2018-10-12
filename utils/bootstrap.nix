@@ -24,7 +24,7 @@ in
       Type = "simple";
       ExecStart = "${bootstrapScript}";
       Restart = "on-failure";
-      PathExists = "!/var/lib/bootstrap-complete"
+      PathExists = "!/var/lib/bootstrap-complete";
     };
     wantedBy = [ "multi-user.target" ];
     wants = [ "network-online.target" ];
