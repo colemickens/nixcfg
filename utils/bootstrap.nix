@@ -17,7 +17,7 @@ let
 in
 {
   environment.systemPackages = bootstrapPkgs;
-  systemd.services.bootstrap = mkIf options.bootstrapper.enable {
+  systemd.services.bootstrap = {
     description = "bootstrap";
     path = bootstrapPkgs;
     serviceConfig = {
