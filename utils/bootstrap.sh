@@ -32,6 +32,3 @@ rb="$(nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.sys
   --option extra-binary-caches "https://kixstorage.blob.core.windows.net/nixcache https://cache.nixos.org" \
   --option trusted-public-keys "nix-cache.cluster.lol-1:Pa4IudNcMNF+S/CjNt5GmD8vVJBDf8mJDktXfPb33Ak= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
 
-sleep 180
-reboot
-

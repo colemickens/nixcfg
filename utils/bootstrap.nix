@@ -7,20 +7,24 @@ let
   bootstrapScript = pkgs.writeScript "bootstrap.sh" ''
     #!/usr/bin/env bash
     set -x
+    set -euo pipefail
     [[ ! -d /etc/nixcfg ]] && sudo git clone https://github.com/colemickens/nixcfg /etc/nixcfg
     cd /etc/nixcfg/utils
     ./bootstrap.sh "${bootstrapDevice}"
+    touch /var/lib/bootstrap-complete
+    reboot
   '';
 in
 {
   environment.systemPackages = bootstrapPkgs;
-  systemd.services.bootstrap = {
+  systemd.services.bootstrap = mkIf options.bootstrapper.enable {
     description = "bootstrap";
     path = bootstrapPkgs;
     serviceConfig = {
       Type = "simple";
       ExecStart = "${bootstrapScript}";
       Restart = "on-failure";
+      PathExists = "!/var/lib/bootstrap-complete"
     };
     wantedBy = [ "multi-user.target" ];
     wants = [ "network-online.target" ];
