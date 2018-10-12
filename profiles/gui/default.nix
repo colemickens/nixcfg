@@ -80,6 +80,7 @@ in
       # tiling wm specific
       i3status-rust
       termite
+      spkgs.wlroots
       spkgs.redshift-wayland
       dmenu
       xwayland
