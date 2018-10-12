@@ -9,9 +9,15 @@ let
     set -x
     set -euo pipefail
     [[ ! -d /etc/nixcfg ]] && sudo git clone https://github.com/colemickens/nixcfg /etc/nixcfg
+    cd /etc/nixcfg
+    git remote update
+    git reset --hard origin/master
     cd /etc/nixcfg/utils
+    echo "bootstrap starting"
     ./bootstrap.sh "${bootstrapDevice}"
+    echo "bootstrap complete"
     touch /var/lib/bootstrap-complete
+    sleep 180
     reboot
   '';
 in
@@ -20,11 +26,13 @@ in
   systemd.services.bootstrap = {
     description = "bootstrap";
     path = bootstrapPkgs;
+    unitConfig = {
+      ConditionPathExists = "!/var/lib/bootstrap-complete"
+    };
     serviceConfig = {
       Type = "simple";
       ExecStart = "${bootstrapScript}";
       Restart = "on-failure";
-      PathExists = "!/var/lib/bootstrap-complete";
     };
     wantedBy = [ "multi-user.target" ];
     wants = [ "network-online.target" ];
