@@ -4,15 +4,15 @@ set -euo pipefail
 
 device="${1:-"packet-kube"}"
 
-# clone nixpkgs
+# clone nixcfg
 [[ ! -d /etc/nixcfg ]] && sudo git clone https://github.com/colemickens/nixcfg /etc/nixcfg
-[[ ! -d /etc/nixpkgs ]] && sudo git clone https://github.com/colemickens/nixpkgs /etc/nixpkgs -b kata3
 (cd /etc/nixcfg; sudo git remote update; sudo git reset --hard origin/master;)
-
 # link nixos config
 mv /etc/nixos/configuration.nix "/etc/nixos/configuration-old-$(date '+%s').nix" || true
 ln -s /etc/nixcfg/devices/${device}/configuration.nix /etc/nixos/configuration.nix
 
+# clone nixpkgs
+[[ ! -d /etc/nixpkgs ]] && sudo git clone https://github.com/colemickens/nixpkgs /etc/nixpkgs -b kata3
 # other nixpkgs branches we use
 cd /etc/nixpkgs
 [[ ! -d /etc/nixpkgs-sway ]] && sudo git worktree add /etc/nixpkgs-sway sway-wip
