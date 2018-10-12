@@ -9,7 +9,7 @@ in {
     ./hardware-configuration.nix
   ];
 
-  options = { xeep.kernelPatches = lib.mkOption { default = [ patches.trackpadPatchV3 ]; }; };
+  options = { xeep.kernelPatches = lib.mkOption { default = [ patches.trackpadPatchV4 ]; }; };
 
   config = {
     # TODO: reorganize this?
