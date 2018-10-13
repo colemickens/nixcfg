@@ -6,11 +6,11 @@ let
   spkgs = (import /etc/nixpkgs-sway/default.nix {
     config = config.nixpkgs.config;
   }).pkgs;
-  fpkgs = (import <nixpkgs> {
-    config = config.nixpkgs.config;
-    #config.allowUnfree = true;
-    overlays = [(import /etc/nixos/nixpkgs-mozilla/firefox-overlay.nix)];
-  }).latest;
+  #fpkgs = (import <nixpkgs> {
+  #  config = config.nixpkgs.config;
+  #  #config.allowUnfree = true;
+  #  overlays = [(import /etc/nixos/nixpkgs-mozilla/firefox-overlay.nix)];
+  #}).latest;
 in
 {
   imports = [
@@ -19,6 +19,9 @@ in
   ];
 
   config = { 
+    nixpkgs.overlays = [
+      (import /etc/nixos/nixpkgs-mozilla/firefox-overlay.nix)
+    ];
     environment.variables.MOZ_USE_XINPUT2 = "1";
     hardware.pulseaudio.enable = true;
     nixpkgs.config.pulseaudio = true;
@@ -48,7 +51,7 @@ in
 
     environment.systemPackages = with pkgs; [
       # firefox-nightly-bin from the mozilla-nixpkgs overlay
-      fpkgs.firefox-nightly-bin
+      latest.firefox-nightly-bin
       # apperance
       arc-theme numix-icon-theme numix-icon-theme-circle
       # browsers

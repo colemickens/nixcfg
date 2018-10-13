@@ -1,12 +1,18 @@
 { config, lib, pkgs, ... }:
 
 let
-  apkgs = (import <nixpkgs> {
-    overlays = [(import /etc/nixos/azure-cli-nix/default.nix)];
-  });
 in
 {
   imports = [ ./yubikey-gpg.nix ];
+
+  nixpkgs = {
+    config ={
+      allowUnfree = true;
+    };
+    overlays = [
+      (import /etc/nixos/azure-cli-nix/default.nix)
+    ];
+  };
 
   nix = {
     # TODO: why is this not working with nixos-rebuild swithc locally to pul lfro mthese?
@@ -24,10 +30,6 @@ in
       "https://cache.nixos.org"
     ];
     trustedUsers = [ "root" "cole" "@wheel" ];
-  };
-
-  nixpkgs.config ={
-    allowUnfree = true;
   };
 
   boot = {
@@ -159,7 +161,7 @@ in
     #nodePackages.cloudflare-cli
     dep2nix
 
-    apkgs.python36Packages.azure-cli
+    python36Packages.azure-cli
     azure-storage-azcopy
 
     yad

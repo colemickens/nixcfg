@@ -2,23 +2,33 @@
 
 let
   _nixpkgs = "/etc/nixpkgs-cmpkgs";
-  _nixoscfg = ./devices/xeep/default.nix;
+  _nixoscfg = "/etc/nixcfg/devices/xeep/default.nix";
+  _system = "x86_64-linux";
 
   system = import "${_nixpkgs}/nixos" {
-    system = "x86_64-linux";
+    system = _system;
 
-    configuration = {
-      imports = [
-        _nixoscfg
-      ];
-    };
+    # these two seem to work the same:
+    #configuration = _nixoscfg;
+    configuration = { imports = [ _nixoscfg ]; };
   };
-
-  #nixpkgs = import _nixpkgs { config = cfg.config; };
 
   #mkMachine1 = c: (nixos { configuration = c; }).system;
 
-  #mkMachine2 = c: (import "${nixpkgs}/nixos/lib/eval-config.nix" {
+  pkgs = import _nixpkgs {
+    system = _system;
+    inherit (ccc.config.nixpkgs) config overlays;
+  };
+
+  ccc = import "${_nixpkgs}/nixos/lib/eval-config.nix" {
+    inherit (pkgs) system;
+    inherit pkgs;
+    modules = [ _nixoscfg ];
+  };
+
+  #mkMachine2 = c: (import "${_nixpkgs}/nixos/lib/eval-config.nix" {
+  #   system = _system;
+  #   pkgs = nixpkgs.pkgs;
   #  inherit (nixpkgs) system;
   #  modules = [ cfg ];
   #}).config.system.build.toplevel;
@@ -29,6 +39,7 @@ let
   #  xeep = (mkMachine2 ./xeep/default.nix);
   #};
 in
-  system.config.system.build.toplevel
+  ccc.config.system.build.toplevel
+  #system.config.system.build.toplevel
   #cfg.config.system.build.toplevel
 
