@@ -29,8 +29,11 @@ fi
 # Find only the new files to upload
 bloblist="$(mktemp)"
 blobnames="$(mktemp)"
+blobsizes="$(mktemp)"
 az storage blob list --container-name "${container}" | jq -r '.' > "${bloblist}"
 cat "${bloblist}" | jq -r '.[].name' > "${blobnames}"
+cat "${bloblist}" | jq -r '.[].properties.contentLength' > "${blobsizes}"
+totalblobsize="$(awk '{ sum += $1 } END { print sum }' "${blobsizes}")"
 
 cd "${store}"
 find . ! -path . -type f -printf '%P\n'| grep -vFf "${blobnames}" | while read -r pth; do
@@ -40,5 +43,6 @@ done
 
 time az storage blob upload-batch \
   --source "${uploaddir}" \
-  --destination nixcache \
+  --destination "${container}" \
 
+echo "==> ${container} disk usage = ${totalblobsize}"
