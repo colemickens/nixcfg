@@ -17,9 +17,7 @@ ln -s /etc/nixcfg/devices/${device}/configuration.nix /etc/nixos/configuration.n
 cd /etc/nixpkgs
 [[ ! -d /etc/nixpkgs-sway ]] && sudo git worktree add /etc/nixpkgs-sway sway-wip
 [[ ! -d /etc/nixpkgs-cmpkgs ]] && sudo git worktree add /etc/nixpkgs-cmpkgs cmpkgs
-# overlays
-[[ ! -d /etc/nixos/azure-cli-nix ]] && sudo git clone https://github.com/stesie/azure-cli-nix /etc/nixos/azure-cli-nix
-[[ ! -d /etc/nixos/nixpkgs-mozilla ]] && sudo git clone https://github.com/mozilla/nixpkgs-mozilla /etc/nixos/nixpkgs-mozilla
+[[ ! -e /etc/nixpkgs-kata3 ]] && sudo ln -s /etc/nixpkgs /etc/nixpkgs-kata3
 
 # make my normal user the owner
 sudo chown -R 1000:1000 "/etc/nixcfg" /etc/nixpkgs* "/etc/nixos/nixpkgs-mozilla" "/etc/nixos/azure-cli-nix"
