@@ -1,0 +1,2 @@
+split packet-kube into a module so it can be loaded along with kata to be cached
+even though we cant build the exact system configuration because we don't have the live ./packet/* files
