@@ -30,10 +30,11 @@ let
       "/etc/nixcfg/devices/chimera/default.nix"
       "x86_64-linux");
 
-    packet-kube = (mkMachine
-      "/etc/nixpkgs-kata3"
-      "/etc/nixcfg/devices/packet-kube/configuration.nix"
-      "x86_64-linux");
+    # TODO: not actually buildable when not on packet machine (/etc/nixos/packet/...)
+    #packet-kube = (mkMachine
+    #  "/etc/nixpkgs-kata3"
+    #  "/etc/nixcfg/devices/packet-kube/configuration.nix"
+    #  "x86_64-linux");
   };
 in
   result
