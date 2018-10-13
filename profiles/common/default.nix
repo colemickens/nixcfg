@@ -160,7 +160,7 @@ in
     dep2nix
 
     apkgs.python36Packages.azure-cli
-    azure-storage-azcopy # not in kata branch yet, hold off
+    azure-storage-azcopy
 
     yad
     ranger

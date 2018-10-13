@@ -3,8 +3,8 @@
 set -x
 set -euo pipefail
 
-target="${1:/run/current-system}"
-store="${2:-"${HOME}/.nixcache}"
+target="${1:-"/run/current-system"}"
+store="${2:-"${HOME}/.nixcache"}"
 key="/etc/nixos/secrets/nix-cache.cluster.lol-1-secret"
 
 mkdir -p "${store}/nar"

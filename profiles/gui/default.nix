@@ -50,7 +50,7 @@ in
       # firefox-nightly-bin from the mozilla-nixpkgs overlay
       fpkgs.firefox-nightly-bin
       # apperance
-      arc-theme numix-icon-theme numix-icon-theme-circle tango-icon-theme
+      arc-theme numix-icon-theme numix-icon-theme-circle
       # browsers
       chromium google-chrome
       # misc desktop
@@ -64,6 +64,7 @@ in
       # misc internet
       spotify transmission
       # virtualization # only if libvirtd is enabled though.... (which it isn't anywhere right now)
+      # TODO: put in my own sort of module?
       # virtmanager virtviewer
       # editors
       vscode kate gnome3.gedit
@@ -76,17 +77,23 @@ in
       # GNOME
       gnome3.gnome-tweaks # TODO: enabled to cfg gtk w/ sway :( TODO: figure better solution
 
+      libinput libinput-gestures
+      pulsemixer
+      epiphany # TODO: remove when firefox/wayland work well
+
       # tiling wm specific
       i3status-rust
       termite
-      spkgs.wlroots
-      spkgs.redshift-wayland
       dmenu
       xwayland
-      epiphany # TODO: remove when firefox/wayland works well
       pulsemixer
-      spkgs.slurp spkgs.grim #spkgs.waybar
-      libinput
+
+      # sway is provided by the program module
+      spkgs.wlroots
+      spkgs.redshift-wayland
+      spkgs.slurp
+      spkgs.grim
+      #spkgs.waybar
     ];
   };
 }
