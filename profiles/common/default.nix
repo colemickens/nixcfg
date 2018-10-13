@@ -10,7 +10,8 @@ in
       allowUnfree = true;
     };
     overlays = [
-      (import /etc/nixos/azure-cli-nix/default.nix)
+      (import (builtins.fetchTarball
+        "https://github.com/stesie/azure-cli-nix/archive/21d92db4d81af549784c8545c40f7a1abdb9c7dd.tar.gz"))
     ];
   };
 

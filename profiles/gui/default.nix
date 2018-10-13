@@ -6,11 +6,6 @@ let
   spkgs = (import /etc/nixpkgs-sway/default.nix {
     config = config.nixpkgs.config;
   }).pkgs;
-  #fpkgs = (import <nixpkgs> {
-  #  config = config.nixpkgs.config;
-  #  #config.allowUnfree = true;
-  #  overlays = [(import /etc/nixos/nixpkgs-mozilla/firefox-overlay.nix)];
-  #}).latest;
 in
 {
   imports = [
@@ -20,7 +15,8 @@ in
 
   config = { 
     nixpkgs.overlays = [
-      (import /etc/nixos/nixpkgs-mozilla/firefox-overlay.nix)
+      (import (builtins.fetchTarball 
+        "https://github.com/mozilla/nixpkgs-mozilla/archive/c72ff151a3e25f14182569679ed4cd22ef352328.tar.gz"))
     ];
     environment.variables.MOZ_USE_XINPUT2 = "1";
     hardware.pulseaudio.enable = true;
