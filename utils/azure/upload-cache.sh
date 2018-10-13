@@ -35,6 +35,7 @@ cat "${bloblist}" | jq -r '.[].name' > "${blobnames}"
 cd "${store}"
 find . ! -path . -type f -printf '%P\n'| grep -vFf "${blobnames}" | while read -r pth; do
   ln -s "${store}/${pth}" "${uploaddir}/${pth}"
+  if [[ "${pth}" == "*narinfo" ]]; then cat "${store}/${pth}" | grep StorePath; fi
 done
 
 time az storage blob upload-batch \
