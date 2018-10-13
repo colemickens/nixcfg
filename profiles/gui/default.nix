@@ -85,7 +85,7 @@ in
       xwayland
       epiphany # TODO: remove when firefox/wayland works well
       pulsemixer
-      spkgs.slurp spkgs.grim spkgs.waybar
+      spkgs.slurp spkgs.grim #spkgs.waybar
       libinput
     ];
   };

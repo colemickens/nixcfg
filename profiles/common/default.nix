@@ -16,12 +16,12 @@ in
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
     ];
     trustedBinaryCaches = [
-      "kixstorage.blob.core.windows.net/nixcache"
-      "cache.nixos.org"
+      "https://kixstorage.blob.core.windows.net/nixcache"
+      "https://cache.nixos.org"
     ];
     binaryCaches = [
-      "kixstorage.blob.core.windows.net/nixcache"
-      "cache.nixos.org"
+      "https://kixstorage.blob.core.windows.net/nixcache"
+      "https://cache.nixos.org"
     ];
     trustedUsers = [ "root" "cole" "@wheel" ];
   };

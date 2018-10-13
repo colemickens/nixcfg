@@ -9,7 +9,10 @@ in {
     ./hardware-configuration.nix
   ];
 
-  options = { xeep.kernelPatches = lib.mkOption { default = [ patches.trackpadPatchV4 ]; }; };
+  # TODO: remove when we move to a 4.20-rc1 with the magic trackpad patches
+  # TODO: then we can follow up on the libinput bug
+  # TODO: also, for now, let's use the "bad" v3 patch that works without the libinput quirk
+  options = { xeep.kernelPatches = lib.mkOption { default = [ patches.trackpadPatchV3 ]; }; };
 
   config = {
     # TODO: reorganize this?

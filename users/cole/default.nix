@@ -83,7 +83,7 @@ in
       description = "Cole Mickens";
       hashedPassword = "$6$rIU9KB8Q$2tHIz6wzkAGqM.F7IMjO9dyQzNeo7ksAUDOesw6pcr2AGD9lXqLHIKwZ0g/gIFSP59i06fZguavOtgUttiq6d.";
       shell = "/run/current-system/sw/bin/bash";
-      extraGroups = [ "wheel" "networkmanager" "kvm" "libvirtd" "docker" "transmission" "audio" "video" "sway" "sound" "pulse" ];
+      extraGroups = [ "wheel" "networkmanager" "kvm" "libvirtd" "docker" "transmission" "audio" "video" "sway" "sound" "pulse" "input" ];
       uid = 1000;
       group = "cole";
       openssh.authorizedKeys.keys = pubkeys;
