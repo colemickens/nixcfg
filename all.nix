@@ -2,7 +2,7 @@
 
 let
   _nixpkgs = "/etc/nixpkgs-cmpkgs";
-  _nixoscfg = "/etc/nixcfg/devices/xeep/default.nix";
+  _nixoscfg = ./devices/xeep/default.nix;
 
   system = import "${_nixpkgs}/nixos" {
     system = "x86_64-linux";

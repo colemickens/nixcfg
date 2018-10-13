@@ -9,9 +9,9 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
   [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null && pwd )"
-nixcfg="${DIR}/.."
+nixcfg="${DIR}"
 
-nixfiletobuild="${1:-"${nixcfg}/devices/all.nix"}"
+nixfiletobuild="${1:-"${nixcfg}/all.nix"}"
 
 unset NIX_PATH
 results="$(\
