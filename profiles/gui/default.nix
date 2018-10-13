@@ -17,8 +17,8 @@ in
     nixpkgs.overlays = [
       (import (builtins.fetchTarball {
         url = "https://github.com/mozilla/nixpkgs-mozilla/archive/c72ff151a3e25f14182569679ed4cd22ef352328.tar.gz";
-	sha256 = "0f8ynrrj24i4g8flp978ccsb2hlwk1n321z8xwj0wakj0ak4c8i9"; 
-      ))
+	sha256 = "0rm612xahllifrc145j128h94409bggx78apx1dpnicaxv78pafw"; 
+      }))
     ];
     environment.variables.MOZ_USE_XINPUT2 = "1";
     hardware.pulseaudio.enable = true;

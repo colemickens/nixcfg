@@ -26,7 +26,7 @@ let
       modules = [ _nixoscfg ];
     };
   in
-    ccc.system.config.system.build.toplevel;
+    ccc.config.system.build.toplevel;
 
   result = {
 
