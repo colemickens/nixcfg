@@ -9,7 +9,7 @@ let
     #!/usr/bin/env bash
     set -x
     set -euo pipefail
-    curl "https://raw.githubusercontent.com/colemickens/nixcfg/master/utils/bootstrap.sh" > /tmp/bootstrap.sh
+    curl "https://raw.githubusercontent.com/colemickens/nixcfg/master/utils/bootstrap/bootstrap.sh" > /tmp/bootstrap.sh
     chmod +x /tmp/bootstrap.sh
     /tmp/bootstrap.sh
     touch ${sentinelPath}

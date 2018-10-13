@@ -1,26 +1,25 @@
 #!/usr/bin/env bash
-
 set -x
 set -euo pipefail
 
-target="${1:-"/run/current-system"}"
-container="nixcache"
+##
+## 1. get a list of all files in the azure cache container already; persist to ${blobnames}
+## 2. create a symlnk in ${uploadddir} for each file in ${store} that is not also in ${blobnames}
+## 3. leverage "az storage blob upload-batch" to quickly upload what doesn't exist
+##
+## NOTE: this is not going to handle key rotation well (which is unfortunately not evident here)
+## When the signing key is rotated, narinfos that are already in azure are not going to be updated
+## TODO: we could have a mode where we purge all narinfos first...
+## 
 
-key="/etc/nixos/secrets/nix-cache.cluster.lol-1-secret"
 export AZURE_STORAGE_CONNECTION_STRING="$(cat /etc/nixos/secrets/kixstorage-secret)"
 
-# prep our store
-store="/var/lib/nixcache"
-sudo mkdir -p "${store}/nar"
-sudo chown -R cole:cole "${store}"
+container="${AZURE_STORAGE_CONTAINER:-"nixcache"}"
+store="${1:-"${HOME}/.nixcache"}"
 
 # prep upload dir
 uploaddir="$(mktemp -d)"
 mkdir -p "${uploaddir}/nar"
-
-# build cache
-nix copy --to "file://${store}" "${target}"
-nix sign-paths --store "file://${store}" -k "${key}" "${target}" -r
 
 # upload
 if ! az storage container show --name "${container}" ; then
