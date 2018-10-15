@@ -20,7 +20,7 @@ cd /etc/nixpkgs
 [[ ! -e /etc/nixpkgs-kata3 ]] && sudo ln -s /etc/nixpkgs /etc/nixpkgs-kata3
 
 # make my normal user the owner
-sudo chown -R 1000:1000 "/etc/nixcfg" /etc/nixpkgs* "/etc/nixos/nixpkgs-mozilla" "/etc/nixos/azure-cli-nix"
+sudo chown -R 1000:1000 "/etc/nixcfg" /etc/nixpkgs*
 
 # change into the '${device}' configuration now
 export NIX_PATH=nixpkgs=/etc/nixpkgs:nixos-config=/etc/nixos/configuration.nix
