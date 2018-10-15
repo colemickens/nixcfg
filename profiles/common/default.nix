@@ -172,6 +172,7 @@ in
     pinentry
 
     bluez
+    fzf
   ];
 }
 

@@ -44,6 +44,7 @@ in
         fira-code fira-code-symbols fira-mono
         source-code-pro
         noto-fonts noto-fonts-emoji
+        nerdfonts
       ];
     };
 
@@ -86,8 +87,11 @@ in
       i3status-rust
       termite
       dmenu
+      rofi
+      albert
       xwayland
       pulsemixer
+      feh
 
       # sway is provided by the program module
       spkgs.wlroots
@@ -95,6 +99,9 @@ in
       spkgs.slurp
       spkgs.grim
       #spkgs.waybar
+      spkgs.wlstream
+
+      way-cooler
     ];
   };
 }

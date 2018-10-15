@@ -49,13 +49,6 @@ in
       if [[ "$SSH_AUTH_SOCK" == "/run/user/$(id -u)/keyring/ssh" ]]; then
         export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
       fi
-
-      if [[ "$(tty)" == "/dev/tty1" ]]; then
-        pkill sway
-        sleep 1
-        export WLR_DRM_NO_ATOMIC=1
-        sway &> ~/.local/sway-$(date '+%s').log
-      fi
     '';
     programs.ssh.startAgent = false;
     programs.tmux = {

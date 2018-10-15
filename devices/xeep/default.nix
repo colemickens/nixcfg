@@ -6,6 +6,7 @@ let
 in {
   imports = [
     ../../profiles/gui
+    ../../profiles/common/thermald.nix
     ./hardware-configuration.nix
   ];
 
