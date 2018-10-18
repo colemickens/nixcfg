@@ -2,7 +2,7 @@
 
 let
   mkMachine = _nixpkgs: _nixoscfg: _system:
-    let 
+    let
       pkgs = import _nixpkgs {
         system = _system;
         inherit (machine.config.nixpkgs) config overlays;

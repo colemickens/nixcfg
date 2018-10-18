@@ -5,10 +5,8 @@ set -euo pipefail
 ##
 ## use github api to get latest commit for a repo
 ## use nix-prefetch-url to get the hash
-## update files in place with sed
+## update files in place with `update-source-version`
 ##
-
-# TODO: can we do better than sed?
 
 export NIX_PATH=nixpkgs=/etc/nixpkgs-sway
 
@@ -38,4 +36,6 @@ EOF
 
 update "wlroots" "swaywm" "wlroots"
 update "sway" "swaywm" "sway"
+update "slurp" "emersion" "slurp"
+update "grim" "emersion" "grim"
 

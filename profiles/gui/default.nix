@@ -16,8 +16,8 @@ in
   config = { 
     nixpkgs.overlays = [
       (import (builtins.fetchTarball {
-        url = "https://github.com/mozilla/nixpkgs-mozilla/archive/c72ff151a3e25f14182569679ed4cd22ef352328.tar.gz";
-	sha256 = "0rm612xahllifrc145j128h94409bggx78apx1dpnicaxv78pafw"; 
+        url = "https://github.com/mozilla/nixpkgs-mozilla/archive/65bfcb376612a2dc0439346e3af8dd0cd257a3de.tar.gz";
+	sha256 = "0l0vqbbm93hnd1w0qkrfvg4yml7rq62jn554li05hlf90765fy50";
       }))
     ];
     environment.variables.MOZ_USE_XINPUT2 = "1";
@@ -78,6 +78,8 @@ in
       ark
       # GNOME
       gnome3.gnome-tweaks # TODO: enabled to cfg gtk w/ sway :( TODO: figure better solution
+      gnome3.nautilus
+      dolphin
 
       libinput libinput-gestures
       pulsemixer

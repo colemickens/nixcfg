@@ -173,6 +173,9 @@ in
 
     bluez
     fzf
+
+    gdb
+    plowshare
   ];
 }
 
