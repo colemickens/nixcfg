@@ -43,11 +43,13 @@ in
     };
   };
 
+  # NOTE: leave this here for when we remove it having any
+  # dependencies on our own nixcfg modules
   nix = {
-    binaryCaches = [ https://kixstorage.blob.core.windows.net/nixcache https://cache.nixos.org ];
-    trustedBinaryCaches = [ https://kixstorage.blob.core.windows.net/nixcache https://cache.nixos.org ];
+    binaryCaches = [ https://nixcache.cluster.lol https://cache.nixos.org ];
+    trustedBinaryCaches = [ https://nixcache.cluster.lol https://cache.nixos.org ];
     binaryCachePublicKeys = [
-      "nix-cache.cluster.lol-1:Pa4IudNcMNF+S/CjNt5GmD8vVJBDf8mJDktXfPb33Ak="
+      "nixcache.cluster.lol-1:DzcbPT+vsJ5LdN1WjWxJPmu+BeU891mgsrRa2X+95XM="
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
     ];
     nixPath = [
