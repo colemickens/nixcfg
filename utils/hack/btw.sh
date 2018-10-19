@@ -8,15 +8,14 @@ unset NIXOS_CONFIG
 closure="${1:-"../../default.nix"}"
 nixcfg="/etc/nixcfg"
 
-pushd "${nixcfg}"
-results="$(./build.sh)"
-popd
+results="$("${nixcfg}/build.sh")"
 
+installables=()
 echo "${results}" | while read -r closure; do
-  "${nixcfg}/utils/azure/cache-closure.sh" "${closure}"
+  installables+=("${closure}")
 done
 
-"${nixcfg}/utils/azure/cache-closure.sh" "/run/current-system"
-
+"${nixcfg}/utils/azure/nix-copy.sh" "${installables[@]}"
+"${nixcfg}/utils/azure/nix-sign-store.sh"
 "${nixcfg}/utils/azure/upload-cache.sh"
 
