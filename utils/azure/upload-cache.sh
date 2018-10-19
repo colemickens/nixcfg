@@ -42,6 +42,8 @@ function blobdata() {
   totalblobsize="$(awk '{ sum += $1 } END { print sum }' "${blobsizes}")"
 }
 
+blobdata # update blob data so we can diff
+
 cd "${store}"
 find . ! -path . -type f -printf '%P\n'| grep -vFf "${blobnames}" | while read -r pth; do
   ln -s "${store}/${pth}" "${uploaddir}/${pth}"
