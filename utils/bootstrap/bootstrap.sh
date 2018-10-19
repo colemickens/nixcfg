@@ -10,7 +10,7 @@ if [[ ! -d "${nixcfg}" ]]; then
   sudo git clone https://github.com/colemickens/nixcfg /etc/nixcfg
 fi
 
-cd /etc/nixcfg
+cd /etc/nixcfg/utils/bootstrap
 
 # link nixos config
 mv /etc/nixos/configuration.nix "/etc/nixos/configuration-old-$(date '+%s').nix" || true
