@@ -26,16 +26,6 @@ let
       system = "x86_64-linux";
     }).config.system.build.toplevel);
   };
-    # packet kubernetes vm
-    # meant to be used with `device-pktkube` with nixpkgs `kata` branch
-    #p =
-  
-    # hyperv build machine
-    #h = (lib.mkHypervImage {
-    #  nixpkgs = "/etc/nixpkgs-cmpkgs";
-    #  nixoscfg = ./modules/config-hvbldr.nix;
-    #  system = "x86_64-linux";
-    #}).config.system.build.vm;
 
 in
   outputs

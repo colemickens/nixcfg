@@ -8,14 +8,7 @@ unset NIXOS_CONFIG
 closure="${1:-"../../default.nix"}"
 nixcfg="/etc/nixcfg"
 
-results="$("${nixcfg}/build.sh")"
-results="/run/current-system/sw/bin/cat\
-/run/current-system/sw/bin/true"
-
-installables=()
-echo "${results}" | while read -r closure; do
-  installables+=("${closure}")
-done
+readarray -t installables <<< "$("${nixcfg}/build.sh")"
 
 "${nixcfg}/utils/azure/nix-copy.sh" "${installables[@]}"
 "${nixcfg}/utils/azure/nix-sign-store.sh"
