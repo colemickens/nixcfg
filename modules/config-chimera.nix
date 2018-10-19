@@ -3,10 +3,12 @@
 let
 in {
   imports = [
-    ./hardware-configuration.nix
-    ./network.nix
-
-    ../../modules/device-chimera.nix
+    ./common
+    ./mixin-plex.nix
+    ./mixin-samba.nix
+    ./mixin-transmission.nix
+    ./mixin-unifi.nix
+    ./mixin-wireguard-server.nix
   ];
 
   userOptions.cole = { tmuxColor="cyan"; bashColor="1;36"; };

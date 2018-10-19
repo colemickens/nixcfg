@@ -1,29 +1,5 @@
-{ config, lib, pkgs, ... }:
-
-let
-in {
-  imports = [
-    ../../users/cole
-    ../common
-  ];
-
-  networking.firewall.enable = false;
-
+{
   services = {
-    plex = {
-      enable = true;
-    };
-    unifi = {
-      unifiPackage = pkgs.unifiStable;
-      enable = true;
-    };
-    transmission = {
-      enable = true;
-      settings = {
-        rpc-whitelist = "127.0.0.1,192.168.*.*";
-        umask = 2;
-      };
-    };
     samba = {
       enable = true;
       extraConfig = ''

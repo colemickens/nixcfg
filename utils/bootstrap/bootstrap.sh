@@ -30,7 +30,7 @@ fi
 
 
 # change into the '${device}' configuration now
-"${nixcfg}/utils/azure/nix-build.sh" -A "system.config.build.toplevel"
+"${nixcfg}/utils/azure/nix-build.sh" "/etc/nixpkgs-kata" -A "system.config.build.toplevel"
 
 export NIX_PATH=nixpkgs=/etc/nixpkgs:nixos-config=/etc/nixos/configuration.nix
 sudo -E nixos-rebuild boot

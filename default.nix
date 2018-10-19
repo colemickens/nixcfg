@@ -21,7 +21,7 @@ let
   # packet kubernetes vm
   # meant to be used with `device-pktkube` with nixpkgs `kata` branch
   p =
-    if builtins.pathExist "/etc/nixos/packet"
+    if builtins.pathExists "/etc/nixos/packet"
     then (lib.mkSystem {
       nixpkgs = "/etc/nixpkgs-kata";
       nixoscfg = ./modules/config-pktkube.nix;
@@ -33,5 +33,5 @@ in
   [
     x
     c
-    p
+    #p
   ]
