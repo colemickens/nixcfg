@@ -3,13 +3,13 @@ set -x
 set -euo pipefail
 
 # clone nixpkgs
-pushd
 if [[ ! -d /etc/nixpkgs-raw ]]; then
   sudo mkdir -p /etc/nixpkgs-raw
   sudo git clone --bare https://github.com/colemickens/nixpkgs /etc/nixpkgs-raw
-  cd /etc/nixpkgs-raw
-  sudo git config --local --add remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
 fi
+
+pushd /etc/nixpkgs-raw
+sudo git config --local --add remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
 popd
 
 # other nixpkgs branches we use
