@@ -5,7 +5,7 @@ in {
   imports = [
     ../../profiles/common
     ../../profiles/cloudvm
-    "${modulesPath}/virtualisation/azure-image.nix"
+    "${pkgs}../nixos/modules/virtualisation/azure-image.nix"
   ];
 
   system.nixos.stateVersion = "18.09";
