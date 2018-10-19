@@ -5,6 +5,7 @@
     ./cole.nix
     ./nix.nix
     ./pkgs.nix
+    ./mixin-yubikey-gpg.nix
   ];
 
   config = {
