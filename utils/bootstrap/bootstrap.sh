@@ -27,7 +27,7 @@ if [[ ! -e /etc/nixpkgs ]]; then
 fi
 
 # change into the '${device}' configuration now
-"${nixcfg}/utils/azure/nix-build.sh" "${nixcfg}/default.nix" -A "chimera"
+"${nixcfg}/utils/azure/nix-build.sh" "${nixcfg}/default.nix" -A "${device}"
 
 export NIX_PATH=nixpkgs=/etc/nixpkgs:nixos-config=/etc/nixos/configuration.nix
 sudo -E nixos-rebuild boot
