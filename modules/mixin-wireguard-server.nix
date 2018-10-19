@@ -1,21 +1,12 @@
 { config, lib, pkgs, ... }:
 
+# TODO: it'd be great if this weren't necessary...
 let
   eth0 = "enp3s0";
 in {
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
   networking = {
-    networkmanager.enable = false;
-
-    defaultGateway = "192.168.1.1";
-    dhcpcd.enable = false;
-    nameservers = [ "192.168.1.1" ];
     firewall.extraCommands = ''iptables -t nat -A POSTROUTING -s10.100.0.0/24 -j MASQUERADE'';
-    interfaces = {
-      enp3s0 = {
-        ipv4.addresses = [ { address = "192.168.1.10"; prefixLength = 24; } ];
-      };
-    };
     wireguard.interfaces = {
       wg0 = {
         ips = [ "10.100.0.1/24" ];

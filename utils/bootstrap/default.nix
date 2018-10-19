@@ -3,7 +3,7 @@
 
 let
   sentinelPath = "/var/lib/bootstrap-complete";
-  bootstrapDevice = "packet-kube";
+  bootstrapDevice = "pktkube";
   bootstrapPkgs = with pkgs; [ bash curl git nix tmux gnutar gzip sudo ];
   bootstrapScript = pkgs.writeScript "bootstrap.sh" ''
     #!/usr/bin/env bash

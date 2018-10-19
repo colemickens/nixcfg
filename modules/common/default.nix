@@ -8,6 +8,8 @@
   ];
 
   config = {
+    environment.systemPackages = with pkgs; [ libva libva-full libva-utils ];
+
     boot = {
       tmpOnTmpfs = true;
       cleanTmpDir = true;
@@ -27,7 +29,7 @@
 
     users.mutableUsers = false;
     security.sudo.wheelNeedsPassword = false;
-  }
+  };
 }
 
 

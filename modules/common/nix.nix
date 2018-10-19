@@ -1,7 +1,6 @@
 { ... }:
 
 {
-
   nixpkgs = {
     config ={
       allowUnfree = true;
@@ -15,6 +14,7 @@
   };
 
   nix = {
+    nixPath = [ "/etc/nixos" "nixpkgs=/etc/nixpkgs" "nixos-config=/etc/nixos/configuration.nix" ];
     binaryCachePublicKeys = [
       "nix-cache.cluster.lol-1:Pa4IudNcMNF+S/CjNt5GmD8vVJBDf8mJDktXfPb33Ak="
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="

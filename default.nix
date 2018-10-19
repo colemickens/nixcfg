@@ -2,19 +2,20 @@
 
 let
   nixcfg = "/etc/nixcfg";
+
+  nixpkgs-cmpkgs  = "/etc/nixpkgs-cmpkgs";
+  nixpkgs-chimera = "/etc/nixpkgs-chimera";
+  nixpkgs-kata = "/etc/nixpkgs-kata";
+
   result = {
-    xeep = (import ./devices/xeep {
-      nixpkgs="/etc/nixpkgs-cmpkgs";
-    });
-    chimera = (import ./devices/chimera {
-      nixpkgs=(builtins.fetchTarball "https://github.com/colemickens/nixpkgs/archive/plex.tar.gz");
-    });
+    xeep    = (import ./modules/device-xeep-all.nix    { nixpkgs = nixpkgs-cmpkgs; });
+    chimera = (import ./modules/device-chimera-all.nix { nixpkgs = nixpkgs-chimera; });
+    # hvbldr  = (import ./modules/device-hvbldr-all.nix  { nixpkgs = nixpkgs-cmpkgs; });
   }
   // (if ! builtins.pathExists "/etc/nixos/packet" then null else
   {
-    packet-kube = (import ./devices/packet-kube {
-      nixpkgs="/etc/nixpkgs-kata3";
-    });
+    # pktkube = (import ./modules/devices-pktkube-all.nix { nixpkgs = nixpkgs-kata; });
   });
+
 in
   result

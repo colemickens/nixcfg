@@ -8,30 +8,29 @@ let
   }).pkgs;
 in
 {
-    programs = {
-      sway = {
-        enable = true;
-        package = spkgs.sway;
-      };
+  programs = {
+    sway = {
+      enable = true;
+      package = spkgs.sway;
     };
-
-    environment.systemPackages = with pkgs; [
-      # tiling wm specific
-      i3status-rust
-      termite
-      rofi
-      xwayland
-      pulsemixer
-      feh
-
-      spkgs.wlroots
-      spkgs.redshift-wayland
-      spkgs.slurp
-      spkgs.grim
-      #spkgs.waybar
-      spkgs.wlstream
-      way-cooler
-    ];
   };
+
+  environment.systemPackages = with pkgs; [
+    # tiling wm specific
+    i3status-rust
+    termite
+    rofi
+    xwayland
+    pulsemixer
+    feh
+
+    spkgs.wlroots
+    spkgs.redshift-wayland
+    spkgs.slurp
+    spkgs.grim
+    #spkgs.waybar
+    spkgs.wlstream
+    way-cooler
+  ];
 }
 

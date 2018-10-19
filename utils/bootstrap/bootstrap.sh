@@ -2,22 +2,25 @@
 set -x
 set -euo pipefail
 
-device="${1:-"packet-kube"}"
+device="${1:-"pktkube"}"
 
 # clone nixcfg
 [[ ! -d /etc/nixcfg ]] && sudo git clone https://github.com/colemickens/nixcfg /etc/nixcfg
+
 (cd /etc/nixcfg; sudo git remote update; sudo git reset --hard origin/master;)
 # link nixos config
 mv /etc/nixos/configuration.nix "/etc/nixos/configuration-old-$(date '+%s').nix" || true
-ln -s /etc/nixcfg/devices/${device}/configuration.nix /etc/nixos/configuration.nix
+ln -s "/etc/nixcfg/modules/config-${device}.nix" /etc/nixos/configuration.nix
 
 # clone nixpkgs
-[[ ! -d /etc/nixpkgs ]] && sudo git clone https://github.com/colemickens/nixpkgs /etc/nixpkgs -b kata3
+[[ ! -d /etc/nixpkgs ]] && \
+	sudo git clone --bare https://github.com/colemickens/nixpkgs /etc/nixpkgs-raw
+
 # other nixpkgs branches we use
 cd /etc/nixpkgs
-[[ ! -d /etc/nixpkgs-sway ]] && sudo git worktree add /etc/nixpkgs-sway sway-wip
+[[ ! -d /etc/nixpkgs-sway ]] && sudo git worktree add /etc/nixpkgs-sway sway
 [[ ! -d /etc/nixpkgs-cmpkgs ]] && sudo git worktree add /etc/nixpkgs-cmpkgs cmpkgs
-[[ ! -e /etc/nixpkgs-kata3 ]] && sudo ln -s /etc/nixpkgs /etc/nixpkgs-kata3
+[[ ! -d /etc/nixpkgs-kata ]] && sudo git worktree add /etc/nixpkgs-kata kata
 
 # make my normal user the owner
 sudo chown -R 1000:1000 "/etc/nixcfg" /etc/nixpkgs*

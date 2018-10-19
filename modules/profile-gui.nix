@@ -3,11 +3,10 @@
 with lib;
 
 {
+  imports = [
+    ./mixin-firefox.nix
+  ];
   config = { 
-    imports = [
-      ./mixin-firefox.nix
-    ];
-
     hardware.pulseaudio.enable = true;
     nixpkgs.config.pulseaudio = true;
 
