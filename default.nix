@@ -26,8 +26,8 @@ let
       nixpkgs = "/etc/nixpkgs-kata";
       nixoscfg = ./modules/config-pktkube.nix;
       system = "x86_64-linux";
-    }.config.system.build.toplevel;
-    else null
+    }).config.system.build.toplevel
+    else null;
 
 in
   [
