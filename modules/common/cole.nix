@@ -40,7 +40,7 @@ in
     programs.bash.interactiveShellInit = ''
       export PATH="$HOME/.local/bin:$PATH"
       export EDITOR="nvim"
-      alias _nixup="sudo nixos-rebuild switch --option build-cores 0 --option extra-binary-caches \"https://kixstorage.blob.core.windows.net/nixcache https://cache.nixos.org\" --option trusted-public-keys \"nix-cache.cluster.lol-1:Pa4IudNcMNF+S/CjNt5GmD8vVJBDf8mJDktXfPb33Ak= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=\"";
+      alias _nixup="sudo nixos-rebuild switch --option build-cores 0 --option extra-binary-caches \"https://nixcache.cluster.lol https://cache.nixos.org\" --option trusted-public-keys \"nixcache.cluster.lol-1:DzcbPT+vsJ5LdN1WjWxJPmu+BeU891mgsrRa2X+95XM= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=\"";
       alias _sway="export WLR_DRM_NO_ATOMIC=1; sway -d &> ~/.local/sway-$(date '+%s').log";
       alias _redshift="export WLR_DRM_NO_ATOMIC=1; redshift -m wayland -l 47.6062:-122.3321 -v"
       alias _colorbg="pkill swaybg; wlroots-layer-shell -l background -a top -a left -w 0 -h 0"

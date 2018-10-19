@@ -16,15 +16,15 @@
   nix = {
     nixPath = [ "/etc/nixos" "nixpkgs=/etc/nixpkgs" "nixos-config=/etc/nixos/configuration.nix" ];
     binaryCachePublicKeys = [
-      "nix-cache.cluster.lol-1:Pa4IudNcMNF+S/CjNt5GmD8vVJBDf8mJDktXfPb33Ak="
+      "nixcache.cluster.lol-1:DzcbPT+vsJ5LdN1WjWxJPmu+BeU891mgsrRa2X+95XM="
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
     ];
     trustedBinaryCaches = [
-      "https://kixstorage.blob.core.windows.net/nixcache"
+      "https://nixcache.cluster.lol"
       "https://cache.nixos.org"
     ];
     binaryCaches = [
-      "https://kixstorage.blob.core.windows.net/nixcache"
+      "https://nixcache.cluster.lol"
       "https://cache.nixos.org"
     ];
     trustedUsers = [ "root" "@wheel" ];

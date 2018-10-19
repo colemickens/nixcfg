@@ -6,7 +6,7 @@ in
 {
   imports = [
     /etc/nixos/packet.nix
-    ../../users/cole
+    ./common
   ];
 
   networking.firewall.enable = false; #TODO: reenable (we were told how on the github pr)
