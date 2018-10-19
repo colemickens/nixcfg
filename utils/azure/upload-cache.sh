@@ -9,6 +9,7 @@ set -euo pipefail
 ##
 ## NOTE: this is not going to handle key rotation well (which is unfortunately not evident here)
 ## When the signing key is rotated, narinfos that are already in azure are not going to be updated
+##
 ## TODO: we could have a mode where we purge all narinfos first...
 ## 
 
@@ -30,10 +31,12 @@ fi
 bloblist="$(mktemp)"
 blobnames="$(mktemp)"
 blobsizes="$(mktemp)"
-az storage blob list --container-name "${container}" | jq -r '.' > "${bloblist}"
-cat "${bloblist}" | jq -r '.[].name' > "${blobnames}"
-cat "${bloblist}" | jq -r '.[].properties.contentLength' > "${blobsizes}"
-totalblobsize="$(awk '{ sum += $1 } END { print sum }' "${blobsizes}")"
+function blobdata() {
+  az storage blob list --container-name "${container}" | jq -r '.' > "${bloblist}"
+  cat "${bloblist}" | jq -r '.[].name' > "${blobnames}"
+  cat "${bloblist}" | jq -r '.[].properties.contentLength' > "${blobsizes}"
+  totalblobsize="$(awk '{ sum += $1 } END { print sum }' "${blobsizes}")"
+}
 
 cd "${store}"
 find . ! -path . -type f -printf '%P\n'| grep -vFf "${blobnames}" | while read -r pth; do
@@ -45,4 +48,6 @@ time az storage blob upload-batch \
   --source "${uploaddir}" \
   --destination "${container}" \
 
+blobdata # update our blob metadata so we can report usage
 echo "==> ${container} disk usage = ${totalblobsize}"
+
