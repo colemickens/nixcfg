@@ -9,7 +9,8 @@ nixcfg="/etc/nixcfg"
 if [[ ! -d "${nixcfg}" ]]; then
   sudo git clone https://github.com/colemickens/nixcfg /etc/nixcfg
 fi
-(cd /etc/nixcfg; sudo git remote update; sudo git reset --hard origin/master;)
+
+cd /etc/nixcfg
 
 # link nixos config
 mv /etc/nixos/configuration.nix "/etc/nixos/configuration-old-$(date '+%s').nix" || true
