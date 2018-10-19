@@ -30,7 +30,6 @@ fi
 "${nixcfg}/utils/azure/nix-build.sh" "${nixcfg}/default.nix" -A "${device}"
 
 export NIX_PATH=nixpkgs=/etc/nixpkgs:nixos-config=/etc/nixos/configuration.nix
-rb="$(nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuild
-d')/bin/nixos-rebuild";
+rb="$(nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuild')/bin/nixos-rebuild";
 sudo -E "${rb}" boot
 
