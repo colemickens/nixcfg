@@ -3,6 +3,7 @@ set -x
 set -euo pipefail
 
 device="${1:-"pktkube"}"
+nixcfg="/etc/nixcfg"
 
 # clone nixcfg
 if [[ ! -d "${nixcfg}" ]]; then
