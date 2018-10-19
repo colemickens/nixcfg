@@ -8,10 +8,9 @@ unset NIXOS_CONFIG
 closure="${1:-"../../default.nix"}"
 nixcfg="/etc/nixcfg"
 
-(
-  cd "${nixcfg}"
-  results="$(./build.sh)"
-)
+pushd "${nixcfg}"
+results="$(./build.sh)"
+popd
 
 echo "${results}" | while read -r closure; do
   "${nixcfg}/utils/azure/cache-closure.sh" "${closure}"

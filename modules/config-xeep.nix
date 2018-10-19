@@ -17,6 +17,7 @@ in {
     ./profile-sway.nix
     ./mixin-docker.nix
     ./mixin-libvirt.nix
+    ./mixin-thermald.nix
   ];
 
   config = {
