@@ -1,16 +1,17 @@
-{ nixpkgs }:
+{}:
 
 let
   lib = import ./lib.nix {};
+  nixpkgs = "/etc/nixpkgs-cmpkgs";
   system = "x86_64-linux";
 
-  result = {
-    machine = (lib.mkSystem {
+  xeep = {
+    toplevel = (lib.mkSystem {
       inherit nixpkgs system;
-      nixoscfg = ./device-xeep-config.nix;
+      nixoscfg = ../modules/config-xeep.nix;
     }).config.system.build.toplevel;
   };
 
 in
-  result
+  xeep
 

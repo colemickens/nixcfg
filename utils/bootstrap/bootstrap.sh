@@ -12,18 +12,16 @@ device="${1:-"pktkube"}"
 mv /etc/nixos/configuration.nix "/etc/nixos/configuration-old-$(date '+%s').nix" || true
 ln -s "/etc/nixcfg/modules/config-${device}.nix" /etc/nixos/configuration.nix
 
-# clone nixpkgs
-[[ ! -d /etc/nixpkgs ]] && \
-	sudo git clone --bare https://github.com/colemickens/nixpkgs /etc/nixpkgs-raw
-
-# other nixpkgs branches we use
-cd /etc/nixpkgs
-[[ ! -d /etc/nixpkgs-sway ]] && sudo git worktree add /etc/nixpkgs-sway sway
-[[ ! -d /etc/nixpkgs-cmpkgs ]] && sudo git worktree add /etc/nixpkgs-cmpkgs cmpkgs
-[[ ! -d /etc/nixpkgs-kata ]] && sudo git worktree add /etc/nixpkgs-kata kata
-
 # make my normal user the owner
-sudo chown -R 1000:1000 "/etc/nixcfg" /etc/nixpkgs*
+sudo chown -R 1000:1000 "/etc/nixcfg"
+
+## Bootstrap the nixpkgs branches, etc
+./bootstrap-nixpkgs.sh
+
+# we still need to assume /etc/nixpkgs is the system config
+# for now bootstrap.sh is specific to the nixos device "pktkube" w/ nixpkgs branch "kata"
+sudo ln -s /etc/nixpkgs-kata /etc/nipkgs
+
 
 # change into the '${device}' configuration now
 export NIX_PATH=nixpkgs=/etc/nixpkgs:nixos-config=/etc/nixos/configuration.nix

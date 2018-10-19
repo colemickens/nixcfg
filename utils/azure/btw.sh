@@ -5,9 +5,10 @@ set -euo pipefail
 unset NIX_PATH
 unset NIXOS_CONFIG
 
-f="${1:-"../../default.nix"}"
+closure="${1:-"../../default.nix"}"
+nixcfg="/etc/nixcfg"
 
-results="$("${nixcfg/utils/azure/nix-build-with-cache.sh" "${closure}")"
+results="$("${nixcfg}/utils/azure/nix-build.sh" "${closure}")"
 echo "${results}" | while read -r closure; do
   "${nixcfg}/utils/nix/cache-closure.sh" "${closure}"
 done

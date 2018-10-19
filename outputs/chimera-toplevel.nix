@@ -1,16 +1,17 @@
-{ nixpkgs }:
+{}:
 
 let
   lib = import ../../lib.nix {};
+  nixpkgs = "/etc/nixpkgs-chimera";
   system = "x86_64-linux";
 
-  result = {
-    machine = (lib.mkSystem {
+  chimera = {
+    toplevel = (lib.mkSystem {
       inherit nixpkgs system;
       nixoscfg = ./configuration.nix;
     }).config.system.build.toplevel;
   };
 
 in
-  result
+  chimera
 
