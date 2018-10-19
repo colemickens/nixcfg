@@ -24,7 +24,9 @@ sudo chown -R 1000:1000 "/etc/nixcfg"
 
 # we still need to assume /etc/nixpkgs is the system config
 # for now bootstrap.sh is specific to the nixos device "pktkube" w/ nixpkgs branch "kata"
-sudo ln -s /etc/nixpkgs-kata /etc/nixpkgs
+if [[ ! -e /etc/nixpkgs ]]; then
+  sudo ln -s /etc/nixpkgs-kata /etc/nixpkgs
+fi
 
 
 # change into the '${device}' configuration now
