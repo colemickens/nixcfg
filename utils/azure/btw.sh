@@ -10,11 +10,11 @@ nixcfg="/etc/nixcfg"
 
 results="$("${nixcfg}/utils/azure/nix-build.sh" "${closure}")"
 echo "${results}" | while read -r closure; do
-  "${nixcfg}/utils/nix/cache-closure.sh" "${closure}"
+  "${nixcfg}/utils/azure/cache-closure.sh" "${closure}"
 done
 
 # for good measure, always take a copy of the current system too
-"${nixcfg}/utils/nix/cache-closure.sh" "/run/current-system"
+"${nixcfg}/utils/azure/cache-closure.sh" "/run/current-system"
 
 "${nixcfg}/utils/azure/upload-cache.sh"
 

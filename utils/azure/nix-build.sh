@@ -15,9 +15,3 @@ results="$(\
     --option trusted-public-keys "nixcache.cluster.lol-1:DzcbPT+vsJ5LdN1WjWxJPmu+BeU891mgsrRa2X+95XM=" \
     "${@}")"
 
-echo "${results}" | while read -r closure; do
-  ${nixcfg}/utils/nix/cache-closure.sh "${closure}"
-done
-
-${nixcfg}/utils/azure/upload-cache.sh
-
