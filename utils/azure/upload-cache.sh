@@ -23,7 +23,11 @@ uploaddir="$(mktemp -d)"
 mkdir -p "${uploaddir}/nar"
 
 # upload
-if ! az storage container show --name "${container}" ; then
+# BUG: ref:
+#if ! az storage container show --name "${container}" ; then
+cc="$(az storage container list -o json)"
+cc="$(echo "${cc}" | jq -r "[ .[] | select(.name==\"${container}\") ] | length")"
+if [[ "${cc}" == 0 ]]; then
   az storage container create --name "${container}" --public-access container
 fi
 
