@@ -9,6 +9,6 @@ with import (if builtins.pathExists "/etc/nixpkgs" then "/etc/nixpkgs" else <nix
 
 stdenv.mkDerivation rec {
   name = "azure-nix-shell";
-  buildInputs = [ python36Packages.azure-cli ];
+  buildInputs = [ python36Packages.azure-cli jq ];
 }
 
