@@ -5,9 +5,11 @@ set -euo pipefail
 device="${1:-"pktkube"}"
 
 # clone nixcfg
-[[ ! -d /etc/nixcfg ]] && sudo git clone https://github.com/colemickens/nixcfg /etc/nixcfg
-
+if [[ ! -d "${nixcfg}" ]]; then
+  sudo git clone https://github.com/colemickens/nixcfg /etc/nixcfg
+fi
 (cd /etc/nixcfg; sudo git remote update; sudo git reset --hard origin/master;)
+
 # link nixos config
 mv /etc/nixos/configuration.nix "/etc/nixos/configuration-old-$(date '+%s').nix" || true
 ln -s "/etc/nixcfg/modules/config-${device}.nix" /etc/nixos/configuration.nix
@@ -20,14 +22,12 @@ sudo chown -R 1000:1000 "/etc/nixcfg"
 
 # we still need to assume /etc/nixpkgs is the system config
 # for now bootstrap.sh is specific to the nixos device "pktkube" w/ nixpkgs branch "kata"
-sudo ln -s /etc/nixpkgs-kata /etc/nipkgs
+sudo ln -s /etc/nixpkgs /etc/nixpkgs-kata
 
 
 # change into the '${device}' configuration now
+"${nixcfg}/utils/azure/nix-build.sh" -A "system.config.build.toplevel"
+
 export NIX_PATH=nixpkgs=/etc/nixpkgs:nixos-config=/etc/nixos/configuration.nix
-rb="$(nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuild')/bin/nixos-rebuild";
-"${rb}" boot \
-  --option build-cores 0 \
-  --option extra-binary-caches "https://kixstorage.blob.core.windows.net/nixcache https://cache.nixos.org" \
-  --option trusted-public-keys "nix-cache.cluster.lol-1:Pa4IudNcMNF+S/CjNt5GmD8vVJBDf8mJDktXfPb33Ak= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+sudo -E nixos-rebuild boot
 

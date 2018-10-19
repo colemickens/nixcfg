@@ -1,7 +1,7 @@
 {}:
 
 let
-  lib = import ./lib.nix {};
+  lib = import ../lib.nix {};
   nixpkgs = "/etc/nixpkgs-cmpkgs";
   system = "x86_64-linux";
 

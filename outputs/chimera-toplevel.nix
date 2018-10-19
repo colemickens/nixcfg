@@ -1,7 +1,7 @@
 {}:
 
 let
-  lib = import ../../lib.nix {};
+  lib = import ../lib.nix {};
   nixpkgs = "/etc/nixpkgs-chimera";
   system = "x86_64-linux";
 
