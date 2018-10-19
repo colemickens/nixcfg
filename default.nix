@@ -29,9 +29,17 @@ let
     }).config.system.build.toplevel
     else null;
 
+  # hyperv build machine
+  h = (lib.mkHypervImage {
+    nixpkgs = "/etc/nixpkgs-cmpkgs";
+    nixoscfg = ./modules/config-hvbldr.nix;
+    system = "x86_64-linux";
+  }).config.system.build.vm;
+
 in
   [
     x
     c
     p
+    #h
   ]

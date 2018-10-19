@@ -15,6 +15,14 @@ let
         };
       in
         machine;
+
+    mkHypervImage = { nixpkgs, nixoscfg, system, extraModules ? []}:
+      let
+        extraModules = extraModules ++ [ "${nixpkgs}/nixos/modules/virtualization/hyperv-image.nix" ];
+      in
+        lib.mkSystem {
+          inherit nixpkgs nixoscfg system extraModules;
+        };
   };
 in
   lib
