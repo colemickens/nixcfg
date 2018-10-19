@@ -14,20 +14,19 @@ cd /etc/nixcfg/utils/bootstrap
 
 # link nixos config
 mv /etc/nixos/configuration.nix "/etc/nixos/configuration-old-$(date '+%s').nix" || true
-ln -s "/etc/nixcfg/modules/config-${device}.nix" /etc/nixos/configuration.nix
+ln -s "${nixcfg}/modules/config-${device}.nix" /etc/nixos/configuration.nix
 
 # make my normal user the owner
-sudo chown -R 1000:1000 "/etc/nixcfg"
+sudo chown -R 1000:1000 "${nixcfg}"
 
 ## Bootstrap the nixpkgs branches, etc
-./bootstrap-nixpkgs.sh
+"${nixcfg}/bootstrap-nixpkgs.sh"
 
 # we still need to assume /etc/nixpkgs is the system config
 # for now bootstrap.sh is specific to the nixos device "pktkube" w/ nixpkgs branch "kata"
 if [[ ! -e /etc/nixpkgs ]]; then
   sudo ln -s /etc/nixpkgs-kata /etc/nixpkgs
 fi
-
 
 # change into the '${device}' configuration now
 "${nixcfg}/utils/azure/nix-build.sh" "/etc/nixpkgs-kata" -A "system.config.build.toplevel"
