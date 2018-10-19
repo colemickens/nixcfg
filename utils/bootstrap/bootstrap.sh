@@ -1,4 +1,4 @@
-  #!/usr/bin/env bash
+#!/usr/bin/env bash
 set -x
 set -euo pipefail
 
@@ -31,4 +31,8 @@ fi
 
 export NIX_PATH=nixpkgs=/etc/nixpkgs:nixos-config=/etc/nixos/configuration.nix
 sudo -E nixos-rebuild boot
+
+rb="$(nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuil
+d')/bin/nixos-rebuild";
+sudo "${rb}" boot
 
