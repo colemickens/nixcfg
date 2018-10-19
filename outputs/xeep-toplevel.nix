@@ -5,13 +5,11 @@ let
   nixpkgs = "/etc/nixpkgs-cmpkgs";
   system = "x86_64-linux";
 
-  xeep = {
-    toplevel = (lib.mkSystem {
-      inherit nixpkgs system;
-      nixoscfg = ../modules/config-xeep.nix;
-    }).config.system.build.toplevel;
-  };
+  result = (lib.mkSystem {
+    inherit nixpkgs system;
+    nixoscfg = ../modules/config-xeep.nix;
+  }).config.system.build.toplevel;
 
 in
-  xeep
+  result
 
