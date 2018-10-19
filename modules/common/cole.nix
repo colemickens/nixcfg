@@ -20,6 +20,8 @@ in
     # bare minimum applications I expect to be available:
     environment.systemPackages = with pkgs; [ tmux git neovim htop ripgrep jq ];
 
+    nix.trustedUsers = [ "cole" ];
+
     i18n = {
       consoleKeyMap = "us";
       defaultLocale = "en_US.UTF-8";

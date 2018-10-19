@@ -3,7 +3,9 @@
 {
   imports = [
     ./common
-    ./user-cole.nix
+
+    ./profile-sway.nix
+
     ./mixin-plex.nix
     ./mixin-samba.nix
     ./mixin-sshd.nix
