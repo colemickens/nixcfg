@@ -65,9 +65,6 @@ in
       '';
     };
 
-    # TODO: split common into parts so we don't need to do this here
-    security.sudo.wheelNeedsPassword = false;
-
     users.extraGroups."cole".gid = 1000;
     users.extraUsers."cole" = {
       isNormalUser = true;

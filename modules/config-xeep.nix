@@ -19,6 +19,7 @@ in {
     ./mixin-libvirt.nix
     ./mixin-sshd.nix
     ./mixin-thermald.nix
+    ./mixin-yubikey.nix
   ];
 
   config = {
@@ -27,20 +28,11 @@ in {
     system.stateVersion = "18.09";
     time.timeZone = "America/Los_Angeles";
 
-    ## TODO: move hardward config up and merge
+    i18n.consolePackages = [ pkgs.terminus_font ]; # hidpi
+    i18n.consoleFont = "ter-v32n"; # hidpi
 
-    # hidpi stuff
-    fonts.fonts = with pkgs; [ terminus_font ];
-    i18n.consolePackages = [ pkgs.terminus_font ];
-    i18n.consoleFont = "ter-v32n";
-
-    # ignore psmouse, errors on Dell HW
-
-    # newer kernel
-
-    services.fwupd.enable = true;
-
-    nix.nixPath = [ "/etc/nixos" "nixpkgs=/etc/nixpkgs" "nixos-config=/etc/nixos/configuration.nix" ];
+    nix.maxJobs = lib.mkDefault 8;
+    nix.nixPath = [ "/etc/nixos" "nixpkgs=/etc/nixpkgs" "nixos-config=/etc/nixos/configuration.nix" ]; # TODO: is this in common?
 
     hardware = {
       bluetooth.enable = true;
@@ -48,37 +40,33 @@ in {
       pulseaudio.package = pkgs.pulseaudioFull;
       enableRedistributableFirmware = true;
       cpu.intel.updateMicrocode = true;
-      #enableAllFirmware = true;
       u2f.enable = true;
     };
 
+    powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
     powerManagement.enable = true;
     services.tlp.enable = true;
+    services.fwupd.enable = true;
 
-    networking = {
-      hostName = "xeep";
-      firewall.allowedTCPPorts = [ 3000 ];
-      networkmanager.enable = true;
+    fileSystems = {
+      "/" = {
+        device = "/dev/vg/root";
+        fsType = "ext4";
+      };
+      "/boot" = {
+        device = "/dev/disk/by-partlabel/xeep-boot";
+        fsType = "vfat";
+      };
     };
-
+    swapDevices = [ ];
     boot = {
-      # earlyVconsoleSetup = true;
+      earlyVconsoleSetup = true; # hidpi + luks-open
       blacklistedKernelModules = [ "psmouse" ];
       kernelPackages = pkgs.linuxPackages_testing;
       kernelPatches = [ trackpadPatch ];
-
-      extraModulePackages = [ config.boot.kernelPackages.wireguard ];
+      extraModulePackages = [ config.boot.kernelPackages.wireguard ]; # (in case we want to use wireguard w/o the module)
       initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
       kernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
-  
-      # workaround Dell/NVME issue with s2idle
-      # see: 
-      #  - https://www.reddit.com/r/Dell/comments/8b6eci/xp_13_9370_battery_drain_while_suspended/
-      #  - https://bugzilla.kernel.org/show_bug.cgi?id=199057
-      #  - https://bugzilla.kernel.org/show_bug.cgi?id=196907
-      # TODO: see if this is still needed with the XPS 13. A BIOS update has changed things somewhat
-      # kernelParams = [ "mem_sleep_default=deep" ];
-
       kernelParams = [
         "i915.modeset=1"
         "i915.enable_guc=2"
@@ -86,33 +74,23 @@ in {
         "i915.enable_fbc=1"
         "i915.enable_psr=1"
         "i915.fastboot=1"
+        "mem_sleep_default=deep" # https://www.reddit.com/r/Dell/comments/8b6eci/xp_13_9370_battery_drain_while_suspended/
       ];
-  
       initrd.luks.devices = [
         { 
           name = "root";
           device = "/dev/disk/by-partlabel/xeep-luks";
           preLVM = true;
-          allowDiscards = true; # TODO
+          allowDiscards = true;
         }
       ];
       loader.systemd-boot.enable = true;
       loader.efi.canTouchEfiVariables = true;
     };
-  
-    fileSystems."/" = {
-      device = "/dev/vg/root";
-      fsType = "ext4";
+    networking = {
+      hostName = "xeep";
+      firewall.allowedTCPPorts = [];
+      networkmanager.enable = true;
     };
-  
-    fileSystems."/boot" = {
-      device = "/dev/disk/by-partlabel/xeep-boot";
-      fsType = "vfat";
-    };
-  
-    swapDevices = [ ];
-  
-    nix.maxJobs = lib.mkDefault 8;
-    powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   };
 }

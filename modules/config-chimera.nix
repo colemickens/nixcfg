@@ -16,7 +16,7 @@ in {
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/dc46f531-a364-4f55-a0d3-7b2441ed63a2";
     fsType = "ext4";
-    #allowDiscards = true; # TODO
+    allowDiscards = true;
   };
 
   fileSystems."/boot" = {
@@ -30,14 +30,16 @@ in {
   };
   
   boot = {
-    initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ata_piix" "usbhid" "usb_storage" "sd_mod" ];
     kernelPackages = pkgs.linuxPackages_latest;
-    kernelModules = [ "kvm-intel" ];
+    initrd.supportedFilesystems = [ btrfs ];
+    supportedFilesystems = [ btrfs ];
+    initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ata_piix" "usbhid" "usb_storage" "sd_mod" "intel_agp" "i915" ];
+    kernelModules = [ "xhci_pci" "ehci_pci" "ata_piix" "usbhid" "usb_storage" "sd_mod" "intel_agp" "i915" ];
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
-    extraModulePackages = [];
+    extraModulePackages = [ config.boot.kernelPackages.wireguard ]; # (in case we want to use wireguard w/o the module)
   };
 
   swapDevices = [];
