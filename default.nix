@@ -19,12 +19,11 @@ let
       system = "x86_64-linux";
     }).config.system.build.toplevel;
 
-    pktkube = (if ! builtins.pathExists "/etc/nixos/packet" then null else
-    (lib.mkSystem {
+    pktkube = (lib.mkSystem {
       nixpkgs = "/etc/nixpkgs-kata";
       nixoscfg = ./modules/config-pktkube.nix;
       system = "x86_64-linux";
-    }).config.system.build.toplevel);
+    }).config.system.build.toplevel;
   };
 
 in

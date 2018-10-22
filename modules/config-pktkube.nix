@@ -2,12 +2,12 @@
 { config, lib, pkgs, ... }:
 
 let
+  _imports = [
+    ./common
+  ] ++ (if lib.pathExists /etc/nixos/packet.nix then [ /etc/nixos/packet.nix ] else []);
 in
 {
-  imports = [
-    /etc/nixos/packet.nix
-    ./common
-  ];
+  imports = _imports;
 
   networking.firewall.enable = false; #TODO: reenable (we were told how on the github pr)
 
