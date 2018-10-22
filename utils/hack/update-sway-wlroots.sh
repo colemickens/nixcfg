@@ -24,8 +24,9 @@ function update() {
   popd >/dev/null
 }
 
-update "wlroots" "swaywm" "wlroots"
-update "sway"    "swaywm" "sway"
-update "slurp"   "emersion" "slurp"
-update "grim"    "emersion" "grim"
+update "wlroots"  "swaywm" "wlroots"
+update "sway"     "swaywm" "sway"
+update "slurp"    "emersion" "slurp"
+update "grim"     "emersion" "grim"
+update "wlstream" "atomnuker" "wlstream"
 
