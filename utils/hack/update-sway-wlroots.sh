@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -x
 set -euo pipefail
 
 ##
@@ -8,34 +7,25 @@ set -euo pipefail
 ## update files in place with `update-source-version`
 ##
 
-export NIX_PATH=nixpkgs=/etc/nixpkgs-sway
+export nixpkgs=/etc/nixpkgs-sway
+export NIX_PATH=nixpkgs=${nixpkgs}
 
-cd /etc/nixpkgs-sway
-
+# update: <derivation-name> <github-repo-owner> <github-repo-name>
 function update() {
   attr="${1}"
   owner="${2}"
   repo="${3}"
-  rev="$(curl "https://api.github.com/repos/${owner}/${repo}/commits" | jq -r ".[0].sha")"
-  sha256="$(nix-prefetch-url --unpack "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz")"
+  rev="$(curl --silent --fail "https://api.github.com/repos/${owner}/${repo}/commits" | jq -r ".[0].sha")"
+  sha256="$(nix-prefetch-url --unpack "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz" 2>/dev/null)"
 
-  /etc/nixpkgs-sway/pkgs/common-updater/scripts/update-source-version \
-    "${attr}" "${rev}" "${sha256}"
-
-  return
-
-  cat <<EOF
-src = fetchFromGitHub {
-  owner = "${owner}";
-  repo = "${repo}";
-  rev = "${rev}";
-  sha256 = "${sha256}";
-}
-EOF
+  pushd "${nixpkgs}" >/dev/null
+  echo "Updating attribute '${attr}'."
+  "${nixpkgs}/pkgs/common-updater/scripts/update-source-version" "${attr}" "${rev}" "${sha256}"
+  popd >/dev/null
 }
 
 update "wlroots" "swaywm" "wlroots"
-update "sway" "swaywm" "sway"
-update "slurp" "emersion" "slurp"
-update "grim" "emersion" "grim"
+update "sway"    "swaywm" "sway"
+update "slurp"   "emersion" "slurp"
+update "grim"    "emersion" "grim"
 
