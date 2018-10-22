@@ -5,16 +5,13 @@
     ./cole.nix
     ./nix.nix
     ./pkgs.nix
-    ./mixin-yubikey-gpg.nix
+    ./mixin-gpg.nix
   ];
 
   config = {
-    environment.systemPackages = with pkgs; [ libva libva-full libva-utils ];
-
     boot = {
       tmpOnTmpfs = true;
       cleanTmpDir = true;
-      supportedFilesystems = [ "btrfs" ];
       kernel.sysctl = {
         "fs.file-max" = 100000;
         "fs.inotify.max_user_instances" = 256;
@@ -24,7 +21,7 @@
 
     services = {
       timesyncd.enable = true;
-      pcscd.enable = true;
+      pcscd.enable = true; # TODO: should be moved to gpg, if not already
       upower.enable = true;
     };
 

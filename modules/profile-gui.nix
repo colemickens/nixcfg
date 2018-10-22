@@ -7,6 +7,7 @@ with lib;
     ./mixin-firefox.nix
   ];
   config = { 
+
     hardware.pulseaudio.enable = true;
     nixpkgs.config.pulseaudio = true;
 
@@ -37,12 +38,14 @@ with lib;
       chromium google-chrome
       gimp graphviz inkscape # TODO: add basic image viewer? todo: whats a good one?
       vlc mpv
+      libva libva-full libva-utils
       pavucontrol
       spotify transmission
       vscode kate gnome3.gedit
       slack signal-desktop zoom-us
 
       ark dolphin
+      evince
       gnome3.gnome-tweaks
       gnome3.nautilus
       gnome3.file-roller

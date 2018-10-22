@@ -28,7 +28,7 @@ in
     spkgs.redshift-wayland
     spkgs.slurp
     spkgs.grim
-    spkgs.waybar
+    #spkgs.waybar
     spkgs.wlstream
     way-cooler
   ];

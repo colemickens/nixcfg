@@ -42,6 +42,7 @@ in
       export EDITOR="nvim"
       alias _nixup="sudo nixos-rebuild switch --option build-cores 0 --option extra-binary-caches \"https://nixcache.cluster.lol https://cache.nixos.org\" --option trusted-public-keys \"nixcache.cluster.lol-1:DzcbPT+vsJ5LdN1WjWxJPmu+BeU891mgsrRa2X+95XM= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=\"";
       alias _sway="export WLR_DRM_NO_ATOMIC=1; sway -d &> ~/.local/sway-$(date '+%s').log";
+      function _reset_pinentry () { pkill pinentry; echo 'UPDATESTARTUPTTY' | gpg-connect-agent; export GPG_TTY=$(tty); }
 
       export SSH_PUBLIC_KEY="${builtins.elemAt pubkeys 0}"
       if [[ "$SSH_AUTH_SOCK" == "/run/user/$(id -u)/keyring/ssh" ]]; then
