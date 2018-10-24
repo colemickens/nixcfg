@@ -32,7 +32,6 @@ in {
     i18n.consoleFont = "ter-v32n"; # hidpi
 
     nix.maxJobs = lib.mkDefault 8;
-    nix.nixPath = [ "/etc/nixos" "nixpkgs=/etc/nixpkgs" "nixos-config=/etc/nixos/configuration.nix" ]; # TODO: is this in common?
 
     hardware = {
       bluetooth.enable = true;

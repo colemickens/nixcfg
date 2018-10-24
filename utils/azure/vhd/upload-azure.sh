@@ -28,17 +28,9 @@ UNIQUE="$(echo "${VHD_DIR}" | cut -d '-' -f 1 | cut -d '/' -f 4)"
 TARGET="nixos-azure-${UNIQUE}-${LOCATION}.vhd"
 IMAGE="nixos-azure-${UNIQUE}-${LOCATION}"
 
-# TODO: remove when we don't need docker
-WORKDIR="$(mktemp -d)"
-trap "sudo rm -rf ${WORKDIR}" EXIT
-export REAL_VHD="$(readlink -f "${VHD}")"; export VHD="/disk.vhd" # until we don't need docker for `azure-cli` anymore
-function az() {
-    docker run -it -e AZURE_STORAGE_CONNECTION_STRING -v "${WORKDIR}:/root" -v "${REAL_VHD}:${VHD}" "docker.io/microsoft/azure-cli:latest" az $@
-}
-
-# ISOLATE AZURE-CLI ENVIRONMENT (re-enable when we dont rely on docker [which is already isolating the workdi])
-#export AZURE_CONFIG_DIR="$(mktemp -d)"
-#trap "rm -rf ${AZURE_CONFIG_DIR}" EXIT
+# ISOLATE AZURE-CLI ENVIRONMENT
+export AZURE_CONFIG_DIR="$(mktemp -d)"
+trap "rm -rf ${AZURE_CONFIG_DIR}" EXIT
 
 # LOGIN
 az login --service-principal --username="${AZURE_USERNAME}" --password="${AZURE_PASSWORD}" --tenant="${AZURE_TENANT_ID}"
@@ -77,7 +69,5 @@ if [[ -z "${IMAGEID}" ]] ; then
     IMAGEID=$(az image show -n ${IMAGE} -g "${RG}" --query [id] -o tsv)
 fi
 
-# PUBLISH
-# TODO: publish whenever that userSharedImages feature lights up
-
 set +x; echo; echo; echo "::::: ${IMAGEID}"; echo;
+

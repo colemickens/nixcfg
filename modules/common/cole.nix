@@ -70,7 +70,8 @@ in
       isNormalUser = true;
       home = "/home/cole";
       description = "Cole Mickens";
-      hashedPassword = "$6$rIU9KB8Q$2tHIz6wzkAGqM.F7IMjO9dyQzNeo7ksAUDOesw6pcr2AGD9lXqLHIKwZ0g/gIFSP59i06fZguavOtgUttiq6d.";
+      #mkpasswd -m sha-512
+      hashedPassword = "$6$gYyrDUSf9hL4H$CWQFdAu1N1EfMIGg3eZhn.YM83VN/Blsbtxh9MW6z0PHVFSGaHX0McJmKHVmeFEnve6gS5l302fZzR0xsSR0t1";
       shell = "/run/current-system/sw/bin/bash";
       extraGroups = [ "wheel" "networkmanager" "kvm" "libvirtd" "docker" "transmission" "audio" "video" "sway" "sound" "pulse" "input" ];
       uid = 1000;

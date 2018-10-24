@@ -23,7 +23,7 @@ uploaddir="$(mktemp -d)"
 mkdir -p "${uploaddir}/nar"
 
 # upload
-# BUG: ref:
+# BUG: ref: https://github.com/Azure/azure-cli/issues/7615
 #if ! az storage container show --name "${container}" ; then
 cc="$(az storage container list -o json)"
 cc="$(echo "${cc}" | jq -r "[ .[] | select(.name==\"${container}\") ] | length")"

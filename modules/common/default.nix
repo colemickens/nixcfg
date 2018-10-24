@@ -21,7 +21,6 @@
 
     services = {
       timesyncd.enable = true;
-      pcscd.enable = true; # TODO: should be moved to gpg, if not already
       upower.enable = true;
     };
 

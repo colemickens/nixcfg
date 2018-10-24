@@ -20,8 +20,6 @@ with lib;
     };
 
     fonts = {
-      #enableFontDir = true;
-      #enableGhostscriptFonts = true;
       fonts = with pkgs; [
         corefonts inconsolata awesome
         fira-code fira-code-symbols fira-mono
@@ -32,17 +30,19 @@ with lib;
     };
 
     environment.systemPackages = with pkgs; [
-      # NOTE: firefox comes from the mixin
+      # NOTE: firefox comes from the mixin/overlay
 
       arc-theme numix-icon-theme numix-icon-theme-circle
       chromium google-chrome
-      gimp graphviz inkscape # TODO: add basic image viewer? todo: whats a good one?
+      gimp graphviz inkscape feh
       vlc mpv
       libva libva-full libva-utils
       pavucontrol
       spotify transmission
       vscode kate gnome3.gedit
       slack signal-desktop zoom-us
+
+      termite kitty
 
       ark dolphin
       evince
