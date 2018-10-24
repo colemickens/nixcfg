@@ -12,6 +12,7 @@ in
   nixpkgs.overlays = [ swayOverlay ];
 
   programs = {
+    qt5ct.enable = true; # https://github.com/NixOS/nixpkgs/issues/25762
     sway-beta = {
       enable = true;
       package = pkgs.sway-beta;
@@ -32,8 +33,8 @@ in
     slurp
     grim
     wlstream
-    #waybar
-    #redshift-wayland
+    waybar
+    redshift-wayland
   ];
 }
 
