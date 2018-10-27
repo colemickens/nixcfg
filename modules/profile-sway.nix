@@ -29,12 +29,16 @@ in
     way-cooler
 
     sway-beta
-    wlroots.bin
+    #wlroots.bin
+    wlroots.examples
     slurp
     grim
     wlstream
     waybar
     redshift-wayland
+    weston
+
+    wayfire
   ];
 }
 
