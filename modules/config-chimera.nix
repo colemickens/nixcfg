@@ -4,8 +4,10 @@ let
 in {
   imports = [
     ./common
+    ./mixin-docker.nix
     ./mixin-plex.nix
     ./mixin-samba.nix
+    ./mixin-sshd.nix
     ./mixin-transmission.nix
     ./mixin-unifi.nix
     ./mixin-wireguard-server.nix
