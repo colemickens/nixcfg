@@ -3,9 +3,10 @@
 {
   services = {
     unifi = {
-      unifiPackage = pkgs.unifiStable;
+      unifiPackage = pkgs.unifiTesting;
       enable = true;
     };
   };
+  networking.firewall.allowedTCPPorts = [ 8080 8443 ];
 }
 
