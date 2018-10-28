@@ -9,7 +9,7 @@ export CACHE_KEY="${CACHE_KEY:-"/etc/nixos/secrets/nixcache.cluster.lol-1-secret
 blobnames="$(mktemp)"
 function bloblist() {
   cc="$(az storage container list | jq -r "[ .[] | select(.name==\"nixcache\") ] | length")"
-  [[ "${cc}" -eq 0 ]] && az storage container create --name "nixcache" --public-access container
+  [[ "${cc}" -eq 0 ]] && az storage container create --name "nixcache" --public-access blob
   az storage blob list --container-name "nixcache" | jq -r '.[].name' > "${blobnames}"
 }
 bloblist &
