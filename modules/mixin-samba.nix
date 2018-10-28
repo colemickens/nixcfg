@@ -1,4 +1,9 @@
 {
+  networking.firewall = {
+    allowPing = true;
+    allowedTCPPorts = [ 445 139 ];
+    allowedUDPPorts = [ 137 138 ];
+  };
   services = {
     samba = {
       enable = true;
