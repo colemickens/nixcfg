@@ -11,7 +11,7 @@ in {
       wg0 = {
         ips = [ "10.100.0.1/24" ];
         listenPort = 51820;
-        privateKeyFile = "/secrets/wireguard/chimera/server_private_key";
+        privateKeyFile = "/etc/nixos/secrets/wireguard/chimera/server_private_key";
 
         postSetup = [
           "${pkgs.iptables}/bin/iptables -A FORWARD -i ${eth0} -j ACCEPT"
