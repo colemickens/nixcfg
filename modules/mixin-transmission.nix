@@ -1,4 +1,5 @@
 {
+  networking.firewall.allowedTCPPorts = [ 9091 ];
   services = {
     transmission = {
       enable = true;
