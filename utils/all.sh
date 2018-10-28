@@ -15,10 +15,8 @@ if [[ -d /etc/nix-overlay-sway ]]; then
   buildables+=("/etc/nix-overlay-sway/build.nix")
 fi
 
-results="$(nix-build "${buildables[@]}")"
+results="$(nix-build --no-out-link "${buildables[@]}")"
 readarray -t installables <<< "$(echo "${results}")"
-"${root}/utils/azure/nix-copy.sh" "${installables[@]}"
 
-"${root}/utils/azure/nix-sign-store.sh"
-"${root}/utils/azure/upload-cache.sh"
+"${root}/utils/azure/nix-copy-azure.sh" "${installables[@]}"
 
