@@ -16,7 +16,6 @@ in {
     ./profile-gui.nix
     ./profile-sway.nix
     ./mixin-docker.nix
-    ./mixin-libvirt.nix
     ./mixin-sshd.nix
     ./mixin-thermald.nix
     ./mixin-yubikey.nix

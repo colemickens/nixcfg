@@ -30,12 +30,12 @@ with lib;
     };
 
     environment.systemPackages = with pkgs; [
-      # NOTE: firefox comes from the mixin/overlay
-
+      # firefox comes from the mixin/overlay
+      chromiumCanary #chromium
+      google-chrome
       arc-theme numix-icon-theme numix-icon-theme-circle
-      chromium google-chrome
       gimp graphviz inkscape feh
-      vlc mpv
+      vlc
       libva libva-full libva-utils
       pavucontrol
       spotify transmission

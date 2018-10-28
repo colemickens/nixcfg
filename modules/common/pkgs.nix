@@ -19,7 +19,7 @@
     vim neovim
 
     kubectl awscli google-cloud-sdk
-    azure-vhd-utils # azure-cli
+    azure-vhd-utils
     nixopsUnstable
 
     efibootmgr

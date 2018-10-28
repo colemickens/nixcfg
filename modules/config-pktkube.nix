@@ -15,9 +15,7 @@ in
   networking.firewall.enable = false; #TODO: reenable (we were told how on the github pr)
 
   environment.systemPackages = with pkgs; [
-    cri-tools bind
-    azure-storage-azcopy python36Packages.azure-cli
-    kata-agent
+    cri-tools bind kata-agent
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -25,18 +23,12 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
   system.stateVersion = "18.03"; # Did you read the comment?
 
-  boot.kernelPackages = pkgs.linuxPackages_4_18;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   nixpkgs = {
-    overlays = [
-      (import (builtins.fetchTarball {
-        url = "https://github.com/stesie/azure-cli-nix/archive/21d92db4d81af549784c8545c40f7a1abdb9c7dd.tar.gz";
-        sha256 = "1s9g9g2vifhba0i99dlhppafbiqi9gdyfna2mpgnpkcdp2z3gj2q";
-      }))
-    ];
     config = {
       allowUnfree = true;
       packageOverrides = pkgs:
-      { linux_4_18 = pkgs.linux_4_18.override {
+      { linux_latest = pkgs.linux_latest.override {
           extraConfig =
             ''
               MLX5_CORE_EN y
