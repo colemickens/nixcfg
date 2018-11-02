@@ -7,7 +7,6 @@ with lib;
     ./mixin-firefox.nix
   ];
   config = { 
-
     hardware.pulseaudio.enable = true;
     nixpkgs.config.pulseaudio = true;
 
@@ -31,7 +30,6 @@ with lib;
 
     environment.systemPackages = with pkgs; [
       # firefox comes from the mixin/overlay
-      chromiumCanary #chromium
       google-chrome
       arc-theme numix-icon-theme numix-icon-theme-circle
       gimp graphviz inkscape feh
