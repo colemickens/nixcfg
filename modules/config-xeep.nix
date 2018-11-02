@@ -19,6 +19,7 @@ in {
     ./mixin-sshd.nix
     ./mixin-thermald.nix
     ./mixin-yubikey.nix
+    ./pkgs-full.nix
   ];
 
   config = {
