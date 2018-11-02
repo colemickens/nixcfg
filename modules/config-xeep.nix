@@ -16,6 +16,7 @@ in {
     ./profile-gui.nix
     ./profile-sway.nix
     ./mixin-docker.nix
+    ./mixin-libvirt.nix
     ./mixin-sshd.nix
     ./mixin-thermald.nix
     ./mixin-yubikey.nix
@@ -35,7 +36,10 @@ in {
 
     hardware = {
       bluetooth.enable = true;
-      opengl.extraPackages = with pkgs; [ vaapiIntel ];
+      opengl = {
+        enable = true;
+        extraPackages = with pkgs; [ vaapiIntel vaapiVdpau libvdpau-va-gl ];
+      };
       pulseaudio.package = pkgs.pulseaudioFull;
       enableRedistributableFirmware = true;
       cpu.intel.updateMicrocode = true;
@@ -89,7 +93,16 @@ in {
     networking = {
       hostName = "xeep";
       firewall.allowedTCPPorts = [];
-      networkmanager.enable = true;
+      useNetworkd = true;
+      wireless.iwd.enable = true;
+    };
+    services.resolved.enable = true;
+    systemd.network = {
+      enable = true;
+      networks."wired".DHCP = "ipv4";
+      networks."wired".matchConfig = { Name = "enp0s20f0u1u3"; };
+      networks."wireless".DHCP = "ipv4";
+      networks."wireless".matchConfig = { Name = "wlp2s0"; };
     };
   };
 }
