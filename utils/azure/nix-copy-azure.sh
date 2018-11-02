@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
-set -x
 set -euo pipefail
 
 export STORE="${STORE:-"${HOME}/.nixcache"}" # semi-permanent expensive NARs
 export AZURE_STORAGE_CONNECTION_STRING="${AZURE_STORAGE_CONNECTION_STRING:-"$(cat /etc/nixos/secrets/kixstorage-secret)"}"
 export CACHE_KEY="${CACHE_KEY:-"/etc/nixos/secrets/nixcache.cluster.lol-1-secret"}"
+
+set -x
 
 blobnames="$(mktemp)"
 function bloblist() {
