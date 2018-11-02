@@ -30,6 +30,7 @@ in
 
     sway-beta
     #wlroots.bin
+    # TODO: re-enable fater pulling nixpkgs patch for wlroots-ex prefix
     wlroots.examples
     slurp
     grim

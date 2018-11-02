@@ -1,22 +1,14 @@
 { config, lib, pkgs, ... }:
 
 let
-  trackpadPatch = {
-    name = "apple-magic-trackpad2-driver-v3";
-    patch = pkgs.fetchpatch {
-      name = "trackpad.patch";
-      url = "https://lkml.org/lkml/diff/2018/9/21/38/1";
-      sha256 = "018wyjvw4wz79by38b1r6bkbl34p6686r66hg7g7vc0v24jkcafn";
-    };
-  };
   cfg = config.xeep;
 in {
   imports = [
     ./common
     ./profile-gui.nix
     ./profile-sway.nix
-    ./mixin-docker.nix
-    ./mixin-libvirt.nix
+    #./mixin-docker.nix
+    #./mixin-libvirt.nix
     ./mixin-sshd.nix
     ./mixin-thermald.nix
     ./mixin-yubikey.nix
@@ -65,8 +57,7 @@ in {
     boot = {
       earlyVconsoleSetup = true; # hidpi + luks-open
       blacklistedKernelModules = [ "psmouse" ];
-      kernelPackages = pkgs.linuxPackages_testing;
-      kernelPatches = [ trackpadPatch ];
+      kernelPackages = pkgs.linuxPackages_latest;
       extraModulePackages = [ config.boot.kernelPackages.wireguard ]; # (in case we want to use wireguard w/o the module)
       initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
       kernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
@@ -92,6 +83,8 @@ in {
     };
     networking = {
       hostName = "xeep";
+      # temporary, do not commit
+      firewall.enable = false;
       firewall.allowedTCPPorts = [];
       useNetworkd = true;
       wireless.iwd.enable = true;
@@ -99,10 +92,10 @@ in {
     services.resolved.enable = true;
     systemd.network = {
       enable = true;
-      networks."wired".DHCP = "ipv4";
-      networks."wired".matchConfig = { Name = "enp0s20f0u1u3"; };
-      networks."wireless".DHCP = "ipv4";
-      networks."wireless".matchConfig = { Name = "wlp2s0"; };
+      #networks."wired".DHCP = "ipv4";
+      #networks."wired".matchConfig = { Name = "enp0s20f0u1u3"; };
+      #networks."wireless".DHCP = "ipv4";
+      #networks."wireless".matchConfig = { Name = "wlp2s0"; };
     };
   };
 }

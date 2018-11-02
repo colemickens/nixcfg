@@ -4,7 +4,6 @@ let
 in {
   imports = [
     ./common
-    ./mixin-docker.nix
     ./mixin-plex.nix
     ./mixin-samba.nix
     ./mixin-sshd.nix
@@ -49,7 +48,7 @@ in {
   nix.maxJobs = 4;
   networking = {
     hostName = "chimera";
-    networkmanager.enable = true;
+    useNetworkd = true;
   };
 
   i18n.consoleFont = "Lat2-Terminus16";

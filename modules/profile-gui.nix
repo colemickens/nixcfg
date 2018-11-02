@@ -31,10 +31,12 @@ with lib;
     environment.systemPackages = with pkgs; [
       # firefox comes from the mixin/overlay
       google-chrome
+      google-chrome-dev
+      #chromiumCanary
+
       arc-theme numix-icon-theme numix-icon-theme-circle
       gimp graphviz inkscape feh
       vlc
-      libva libva-full libva-utils
       pavucontrol
       spotify transmission
       vscode kate gnome3.gedit

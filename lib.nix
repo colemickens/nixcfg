@@ -2,7 +2,7 @@
 
 let
   lib = {
-    mkSystem = { nixpkgs, nixoscfg, system, extraModules ? []}:
+    mkSystem = { nixpkgs, fallback, nixoscfg, system, extraModules ? []}:
       let
         pkgs = import nixpkgs {
           inherit system;
