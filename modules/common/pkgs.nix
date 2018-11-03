@@ -1,5 +1,8 @@
 { pkgs, ... }:
 
+let
+  pass = pass.withExtensions (ext: [ext.pass-import]);
+in
 {
   environment.systemPackages = with pkgs ; [
     zsh bash tmux
@@ -15,6 +18,7 @@
     dmidecode
     ranger
     ffmpeg
+    gopass pass
   ];
 }
 

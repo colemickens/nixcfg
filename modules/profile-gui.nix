@@ -30,12 +30,15 @@ with lib;
 
     environment.systemPackages = with pkgs; [
       # firefox comes from the mixin/overlay
-      google-chrome
+      #google-chrome
       google-chrome-dev
+      epiphany
+      qtpass
       #chromiumCanary
 
       arc-theme numix-icon-theme numix-icon-theme-circle
       gimp graphviz inkscape feh
+      discord
       vlc
       pavucontrol
       spotify transmission
@@ -51,6 +54,8 @@ with lib;
       gnome3.file-roller
 
       libinput libinput-gestures
+      browserpass
+      xclip
     ];
   };
 }
