@@ -8,7 +8,7 @@ in {
     ./profile-gui.nix
     ./profile-sway.nix
     #./mixin-docker.nix
-    #./mixin-libvirt.nix
+    ./mixin-libvirt.nix
     ./mixin-sshd.nix
     ./mixin-thermald.nix
     ./mixin-yubikey.nix
@@ -86,16 +86,17 @@ in {
       # temporary, do not commit
       firewall.enable = false;
       firewall.allowedTCPPorts = [];
-      useNetworkd = true;
-      wireless.iwd.enable = true;
+      #wireless.iwd.enable = true;
+      #useNetworkd = true;
+      networkmanager.enable = true;
     };
     services.resolved.enable = true;
-    systemd.network = {
-      enable = true;
+    #systemd.network = {
+    #  enable = true;
       #networks."wired".DHCP = "ipv4";
       #networks."wired".matchConfig = { Name = "enp0s20f0u1u3"; };
       #networks."wireless".DHCP = "ipv4";
       #networks."wireless".matchConfig = { Name = "wlp2s0"; };
-    };
+    #};
   };
 }

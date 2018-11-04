@@ -3,6 +3,7 @@ set -x
 set -euo pipefail
 
 device="${1:-"pktkube"}"
+branch="${2:-"kata"}"
 nixcfg="/etc/nixcfg"
 
 # clone nixcfg
@@ -23,11 +24,10 @@ sudo chown -R 1000:1000 "${nixcfg}"
 # we still need to assume /etc/nixpkgs is the system config
 # for now bootstrap.sh is specific to the nixos device "pktkube" w/ nixpkgs branch "kata"
 if [[ ! -e /etc/nixpkgs ]]; then
-  sudo ln -s /etc/nixpkgs-kata /etc/nixpkgs
+  sudo ln -s "/etc/nixpkgs-${branch}" /etc/nixpkgs
 fi
 
-# change into the '${device}' configuration now
-"${nixcfg}/utils/azure/nix-build.sh" "${nixcfg}/default.nix" -A "${device}"
+nix build "${nixcfg}/default.nix" -A "${device}"
 
 export NIX_PATH=nixpkgs=/etc/nixpkgs:nixos-config=/etc/nixos/configuration.nix
 rb="$(nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuild')/bin/nixos-rebuild";

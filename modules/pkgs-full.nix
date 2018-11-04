@@ -4,7 +4,7 @@
   environment.systemPackages = with pkgs ; [
     nox
 
-    zsh bash tmux
+    zsh bash bashCompletion tmux
     wget curl stow
     openssh autossh mosh sshuttle
     htop iotop
@@ -121,7 +121,10 @@
     fzf
 
     gdb
-    plowshare
+    plowshare # TODO: move to common or server pkgs or somethign maybe?
+
+    zbar
+    highlight
   ];
 }
 

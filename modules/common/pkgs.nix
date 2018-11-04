@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-  pass = pass.withExtensions (ext: [ext.pass-import]);
+  pass' = pkgs.pass.withExtensions (ext: [ext.pass-import]);
 in
 {
   environment.systemPackages = with pkgs ; [
@@ -18,7 +18,7 @@ in
     dmidecode
     ranger
     ffmpeg
-    gopass pass
+    gopass pass'
   ];
 }
 

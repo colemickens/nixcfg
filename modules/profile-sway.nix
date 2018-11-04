@@ -4,8 +4,8 @@ with lib;
 let
   nos = "https://github.com/colemickens/nixpkgs-wayland/archive/master.tar.gz";
   swayOverlay =
-    if builtins.pathExists /etc/nixpkgs-wayland
-    then (import /etc/nixpkgs-wayland)
+    if builtins.pathExists /etc/nix-overlays/nixpkgs-wayland
+    then (import /etc/nix-overlays/nixpkgs-wayland)
     else (import (builtins.fetchTarball nos));
 in
 {
@@ -28,12 +28,15 @@ in
     feh
     way-cooler
 
-    sway-beta
+    dunst
+
+    #sway-beta (don't mask sway-joined from the module)
     #wlroots.bin
     # TODO: re-enable fater pulling nixpkgs patch for wlroots-ex prefix
     wlroots.examples
     slurp
     grim
+    mako
     wlstream
     waybar
     redshift-wayland

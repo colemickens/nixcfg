@@ -47,6 +47,8 @@ in
       if [[ "$SSH_AUTH_SOCK" == "/run/user/$(id -u)/keyring/ssh" ]]; then
         export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
       fi
+      export FZF_TMUX=1
+      export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
     '';
     programs.ssh.startAgent = false;
     programs.tmux = {
