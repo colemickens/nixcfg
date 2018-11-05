@@ -56,6 +56,7 @@ with lib;
       libinput libinput-gestures
       browserpass
       xclip
+      discord
     ];
   };
 }
