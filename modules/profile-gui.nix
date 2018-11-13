@@ -29,34 +29,36 @@ with lib;
     };
 
     environment.systemPackages = with pkgs; [
-      # firefox comes from the mixin/overlay
-      #google-chrome
-      google-chrome-dev
-      epiphany
-      qtpass
-      #chromiumCanary
-
       arc-theme numix-icon-theme numix-icon-theme-circle
-      gimp graphviz inkscape feh
+
+      ark
+      #chromiumDev
+      dolphin
       discord
-      vlc
-      pavucontrol
-      spotify transmission
-      vscode kate gnome3.gedit
-      slack signal-desktop zoom-us
-
-      termite kitty
-
-      ark dolphin
       evince
+      falkon
+      feh
+      gimp
+      google-chrome-dev
+      kate
+      kitty
+      #konqueror
+      libinput
+      libinput-gestures
+      pavucontrol
+      ripasso
+      spotify
+      streamlink
+      termite
+      transmission
+      vlc
+      vscode
+      xclip
+
+      gnome3.gedit
       gnome3.gnome-tweaks
       gnome3.nautilus
       gnome3.file-roller
-
-      libinput libinput-gestures
-      browserpass
-      xclip
-      discord
     ];
   };
 }

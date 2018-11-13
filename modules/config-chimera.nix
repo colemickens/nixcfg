@@ -15,8 +15,6 @@ in {
     ./mixin-wireguard-server.nix
   ];
 
-  userOptions.cole = { tmuxColor="cyan"; bashColor="1;36"; };
-
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/dc46f531-a364-4f55-a0d3-7b2441ed63a2";
     fsType = "ext4";

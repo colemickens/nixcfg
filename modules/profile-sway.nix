@@ -1,16 +1,7 @@
 { config, lib, pkgs, ... }:
 with lib;
 
-let
-  nos = "https://github.com/colemickens/nixpkgs-wayland/archive/master.tar.gz";
-  swayOverlay =
-    if builtins.pathExists /etc/nix-overlays/nixpkgs-wayland
-    then (import /etc/nix-overlays/nixpkgs-wayland)
-    else (import (builtins.fetchTarball nos));
-in
 {
-  nixpkgs.overlays = [ swayOverlay ];
-
   programs = {
     qt5ct.enable = true; # https://github.com/NixOS/nixpkgs/issues/25762
     sway-beta = {
@@ -26,7 +17,6 @@ in
     xwayland
     pulsemixer
     feh
-    way-cooler
 
     dunst
 
@@ -37,10 +27,13 @@ in
     slurp
     grim
     mako
+    kanshi
     wlstream
+    oguri
     waybar
     redshift-wayland
     weston
+    wmfocus
 
     wayfire
   ];

@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 
-let
-  cfg = config.xeep;
-in {
+{
   imports = [
     ./common
     ./profile-gui.nix
@@ -16,8 +14,6 @@ in {
   ];
 
   config = {
-    userOptions.cole = { tmuxColor="magenta"; bashColor="1;35"; };
-
     system.stateVersion = "18.09";
     time.timeZone = "America/Los_Angeles";
 

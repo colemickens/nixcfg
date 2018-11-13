@@ -5,7 +5,6 @@
     ./cole.nix
     ./nix.nix
     ./pkgs.nix
-    ./mixin-gpg.nix
   ];
 
   config = {
