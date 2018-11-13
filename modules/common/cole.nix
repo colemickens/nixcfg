@@ -5,7 +5,7 @@ with lib;
 {
   config = {
     # bare minimum applications I expect to be available:
-    environment.systemPackages = with pkgs; [ bash tmux git neovim htop ripgrep jq gopass ];
+    environment.systemPackages = with pkgs; [ bash tmux git neovim htop ripgrep jq gopass gnupg ];
     nix.trustedUsers = [ "cole" ];
 
     i18n = {

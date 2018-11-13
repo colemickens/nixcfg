@@ -6,7 +6,6 @@ in {
     ./common
     ./mixin-docker.nix
     ./mixin-libvirt.nix
-    ./mixin-nginx-server.nix
     ./mixin-plex.nix
     ./mixin-samba.nix
     ./mixin-sshd.nix
