@@ -3,6 +3,7 @@
 # TODO: it'd be great if this weren't necessary...
 let
   eth0 = "enp3s0";
+  wgDir = "/etc/nixos/secrets/wireguard";
 in {
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
   networking = {
@@ -11,7 +12,7 @@ in {
       wg0 = {
         ips = [ "10.100.0.1/24" ];
         listenPort = 51820;
-        privateKeyFile = "/etc/nixos/secrets/wireguard/chimera/server_private_key";
+        privateKeyFile = "${wgDir}/chimera/server_private";
 
         postSetup = [
           "${pkgs.iptables}/bin/iptables -A FORWARD -i ${eth0} -j ACCEPT"
@@ -24,7 +25,14 @@ in {
         ];
 
         peers = [
-          { publicKey = "RVJ3jkBXh3ef+sshatGqAZmaO1NVNe2a+wEwMSZjRSI="; allowedIPs = [ "10.100.0.2/32" ]; } # xeep
+          { # xeep
+            publicKey = (lib.readFile "${wgDir}/xeep-nov2018/public");
+            allowedIPs = [ "10.100.0.2/32" ];
+          }
+          { # pixel3
+            publicKey = (lib.readFile "${wgDir}/pixel3-nov2018/public");
+            allowedIPs = [ "10.100.0.3/32" ];
+          }
         ];
       };
     };
