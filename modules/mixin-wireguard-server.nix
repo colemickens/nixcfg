@@ -24,8 +24,7 @@ in {
         ];
 
         peers = [
-          { publicKey = "uOu3d86RHVQRbLtd912Tb/iXk+BCRsN5PZa3cOJSEDE="; allowedIPs = [ "10.100.0.2/32" ]; } # xeep
-          { publicKey = "7vTuXgz7z9zhZkZdERKq1a9nt1M8/rDcFKLS57d6SXo="; allowedIPs = [ "10.100.0.3/32" ]; } # pixel2
+          { publicKey = "RVJ3jkBXh3ef+sshatGqAZmaO1NVNe2a+wEwMSZjRSI="; allowedIPs = [ "10.100.0.2/32" ]; } # xeep
         ];
       };
     };
