@@ -48,7 +48,6 @@
     fzf gdb wipe dmidecode
     qrencode zbar highlight
     ranger
-    pinentry
   ];
 }
 

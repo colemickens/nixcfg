@@ -4,6 +4,7 @@ let
 in
 {
   environment.systemPackages = with pkgs ; [
+    cachix
     zsh bash tmux
     wget curl stow
     openssh fzf fzy jq ripgrep

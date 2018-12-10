@@ -2,6 +2,16 @@
 
 with lib;
 
+let
+  ncw = import /etc/nixpkgs-chromium-wayland {};
+  # why does this not work?
+  chromiumOzone = ncw.chromium.override {
+    channel = "dev";
+    useOzone = true;
+    enablePepperFlash = true;
+    enableWideVine = true;
+  };
+in
 {
   imports = [
     ./mixin-firefox.nix
@@ -10,9 +20,7 @@ with lib;
     hardware.pulseaudio.enable = true;
     nixpkgs.config.pulseaudio = true;
 
-    programs = {
-      light.enable = true;
-    };
+    hardware.brightnessctl.enable = true;
 
     services = {
       flatpak.enable = true;
@@ -23,7 +31,9 @@ with lib;
         corefonts inconsolata awesome
         fira-code fira-code-symbols fira-mono
         source-code-pro
-        noto-fonts noto-fonts-emoji
+        twemoji-color-font
+        noto-fonts noto-fonts-extra noto-fonts-emoji
+        ttf_bitstream_vera
         nerdfonts
       ];
     };
@@ -31,8 +41,11 @@ with lib;
     environment.systemPackages = with pkgs; [
       arc-theme numix-icon-theme numix-icon-theme-circle
 
+      passff-host
+
+      alacritty
       ark
-      #chromiumDev
+      #chromiumOzone
       dolphin
       discord
       evince
@@ -45,13 +58,13 @@ with lib;
       #konqueror
       libinput
       libinput-gestures
+      mpv
       pavucontrol
-      ripasso
+      plex-media-player
       spotify
       streamlink
       termite
       transmission
-      vlc
       vscode
       xclip
 
@@ -59,6 +72,8 @@ with lib;
       gnome3.gnome-tweaks
       gnome3.nautilus
       gnome3.file-roller
+
+      qt5.qtwayland
     ];
   };
 }

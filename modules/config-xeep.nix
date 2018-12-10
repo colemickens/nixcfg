@@ -1,16 +1,18 @@
 { config, lib, pkgs, ... }:
 
+let
+  nixosHardware = builtins.fetchTarball
+    "https://github.com/NixOS/nixos-hardware/archive/master.tar.gz";
+in
 {
   imports = [
     ./common
     ./profile-gui.nix
     ./profile-sway.nix
-    #./mixin-docker.nix
-    ./mixin-libvirt.nix
     ./mixin-sshd.nix
-    ./mixin-thermald.nix
     ./mixin-yubikey.nix
     ./pkgs-full.nix
+    "${builtins.toString nixosHardware}/dell/xps/13-9370/default.nix"
   ];
 
   config = {
