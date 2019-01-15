@@ -9,7 +9,7 @@
     htop iotop
     fzy ripgrep jq
     keybase
-    git cvs git tig mercurial subversion darcs
+    git cvs git tig mercurial subversion #darcs
     pijul
     gitAndTools.hub gist
 

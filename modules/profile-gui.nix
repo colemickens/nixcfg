@@ -9,7 +9,7 @@ let
     channel = "dev";
     useOzone = true;
     enablePepperFlash = true;
-    enableWideVine = true;
+    #enableWideVine = true;
   };
 in
 {
@@ -17,10 +17,21 @@ in
     ./mixin-firefox.nix
   ];
   config = { 
-    hardware.pulseaudio.enable = true;
+    hardware = {
+      brightnessctl.enable = true;
+      opengl = {
+        enable = true;
+        extraPackages = with pkgs; [
+          vaapiIntel
+          vaapiVdpau libvdpau-va-gl
+        ];
+      };
+      pulseaudio.enable = true;
+    };
     nixpkgs.config.pulseaudio = true;
-
-    hardware.brightnessctl.enable = true;
+    nixpkgs.config.packageOverrides = pkgs: {
+      vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+    };
 
     services = {
       flatpak.enable = true;
@@ -41,13 +52,13 @@ in
     environment.systemPackages = with pkgs; [
       arc-theme numix-icon-theme numix-icon-theme-circle
 
-      passff-host
-
       alacritty
       ark
+      brightnessctl
       #chromiumOzone
       dolphin
       discord
+      epiphany
       evince
       falkon
       feh
@@ -59,12 +70,14 @@ in
       libinput
       libinput-gestures
       mpv
+      #obs-studio
       pavucontrol
       plex-media-player
       spotify
       streamlink
       termite
       transmission
+      vlc
       vscode
       xclip
 

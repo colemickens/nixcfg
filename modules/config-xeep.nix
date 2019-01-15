@@ -3,6 +3,7 @@
 let
   nixosHardware = builtins.fetchTarball
     "https://github.com/NixOS/nixos-hardware/archive/master.tar.gz";
+  hostname = "xeep";
 in
 {
   imports = [
@@ -23,20 +24,18 @@ in
     i18n.consoleFont = "ter-v32n"; # hidpi
 
     nix.maxJobs = lib.mkDefault 8;
+    nix.nixPath = [ "/etc/nixos" "nixpkgs=/home/cole/code/nixpkgs" "nixos-config=/home/cole/code/nixcfg/modules/config-${hostname}.nix" ];
+
 
     hardware = {
       bluetooth.enable = true;
-      opengl = {
-        enable = true;
-        extraPackages = with pkgs; [ vaapiIntel vaapiVdpau libvdpau-va-gl ];
-      };
       pulseaudio.package = pkgs.pulseaudioFull;
       enableRedistributableFirmware = true;
       cpu.intel.updateMicrocode = true;
       u2f.enable = true;
     };
 
-    powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+    #powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
     powerManagement.enable = true;
     services.tlp.enable = true;
     services.fwupd.enable = true;
@@ -80,7 +79,7 @@ in
       loader.efi.canTouchEfiVariables = true;
     };
     networking = {
-      hostName = "xeep";
+      hostName = hostname;
       # temporary, do not commit
       firewall.enable = false;
       firewall.allowedTCPPorts = [];

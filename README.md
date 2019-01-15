@@ -1,5 +1,16 @@
 # colemickens/**nixcfg**
 
+# operation NixOS Challenge
+## keep / wipable
+## mount /var
+## mount /nix
+## mount /home
+
+## nixcfg + nixpkgs goes in /home/nix
+## regular server storage in /var
+## regular cole data in /home/cole
+
+
 This is my nix configuration files for all of my various nix endeavors.
 
 It also includes scripts to work with my Azure cache.

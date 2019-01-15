@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
+  hostname = "chimera";
 in {
   imports = [
     ./common
@@ -28,7 +29,9 @@ in {
     device = "/dev/sdc";
     fsType = "btrfs";
   };
-  
+
+  nix.nixPath = [ "/etc/nixos" "nixpkgs=/home/cole/code/nixpkgs" "nixos-config=/home/cole/code/nixcfg/modules/config-${hostname}.nix" ];
+
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     initrd.supportedFilesystems = [ "btrfs" ];
@@ -47,7 +50,7 @@ in {
   system.stateVersion = "18.09"; # Did you read the comment?
   nix.maxJobs = 4;
   networking = {
-    hostName = "chimera";
+    hostName = hostname;
     networkmanager.enable = true;
   };
 

@@ -18,6 +18,7 @@ with lib;
   };
 
   environment.systemPackages = with pkgs; [
+    swayidle
     i3status-rust
     termite
     xwayland
@@ -36,7 +37,7 @@ with lib;
     waybar
     redshift-wayland
     weston
-    wmfocus
+    #wmfocus
     wayfire
     wl-clipboard
 

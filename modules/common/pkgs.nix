@@ -4,11 +4,16 @@ let
 in
 {
   environment.systemPackages = with pkgs ; [
-    cachix
+    # new
+    bat ncdu
+    git-crypt
+    # TODO: other good rust replacement tools
+
+    #cachix
     zsh bash tmux
     wget curl stow
     openssh fzf fzy jq ripgrep
-    git cvs git tig mercurial subversion darcs
+    git cvs git tig mercurial subversion #darcs
     gitAndTools.hub gist
     vim neovim
     htop tree which binutils.bintools
@@ -18,6 +23,9 @@ in
     dmidecode
     ranger
     ffmpeg
+    libsmbios
+    msr-tools
+    cpufrequtils
   ];
 }
 
