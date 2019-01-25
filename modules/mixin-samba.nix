@@ -18,6 +18,27 @@
         map to guest = bad user
       '';
       shares = {
+        steam = {
+          path = "/media/data/STEAM";
+          browseable = "yes";
+          public = "yes";
+          "guest ok" = "yes";
+          "read only" = "no";
+        };
+        backups = {
+          path = "/media/data/BACKUPS";
+          browseable = "yes";
+          public = "yes";
+          "guest ok" = "yes";
+          "read only" = "yes";
+        };
+        roms = {
+          path = "/media/data/Roms";
+          browseable = "yes";
+          public = "yes";
+          "guest ok" = "yes";
+          "read only" = "yes";
+        };
         media = {
           path = "/media/data/Media";
           browseable = "yes";
