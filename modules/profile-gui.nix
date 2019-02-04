@@ -58,28 +58,20 @@ in
       #chromiumOzone
       dolphin
       discord
-      epiphany
       evince
-      falkon
       feh
       gimp
       google-chrome-dev
-      kate
       kitty
-      #konqueror
       libinput
       libinput-gestures
       mpv
-      #obs-studio
       pavucontrol
       plex-media-player
       spotify
-      streamlink
       termite
-      transmission
       vlc
       vscode
-      xclip
 
       gnome3.gedit
       gnome3.gnome-tweaks

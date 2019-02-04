@@ -24,6 +24,8 @@
 
     aria2 megatools youtube-dl plowshare
 
+    streamlink
+
     bind
     file
     ffmpeg

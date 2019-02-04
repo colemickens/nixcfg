@@ -28,3 +28,12 @@ It also includes scripts to work with my Azure cache.
 
 You can figure out the rest by following the rabbit-hole down `./default.nix`.
 
+
+## NOTES:
+
+1. `lib.overlay` so that we can use overlays directly from git or via a local path if we have ti checked out to work on
+s
+
+```bash
+export NIX_PATH=nixpkgs=/home/cole/code/nixpkgs:nixos-config=/home/cole/code/nixcfg/machines/xeep.nix
+```

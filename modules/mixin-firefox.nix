@@ -12,10 +12,20 @@ let
     release = false;
   };
   firefoxNightly = firefoxNightlyLatest;
+  overlay = (import ../lib.nix {}).overlay;
 in
 {
-  config = { 
+  config = {
+    nixpkgs = {
+      config.allowUnfree = true;
+      overlays = [
+        (overlay
+          "nixpkgs-mozilla"
+          "https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz")
+      ];
+    };
     environment.variables.MOZ_USE_XINPUT2 = "1";
+    environment.variables.MOZ_ENABLE_WAYLAND = "1";
     environment.systemPackages = with pkgs; [
       firefoxNightly
     ];

@@ -1,5 +1,9 @@
 { config, pkgs, lib, ... }:
 
+# TODO: is it possible to have a MASTER INSTALL ISO
+# with various machine configs on it, ready to boot
+# for the various computers, including any drivers, etc?
+
 # EACH COMPUTER/DRIVE LAYOUT:
 # |--------------------|-------------|-------------|-------------|--------------------------------------|
 # |--------------------|-------------|-------------|-------------|--------------------------------------|

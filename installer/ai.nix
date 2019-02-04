@@ -54,18 +54,17 @@ in
   mount -t vfat                        /dev/nvme0n1p1        /mnt/boot
 
   mkdir -p /home/nix
-  mkdir -p /home/cole
-  ${pkgs.git}/bin/git clone https://github.com/colemickens/nixcfg  -b master /home/nix/nixcfg
-  ${pkgs.git}/bin/git clone https://github.com/colemickens/nixpkgs -b cmpkgs /home/nix/nixpkgs
-  ${pkgs.git}/bin/git clone https://github.com/colemickens/dotfiles -b cmpkgs /home/cole/.dotfiles
+  mkdir -p /home/cole/code
+  ${pkgs.git}/bin/git clone https://github.com/colemickens/nixcfg  -b master /home/cole/code/nixcfg
+  ${pkgs.git}/bin/git clone https://github.com/colemickens/nixpkgs -b cmpkgs /home/cole/code/nixpkgs
+  ${pkgs.git}/bin/git clone https://github.com/colemickens/dotfiles -b cmpkgs /home/cole/code/dotfiles
 
-  NIX_PATH=nixpkgs=/mnt/home/nix/nixpkgs:nixos-config=/mnt/home/nix/nixcfg/modules/config-${hostname}.nix
+  NIX_PATH=nixpkgs=/mnt/home/cole/code/nixpkgs:nixos-config=/mnt/home/cole/code/nixcfg/machines/${hostname}.nix
   nixos-install
 
-  chown -R cole:cole /home/nix
   chown -R cole:cole /home/cole
 
-  (cd /home/cole/.dotfiles; sudo -u cole "bash ./stow.sh")
+  (cd /home/cole/code/dotfiles; sudo -u cole "bash ./stow.sh")
 
   umount /mnt/home
   umount /mnt/nix
