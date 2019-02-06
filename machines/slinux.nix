@@ -3,19 +3,22 @@
 let
   nixosHardware = builtins.fetchTarball
     "https://github.com/NixOS/nixos-hardware/archive/master.tar.gz";
-  hostname = "chimera";
+  hostname = "slinux";
 in
 {
   imports = [
     ../modules/common.nix
     
+    ../modules/profile-gui.nix
+    ../modules/profile-sway.nix
+
     ../modules/mixin-docker.nix
-    ../modules/mixin-libvirt.nix
-    ../modules/mixin-plex.nix
-    ../modules/mixin-samba.nix
     ../modules/mixin-sshd.nix
-    ../modules/mixin-transmission.nix
-    ../modules/mixin-unifi.nix
+    
+    ../modules/mixin-yubikey.nix
+    ../modules/pkgs-full.nix
+
+    ../modules/hw-magictrackpad2.nix
 
     "${builtins.toString nixosHardware}/common/cpu/intel"
   ];
@@ -27,16 +30,12 @@ in
 
     fileSystems = {
       "/" = {
-        device = "/dev/disk/by-uuid/dc46f531-a364-4f55-a0d3-7b2441ed63a2";
+        device = "/dev/disk/by-partlabel/nixos-root";
         fsType = "ext4";
       };
       "/boot" = {
-        device = "/dev/disk/by-uuid/03F7-8754";
+        device = "/dev/disk/by-partlabel/nixos-boot";
         fsType = "vfat";
-      };
-      "/media/data" = {
-        device = "/dev/sdc";
-        fsType = "btrfs";
       };
     };
     swapDevices = [];
@@ -66,6 +65,8 @@ in
       "nixpkgs=/home/cole/code/nixpkgs"
       "nixos-config=/home/cole/code/nixcfg/machines/${hostname}.nix"
     ];
+
+    # TODO: ENABLE NVIDIA
 
     nixpkgs.config.allowUnfree = true; # for redistrib fw
     hardware = {

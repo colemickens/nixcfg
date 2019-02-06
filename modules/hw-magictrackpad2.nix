@@ -1,5 +1,7 @@
 { config, lib, pkgs, ... }:
 
+# TODO: this doesn't work
+
 {
   config = {
     environment.etc."libinput/local-overrides.quirks".text = ''

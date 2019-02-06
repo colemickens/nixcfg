@@ -34,14 +34,21 @@ with lib;
     # bare minimum applications I expect to be available on ALL machines
     # regardless of profile-*/pkgs-* inclusion:
     environment.systemPackages = with pkgs; [
-      bash tmux ripgrep jq gopass
+      bash bashCompletion tmux
+      wget curl
+      ripgrep jq fzy
       wget curl stow
+      git-crypt gopass
       gnupg pinentry pinentry_gnome gnome3.gcr
-      bat ncdu  
-      openssh fzf fzy jq ripgrep
-      git git-crypt
-      neovim htop tree which binutils.bintools
+      fzf fzy jq ripgrep
+      openssh autossh mosh sshuttle
+      bat ncdu tree
+      git gitAndTools.hub gist
+      cvs tig mercurial subversion pijul
+      neovim vim
+      htop iotop which binutils.bintools stow
       p7zip unrar parallel unzip xz zip
+      
     ];
 
     # locale stuff

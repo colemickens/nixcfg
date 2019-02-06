@@ -24,7 +24,7 @@ in
   ];
 
   config = {
-    system.stateVersion = "18.09";
+    system.stateVersion = "18.09"; # Did you read the comment?
     time.timeZone = "America/Los_Angeles";
     services.timesyncd.enable = true;
 
@@ -33,8 +33,12 @@ in
         device = "/dev/vg/root";
         fsType = "ext4";
       };
+      # xeep2
+      #"/"    = { device = "/dev/mapper/nixos-btrfs"; fsType = "btrfs"; options = "subvol=root" };
+      #"/nix" = { device = "/dev/mapper/nixos-btrfs"; fsType = "btrfs"; options = "subvol=nix" };
+      #"/var" = { device = "/dev/mapper/nixos-btrfs"; fsType = "btrfs"; options = "subvol=nix" };
       "/boot" = {
-        device = "/dev/disk/by-partlabel/xeep-boot";
+        device = "/dev/disk/by-partlabel/nixos-boot";
         fsType = "vfat";
       };
     };
@@ -57,10 +61,17 @@ in
       initrd.luks.devices = [
         { 
           name = "root";
-          device = "/dev/disk/by-partlabel/xeep-luks";
+          device = "/dev/disk/by-partlabel/nixos-luks";
           preLVM = true;
           allowDiscards = true;
         }
+        #xeep2
+        #{ 
+        #  name = "nixos-btrfs";
+        #  device = "/dev/disk/by-partlabel/nixos-luks";
+        #  preLVM = true;
+        #  allowDiscards = true;
+        #}
       ];
       loader = {
         systemd-boot.enable = true;
@@ -85,6 +96,7 @@ in
       "nixos-config=/home/cole/code/nixcfg/machines/${hostname}.nix"
     ];
     
+    nixpkgs.config.allowUnfree = true; # for redistrib fw
     hardware = {
       bluetooth.enable = true;
       pulseaudio.package = pkgs.pulseaudioFull;

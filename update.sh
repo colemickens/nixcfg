@@ -33,11 +33,10 @@ update "pkgs/gopass"           "gopasspw"   "gopass"          "master"
 
 unset NIX_PATH
 nix-build \
-  --verbose \
   --no-out-link \
   configurations/xeep.nix
 
 # push all to cachix
-#nix-build --no-out-link --keep-going build.nixos-unstable.nix  \
-#  | cachix push "${cachixremote}"
+nix-build --no-out-link --keep-going default.nix \
+  | cachix push "${cachixremote}"
 

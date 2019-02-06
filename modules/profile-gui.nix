@@ -2,16 +2,6 @@
 
 with lib;
 
-let
-  ncw = import /etc/nixpkgs-chromium-wayland {};
-  # why does this not work?
-  chromiumOzone = ncw.chromium.override {
-    channel = "dev";
-    useOzone = true;
-    enablePepperFlash = true;
-    #enableWideVine = true;
-  };
-in
 {
   imports = [
     ./mixin-firefox.nix
@@ -23,14 +13,17 @@ in
         enable = true;
         extraPackages = with pkgs; [
           vaapiIntel
-          vaapiVdpau libvdpau-va-gl
+          vaapiVdpau
+          libvdpau-va-gl
         ];
       };
       pulseaudio.enable = true;
     };
     nixpkgs.config.pulseaudio = true;
     nixpkgs.config.packageOverrides = pkgs: {
-      vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+      vaapiIntel = pkgs.vaapiIntel.override {
+        enableHybridCodec = true;
+      };
     };
 
     services = {
@@ -50,13 +43,15 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-      arc-theme numix-icon-theme numix-icon-theme-circle
+      arc-theme
+      numix-icon-theme
+      numix-icon-theme-circle
 
       alacritty
-      ark
+      #ark
       brightnessctl
       #chromiumOzone
-      dolphin
+      #dolphin
       discord
       evince
       feh
@@ -73,13 +68,12 @@ in
       vlc
       vscode
 
-      gnome3.gedit
       gnome3.gnome-tweaks
       gnome3.nautilus
       gnome3.file-roller
 
-      qt5.qtwayland
+      # not sure what needs this?
+      #qt5.qtwayland
     ];
   };
 }
-

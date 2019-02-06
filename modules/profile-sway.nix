@@ -44,6 +44,7 @@ in
       xwayland
       pulsemixer
       feh
+      ranger
 
       gnome3.gcr
 

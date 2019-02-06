@@ -34,6 +34,13 @@ You can figure out the rest by following the rabbit-hole down `./default.nix`.
 1. `lib.overlay` so that we can use overlays directly from git or via a local path if we have ti checked out to work on
 s
 
+## TODO:
+
+1. Example of a self-expanding image. (we could make the squashfs, dd, extract, expand luks, expand btrfs operation?)
+2. Pre-encrypted image? (dare we store a LUKS passphrase in gopass? thus allowing automation on a trusted machine with a yubikey or gpgagent forwarded)
+3. ??
+4. non-btrfs? :( not sure I'm willing to bother with ZFS
+
 ```bash
 export NIX_PATH=nixpkgs=/home/cole/code/nixpkgs:nixos-config=/home/cole/code/nixcfg/machines/xeep.nix
 ```
