@@ -27,6 +27,7 @@ function update() {
 
 # update <attr_name> <repo_owner> <repo_name> <repo_rev>
 update "nixpkgs/nixos-unstable" "nixos" "nixpkgs-channels" "nixos-unstable"
+update "nixpkgs/nixos-unstable-openhab" "colemickens" "nixpkgs" "openhab"
 
 update "pkgs/gopass"           "gopasspw"   "gopass"          "master"
 

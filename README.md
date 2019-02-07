@@ -6,10 +6,20 @@
 ## mount /nix
 ## mount /home
 
+# TODO: document this
+# nix-path less
+
+
 ## nixcfg + nixpkgs goes in /home/nix
 ## regular server storage in /var
 ## regular cole data in /home/cole
 
+
+# Examples of:
+- static, reproducible/repeatable builds for everything
+- hyperv vhd image
+- system configs
+- multi-system installer image
 
 This is my nix configuration files for all of my various nix endeavors.
 

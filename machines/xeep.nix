@@ -19,6 +19,7 @@ in
     ../modules/pkgs-full.nix
 
     ../modules/hw-magictrackpad2.nix
+    ../modules/hw-chromecast.nix
 
     "${builtins.toString nixosHardware}/dell/xps/13-9370/default.nix"
   ];
