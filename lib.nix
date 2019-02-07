@@ -18,7 +18,7 @@ let
 
   mkSystem = { nixpkgs, localnixpkgs ? null, nixoscfg, system }:
     let
-      importpath = if localnixpkgs != null then localnixpkgs else nixpkgs.pkgs;
+      importpath = if localnixpkgs != null && builtins.pathExists localnixpkgs then localnixpkgs else nixpkgs.pkgs;
       pkgs = import importpath {
         inherit system;
         inherit (machine.config.nixpkgs) config overlays;
@@ -29,7 +29,7 @@ let
           system.nixos.revision = nixpkgs.meta.revShort;
           system.nixos.versionSuffix = ".git.${nixpkgs.meta.revShort}";
         }) ];
-      machine = import "${nixpkgs.pkgs}/nixos/lib/eval-config.nix" {
+      machine = import "${importpath}/nixos/lib/eval-config.nix" {
         inherit (pkgs) system;
         inherit pkgs;
         modules = [ nixoscfg ] ++ extraModules;
