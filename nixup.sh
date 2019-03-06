@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+set -x
+
 unset NIX_PATH
 unset NIXOS_CONFIG
 
@@ -8,6 +11,10 @@ unset NIXOS_CONFIG
 
 target="$(hostname)System"
 system="$(nix-build -A "${target}" default.nix)"
+
+sudo nix-env --set \
+  --profile "/nix/var/nix/profiles/system" \
+  "${system}"
 
 sudo "${system}/bin/switch-to-configuration" switch
 

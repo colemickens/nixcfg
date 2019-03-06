@@ -27,7 +27,7 @@ function update() {
 
 # update <attr_name> <repo_owner> <repo_name> <repo_rev>
 update "nixpkgs/nixos-unstable" "nixos" "nixpkgs-channels" "nixos-unstable"
-update "nixpkgs/nixos-unstable-openhab" "colemickens" "nixpkgs" "openhab"
+#update "nixpkgs/nixos-unstable-openhab" "colemickens" "nixpkgs" "openhab"
 
 update "pkgs/gopass"           "gopasspw"   "gopass"          "master"
 
@@ -36,6 +36,9 @@ unset NIX_PATH
 nix-build \
   --no-out-link \
   configurations/xeep.nix
+
+nix-build --no-out-link --keep-going default.nix
+exit 0
 
 # push all to cachix
 nix-build --no-out-link --keep-going default.nix \

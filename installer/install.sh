@@ -1,5 +1,33 @@
 #!/usr/bin/env bash
 
+# TODO: is it possible to have a MASTER INSTALL ISO
+# with various machine configs on it, ready to boot
+# for the various computers, including any drivers, etc?
+
+# EACH COMPUTER/DRIVE LAYOUT:
+# |--------------------|-------------|--------------------------------------|
+# |--------------------|-------------|--------------------------------------|
+# | PARTITION          | [XEEP]      |  PART TYPE                           |
+# |--------------------|-------------|--------------------------------------|
+# | 1) ESP (FAT32)     | 512 MB      | C12A7328-F81F-11D2-BA4B-00A0C93EC93B |
+# |--------------------|-------------|--------------------------------------|
+# | 2) LUKS (BTRFS)    | (remainder) | CA7D7CCB-63ED-4C53-861C-1742536059CC |
+# |--------------------|-------------|--------------------------------------|
+# | 3) SWAP            | 17GB        | CA7D7CCB-63ED-4C53-861C-1742536059CC |
+# |--------------------|-------------|--------------------------------------|
+# | 4) WinRE (NTFS)    | 512 MB      | DE94BBA4-06D1-4D40-A16A-BFD50179D6AC |
+# |--------------------|-------------|--------------------------------------|
+# | 5) MS Reserved     | 128 MB      | E3C9E316-0B5C-4DB8-817D-F92DF00215AE |
+# |--------------------|-------------|--------------------------------------|
+# | 6) Win10 (NTFS)    | 220GB       | EBD0A0A2-B9E5-4433-87C0-68B6B72699C7 |
+# |--------------------|-------------|--------------------------------------|
+# |--------------------|-------------|--------------------------------------|
+# |              TOTAL | 1 TB        |                                      |
+# |--------------------|-------------|--------------------------------------|
+# |--------------------|-------------|--------------------------------------|
+
+# TODO: long-term : declarative partitioning would be excellent (nixpart?)
+
 export partTypeESP = "0FC63DAF-8483-4772-8E79-3D69D8477DE4";
 export partTypeLUKS = "CA7D7CCB-63ED-4C53-861C-1742536059CC";
 export partTypeWinRE = "DE94BBA4-06D1-4D40-A16A-BFD50179D6AC";
@@ -9,7 +37,7 @@ export partTypeWinBasicData = "EBD0A0A2-B9E5-4433-87C0-68B6B72699C7";
 set -u
 
 local hostname="${1}"
-local rootDevice="${2}"
+local rootDevice="${2}" #?
 local windowsSize="${3}"
 wipefs -a ${rootDevice}
 
@@ -54,6 +82,8 @@ ${pkgs.git}/bin/git clone https://github.com/colemickens/nixpkgs -b cmpkgs /home
 ${pkgs.git}/bin/git clone https://github.com/colemickens/dotfiles -b cmpkgs /home/cole/code/dotfiles
 
 NIX_PATH=nixpkgs=/mnt/home/cole/code/nixpkgs:nixos-config=/mnt/home/cole/code/nixcfg/machines/${hostname}.nix
+# TODO: do we use switch-to-configuration directly along with NIXOS_INSTALL_BOOTLOADER
+# or do we go ahead and run `nixos-install --system=$(readlink -f result) ...`
 nixos-install
 
 chown -R cole:cole /home/cole

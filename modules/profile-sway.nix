@@ -39,6 +39,8 @@ in
       swayidle
       swaylock
 
+      udiskie
+
       i3status-rust
       termite
       xwayland
@@ -57,7 +59,7 @@ in
       oguri
       waybar
       redshift-wayland
-      weston
+      #weston
       wmfocus
       wayfire
       wl-clipboard

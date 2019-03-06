@@ -9,11 +9,13 @@ in
 {
   imports = [
     ../modules/common.nix
-    
+
     ../modules/profile-gui.nix
     ../modules/profile-sway.nix
 
-    ../modules/mixin-docker.nix
+    #../modules/mixin-docker.nix
+    #../modules/mixin-libvirt.nix
+    #../modules/mixin-openhab.nix
     ../modules/mixin-sshd.nix
     ../modules/mixin-yubikey.nix
     ../modules/pkgs-full.nix
@@ -34,10 +36,7 @@ in
         device = "/dev/vg/root";
         fsType = "ext4";
       };
-      # xeep2
-      #"/"    = { device = "/dev/mapper/nixos-btrfs"; fsType = "btrfs"; options = "subvol=root" };
-      #"/nix" = { device = "/dev/mapper/nixos-btrfs"; fsType = "btrfs"; options = "subvol=nix" };
-      #"/var" = { device = "/dev/mapper/nixos-btrfs"; fsType = "btrfs"; options = "subvol=nix" };
+      #"/"    = { device = "/dev/mapper/dmnixos"; fsType = "btrfs"; options = "subvol=root" };
       "/boot" = {
         device = "/dev/disk/by-partlabel/nixos-boot";
         fsType = "vfat";
@@ -52,7 +51,7 @@ in
       kernelParams = [
         "i915.modeset=1"     # nixos-hw = missing
         "i915.enable_guc=3"  # nixos-hw = missing
-        #"i915.enable_gvt=0" # nixos-hw = missing
+        "i915.enable_gvt=0" # nixos-hw = missing
         "i915.enable_fbc=1"  # nixos-hw = 2
         "i915.enable_psr=1"  # nixos-hw = missing?
         "i915.fastboot=1"    # nixos-hw = missing?
@@ -68,18 +67,22 @@ in
         }
         #xeep2
         #{ 
-        #  name = "nixos-btrfs";
+        #  name = "dmnixos";
         #  device = "/dev/disk/by-partlabel/nixos-luks";
         #  preLVM = true;
         #  allowDiscards = true;
         #}
       ];
       loader = {
+        #boot.loader.grub.efiInstallAsRemovable = true; #??
+        #boot.loader.grub.efiSupport = true;
+        #boot.loader.grub.device = "nodev";
         systemd-boot.enable = true;
         efi.canTouchEfiVariables = true;
       };
     };
     networking = {
+      hostId = "ef66d560";
       hostName = hostname;
       firewall.enable = true;
       firewall.allowedTCPPorts = [];

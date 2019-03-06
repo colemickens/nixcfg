@@ -53,6 +53,7 @@ in
       };
     };
     networking = {
+      hostId = "2aaf4ef3";
       hostName = hostname;
       firewall.enable = true;
       firewall.allowedTCPPorts = [];

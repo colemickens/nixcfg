@@ -12,10 +12,12 @@ with lib;
       opengl = {
         enable = true;
         extraPackages = with pkgs; [
+          intel-media-driver
           vaapiIntel
           vaapiVdpau
           libvdpau-va-gl
         ];
+        driSupport32Bit = true;
       };
       pulseaudio.enable = true;
     };
@@ -47,9 +49,13 @@ with lib;
       numix-icon-theme
       numix-icon-theme-circle
 
+      libva-utils
+      xdg_utils
+
       alacritty
       #ark
       brightnessctl
+      chromium
       #chromiumOzone
       #dolphin
       discord

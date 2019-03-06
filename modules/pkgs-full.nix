@@ -16,11 +16,13 @@
     cmake gnumake gcc
     go rustup
     gdb lldb
+    pkg-config
+    openssl
 
     # misc
     binutils.bintools
     file
-    ffmpeg
+    ffmpeg_4
     gptfdisk # essential?
     openssl
     parted
@@ -35,4 +37,3 @@
     streamlink
   ];
 }
-
