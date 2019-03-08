@@ -10,7 +10,11 @@ unset NIXOS_CONFIG
 # NIX_PATH, NIXOS_CONFIG, nor `nixos-*` commands
 
 target="$(hostname)System"
-system="$(nix-build -A "${target}" default.nix)"
+system="$(\
+  nix-build \
+    --option "extra-binary-caches" "https://colemickens.cachix.org" \
+  -A "${target}"
+)"
 
 sudo nix-env --set \
   --profile "/nix/var/nix/profiles/system" \
