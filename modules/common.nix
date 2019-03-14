@@ -36,19 +36,18 @@ with lib;
     environment.systemPackages = with pkgs; [
       bash bashCompletion tmux
       wget curl
-      ripgrep jq fzy
+      ripgrep jq
       wget curl stow
       git-crypt gopass
       gnupg pinentry pinentry_gnome gnome3.gcr
-      fzf fzy jq ripgrep
+      jq ripgrep
       openssh autossh mosh sshuttle
       bat ncdu tree
-      git gitAndTools.hub gist
-      cvs tig mercurial subversion pijul
+      git gitAndTools.hub gist tig
+      # cvs mercurial subversion pijul
       neovim vim
       htop iotop which binutils.bintools stow
       p7zip unrar parallel unzip xz zip
-      
     ];
 
     # locale stuff

@@ -28,9 +28,9 @@ with lib;
       };
     };
 
-    services = {
-      flatpak.enable = true;
-    };
+    #services = {
+    #  flatpak.enable = true;
+    #};
 
     fonts = {
       fonts = with pkgs; [
@@ -45,14 +45,14 @@ with lib;
     };
 
     environment.systemPackages = with pkgs; [
-      arc-theme
-      numix-icon-theme
-      numix-icon-theme-circle
+#      arc-theme
+#      numix-icon-theme
+#      numix-icon-theme-circle
 
       libva-utils
       xdg_utils
 
-      alacritty
+      #alacritty
       #ark
       brightnessctl
       chromium
@@ -63,20 +63,20 @@ with lib;
       feh
       gimp
       google-chrome-dev
-      kitty
-      libinput
-      libinput-gestures
+      #kitty
+      #libinput
+      #libinput-gestures
       mpv
       pavucontrol
-      plex-media-player
+      #plex-media-player
       spotify
       termite
-      vlc
+      #vlc
       vscode
 
-      gnome3.gnome-tweaks
-      gnome3.nautilus
-      gnome3.file-roller
+      #gnome3.gnome-tweaks
+      #gnome3.nautilus
+      #gnome3.file-roller
 
       # not sure what needs this?
       #qt5.qtwayland

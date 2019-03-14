@@ -1,6 +1,6 @@
 {
   xeepSystem = import ./configurations/xeep.nix;
-  chimeraSystem = import ./configurations/chimera.nix;
+  #chimeraSystem = import ./configurations/chimera.nix;
 
   #goonhabSystem = import ./configurations/goonhab.nix;
   

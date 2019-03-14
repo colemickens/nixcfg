@@ -34,6 +34,7 @@ update "pkgs/gopass"           "gopasspw"   "gopass"          "master"
 
 unset NIX_PATH
 nix-build \
+  --option build-cores 0 \
   --no-out-link \
   configurations/xeep.nix
 
