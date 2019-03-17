@@ -41,7 +41,6 @@ nix-build \
   configurations/xeep.nix
 
 nix-build --no-out-link --keep-going default.nix
-exit 0
 
 # push all to cachix
 nix-build --no-out-link --keep-going default.nix \

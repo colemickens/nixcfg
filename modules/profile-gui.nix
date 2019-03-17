@@ -56,7 +56,7 @@ with lib;
       #ark
       brightnessctl
       chromium
-      #chromiumOzone
+      chromiumOzone
       #dolphin
       discord
       evince
