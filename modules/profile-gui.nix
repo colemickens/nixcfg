@@ -35,6 +35,7 @@ with lib;
     fonts = {
       fonts = with pkgs; [
         corefonts inconsolata awesome
+        overpass
         fira-code fira-code-symbols fira-mono
         source-code-pro
         twemoji-color-font
@@ -55,7 +56,7 @@ with lib;
       #alacritty
       #ark
       brightnessctl
-      chromium
+      #chromium
       chromiumOzone
       #dolphin
       discord

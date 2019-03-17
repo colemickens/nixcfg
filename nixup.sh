@@ -13,6 +13,7 @@ target="$(hostname)System"
 system="$(\
   nix-build \
     --option "extra-binary-caches" "https://colemickens.cachix.org" \
+    --option "extra-binary-caches" "https://nixpkgs-wayland.cachix.org" \
   -A "${target}"
 )"
 
