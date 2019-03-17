@@ -15,9 +15,8 @@ in
     };
     programs = {
       qt5ct.enable = true;
-      sway-beta = {
+      sway = {
         enable = true;
-        package = pkgs.sway-beta;
         extraSessionCommands = ''
           export SDL_VIDEODRIVER=wayland
           export GDK_BACKEND=wayland

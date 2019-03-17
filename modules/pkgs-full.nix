@@ -17,14 +17,12 @@
     go rustup
     gdb lldb
     pkg-config
-    openssl
 
     # misc
     binutils.bintools
     file
     ffmpeg_4
     gptfdisk # essential?
-    openssl
     parted
     psmisc
     wipe

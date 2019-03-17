@@ -34,7 +34,9 @@ with lib;
     # bare minimum applications I expect to be available on ALL machines
     # regardless of profile-*/pkgs-* inclusion:
     environment.systemPackages = with pkgs; [
-      bash bashCompletion tmux
+      tmux
+      bash bashCompletion
+      zsh antibody
       wget curl
       ripgrep jq
       wget curl stow
@@ -42,12 +44,14 @@ with lib;
       gnupg pinentry pinentry_gnome gnome3.gcr
       jq ripgrep
       openssh autossh mosh sshuttle
-      bat ncdu tree
+      bat ncdu tree exa
       git gitAndTools.hub gist tig
       # cvs mercurial subversion pijul
       neovim vim
       htop iotop which binutils.bintools stow
       p7zip unrar parallel unzip xz zip
+
+      (callPackage ../pkgs/gitstatus {})
     ];
 
     # locale stuff
@@ -75,7 +79,7 @@ with lib;
       description = "Cole Mickens";
       #mkpasswd -m sha-512
       hashedPassword = "$6$gYyrDUSf9hL4H$CWQFdAu1N1EfMIGg3eZhn.YM83VN/Blsbtxh9MW6z0PHVFSGaHX0McJmKHVmeFEnve6gS5l302fZzR0xsSR0t1";
-      shell = "/run/current-system/sw/bin/bash";
+      shell = "/run/current-system/sw/bin/zsh";
       extraGroups = [ "wheel" "networkmanager" "kvm" "libvirtd" "docker" "transmission" "audio" "video" "sway" "sound" "pulse" "input" "render" ];
       uid = 1000;
       group = "cole";

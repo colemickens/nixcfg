@@ -30,6 +30,8 @@ update "nixpkgs/nixos-unstable" "nixos" "nixpkgs-channels" "nixos-unstable"
 #update "nixpkgs/nixos-unstable-openhab" "colemickens" "nixpkgs" "openhab"
 
 update "pkgs/gopass"           "gopasspw"   "gopass"          "master"
+update "pkgs/gitstatus"        "romkatv"    "gitstatus"       "master"
+update "pkgs/libgit2"          "romkatv"    "libgit2"         "master"
 
 
 unset NIX_PATH
