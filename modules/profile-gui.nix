@@ -56,7 +56,9 @@ with lib;
       #alacritty
       #ark
       brightnessctl
-      #chromium
+      chromium
+      chromiumBeta
+      chromiumDev
       chromiumOzone
       #dolphin
       discord
