@@ -56,10 +56,10 @@ with lib;
       #alacritty
       #ark
       brightnessctl
-      chromium
-      chromiumBeta
-      chromiumDev
-      chromiumOzone
+      (chromium.override {
+        useVaapi = false;
+        useOzone = true;
+      })
       #dolphin
       discord
       evince
