@@ -14,6 +14,15 @@ with lib;
       };
     };
 
+    nixpkgs.overlays = [
+      (pkgsself: pkgssuper: {
+        libdrm = pkgssuper.libdrm.override {
+        };
+        mesa = pkgssuper.mesa.override {
+        };
+      })
+    ];
+
     nix = {
       buildCores = 0;
       binaryCachePublicKeys = [

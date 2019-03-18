@@ -57,6 +57,7 @@ with lib;
       #ark
       brightnessctl
       (chromium.override {
+        channel = "dev";
         useVaapi = false;
         useOzone = true;
       })
