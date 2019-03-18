@@ -56,11 +56,11 @@ with lib;
       #alacritty
       #ark
       brightnessctl
-      (chromium.override {
-        channel = "dev";
-        useVaapi = false;
-        useOzone = true;
-      })
+      #(chromium.override {
+      #  channel = "dev";
+      #  useVaapi = false;
+      #  useOzone = true;
+      #})
       #dolphin
       discord
       evince
