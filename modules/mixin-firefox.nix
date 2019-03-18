@@ -23,6 +23,7 @@ in
           "nixpkgs-mozilla"
           "https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz")
       ];
+      config.firefox.enableFXCastBridge = true;
     };
     environment.variables.MOZ_USE_XINPUT2 = "1";
     environment.variables.MOZ_ENABLE_WAYLAND = "1";
