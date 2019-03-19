@@ -62,6 +62,9 @@ in
       wmfocus
       wayfire
       wl-clipboard
+      wf-recorder
+
+      gebaar-libinput
     ];
   };
 }

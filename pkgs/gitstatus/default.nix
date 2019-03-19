@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    mkdir -p $out/share/zsh-plugins
+    mkdir -p $out/lib/gitstatus
     cp -a gitstatusd $out/bin/gitstatusd
-    cp -a gitstatus.plugin.zsh $out/share/zsh-plugins/gitstatus.plugin.zsh
+    cp -a gitstatus.plugin.zsh $out/lib/gitstatus/gitstatus.plugin.zsh
   '';
 
   meta = with stdenv.lib; {
