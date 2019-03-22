@@ -61,6 +61,7 @@ with lib;
       #  useVaapi = false;
       #  useOzone = true;
       #})
+      chromium
       #dolphin
       discord
       evince

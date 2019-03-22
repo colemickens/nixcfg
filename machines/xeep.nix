@@ -11,7 +11,7 @@ in
     ../modules/common.nix
 
     ../modules/profile-gui.nix
-    #../modules/profile-i3.nix
+    ../modules/profile-i3.nix
     ../modules/profile-sway.nix
 
     #../modules/mixin-docker.nix
