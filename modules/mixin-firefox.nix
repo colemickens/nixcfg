@@ -9,7 +9,9 @@ let
     version = "68.0a1";
     # last before: https://bugzilla.mozilla.org/show_bug.cgi?id=1512589
     #timestamp = "2018-12-06-09-26-19";
-    timestamp = "2019-03-28-13-14-10";
+    # get timestamp from here:
+    #  https://download.cdn.mozilla.net/pub/firefox/nightly/...
+    timestamp = "2019-04-02-08-35-12";
     release = false;
   };
   firefoxNightly = firefoxNightlyPinned;
