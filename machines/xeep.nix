@@ -14,7 +14,7 @@ in
     ../modules/profile-i3.nix
     ../modules/profile-sway.nix
 
-    #../modules/mixin-docker.nix
+    ../modules/mixin-docker.nix
     #../modules/mixin-libvirt.nix
     #../modules/mixin-openhab.nix
     ../modules/mixin-sshd.nix
