@@ -9,7 +9,9 @@ unset NIXOS_CONFIG
 # prove we can do day-to-day nixos operations without:
 # NIX_PATH, NIXOS_CONFIG, nor `nixos-*` commands
 
+
 target="$(hostname)System"
+nix build -f default.nix "${target}"
 system="$(\
   nix-build \
     --option "extra-binary-caches" "https://colemickens.cachix.org" \

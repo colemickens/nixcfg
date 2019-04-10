@@ -50,7 +50,7 @@ with lib;
       ripgrep jq
       wget curl stow
       git-crypt gopass
-      gnupg pinentry pinentry_gnome gnome3.gcr
+      gnupg
       jq ripgrep fzf
       openssh autossh mosh sshuttle
       bat ncdu tree exa
