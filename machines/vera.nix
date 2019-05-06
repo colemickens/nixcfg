@@ -18,6 +18,8 @@ in
     ../modules/mixin-transmission.nix
     ../modules/mixin-unifi.nix
 
+    ../modules/mixin-loremipsum-media.nix
+
     "${builtins.toString nixosHardware}/common/cpu/intel"
   ];
 
