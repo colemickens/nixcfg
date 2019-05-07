@@ -1,0 +1,4 @@
+{
+  rev = "locallocal";
+  revShort = "local";
+}

@@ -2,6 +2,10 @@
 
 {
   environment.systemPackages = with pkgs ; [
+    # new random stuff
+    ipfs
+    rclone # ?
+
     # stuff I probably only need on NixOS:
     cryptsetup
     efibootmgr

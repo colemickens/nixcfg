@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ pkgs, lib, config, ... }:
 
 with lib;
 
@@ -14,7 +14,7 @@ let
     timestamp = "2019-04-02-08-35-12";
     release = false;
   };
-  firefoxNightly = firefoxNightlyPinned;
+  firefoxNightly = firefoxNightlyLatest;
   overlay = (import ../lib.nix {}).overlay;
 in
 {
@@ -31,7 +31,8 @@ in
     environment.variables.MOZ_USE_XINPUT2 = "1";
     environment.variables.MOZ_ENABLE_WAYLAND = "1";
     environment.systemPackages = with pkgs; [
-      firefoxNightly
+      #firefoxNightly
+      firefox
     ];
   };
 }

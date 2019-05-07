@@ -35,6 +35,7 @@ in
     };
 
     environment.systemPackages = with pkgs; [
+      swaybg
       swayidle
       swaylock
 
@@ -64,7 +65,7 @@ in
       wl-clipboard
       wf-recorder
 
-      gebaar-libinput
+      #gebaar-libinput
     ];
   };
 }

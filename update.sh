@@ -24,15 +24,16 @@ function update() {
   fi
 }
 
+# nixpkgs
+update "imports/nixpkgs/nixos-unstable" "nixos" "nixpkgs-channels" "nixos-unstable"
 
-# update <attr_name> <repo_owner> <repo_name> <repo_rev>
-update "nixpkgs/nixos-unstable" "nixos" "nixpkgs-channels" "nixos-unstable"
-#update "nixpkgs/nixos-unstable-openhab" "colemickens" "nixpkgs" "openhab"
+# module-ish imports
+update "imports/nixos-hardware"   "nixos"      "nixos-hardware"  "master"
 
+# my own packages not in nixpkgs-wayland or nixpkgs upstream
 update "pkgs/gopass"           "gopasspw"   "gopass"          "master"
 update "pkgs/gitstatus"        "romkatv"    "gitstatus"       "master"
 update "pkgs/libgit2"          "romkatv"    "libgit2"         "master"
-
 
 unset NIX_PATH
 nix-build \

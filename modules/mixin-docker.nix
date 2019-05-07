@@ -1,5 +1,3 @@
-{ config, lib, pkgs, ... }:
-
 {
   config = {
     virtualisation.docker = {

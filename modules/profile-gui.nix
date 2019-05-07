@@ -46,9 +46,16 @@ with lib;
     };
 
     environment.systemPackages = with pkgs; [
+      # new shit?
+      fractal
+      rdesktop
+      steam
+      steamcmd
+
 #      arc-theme
-#      numix-icon-theme
-#      numix-icon-theme-circle
+      numix-icon-theme
+      numix-icon-theme-circle
+      pinentry_gnome gnome3.gcr
 
       libva-utils
       xdg_utils

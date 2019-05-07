@@ -9,17 +9,18 @@ in
 {
   imports = [
     ../modules/common.nix
+    ../modules/pkgs-common.nix
+    ../modules/pkgs-full.nix
+    ../modules/user-cole.nix
 
+    ../modules/profile-interactive.nix
     ../modules/profile-gui.nix
-    ../modules/profile-i3.nix
     ../modules/profile-sway.nix
 
     ../modules/mixin-docker.nix
-    #../modules/mixin-libvirt.nix
-    #../modules/mixin-openhab.nix
     ../modules/mixin-sshd.nix
+    ../modules/mixin-ipfs.nix
     ../modules/mixin-yubikey.nix
-    ../modules/pkgs-full.nix
 
     ../modules/hw-magictrackpad2.nix
     ../modules/hw-chromecast.nix
@@ -31,6 +32,13 @@ in
     system.stateVersion = "18.09"; # Did you read the comment?
     time.timeZone = "America/Los_Angeles";
     services.timesyncd.enable = true;
+
+    #documentation.enable = false;
+    documentation.nixos.enable = false;
+
+    services.mingetty.autologinUser = "cole";
+    #services.kmscon.enable = true;
+    #services.kmscon.autologinUser = "cole";
 
     fileSystems = {
       "/" = {
@@ -85,7 +93,7 @@ in
     networking = {
       hostId = "ef66d560";
       hostName = hostname;
-      firewall.enable = true;
+      firewall.enable = false;
       firewall.allowedTCPPorts = [];
       networkmanager.enable = true;
     };
@@ -109,6 +117,9 @@ in
       cpu.intel.updateMicrocode = true;
       enableAllFirmware = true;
       u2f.enable = true;
+
+      opengl.driSupport32Bit = true;
+      pulseaudio.support32Bit = true;
     };
     services.fwupd.enable = true;
 
