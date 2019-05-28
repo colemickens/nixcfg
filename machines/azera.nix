@@ -1,7 +1,8 @@
 { config, lib, stdenv, pkgs, ... }:
 
 let
-  hostname = "vera";
+  hostname = "azera";
+in
 {
   imports = [
     ../modules/mixin-sshd.nix

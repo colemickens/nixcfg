@@ -19,10 +19,10 @@ in
 
     ../modules/mixin-docker.nix
     ../modules/mixin-sshd.nix
-    ../modules/mixin-ipfs.nix
+    #../modules/mixin-ipfs.nix
     ../modules/mixin-yubikey.nix
 
-    ../modules/hw-magictrackpad2.nix
+    #../modules/hw-magictrackpad2.nix
     ../modules/hw-chromecast.nix
 
     "${builtins.toString nixosHardware}/dell/xps/13-9370/default.nix"
@@ -39,6 +39,10 @@ in
     services.mingetty.autologinUser = "cole";
     #services.kmscon.enable = true;
     #services.kmscon.autologinUser = "cole";
+
+    environment.systemPackages = with pkgs; [
+      msr-tools # how to add a one off command instead of adding to full system pkgs:
+    ];
 
     fileSystems = {
       "/" = {

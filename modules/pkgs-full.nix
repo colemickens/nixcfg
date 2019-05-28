@@ -5,6 +5,7 @@
     # new random stuff
     ipfs
     rclone # ?
+    bind
 
     # stuff I probably only need on NixOS:
     cryptsetup

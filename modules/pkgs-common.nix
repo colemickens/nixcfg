@@ -4,6 +4,7 @@
   # bare minimum applications I expect to be available on ALL machines
   # regardless of profile-*/pkgs-* inclusion:
   environment.systemPackages = with pkgs; [
+    bc
     tmux
     bash bashCompletion
     zsh antibody
@@ -21,7 +22,6 @@
     htop iotop which binutils.bintools stow
     p7zip unrar parallel unzip xz zip
 
-    (callPackage ../pkgs/gitstatus {})
     (callPackage ../imports/nixos-hardware {}).src
   ];
 }

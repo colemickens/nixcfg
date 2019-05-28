@@ -47,12 +47,27 @@ with lib;
 
     environment.systemPackages = with pkgs; [
       # new shit?
-      fractal
+      #fractal
+      #nheko
+      #quaternion
+      #matrique
+      spectral
+      freerdp
+      qemu
+      signal-desktop
+
       rdesktop
       steam
       steamcmd
+      obs-studio
+      wlrobs
 
-#      arc-theme
+      qt5ct
+      qt5.qtwayland
+      lxappearance
+      adwaita-qt
+      breeze-qt5
+      breeze-gtk
       numix-icon-theme
       numix-icon-theme-circle
       pinentry_gnome gnome3.gcr
@@ -60,38 +75,20 @@ with lib;
       libva-utils
       xdg_utils
 
-      #alacritty
-      #ark
+      alacritty
       brightnessctl
-      #(chromium.override {
-      #  channel = "dev";
-      #  useVaapi = false;
-      #  useOzone = true;
-      #})
       chromium
-      #dolphin
       discord
       evince
       feh
       gimp
       google-chrome-dev
-      #kitty
-      #libinput
-      #libinput-gestures
+      kitty
       mpv
       pavucontrol
-      #plex-media-player
       spotify
       termite
-      #vlc
-      vscode
-
-      #gnome3.gnome-tweaks
-      #gnome3.nautilus
-      #gnome3.file-roller
-
-      # not sure what needs this?
-      #qt5.qtwayland
+      vscodium
     ];
   };
 }

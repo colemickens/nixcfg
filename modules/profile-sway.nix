@@ -35,37 +35,37 @@ in
     };
 
     environment.systemPackages = with pkgs; [
+      obs-studio
+      wlrobs
+      gnome3.gcr
+
       swaybg
       swayidle
       swaylock
 
       udiskie
-
-      i3status-rust
       termite
-      xwayland
       pulsemixer
       feh
       ranger
 
-      gnome3.gcr
+      i3status-rust
+      xwayland
 
       wlroots.examples
       slurp
       grim
       mako
       kanshi
-      wlstream
       oguri
       waybar
       redshift-wayland
-      #weston
-      wmfocus
       wayfire
       wl-clipboard
       wf-recorder
+      glpaper
 
-      #gebaar-libinput
+      gebaar-libinput
     ];
   };
 }

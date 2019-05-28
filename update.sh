@@ -32,8 +32,6 @@ update "imports/nixos-hardware"   "nixos"      "nixos-hardware"  "master"
 
 # my own packages not in nixpkgs-wayland or nixpkgs upstream
 update "pkgs/gopass"           "gopasspw"   "gopass"          "master"
-update "pkgs/gitstatus"        "romkatv"    "gitstatus"       "master"
-update "pkgs/libgit2"          "romkatv"    "libgit2"         "master"
 
 unset NIX_PATH
 nix-build \

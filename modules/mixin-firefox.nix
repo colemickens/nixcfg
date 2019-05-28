@@ -30,9 +30,10 @@ in
     };
     environment.variables.MOZ_USE_XINPUT2 = "1";
     environment.variables.MOZ_ENABLE_WAYLAND = "1";
-    environment.systemPackages = with pkgs; [
-      #firefoxNightly
-      firefox
+    environment.systemPackages = [
+      #pkgs.firefox
+      firefoxNightly
+      #pkgs.latest.firefox-beta-bin
     ];
   };
 }
