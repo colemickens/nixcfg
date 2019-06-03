@@ -4,7 +4,7 @@ let
     system = "x86_64-linux";
     nixoscfg = import ../machines/xeep.nix;
     nixpkgs = import ../nixpkgs/nixos-unstable;
-    localnixpkgs = /home/cole/code/nixpkgs; # if exists, used instead of the stable 'nixpkgs' ref
+    localnixpkgs = /root/code/nixpkgs; # if exists, used instead of the stable 'nixpkgs' ref
   };
 in
   xeepOs.config.system.build.toplevel

@@ -2,8 +2,8 @@
 
 let
   overlay = name: url:
-    if builtins.pathExists "/home/cole/code/overlays/${name}"
-    then (import "/home/cole/code/overlays/${name}")
+    if builtins.pathExists "/root/code/overlays/${name}"
+    then (import "/root/code/overlays/${name}")
     else (import (builtins.fetchTarball "${url}"));
 
   mkSystem = { nixpkgs, nixoscfg, system, localnixpkgs ? "/zzz", extraModules ? [] }:

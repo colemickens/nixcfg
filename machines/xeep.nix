@@ -62,6 +62,7 @@ in
       initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
       kernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
       kernelParams = [
+        "mitigations=off"    # HIGHLY IRRESPONSIBLE
         "i915.modeset=1"     # nixos-hw = missing
         "i915.enable_guc=3"  # nixos-hw = missing
         "i915.enable_gvt=0" # nixos-hw = missing

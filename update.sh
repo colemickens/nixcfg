@@ -33,15 +33,10 @@ update "imports/nixos-hardware"   "nixos"      "nixos-hardware"  "master"
 # my own packages not in nixpkgs-wayland or nixpkgs upstream
 update "pkgs/gopass"           "gopasspw"   "gopass"          "master"
 
+function nb() {
+  nix-build --option build-cores 0 --no-out-link ${@}
+}
+
 unset NIX_PATH
-nix-build \
-  --option build-cores 0 \
-  --no-out-link \
-  configurations/xeep.nix
-
-nix-build --no-out-link --keep-going default.nix
-
-# push all to cachix
-nix-build --no-out-link --keep-going default.nix \
-  | cachix push "${cachixremote}"
+nb default.nix | cachix push "${cachixremote}"
 
