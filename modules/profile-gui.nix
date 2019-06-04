@@ -62,14 +62,10 @@ with lib;
       obs-studio
       wlrobs
 
-      qt5ct
       qt5.qtwayland
       lxappearance
       adwaita-qt
       breeze-qt5
-      breeze-gtk
-      numix-icon-theme
-      numix-icon-theme-circle
       pinentry_gnome gnome3.gcr
 
       libva-utils
@@ -77,6 +73,7 @@ with lib;
 
       alacritty
       brightnessctl
+      #chromium
       #chromiumOzone
       discord
       evince

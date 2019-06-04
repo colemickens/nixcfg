@@ -19,24 +19,16 @@ function update() {
     revdata="$(curl -L --fail "https://api.github.com/repos/${owner}/${repo}/commits/${rev}")"
     revdate="$(echo "${revdata}" | jq -r ".commit.committer.date")"
     sha256="$(nix-prefetch-url --unpack "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz" 2>/dev/null)"
-    printf '{\n  rev = "%s";\n  revShort = "%s";\n  sha256 = "%s";\n  revdate = "%s";\n}\n' \
-      "${rev}" "${revShort}" "${sha256}" "${revdate}" > "./${attr}/metadata.nix"
+    printf '{\n  owner = "%s";\n  repo = "%s";\n  rev = "%s";\n  revShort = "%s";\n  sha256 = "%s";\n  revdate = "%s";\n}\n' \
+      "${owner}" "${repo}" "${rev}" "${revShort}" "${sha256}" "${revdate}" > "./${attr}/metadata.nix"
   fi
 }
+update "imports/nixpkgs/nixos-unstable"       "nixos" "nixpkgs-channels" "nixos-unstable"
+update "imports/nixpkgs/nixos-unstable-small" "nixos" "nixpkgs-channels" "nixos-unstable-small"
+update "imports/nixpkgs/cmpkgs"               "colemickens" "nixpkgs" "cmpkgs"
+update "imports/nixos-hardware"               "nixos" "nixos-hardware" "master"
 
-# nixpkgs
-update "imports/nixpkgs/nixos-unstable" "nixos" "nixpkgs-channels" "nixos-unstable"
-
-# module-ish imports
-update "imports/nixos-hardware"   "nixos"      "nixos-hardware"  "master"
-
-# my own packages not in nixpkgs-wayland or nixpkgs upstream
-update "pkgs/gopass"           "gopasspw"   "gopass"          "master"
-
-function nb() {
-  nix-build --option build-cores 0 --no-out-link ${@}
-}
+update "pkgs/gopass"  "gopasspw" "gopass" "master"
 
 unset NIX_PATH
-nb default.nix | cachix push "${cachixremote}"
-
+./nixbuild.sh default.nix -A all | cachix push "${cachixremote}"

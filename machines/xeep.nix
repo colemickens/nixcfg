@@ -17,6 +17,7 @@ in
     ../modules/profile-gui.nix
     ../modules/profile-sway.nix
 
+    ../modules/mixin-coredumps.nix
     ../modules/mixin-docker.nix
     ../modules/mixin-sshd.nix
     #../modules/mixin-ipfs.nix

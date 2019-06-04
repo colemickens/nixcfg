@@ -60,7 +60,7 @@ in
       oguri
       waybar
       redshift-wayland
-      wayfire
+      #wayfire
       wl-clipboard
       wf-recorder
       glpaper

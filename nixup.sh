@@ -6,22 +6,11 @@ set -x
 unset NIX_PATH
 unset NIXOS_CONFIG
 
-# prove we can do day-to-day nixos operations without:
-# NIX_PATH, NIXOS_CONFIG, nor `nixos-*` commands
-
-
-target="$(hostname)System"
-nix build -f default.nix "${target}"
-system="$(\
-  nix-build \
-    --option "extra-binary-caches" "https://colemickens.cachix.org" \
-    --option "extra-binary-caches" "https://nixpkgs-wayland.cachix.org" \
-  -A "${target}"
-)"
+target="$(hostname)__local"
+toplevel=$(./nixbuild.sh default.nix -A "${target}.machine.config.system.build.toplevel")
 
 sudo nix-env --set \
   --profile "/nix/var/nix/profiles/system" \
-  "${system}"
+  "${toplevel}"
 
-sudo "${system}/bin/switch-to-configuration" switch
-
+sudo "${toplevel}/bin/switch-to-configuration" switch

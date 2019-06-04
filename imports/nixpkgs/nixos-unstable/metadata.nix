@@ -1,6 +1,8 @@
 {
-  rev = "4ab1c14714fc97a27655f3a6877386da3cb237bc";
-  revShort = "4ab1c14";
-  sha256 = "16lcj9552q2jfxc27j6116qkf2vl2dcj7vhg5gdq4qi51d891yhn";
-  revdate = "2019-06-01T09:49:51Z";
+  owner = "nixos";
+  repo = "nixpkgs-channels";
+  rev = "ae71c13a92f7e3b7968e8b7b1db9f6238dc00a25";
+  revShort = "ae71c13";
+  sha256 = "0khm8khgyfhmnnmm7wjs5mh2cfvk124drflwswn9q341bkc4bqnw";
+  revdate = "2019-06-03T03:54:44Z";
 }
