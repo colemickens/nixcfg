@@ -5,13 +5,6 @@ let
 in
 buildGoPackage rec {
   name = "gopass-${version}";
-
-  goPackagePath = "github.com/gopasspw/gopass";
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  #version = "git";
-  #src = /home/cole/code/gopass_gopath/src/github.com/gopasspw/gopass;
   version = metadata.rev;
   src = fetchFromGitHub {
     owner = "gopasspw";
@@ -19,6 +12,10 @@ buildGoPackage rec {
     rev = metadata.rev;
     sha256 = metadata.sha256;
   };
+
+  nativeBuildInputs = [ makeWrapper ];
+  
+  goPackagePath = "github.com/gopasspw/gopass";
 
   wrapperPath = with stdenv.lib; makeBinPath ([
     git
