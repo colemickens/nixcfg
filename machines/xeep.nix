@@ -15,6 +15,7 @@ in
 
     ../modules/profile-interactive.nix
     ../modules/profile-gui.nix
+    ../modules/profile-gui-extra.nix
     ../modules/profile-sway.nix
 
     ../modules/mixin-coredumps.nix
