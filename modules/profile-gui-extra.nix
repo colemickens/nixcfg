@@ -7,7 +7,7 @@ with lib;
     environment.systemPackages = with pkgs; [
       glib # gsettings for 'sway' to fixup gtk mouse cursors
            # (wtf is there a gtk bug)
-      dolphin nautilus
+      dolphin gnome3.nautilus
 
       arc-icon-theme
       numix-icon-theme
