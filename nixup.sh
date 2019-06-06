@@ -7,7 +7,7 @@ unset NIX_PATH
 unset NIXOS_CONFIG
 
 target="$(hostname)__local"
-toplevel=$(./nixbuild.sh default.nix -A "${target}.machine.config.system.build.toplevel")
+toplevel=$(./nixbuild.sh default.nix -A "${target}.config.system.build.toplevel")
 
 sudo nix-env --set \
   --profile "/nix/var/nix/profiles/system" \

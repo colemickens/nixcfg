@@ -33,6 +33,15 @@ with lib;
     #};
 
     fonts = {
+      fontconfig = {
+        defaultFonts = {
+          monospace = ["Liberation Mono"];
+          sansSerif = ["Liberation Sans"];
+          serif = ["Liberation Serif"];
+        };
+        #ultimate.enable = true;
+        # localConf = []; ? 
+      };
       fonts = with pkgs; [
         corefonts inconsolata awesome
         overpass

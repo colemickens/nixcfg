@@ -80,18 +80,8 @@ in
           preLVM = true;
           allowDiscards = true;
         }
-        #xeep2
-        #{ 
-        #  name = "dmnixos";
-        #  device = "/dev/disk/by-partlabel/nixos-luks";
-        #  preLVM = true;
-        #  allowDiscards = true;
-        #}
       ];
       loader = {
-        #boot.loader.grub.efiInstallAsRemovable = true; #??
-        #boot.loader.grub.efiSupport = true;
-        #boot.loader.grub.device = "nodev";
         systemd-boot.enable = true;
         efi.canTouchEfiVariables = true;
       };

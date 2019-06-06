@@ -39,33 +39,44 @@ in
       wlrobs
       gnome3.gcr
 
-      swaybg
-      swayidle
-      swaylock
-
       udiskie
       termite
       pulsemixer
       feh
       ranger
 
-      i3status-rust
+      ## nixpkgs-wayland README:
       xwayland
+      swaybg
+      swayidle
+      swaylock
 
-      wlroots.examples
-      slurp
-      grim
-      mako
-      kanshi
-      oguri
       waybar
-      redshift-wayland
-      #wayfire
-      wl-clipboard
-      wf-recorder
-      glpaper
+      i3status-rust
 
       gebaar-libinput
+      glpaper
+      grim
+      kanshi
+      mako
+      oguri
+      redshift-wayland
+      slurp
+      waybar
+      waypipe
+      wf-recorder
+      wl-clipboard
+      wtype
+
+      xdg-desktop-portal-wlr
+
+      waybox
+      bspwc
+      cage
+
+      wayfire
+      wf-config
+      ## end README
     ];
   };
 }
