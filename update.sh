@@ -31,4 +31,8 @@ update "imports/nixos-hardware"               "nixos" "nixos-hardware" "master"
 update "pkgs/gopass"  "gopasspw" "gopass" "master"
 
 unset NIX_PATH
+# build and push xeep__local first
+# the full 'default.nix' might not be buildable depending on the state of the world, wrt to nixpkgs
+attr="xeep__local.config.system.build.toplevel"
+./nixbuild.sh default.nix -A "${attr}" | cachix push "${cachixremote}"
 ./nixbuild.sh default.nix -A all | cachix push "${cachixremote}"

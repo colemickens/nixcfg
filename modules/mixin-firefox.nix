@@ -14,7 +14,8 @@ let
     timestamp = "2019-06-03-16-04-29";
     release = false;
   };
-  firefoxNightly = firefoxNightlyPinned;
+  #firefoxNightly = firefoxNightlyPinned;
+  #firefoxNightly = firefoxNightlyLatest;
   overlay = (import ../lib.nix {}).overlay;
 in
 {
