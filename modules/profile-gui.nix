@@ -83,7 +83,7 @@ with lib;
       alacritty
       brightnessctl
       #chromium
-      #chromiumOzone
+      chromiumOzone
       discord
       evince
       feh
