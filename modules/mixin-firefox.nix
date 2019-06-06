@@ -14,8 +14,9 @@ let
     timestamp = "2019-06-03-16-04-29";
     release = false;
   };
-  #firefoxNightly = firefoxNightlyPinned;
-  #firefoxNightly = firefoxNightlyLatest;
+  #ff = firefoxNightlyPinned;
+  ff = firefoxNightlyLatest;
+  #ff = pkgs.firefox;
   overlay = (import ../lib.nix {}).overlay;
 in
 {
@@ -31,11 +32,7 @@ in
     };
     environment.variables.MOZ_USE_XINPUT2 = "1";
     environment.variables.MOZ_ENABLE_WAYLAND = "1";
-    environment.systemPackages = [
-      #pkgs.firefox
-      firefoxNightly
-      #pkgs.latest.firefox-beta-bin
-    ];
+    environment.systemPackages = [ ff ];
   };
 }
 
