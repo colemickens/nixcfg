@@ -70,7 +70,6 @@ in
 
       xdg-desktop-portal-wlr
 
-      waybox
       bspwc
       cage
 
