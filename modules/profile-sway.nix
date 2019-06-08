@@ -45,6 +45,8 @@ in
       feh
       ranger
 
+      glib # for gsettings, for gtk+wayland+cursor
+
       ## nixpkgs-wayland README:
       xwayland
       swaybg

@@ -38,6 +38,8 @@ in
       wlrobs
       gnome3.gcr
 
+      fractal
+
       ## nixpkgs-wayland README:
       xwayland
     ];

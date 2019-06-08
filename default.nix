@@ -37,7 +37,7 @@ in rec {
   xeep = [
     xeep_sway__local.config.system.build.toplevel
     xeep_gnomeshell__local.config.system.build.toplevel
-    xeep_plasma__local.config.system.build.toplevel
+    #xeep_plasma__local.config.system.build.toplevel
   ];
 
   # vera-vm: This builds a disk image ready to go, running my services,
