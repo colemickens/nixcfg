@@ -1,32 +1,41 @@
 let
   mkSystem = (import ./lib.nix {}).mkSystem;
 in rec {
-  xeep__nixos-unstable = mkSystem rec {
-    inherit (import ./imports/nixpkgs/nixos-unstable/metadata.nix) rev sha256 owner repo;
-    configFile = import ./machines/xeep.nix;
-    nixpkgs = builtins.fetchTarball {
-      url = "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz";
-      inherit sha256;
-    };
-  };
-  xeep__cmpkgs = mkSystem rec {
-    inherit (import ./imports/nixpkgs/cmpkgs/metadata.nix) rev sha256 owner repo;
-    configFile = import ./machines/xeep.nix;
-    nixpkgs = builtins.fetchTarball {
-      url = "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz";
-      inherit sha256;
-    };
-  };
-  xeep__local = mkSystem rec {
-    configFile = ./machines/xeep.nix;
+  #xeep__nixos-unstable = mkSystem rec {
+  #  inherit (import ./imports/nixpkgs/nixos-unstable/metadata.nix) rev sha256 owner repo;
+  #  configFile = import ./machines/xeep.nix;
+  #  nixpkgs = builtins.fetchTarball {
+  #    url = "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz";
+  #    inherit sha256;
+  #  };
+  #};
+  #xeep__cmpkgs = mkSystem rec {
+  #  inherit (import ./imports/nixpkgs/cmpkgs/metadata.nix) rev sha256 owner repo;
+  #  configFile = import ./machines/xeep.nix;
+  #  nixpkgs = builtins.fetchTarball {
+  #    url = "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz";
+  #    inherit sha256;
+  #  };
+  #};
+
+  xeep_sway__local = mkSystem rec {
+    configFile = ./machines/xeep-sway.nix;
     nixpkgs = /home/cole/code/nixpkgs;
     rev = "git";
   };
+  #xeep_plasma__local = mkSystem rec {
+  #  configFile = ./machines/xeep-plasma.nix;
+  #  nixpkgs = /home/cole/code/nixpkgs;
+  #  rev = "git";
+  #};
+  #xeep_gnomeshell__local = mkSystem rec {
+  #  configFile = ./machines/xeep-gnomeshell.nix;
+  #  nixpkgs = /home/cole/code/nixpkgs;
+  #  rev = "git";
+  #};
 
-  all = [
-    xeep__nixos-unstable.config.system.build.toplevel
-    xeep__cmpkgs.config.system.build.toplevel
-    xeep__local.config.system.build.toplevel
+  xeep = [
+    xeep_sway__local.config.system.build.toplevel
   ];
 
   # vera-vm: This builds a disk image ready to go, running my services,

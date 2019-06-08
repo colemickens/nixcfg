@@ -35,4 +35,4 @@ unset NIX_PATH
 # the full 'default.nix' might not be buildable depending on the state of the world, wrt to nixpkgs
 attr="xeep__local.config.system.build.toplevel"
 ./nixbuild.sh default.nix -A "${attr}" | cachix push "${cachixremote}"
-./nixbuild.sh default.nix -A all | cachix push "${cachixremote}"
+#./nixbuild.sh default.nix -A all | cachix push "${cachixremote}"

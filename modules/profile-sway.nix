@@ -73,8 +73,8 @@ in
       bspwc
       cage
 
-      wayfire
-      wf-config
+      #wayfire
+      #wf-config
       ## end README
     ];
   };

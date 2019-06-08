@@ -9,6 +9,8 @@ with lib;
            # (wtf is there a gtk bug)
       dolphin gnome3.nautilus
 
+      falkon
+
       arc-icon-theme
       numix-icon-theme
 
