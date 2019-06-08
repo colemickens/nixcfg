@@ -16,10 +16,7 @@ in
     ../modules/profile-interactive.nix
     ../modules/profile-gui.nix
     ../modules/profile-gui-extra.nix
-    ../modules/profile-gnomeshell.nix
-    #../modules/profile-plasma.nix
-    #../modules/profile-sway.nix
-
+    
     ../modules/mixin-coredumps.nix
     ../modules/mixin-docker.nix
     ../modules/mixin-sshd.nix
