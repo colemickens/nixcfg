@@ -42,6 +42,9 @@ in
 
       ## nixpkgs-wayland README:
       xwayland
+
+      # gnome-specific
+      fractal
     ];
   };
 }

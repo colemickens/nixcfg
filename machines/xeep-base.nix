@@ -37,7 +37,7 @@ in
     #documentation.enable = false;
     documentation.nixos.enable = false;
 
-    services.mingetty.autologinUser = "cole";
+    #services.mingetty.autologinUser = "cole";
     #services.kmscon.enable = true;
     #services.kmscon.autologinUser = "cole";
 
