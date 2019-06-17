@@ -3,6 +3,7 @@ set -euo pipefail
 set -x
 
 cachixremote="colemickens"
+attr="xeep_sway__local.config.system.build.toplevel"
 
 function update() {
   attr="${1}"
@@ -30,7 +31,14 @@ update "imports/nixos-hardware"               "nixos" "nixos-hardware" "master"
 
 update "pkgs/gopass"  "gopasspw" "gopass" "master"
 
+set +o pipefail
+set +e
+
 unset NIX_PATH
-attr="xeep_sway__local.config.system.build.toplevel"
-./nixbuild.sh default.nix -A "${attr}" | cachix push "${cachixremote}"
+./nixbuild.sh default.nix -A "xeep_sway__local.config.system.build.toplevel" | cachix push "${cachixremote}"
+./nixbuild.sh default.nix -A "xeep_plasma__local.config.system.build.toplevel" | cachix push "${cachixremote}"
+./nixbuild.sh default.nix -A "xeep_gnomeshell__local.config.system.build.toplevel" | cachix push "${cachixremote}"
+
+set -euo pipefail
+./nixbuild.sh default.nix -A "xeep_sway__local.config.system.build.toplevel" | cachix push "${cachixremote}"
 
