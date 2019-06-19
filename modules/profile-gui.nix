@@ -55,19 +55,12 @@ with lib;
     };
 
     environment.systemPackages = with pkgs; [
-      # new shit?
-      #fractal
-      #nheko
-      #quaternion
-      #matrique
       spectral
       freerdp
       qemu
       signal-desktop
 
       rdesktop
-      steam
-      steamcmd
       obs-studio
       wlrobs
 
@@ -82,15 +75,11 @@ with lib;
 
       alacritty
       brightnessctl
-      #chromium
-      chromiumBeta
-      #chromiumOzone
+      #chromiumBeta
       discord
       evince
       feh
       gimp
-      google-chrome-dev
-      kitty
       mpv
       pavucontrol
       spotify
