@@ -59,6 +59,7 @@ with lib;
       freerdp
       qemu
       signal-desktop
+      calibre
 
       rdesktop
       obs-studio
