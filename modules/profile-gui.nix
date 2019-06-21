@@ -69,13 +69,14 @@ with lib;
       adwaita-qt
       breeze-qt5
       pinentry_gnome gnome3.gcr
+      networkmanager-openvpn
 
       libva-utils
       xdg_utils
 
       alacritty
       brightnessctl
-      #chromiumBeta
+      chromiumOzone
       discord
       evince
       feh
