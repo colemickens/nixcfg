@@ -59,7 +59,7 @@ with lib;
       freerdp
       qemu
       signal-desktop
-      calibre
+      #calibre
 
       rdesktop
       obs-studio
@@ -75,9 +75,12 @@ with lib;
       libva-utils
       xdg_utils
 
+      #altcoins.dogecoin
+
       alacritty
       brightnessctl
-      chromiumOzone
+      #chromiumOzone
+      google-chrome-dev
       discord
       evince
       feh

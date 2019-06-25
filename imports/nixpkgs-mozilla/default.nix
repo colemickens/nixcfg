@@ -3,10 +3,10 @@ let
 in
 {
   version = metadata.rev;
-  name = "nixos-hardware-${metadata.rev}";
+  name = "nixpkgs-mozilla-${metadata.rev}";
 
   src = builtins.fetchTarball {
-    url = "https://github.com/nixos/nixos-hardware/archive/${metadata.rev}.tar.gz";
+    url = "https://github.com/mozilla/nixpkgs-mozilla/archive/${metadata.rev}.tar.gz";
     sha256 = metadata.sha256;
   };
 }

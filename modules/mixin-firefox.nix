@@ -11,7 +11,7 @@ let
     #timestamp = "2018-12-06-09-26-19";
     # get timestamp from here:
     #  https://download.cdn.mozilla.net/pub/firefox/nightly/...
-    timestamp = "2019-06-03-16-04-29";
+    timestamp = "2019-06-20-22-06-31";
     release = false;
   };
   #ff = firefoxNightlyPinned;

@@ -2,8 +2,7 @@
 
 let
   lib = pkgs.lib;
-  nixosHardware = builtins.fetchTarball
-    "https://github.com/NixOS/nixos-hardware/archive/master.tar.gz";
+  nixosHardware = import ../imports/nixos-hardware;
   hostname = "xeep";
 in
 {
@@ -18,7 +17,7 @@ in
     ../modules/profile-gui-extra.nix
     
     ../modules/mixin-coredumps.nix
-    #../modules/mixin-docker.nix
+    ../modules/mixin-docker.nix
     #../modules/mixin-sshd.nix
     #../modules/mixin-ipfs.nix
     ../modules/mixin-yubikey.nix
@@ -26,20 +25,15 @@ in
     #../modules/hw-magictrackpad2.nix
     ../modules/hw-chromecast.nix
 
-    "${builtins.toString nixosHardware}/dell/xps/13-9370/default.nix"
+    "${nixosHardware.src}/dell/xps/13-9370/default.nix"
   ];
 
   config = {
     system.stateVersion = "18.09"; # Did you read the comment?
-    time.timeZone = "America/Los_Angeles";
+    #time.timeZone = "America/Los_Angeles";
     services.timesyncd.enable = true;
 
-    #documentation.enable = false;
     documentation.nixos.enable = false;
-
-    #services.mingetty.autologinUser = "cole";
-    #services.kmscon.enable = true;
-    #services.kmscon.autologinUser = "cole";
 
     environment.systemPackages = with pkgs; [
       msr-tools # how to add a one off command instead of adding to full system pkgs:
@@ -93,7 +87,8 @@ in
       firewall.allowedTCPPorts = [];
       networkmanager.enable = true;
     };
-    services.resolved.enable = true;
+    #services.resolved.enable = true;
+    # FUCK RESOLVED
 
     i18n.consolePackages = [ pkgs.terminus_font ]; # hidpi
     i18n.consoleFont = "ter-v32n"; # hidpi
@@ -113,9 +108,6 @@ in
       cpu.intel.updateMicrocode = true;
       enableAllFirmware = true;
       u2f.enable = true;
-
-      opengl.driSupport32Bit = true;
-      pulseaudio.support32Bit = true;
     };
     services.fwupd.enable = true;
 
