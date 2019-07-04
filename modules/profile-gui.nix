@@ -50,12 +50,12 @@ with lib;
         twemoji-color-font
         noto-fonts noto-fonts-extra noto-fonts-emoji
         ttf_bitstream_vera
-        nerdfonts
       ];
     };
 
     environment.systemPackages = with pkgs; [
       spectral
+      fractal
       freerdp
       qemu
       signal-desktop
@@ -90,6 +90,8 @@ with lib;
       spotify
       termite
       vscodium
+      gomuks
+      lm_sensors
     ];
   };
 }

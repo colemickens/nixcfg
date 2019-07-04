@@ -8,7 +8,7 @@
 
   config = {
     environment.variables = {
-      MESA_LOADER_DRIVER_OVERRIDE = "iris";
+      #MESA_LOADER_DRIVER_OVERRIDE = "iris";
     };
   };
 }

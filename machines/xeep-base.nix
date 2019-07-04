@@ -18,6 +18,7 @@ in
     
     ../modules/mixin-coredumps.nix
     ../modules/mixin-docker.nix
+    ../modules/mixin-libvirt.nix
     #../modules/mixin-sshd.nix
     #../modules/mixin-ipfs.nix
     ../modules/mixin-yubikey.nix
@@ -88,6 +89,7 @@ in
       networkmanager.enable = true;
     };
     #services.resolved.enable = true;
+    services.resolved.enable = false;
     # FUCK RESOLVED
 
     i18n.consolePackages = [ pkgs.terminus_font ]; # hidpi

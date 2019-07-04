@@ -5,12 +5,12 @@ with lib;
 {
   config = { 
     environment.systemPackages = with pkgs; [
-      arc-icon-theme
-      numix-icon-theme
+      #arc-icon-theme
+      #numix-icon-theme
 
-      numix-cursor-theme
-      capitaine-cursors
-      bibata-cursors
+      #numix-cursor-theme
+      #capitaine-cursors
+      #bibata-cursors
     ];
   };
 }
