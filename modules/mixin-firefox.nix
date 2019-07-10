@@ -3,20 +3,19 @@
 with lib;
 
 let
-  firefoxNightlyLatest = pkgs.latest.firefox-nightly-bin;
-  firefoxNightlyPinned = pkgs.lib.firefoxOverlay.firefoxVersion {
+  firefoxNightlyNow = pkgs.latest.firefox-nightly-bin;
+  firefoxNightlyPin = pkgs.lib.firefoxOverlay.firefoxVersion {
+    # get timestamp from here: https://download.cdn.mozilla.net/pub/firefox/nightly/...
     name = "Firefox Nightly";
     version = "69.0a1";
-    # last before: https://bugzilla.mozilla.org/show_bug.cgi?id=1512589
-    #timestamp = "2018-12-06-09-26-19";
-    # get timestamp from here:
-    #  https://download.cdn.mozilla.net/pub/firefox/nightly/...
-    timestamp = "2019-06-20-22-06-31";
+    timestamp = "2019-07-05-16-10-30";
     release = false;
   };
-  #ff = firefoxNightlyPinned;
-  ff = firefoxNightlyLatest;
-  #ff = pkgs.firefox;
+  firefoxStable = pkgs.firefox;
+  firefoxNightlyUnwrapped = firefoxNightlyNow;
+  firefoxNightly = pkgs.writeShellScriptBin "firefox-nightly" ''
+    exec ${firefoxNightlyUnwrapped}/bin/firefox "''${@}"
+  '';
   overlay = (import ../lib.nix {}).overlay;
 in
 {
@@ -32,7 +31,10 @@ in
     };
     environment.variables.MOZ_USE_XINPUT2 = "1";
     environment.variables.MOZ_ENABLE_WAYLAND = "1";
-    environment.systemPackages = [ ff ];
+    environment.systemPackages = [
+      firefoxStable
+      firefoxNightly
+    ];
   };
 }
 
