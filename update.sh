@@ -3,7 +3,6 @@ set -euo pipefail
 set -x
 
 cachixremote="colemickens"
-attr="xeep_sway__local.config.system.build.toplevel"
 
 function update() {
   attr="${1}"
@@ -24,10 +23,11 @@ function update() {
       "${owner}" "${repo}" "${rev}" "${revShort}" "${sha256}" "${revdate}" > "./${attr}/metadata.nix"
   fi
 }
-update "imports/nixpkgs/nixos-unstable"       "nixos" "nixpkgs-channels" "nixos-unstable"
-update "imports/nixpkgs/nixos-unstable-small" "nixos" "nixpkgs-channels" "nixos-unstable-small"
-update "imports/nixpkgs/cmpkgs"               "colemickens" "nixpkgs" "cmpkgs"
-update "imports/nixos-hardware"               "nixos" "nixos-hardware" "master"
+update "imports/nixpkgs/nixos-unstable"       "nixos"       "nixpkgs-channels" "nixos-unstable"
+update "imports/nixpkgs/cmpkgs"               "colemickens" "nixpkgs"          "cmpkgs"
+update "imports/nixos-hardware"               "nixos"       "nixos-hardware"   "master"
+update "imports/nixpkgs-mozilla"              "mozilla"     "nixpkgs-mozilla" "master"
+update "imports/nixpkgs-wayland"              "colemickens" "nixpkgs-wayland"  "master"
 
 update "pkgs/gopass"  "gopasspw" "gopass" "master"
 

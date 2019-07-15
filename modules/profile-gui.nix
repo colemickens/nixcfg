@@ -54,6 +54,10 @@ with lib;
     };
 
     environment.systemPackages = with pkgs; [
+      riot-desktop
+      imgurbash2 # move?
+      nix-prefetch # move? # is there a better one?
+      openssl # lol wat move
       spectral
       fractal
       freerdp
@@ -79,9 +83,8 @@ with lib;
 
       alacritty
       brightnessctl
-      #chromiumOzone
+      chromiumOzone
       google-chrome-dev
-      discord
       evince
       feh
       gimp

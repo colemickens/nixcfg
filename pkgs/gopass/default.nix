@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, git, gnupg, xclip, makeWrapper }:
+{ stdenv, buildGoPackage, fetchFromGitHub, git, gnupg, wl-clipboard, xclip, makeWrapper }:
 
 let
   metadata = import ./metadata.nix;
@@ -20,6 +20,7 @@ buildGoPackage rec {
   wrapperPath = with stdenv.lib; makeBinPath ([
     git
     gnupg
+    wl-clipboard
     xclip
   ]);
 

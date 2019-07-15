@@ -72,7 +72,7 @@ in
 
       xdg-desktop-portal-wlr
 
-      bspwc
+      #bspwc
       cage
 
       #wayfire
