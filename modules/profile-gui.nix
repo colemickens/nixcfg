@@ -8,7 +8,7 @@ let
       "r300" "r600" "radeonsi" "nouveau" "virgl" "svga" "swrast"
       "iris"
     ];
-  });
+  }).drivers;
 in
 {
   imports = [
