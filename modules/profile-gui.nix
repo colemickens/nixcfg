@@ -2,6 +2,14 @@
 
 with lib;
 
+let
+  iris = (pkgs.mesa.override {
+    galliumDrivers = [
+      "r300" "r600" "radeonsi" "nouveau" "virgl" "svga" "swrast"
+      "iris"
+    ];
+  });
+in
 {
   imports = [
     ./mixin-firefox.nix
@@ -12,6 +20,7 @@ with lib;
       opengl = {
         enable = true;
         extraPackages = with pkgs; [
+          iris
           intel-media-driver
           vaapiIntel
           vaapiVdpau
