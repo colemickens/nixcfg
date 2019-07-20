@@ -2,14 +2,6 @@
 
 with lib;
 
-let
-  mesa_with_iris = (pkgs.mesa.override {
-    galliumDrivers = [
-      "r300" "r600" "radeonsi" "nouveau" "virgl" "svga" "swrast"
-      "iris"
-    ];
-  });
-in
 {
   imports = [
     ./mixin-firefox.nix
@@ -19,7 +11,6 @@ in
       brightnessctl.enable = true;
       opengl = {
         enable = true;
-        package = mesa_with_iris.drivers;
         extraPackages = with pkgs; [
           intel-media-driver
           vaapiIntel

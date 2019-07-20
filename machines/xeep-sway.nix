@@ -4,11 +4,6 @@
   imports = [
     ./xeep-base.nix
     ../modules/profile-sway.nix
+    ../modules/mixin-intel-iris.nix
   ];
-
-  config = {
-    environment.variables = {
-      #MESA_LOADER_DRIVER_OVERRIDE = "iris";
-    };
-  };
 }
