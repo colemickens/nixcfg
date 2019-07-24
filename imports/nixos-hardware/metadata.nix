@@ -1,8 +1,8 @@
 {
   owner = "nixos";
   repo = "nixos-hardware";
-  rev = "54268d11ae4e7a35e6085c5561a8d585379e5c73";
-  revShort = "54268d1";
-  sha256 = "1nvhbawa9y2vn68zgqnyyxiv8ijrqxgxzz1bij2lcac40lf1f8nl";
-  revdate = "2019-07-05T08:10:57Z";
+  rev = "34f24f248033d6418da82f12b3872d5f5401a310";
+  revShort = "34f24f2";
+  sha256 = "1l9h3knw1rz2kl03cv9736i0j79lrfmsq1j2f56pflb00rbzj956";
+  revdate = "2019-07-24T09:42:37Z";
 }

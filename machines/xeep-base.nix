@@ -14,17 +14,16 @@ in
 
     ../modules/profile-interactive.nix
     ../modules/profile-gui.nix
-    ../modules/profile-gui-extra.nix
-    
+
     ../modules/mixin-coredumps.nix
-    ../modules/mixin-docker.nix
-    ../modules/mixin-libvirt.nix
+    #../modules/mixin-docker.nix
+    #../modules/mixin-libvirt.nix
     #../modules/mixin-sshd.nix
     #../modules/mixin-ipfs.nix
-    ../modules/mixin-yubikey.nix
+    #../modules/mixin-yubikey.nix
 
     #../modules/hw-magictrackpad2.nix
-    ../modules/hw-chromecast.nix
+    #../modules/hw-chromecast.nix
 
     "${nixosHardware.src}/dell/xps/13-9370/default.nix"
   ];

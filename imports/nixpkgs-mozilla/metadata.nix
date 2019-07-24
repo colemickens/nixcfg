@@ -1,8 +1,8 @@
 {
   owner = "mozilla";
   repo = "nixpkgs-mozilla";
-  rev = "200cf0640fd8fdff0e1a342db98c9e31e6f13cd7";
-  revShort = "200cf06";
-  sha256 = "1am353ims43ylvay263alchzy3y87r1khnwr0x2fp35qr347bvxi";
-  revdate = "2019-06-13T17:02:54Z";
+  rev = "ac8e9d7bbda8fb5e45cae20c5b7e44c52da3ac0c";
+  revShort = "ac8e9d7";
+  sha256 = "1irlkqc0jdkxdfznq7r52ycnf0kcvvrz416qc7346xhmilrx2gy6";
+  revdate = "2019-07-24T14:02:40Z";
 }

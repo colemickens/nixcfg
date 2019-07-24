@@ -1,4 +1,7 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, git, gnupg, wl-clipboard, xclip, makeWrapper }:
+{ stdenv, buildGoPackage, fetchFromGitHub
+, git, gnupg
+, wl-clipboard #, xclip
+, makeWrapper }:
 
 let
   metadata = import ./metadata.nix;
@@ -21,7 +24,7 @@ buildGoPackage rec {
     git
     gnupg
     wl-clipboard
-    xclip
+    #xclip
   ]);
 
   postInstall = ''
