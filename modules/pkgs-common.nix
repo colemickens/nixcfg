@@ -1,8 +1,5 @@
 { pkgs, ...}:
 
-let
-  gopass_ = pkgs.callPackage ../pkgs/gopass {};
-in
 {
   # bare minimum applications I expect to be available on ALL machines
   # regardless of profile-*/pkgs-* inclusion:
@@ -14,7 +11,7 @@ in
     wget curl
     ripgrep jq
     wget curl stow
-    git-crypt gopass_
+    git-crypt gopass
     gnupg
     jq ripgrep fzf
     openssh autossh mosh sshuttle

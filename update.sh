@@ -2,6 +2,8 @@
 set -euo pipefail
 set -x
 
+unset NIX_PATH
+
 cachixremote="colemickens"
 
 function update() {
@@ -29,16 +31,9 @@ update "imports/nixos-hardware"               "nixos"       "nixos-hardware"   "
 update "imports/nixpkgs-mozilla"              "mozilla"     "nixpkgs-mozilla" "master"
 update "imports/nixpkgs-wayland"              "colemickens" "nixpkgs-wayland"  "master"
 
-update "pkgs/gopass"  "gopasspw" "gopass" "master"
+update "overlay/pkgs/gopass"  "gopasspw" "gopass" "master"
+update "overlay/pkgs/mesa"    "mesa3d" "mesa" "master"
+#update "overlay/pkgs/libdrm"  "mesa3d" "libdrm" "master"
 
-set +o pipefail
-set +e
-
-unset NIX_PATH
-./nixbuild.sh default.nix -A "xeep_sway__local.config.system.build.toplevel" | cachix push "${cachixremote}"
-./nixbuild.sh default.nix -A "xeep_plasma__local.config.system.build.toplevel" | cachix push "${cachixremote}"
-./nixbuild.sh default.nix -A "xeep_gnomeshell__local.config.system.build.toplevel" | cachix push "${cachixremote}"
-
-set -euo pipefail
 ./nixbuild.sh default.nix -A "xeep_sway__local.config.system.build.toplevel" | cachix push "${cachixremote}"
 

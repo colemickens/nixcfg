@@ -1,42 +1,47 @@
 { pkgs, ... }:
 
 {
-  environment.systemPackages = with pkgs ; [
-    # new random stuff
-    ipfs
-    rclone # ?
-    bind
+  config = {
+    nixpkgs.overlays = [
+      (import ../overlay/default.nix)
+    ];
+    environment.systemPackages = with pkgs ; [
+      # new random stuff
+      ipfs
+      rclone # ?
+      bind
 
-    # stuff I probably only need on NixOS:
-    cryptsetup
-    efibootmgr
-    dmidecode
+      # stuff I probably only need on NixOS:
+      cryptsetup
+      efibootmgr
+      dmidecode
 
-    # misc FSes:
-    cifs-utils
-    ms-sys
-    ntfs3g
-    
-    # build tools:
-    cmake gnumake gcc
-    go rustup
-    gdb lldb
-    pkg-config
+      # misc FSes:
+      cifs-utils
+      ms-sys
+      ntfs3g
 
-    # misc
-    binutils.bintools
-    file
-    ffmpeg_4
-    gptfdisk # essential?
-    parted
-    psmisc
-    wipe
+      # build tools:
+      cmake gnumake gcc
+      go rustup
+      gdb lldb
+      pkg-config
 
-    # download tools
-    aria2
-    megatools
-    youtube-dl
-    plowshare
-    streamlink
-  ];
+      # misc
+      binutils.bintools
+      file
+      ffmpeg_4
+      gptfdisk # essential?
+      parted
+      psmisc
+      wipe
+
+      # download tools
+      aria2
+      megatools
+      youtube-dl
+      plowshare
+      streamlink
+    ];
+  };
 }

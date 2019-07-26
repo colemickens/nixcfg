@@ -1,13 +1,13 @@
-{ stdenv, buildGoPackage, fetchFromGitHub
+{ stdenv, buildGoModule, fetchFromGitHub
 , git, gnupg
-, wl-clipboard #, xclip
+, wl-clipboard, xclip
 , makeWrapper }:
 
 let
   metadata = import ./metadata.nix;
 in
-buildGoPackage rec {
-  name = "gopass-${version}";
+buildGoModule rec {
+  pname = "gopass";
   version = metadata.rev;
   src = fetchFromGitHub {
     owner = "gopasspw";
@@ -16,10 +16,10 @@ buildGoPackage rec {
     sha256 = metadata.sha256;
   };
 
+  modSha256 = metadata.modSha256;
+
   nativeBuildInputs = [ makeWrapper ];
   
-  goPackagePath = "github.com/gopasspw/gopass";
-
   wrapperPath = with stdenv.lib; makeBinPath ([
     git
     gnupg
