@@ -61,7 +61,6 @@ with lib;
       spectral
       fractal
       freerdp
-      qemu
       signal-desktop
       #calibre
 
@@ -70,18 +69,14 @@ with lib;
       wlrobs
 
       qt5.qtwayland
+      qt5.qtbase
       lxappearance
-      adwaita-qt
+      breeze-icons
       breeze-qt5
-      pinentry_gnome gnome3.gcr
-      networkmanager-openvpn
 
       libva-utils
       xdg_utils
 
-      #altcoins.dogecoin
-
-      alacritty
       brightnessctl
       chromiumOzone
       google-chrome-dev
@@ -93,8 +88,9 @@ with lib;
       spotify
       termite
       vscodium
-      gomuks
       lm_sensors
+
+      gomuks # not gui?
     ];
   };
 }
