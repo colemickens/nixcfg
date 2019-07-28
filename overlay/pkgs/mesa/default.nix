@@ -31,8 +31,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "mesa";
-  inherit version;
+  name = "mesa";
+  version = metadata.rev;
 
   src = fetchgit {
     url = "https://gitlab.freedesktop.org/mesa/mesa.git";
