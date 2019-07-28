@@ -30,7 +30,6 @@
       # misc
       binutils.bintools
       file
-      ffmpeg_4
       gptfdisk # essential?
       parted
       psmisc

@@ -89,8 +89,6 @@ with lib;
       termite
       vscodium
       lm_sensors
-
-      gomuks # not gui?
     ];
   };
 }

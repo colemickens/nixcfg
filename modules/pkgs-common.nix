@@ -21,5 +21,7 @@
     neovim vim
     htop iotop which binutils.bintools stow
     p7zip unrar parallel unzip xz zip
+
+    gomuks
   ];
 }
