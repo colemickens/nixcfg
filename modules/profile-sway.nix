@@ -8,9 +8,7 @@ in
   config = {
     nixpkgs = {
       overlays = [
-        (overlay
-          "nixpkgs-wayland"
-          "https://github.com/colemickens/nixpkgs-wayland/archive/master.tar.gz")
+        (overlay "nixpkgs-wayland" "https://github.com/colemickens/nixpkgs-wayland/archive/master.tar.gz")
       ];
     };
     programs = {

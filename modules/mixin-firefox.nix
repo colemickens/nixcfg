@@ -23,9 +23,7 @@ in
     nixpkgs = {
       config.allowUnfree = true;
       overlays = [
-        (overlay
-          "nixpkgs-mozilla"
-          "https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz")
+        (overlay "nixpkgs-mozilla" "https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz")
       ];
       config.firefox.enableFXCastBridge = true;
     };

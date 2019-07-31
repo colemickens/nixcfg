@@ -2,7 +2,7 @@
 
 let
   lib = pkgs.lib;
-  nixosHardware = import ../imports/nixos-hardware;
+  nixosHardware = import ../imports/misc/nixos-hardware;
   hostname = "xeep";
 in
 {
@@ -86,6 +86,7 @@ in
       firewall.enable = false;
       firewall.allowedTCPPorts = [];
       networkmanager.enable = true;
+      #networkmanager.wifi.macAddress = "random";
     };
     #services.resolved.enable = true;
     services.resolved.enable = false;
