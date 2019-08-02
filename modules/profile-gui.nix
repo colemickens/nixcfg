@@ -43,6 +43,8 @@ with lib;
         # localConf = []; ? 
       };
       fonts = with pkgs; [
+        electrum
+
         corefonts inconsolata awesome
         overpass
         fira-code fira-code-symbols fira-mono
@@ -61,7 +63,6 @@ with lib;
       spectral
       fractal
       freerdp
-      signal-desktop
       #calibre
 
       rdesktop
@@ -78,7 +79,7 @@ with lib;
       xdg_utils
 
       brightnessctl
-      chromiumOzone
+      #chromiumOzone
       google-chrome-dev
       evince
       feh

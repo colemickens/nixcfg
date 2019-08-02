@@ -1,7 +1,7 @@
 self: pkgs:
 {
   # custom/newer packages
-  gopass = pkgs.callPackage ./pkgs/gopass {};
+  #gopass = pkgs.callPackage ./pkgs/gopass {};
   #ripasso = pkgs.callPackage ./pkgs/ripasso {};
 
   # system, mass rebuild:
