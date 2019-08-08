@@ -14,3 +14,12 @@ sudo nix-env --set \
   "${toplevel}"
 
 sudo "${toplevel}/bin/switch-to-configuration" switch
+
+# delete all but last few generations
+echo nix-env \
+  --profile "/nix/var/nix/profiles/system" \
+  --delete-generations +3
+
+sudo nix-store --gc
+sudo nix-store --optimize
+

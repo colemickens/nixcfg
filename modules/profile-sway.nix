@@ -70,6 +70,8 @@ in
 
       xdg-desktop-portal-wlr
 
+      xorg.xrdb
+
       #bspwc
       cage
 

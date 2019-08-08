@@ -1,8 +1,8 @@
 {
   owner = "mesa3d";
   repo = "mesa";
-  rev = "de17922b8a3c382cf89833cf8975cadc00142313";
-  revShort = "de17922";
-  sha256 = "0h9ilyr2pps8504lnvy4r7gc4irzdsdh3i6m9nfqw2cc0llbd9cc";
-  revdate = "2019-07-28T21:38:31Z";
+  rev = "04a995158084acbd1917b4c7e0f8d381e1c9222d";
+  revShort = "04a9951";
+  sha256 = "1vfpr5bzyvcz7jvcy2r2xb5f9797kibcw7n6dxf42mkj33yrlacg";
+  revdate = "2019-08-05T17:19:09Z";
 }

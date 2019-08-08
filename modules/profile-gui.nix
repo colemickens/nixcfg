@@ -39,17 +39,13 @@ with lib;
           sansSerif = ["Liberation Sans"];
           serif = ["Liberation Serif"];
         };
-        #ultimate.enable = true;
         # localConf = []; ? 
       };
       fonts = with pkgs; [
-        electrum
-
         corefonts inconsolata awesome
         overpass
         fira-code fira-code-symbols fira-mono
         source-code-pro
-        twemoji-color-font
         noto-fonts noto-fonts-extra noto-fonts-emoji
         ttf_bitstream_vera
       ];

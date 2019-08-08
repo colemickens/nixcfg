@@ -60,7 +60,7 @@ in
         "mitigations=off"    # HIGHLY IRRESPONSIBLE
         "i915.modeset=1"     # nixos-hw = missing
         "i915.enable_guc=3"  # nixos-hw = missing
-        "i915.enable_gvt=0" # nixos-hw = missing
+        "i915.enable_gvt=0"  # nixos-hw = missing
         "i915.enable_fbc=1"  # nixos-hw = 2
         "i915.enable_psr=1"  # nixos-hw = missing?
         "i915.fastboot=1"    # nixos-hw = missing?
@@ -96,13 +96,7 @@ in
     i18n.consoleFont = "ter-v32n"; # hidpi
 
     nix.maxJobs = 8;
-    nix.nixPath = [
-      "/etc/nixos"
-      "nixpkgs=/home/cole/code/nixpkgs"
-      "nixos-config=/home/cole/code/nixcfg/machines/${hostname}.nix"
-    ];
-    
-    nixpkgs.config.allowUnfree = true; # for redistrib fw
+    nixpkgs.config.allowUnfree = true;
     hardware = {
       bluetooth.enable = true;
       pulseaudio.package = pkgs.pulseaudioFull;
