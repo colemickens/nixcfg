@@ -66,6 +66,7 @@ in
       waypipe
       wf-recorder
       wl-clipboard
+      wldash
       wtype
 
       xdg-desktop-portal-wlr
@@ -75,8 +76,8 @@ in
       #bspwc
       cage
 
-      #wayfire
-      #wf-config
+      wayfire
+      wf-config
       ## end README
     ];
   };
