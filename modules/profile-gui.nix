@@ -75,7 +75,7 @@ with lib;
       xdg_utils
 
       brightnessctl
-      #chromiumOzone
+      chromiumOzone
       google-chrome-dev
       evince
       feh
