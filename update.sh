@@ -37,4 +37,8 @@ update "overlay/pkgs/mesa"    "mesa3d" "mesa" "master"
 
 ./nixbuild.sh default.nix -A "xeep_sway__local.config.system.build.toplevel" \
   | cachix push "${cachixremote}"
+./nixbuild.sh default.nix -A "xeep_gnome__local.config.system.build.toplevel" \
+  | cachix push "${cachixremote}"
+./nixbuild.sh default.nix -A "xeep_plasma__local.config.system.build.toplevel" \
+  | cachix push "${cachixremote}"
 

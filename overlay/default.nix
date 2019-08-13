@@ -1,8 +1,8 @@
 self: pkgs:
 {
   # custom/newer packages
-  #gopass = pkgs.callPackage ./pkgs/gopass {};
-  #ripasso = pkgs.callPackage ./pkgs/ripasso {};
+  gopass = pkgs.callPackage ./pkgs/gopass {};
+  ripasso = pkgs.callPackage ./pkgs/ripasso {};
 
   # system, mass rebuild:
   #libdrm = pkgs.callPackage ./pkgs/libdrm {};

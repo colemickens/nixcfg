@@ -20,6 +20,6 @@ echo nix-env \
   --profile "/nix/var/nix/profiles/system" \
   --delete-generations +3
 
-sudo nix-store --gc
+#sudo nix-store --gc
 sudo nix-store --optimize
 

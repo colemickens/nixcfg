@@ -62,8 +62,6 @@ with lib;
       #calibre
 
       rdesktop
-      obs-studio
-      wlrobs
 
       qt5.qtwayland
       qt5.qtbase
