@@ -31,8 +31,8 @@ update "imports/misc/nixos-hardware"   "nixos"       "nixos-hardware"   "master"
 update "imports/overlays/nixpkgs-mozilla"  "mozilla"     "nixpkgs-mozilla"  "master"
 update "imports/overlays/nixpkgs-wayland"  "colemickens" "nixpkgs-wayland"  "master"
 
-update "overlay/pkgs/gopass"  "gopasspw" "gopass" "master"
-update "overlay/pkgs/mesa"    "mesa3d" "mesa" "master"
+#update "overlay/pkgs/gopass"  "gopasspw" "gopass" "master"
+#update "overlay/pkgs/mesa"    "mesa3d" "mesa" "master"
 #update "overlay/pkgs/libdrm"  "mesa3d" "libdrm" "master"
 
 ./nixbuild.sh default.nix -A "xeep_sway__local.config.system.build.toplevel" \

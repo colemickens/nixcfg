@@ -2,7 +2,7 @@
 
 {
   config = {
-    nixpkgs.overlays = [ (import ../overlay/default.nix) ];
+    # nixpkgs.overlays = [ (import ../overlay/default.nix) ];
 
     environment.systemPackages = with pkgs ; [
       # new random stuff
