@@ -9,6 +9,7 @@
       ipfs
       rclone # ?
       bind
+      ffmpeg
 
       # stuff I probably only need on NixOS:
       cryptsetup

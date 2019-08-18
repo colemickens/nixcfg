@@ -33,6 +33,8 @@ in
     };
 
     environment.systemPackages = with pkgs; [
+      intel-gpu-tools
+
       obs-studio
       wlrobs
       gnome3.gcr
@@ -66,6 +68,7 @@ in
       waypipe
       wf-recorder
       wl-clipboard
+      wdisplays
       wldash
       wtype
 
@@ -78,7 +81,6 @@ in
 
       wayfire
       wf-config
-      ## end README
     ];
   };
 }

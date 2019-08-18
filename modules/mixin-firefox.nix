@@ -7,12 +7,12 @@ let
   firefoxNightlyPin = pkgs.lib.firefoxOverlay.firefoxVersion {
     # get timestamp from here: https://download.cdn.mozilla.net/pub/firefox/nightly/...
     name = "Firefox Nightly";
-    version = "69.0a1";
-    timestamp = "2019-07-05-16-10-30";
+    version = "70.0a1";
+    timestamp = "2019-08-15-19-35-05";
     release = false;
   };
   firefoxStable = pkgs.firefox;
-  firefoxNightlyUnwrapped = firefoxNightlyNow;
+  firefoxNightlyUnwrapped = firefoxNightlyPin;
   firefoxNightly = pkgs.writeShellScriptBin "firefox-nightly" ''
     exec ${firefoxNightlyUnwrapped}/bin/firefox "''${@}"
   '';

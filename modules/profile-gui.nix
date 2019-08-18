@@ -48,6 +48,7 @@ with lib;
         source-code-pro
         noto-fonts noto-fonts-extra noto-fonts-emoji
         ttf_bitstream_vera
+        gelasio
       ];
     };
 
@@ -59,15 +60,16 @@ with lib;
       spectral
       fractal
       freerdp
-      #calibre
+      calibre
+      okular
 
       rdesktop
 
       qt5.qtwayland
       qt5.qtbase
       lxappearance
-      breeze-icons
-      breeze-qt5
+      numix-icon-theme
+      breeze-qt5 # needed for breeze cursor
 
       libva-utils
       xdg_utils

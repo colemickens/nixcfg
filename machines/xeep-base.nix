@@ -17,7 +17,7 @@ in
 
     ../modules/mixin-coredumps.nix
     #../modules/mixin-docker.nix
-    #../modules/mixin-libvirt.nix
+    ../modules/mixin-libvirt.nix
     #../modules/mixin-sshd.nix
     #../modules/mixin-ipfs.nix
     #../modules/mixin-yubikey.nix
