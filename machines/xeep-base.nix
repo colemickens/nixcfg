@@ -16,7 +16,7 @@ in
     ../modules/profile-gui.nix
 
     ../modules/mixin-coredumps.nix
-    #../modules/mixin-docker.nix
+    ../modules/mixin-docker.nix
     ../modules/mixin-libvirt.nix
     #../modules/mixin-sshd.nix
     #../modules/mixin-ipfs.nix

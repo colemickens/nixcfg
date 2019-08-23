@@ -1,8 +1,8 @@
 {
   owner = "colemickens";
   repo = "nixpkgs";
-  rev = "fc2dc143774c25219b235b2dddda6a4e6513e5fb";
-  revShort = "fc2dc14";
-  sha256 = "0w62csnzwzxxsq28y1lij8dprw0msksbx1bpa7im39g3xx0ky97z";
-  revdate = "2019-08-15T19:11:52Z";
+  rev = "97d01d71cc4bbc5e247dcef1bc5558897d878a3e";
+  revShort = "97d01d7";
+  sha256 = "08qi5pxrhdcw3527nhzk94l4fz3gvp4x8118j21m0dhs73d3cqc1";
+  revdate = "2019-08-15T22:16:59Z";
 }
