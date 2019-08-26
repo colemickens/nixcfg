@@ -61,7 +61,7 @@ with lib;
       fractal
       freerdp
       calibre
-      okular
+      okular # TODO: pulls in qt?
 
       rdesktop
 
@@ -69,7 +69,7 @@ with lib;
       qt5.qtbase
       lxappearance
       numix-icon-theme
-      breeze-qt5 # needed for breeze cursor
+      breeze-qt5 # needed for breeze cursor # TODO: pulls in qt?
 
       libva-utils
       xdg_utils

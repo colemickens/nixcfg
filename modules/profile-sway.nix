@@ -34,8 +34,8 @@ in
     environment.systemPackages = with pkgs; [
       intel-gpu-tools
 
-      obs-studio
-      wlrobs
+      #obs-studio
+      #wlrobs
       gnome3.gcr
 
       udiskie

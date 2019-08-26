@@ -34,6 +34,7 @@ in
 
     documentation.nixos.enable = false;
 
+    environment.variables.MESA_LOADER_DRIVER_OVERRIDE = "iris";
     environment.systemPackages = with pkgs; [
       msr-tools # how to add a one off command instead of adding to full system pkgs:
     ];
