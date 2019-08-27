@@ -64,6 +64,7 @@ with lib;
       okular # TODO: pulls in qt?
 
       steam
+      moonlight-embedded
 
       rdesktop
 
