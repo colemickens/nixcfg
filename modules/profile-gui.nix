@@ -73,7 +73,9 @@ with lib;
       lxappearance
       numix-icon-theme
       breeze-qt5 # needed for breeze cursor # TODO: pulls in qt?
-      captaine-cursors
+      capitaine-cursors
+      arc-icon-theme arc-theme
+      yaru-theme
 
       libva-utils
       xdg_utils
