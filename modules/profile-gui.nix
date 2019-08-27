@@ -63,6 +63,8 @@ with lib;
       calibre
       okular # TODO: pulls in qt?
 
+      steam
+
       rdesktop
 
       qt5.qtwayland
@@ -70,6 +72,7 @@ with lib;
       lxappearance
       numix-icon-theme
       breeze-qt5 # needed for breeze cursor # TODO: pulls in qt?
+      captaine-cursors
 
       libva-utils
       xdg_utils

@@ -1,8 +1,6 @@
 {...}:
 
-let
-  home = "/home/cole";
-in rec
+rec
 {
   # overlay will load an overlay, either from:
   #  ../overlays/{name}
