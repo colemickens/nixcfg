@@ -3,17 +3,17 @@ let
 in rec {
   xeep_sway__local = mkSystem rec {
     configFile = ./machines/xeep-sway.nix;
-    nixpkgs = /home/cole/code/nixpkgs;
+    nixpkgs = ../nixpkgs;
     rev = "git";
   };
   xeep_plasma__local = mkSystem rec {
     configFile = ./machines/xeep-plasma.nix;
-    nixpkgs = /home/cole/code/nixpkgs;
+    nixpkgs = ../nixpkgs;
     rev = "git";
   };
   xeep_gnome__local = mkSystem rec {
     configFile = ./machines/xeep-gnomeshell.nix;
-    nixpkgs = /home/cole/code/nixpkgs;
+    nixpkgs = ../nixpkgs;
     rev = "git";
   };
 
