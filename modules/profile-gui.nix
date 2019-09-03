@@ -61,7 +61,7 @@ with lib;
       fractal
       freerdp
       calibre
-      okular # TODO: pulls in qt?
+      #okular # TODO: pulls in qt?
 
       steam
       moonlight-embedded
@@ -70,9 +70,9 @@ with lib;
 
       qt5.qtwayland
       qt5.qtbase
-      lxappearance
+      lxappearance-gtk3
       numix-icon-theme
-      breeze-qt5 # needed for breeze cursor # TODO: pulls in qt?
+      #breeze-qt5 # needed for breeze cursor # TODO: pulls in qt?
       capitaine-cursors
       arc-icon-theme arc-theme
       yaru-theme

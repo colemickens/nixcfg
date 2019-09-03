@@ -86,7 +86,9 @@ in
       firewall.enable = false;
       firewall.allowedTCPPorts = [];
       networkmanager.enable = true;
+      #wireless.iwd.enable = true;
       #networkmanager.wifi.macAddress = "random";
+      networkmanager.wifi.backend = "iwd";
     };
     #services.resolved.enable = true;
     services.resolved.enable = false;
