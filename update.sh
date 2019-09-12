@@ -27,7 +27,7 @@ function update() {
 }
 update "imports/nixpkgs/nixos-unstable"    "nixos"       "nixpkgs-channels" "nixos-unstable"
 update "imports/nixpkgs/cmpkgs"            "colemickens" "nixpkgs"          "cmpkgs"
-update "imports/misc/nixos-hardware"   "nixos"       "nixos-hardware"   "master"
+update "imports/misc/nixos-hardware"       "nixos"       "nixos-hardware"   "master"
 update "imports/overlays/nixpkgs-mozilla"  "mozilla"     "nixpkgs-mozilla"  "master"
 update "imports/overlays/nixpkgs-wayland"  "colemickens" "nixpkgs-wayland"  "master"
 
