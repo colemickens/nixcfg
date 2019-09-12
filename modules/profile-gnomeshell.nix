@@ -7,15 +7,24 @@ with lib;
     services.xserver.displayManager.gdm.enable = true;
     services.xserver.desktopManager.gnome3.enable = true;
 
-    environment.gnome3.excludePackages = pkgs.gnome3.optionalPackages;
-    programs.gnome-documents.enable = false;
+    services.printing.enable = false;
+
+    services.gnome3.core-utilities.enable = false;
+
+    services.colord.enable = true;
     services.gnome3.gnome-remote-desktop.enable = false;
     services.gnome3.gnome-user-share.enable = false;
-    programs.gpaste.enable = false;
+    services.gvfs.enable = true;
+    services.telepathy.enable = false;
 
+    programs.gpaste.enable = false;
+    programs.evince.enable = true;
     programs.file-roller.enable = true;
+    programs.gnome-documents.enable = false;
     programs.gnome-disks.enable = true;
-    services.gnome3.gnome-terminal-server.enable = true;
+    programs.gnome-terminal.enable = true;
+    services.gnome3.seahorse.enable = true;
+    services.gnome3.sushi.enable = true;
 
     environment.systemPackages = []
       ++ (with pkgs; [])

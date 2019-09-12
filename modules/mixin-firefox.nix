@@ -12,7 +12,8 @@ let
     release = false;
   };
   firefoxStable = pkgs.firefox;
-  firefoxNightlyUnwrapped = firefoxNightlyPin;
+  #firefoxNightlyUnwrapped = firefoxNightlyPin;
+  firefoxNightlyUnwrapped = firefoxNightlyNow; # with local nixpkgs-mozilla w/ authenticity check disabled
   firefoxNightly = pkgs.writeShellScriptBin "firefox-nightly" ''
     exec ${firefoxNightlyUnwrapped}/bin/firefox "''${@}"
   '';

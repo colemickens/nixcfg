@@ -15,7 +15,7 @@ awk -i inplace -v r="$(cat ~/.secrets/packet-projectid)" \
 awk -i inplace -v r="$(cat ~/.config/cachix/cachix.dhall)" \
   '{gsub(/CACHIXDHALL/,r)}1' "${b}"
 
-awk -i inplace -v r="$(cat ../../modules/user-cole.nix | head -n-2 | tail -n+3)" \
+awk -i inplace -v r="$(cat "${DIR}/../../modules/user-cole.nix" | head -n-2 | tail -n+3)" \
   '{gsub(/USERCONFIG/,r)}1' "${b}"
 
 cat "${b}"

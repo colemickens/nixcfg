@@ -88,7 +88,6 @@ with lib;
       gimp
       mpv
       pavucontrol
-      spotify
       termite
       vscodium
       lm_sensors
