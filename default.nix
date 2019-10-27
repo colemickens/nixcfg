@@ -17,6 +17,18 @@ in rec {
     rev = "git";
   };
 
+  xeep_sway__cmpkgs = mkSystem rec {
+    configFile = ./machines/xeep-sway.nix;
+    nixpkgs = ./imports/nixpkgs/cmpkgs;
+    rev = "git";
+  };
+
+  # TODO: if we omit "rev" from local path builds,
+  # do we still get the git revision in the end?
+  #
+  # make ./imports/nixpkgs/foo/ include a default.nix plz
+  # if we keep `.git` does it also get the rev properly?
+
   xeep = [
     xeep_sway__local.config.system.build.toplevel
     xeep_gnome__local.config.system.build.toplevel

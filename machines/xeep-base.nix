@@ -4,6 +4,7 @@ let
   lib = pkgs.lib;
   nixosHardware = import ../imports/misc/nixos-hardware;
   hostname = "xeep";
+  kp = pkgs.linuxPackages_latest;
 in
 {
   imports = [
@@ -15,14 +16,14 @@ in
     ../modules/profile-interactive.nix
     ../modules/profile-gui.nix
 
-    ../modules/mixin-docker.nix
-    ../modules/mixin-libvirt.nix
+    #../modules/mixin-docker.nix
+    #../modules/mixin-libvirt.nix
     #../modules/mixin-sshd.nix
     #../modules/mixin-ipfs.nix
     #../modules/mixin-yubikey.nix
 
     #../modules/hw-magictrackpad2.nix
-    #../modules/hw-chromecast.nix
+    ../modules/hw-chromecast.nix
 
     "${nixosHardware.src}/dell/xps/13-9370/default.nix"
   ];
@@ -34,9 +35,10 @@ in
 
     documentation.nixos.enable = false;
 
-    environment.variables.MESA_LOADER_DRIVER_OVERRIDE = "iris";
+    #environment.variables.MESA_LOADER_DRIVER_OVERRIDE = "iris";
     environment.systemPackages = with pkgs; [
       msr-tools # how to add a one off command instead of adding to full system pkgs:
+      v4l-utils
     ];
 
     fileSystems = {
@@ -53,11 +55,15 @@ in
     swapDevices = [ ];
     boot = {
       earlyVconsoleSetup = true; # hidpi + luks-open
-      kernelPackages = pkgs.linuxPackages_latest;
+      kernelPackages = kp;
       initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
       kernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
       kernelParams = [
-        "mitigations=off"    # HIGHLY IRRESPONSIBLE
+        # HIGHLY IRRESPONSIBLE
+        "noibrs" "noibpb" "nopti" "nospectre_v2"
+        "nospectre_v1" "l1tf=off" "nospec_store_bypass_disable"
+        "no_stf_barrier" "mds=off" "mitigations=off"
+
         "i915.modeset=1"     # nixos-hw = missing
         "i915.enable_guc=3"  # nixos-hw = missing
         "i915.enable_gvt=0"  # nixos-hw = missing
@@ -66,9 +72,10 @@ in
         "i915.fastboot=1"    # nixos-hw = missing?
       ];
       supportedFilesystems = [ "btrfs" ];
+      extraModulePackages = [ kp.v4l2loopback ];
       initrd.supportedFilesystems = [ "btrfs" ];
       initrd.luks.devices = [
-        { 
+        {
           name = "root";
           device = "/dev/disk/by-partlabel/nixos-luks";
           preLVM = true;
@@ -104,14 +111,21 @@ in
       pulseaudio.package = pkgs.pulseaudioFull;
       enableRedistributableFirmware = true;
       cpu.intel.updateMicrocode = true;
-      enableAllFirmware = true;
+      #enableAllFirmware = true;
       u2f.enable = true;
     };
     services.fwupd.enable = true;
 
-    powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+    #powerManagement.cpuFreqGovernor = "powersave";
     powerManagement.enable = true;
     services.tlp.enable = true;
+    services.tlp.extraConfig = ''
+      #START_CHARGE_THRESH_BAT0=75
+      #STOP_CHARGE_THRESH_BAT0=80
+      CPU_SCALING_GOVERNOR_ON_BAT=powersave
+      ENERGY_PERF_POLICY_ON_BAT=powersave
+    '';
+
     services.upower.enable = true;
   };
 }

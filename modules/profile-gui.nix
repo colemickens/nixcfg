@@ -6,11 +6,17 @@ with lib;
   imports = [
     ./mixin-firefox.nix
   ];
-  config = { 
+  config = {
+    environment.variables.MESA_LOADER_DRIVER_OVERRIDE = "iris";
     hardware = {
       brightnessctl.enable = true;
       opengl = {
         enable = true;
+        package = (pkgs.mesa.override {
+          galliumDrivers = [ "virgl" "svga" "swrast" "iris" ];
+          driDrivers = [ "i915" "i965" ];
+          vulkanDrivers = [ "intel" ];
+        }).drivers;
         extraPackages = with pkgs; [
           intel-media-driver
           vaapiIntel
@@ -49,11 +55,13 @@ with lib;
         noto-fonts noto-fonts-extra noto-fonts-emoji
         ttf_bitstream_vera
         gelasio
+        cascadia-code go-font sudo-font monoid
+        fantasque-sans-mono
+        victor-mono
       ];
     };
 
     environment.systemPackages = with pkgs; [
-      riot-desktop
       imgurbash2 # move?
       nix-prefetch # move? # is there a better one?
       openssl # lol wat move
@@ -63,7 +71,7 @@ with lib;
       calibre
       #okular # TODO: pulls in qt?
 
-      steam
+      #steam
       moonlight-embedded
 
       rdesktop
@@ -75,13 +83,13 @@ with lib;
       #breeze-qt5 # needed for breeze cursor # TODO: pulls in qt?
       capitaine-cursors
       arc-icon-theme arc-theme
-      yaru-theme
+      #yaru-theme
 
       libva-utils
       xdg_utils
 
       brightnessctl
-      chromiumOzone
+      #chromiumOzone
       google-chrome-dev
       evince
       feh
