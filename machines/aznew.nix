@@ -7,6 +7,8 @@
     ../modules/mixin-plex.nix
   ];
 
+  system.stateVersion = "19.03";
+
   programs.mosh.enable = true;
   #virtualisation.docker.enable = true;
   security.sudo.wheelNeedsPassword = false;
