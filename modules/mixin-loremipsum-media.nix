@@ -55,13 +55,20 @@ in {
       where = "${mergedMnt}";
       type = "mergerfs"; # TODO: how to ensure is available?
       options = "defaults,sync_read,auto_cache,use_ino,allow_other,func.getattr=newest,category.action=all,category.create=ff";
-      #WantedBy=multi-user.target
+      wantedBy = [ "multi-user.target" ];
 
       # TODO: for now local downloads are all ephemeral
       #requiresMountsFor = "/var/lib/localdata";
     }
   ];
   
+  systemd.automounts = [
+    {
+      where = "${mergedMnt}";
+      wantedBy = [ "multi-user.target" ];
+    }
+  ];
+
   services = {
     #flexget = {
     #  enable = true;
@@ -78,7 +85,23 @@ in {
         };
       };
     };
+    nginx = {
+      enable = false;
+      virtualHosts."azdev.westus2.cloudapp.azure.com" = {
+	locations."/" = {
+	  root = "/var/lib/data";
+	  extraConfig = ''
+	    dav_ext_methods PROPFIND OPTIONS;
+	    dav_access user:rw group:rw all:rw;
+	    autoindex on;
+	    allow all;
+	  '';
+	};
+      };
+    };
   };
+
+  networking.firewall.allowedTCPPorts = [ 80 ];
 
   systemd.services = {
     rclone-mount = {
