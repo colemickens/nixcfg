@@ -21,12 +21,13 @@ let
     service_account_file = ${rcloneServiceAccountFile}
     impersonate = johndough@loremipsumtechnologies.com
 
-    [encryptedgoogdrv]
+    [encgoogdrv]
     type = crypt
     remote = googdrv:encrypted_media
     filename_encryption = standard
-    password = password1
-    password2 = password2
+    password = yIxCG1ljmAyqP9PH886G3ZgMzl3-d22DwQ
+    password2 = MeX-eiwyvK06v0IAhJ1QFfli_1kxNPcW6Q
+
     directory_name_encryption = true
   '';
   flexgetConfigFile = ''
@@ -41,6 +42,7 @@ let
   '';
   localData = "/var/lib/data-local";
   rcloneTgt = "googdrv:media";
+  #rcloneTgt = "encgoogdrv:encrypted_media";
   rcloneMnt = "/var/lib/data-rclone";
   mergedMnt = "/var/lib/data";
 in {
@@ -51,7 +53,7 @@ in {
       after = [ "rclone-mount.service" ]; # TODO: non-string reference?
       what = "${localData}:${rcloneMnt}";
       where = "${mergedMnt}";
-      type = "fuse.mergerfs"; # TODO: how to ensure is available?
+      type = "mergerfs"; # TODO: how to ensure is available?
       options = "defaults,sync_read,auto_cache,use_ino,allow_other,func.getattr=newest,category.action=all,category.create=ff";
       #WantedBy=multi-user.target
 
@@ -61,10 +63,10 @@ in {
   ];
   
   services = {
-    flexget = {
-      enable = true;
-      config = flexgetConfigFile;
-    };
+    #flexget = {
+    #  enable = true;
+    #  config = flexgetConfigFile;
+    #};
     samba = {
       shares = {
         googdrvsmb = {
