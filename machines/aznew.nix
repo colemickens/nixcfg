@@ -8,7 +8,7 @@
   ];
 
   programs.mosh.enable = true;
-  virtualisation.docker.enable = true;
+  #virtualisation.docker.enable = true;
   security.sudo.wheelNeedsPassword = false;
 
   environment.systemPackages = with pkgs; [ git neovim jq file htop ripgrep cachix wget curl tmux ];
