@@ -17,12 +17,13 @@ in
     ../modules/profile-interactive.nix
     ../modules/profile-gui.nix
 
-    #../modules/mixin-docker.nix
+    ../modules/mixin-docker.nix
     #../modules/mixin-libvirt.nix
     #../modules/mixin-sshd.nix
     #../modules/mixin-ipfs.nix
     #../modules/mixin-yubikey.nix
 
+    ../modules/mixin-loremipsum-media.nix
     ../modules/mixin-firecracker.nix
     ../modules/mixin-spotifyd.nix
 
