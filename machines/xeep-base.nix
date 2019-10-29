@@ -4,7 +4,8 @@ let
   lib = pkgs.lib;
   nixosHardware = import ../imports/misc/nixos-hardware;
   hostname = "xeep";
-  kp = pkgs.linuxPackages_latest;
+  #kp = pkgs.linuxPackages_latest;
+  kp = pkgs.linuxPackages_testing;
 in
 {
   imports = [
@@ -21,6 +22,9 @@ in
     #../modules/mixin-sshd.nix
     #../modules/mixin-ipfs.nix
     #../modules/mixin-yubikey.nix
+
+    ../modules/mixin-firecracker.nix
+    ../modules/mixin-spotifyd.nix
 
     #../modules/hw-magictrackpad2.nix
     ../modules/hw-chromecast.nix
@@ -91,7 +95,7 @@ in
       hostId = "ef66d560";
       hostName = hostname;
       firewall.enable = false;
-      firewall.allowedTCPPorts = [];
+      firewall.allowedTCPPorts = [3389];
       networkmanager.enable = true;
       #wireless.iwd.enable = true;
       #networkmanager.wifi.macAddress = "random";

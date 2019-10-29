@@ -34,10 +34,6 @@ with lib;
       };
     };
 
-    #services = {
-    #  flatpak.enable = true;
-    #};
-
     fonts = {
       fontconfig = {
         defaultFonts = {
@@ -48,57 +44,52 @@ with lib;
         # localConf = []; ? 
       };
       fonts = with pkgs; [
-        corefonts inconsolata awesome
-        overpass
-        fira-code fira-code-symbols fira-mono
-        source-code-pro
+        awesome
+        corefonts gelasio ttf_bitstream_vera
         noto-fonts noto-fonts-extra noto-fonts-emoji
-        ttf_bitstream_vera
-        gelasio
-        cascadia-code go-font sudo-font monoid
+
+        # monospace
+        cascadia-code
+        inconsolata
         fantasque-sans-mono
+        fira-code fira-code-symbols
+        fira-mono
+        go-font
+        monoid
+        overpass
+        source-code-pro
+        sudo-font
         victor-mono
       ];
     };
 
     environment.systemPackages = with pkgs; [
-      imgurbash2 # move?
-      nix-prefetch # move? # is there a better one?
-      openssl # lol wat move
-      spectral
-      fractal
-      freerdp
+      # gui apps
       calibre
-      #okular # TODO: pulls in qt?
-
-      #steam
-      moonlight-embedded
-
-      rdesktop
-
-      qt5.qtwayland
-      qt5.qtbase
-      lxappearance-gtk3
-      numix-icon-theme
-      #breeze-qt5 # needed for breeze cursor # TODO: pulls in qt?
-      capitaine-cursors
-      arc-icon-theme arc-theme
-      #yaru-theme
-
-      libva-utils
-      xdg_utils
-
-      brightnessctl
-      #chromiumOzone
-      google-chrome-dev
       evince
       feh
+      fractal
+      freerdp
       gimp
+      google-chrome-dev
       mpv
       pavucontrol
+      spectral
       termite
       vscodium
-      lm_sensors
+
+      # utils
+      brightnessctl
+
+      # misc
+      qt5.qtwayland
+      qt5.qtbase
+
+      # appearance
+      arc-icon-theme
+      arc-theme
+      capitaine-cursors
+      numix-icon-theme
     ];
   };
 }

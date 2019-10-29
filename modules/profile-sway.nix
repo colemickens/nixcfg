@@ -32,54 +32,42 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-      intel-gpu-tools
-
-      #obs-studio
-      #wlrobs
-      gnome3.gcr
+      intel-gpu-tools # to confirm iris/vaapi usage
+      glib # for gsettings, for gtk+wayland+cursor
+      xorg.xrdb # for something?
 
       udiskie
       termite
       pulsemixer
       feh
       ranger
+      xwayland # sway
 
-      glib # for gsettings, for gtk+wayland+cursor
-
-      ## nixpkgs-wayland README:
-      xwayland
-      swaybg
-      swayidle
-      swaylock
-
-      waybar
-      i3status-rust
-
+      # nixpkgs-wayland
+      bspwc
+      cage
       gebaar-libinput
       glpaper
       grim
+      i3status-rust
       kanshi
       mako
       oguri
       redshift-wayland
       slurp
+      swaybg
+      swayidle
+      swaylock
       waybar
+      wayfire
+      wf-config
       waypipe
       wf-recorder
       wl-clipboard
       wdisplays
       wldash
       wtype
-
       xdg-desktop-portal-wlr
-
-      xorg.xrdb
-
-      #bspwc
-      cage
-
-      wayfire
-      wf-config
     ];
   };
 }

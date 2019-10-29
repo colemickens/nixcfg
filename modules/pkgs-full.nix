@@ -10,6 +10,9 @@
       rclone # ?
       bind
       ffmpeg
+      linuxPackages.cpupower
+      sshfs
+      imgurbash2 spotify-tui xdg_utils
 
       # stuff I probably only need on NixOS:
       cryptsetup

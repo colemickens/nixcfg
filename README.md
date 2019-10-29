@@ -1,5 +1,12 @@
 # nixcfg
 
+
+TODO: turn aznew.nix into something that can be used with an existing blank image
+   - or can be used to press a flat VHD that can be uploaded and used
+
+   - make GCE image? (free BW in, free BW to google drive)
+   - then I only pay BW to download and watch, or 2x for Azure to transcode
+
 NixOS Configuration for Cole Mickens's machines.
 
 This repository is used for reproducably\* building the entirety of my computing existence. This includes my laptop, Azure VM, and any containers I happen to be using.
