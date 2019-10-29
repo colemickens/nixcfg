@@ -44,8 +44,9 @@ in
       xwayland # sway
 
       # nixpkgs-wayland
-      bspwc
+      #bspwc
       cage
+      #drm_info
       gebaar-libinput
       glpaper
       grim
