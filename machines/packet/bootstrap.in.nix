@@ -71,7 +71,7 @@ in
     nix.trustedUsers = [ "root" "cole" ];
     systemd.services.buildworld = {
       description = "buildworld";
-      path = with pkgs; [ bash nix git jq curl cachix openssh ripgrep gnutar gzip ];
+      path = with pkgs; [ bash nix git jq curl cachix openssh ripgrep gnutar gzip gawk ];
       serviceConfig = {
         User = "cole";
         Type = "simple";
