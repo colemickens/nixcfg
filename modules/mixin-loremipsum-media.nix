@@ -16,7 +16,7 @@ let
     minutes: 10
   '';
   localData = "/var/lib/data-local";
-  rcloneTgt = "googdrv:media";
+  rcloneTgt = "google_drive_media_mnt:";
   #rcloneTgt = "encgoogdrv:encrypted_media";
   rcloneMnt = "/var/lib/data-rclone";
   mergedMnt = "/var/lib/data";
