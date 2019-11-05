@@ -35,6 +35,7 @@ in
       intel-gpu-tools # to confirm iris/vaapi usage
       glib # for gsettings, for gtk+wayland+cursor
       xorg.xrdb # for something?
+      gnome3.gcr # for gpg pinentry
 
       udiskie
       termite
@@ -55,18 +56,23 @@ in
       mako
       oguri
       redshift-wayland
+      rootbar
       slurp
       swaybg
       swayidle
       swaylock
       waybar
+      waypipe
       wayfire
       wf-config
-      waypipe
-      wf-recorder
-      wl-clipboard
       wdisplays
+      wev
+      wf-recorder
+      wlay
+      wl-clipboard
       wldash
+      wlr-randr
+      wofi
       wtype
       xdg-desktop-portal-wlr
     ];

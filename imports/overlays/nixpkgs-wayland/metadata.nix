@@ -1,8 +1,8 @@
 {
   owner = "colemickens";
   repo = "nixpkgs-wayland";
-  rev = "5cf189901bd5e4a0df00cc94b05e9928e84d2856";
-  revShort = "5cf1899";
-  sha256 = "10vp7g8wln0fmndszds5mkqc39fra10zf76p192ciz52s4sdw5gm";
-  revdate = "2019-10-27T07:07:10Z";
+  rev = "fef2ada3987922dd1fb070b3cc8997ca67795dab";
+  revShort = "fef2ada";
+  sha256 = "00mb7zplpphjdjwd5sfc9s3hlyw0r2kdbvchk9dh7ia6m3rnddn1";
+  revdate = "2019-11-02T21:13:23Z";
 }

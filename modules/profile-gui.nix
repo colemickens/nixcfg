@@ -71,7 +71,7 @@ with lib;
       fractal
       freerdp
       gimp
-      google-chrome-dev
+      google-chrome-dev chromium
       mpv
       pavucontrol
       spectral

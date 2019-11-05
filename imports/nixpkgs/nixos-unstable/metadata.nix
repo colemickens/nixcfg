@@ -1,8 +1,8 @@
 {
   owner = "nixos";
   repo = "nixpkgs-channels";
-  rev = "4cd2cb43fb3a87f48c1e10bb65aee99d8f24cb9d";
-  revShort = "4cd2cb4";
-  sha256 = "1d6rmq67kdg5gmk94wx2774qw89nvbhy6g1f2lms3c9ph37hways";
-  revdate = "2019-10-23T18:19:15Z";
+  rev = "471869c9185fb610e67940a701eb13b1cfb335a4";
+  revShort = "471869c";
+  sha256 = "1klbclz8n4b9k1kfwv806bqdavld1mg32l1vxsmnrqzr6zck1c54";
+  revdate = "2019-10-31T15:03:13Z";
 }
