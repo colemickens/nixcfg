@@ -1,5 +1,14 @@
 { lib, pkgs, ... }:
 
+#
+#
+#
+# copy from sync.sh so we have a portable command nixos config
+#
+#
+#
+#
+
 let
   rcloneConfigFile = pkgs.substituteAll {
     src = ./mixin-loremipsum-media-rclone.conf;
