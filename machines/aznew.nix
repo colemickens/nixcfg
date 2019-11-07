@@ -3,7 +3,7 @@
 {
   imports = [
     "${modulesPath}/virtualisation/azure-common.nix"
-    ../modules/mixin-loremipsum-media.nix
+    ../modules/loremipsum-media/rclone-mnt.nix
     ../modules/mixin-plex.nix
   ];
 
