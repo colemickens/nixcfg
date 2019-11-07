@@ -16,13 +16,13 @@ in
     ../modules/profile-gui.nix
 
     #../modules/mixin-docker.nix
+    #../modules/mixin-firecracker.nix
     #../modules/mixin-libvirt.nix
     #../modules/mixin-sshd.nix
     #../modules/mixin-ipfs.nix
     #../modules/mixin-yubikey.nix
 
-    #../modules/mixin-loremipsum-media.nix
-    #../modules/mixin-firecracker.nix
+    ../modules/loremipsum-media/rclone-cmd.nix
     ../modules/mixin-spotifyd.nix
 
     ../modules/mixin-v4l2loopback.nix
