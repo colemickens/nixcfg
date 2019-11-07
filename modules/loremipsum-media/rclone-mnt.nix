@@ -6,7 +6,6 @@ let
     rcloneServiceAccountFile = ./rclone-google-sa.json;
   };
   rcloneTgt = "google_drive_media:";
-  rcloneMnt = "/var/lib/data";
   rcloneMnt = "/mnt/google_drive_media";
 in {
   systemd.services = {
