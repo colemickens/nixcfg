@@ -9,6 +9,8 @@
 
   system.stateVersion = "19.03";
 
+  services.openssh.passwordAuthentication = false;
+
   programs.mosh.enable = true;
   security.sudo.wheelNeedsPassword = false; # TODO: this should move to azure module
 
