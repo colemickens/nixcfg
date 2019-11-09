@@ -31,6 +31,7 @@ update "imports/misc/nixos-hardware"       "nixos"       "nixos-hardware"   "mas
 update "imports/overlays/nixpkgs-mozilla"  "mozilla"     "nixpkgs-mozilla"  "master"
 update "imports/overlays/nixpkgs-wayland"  "colemickens" "nixpkgs-wayland"  "master"
 
-./nixbuild.sh default.nix -A "xeep_sway__local.config.system.build.toplevel" \
+attr="xeep_sway__local.config.system.build.toplevel"
+attr="xeep"
+./nixbuild.sh default.nix -A "${attr}" \
   | cachix push "${cachixremote}"
-

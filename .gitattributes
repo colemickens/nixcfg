@@ -1,0 +1,2 @@
+modules/loremipsum-media/sa/*         filter=git-crypt diff=git-crypt
+modules/loremipsum-media/rclone.conf  filter=git-crypt diff=git-crypt

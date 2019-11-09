@@ -37,7 +37,14 @@ in
 
     documentation.nixos.enable = false;
 
-    environment.systemPackages = with pkgs; [ msr-tools ]; # dell powerthrottling workaround script
+    environment.systemPackages = with pkgs; [ 
+      (pkgs.writeScriptBin "dell-fix-power" ''
+        #!/usr/bin/env bash
+        oldval="$(sudo rdmsr 0x1FC)"
+        newval="$(( 0xFFFFFFFE & 0x$oldval ))"
+        sudo wrmsr -a 0x1FC "$val"
+      '')
+    ];
 
     fileSystems = {
       "/" =     { fsType = "ext4"; device = "/dev/vg/root"; };

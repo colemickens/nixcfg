@@ -23,12 +23,12 @@ with lib;
     programs.gnome-documents.enable = false;
     programs.gnome-disks.enable = true;
     programs.gnome-terminal.enable = true;
-    services.gnome3.seahorse.enable = true;
+    programs.seahorse.enable = true;
     services.gnome3.sushi.enable = true;
 
     environment.systemPackages = []
       ++ (with pkgs; [])
-      ++ (with pkgs.gnome3; [ gedit ]);
+      ++ (with pkgs.gnome3; [ gedit gnome-tweaks ]);
   };
 }
 

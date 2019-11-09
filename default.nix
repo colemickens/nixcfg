@@ -12,7 +12,7 @@ in rec {
     rev = "git";
   };
   xeep_gnome__local = mkSystem rec {
-    configFile = ./machines/xeep-gnomeshell.nix;
+    configFile = ./machines/xeep-gnome.nix;
     nixpkgs = ../nixpkgs;
     rev = "git";
   };

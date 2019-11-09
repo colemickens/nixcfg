@@ -66,12 +66,12 @@ with lib;
     environment.systemPackages = with pkgs; [
       # gui apps
       calibre
+      chromium
       evince
       feh
       fractal
       freerdp
       gimp
-      google-chrome-dev chromium
       mpv
       pavucontrol
       spectral

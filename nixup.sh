@@ -6,7 +6,8 @@ set -x
 unset NIX_PATH
 unset NIXOS_CONFIG
 
-target="$(hostname)_sway__local"
+t="${1:-"sway"}"
+target="$(hostname)_${t}__local"
 toplevel=$(./nixbuild.sh default.nix -A "${target}.config.system.build.toplevel")
 
 sudo nix-env --set \
@@ -21,5 +22,5 @@ echo nix-env \
   --delete-generations +3
 
 #sudo nix-store --gc
-sudo nix-store --optimize
+#sudo nix-store --optimize
 

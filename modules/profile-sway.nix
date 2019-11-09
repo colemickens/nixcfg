@@ -74,6 +74,7 @@ in
       wlr-randr
       wofi
       wtype
+      #wxrc
       xdg-desktop-portal-wlr
     ];
   };

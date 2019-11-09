@@ -22,7 +22,7 @@ This repository is used for reproducably\* building the entirety of my computing
   * `azmedia.nix` defines my Azure media download server
   * `xeep-base.nix` defines most of the configuration of my `xeep` laptop (a Dell XPS 13 (9370))
   * `xeep-plasma.nix` defines a `xeep` variant that runs Plasma
-  * `xeep-gnomeshell.nix` defines a `xeep` variant that runs Gnome-Shell
+  * `xeep-gnome.nix` defines a `xeep` variant that runs Gnome-Shell
   * `xeep-sway.nix` defines a `xeep` variant that runs Sway
   * `packet/` includes a script to bootstrap a Packet VM to build my machine config.
 

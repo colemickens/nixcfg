@@ -3,6 +3,6 @@
 {
   imports = [
     ./xeep-base.nix
-    ../modules/profile-gnomeshell.nix
+    ../modules/profile-gnome.nix
   ];
 }
