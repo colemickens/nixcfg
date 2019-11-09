@@ -10,6 +10,7 @@ rec {
   };
 
   rclone-lim-mount = (pkgs.writeScriptBin "rclone-lim-mount" ''
+    #!/usr/bin/env bash
     ${pkgs.rclone}/bin/rclone \
       --config ${rcloneConfigFile} \
       --fast-list \

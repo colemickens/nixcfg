@@ -2,24 +2,27 @@
 
 let
   c = import ./common.nix { inherit pkgs; };
-  target = "tvshows-ro:"; # pp
-  #targets = [ "tvshows" "movies" ]; ## <-- pp
+  mkMount = target: {
+    description = "RCloneGoogDrv Mount Thing";
+    path = with pkgs; [ fuse bash ];
+    serviceConfig = {
+      Type = "simple";
+      StartLimitInterval = "60s";
+      StartLimitBurst = 3;
+      ExecStartPre = [
+        "-${pkgs.fuse}/bin/fusermount -uz /mnt/${target}"
+        "${pkgs.coreutils}/bin/mkdir -p /mnt/${target}"
+      ];
+      ExecStart = "${c.rclone-lim-mount}/bin/rclone-lim-mount ${target}: /mnt/${target}";
+      ExecStop = "${pkgs.fuse}/bin/fusermount -uz /mnt/${target}";
+      Restart = "on-failure";
+    };
+    wantedBy = [ "default.target" ];
+  };
 in {
   systemd.services = {
-    rclone-mount = {
-      description = "RCloneGoogDrv Mount Thing";
-      path = with pkgs; [ fuse ];
-      serviceConfig = {
-        Type = "notify";
-        StartLimitInterval = "60s";
-        StartLimitBurst = 3;
-        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /mnt/${target}";
-        ExecStart = c.rclone-lim-mount + " ${target}: /mnt/${target}";
-        ExecStop = "${pkgs.fuse}/bin/fusermount -uz /mnt/${target}";
-        Restart = "on-failure";
-      };
-      wantedBy = [ "default.target" ];
-    };
+    rclone_tvshows = mkMount "tvshows";
+    rclone_movies  = mkMount "movies";
   };
 }
 
