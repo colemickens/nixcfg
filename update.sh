@@ -4,7 +4,6 @@ set -euo pipefail
 set -x
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-cd "${DIR}"
 
 # keep track of what we build for the README
 pkgentries=(); nixpkgentries=();
@@ -56,7 +55,7 @@ function update() {
     # Update Sha256
     # TODO: nix-prefetch without NIX_PATH?
     if [[ "${typ}" == "pkgs" ]]; then
-      newsha256="$(NIX_PATH=nixpkgs=https://github.com/nixos/nixpkgs-channels/archive/nixos-unstable.tar.gz
+      newsha256="$(NIX_PATH=nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz
         nix-prefetch \
           -E "(import ./build.nix).nixosUnstable.${pkgname}" \
           --rev "${newrev}" \
@@ -64,7 +63,7 @@ function update() {
     elif [[ "${typ}" == "nixpkgs" ]]; then
       # TODO: why can't nix-prefetch handle this???
       url="$(nix eval --raw -f "${metadata}" url)"
-      newsha256="$(NIX_PATH=nixpkgs=https://github.com/nixos/nixpkgs-channels/archive/nixos-unstable.tar.gz
+      newsha256="$(NIX_PATH=nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz
         nix-prefetch-url --unpack "${url}")"
     fi
 
@@ -125,11 +124,21 @@ function update_readme() {
 
 for p in nixpkgs/*; do
   update "nixpkgs" "${p}"
+  update_readme_entries "nixpkgs" "${p}"
 done
+
+if [[ "${1:-}" != "" ]]; then
+  update "pkgs" "pkgs/${1}"
+else
+  for p in pkgs/*; do
+    update "pkgs" "${p}"
+  done
+fi
 
 for p in pkgs/*; do
-  update "nixpkgs" "${p}"
+  update_readme_entries "pkgs" "${p}"
 done
+update_readme
 
-nix-build --no-out-link default.nix -A "${1}" \
+nix-build --no-out-link build.nix -A all \
   | cachix push "colemickens"
