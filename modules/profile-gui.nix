@@ -5,18 +5,13 @@ with lib;
 {
   imports = [
     ./mixin-firefox.nix
+    ./mixin-chromium.nix
   ];
   config = {
-    environment.variables.MESA_LOADER_DRIVER_OVERRIDE = "iris";
     hardware = {
       brightnessctl.enable = true;
       opengl = {
         enable = true;
-        package = (pkgs.mesa.override {
-          galliumDrivers = [ "virgl" "svga" "swrast" "iris" ];
-          driDrivers = [ "i915" "i965" ];
-          vulkanDrivers = [ "intel" ];
-        }).drivers;
         extraPackages = with pkgs; [
           intel-media-driver
           vaapiIntel
@@ -65,15 +60,18 @@ with lib;
 
     environment.systemPackages = with pkgs; [
       # gui apps
+      alacritty
       calibre
-      chromium
       evince
       feh
       fractal
       freerdp
       gimp
+      kitty
       mpv
+      gnome3.nautilus
       pavucontrol
+      qemu
       spectral
       termite
       vscodium

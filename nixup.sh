@@ -6,9 +6,9 @@ set -x
 unset NIX_PATH
 unset NIXOS_CONFIG
 
-t="${1:-"sway"}"
-target="$(hostname)_${t}__local"
-toplevel=$(./nixbuild.sh default.nix -A "${target}.config.system.build.toplevel")
+desktop="${1:-"sway"}"
+target="$(hostname)-${desktop}"
+toplevel=$(./nixbuild.sh default.nix -A "${target}")
 
 sudo nix-env --set \
   --profile "/nix/var/nix/profiles/system" \
@@ -22,5 +22,6 @@ echo nix-env \
   --delete-generations +3
 
 #sudo nix-store --gc
-#sudo nix-store --optimize
+
+sudo nix-store --optimize
 

@@ -17,7 +17,7 @@
     jq ripgrep fzf
     openssh autossh mosh sshuttle
     bat ncdu tree exa
-    git gitAndTools.hub gist tig
+    gitAndTools.gitFull gitAndTools.hub gist tig
     cvs mercurial subversion # pjiul
     nix-prefetch
     neovim vim

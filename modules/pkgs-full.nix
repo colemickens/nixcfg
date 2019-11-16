@@ -26,7 +26,7 @@
 
       # build tools:
       cmake gnumake gcc
-      go rustup
+      # go rustup # use nix-shell insetad? (see colemickens/gsync for shell.nix example)
       gdb lldb
       pkg-config
 

@@ -1,37 +1,135 @@
 #!/usr/bin/env bash
+
 set -euo pipefail
 set -x
 
-unset NIX_PATH
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd "${DIR}"
 
-cachixremote="colemickens"
+# keep track of what we build for the README
+pkgentries=(); nixpkgentries=();
 
 function update() {
-  attr="${1}"
-  owner="${2}"
-  repo="${3}"
-  ref="${4}"
+  typ="${1}"
+  pkg="${2}"
 
-  rev=""
-  url="https://api.github.com/repos/${owner}/${repo}/commits?sha=${ref}"
-  rev="$(git ls-remote "https://github.com/${owner}/${repo}" "${ref}" | cut -d '	' -f1)"
-  [[ -f "./${attr}/metadata.nix" ]] && oldrev="$(nix eval -f "./${attr}/metadata.nix" rev --raw)"
-  if [[ "${oldrev:-}" != "${rev}" ]]; then
-    revShort="$(git rev-parse --short "${rev}")"
-    revdata="$(curl -L --fail "https://api.github.com/repos/${owner}/${repo}/commits/${rev}")"
-    revdate="$(echo "${revdata}" | jq -r ".commit.committer.date")"
-    sha256="$(nix-prefetch-url --unpack "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz" 2>/dev/null)"
-    printf '{\n  owner = "%s";\n  repo = "%s";\n  rev = "%s";\n  revShort = "%s";\n  sha256 = "%s";\n  revdate = "%s";\n}\n' \
-      "${owner}" "${repo}" "${rev}" "${revShort}" "${sha256}" "${revdate}" > "./${attr}/metadata.nix"
+  metadata="${pkg}/metadata.nix"
+  pkgname="$(basename "${pkg}")"
+
+  branch="$(nix eval --raw -f "${metadata}" branch)"
+  rev="$(nix eval --raw -f "${metadata}" rev)"
+  date="$(nix eval --raw -f "${metadata}" revdate)"
+  sha256="$(nix eval --raw -f "${metadata}" sha256)"
+  skip="$(nix eval -f "${metadata}" skip || true)"
+
+  if [[ "${skip}" == "true" ]]; then
+    return 0
+  fi
+
+  # Determine RepoTyp (git/hg)
+  if   nix eval --raw -f "${metadata}" repo_git; then repotyp="git";
+  elif nix eval --raw -f "${metadata}" repo_hg;  then repotyp="hg";
+  else echo "unknown repo_typ" && exit -1;
+  fi
+
+  # Update Rev
+  if [[ "${repotyp}" == "git" ]]; then
+    repo="$(nix eval --raw -f "${metadata}" repo_git)"
+    newrev="$(git ls-remote "${repo}" "${branch}" | awk '{ print $1}')"
+  elif [[ "${repotyp}" == "hg" ]]; then
+    repo="$(nix eval --raw -f "${metadata}" repo_hg)"
+    newrev="$(hg identify "${repo}" -r "${branch}")"
+  fi
+  
+  if [[ "${rev}" != "${newrev}" ]]; then
+    # Update RevDate
+    d="$(mktemp -d)"
+    if [[ "${repotyp}" == "git" ]]; then
+      git clone -b "${branch}" --single-branch --depth=1 "${repo}" "${d}"
+      newdate="$(cd "${d}"; git log --format=%ci --max-count=1)"
+    elif [[ "${repotyp}" == "hg" ]]; then
+      hg clone "${repo}#${branch}" "${d}"
+      newdate="$(cd "${d}"; hg log -r1 --template '{date|isodate}')"
+    fi
+    rm -rf "${d}"
+
+    # Update Sha256
+    # TODO: nix-prefetch without NIX_PATH?
+    if [[ "${typ}" == "pkgs" ]]; then
+      newsha256="$(NIX_PATH=nixpkgs=https://github.com/nixos/nixpkgs-channels/archive/nixos-unstable.tar.gz
+        nix-prefetch \
+          -E "(import ./build.nix).nixosUnstable.${pkgname}" \
+          --rev "${newrev}" \
+          --output raw)"
+    elif [[ "${typ}" == "nixpkgs" ]]; then
+      # TODO: why can't nix-prefetch handle this???
+      url="$(nix eval --raw -f "${metadata}" url)"
+      newsha256="$(NIX_PATH=nixpkgs=https://github.com/nixos/nixpkgs-channels/archive/nixos-unstable.tar.gz
+        nix-prefetch-url --unpack "${url}")"
+    fi
+
+    # TODO: do this with nix instead of sed?
+    sed -i "s/${rev}/${newrev}/" "${metadata}"
+    sed -i "s/${date}/${newdate}/" "${metadata}"
+    sed -i "s/${sha256}/${newsha256}/" "${metadata}"
   fi
 }
-update "imports/nixpkgs/nixos-unstable"    "nixos"       "nixpkgs-channels" "nixos-unstable"
-update "imports/nixpkgs/cmpkgs"            "colemickens" "nixpkgs"          "cmpkgs"
-update "imports/misc/nixos-hardware"       "nixos"       "nixos-hardware"   "master"
-update "imports/overlays/nixpkgs-mozilla"  "mozilla"     "nixpkgs-mozilla"  "master"
-update "imports/overlays/nixpkgs-wayland"  "colemickens" "nixpkgs-wayland"  "master"
 
-attr="xeep_sway__local.config.system.build.toplevel"
-attr="xeep"
-./nixbuild.sh default.nix -A "${attr}" \
-  | cachix push "${cachixremote}"
+function update_readme_entries() {
+  typ="${1}"
+  pkg="${2}"
+  metadata="${pkg}/metadata.nix"
+  pkgname="$(basename "${pkg}")"
+  branch="$(nix eval --raw -f "${metadata}" branch)"
+  rev="$(nix eval --raw -f "${metadata}" rev)"
+  date="$(nix eval --raw -f "${metadata}" revdate)"
+  sha256="$(nix eval --raw -f "${metadata}" sha256)"
+  skip="$(nix eval -f "${metadata}" skip || true)"
+  if [[ "${skip}" == "true" ]]; then
+    date="${date} (pinned)"
+  fi
+  if [[ "${typ}" == "pkgs" ]]; then
+    desc="$(nix eval --raw "(import ./build.nix).nixosUnstable.${pkgname}.meta.description")"
+    home="$(nix eval --raw "(import ./build.nix).nixosUnstable.${pkgname}.meta.homepage")"
+    pkgentries=("${pkgentries[@]}" "| [${pkgname}](${home}) | ${date} | ${desc} |");
+  elif [[ "${typ}" == "nixpkgs" ]]; then
+    nixpkgentries=("${nixpkgentries[@]}" "| ${pkgname} | ${date} |");
+  fi
+}
+function update_readme() {
+  replace="$(printf "<!--pkgs-->")"
+  replace="$(printf "%s\n| Package | Last Update | Description |" "${replace}")"
+  replace="$(printf "%s\n| ------- | ----------- | ----------- |" "${replace}")"
+  for p in "${pkgentries[@]}"; do
+    replace="$(printf "%s\n%s\n" "${replace}" "${p}")"
+  done
+  replace="$(printf "%s\n<!--pkgs-->" "${replace}")"
+
+  rg --multiline '(?s)(.*)<!--pkgs-->(.*)<!--pkgs-->(.*)' "README.md" \
+    --replace "\$1${replace}\$3" \
+      > README2.md; mv README2.md README.md
+
+  replace="$(printf "<!--nixpkgs-->")"
+  replace="$(printf "%s\n| Channel | Last Channel Commit Time |" "${replace}")"
+  replace="$(printf "%s\n| ------- | ------------------------ |" "${replace}")"
+  for p in "${nixpkgentries[@]}"; do
+    replace="$(printf "%s\n%s\n" "${replace}" "${p}")"
+  done
+  replace="$(printf "%s\n<!--nixpkgs-->" "${replace}")"
+  set -x
+
+  rg --multiline '(?s)(.*)<!--nixpkgs-->(.*)<!--nixpkgs-->(.*)' "README.md" \
+    --replace "\$1${replace}\$3" \
+      > README2.md; mv README2.md README.md
+}
+
+for p in nixpkgs/*; do
+  update "nixpkgs" "${p}"
+done
+
+for p in pkgs/*; do
+  update "nixpkgs" "${p}"
+done
+
+nix-build --no-out-link default.nix -A "${1}" \
+  | cachix push "colemickens"

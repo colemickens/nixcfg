@@ -2,7 +2,7 @@
 
 let
   lib = pkgs.lib;
-  nixosHardware = import ../imports/misc/nixos-hardware;
+  nixosHardware = import ../pkgs/nixos-hardware;
   hostname = "xeep";
 in
 {
@@ -15,10 +15,10 @@ in
     ../modules/profile-interactive.nix
     ../modules/profile-gui.nix
 
-    #../modules/mixin-docker.nix
-    #../modules/mixin-firecracker.nix
-    #../modules/mixin-libvirt.nix
-    #../modules/mixin-sshd.nix
+    ../modules/mixin-docker.nix
+    ../modules/mixin-firecracker.nix
+    ../modules/mixin-libvirt.nix
+    ../modules/mixin-sshd.nix
     #../modules/mixin-ipfs.nix
     #../modules/mixin-yubikey.nix
 
@@ -37,12 +37,16 @@ in
 
     documentation.nixos.enable = false;
 
+    # extract?
+    services.ratbagd.enable = true;
+
     environment.systemPackages = with pkgs; [ 
+      libratbag piper
       (pkgs.writeScriptBin "dell-fix-power" ''
         #!/usr/bin/env bash
-        oldval="$(sudo rdmsr 0x1FC)"
+        oldval="$(sudo ${pkgs.msr-tools}/bin/rdmsr 0x1FC)"
         newval="$(( 0xFFFFFFFE & 0x$oldval ))"
-        sudo wrmsr -a 0x1FC "$val"
+        sudo ${pkgs.msr-tools}/bin/wrmsr -a 0x1FC "$val"
       '')
     ];
 

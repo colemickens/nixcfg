@@ -22,14 +22,13 @@ rec
 
   # TODO: see if there's way to simplify this, (note: nixpkgs.nixos does not eval overlays)
   # (also though, I think this winds up importing the nixpkgs checkout to /nix/store, oh well)
-  mkSystem = { nixpkgs, rev, configFile, extraModules ? [], ... }:
+  mkSystem = { nixpkgs, rev ? "git", extraModules ? [], ... }:
     let
       pkgs = import (nixpkgs) {
         inherit (machine.config.nixpkgs) config overlays;
       };
       machine = import "${nixpkgs}/nixos/lib/eval-config.nix" {
         modules = [
-          configFile
           ({config, ...}: {
             system.nixos.revision = rev;
             system.nixos.versionSuffix = ".git.${rev}";
