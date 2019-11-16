@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./xeep-base.nix
+    ./base.nix
     ../modules/profile-gnome.nix
   ];
 }
