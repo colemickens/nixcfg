@@ -3,6 +3,6 @@
 {
   imports = [
     ./base.nix
-    ../modules/profile-plasma.nix
+    ../../modules/profile-plasma.nix
   ];
 }

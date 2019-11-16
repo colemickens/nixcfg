@@ -3,6 +3,6 @@
 {
   imports = [
     ./base.nix
-    ../modules/profile-gnome.nix
+    ../../modules/profile-gnome.nix
   ];
 }

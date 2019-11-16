@@ -8,5 +8,8 @@ tasks:
   - update: |
       cd nixpkgs-wayland
       nix-shell --pure --command "./.ci/prep.sh"
-      nix-shell --pure --command "./update.sh"
+      nix-shell --pure --command "./update.sh xeep-sway" # do the hopefully-good-one first at least
+      nix-shell --pure --command "./update.sh xeep-ci"
       nix-shell --pure --command "./.ci/push.sh"
+
+# TODO: how can we push intermediate results ?

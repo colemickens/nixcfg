@@ -2,31 +2,31 @@
 
 let
   lib = pkgs.lib;
-  nixosHardware = import ../pkgs/nixos-hardware;
+  nixosHardware = import ../../pkgs/nixos-hardware;
   hostname = "xeep";
 in
 {
   imports = [
-    ../modules/common.nix
-    ../modules/pkgs-common.nix
-    ../modules/pkgs-full.nix
-    ../modules/user-cole.nix
+    ../../modules/common.nix
+    ../../modules/pkgs-common.nix
+    ../../modules/pkgs-full.nix
+    ../../modules/user-cole.nix
 
-    ../modules/profile-interactive.nix
-    ../modules/profile-gui.nix
+    ../../modules/profile-interactive.nix
+    ../../modules/profile-gui.nix
 
-    ../modules/mixin-docker.nix
-    ../modules/mixin-firecracker.nix
-    ../modules/mixin-libvirt.nix
-    ../modules/mixin-sshd.nix
-    #../modules/mixin-ipfs.nix
-    #../modules/mixin-yubikey.nix
+    ../../modules/mixin-docker.nix
+    ../../modules/mixin-firecracker.nix
+    ../../modules/mixin-libvirt.nix
+    ../../modules/mixin-sshd.nix
+    #../../modules/mixin-ipfs.nix
+    #../../modules/mixin-yubikey.nix
 
-    ../modules/loremipsum-media/rclone-cmd.nix
-    ../modules/mixin-spotifyd.nix
+    ../../modules/loremipsum-media/rclone-cmd.nix
+    ../../modules/mixin-spotifyd.nix
 
-    ../modules/mixin-v4l2loopback.nix
-    ../modules/hw-chromecast.nix
+    ../../modules/mixin-v4l2loopback.nix
+    ../../modules/hw-chromecast.nix
 
     "${nixosHardware.src}/dell/xps/13-9370/default.nix"
   ];
