@@ -6,7 +6,7 @@ secrets:
   - bd070f2a-01d1-4b7b-9795-036deb06912c # id_ed25519
 tasks:
   - update: |
-      cd nixpkgs-wayland
+      cd nixcfg
       nix-shell --pure --command "./.ci/prep.sh"
       nix-shell --pure --command "./update.sh xeep-sway" # do the hopefully-good-one first at least
       nix-shell --pure --command "./update.sh xeep-ci"
