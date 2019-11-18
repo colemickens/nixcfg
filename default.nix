@@ -11,4 +11,12 @@ in rec {
   xeep-plasma = (mkSystem rec {
     nixpkgs = ../nixpkgs; extraModules = [ ./machines/xeep/plasma.nix ];
   }).config.system.build.toplevel;
+
+  gcpdrivebridge = (mkSystem rec {
+    nixpkgs = ../nixpkgs; extraModules = [ ./machines/gcpdrivebridge/image.nix ];
+  }).config.system.build.googleComputeImage;
+
+  azplex = (mkSystem rec {
+    nixpkgs = ../nixpkgs; extraModules = [ ./machines/azplex/image.nix ];
+  }).config.system.build.azureImage;
 }

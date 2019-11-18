@@ -7,3 +7,6 @@ Notes to self:
 ```
 
 ```
+
+Post-deploy:
+  1. Port forward 32400 to setup Plex (hopefully we're past Plex by time we need to re-deploy...)

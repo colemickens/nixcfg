@@ -13,6 +13,12 @@ stdenv.mkDerivation {
     gitAndTools.gitFull
     gitAndTools.hub
     ripgrep
+
+    # gcpdrivebridge
+    google-cloud-sdk
+    
+    # azplex
+    azure-storage-azcopy # = pkgs.callPackage ./pkgs/azure-storage-azcopy {};
   ];
 
   buildInputs = [

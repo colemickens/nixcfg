@@ -9,6 +9,11 @@ rec {
     rclone_tvshows    = ./sa/rclone-238701-9a5c922143a1.json;
   };
 
+  rclone-lim = pkgs.writeScriptBin "rclone-lim" ''
+    #!/usr/bin/env bash
+    ${pkgs.rclone}/bin/rclone --config "${rcloneConfigFile}" "''${@}"
+  '';
+
   rclone-lim-mount = (pkgs.writeScriptBin "rclone-lim-mount" ''
     #!/usr/bin/env bash
     ${pkgs.rclone}/bin/rclone \
@@ -17,7 +22,8 @@ rec {
       --drive-skip-gdocs \
       --vfs-read-chunk-size=64M \
       --vfs-read-chunk-size-limit=2048M \
-      --buffer-size=64M \
+      --vfs-cache-mode full \
+      --buffer-size=128M \
       --max-read-ahead=256M \
       --poll-interval=1m \
       --dir-cache-time=168h \
@@ -31,5 +37,23 @@ rec {
       --umask=002 \
       -v \
       mount ''${@}
+  '');
+
+  rclone-lim-mount-all = (pkgs.writeScriptBin "rclone-lim-mount-all" ''
+    #!/usr/bin/env bash
+    
+    pids=()
+
+    ${rclone-lim-mount}/bin/rclone-lim-mount tvshows: ~/mnt/tvshows
+    pids=($pids $!)
+    ${rclone-lim-mount}/bin/rclone-lim-mount movies: ~/mnt/movies
+    pids=($pids $!)
+    ${rclone-lim-mount}/bin/rclone-lim-mount misc: ~/mnt/misc
+    pids=($pids $!)
+    ${rclone-lim-mount}/bin/rclone-lim-mount archives: ~/mnt/archives
+    pids=($pids $!)
+    ${rclone-lim-mount}/bin/rclone-lim-mount backups: ~/mnt/backups
+    
+    trap "kill $pids[@]" EXIT
   '');
 }

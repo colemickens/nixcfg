@@ -24,10 +24,10 @@ rec
       };
       machine = import "${nixpkgs}/nixos/lib/eval-config.nix" {
         modules = [
-          ({config, ...}: {
-            system.nixos.revision = rev;
-            system.nixos.versionSuffix = ".git.${rev}";
-          })
+          #({config, ...}: {
+          #  system.nixos.revision = rev;
+          #  system.nixos.versionSuffix = ".git.${rev}";
+          #})
         ] ++ extraModules;
       };
     in
