@@ -7,6 +7,8 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # keep track of what we build for the README
 pkgentries=(); nixpkgentries=();
+cache="nixpkgs-wayland"
+build_attr="${1:-"xeep-sway"}"
 
 function update() {
   typ="${1}"
@@ -53,7 +55,7 @@ function update() {
       # Update Sha256
       # TODO: nix-prefetch without NIX_PATH?
       if [[ "${typ}" == "pkgs" ]]; then
-        newsha256="$(NIX_PATH=nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz
+        newsha256="$(NIX_PATH=nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz \
           nix-prefetch \
             -E "(import ./build.nix).nixosUnstable.${pkgname}" \
             --rev "${newrev}" \
@@ -61,7 +63,7 @@ function update() {
       elif [[ "${typ}" == "nixpkgs" ]]; then
         # TODO: why can't nix-prefetch handle this???
         url="$(nix eval --raw -f "${metadata}" url)"
-        newsha256="$(NIX_PATH=nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz
+        newsha256="$(NIX_PATH=nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz \
           nix-prefetch-url --unpack "${url}")"
       fi
 
@@ -121,5 +123,11 @@ done
 
 update_readme
 
-nix-build --no-out-link default.nix -A "${1:-"xeep-sway"}" \
-  | cachix push "nixpkgs-wayland"
+cachix push -w "${cache}" &
+CACHIX_PID="$!"
+trap "kill ${CACHIX_PID}" EXIT
+
+nix-build default.nix \
+  --no-out-link --keep-going \
+  --attr "${build_attr}" \
+  | cachix push "${cache}"

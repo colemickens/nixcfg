@@ -28,7 +28,7 @@ in
     ../../modules/mixin-v4l2loopback.nix
     ../../modules/hw-chromecast.nix
 
-    "${nixosHardware.src}/dell/xps/13-9370/default.nix"
+    "${nixosHardware}/dell/xps/13-9370/default.nix"
   ];
 
   config = {
