@@ -2,12 +2,7 @@
 set -euo pipefail
 set -x
 
-fallback=$(echo gce/*.tar.gz)
-fallback="$(basename "${fallback}")"
-fallback="${fallback%".raw.tar.gz"}"
-fallback="${fallback//[._]/-}"
-
-img_name="${1:-"${fallback}"}"
+source ./common.sh
 
 gcloud compute instances create \
   "gcpdrivebridge-vm" \
@@ -23,13 +18,3 @@ gcloud compute instances create \
   --boot-disk-type="pd-standard" \
   --boot-disk-device-name="gcpdrivebridge-vm-bootdisk" \
   --reservation-affinity="any"
-
-exit 0
-
-gcloud compute instance create \
-  "gcpdrivebridge" \
-  --image-name "gcpdrivebridge" \
-  --maintenance-policy="TERMINATE" \
-  --machine-type="f1-micro"
-  --boot-disk-size="30GB"
-

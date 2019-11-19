@@ -13,6 +13,7 @@
       linuxPackages.cpupower
       sshfs
       imgurbash2 spotify-tui xdg_utils
+      lm_sensors
 
       # stuff I probably only need on NixOS:
       cryptsetup

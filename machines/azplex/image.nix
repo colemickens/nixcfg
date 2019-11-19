@@ -9,7 +9,7 @@
     ../../modules/user-cole.nix
   ];
 
-  # azure.foo.x
+  virtualisation.azureImage.diskSize = 2500;
 
   system.stateVersion = "19.09";
   networking.hostName = "azplex";

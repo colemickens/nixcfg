@@ -2,7 +2,7 @@
 set -euo pipefail
 set -x
 
-BUCKET_NAME="${BUCKET_NAME:-"colemickens-images"}"
+source ./common.sh
 
 if gsutil ls "gs://${BUCKET_NAME}" &>/dev/null; then
   gsutil rm -r "gs://${BUCKET_NAME}"
@@ -18,6 +18,13 @@ then
     --quiet
 fi
 
-if gcloud compute images describe "gcpdrivebridge-img" &>/dev/null; then
-  gcloud compute images delete "gcpdrivebridge-img" --quiet
+fallback=$(echo gce/*.tar.gz)
+fallback="$(basename "${fallback}")"
+fallback="${fallback%".raw.tar.gz"}"
+fallback="${fallback//[._]/-}"
+
+img_name="${1:-"${fallback}"}"
+
+if gcloud compute images describe "${img_name}" &>/dev/null; then
+  gcloud compute images delete "${img_name}" --quiet
 fi

@@ -2,44 +2,49 @@
 set -euo pipefail
 set -x
 
-BUCKET_NAME="${BUCKET_NAME:-"colemickens-images"}"
+nix-build ../../default.nix -A "azplex" --out-link "azure"
 
-group="azplex"
-location="westus2"
-./az.sh group create --name "${group}" --location "${location}"
+source ./common.sh
 
-diskname="azplex-disk"
-./az.sh disk create \
-  --resource-group "${group}" \
-  --name "${diskname}" \
-  --size-gb "${size}" \
-  --for-upload true
+if ! az group show -n "${group}" &>/dev/null; then
+  az group create --name "${group}" --location "${location}"
+fi
 
-timeout=$(( 60 * 60 )) # disk access token timeout
-sasurl="$(\
-  ./az.sh disk grant-access \
-    --access-level Write \
+if ! az disk show -g "${group}" -n "${img_name}" &>/dev/null; then
+  bytes="$(stat -c %s ${img_file})"
+  size="30"
+  az disk create \
     --resource-group "${group}" \
-    --name "${diskname}" \
-    --duration-in-seconds ${timeout} \
-      | jq -r '.accessSas'
-)"
+    --name "${img_name}" \
+    --for-upload true --upload-size-bytes "${bytes}"
 
-azcopy copy "${source}" "${sasurl}" \
-  --blob-type PageBlob 
-  
-./az.sh disk revoke-access \
-  --resource-group "${group}" \
-  --name "${diskname}"
+  timeout=$(( 60 * 60 )) # disk access token timeout
+  sasurl="$(\
+    az disk grant-access \
+      --access-level Write \
+      --resource-group "${group}" \
+      --name "${img_name}" \
+      --duration-in-seconds ${timeout} \
+        | jq -r '.accessSas'
+  )"
 
-diskid="$(./az.sh disk show -g "${group}" -n "${diskname}" -o json | jq -r .id)"
+  azcopy copy "${img_file}" "${sasurl}" \
+    --blob-type PageBlob 
+    
+  az disk revoke-access \
+    --resource-group "${group}" \
+    --name "${img_name}"
+fi
 
-./az.sh image create \
-  --resource-group "${group}" \
-  --name "${diskname}" \
-  --source "${diskid}" \
-  --os-type "linux" >/dev/null
+if ! az image show -g "${group}" -n "${img_name}" &>/dev/null; then
+  diskid="$(az disk show -g "${group}" -n "${img_name}" -o json | jq -r .id)"
 
-imageid="$(./az.sh image show -g "${group}" -n "${diskname}" -o json | jq -r .id)"
+  az image create \
+    --resource-group "${group}" \
+    --name "${img_name}" \
+    --source "${diskid}" \
+    --os-type "linux" >/dev/null
+fi
 
+imageid="$(az image show -g "${group}" -n "${img_name}" -o json | jq -r .id)"
 echo "${imageid}"

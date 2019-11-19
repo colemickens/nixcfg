@@ -14,7 +14,7 @@ let
         "${pkgs.coreutils}/bin/mkdir -p /mnt/${target}"
       ];
       ExecStart = "${c.rclone-lim-mount}/bin/rclone-lim-mount --allow-other ${target}: /mnt/${target}";
-      ExecStop = "${pkgs.fuse}/bin/fusermount -uz /mnt/${target}";
+      ExecStop = "${pkgs.fuse}/bin/fusermount -uz /mnt/rclone/${target}";
       Restart = "on-failure";
     };
     wantedBy = [ "default.target" ];

@@ -64,6 +64,7 @@ in
       waybar
       waypipe
       wayfire
+      wayvnc
       wf-config
       wdisplays
       wev

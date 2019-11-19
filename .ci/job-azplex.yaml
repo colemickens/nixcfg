@@ -1,0 +1,13 @@
+image: nixos/unstable
+sources:
+  - git@github.com:colemickens/nixcfg
+secrets:
+  - df3e056f-2931-4a93-86db-e40c2fa6098d # azure_sp TODO update guid
+tasks:
+  - update: |
+      cd nixcfg
+      nix-shell --pure --command "./.ci/prep.sh"
+      nix-shell --pure --command "./machines/azplex/.ci/try.sh"
+      nix-shell --pure --command "./.ci/push.sh"
+
+# TODO: how can we push intermediate results ?

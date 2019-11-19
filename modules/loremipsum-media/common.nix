@@ -7,6 +7,7 @@ rec {
     rclone_backups    = ./sa/rclone-238701-2f39d1bad234.json;
     rclone_movies     = ./sa/rclone-238701-d77283a08b9a.json;
     rclone_tvshows    = ./sa/rclone-238701-9a5c922143a1.json;
+    rclone_misc       = ./sa/rclone-238701-9a5c922143a1.json;
   };
 
   rclone-lim = pkgs.writeScriptBin "rclone-lim" ''
@@ -41,19 +42,18 @@ rec {
 
   rclone-lim-mount-all = (pkgs.writeScriptBin "rclone-lim-mount-all" ''
     #!/usr/bin/env bash
-    
+    set -x
     pids=()
-
-    ${rclone-lim-mount}/bin/rclone-lim-mount tvshows: ~/mnt/tvshows
-    pids=($pids $!)
-    ${rclone-lim-mount}/bin/rclone-lim-mount movies: ~/mnt/movies
-    pids=($pids $!)
-    ${rclone-lim-mount}/bin/rclone-lim-mount misc: ~/mnt/misc
-    pids=($pids $!)
-    ${rclone-lim-mount}/bin/rclone-lim-mount archives: ~/mnt/archives
-    pids=($pids $!)
-    ${rclone-lim-mount}/bin/rclone-lim-mount backups: ~/mnt/backups
-    
-    trap "kill $pids[@]" EXIT
+    mnts=( "tvshows" "movies" "misc" "backups" "archives" )
+    for m in "''${mnts[@]}"; do
+      sudo fusermount -uz "''${HOME}/mnt/''$m"
+    done
+    for m in "''${mnts[@]}"; do
+      mkdir -p "''${HOME}/mnt/''$m"
+      sudo fusermount -u "''${HOME}/mnt/''$m"
+      "${rclone-lim-mount}/bin/rclone-lim-mount" "''$m:" "''${HOME}/mnt/''$m" &
+      trap "set +x; kill ''$!; sudo fusermount -uz ''${HOME}/mnt/''$m; rmdir ''${HOME}/mnt/''$m" EXIT
+    done
+    wait
   '');
 }

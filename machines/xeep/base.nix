@@ -42,6 +42,7 @@ in
 
     environment.systemPackages = with pkgs; [ 
       libratbag piper
+      undervolt
       (pkgs.writeScriptBin "dell-fix-power" ''
         #!/usr/bin/env bash
         oldval="$(sudo ${pkgs.msr-tools}/bin/rdmsr 0x1FC)"
@@ -112,6 +113,14 @@ in
     services.fwupd.enable = true;
 
     powerManagement.enable = true;
+    services.undervolt = {
+      enable = true;
+      coreOffset = "-100";
+      gpuOffset = "-75";
+      uncoreOffset = "-100";
+      analogioOffset = "-100";
+      temp = "97";
+    };
     services.tlp.enable = true;
     services.tlp.extraConfig = ''
       #START_CHARGE_THRESH_BAT0=75
