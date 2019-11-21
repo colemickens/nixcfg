@@ -7,7 +7,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # keep track of what we build for the README
 pkgentries=(); nixpkgentries=();
-cache="nixpkgs-wayland"
+cache="colemickens"
 build_attr="${1:-"xeep-sway"}"
 
 function update() {
