@@ -6,10 +6,10 @@ trap "rm ${b}" EXIT
 
 cp "${DIR}/bootstrap.in.nix" "${b}"
 
-awk -i inplace -v r="$(cat ~/.secrets/packet-apitoken)" \
+awk -i inplace -v r="$(gopass show "colemickens/packet.net" | grep apikey | cut -d' ' -f2)" \
   '{gsub(/PACKETAPITOKEN/,r)}1' "${b}"
 
-awk -i inplace -v r="$(cat ~/.secrets/packet-projectid)" \
+awk -i inplace -v r="$(gopass show "colemickens/packet.net" | grep default_project_id | cut -d' ' -f2)" \
   '{gsub(/PACKETPROJECTID/,r)}1' "${b}"
 
 awk -i inplace -v r="$(cat ~/.config/cachix/cachix.dhall)" \

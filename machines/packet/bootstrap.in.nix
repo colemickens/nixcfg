@@ -2,9 +2,10 @@
 { pkgs, ... }:
 
 let
-cachixFile = pkgs.writeText "config.dhall" ''
-CACHIXDHALL
-'';
+  buildScript = "https://raw.githubusercontent.com/colemickens/nixcfg/master/machines/packet/buildworld.sh";
+  cachixFile = pkgs.writeText "config.dhall" ''
+    CACHIXDHALL
+  '';
 
   packetApiToken = "PACKETAPITOKEN";
   packetProjectId= "PACKETPROJECTID";
@@ -20,11 +21,10 @@ CACHIXDHALL
   buildworldScript = pkgs.writeScript "buildworld" ''
     #!/usr/bin/env bash
     set -x
-    rm -f /tmp/buildworld.sh
-    wget "https://raw.githubusercontent.com/colemickens/nixcfg/master/machines/packet/buildworld.sh" \
-      -O /tmp/buildworld.sh
-    chmod +x /tmp/buildworld.sh
-    exec /tmp/buildworld.sh
+    mkdir -p /home/cole/.config/cachix
+    rm -f "/home/cole/.config/cachix/cachix.dhall"
+    cp "${cachixFile}" "/home/cole/.config/cachix/cachix.dhall"
+    curl --proto '=https' --tlsv1.2 -sSf "${buildScript}" | sh
   '';
 in
 {
