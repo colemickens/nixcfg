@@ -62,6 +62,18 @@ with lib;
       # gui apps
       alacritty
       calibre
+      #(chromium-git_80.overrideAttrs(old: {
+      #  customGnFlags = {
+      #    use_vaapi = true;
+      #    use_ozone = true;
+      #    #use_system_minigbm = true;
+      #    ozone_auto_platforms = false;
+      #    ozone_platform = "wayland";
+      #    ozone_platform_wayland = true;
+      #    ozone_platform_x11 = true;
+      #    ozone_platform_headless = true;
+      #  };
+      #}))
       evince
       feh
       fractal

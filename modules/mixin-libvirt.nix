@@ -6,6 +6,7 @@
       enable = true;
     };
     environment.systemPackages = with pkgs; [
+      bridge-utils
       virtviewer
       virtmanager
       spice-gtk

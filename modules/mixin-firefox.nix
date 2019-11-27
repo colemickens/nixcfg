@@ -10,17 +10,14 @@ let
     exec ${pkgs.latest.firefox-nightly-bin}/bin/firefox "''${@}"
   '';
   
-  # TODO: remove when firefox overlay is fixed
-  safeToUseNightly = lib.pathExists ../../overlays/nixpkgs-mozilla/default.nix;
-  firefoxPkgs = [ stable ] ++ (lib.optionals safeToUseNightly [ nightly ]);
+  useNightly = builtins.pathExists ../../overlays/nixpkgs-mozilla;
+  firefoxPkgs = [ stable ] ++ lib.optionals useNightly [ nightly ];
 in
 {
   config = {
     nixpkgs = {
       config.allowUnfree = true;
-      overlays = [
-        (overlay "nixpkgs-mozilla" "https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz")
-      ];
+      overlays = [ (overlay "nixpkgs-mozilla") ];
       config.firefox.enableFXCastBridge = true;
     };
     environment.variables.MOZ_USE_XINPUT2 = "1";

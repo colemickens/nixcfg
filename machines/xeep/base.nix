@@ -7,6 +7,8 @@ let
 in
 {
   imports = [
+    ./power-management.nix
+
     ../../modules/common.nix
     ../../modules/pkgs-common.nix
     ../../modules/pkgs-full.nix
@@ -15,9 +17,10 @@ in
     ../../modules/profile-interactive.nix
     ../../modules/profile-gui.nix
 
-    ../../modules/mixin-docker.nix
+    #../../modules/mixin-docker.nix
     ../../modules/mixin-firecracker.nix
     ../../modules/mixin-libvirt.nix
+    ../../modules/mixin-mitmproxy.nix
     ../../modules/mixin-sshd.nix
     #../../modules/mixin-ipfs.nix
     #../../modules/mixin-yubikey.nix
@@ -111,24 +114,5 @@ in
       u2f.enable = true;
     };
     services.fwupd.enable = true;
-
-    powerManagement.enable = true;
-    services.undervolt = {
-      enable = true;
-      coreOffset = "-100";
-      gpuOffset = "-75";
-      uncoreOffset = "-100";
-      analogioOffset = "-100";
-      temp = "97";
-    };
-    services.tlp.enable = true;
-    services.tlp.extraConfig = ''
-      #START_CHARGE_THRESH_BAT0=75
-      #STOP_CHARGE_THRESH_BAT0=80
-      CPU_SCALING_GOVERNOR_ON_BAT=powersave
-      CPU_SCALING_GOVERNOR_ON_AC=performance
-      ENERGY_PERF_POLICY_ON_BAT=powersave
-    '';
-    services.upower.enable = true;
   };
 }

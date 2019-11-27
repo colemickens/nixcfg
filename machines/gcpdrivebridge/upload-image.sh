@@ -10,7 +10,7 @@ fi
 
 bld="$(nix-build ../../default.nix -A gcpdrivebridge --out-link gce)"
 source ./common.sh #reload the img_name/img_path
-uri="gs://${BUCKET_NAME}/${img_name}"
+uri="gs://${BUCKET_NAME}/${img_name}.tar.gz"
 if ! gsutil ls "${uri}"; then
   gsutil cp "${img_path}" "${uri}"
 fi

@@ -5,7 +5,7 @@ rec
   # overlay will load an overlay, either from:
   #  ../overlays/{name}
   #  ./pkgs/{name}
-  overlay = name: url:
+  overlay = name:
     let
       localimportpath = ../overlays + "/${name}";
       importpath = ./pkgs + "/${name}";
@@ -13,7 +13,7 @@ rec
       if builtins.pathExists localimportpath then
         (import "${localimportpath}")
       else if builtins.pathExists importpath then
-        (import "${importpath}")
+        (import (import "${importpath}"))
       else (abort "you must vendor overlay imports");
 
   # TODO: see if there's way to simplify this, (note: nixpkgs.nixos does not eval overlays)
