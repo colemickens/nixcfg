@@ -71,7 +71,7 @@ in
       wf-recorder
       wlay
       wl-clipboard
-      wldash
+      #wldash
       wlr-randr
       wofi
       wtype

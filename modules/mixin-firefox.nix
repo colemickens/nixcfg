@@ -9,8 +9,9 @@ let
   nightly = pkgs.writeShellScriptBin "firefox-nightly" ''
     exec ${pkgs.latest.firefox-nightly-bin}/bin/firefox "''${@}"
   '';
-  
-  useNightly = builtins.pathExists ../../overlays/nixpkgs-mozilla;
+
+  #useNightly = (builtins.pathExists ../../overlays/nixpkgs-mozilla);
+  useNightly = false;
   firefoxPkgs = [ stable ] ++ lib.optionals useNightly [ nightly ];
 in
 {

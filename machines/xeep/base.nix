@@ -26,7 +26,7 @@ in
     #../../modules/mixin-yubikey.nix
 
     ../../modules/loremipsum-media/rclone-cmd.nix
-    ../../modules/mixin-spotifyd.nix
+    #../../modules/mixin-spotifyd.nix
 
     ../../modules/mixin-v4l2loopback.nix
     ../../modules/hw-chromecast.nix
@@ -61,7 +61,7 @@ in
     swapDevices = [ ];
     boot = {
       earlyVconsoleSetup = true; # hidpi + luks-open
-      kernelPackages = pkgs.linuxPackages_testing;
+      kernelPackages = pkgs.linuxPackages;
       initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
       kernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
       kernelParams = [

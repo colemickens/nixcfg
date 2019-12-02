@@ -32,7 +32,7 @@ def main():
 
   bitlocker_key = bitlocker_key.split(":")[1].strip()
 
-  guest = "generic"
+  guest = "win10"
 
   print(bitlocker_key)
 
