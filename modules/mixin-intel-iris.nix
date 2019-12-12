@@ -7,11 +7,14 @@ in
 {
   config = {
     # we're using the overlay for now:
-    #hardware.opengl.package = (pkgs.mesa.override {
-    #  galliumDrivers = [ "virgl" "svga" "swrast" "iris" ];
-    #  driDrivers = [ "i915" "i965" ];
-    #  vulkanDrivers = [ "intel" ];
-    #}).drivers;
+    hardware.opengl.package =
+      if useOverlay
+      then pkgs.mesa.drivers
+      else (pkgs.mesa.override {
+        galliumDrivers = [ "virgl" "svga" "swrast" "iris" ];
+        driDrivers = [ "i915" "i965" ];
+        vulkanDrivers = [ "intel" ];
+      }).drivers;
 
     nixpkgs.overlays =
       if useOverlay
