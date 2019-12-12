@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "nixcfg-devenv";
 
   nativeBuildInputs = []
-  #++ (with azcopypkgs; [ azure-cli azure-storage-azcopy  ])
+  ++ (with azcopypkgs; [ azure-cli azure-storage-azcopy  ])
   ++ [
     bash
     cacert
@@ -18,9 +18,9 @@ stdenv.mkDerivation {
     openssh
     ripgrep
     
-    python3
+    #python3
 
     # gcpdrivebridgeGuest is not running.
-    google-cloud-sdk
+    #google-cloud-sdk
   ];
 }

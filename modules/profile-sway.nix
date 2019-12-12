@@ -40,7 +40,6 @@ in
       udiskie
       termite
       pulsemixer
-      feh
       ranger
       xwayland # sway
 
@@ -53,6 +52,7 @@ in
       grim
       i3status-rust
       kanshi
+      imv
       mako
       oguri
       redshift-wayland

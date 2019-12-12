@@ -86,15 +86,15 @@
 
         [UNDERVOLT.AC]
         # CPU core voltage offset (mV)
-        CORE: -75
+        CORE: 0
         # Integrated GPU voltage offset (mV)
-        GPU: -75
+        GPU: 0
         # CPU cache voltage offset (mV)
-        CACHE: -75
+        CACHE: 0
         # System Agent voltage offset (mV)
-        UNCORE: -75
+        UNCORE: 0
         # Analog I/O voltage offset (mV)
-        ANALOGIO: -75
+        ANALOGIO: 0
 
         # [ICCMAX.AC]
         # # CPU core max current (A)

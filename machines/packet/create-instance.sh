@@ -10,15 +10,17 @@ projectid="$(gopass show colemickens/packet.net | grep default_project_id | cut 
 termtime="$(TZ=UTC date --date="2 hour" --iso-8601=seconds)"
 hostname="pkt-$(printf "%x" "$(date '+%s')")"
 
-plan="m2.xlarge.x86";   price="0.50"
-#plan="x2.xlarge.x86";   price="0.50"
+#configurations:
+# loc="dfw2";  plan="g2.large.x86";    price="2";
+  loc="sjc1";  plan="m2.xlarge.x86";   price="0.50"
+  loc="sjc1";  plan="x2.xlarge.x86";   price="0.50"
 
 ~/code/packet-cli/bin/packet device create \
   --hostname "${hostname}" \
   --userdata "${userdata}" \
   --plan "${plan}" \
   --operating-system "nixos_19_03" \
-  --facility "sjc1" \
+  --facility "${loc}" \
   --project-id "${projectid}" \
   --spot-instance \
   --spot-price-max "${price}" \

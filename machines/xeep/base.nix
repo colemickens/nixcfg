@@ -10,6 +10,8 @@ in
     ./power-management.nix
 
     ../../modules/common.nix
+    ../../modules/mixin-devenv.nix
+    ../../modules/mixin-intel-iris.nix
     ../../modules/pkgs-common.nix
     ../../modules/pkgs-full.nix
     ../../modules/user-cole.nix
@@ -26,7 +28,7 @@ in
     #../../modules/mixin-yubikey.nix
 
     ../../modules/loremipsum-media/rclone-cmd.nix
-    #../../modules/mixin-spotifyd.nix
+    ../../modules/mixin-spotifyd.nix
 
     ../../modules/mixin-v4l2loopback.nix
     ../../modules/hw-chromecast.nix
@@ -61,7 +63,7 @@ in
     swapDevices = [ ];
     boot = {
       earlyVconsoleSetup = true; # hidpi + luks-open
-      kernelPackages = pkgs.linuxPackages;
+      kernelPackages = pkgs.linuxPackages_latest;
       initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
       kernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
       kernelParams = [
@@ -77,8 +79,8 @@ in
         "i915.enable_psr=1"  # nixos-hw = missing?
         "i915.fastboot=1"    # nixos-hw = missing?
       ];
-      supportedFilesystems = [ "btrfs" ];
-      initrd.supportedFilesystems = [ "btrfs" ];
+      supportedFilesystems = [ "btrfs" "zfs" ];
+      initrd.supportedFilesystems = [ "btrfs" "zfs" ];
       initrd.luks.devices = [
         {
           name = "root";

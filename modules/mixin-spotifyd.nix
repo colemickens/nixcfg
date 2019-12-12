@@ -6,7 +6,9 @@
     config = ''
       [global]
       username = cole.mickens@gmail.com
-      password = 52eC7pIluqv1PkJbM%osQ^D&C
+      password = OneTwoThree
+      #password_cmd = gopass show -o colemickens/spotify.com
+      backend = pulseaudio
       bitrate = 320
     '';
   };

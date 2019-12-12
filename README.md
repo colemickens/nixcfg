@@ -66,12 +66,12 @@ Altogether, this allows me to rev my nixpkgs, call this script, wait, and then s
 <!--nixpkgs-->
 | Channel | Last Channel Commit Time |
 | ------- | ------------------------ |
-| cmpkgs | 2019-11-22 03:38:57 -0800 |
-| nixos-unstable | 2019-11-27 16:10:01 -0500 |
-| nixos-unstable-small | 2019-11-28 22:23:36 +0100 |
+| cmpkgs | 2019-12-09 01:51:03 -0800 |
+| nixos-unstable | 2019-12-05 01:28:43 +0100 |
+| nixos-unstable-small | 2019-12-11 22:03:04 +0100 |
 | nixos-hardware | 2019-11-12 10:36:10 +0000 |
-| nixpkgs-mozilla | 2019-10-04 15:56:17 +0200 |
-| nixpkgs-wayland | 2019-11-26 07:22:37 +0000 |
+| nixpkgs-mozilla | 2019-12-09 16:45:32 +0100 |
+| nixpkgs-wayland | 2019-12-11 14:08:42 +0000 |
 <!--nixpkgs-->
 
 <!--pkgs-->

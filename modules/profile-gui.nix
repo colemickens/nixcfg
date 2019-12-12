@@ -29,6 +29,8 @@ with lib;
       };
     };
 
+    services.avahi = { enable = true; nssmdns = true; };
+
     fonts = {
       fontconfig = {
         defaultFonts = {
@@ -75,7 +77,6 @@ with lib;
       #  };
       #}))
       evince
-      feh
       fractal
       freerdp
       gimp
