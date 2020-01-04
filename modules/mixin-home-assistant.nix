@@ -5,7 +5,7 @@ let
   zigbeeAdapter = "/dev/serial/by-id/usb-Silicon_Labs_HubZ_Smart_Home_Controller_813003E3-if01-port0";
 
   eth = "eth0";
-  wg = "wg0";
+  wg = "wg1";
   wg_port = 51820;
   externalIP = "192.168.1.117";
   external_range = "192.168.1.0/24";
@@ -24,6 +24,7 @@ in
       #externalIP = externalIP;
     };
     networking.firewall = {
+      enable = true;
       allowedUDPPorts = [ wg_port ];
       allowedTCPPorts = [ ha_port ];
     };

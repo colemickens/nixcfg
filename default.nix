@@ -24,8 +24,10 @@ in rec {
     nixpkgs = ../nixpkgs; extraModules = [ ./machines/azure/image-azbuildworld.nix ];
   }).config.system.build.azureImage;
 
-  raspberry = (mkSystem rec {
+  raspberry_ = (mkSystem rec {
     nixpkgs = ../nixpkgs; extraModules = [ ./machines/raspberry/default.nix ];
     system = "aarch64-linux";
-  }).config.system.build.sdImage;
+  }).config.system.build;
+  raspberry = raspberry_.toplevel;
+  raspberry_image = raspberry_.sdImage;
 }

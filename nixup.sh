@@ -6,7 +6,7 @@ unset NIX_PATH
 unset NIXOS_CONFIG
 
 desktop="${1:-"sway"}"
-target="$(hostname)-${desktop}"
+target="${1:-"$(hostname)-${desktop}"}"
 toplevel=$(./nixbuild.sh default.nix -A "${target}")
 
 sudo nix-env --set \
