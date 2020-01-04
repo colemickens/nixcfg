@@ -4,13 +4,13 @@ let
   zwaveAdapter  = "/dev/serial/by-id/usb-Silicon_Labs_HubZ_Smart_Home_Controller_813003E3-if00-port0";
   zigbeeAdapter = "/dev/serial/by-id/usb-Silicon_Labs_HubZ_Smart_Home_Controller_813003E3-if01-port0";
 
-  eth = "enp57s0u2u3u1";
+  eth = "eth0";
   wg = "wg0";
   wg_port = 51820;
-  externalIP = "192.168.1.35";
-  external_range = " 192.168.1.1/24";
+  externalIP = "192.168.1.117";
+  external_range = "192.168.1.0/24";
   internalIP = "192.168.2.1";
-  internal_range = " 192.168.2.1/24";
+  internal_range = "192.168.2.0/24";
 
   ha_port = 8123;
 in
@@ -21,7 +21,7 @@ in
       internalInterfaces = [ wg ];
       internalIPs = [ internal_range ];
       externalInterface = eth;
-      externalIP = externalIP;
+      #externalIP = externalIP;
     };
     networking.firewall = {
       allowedUDPPorts = [ wg_port ];
@@ -88,7 +88,8 @@ in
           unit_system = "metric";
           temperature_unit = "C";
           auth_providers = [
-             { type = "homeassistant"; }
+             # must be enabled to finish bootstrap/onboard:
+             #{ type = "homeassistant"; }
              {
                type = "trusted_networks";
                trusted_networks = [ "127.0.0.1" external_range internal_range ];
