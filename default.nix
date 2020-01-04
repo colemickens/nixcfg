@@ -26,5 +26,6 @@ in rec {
 
   raspberry = (mkSystem rec {
     nixpkgs = ../nixpkgs; extraModules = [ ./machines/raspberry/default.nix ];
+    system = "aarch64-linux";
   }).config.system.build.sdImage;
 }

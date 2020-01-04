@@ -8,9 +8,9 @@ let
   wg = "wg0";
   wg_port = 51820;
   externalIP = "192.168.1.35";
-  externalRange = " 192.168.1.1/24";
+  external_range = " 192.168.1.1/24";
   internalIP = "192.168.2.1";
-  internalRange = " 192.168.2.1/24";
+  internal_range = " 192.168.2.1/24";
 
   ha_port = 8123;
 in
@@ -19,7 +19,7 @@ in
     networking.nat = {
       enable = true;
       internalInterfaces = [ wg ];
-      internalIPs = [ internalRange ];
+      internalIPs = [ internal_range ];
       externalInterface = eth;
       externalIP = externalIP;
     };
@@ -30,7 +30,7 @@ in
     networking.wireguard.interfaces."${wg}" = {
       ips = [ internal_range ];
       listenPort = wg_port;
-      privateKeyFile = "${./wg-server.key}";
+      privateKeyFile = "${../machines/raspberry/wg-server.key}";
       peers = [
         { allowedIPs = ["192.168.2.2/32"]; # cole-phone
           publicKey = "TVmP+Ov/RKECq98pCpoTAgJF9BKo/QrUUN+25dEnjR4="; }
@@ -91,7 +91,7 @@ in
              { type = "homeassistant"; }
              {
                type = "trusted_networks";
-               trusted_networks = [ "127.0.0.1" externalRange internalRange ];
+               trusted_networks = [ "127.0.0.1" external_range internal_range ];
                allow_bypass_login = true;
              }
           ];
