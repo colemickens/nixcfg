@@ -4,6 +4,7 @@ let lib = pkgs.lib; in
 {
   imports = [
     ../../modules/common.nix
+    ../../modules/profile-interactive.nix
 
     #../../modules/mixin-unifi.nix
     ../../modules/mixin-plex-client.nix
