@@ -111,7 +111,7 @@ in
           {
             platform = "flux_led";
             devices = {
-              "192.168.1.34" = {
+              "192.168.1.118" = {
                 name = "mh_led";
                 mode = "rgbw";
               };
