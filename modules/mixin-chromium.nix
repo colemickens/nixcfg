@@ -1,14 +1,13 @@
-{ pkgs, lib, ... }:
-
-# TODO: look at `chromium-git` from volth
+{ pkgs, ...}:
 
 let
-  chromiumPkg =
-    if builtins.pathExists /tmp/nochromium
-    then pkgs.chromium
-    #else pkgs.chromium-git-ozone;
-    else pkgs.chromium-git-ozone;
+  rev = "master";
+  nixpkgsChromiumSet = import (builtins.fetchTarball {
+    url = "https://github.com/colemickens/nixpkgs-chromium/archive/${rev}.tar.gz";
+  }) { pkgs = pkgs; };
 in
 {
-  environment.systemPackages = [ chromiumPkg ];
+  config = {
+    #environment.systemPackages = [ nixpkgsChromiumSet.chromium-git ];
+  };
 }

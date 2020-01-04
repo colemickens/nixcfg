@@ -20,11 +20,13 @@ in
     ../../modules/profile-gui.nix
 
     #../../modules/mixin-docker.nix
-    ../../modules/mixin-firecracker.nix
-    ../../modules/mixin-libvirt.nix
+    #../../modules/mixin-firecracker.nix
+    #../../modules/mixin-libvirt.nix
+    #../../modules/mixin-home-assistant.nix
     ../../modules/mixin-mitmproxy.nix
     ../../modules/mixin-sshd.nix
     #../../modules/mixin-ipfs.nix
+    #../../modules/mixin-unifi.nix
     #../../modules/mixin-yubikey.nix
 
     ../../modules/loremipsum-media/rclone-cmd.nix
@@ -56,13 +58,23 @@ in
       '')
     ];
 
+    #fileSystems = {
+    #  "/" =     { fsType = "ext4"; device = "/dev/vg/root"; };
+    #  "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/nixos-boot"; };
+    #};
     fileSystems = {
-      "/" =     { fsType = "ext4"; device = "/dev/vg/root"; };
+      "/" =     { fsType = "zfs";  device = "rpool2/nixos"; };
       "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/nixos-boot"; };
+      "/home" = { fsType = "zfs";  device = "rpool2/home"; };
     };
     swapDevices = [ ];
+
+    console.earlySetup = true; # hidpi + luks-open  # TODO : STILL NEEDED?
+    console.font = "ter-v32n";
+    console.packages = [ pkgs.terminus_font ];
+
     boot = {
-      earlyVconsoleSetup = true; # hidpi + luks-open
+      zfs.requestEncryptionCredentials = true;
       kernelPackages = pkgs.linuxPackages_latest;
       initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
       kernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
@@ -81,15 +93,16 @@ in
       ];
       supportedFilesystems = [ "btrfs" "zfs" ];
       initrd.supportedFilesystems = [ "btrfs" "zfs" ];
-      initrd.luks.devices = [
-        {
-          name = "root";
-          device = "/dev/disk/by-partlabel/nixos-luks";
-          preLVM = true;
-          allowDiscards = true;
-        }
-      ];
+      #initrd.luks.devices = [
+      #  {
+      #    name = "root";
+      #    device = "/dev/disk/by-partlabel/nixos-luks";
+      #    preLVM = true;
+      #    allowDiscards = true;
+      #  }
+      #];
       loader = {
+        timeout = 1;
         systemd-boot.enable = true;
         efi.canTouchEfiVariables = true;
       };
@@ -97,14 +110,11 @@ in
     networking = {
       hostId = "ef66d560";
       hostName = hostname;
-      firewall.enable = false;
+      firewall.enable = true;
       networkmanager.enable = true;
       networkmanager.wifi.backend = "iwd";
     };
-    services.resolved.enable = false;
-
-    i18n.consolePackages = [ pkgs.terminus_font ]; # hidpi
-    i18n.consoleFont = "ter-v32n"; # hidpi
+    services.resolved.enable = true;
 
     nix.maxJobs = 8;
     nixpkgs.config.allowUnfree = true;

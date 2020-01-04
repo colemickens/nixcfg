@@ -12,8 +12,8 @@ hostname="pkt-$(printf "%x" "$(date '+%s')")"
 
 #configurations:
 # loc="dfw2";  plan="g2.large.x86";    price="2";
-  loc="sjc1";  plan="m2.xlarge.x86";   price="0.50"
   loc="sjc1";  plan="x2.xlarge.x86";   price="0.50"
+  loc="sjc1";  plan="m2.xlarge.x86";   price="0.50"
 
 ~/code/packet-cli/bin/packet device create \
   --hostname "${hostname}" \

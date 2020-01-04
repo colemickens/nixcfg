@@ -2,7 +2,7 @@
 
 let
   overlay = (import ../lib.nix {}).overlay;
-  useOverlay = builtins.pathExists /tmp/build-nixpkgs-graphics;
+  useOverlay = builtins.pathExists ../../overlays/nixpkgs-graphics;
 in
 {
   config = {

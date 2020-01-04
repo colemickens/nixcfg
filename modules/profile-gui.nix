@@ -29,7 +29,12 @@ with lib;
       };
     };
 
-    services.avahi = { enable = true; nssmdns = true; };
+    services.avahi = {
+      enable = true;
+      nssmdns = true;
+      publish.domain = true;
+      publish.enable = true;
+    };
 
     fonts = {
       fontconfig = {
@@ -82,6 +87,7 @@ with lib;
       gimp
       kitty
       mpv
+      plex-mpv-shim
       gnome3.nautilus
       pavucontrol
       qemu

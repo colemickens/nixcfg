@@ -15,6 +15,7 @@ in
       qt5ct.enable = true;
       sway = {
         enable = true;
+        #wrapperFeatures = { gtk = true; };
         extraSessionCommands = ''
           export SDL_VIDEODRIVER=wayland
           export QT_QPA_PLATFORM=wayland
@@ -24,6 +25,14 @@ in
         '';
       };
     };
+
+    programs.seahorse.enable = true;
+    services.gnome3.gnome-keyring.enable = true;
+
+    #networking.firewall.allowedTCPPorts = [ 3000 32400 32467 ];
+    #networking.firewall.allowedUDPPorts = [ 5353 32467 32400 32410 32412 32413 32414 44777 ];
+    networking.firewall.allowedTCPPorts = [ 3000 ];
+    networking.firewall.allowedUDPPorts = [ 32410 32412 32413 32414 ];
 
     nix = {
       binaryCachePublicKeys = [ "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA=" ];
@@ -71,7 +80,7 @@ in
       wf-recorder
       wlay
       wl-clipboard
-      #wldash
+      wldash
       wlr-randr
       wofi
       wtype

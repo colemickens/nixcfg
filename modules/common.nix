@@ -20,11 +20,8 @@ with lib;
       binaryCaches = [ "https://cache.nixos.org" ];
       trustedUsers = [ "@wheel" "root" ];
     };
-    
-    i18n = {
-      consoleKeyMap = "us";
-      defaultLocale = "en_US.UTF-8";
-    };
+
+    i18n.defaultLocale = "en_US.UTF-8";
 
     security.sudo.wheelNeedsPassword = false;
     users.mutableUsers = false;

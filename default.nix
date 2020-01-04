@@ -17,6 +17,14 @@ in rec {
   }).config.system.build.googleComputeImage;
 
   azplex = (mkSystem rec {
-    nixpkgs = ../nixpkgs; extraModules = [ ./machines/azplex/image.nix ];
+    nixpkgs = ../nixpkgs; extraModules = [ ./machines/azure/image-azplex.nix ];
   }).config.system.build.azureImage;
+
+  azbuildworld = (mkSystem rec {
+    nixpkgs = ../nixpkgs; extraModules = [ ./machines/azure/image-azbuildworld.nix ];
+  }).config.system.build.azureImage;
+
+  raspberry = (mkSystem rec {
+    nixpkgs = ../nixpkgs; extraModules = [ ./machines/raspberry/default.nix ];
+  }).config.system.build.sdImage;
 }

@@ -10,15 +10,14 @@ let
     exec ${pkgs.latest.firefox-nightly-bin}/bin/firefox "''${@}"
   '';
 
-  useNightly = (builtins.pathExists ../../overlays/nixpkgs-mozilla);
-  #useNightly = false;
+  useNightly = builtins.pathExists ../../overlays/nixpkgs-mozilla;
   firefoxPkgs = [ stable ] ++ lib.optionals useNightly [ nightly ];
 in
 {
   config = {
     nixpkgs = {
       config.allowUnfree = true;
-      overlays = [ (overlay "nixpkgs-mozilla") ];
+      overlays = if useNightly then [ (overlay "nixpkgs-mozilla") ] else [];
       config.firefox.enableFXCastBridge = true;
     };
     environment.variables.MOZ_USE_XINPUT2 = "1";
