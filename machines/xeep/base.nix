@@ -26,7 +26,7 @@ in
     ../../modules/mixin-mitmproxy.nix
     ../../modules/mixin-sshd.nix
     #../../modules/mixin-ipfs.nix
-    ../../modules/mixin-unifi.nix
+    #../../modules/mixin-unifi.nix
     #../../modules/mixin-yubikey.nix
 
     ../../modules/loremipsum-media/rclone-cmd.nix
