@@ -36,7 +36,7 @@ in
         { allowedIPs = ["192.168.2.2/32"]; # cole-phone
           publicKey = "TVmP+Ov/RKECq98pCpoTAgJF9BKo/QrUUN+25dEnjR4="; }
         { allowedIPs = ["192.168.2.3/32"]; # buddie-phone
-          publicKey = "wD3LnMRhppqOIO60wnqz7ggK+DbrQU3BY69qSWGYfks="; }
+          publicKey = "UrVPH3QQhRNCsLfM21gv08PydwrIV6eGuStKG8mn/CI="; }
       ];
     };
 
