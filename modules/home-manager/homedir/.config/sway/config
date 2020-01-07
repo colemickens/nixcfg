@@ -1,0 +1,243 @@
+### Variables
+# Logo key. Use Mod1 for Alt.
+set $mod Mod4
+
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# Workspaces:
+# switch to workspace
+bindsym Ctrl+Alt+Left workspace prev
+bindsym Ctrl+Alt+Right workspace next
+
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
+# Note: workspaces can have any name you want, not just numbers.
+# We just use 1-10 as the default.
+#
+# Layout stuff:
+#
+# You can "split" the current object of your focus with
+# $mod+b or $mod+v, for horizontal and vertical splits
+# respectively.
+bindsym $mod+b splith
+bindsym $mod+v splitv
+
+# Switch the current container between different layout styles
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# Make the current focus fullscreen
+bindsym $mod+f fullscreen
+
+# Toggle the current focus between tiling and floating mode
+bindsym $mod+Shift+space floating toggle
+
+# Swap focus between the tiling area and the floating area
+bindsym $mod+space focus mode_toggle
+
+# move focus to the parent container
+bindsym $mod+a focus parent
+
+###############################################################################
+# APPEARANCE
+set $purple '#3d326e'
+set $purpledark '#1b104d'
+set $font "pango:Cascadia Code Bold 10"
+set $font "pango:Victor Mono Bold 10"
+set $font "pango:Noto Sans Mono Bold 10"
+#client.focused #3d1255 #764b83 #ffffff #9775aa #764b83
+client.focused #3d1255 #000000 #ffffff #957c03 #000000
+#client.focused #2f1d00 #957c03 #ffffff #d6b100 #957c03
+output * background '#111111' solid_color
+#output * background '#ffffff' solid_color
+
+set $swaylock swaylock -f -c '#000000' -i "${HOME}/.config/sway/lock-single.png" -s center
+
+## FLOATING
+bindsym $mod+Shift+Alt+space sticky toggle
+
+## OPTIONS
+xwayland enable
+focus_follows_mouse always
+floating_modifier $mod normal
+font $font
+default_border normal 4
+gaps inner 6
+gaps outer 0
+
+## OUTPUTS
+output "Sharp Corporation 0x148B 0x00000000" {
+  mode "3480x2160@59.997002Hz"
+  subpixel rgb
+  scale 2.4
+}
+output "Dell Inc. Dell AW3418DW #ASPD8psOnhPd" {
+  mode "3440x1440@120Hz"
+  #mode "3440x1440@59.973000Hz"
+  subpixel rgb
+  scale 1.0
+}
+output * {
+  #background "$HOME/.config/sway/bg.png" tile "#001e59"
+  #background "$HOME/.config/sway/bg.png" tile "#0A0B07"
+  #background "$HOME/.config/sway/bg.png" tile "#2f1d00"
+  #background "$HOME/downloads/cartographer.png" tile "#000000"
+}
+
+## BAR
+bar {
+  font $font
+  position top
+  status_command /run/current-system/sw/bin/i3status-rs # $HOME/.config/i3/status.toml
+  #swaybar_command /run/current-system/sw/bin/waybar
+}
+
+
+###############################################################################
+# menu(s) should float:
+#for_window [app_id="^launcher$"] floating enable, border pixel 10
+for_window [app_id="^launcher$"] floating enable, border none, resize set width 100 ppt height 10 ppt, move position 0 px 0 px
+# regular launcher:
+bindsym $mod+escape exec /home/cole/.config/sway/scripts/launcher-termite.sh
+bindsym ctrl+escape exec wldash start-or-kill
+# force-x11 launcher:
+bindsym $mod+Shift+escape exec env LAUNCHER_USE_X11=1 /home/cole/.config/sway/scripts/launcher-termite.sh
+###############################################################################
+
+
+###############################################################################
+# dynamic output handling
+bindsym $mod+Ctrl+Alt+equal exec /home/cole/.config/sway/scripts/hotkey-scale-output.sh "+ .1"
+bindsym $mod+Ctrl+Alt+minus exec /home/cole/.config/sway/scripts/hotkey-scale-output.sh "- .1"
+bindsym --locked $mod+End output -- disable
+bindsym --locked $mod+Home output * enable
+###############################################################################
+
+
+###############################################################################
+# gopass
+set $gopass_show gopass ls --flat | fzf | xargs -r swaymsg -t command exec -- gopass show --clip
+set $gopass_totp gopass ls --flat | fzf | xargs -r swaymsg -t command exec -- gopass totp --clip
+set $termite_gopass_show exec termite --name=launcher -e 'bash -c "$gopass_show"'
+set $termite_gopass_totp exec termite --name=launcher -e 'bash -c "$gopass_totp"'
+bindsym $mod+F1 $termite_gopass_show
+bindsym $mod+F2 $termite_gopass_totp
+###############################################################################
+
+
+###############################################################################
+# misc shortcuts:
+#
+# manual lock
+bindsym $mod+Delete exec "$swaylock"
+# terminal
+bindsym $mod+Return exec termite
+# browser
+bindsym $mod+Shift+Return exec GDK_BACKEND=wayland firefox-nightly
+# browser
+bindsym $mod+Shift+Alt+Return exec GDK_BACKEND=x11 google-chrome-unstable
+# vscodium
+bindsym $mod+Shift+Backspace exec GDK_BACKEND=x11 codium
+# force kill
+bindsym $mod+Shift+q kill
+# reload config
+bindsym $mod+Shift+c reload
+# quit sway
+bindsym $mod+Ctrl+Alt+Delete exit
+# can't wait til this Firefox bug turns a decade old, FFS
+bindsym Ctrl+q exec echo "ugh, mozilla"
+#
+## Miscellaneous
+# Screenshots
+bindsym $mod+Print exec grim "${HOME}/screenshot-$(date '+%s').png"
+bindsym $mod+Shift+Print exec grim -g "$(slurp)" "${HOME}/screenshot-$(date '+%s').png"
+# Brightness
+bindsym --locked $mod+Ctrl+Alt+Up    exec brightnessctl set +10
+bindsym --locked $mod+Ctrl+Alt+Down  exec brightnessctl set 10-
+bindsym --locked $mod+Ctrl+Alt+Left  exec pulsemixer --change-volume -2
+bindsym --locked $mod+Ctrl+Alt+Right exec pulsemixer --change-volume +2
+bindsym --locked $mod+Ctrl+Alt+Prior exec brightnessctl set +100
+bindsym --locked $mod+Ctrl+Alt+Next  exec brightnessctl set 100-
+###############################################################################
+
+
+## INPUT CONFIG
+input "5426:92:Razer_Razer_DeathAdder_Elite" pointer_accel 1
+input "5426:92:Razer_Razer_DeathAdder_Elite" accel_profile adaptive
+
+input "1739:30383:DELL07E6:00_06CB:76AF_Touchpad" click_method clickfinger
+input "1739:30383:DELL07E6:00_06CB:76AF_Touchpad" tap enabled
+input "1739:30383:DELL07E6:00_06CB:76AF_Touchpad" dwt enabled
+input "1739:30383:DELL07E6:00_06CB:76AF_Touchpad" scroll_method two_finger
+input "1739:30383:DELL07E6:00_06CB:76AF_Touchpad" click_method clickfinger
+input "1739:30383:DELL07E6:00_06CB:76AF_Touchpad" natural_scroll enabled
+input "1739:30383:DELL07E6:00_06CB:76AF_Touchpad" accel_profile adaptive
+input "1739:30383:DELL07E6:00_06CB:76AF_Touchpad" pointer_accel 1
+
+input "1133:16505:Logitech_G_Pro" accel_profile adaptive
+#input "1133:16505:Logitech_G_Pro" pointer_accel 1
+
+## EXEC
+exec mako >/tmp/sway-mako.log 2>&1
+#exec redshift >/tmp/sway-redshift.log 2>&1
+exec gebaard >/tmp/sway-gebaar.log 2>&1
+exec udiskie >/tmp/sway-udiskie.log 2>&1
+exec kanshi >/tmp/sway-kanshi.log 2>&1
+
+for_window [app_id=mpv] sticky enable
+for_window [app_id=mpv] border none
+for_window [app_id=mpv] floating enable
+
+# title = "Firefox - Sharing Indicator"
+# title = "Firefox Nightly - Sharing Indicator" ??
+#for_window [app_id=mpv] floating enable
+for_window [title="^Firefox - Sharing Indicator"] floating enable
+
+exec_always swayidle -w \
+  before-sleep "$swaylock" \
+  lock "$swaylock" \
+  timeout 500 "$swaylock" \
+  timeout 1000 "systemctl suspend"
+
+exec_always /home/cole/.config/sway/scripts/autoexec-import-gsettings.sh \
+    gtk-theme:gtk-theme-name \
+    icon-theme:gtk-icon-theme-name \
+    cursor-theme:gtk-cursor-theme-name
+exec_always xrdb -l $HOME/.Xresources
+
+# borrowed from emersion:
+include ~/.config/sway/`hostname`/*
+exec systemd-notify --ready || true
+
+seat seat0 xcursor_theme capitaine-cursors-white
+
+#xwayland disable
+

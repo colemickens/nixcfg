@@ -8,7 +8,7 @@ rec
   overlay = name:
     let
       localimportpath = ../overlays + "/${name}";
-      importpath = ./pkgs + "/${name}";
+      importpath = ./imports + "/${name}";
     in
       if builtins.pathExists localimportpath then
         (import "${localimportpath}")

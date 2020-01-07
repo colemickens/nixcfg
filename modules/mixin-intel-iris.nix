@@ -2,7 +2,8 @@
 
 let
   overlay = (import ../lib.nix {}).overlay;
-  useOverlay = builtins.pathExists ../../overlays/nixpkgs-graphics;
+  _useOverlay = builtins.pathExists ../../overlays/nixpkgs-graphics;
+  useOverlay = false;
 in
 {
   config = {
@@ -22,7 +23,7 @@ in
       else [];
 
     environment.variables = {
-      MESA_LOADER_DRIVER_OVERRIDE = "iris";
+      #MESA_LOADER_DRIVER_OVERRIDE = "iris";
     };
   };
 }

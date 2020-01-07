@@ -4,6 +4,9 @@ with lib;
 
 {
   config = {
+    services.nscd.enable = false; # once and for all
+    services.resolved.enable = mkForce false;
+
     boot = {
       tmpOnTmpfs = true;
       cleanTmpDir = true;

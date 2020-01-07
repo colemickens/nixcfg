@@ -1,0 +1,9 @@
+[commands.swipe.four]
+left_up = ""
+right_up = ""
+up = "/home/cole/.config/sway/menu-termite.sh"
+left_down = ""
+right_down = ""
+down = ""
+left = "swaymsg \"workspace next\""
+right = "swaymsg \"workspace prev\""

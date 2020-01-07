@@ -11,6 +11,7 @@ in
         (overlay "nixpkgs-wayland")
       ];
     };
+    environment.variables.WLR_DRM_NO_MODIFIERS = "1";
     programs = {
       qt5ct.enable = true;
       sway = {
@@ -62,6 +63,7 @@ in
       redshift-wayland
       rootbar
       slurp
+      #sommelier
       swaybg
       swayidle
       swaylock
@@ -75,6 +77,7 @@ in
       wf-recorder
       wlay
       wl-clipboard
+      wl-gammactl
       wldash
       wlr-randr
       wofi

@@ -31,7 +31,7 @@ with lib;
 
     services.avahi = {
       enable = true;
-      nssmdns = true;
+      #nssmdns = true;
       publish.domain = true;
       publish.enable = true;
     };
@@ -85,14 +85,13 @@ with lib;
       fractal
       freerdp
       gimp
-      google-chrome-dev
+      #google-chrome-dev
       kitty
       mpv
-      plex-mpv-shim
       gnome3.nautilus
       pavucontrol
       qemu
-      #spectral
+      spectral
       termite
       vscodium
 
@@ -108,6 +107,12 @@ with lib;
       arc-theme
       capitaine-cursors
       numix-icon-theme
+
+      discord
+      tor-browser-bundle-bin
+      minecraft
+      riot-desktop
+      slack
     ];
   };
 }

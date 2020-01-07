@@ -2,8 +2,12 @@
 set -euo pipefail
 set -x
 
-unset NIX_PATH
-unset NIXOS_CONFIG
+cd ~/code/nixpkgs
+git remote update
+git rebase nixpkgs/nixos-unstable
+sudo bash -c "ulimit -s 100000; nixos-rebuild switch"
+
+exit 0
 
 desktop="${1:-"sway"}"
 target="${1:-"$(hostname)-${desktop}"}"
@@ -14,3 +18,4 @@ sudo nix-env --set \
   "${toplevel}"
 
 sudo "${toplevel}/bin/switch-to-configuration" switch
+

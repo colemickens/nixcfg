@@ -10,7 +10,7 @@ let
     exec ${pkgs.latest.firefox-nightly-bin}/bin/firefox "''${@}"
   '';
 
-  useNightly = builtins.pathExists ../../overlays/nixpkgs-mozilla;
+  useNightly = true;
   firefoxPkgs = [ stable ] ++ lib.optionals useNightly [ nightly ];
 in
 {

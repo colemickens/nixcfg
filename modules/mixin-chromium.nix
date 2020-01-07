@@ -2,12 +2,12 @@
 
 let
   rev = "master";
-  nixpkgsChromiumSet = import (builtins.fetchTarball {
-    url = "https://github.com/colemickens/nixpkgs-chromium/archive/${rev}.tar.gz";
-  }) { pkgs = pkgs; };
+  #n = import (import ../imports/nixpkgs-chromium);
+  st = builtins.fetchTarball { url="https://github.com/colemickens/nixpkgs-chromium/archive/master.tar.gz"; };
+  n = import st;
 in
 {
   config = {
-    #environment.systemPackages = [ nixpkgsChromiumSet.chromium-git ];
+    environment.systemPackages = [ n.chromium-dev-wayland ];
   };
 }

@@ -15,7 +15,7 @@
       ENERGY_PERF_POLICY_ON_BAT=powersave
     '';
     powerManagement.enable = true;
-    services.upower.enable = true;
+    services.upower.enable = false; # fucking tired of it shutting down with hours of battery left
     
     #services.undervolt = {
     #  enable = true;

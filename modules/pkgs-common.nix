@@ -5,12 +5,13 @@ let
 in
 {
   environment.systemPackages = [] ++
-    #(with cachixpkgs; [
-    #  cachix
-    #]) ++
+    (with cachixpkgs; [
+      cachix
+    ]) ++
 
     (with pkgs; [
       bc
+      broot
       tmux
       bash bashCompletion
       zsh antibody

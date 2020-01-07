@@ -6,7 +6,6 @@
     "${modulesPath}/virtualisation/azure-image.nix"
     ../../modules/loremipsum-media/rclone-mnt.nix
     ../../modules/mixin-plex.nix
-    ../../modules/mixin-srht-cronjobs.nix
     ../../modules/user-cole.nix
   ];
 

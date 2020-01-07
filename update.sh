@@ -5,9 +5,10 @@ set -x
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
+export NIX_PATH="nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz"
+
 # keep track of what we build for the README
 pkgentries=(); nixpkgentries=();
-cache="colemickens"
 build_attr="${1:-"xeep-sway"}"
 
 function update() {
@@ -21,6 +22,7 @@ function update() {
   rev="$(nix eval --raw -f "${metadata}" rev)"
   date="$(nix eval --raw -f "${metadata}" revdate)"
   sha256="$(nix eval --raw -f "${metadata}" sha256)"
+  url="$(nix eval --raw -f "${metadata}" url)"
   skip="$(nix eval -f "${metadata}" skip || true)"
 
   newdate="${date}"
@@ -52,20 +54,7 @@ function update() {
       fi
       rm -rf "${d}"
 
-      # Update Sha256
-      # TODO: nix-prefetch without NIX_PATH?
-      if [[ "${typ}" == "pkgs" ]]; then
-        newsha256="$(NIX_PATH=nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz \
-          nix-prefetch \
-            -E "(import ./build.nix).nixosUnstable.${pkgname}" \
-            --rev "${newrev}" \
-            --output raw)"
-      elif [[ "${typ}" == "nixpkgs" ]]; then
-        # TODO: why can't nix-prefetch handle this???
-        url="$(nix eval --raw -f "${metadata}" url)"
-        newsha256="$(NIX_PATH=nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz \
-          nix-prefetch-url --unpack "${url}")"
-      fi
+      newsha256="$(nix-prefetch-url --unpack "${url}")"
 
       # TODO: do this with nix instead of sed?
       sed -i "s/${rev}/${newrev}/" "${metadata}"
@@ -73,61 +62,10 @@ function update() {
       sed -i "s/${sha256}/${newsha256}/" "${metadata}"
     fi
   fi
-
-  if [[ "${skip}" == "true" ]]; then
-    newdate="${newdate} (pinned)"
-  fi
-  if [[ "${typ}" == "pkgs" ]]; then
-    desc="$(nix eval --raw "(import ./build.nix).nixosUnstable.${pkgname}.meta.description")"
-    home="$(nix eval --raw "(import ./build.nix).nixosUnstable.${pkgname}.meta.homepage")"
-    pkgentries=("${pkgentries[@]}" "| [${pkgname}](${home}) | ${newdate} | ${desc} |");
-  elif [[ "${typ}" == "nixpkgs" ]]; then
-    nixpkgentries=("${nixpkgentries[@]}" "| ${pkgname} | ${newdate} |");
-  fi
 }
 
-function update_readme() {
-  replace="$(printf "<!--pkgs-->")"
-  replace="$(printf "%s\n| Package | Last Update | Description |" "${replace}")"
-  replace="$(printf "%s\n| ------- | ----------- | ----------- |" "${replace}")"
-  for p in "${pkgentries[@]}"; do
-    replace="$(printf "%s\n%s\n" "${replace}" "${p}")"
-  done
-  replace="$(printf "%s\n<!--pkgs-->" "${replace}")"
-
-  rg --multiline '(?s)(.*)<!--pkgs-->(.*)<!--pkgs-->(.*)' "README.md" \
-    --replace "\$1${replace}\$3" \
-      > README2.md; mv README2.md README.md
-
-  replace="$(printf "<!--nixpkgs-->")"
-  replace="$(printf "%s\n| Channel | Last Channel Commit Time |" "${replace}")"
-  replace="$(printf "%s\n| ------- | ------------------------ |" "${replace}")"
-  for p in "${nixpkgentries[@]}"; do
-    replace="$(printf "%s\n%s\n" "${replace}" "${p}")"
-  done
-  replace="$(printf "%s\n<!--nixpkgs-->" "${replace}")"
-  set -x
-
-  rg --multiline '(?s)(.*)<!--nixpkgs-->(.*)<!--nixpkgs-->(.*)' "README.md" \
-    --replace "\$1${replace}\$3" \
-      > README2.md; mv README2.md README.md
-}
-
-for p in nixpkgs/*; do
+for p in imports/*; do
   update "nixpkgs" "${p}"
 done
 
-for p in pkgs/*; do
-  update "nixpkgs" "${p}"
-done
-
-update_readme
-
-cachix push -w "${cache}" &
-CACHIX_PID="$!"
-trap "kill ${CACHIX_PID}" EXIT
-
-nix-build default.nix \
-  --no-out-link --keep-going \
-  --attr "${build_attr}" \
-  | cachix push "${cache}"
+sudo bash -c "ulimit -s 100000; nix-build default.nix --no-out-link --keep-going --attr ${build_attr}"

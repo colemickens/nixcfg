@@ -2,7 +2,7 @@
 
 let
   lib = pkgs.lib;
-  nixosHardware = import ../../pkgs/nixos-hardware;
+  nixosHardware = import ../../imports/nixos-hardware;
   hostname = "xeep";
 in
 {
@@ -11,7 +11,7 @@ in
 
     ../../modules/common.nix
     ../../modules/mixin-devenv.nix
-    ../../modules/mixin-intel-iris.nix
+    #../../modules/mixin-intel-iris.nix
     ../../modules/pkgs-common.nix
     ../../modules/pkgs-full.nix
     ../../modules/user-cole.nix
@@ -19,9 +19,9 @@ in
     ../../modules/profile-interactive.nix
     ../../modules/profile-gui.nix
 
-    #../../modules/mixin-docker.nix
+    ../../modules/mixin-docker.nix
     #../../modules/mixin-firecracker.nix
-    #../../modules/mixin-libvirt.nix
+    ../../modules/mixin-libvirt.nix
     #../../modules/mixin-home-assistant.nix
     ../../modules/mixin-mitmproxy.nix
     ../../modules/mixin-sshd.nix
@@ -39,8 +39,14 @@ in
   ];
 
   config = {
+    # TODO move to devenv
+    services.udev.packages = with pkgs; [ libsigrok ];
+
     system.stateVersion = "18.09"; # Did you read the comment?
     services.timesyncd.enable = true;
+
+    # ??
+    services.tor.enable = true;
 
     documentation.nixos.enable = false;
 
@@ -110,9 +116,14 @@ in
     networking = {
       hostId = "ef66d560";
       hostName = hostname;
-      firewall.enable = true;
+      firewall = {
+        enable = true;
+        allowedTCPPorts = [ 5900 ];
+        checkReversePath = "loose";
+      };
       networkmanager.enable = true;
       networkmanager.wifi.backend = "iwd";
+      wireguard.enable = true;
     };
     services.resolved.enable = true;
 

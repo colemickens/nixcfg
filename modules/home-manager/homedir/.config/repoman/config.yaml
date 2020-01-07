@@ -1,0 +1,42 @@
+config:
+  default_location: ~/.local/share/repoman/enlistments
+enlistments:
+- blog:
+- cfdyndns:
+- chefi:
+- dotfiles:
+- gsync:
+- imgui-rs:
+- ktails:
+- macOS-simple-KVM:
+- nixcfg:
+- nixpkgs:
+  - root: ~/.local/share/repoman/enlistments/nixpkgs # implicit
+  - remotes:
+      origin: git@github.com:colemickens/nixpkgs
+      nixpkgs: https://github.com/nixos/nixpkgs
+      volth: https://github.com/volth/nixpkgs
+    worktrees:
+    - name: nixpkgs-cmpkgs
+      branch: cmpkgs
+      upstream: origin/cmpkgs
+    - name: nixpkgs-chromium-git
+      branch: chromium-git
+      upstream: volth/chromium-git
+- overlays
+  - sub_enlistments:
+      - nixpkgs-mozilla
+      - nixpkgs-wayland
+- packet-cli:
+- packet-utils:
+- repoman:
+- rucoin: 
+- secretkeeper:
+
+
+
+
+# TODO:
+#   when the tool notices that we've changed state and removed
+#   something that is unsynced, warn the user or block it ??
+
