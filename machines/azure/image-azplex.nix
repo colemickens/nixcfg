@@ -25,7 +25,7 @@
   security.sudo.wheelNeedsPassword = false;
     
   environment.systemPackages = with pkgs; [
-    git neovim jq file htop ripgrep cachix wget curl tmux
+    git neovim jq file htop ripgrep wget curl tmux
   ];
 
   nix.allowedUsers = [ "root" "@wheel" "azureuser" "cole" ];

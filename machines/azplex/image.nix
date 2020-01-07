@@ -12,19 +12,19 @@
 
   nix.nixPath = [
     "nixpkgs=/home/cole/code/nixpkgs"
-    "nixos-config=/home/cole/code/machines/azplex/image.nix"
+    "nixos-config=/home/cole/code/nixcfg/machines/azplex/image.nix"
   ];
 
   virtualisation.azureImage.diskSize = 2500;
-  virtualisation.docker.enable = true;
 
   system.stateVersion = "19.09";
   networking.hostName = "azplex";
+    #networking.nameservers = [ "168.63.129.16" ];  # this shouldn't be needed
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   #environment.noXlibs = true;
-  #documentation.enable = false;
-  #documentation.nixos.enable = false;
+  documentation.enable = false;
+  documentation.nixos.enable = false;
 
   services.openssh.passwordAuthentication = false;
   programs.mosh.enable = true;
@@ -32,7 +32,7 @@
   security.sudo.wheelNeedsPassword = false;
     
   environment.systemPackages = with pkgs; [
-    git neovim jq file htop ripgrep cachix wget curl tmux
+    git neovim jq file htop ripgrep wget curl tmux
   ];
 
   nix.allowedUsers = [ "root" "@wheel" "azureuser" "cole" ];
