@@ -8,7 +8,7 @@ let lib = pkgs.lib; in
 
     ../../modules/mixin-unifi.nix
     ../../modules/mixin-plex-mpv.nix
-    ../../modules/mixin-home-assistant.nix
+    #../../modules/mixin-home-assistant.nix
     ../../modules/user-cole.nix
     "${modulesPath}/installer/cd-dvd/sd-image-raspberrypi4-new.nix"
   ];
