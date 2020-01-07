@@ -17,12 +17,13 @@ let lib = pkgs.lib; in
     services.openssh.enable = lib.mkForce true;
     nix.nixPath = [
       "nixpkgs=/home/cole/code/nixpkgs"
-      "nixos-config=/home/cole/code/nixcfg/machines/raspverry/default.nix"
+      "nixos-config=/home/cole/code/nixcfg/machines/raspberry/default.nix"
     ];
 
     networking.hostName = "raspberry";
 
     environment.systemPackages = with pkgs; [
+      neovim
       ripgrep
       tmux htop
       plex-mpv-shim sway
