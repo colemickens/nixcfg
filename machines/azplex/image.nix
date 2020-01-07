@@ -6,10 +6,17 @@
     "${modulesPath}/virtualisation/azure-image.nix"
     ../../modules/loremipsum-media/rclone-mnt.nix
     ../../modules/mixin-plex.nix
+    ../../modules/mixin-srht-cronjobs.nix
     ../../modules/user-cole.nix
   ];
 
+  nix.nixPath = [
+    "nixpkgs=/home/cole/code/nixpkgs"
+    "nixos-config=/home/cole/code/machines/azplex/image.nix"
+  ];
+
   virtualisation.azureImage.diskSize = 2500;
+  virtualisation.docker.enable = true;
 
   system.stateVersion = "19.09";
   networking.hostName = "azplex";
