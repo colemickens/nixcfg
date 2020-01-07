@@ -85,13 +85,14 @@ with lib;
       fractal
       freerdp
       gimp
+      google-chrome-dev
       kitty
       mpv
       plex-mpv-shim
       gnome3.nautilus
       pavucontrol
       qemu
-      spectral
+      #spectral
       termite
       vscodium
 
