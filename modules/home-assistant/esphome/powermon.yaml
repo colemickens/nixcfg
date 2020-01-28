@@ -1,0 +1,116 @@
+substitutions:
+  disp_name: 6C
+  update_time: 10s
+  current_cal: '32498'
+
+esphome:
+  name: iot_powermon
+  platform: ESP32
+  board: nodemcu-32s
+
+wifi:
+  ssid: "chimera-iot"
+  password: "fafc996b949b6d53800"
+
+  manual_ip:
+    static_ip: 192.168.69.100
+    gateway: 192.168.1.1
+    subnet: 255.255.0.0
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Powermon Fallback Hotspot"
+    password: "d3ZBU8Kih1RN"
+
+captive_portal:
+
+mqtt:
+  broker: 192.168.1.117
+  username: DVES_USER
+  password: DVES_PASSWORD
+
+api:
+  password: "fafc996b949b6d53800"
+
+logger:
+
+ota:
+
+spi:
+  clk_pin: 18
+  miso_pin: 19
+  mosi_pin: 23
+
+sensor:
+  - platform: wifi_signal
+    name: ${disp_name} WiFi
+    update_interval: 60s
+#IC1
+  - platform: atm90e32
+    cs_pin: 5
+    phase_a:
+      voltage:
+        name: ${disp_name} Volts A
+        id: ic1Volts
+        accuracy_decimals: 1
+#        filters:
+#          - multiply: 2.0
+      current:
+        name: ${disp_name} CT1 Amps
+        id: ct1Amps
+      #gain_voltage: 7305
+      gain_voltage: 7305
+# Voltage using a 9VAC power transformer
+# Note: If you can not get the voltage correct with the highest gain of 65535, uncomment the 2.0 multiply filter above and lower the gain as needed
+      gain_ct: ${current_cal}
+    phase_b:
+      current:
+        name: ${disp_name} CT2 Amps
+        id: ct2Amps
+      gain_ct: ${current_cal}
+    phase_c:
+      current:
+        name: ${disp_name} CT3 Amps
+        id: ct3Amps
+      gain_ct: ${current_cal}
+    frequency:
+      name: ${disp_name} Freq A
+    line_frequency: 60Hz
+    gain_pga: 1X
+    update_interval: ${update_time}
+#IC2
+  - platform: atm90e32
+    cs_pin: 4
+    phase_a:
+      voltage:
+        name: ${disp_name} Volts B
+        id: ic2Volts
+        accuracy_decimals: 1
+      current:
+        name: ${disp_name} CT4 Amps
+        id: ct4Amps
+      gain_voltage: 7305
+      gain_ct: ${current_cal}
+    phase_b:
+      current:
+        name: ${disp_name} CT5 Amps
+        id: ct5Amps
+      gain_ct: ${current_cal}
+    phase_c:
+      current:
+        name: ${disp_name} CT6 Amps
+        id: ct6Amps
+      gain_ct: ${current_cal}
+    frequency:
+      name: ${disp_name} Freq B
+    line_frequency: 60Hz
+    gain_pga: 1X
+    update_interval: ${update_time}
+
+switch:
+  - platform: restart
+    name: ${disp_name} Restart  
+
+time:
+  - platform: sntp
+    id: sntp_time
