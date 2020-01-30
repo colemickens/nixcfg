@@ -1,0 +1,35 @@
+substitutions:
+  disp_name: 6C
+  update_time: 10s
+  current_cal: '32498'
+
+  ipnum: "110"
+  devname: desk${ipnum}
+
+esphome:
+  name: ${devname}
+  platform: ESP32
+  board: nodemcu-32s
+
+wifi:
+  ssid: "chimera-iot"
+  password: "fafc996b949b6d53800"
+
+  manual_ip:
+    static_ip: 192.168.69.${ipnum}
+    gateway: 192.168.1.1
+    subnet: 255.255.0.0
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Powermon Fallback Hotspot"
+    password: "d3ZBU8Kih1RN"
+
+captive_portal:
+
+api:
+  password: "fafc996b949b6d53800"
+
+logger:
+
+ota:

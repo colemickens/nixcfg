@@ -1,5 +1,9 @@
+substitutions:
+  ipnum: "101"
+  devname:  mh_led${ipnum}
+
 esphome:
-  name: iot_mh_led
+  name: ${devname}
   platform: ESP8266
   board: esp8285
 
@@ -22,21 +26,22 @@ captive_portal:
 api:
   password: "fafc996b949b6d53800"
 
-mqtt:
-  broker: 192.168.1.117
-  username: DVES_USER
-  password: DVES_PASSWORD
-
 logger:
 
 ota:
 
 light:
   - platform: rgb
-    name: "iot_mh_led"
+    name: "${devname}"
     red: mh_led_1
     green: mh_led_2
     blue: mh_led_3
+    effects:
+      - random:
+          name: Random Effect With Custom Values
+          transition_length: 8s
+          update_interval: 11s
+
 output:
   - platform: esp8266_pwm
     id: mh_led_1
