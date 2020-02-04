@@ -13,5 +13,6 @@
       uid = 1000;
       group = "cole";
     };
+    nix.trustedUsers = [ "cole" ];
   };
 }
