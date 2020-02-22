@@ -2,20 +2,18 @@
 set -euo pipefail
 set -x
 
-cd ~/code/nixpkgs
-git remote update
-git rebase nixpkgs/nixos-unstable
+#(
+#  cd ~/code/nixpkgs
+#  git remote update
+#  git rebase nixpkgs/nixos-unstable
+#)
+
+# 1. use ./nixbuild.sh first so that we get caching benefits
+#    even on a blank system
+# 2. we're back to using <nixpkgs/nixos> because my other methods seem
+#    to result in a lot of copies of nixpkgs being copied into the store.
+
+./nixbuild.sh '<nixpkgs/nixos>' -A config.system.build.toplevel
+
+# we might still need ulimit
 sudo bash -c "ulimit -s 100000; nixos-rebuild switch"
-
-exit 0
-
-desktop="${1:-"sway"}"
-target="${1:-"$(hostname)-${desktop}"}"
-toplevel=$(./nixbuild.sh default.nix -A "${target}")
-
-sudo nix-env --set \
-  --profile "/nix/var/nix/profiles/system" \
-  "${toplevel}"
-
-sudo "${toplevel}/bin/switch-to-configuration" switch
-

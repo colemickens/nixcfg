@@ -68,4 +68,7 @@ for p in imports/*; do
   update "nixpkgs" "${p}"
 done
 
-sudo bash -c "ulimit -s 100000; nix-build default.nix --no-out-link --keep-going --attr ${build_attr}"
+./nixbuild.sh default.nix \
+  --no-out-link \
+  --keep-going \
+  --attr "${build_attr}"

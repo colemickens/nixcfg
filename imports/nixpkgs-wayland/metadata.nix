@@ -2,7 +2,7 @@
   url = "https://github.com/colemickens/nixpkgs-wayland/archive/master.tar.gz";
   repo_git = "https://github.com/colemickens/nixpkgs-wayland";
   branch = "master";
-  rev = "de5561f14162f46c33b89efd6a7a94601bd3bed2";
-  sha256 = "1h2rzkyd3d93n6aja3s0lzipk8h22dg3gbris11wy5fvpsljw9a5";
-  revdate = "2020-02-10 01:02:51 +0000";
+  rev = "5219af1f4f8edaadeb1e41053c27a420140cdc80";
+  sha256 = "1797r14dk6z7xq69ji3zbk13j7fri30jyrbsa3wg794786fx321y";
+  revdate = "2020-02-17 19:19:15 -0800";
 }
