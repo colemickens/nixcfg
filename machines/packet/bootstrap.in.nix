@@ -33,6 +33,9 @@ in
   config = {
     environment.systemPackages = with pkgs; [ tmux ];
     nix.trustedUsers = [ "root" "cole" ];
+
+    security.sudo.wheelNeedsPassword = false;
+
     systemd.services.buildworld = {
       description = "buildworld";
       path = with pkgs; [
