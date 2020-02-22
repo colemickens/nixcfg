@@ -10,6 +10,7 @@ export NIX_PATH="nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable
 # keep track of what we build for the README
 pkgentries=(); nixpkgentries=();
 build_attr="${1:-"xeep-sway"}"
+cachix="colemickens"
 
 function update() {
   typ="${1}"
@@ -71,4 +72,5 @@ done
 ./nixbuild.sh default.nix \
   --no-out-link \
   --keep-going \
-  --attr "${build_attr}"
+  --attr "${build_attr}" \
+    | cachix push "${cachix}"
