@@ -12,6 +12,11 @@ in
       ];
     };
     environment.variables.WLR_DRM_NO_MODIFIERS = "1";
+
+    #xdg.portal.enable = true;
+    #xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
+    #xdg.portal.gtkUsePortal = true;
+
     programs = {
       qt5ct.enable = true;
       sway = {

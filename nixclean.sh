@@ -12,4 +12,3 @@ nix-env \
 sudo nix-store --gc
 
 sudo nix-store --optimize
-

@@ -11,7 +11,6 @@ in
 
     ../../modules/common.nix
     ../../modules/mixin-devenv.nix
-    #../../modules/mixin-intel-iris.nix
     ../../modules/pkgs-common.nix
     ../../modules/pkgs-full.nix
     ../../modules/user-cole.nix
@@ -21,12 +20,13 @@ in
 
     ../../modules/mixin-docker.nix
     #../../modules/mixin-firecracker.nix
+    ../../modules/mixin-intel-iris.nix
     ../../modules/mixin-libvirt.nix
-    #../../modules/mixin-home-assistant.nix
+    #../../modules/mixin-plex-mpv.nix
     ../../modules/mixin-mitmproxy.nix
+    ../../modules/mixin-plex.nix
     ../../modules/mixin-sshd.nix
     #../../modules/mixin-ipfs.nix
-    #../../modules/mixin-unifi.nix
     #../../modules/mixin-yubikey.nix
 
     ../../modules/loremipsum-media/rclone-cmd.nix

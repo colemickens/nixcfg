@@ -12,10 +12,13 @@ pkgs.stdenv.mkDerivation {
   name = "devenv";
 
   nativeBuildInputs = with pkgs; [
-    latest.rustChannels.stable.rust
+    latest.rustChannels.nightly.rust
     ncurses
     pkgconfig
     nodejs
+    go
+    lldb
+    python3
   ];
 
   buildInputs = with pkgs; [

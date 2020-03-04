@@ -23,7 +23,7 @@ rec {
       --drive-skip-gdocs \
       --vfs-read-chunk-size=64M \
       --vfs-read-chunk-size-limit=2048M \
-      --vfs-cache-mode full \
+      --vfs-cache-mode writes \
       --buffer-size=128M \
       --max-read-ahead=256M \
       --poll-interval=1m \

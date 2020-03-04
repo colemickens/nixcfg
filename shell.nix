@@ -8,10 +8,6 @@ pkgs.stdenv.mkDerivation {
   nativeBuildInputs = []
   ++ (with cachixpkgs; [ cachix ])
   ++ (with pkgs; [
-    google-cloud-sdk
-
-    azure-cli
-    azure-storage-azcopy
     bash
     cacert
     curl
