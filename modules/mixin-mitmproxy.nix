@@ -6,6 +6,7 @@ let
 in
 {
   config = {
+    environment.systemPackages = [ pkgs.mitmproxy ];
     security.pki.certificateFiles =
       if (lib.pathExists "${crtFilePath}")
         then [ "${crtFile}" ]
