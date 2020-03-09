@@ -104,6 +104,7 @@ with lib;
       riot-desktop
       slack
       spotify
+      ripcord
     ];
   };
 }
