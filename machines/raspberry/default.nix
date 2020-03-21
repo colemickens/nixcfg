@@ -17,6 +17,7 @@ in
     ../../modules/profile-interactive.nix
     ../../modules/user-cole.nix
 #    ../../modules/profile-sway.nix
+    ../../modules/profile-sway-minimal.nix
 
     ../../modules/mixin-unifi.nix
     ../../modules/mixin-sshd.nix
@@ -27,7 +28,7 @@ in
     ../../modules/hidden-gateway
     ../../modules/wireguard
 
-    "${modulesPath}/installer/cd-dvd/sd-image-raspberrypi4-new.nix"
+    "${pkgs}/nixos/modules/installer/cd-dvd/sd-image-raspberrypi4-new.nix"
   ];
 
   config = {
