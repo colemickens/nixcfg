@@ -70,7 +70,8 @@ with lib;
       calibre
       evince
       fractal
-      freerdp
+      #freerdp
+      wlfreerdp
       gimp
       google-chrome-dev
       kitty
@@ -80,6 +81,7 @@ with lib;
       qemu
       spectral
       termite
+      thunderbird
       vscodium
 
       # utils

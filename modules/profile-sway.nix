@@ -88,7 +88,6 @@ in
       wofi
       wtype
       #wxrc
-      xdg-desktop-portal-wlr
     ];
   };
 }
