@@ -41,7 +41,7 @@ in rec {
     nixpkgs = ../nixpkgs;
     extraModules = [ ./machines/rpikexec/default.nix ];
     system = "aarch64-linux";
-  }).config.system.build.kexec_tarball;
+  }).config.system.build.fullball;
 
   rpiboot = (mkSystem rec {
     nixpkgs = ../nixpkgs;
