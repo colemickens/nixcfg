@@ -5,7 +5,7 @@ with lib;
 {
   imports = [
     ./mixin-firefox.nix
-    ./mixin-chromium.nix
+    #./mixin-chromium.nix
   ];
   config = {
     hardware = {
@@ -26,6 +26,19 @@ with lib;
       vaapiIntel = pkgs.vaapiIntel.override {
         enableHybridCodec = true;
       };
+    };
+
+    gtk = {
+      enable = true;
+      font = { name = "Noto Sans 11"; package = pkgs.noto-fonts; };
+      iconTheme = { name = "Numix"; package = pkgs.numix-icon-theme; };
+      cursorTheme = { name = "Adwaita"; package = pkgs.gnome3.adwaita-icon-theme; };
+      theme = { name = "Arc-Dark"; package = pkgs.arc-theme; };
+    };
+    qt = {
+      font = { name = "Noto Sans,10,-1,5,50,0,0,0,0,0,Regular"; package = pkgs.noto-fonts; };
+      iconTheme = { name = "Numix"; package = pkgs.numix-icon-theme; };
+      style = { name = "Breeze"; package = pkgs.breeze-qt5; };
     };
 
     services.avahi = {
@@ -83,6 +96,8 @@ with lib;
       termite
       thunderbird
       vscodium
+
+      hicolor-icon-theme
 
       # utils
       brightnessctl

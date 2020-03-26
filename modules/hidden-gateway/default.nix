@@ -6,14 +6,14 @@
   #mkService "web.abcd.onion" ":3000"
 #in
 let
-  oh = "pslivaruemhjwytgi7apek6jkearbmpam54e6pvv2wlxgalve5ilefyd.onion";
+  oh = "foo.onion";
   internal_port = 9901;
 in
 {
   config = {
     networking.firewall.allowedTCPPorts = [ internal_port ];
     services.nginx = {
-      enable = true;
+      enable = false;
       #recommendedGzipSettings = true;
       #recommendedOptimisation = true;
       #recommendedProxySettings = true;
@@ -46,20 +46,13 @@ in
     services.tor = {
       enable = true;
       hiddenServices = {
-        "dash" = {
-          name = "dash";
+        "ssh" = {
+          name = "ssh";
           map = [{
-            port = "80";
-            toPort = toString internal_port;
+            port = "22";
+            toPort = "22";
           }];
-          version = 3;
-        };
-        "secretplans" = {
-          name = "secretplans";
-          map = [{
-            port = "80";
-            toPort = "9902";
-          }];
+          privateKeyPath = "/home/cole/hs_ed25519_secret_key";
           version = 3;
         };
       };
