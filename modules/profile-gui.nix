@@ -28,18 +28,18 @@ with lib;
       };
     };
 
-    gtk = {
-      enable = true;
-      font = { name = "Noto Sans 11"; package = pkgs.noto-fonts; };
-      iconTheme = { name = "Numix"; package = pkgs.numix-icon-theme; };
-      cursorTheme = { name = "Adwaita"; package = pkgs.gnome3.adwaita-icon-theme; };
-      theme = { name = "Arc-Dark"; package = pkgs.arc-theme; };
-    };
-    qt = {
-      font = { name = "Noto Sans,10,-1,5,50,0,0,0,0,0,Regular"; package = pkgs.noto-fonts; };
-      iconTheme = { name = "Numix"; package = pkgs.numix-icon-theme; };
-      style = { name = "Breeze"; package = pkgs.breeze-qt5; };
-    };
+    #gtk = {
+    #  enable = true;
+    #  font = { name = "Noto Sans 11"; package = pkgs.noto-fonts; };
+    #  iconTheme = { name = "Numix"; package = pkgs.numix-icon-theme; };
+    #  cursorTheme = { name = "Adwaita"; package = pkgs.gnome3.adwaita-icon-theme; };
+    #  theme = { name = "Arc-Dark"; package = pkgs.arc-theme; };
+    #};
+    #qt = {
+    #  font = { name = "Noto Sans,10,-1,5,50,0,0,0,0,0,Regular"; package = pkgs.noto-fonts; };
+    #  iconTheme = { name = "Numix"; package = pkgs.numix-icon-theme; };
+    #  style = { name = "Breeze"; package = pkgs.breeze-qt5; };
+    #};
 
     services.avahi = {
       enable = true;
