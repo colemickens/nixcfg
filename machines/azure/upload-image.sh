@@ -6,7 +6,7 @@ attr="${1:-"azbasic"}"
 
 nix-build ./examples/basic/image.nix --out-link "azure"
 
-group="nixos-images"
+group="nixos-images2"
 location="westus2"
 img_name="azure-image-todo-makethisbetter" # TODO: clean this up
 img_file="$(readlink -f ./azure/disk.vhd)" # TODO: this doesn't feel great either

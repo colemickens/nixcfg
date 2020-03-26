@@ -4,7 +4,7 @@ set -x
 
 image="${1}"
 location="westus2"
-group="nixos-test-instance"
+group="nixos-test-instance2"
 vm_size="Standard_D2s_v3";  os_size=42;
 
 # ensure group
