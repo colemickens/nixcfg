@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, modulesPath, pkgs, ... }:
 let
   download_store = pkgs.writeTextFile {
     executable = true;
@@ -25,10 +25,8 @@ let
     '';
   };
 in {
-  imports = [
-    "/home/colemickens/code/nixpkgs/nixos/modules/installer/cd-dvd/sd-image-raspberrypi4.nix"
-  ];
 
+  imports = [ "${modulesPath}/installer/cd-dvd/sd-image-raspberrypi4.nix" ];
   config = {
     # boot.initrd.postMountCommands = ''
     #   mkdir -p /mnt-root/root/.ssh/
@@ -94,10 +92,25 @@ in {
       ];
     };
 
-    boot.initrd.network.ssh.enable = true;
-    boot.initrd.network.ssh.authorized_keys = [
-      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC9YAN+P0umXeSP/Cgd5ZvoD5gpmkdcrOjmHdonvBbptbMUbI/Zm0WahBDK0jO5vfJ/C6A1ci4quMGCRh98LRoFKFRoWdwlGFcFYcLkuG/AbE8ObNLHUxAwqrdNfIV6z0+zYi3XwVjxrEqyJ/auZRZ4JDDBha2y6Wpru8v9yg41ogeKDPgHwKOf/CKX77gCVnvkXiG5ltcEZAamEitSS8Mv8Rg/JfsUUwULb6yYGh+H6RECKriUAl9M+V11SOfv8MAdkXlYRrcqqwuDAheKxNGHEoGLBk+Fm+orRChckW1QcP89x6ioxpjN9VbJV0JARF+GgHObvvV+dGHZZL1N3jr8WtpHeJWxHPdBgTupDIA5HeL0OCoxgSyyfJncMl8odCyUqE+lqXVz+oURGeRxnIbgJ07dNnX6rFWRgQKrmdV4lt1i1F5Uux9IooYs/42sKKMUQZuBLTN4UzipPQM/DyDO01F0pdcaPEcIO+tp2U6gVytjHhZqEeqAMaUbq7a6ucAuYzczGZvkApc85nIo9jjW+4cfKZqV8BQfJM1YnflhAAplIq6b4Tzayvw1DLXd2c5rae+GlVCsVgpmOFyT6bftSon/HfxwBE4wKFYF7fo7/j6UbAeXwLafDhX+S5zSNR6so1epYlwcMLshXqyJePJNhtsRhpGLd9M3UqyGDAFoOQ== (none)"
-    ];
+    networking.useDHCP = true;
+    networking.interfaces."eth0".useDHCP = true;
+    boot.initrd.network.ssh = {
+      enable = true;
+      authorized_keys = [
+        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCv76jivnmT678kYdL8J7yVVxhPhxyfL3Xp4jlCaEFded1uT+FXqBmYR5foOdB56L/QM/uCTWf0mbrwOYwYpkBx6cJTJqDMTlW0Mbys/UhEJo2U6U6fBSewuseiRRcUtvP+gOvsr1MmMi77xAHUkvDbeR1bLk9Eq2JoS5JMwD7T0ih2QVG3xheCgZml8avqfSXSDWOfqrui9VLzaxYhGe9M0Iv6yUA8gF8G2+iY9RkUBXvpCGjUlt3nd9yY/u4qRPsdCASt5l2AA61SUpA113QRkGfjAi4MDGwhnlUTYS0tawjIDrQqVuYqRp+1f0naKRCSDTXv87JB57GV9gbnFfmtzmFn2eTkJ7+PufiK7p763z6QIKfY8Qx9SBpOwKUi17n4y8VAXhsuOhiYmVapTx/QIIG8kag77NbxpD4bi+W3EufoSgi0ZS2CPBnzXxVENA/8Md+rWo2o8xhMmgMXZddxcEfZ00GvQSuGhtZApV6epIAzzrKckZrjwlmGJhk+uus= cole@xeep"
+      ];
+      hostECDSAKey = ''
+        -----BEGIN OPENSSH PRIVATE KEY-----
+        b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAaAAAABNlY2RzYS
+        1zaGEyLW5pc3RwMjU2AAAACG5pc3RwMjU2AAAAQQQDsFTxxSVrXx6Uovjgh4b0/ceSABde
+        vVOtK0VwMFhlpcf0VEV5686Mmue1vtJX4L0uHKpsJtEBW8QJ/VhVnVn7AAAAqBPcyGcT3M
+        hnAAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAOwVPHFJWtfHpSi
+        +OCHhvT9x5IAF169U60rRXAwWGWlx/RURXnrzoya57W+0lfgvS4cqmwm0QFbxAn9WFWdWf
+        sAAAAhAO3aXAcuyXdQph+8HI3k2jAN07p9n66R051tsJnooLOPAAAACWNvbGVAeGVlcAEC
+        AwQFBg==
+        -----END OPENSSH PRIVATE KEY-----
+      '';
+    };
 
     # we must download and place squashfs
     # at the right time?
@@ -118,7 +131,7 @@ in {
 
     boot.initrd.availableKernelModules = [ "squashfs" "overlay" ];
 
-    boot.initrd.kernelModules = [ "loop" "overlay" ];
+    boot.initrd.kernelModules = [ "loop" "overlay" "bcmgenet" ];
 
     # Closures to be copied to the Nix store, namely the init
     # script and the top-level system configuration directory.

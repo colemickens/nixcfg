@@ -9,14 +9,13 @@ let
   external_range = "192.168.1.0/24";
   internalIP = "192.168.2.1";
   internal_range = "192.168.2.0/24";
-in
-{
+in {
   imports = [
     ../../modules/common.nix
-#    ../../modules/pkgs-common.nix
+    #    ../../modules/pkgs-common.nix
     ../../modules/profile-interactive.nix
     ../../modules/user-cole.nix
-#    ../../modules/profile-sway.nix
+    #    ../../modules/profile-sway.nix
     ../../modules/profile-sway-minimal.nix
 
     ../../modules/mixin-unifi.nix
@@ -28,7 +27,7 @@ in
     ../../modules/hidden-gateway
     ../../modules/wireguard
 
-    "${pkgs}/nixos/modules/installer/cd-dvd/sd-image-raspberrypi4-new.nix"
+    "${modulesPath}/installer/cd-dvd/sd-image-raspberrypi4-new.nix"
   ];
 
   config = {
@@ -44,17 +43,22 @@ in
     environment.systemPackages = with pkgs; [
       #neovim
       ripgrep
-      tmux htop
-      alsaTools alsaUtils pulsemixer
-      git-crypt git
+      tmux
+      htop
+      alsaTools
+      alsaUtils
+      pulsemixer
+      git-crypt
+      git
     ];
 
     ##############################
     networking = {
       wireless.enable = false;
-      interfaces.eth0.ipv4.addresses = [
-        { address = "192.168.1.2"; prefixLength = 16; }
-      ];
+      interfaces.eth0.ipv4.addresses = [{
+        address = "192.168.1.2";
+        prefixLength = 16;
+      }];
       defaultGateway = "192.168.1.1";
       nameservers = [ "192.168.1.1" ];
     };
