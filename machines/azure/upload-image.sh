@@ -2,11 +2,14 @@
 set -euo pipefail
 set -x
 
-attr="${1:-"azbuildworld"}"
+attr="${1:-"azbasic"}"
 
-nix-build ../../default.nix -A "${attr}" --out-link "azure"
+nix-build ./examples/basic/image.nix --out-link "azure"
 
-source ./common.sh
+group="nixos-images"
+location="westus2"
+img_name="azure-image-todo-makethisbetter" # TODO: clean this up
+img_file="$(readlink -f ./azure/disk.vhd)" # TODO: this doesn't feel great either
 
 if ! az group show -n "${group}" &>/dev/null; then
   az group create --name "${group}" --location "${location}"
