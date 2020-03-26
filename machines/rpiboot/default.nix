@@ -67,6 +67,8 @@ in {
       options = [ "mode=0755" ];
     };
 
+    sdImage.compressImage = false;
+
     # In stage 1, mount a tmpfs on top of /nix/store (the squashfs
     # image) to make this a live CD.
     fileSystems."/nix/.ro-store" = {
