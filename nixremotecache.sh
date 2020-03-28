@@ -9,7 +9,7 @@ cachixkey="$(gopass show websites/cachix.org/gh | grep cachix_key_colemickens | 
 # scp: copy derivations to server
 # ssh: env CACHIX_KEY="" build derivation | cachix push
 
-drv="$(nix-instantiate -A rpiboot)"
+drv="$(nix-instantiate -A raspberry)"
 
 # you know what, NO, I'm not using
 # nix-copy-closure
@@ -33,7 +33,21 @@ remotetmp="$(ssh "${remote}" mkdir -p "${dst}")"
 rsync -avh "${dst}/" "${remote}:${dst}"
 
 ssh "${remote}" "nix copy --experimental-features 'nix-command ca-references' --from \"file://${dst}\" \"${drv}\""
-ssh "${remote}" "env CACHIX_KEY=\"${cachixkey}\" nix-build ${drv} | cachix push"
 
-ssh "${remote}" "rm -rf '${dst}'"
-ssh "${remote}" "nix-store --delete -r '${drv}'"
+#    -f 'https://api.cachix.org/api/v1/install' \
+#    -f 'https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz' \
+#ssh "${remote}" "\
+# env CACHIX_KEY=\"${cachixkey}\" nix-build ${drv} \
+# | nix run -v --experimental-features 'nix-command ca-references' -f 'https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz' cachix --command 'cachix push colemickens'"
+out="$(ssh "${remote}" nix-build "${drv}")"
+
+dst2="/tmp/storeout"
+ssh "${remote}" "nix  --experimental-features 'nix-command ca-references' copy --to 'file://${dst2}' '${out}'"
+mkdir -p "${dst2}/"
+rsync -avh "${remote}:${dst2}/" "${dst}"
+nix copy --from "${dst2}" "${out}"
+
+#ssh "${remote}" "rm -rf '${dst}'"
+#ssh "${remote}" "rm -rf '${dst2}'"
+#ssh "${remote}" "nix-store --delete '${drv}'"
+#ssh "${remote}" "nix-store --delete '${out}'"

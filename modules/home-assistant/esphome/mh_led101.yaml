@@ -7,18 +7,21 @@ esphome:
   platform: ESP8266
   board: esp8285
 
+
+### START COMMON (TODO extract, make sure interpolation happens after concat)
+
 wifi:
   ssid: "chimera-iot"
   password: "fafc996b949b6d53800"
 
   manual_ip:
-    static_ip: 192.168.69.101
+    static_ip: 192.168.69.${ipnum}
     gateway: 192.168.1.1
     subnet: 255.255.0.0
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "Powermon Fallback Hotspot"
+    ssid: "ESPHome Fallback ${devname}"
     password: "d3ZBU8Kih1RN"
 
 captive_portal:
@@ -29,6 +32,9 @@ api:
 logger:
 
 ota:
+
+### END COMMON
+
 
 light:
   - platform: rgb

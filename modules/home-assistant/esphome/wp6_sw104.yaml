@@ -7,6 +7,8 @@ esphome:
   platform: ESP8266
   board: esp8285
 
+### START COMMON (TODO extract, make sure interpolation happens after concat)
+
 wifi:
   ssid: "chimera-iot"
   password: "fafc996b949b6d53800"
@@ -18,7 +20,7 @@ wifi:
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "Powermon Fallback Hotspot"
+    ssid: "ESPHome Fallback ${devname}"
     password: "d3ZBU8Kih1RN"
 
 captive_portal:
@@ -29,6 +31,10 @@ api:
 logger:
 
 ota:
+
+### END COMMON
+
+# GOSUND WP6 NOTE: I don't think the LEDs are configured correctly.
 
 binary_sensor:
   - platform: gpio

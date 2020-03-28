@@ -12,10 +12,8 @@ let
 in {
   imports = [
     ../../modules/common.nix
-    #    ../../modules/pkgs-common.nix
     ../../modules/profile-interactive.nix
     ../../modules/user-cole.nix
-    #    ../../modules/profile-sway.nix
     ../../modules/profile-sway-minimal.nix
 
     ../../modules/mixin-unifi.nix
@@ -27,29 +25,30 @@ in {
     ../../modules/hidden-gateway
     ../../modules/wireguard
 
-    "${modulesPath}/installer/cd-dvd/sd-image-raspberrypi4-new.nix"
+    ./sd-image-raspberrypi4-new.nix
   ];
 
   config = {
-    nix.nixPath = [
-      "nixpkgs=/home/cole/code/nixpkgs"
-      "nixos-config=/home/cole/code/nixcfg/machines/raspberry/default.nix"
-    ];
+    nix.nixPath = [ ];
 
     documentation.nixos.enable = false;
 
     networking.hostName = "raspberry";
 
+    # TODO: oh, I didn't know uboot was a separate option?
+    #boot.loader.raspberryPi.uboot.configurationLimit = 2;
+
     environment.systemPackages = with pkgs; [
       #neovim
+      file
       ripgrep
       tmux
       htop
-      alsaTools
-      alsaUtils
-      pulsemixer
-      git-crypt
-      git
+      #alsaTools
+      #alsaUtils
+      #pulsemixer
+      #git-crypt
+      #git
     ];
 
     ##############################

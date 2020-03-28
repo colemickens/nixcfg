@@ -16,6 +16,8 @@ esphome:
   platform: ESP32
   board: nodemcu-32s
 
+### START COMMON (TODO extract, make sure interpolation happens after concat)
+
 wifi:
   ssid: "chimera-iot"
   password: "fafc996b949b6d53800"
@@ -27,7 +29,7 @@ wifi:
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "Powermon Fallback Hotspot"
+    ssid: "ESPHome Fallback ${devname}"
     password: "d3ZBU8Kih1RN"
 
 captive_portal:
@@ -38,6 +40,8 @@ api:
 logger:
 
 ota:
+
+### END COMMON
 
 spi:
   clk_pin: 18

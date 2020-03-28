@@ -1,10 +1,13 @@
 { pkgs, ... }:
 
 let
-  trusted_networks = [ "192.168.1.0/24" "192.168.2.0/24" ];
+  trusted_networks = [
+    "192.168.1.0/24" # default chimera network
+    "192.168.2.0/24" # wireguard network
+    #"192.168.69.0/24" # esphome network (but doesn't need to hit HA frontdoor)
+  ];
 
-  ha_pkgs = import /home/cole/code/nixpkgs-ha-pkgs-bravia {};
-
+  # hopefully removing this soon? vvv
   zwaveAdapter  = "/dev/serial/by-id/usb-Silicon_Labs_HubZ_Smart_Home_Controller_813003E3-if00-port0";
   zigbeeAdapter = "/dev/serial/by-id/usb-Silicon_Labs_HubZ_Smart_Home_Controller_813003E3-if01-port0";
 
@@ -69,13 +72,6 @@ in
 
     services.home-assistant = {
       enable = true;
-      #package = pkgs.home-assistant.override {
-      #  extraPackages = ps: with ps; [
-      #    colorlog #??
-      #    zigpy #?? 
-      #  ];
-      #};
-      #package = ha_pkgs.home-assistant;
       port = 8123;
       config = {
         homeassistant = {
@@ -99,7 +95,8 @@ in
         config = {}; # TODO: disable?
         frontend = {
           themes = {
-            midnight = import ./theme-midnight.nix;
+            midnight = import ./theme-midnight.nix; # TODO: import vs copyToStore?
+            slate = import ./theme-slate.nix;
           };
         };
         recorder = {};

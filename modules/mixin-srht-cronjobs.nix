@@ -2,8 +2,16 @@
 
 let
   doBuild = pkgs.writeScript "doBuild.sh" ''
-    #!/usr/bin/env bash
-    cd /home/cole/code/overlays/nixpkgs-wayland
+    #! /usr/bin/env bash
+    set -eu
+    mkdir -p /tmp/overlaydir
+    cd /tmp/overlaydir
+    if [[ ! -d ./nixpkgs-wayland ]]; then
+      git clone https://github.com/colemickens/nixpkgs-wayland
+    fi
+    cd nixpkgs-wayland
+    git remote update
+    git reset --hard origin/master
     bash .ci/srht-submit.sh
   '';
 in
@@ -15,7 +23,7 @@ in
   };
 
   systemd.services.srht-nixpkgs-wayland = {
-    path = with pkgs; [ bash curl jq gopass ];
+    path = with pkgs; [ bash curl jq gopass git ];
     #wantedBy = [ "multi-user.target" ];
     after = [ "network.target" ];
     description = "...";

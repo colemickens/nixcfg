@@ -52,7 +52,7 @@ in
             port = "22";
             toPort = "22";
           }];
-          privateKeyPath = "/home/cole/hs_ed25519_secret_key";
+          #privateKeyPath = "/home/cole/hs_ed25519_secret_key";
           version = 3;
         };
       };

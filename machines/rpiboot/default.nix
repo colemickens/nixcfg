@@ -1,5 +1,19 @@
 { config, lib, modulesPath, pkgs, ... }:
 let
+  hostKeyPath = pkgs.writeTextFile {
+    name = "host_key";
+    text = ''
+      -----BEGIN OPENSSH PRIVATE KEY-----
+      b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAaAAAABNlY2RzYS
+      1zaGEyLW5pc3RwMjU2AAAACG5pc3RwMjU2AAAAQQQDsFTxxSVrXx6Uovjgh4b0/ceSABde
+      vVOtK0VwMFhlpcf0VEV5686Mmue1vtJX4L0uHKpsJtEBW8QJ/VhVnVn7AAAAqBPcyGcT3M
+      hnAAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAOwVPHFJWtfHpSi
+      +OCHhvT9x5IAF169U60rRXAwWGWlx/RURXnrzoya57W+0lfgvS4cqmwm0QFbxAn9WFWdWf
+      sAAAAhAO3aXAcuyXdQph+8HI3k2jAN07p9n66R051tsJnooLOPAAAACWNvbGVAeGVlcAEC
+      AwQFBg==
+      -----END OPENSSH PRIVATE KEY-----
+    '';
+  };
   download_store = pkgs.writeTextFile {
     executable = true;
     name = "kexec-nixos";
@@ -96,22 +110,13 @@ in {
 
     networking.useDHCP = true;
     networking.interfaces."eth0".useDHCP = true;
+    boot.initrd.network.enable = true;
     boot.initrd.network.ssh = {
       enable = true;
-      authorized_keys = [
+      authorizedKeys = [
         "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCv76jivnmT678kYdL8J7yVVxhPhxyfL3Xp4jlCaEFded1uT+FXqBmYR5foOdB56L/QM/uCTWf0mbrwOYwYpkBx6cJTJqDMTlW0Mbys/UhEJo2U6U6fBSewuseiRRcUtvP+gOvsr1MmMi77xAHUkvDbeR1bLk9Eq2JoS5JMwD7T0ih2QVG3xheCgZml8avqfSXSDWOfqrui9VLzaxYhGe9M0Iv6yUA8gF8G2+iY9RkUBXvpCGjUlt3nd9yY/u4qRPsdCASt5l2AA61SUpA113QRkGfjAi4MDGwhnlUTYS0tawjIDrQqVuYqRp+1f0naKRCSDTXv87JB57GV9gbnFfmtzmFn2eTkJ7+PufiK7p763z6QIKfY8Qx9SBpOwKUi17n4y8VAXhsuOhiYmVapTx/QIIG8kag77NbxpD4bi+W3EufoSgi0ZS2CPBnzXxVENA/8Md+rWo2o8xhMmgMXZddxcEfZ00GvQSuGhtZApV6epIAzzrKckZrjwlmGJhk+uus= cole@xeep"
       ];
-      hostECDSAKey = ''
-        -----BEGIN OPENSSH PRIVATE KEY-----
-        b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAaAAAABNlY2RzYS
-        1zaGEyLW5pc3RwMjU2AAAACG5pc3RwMjU2AAAAQQQDsFTxxSVrXx6Uovjgh4b0/ceSABde
-        vVOtK0VwMFhlpcf0VEV5686Mmue1vtJX4L0uHKpsJtEBW8QJ/VhVnVn7AAAAqBPcyGcT3M
-        hnAAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAOwVPHFJWtfHpSi
-        +OCHhvT9x5IAF169U60rRXAwWGWlx/RURXnrzoya57W+0lfgvS4cqmwm0QFbxAn9WFWdWf
-        sAAAAhAO3aXAcuyXdQph+8HI3k2jAN07p9n66R051tsJnooLOPAAAACWNvbGVAeGVlcAEC
-        AwQFBg==
-        -----END OPENSSH PRIVATE KEY-----
-      '';
+      hostECDSAKey = hostKeyPath;
     };
 
     # we must download and place squashfs
@@ -133,7 +138,7 @@ in {
 
     boot.initrd.availableKernelModules = [ "squashfs" "overlay" ];
 
-    boot.initrd.kernelModules = [ "loop" "overlay" "bcmgenet" ];
+    boot.initrd.kernelModules = [ "loop" "overlay" ];
 
     # Closures to be copied to the Nix store, namely the init
     # script and the top-level system configuration directory.

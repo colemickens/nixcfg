@@ -16,12 +16,14 @@ in
     ../../modules/pkgs-common.nix
     ../../modules/pkgs-full.nix
     ../../modules/user-cole.nix
+    
+    ../../modules/profile-x86-only.nix
 
     ../../modules/profile-interactive.nix
     ../../modules/profile-gui.nix
 
     ../../modules/mixin-docker.nix
-    ../../modules/hidden-gateway
+    #../../modules/hidden-gateway
     #../../modules/mixin-firecracker.nix
     #../../modules/mixin-intel-iris.nix
     ../../modules/mixin-libvirt.nix
@@ -119,6 +121,7 @@ in
       loader = {
         timeout = 1;
         systemd-boot.enable = true;
+        systemd-boot.configurationLimit = 2;
         efi.canTouchEfiVariables = true;
       };
     };

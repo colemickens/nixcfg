@@ -1,6 +1,19 @@
 { pkgs, ... }:
 
-{
+let
+  pinnedNixpkgs = let
+    channelRelease =
+      "nixos-19.09pre190687.3f4144c30a6"; # last known working mongo
+    channelName = "unstable";
+    url =
+      "https://releases.nixos.org/nixos/${channelName}/${channelRelease}/nixexprs.tar.xz";
+    sha256 = "040f16afph387s0a4cc476q3j0z8ik2p5bjyg9w2kkahss1d0pzm";
+  in import (builtins.fetchTarball { inherit url sha256; }) {
+    system = pkgs.system; # TODO: ? is this the best way?
+    # TODO: inherit overlays too?
+  };
+  mdbp = pinnedNixpkgs.mongodb;
+in {
   config = {
     nixpkgs.config = {
       allowUnfree = true;
@@ -11,19 +24,7 @@
       enable = true;
       unifiPackage = pkgs.unifiStable;
 
-      mongodbPackage =
-        let
-          channelRelease = "nixos-19.09pre190687.3f4144c30a6";  # last known working mongo
-          channelName = "unstable";
-          url = "https://releases.nixos.org/nixos/${channelName}/${channelRelease}/nixexprs.tar.xz";
-          sha256 = "040f16afph387s0a4cc476q3j0z8ik2p5bjyg9w2kkahss1d0pzm";
-
-          pinnedNixpkgsFile = builtins.fetchTarball {
-            inherit url sha256;
-          };
-
-          pinnedNixpkgs = import pinnedNixpkgsFile {};
-        in pinnedNixpkgs.mongodb;
+      mongodbPackage = mdbp;
 
       jrePackage = pkgs.jre8_headless;
     };

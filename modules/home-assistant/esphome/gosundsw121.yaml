@@ -1,11 +1,13 @@
 substitutions:
-  ipnum: "110"
-  devname: desk${ipnum}
+  ipnum: "121"
+  devname:  gosundsw${ipnum}
+
+# bathroom vanity light
 
 esphome:
   name: ${devname}
-  platform: ESP32
-  board: nodemcu-32s
+  platform: ESP8266
+  board: esp01_1m
 
 ### START COMMON (TODO extract, make sure interpolation happens after concat)
 
