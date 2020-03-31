@@ -13,7 +13,7 @@ in {
     ../../modules/mixin-srht-cronjobs.nix
     #../../modules/loremipsum-media/rclone-mnt.nix
 
-    ../../modules/home-assistant
+    ./home-assistant
 
     ./sd-image-raspberrypi4-new.nix
 
@@ -46,8 +46,8 @@ in {
       allowedUDPPorts = [ 51820 ];
     };
     networking.wireguard.interfaces."${wg}" = {
-      ips = [ internal_range ];
-      listenPort = wg_port;
+      ips = [ "192.168.2.0/24" ];
+      listenPort = 51820;
       privateKeyFile = "${./wireguard/server.key}";
       peers = [
         {

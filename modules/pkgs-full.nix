@@ -6,6 +6,7 @@
 
     environment.systemPackages = with pkgs ; [
       # new random stuff
+      azure-cli
       ipfs
       rclone # ?
       bind

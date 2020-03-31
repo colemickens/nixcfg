@@ -48,7 +48,7 @@ in {
     };
     services.grafana = {
       enable = true;
-      domain = "grafana.${oh}";
+      domain = "grafana.cleothecat.duckdns.org";
       auth.anonymous.enable = true;
       provision = {
         enable = true;
