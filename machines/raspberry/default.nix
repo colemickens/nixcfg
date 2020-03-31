@@ -52,15 +52,15 @@ in {
       peers = [
         {
           allowedIPs = [ "192.168.2.2/32" ]; # cole-phone
-          publicKey = builtins.readFile ./wireguard/client-cole-pixel3.pub;
+          publicKey = builtins.readFile ./wireguard/cole-phone.pub;
         }
         {
           allowedIPs = [ "192.168.2.3/32" ]; # buddie-phone
-          publicKey = builtins.readFile ./wireguard/client-buddie-pixel3.pub;
+          publicKey = builtins.readFile ./wireguard/bud-phone.pub;
         }
         {
           allowedIPs = [ "192.168.2.4/32" ]; # jeff-phone
-          publicKey = builtins.readFile ./wireguard/client-jeff-iphone.pub;
+          publicKey = builtins.readFile ./wireguard/jeff-phone.pub;
         }
       ];
     };

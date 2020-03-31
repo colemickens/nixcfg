@@ -92,6 +92,7 @@ in {
         };
         cast = { media_player = { host = "192.168.1.200"; }; };
         config = { };
+        discovery = { };
         esphome = { };
         frontend = {
           themes = {

@@ -13,8 +13,8 @@ num="${2}"
 
 umask  077
 
-wg genkey | head -1 > "${name}.key"
-cat "${name}.key" | wg pubkey | head -1 > "${name}.pub"
+wg genkey | tr -d '\n' > "${name}.key"
+cat "${name}.key" | wg pubkey | tr -d '\n' > "${name}.pub"
 
 privkey="$(cat "${name}.key")"
 srvpubkey="$(cat "server.pub")"
