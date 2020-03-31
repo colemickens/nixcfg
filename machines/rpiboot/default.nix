@@ -1,5 +1,7 @@
 { config, lib, modulesPath, pkgs, ... }:
 let
+  sshkey =
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCv76jivnmT678kYdL8J7yVVxhPhxyfL3Xp4jlCaEFded1uT+FXqBmYR5foOdB56L/QM/uCTWf0mbrwOYwYpkBx6cJTJqDMTlW0Mbys/UhEJo2U6U6fBSewuseiRRcUtvP+gOvsr1MmMi77xAHUkvDbeR1bLk9Eq2JoS5JMwD7T0ih2QVG3xheCgZml8avqfSXSDWOfqrui9VLzaxYhGe9M0Iv6yUA8gF8G2+iY9RkUBXvpCGjUlt3nd9yY/u4qRPsdCASt5l2AA61SUpA113QRkGfjAi4MDGwhnlUTYS0tawjIDrQqVuYqRp+1f0naKRCSDTXv87JB57GV9gbnFfmtzmFn2eTkJ7+PufiK7p763z6QIKfY8Qx9SBpOwKUi17n4y8VAXhsuOhiYmVapTx/QIIG8kag77NbxpD4bi+W3EufoSgi0ZS2CPBnzXxVENA/8Md+rWo2o8xhMmgMXZddxcEfZ00GvQSuGhtZApV6epIAzzrKckZrjwlmGJhk+uus= cole@xeep";
   hostKeyPath = pkgs.writeTextFile {
     name = "host_key";
     text = ''
@@ -113,9 +115,7 @@ in {
     boot.initrd.network.enable = true;
     boot.initrd.network.ssh = {
       enable = true;
-      authorizedKeys = [
-        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCv76jivnmT678kYdL8J7yVVxhPhxyfL3Xp4jlCaEFded1uT+FXqBmYR5foOdB56L/QM/uCTWf0mbrwOYwYpkBx6cJTJqDMTlW0Mbys/UhEJo2U6U6fBSewuseiRRcUtvP+gOvsr1MmMi77xAHUkvDbeR1bLk9Eq2JoS5JMwD7T0ih2QVG3xheCgZml8avqfSXSDWOfqrui9VLzaxYhGe9M0Iv6yUA8gF8G2+iY9RkUBXvpCGjUlt3nd9yY/u4qRPsdCASt5l2AA61SUpA113QRkGfjAi4MDGwhnlUTYS0tawjIDrQqVuYqRp+1f0naKRCSDTXv87JB57GV9gbnFfmtzmFn2eTkJ7+PufiK7p763z6QIKfY8Qx9SBpOwKUi17n4y8VAXhsuOhiYmVapTx/QIIG8kag77NbxpD4bi+W3EufoSgi0ZS2CPBnzXxVENA/8Md+rWo2o8xhMmgMXZddxcEfZ00GvQSuGhtZApV6epIAzzrKckZrjwlmGJhk+uus= cole@xeep"
-      ];
+      authorizedKeys = [ sshkey ];
       hostECDSAKey = hostKeyPath;
     };
 

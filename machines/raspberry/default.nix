@@ -4,86 +4,71 @@ let
   lib = pkgs.lib;
   eth = "eth0";
   wg = "wg1";
-  wg_port = 51820;
-  externalIP = "192.168.1.117";
-  external_range = "192.168.1.0/24";
-  internalIP = "192.168.2.1";
-  internal_range = "192.168.2.0/24";
 in {
   imports = [
     ../../modules/common.nix
-    ../../modules/profile-interactive.nix
     ../../modules/user-cole.nix
-    ../../modules/profile-sway-minimal.nix
-
     ../../modules/mixin-unifi.nix
     ../../modules/mixin-sshd.nix
     ../../modules/mixin-srht-cronjobs.nix
-    ../../modules/loremipsum-media/rclone-mnt.nix
+    #../../modules/loremipsum-media/rclone-mnt.nix
 
     ../../modules/home-assistant
-    ../../modules/hidden-gateway
-    ../../modules/wireguard
 
     ./sd-image-raspberrypi4-new.nix
+
+    # GUI
+    # ./gui.nix
+    #../../modules/profile-sway-minimal.nix
   ];
 
   config = {
     nix.nixPath = [ ];
-
     documentation.nixos.enable = false;
-
     networking.hostName = "raspberry";
+    environment.systemPackages = with pkgs; [ file ripgrep tmux htop ];
 
-    # TODO: oh, I didn't know uboot was a separate option?
-    #boot.loader.raspberryPi.uboot.configurationLimit = 2;
-
-    environment.systemPackages = with pkgs; [
-      #neovim
-      file
-      ripgrep
-      tmux
-      htop
-      #alsaTools
-      #alsaUtils
-      #pulsemixer
-      #git-crypt
-      #git
-    ];
-
-    ##############################
-    networking = {
-      wireless.enable = false;
-      interfaces.eth0.ipv4.addresses = [{
-        address = "192.168.1.2";
-        prefixLength = 16;
-      }];
-      defaultGateway = "192.168.1.1";
-      nameservers = [ "192.168.1.1" ];
+    networking.wireless.enable = false;
+    networking.interfaces."${eth}".ipv4.addresses = [{
+      address = "192.168.1.2";
+      prefixLength = 16;
+    }];
+    networking.defaultGateway = "192.168.1.1";
+    networking.nameservers = [ "192.168.1.1" ];
+    networking.nat = {
+      enable = true;
+      internalInterfaces = [ wg ];
+      internalIPs = [ "192.168.2.0/24" ];
+      externalInterface = eth;
     };
-    #hardware.opengl = {
-    #  enable = true;
-    #  setLdLibraryPath = true;
-    #  package = pkgs.mesa_drivers;
-    #};
-    #hardware.deviceTree = {
-    #  base = pkgs.device-tree_rpi;
-    #  overlays = [ "${pkgs.device-tree_rpi.overlays}/vc4-fkms-v3d.dtbo" ];
-    #};
-
-    #boot.loader.raspberryPi.firmwareConfig = ''
-    #  gpu_mem=192
-    #  disable_overscan=1
-    #  hdmi_drive=2
-    #  dtparam=audio=on
-    #'';
-    ##############################
+    networking.firewall = {
+      enable = true;
+      allowedUDPPorts = [ 51820 ];
+    };
+    networking.wireguard.interfaces."${wg}" = {
+      ips = [ internal_range ];
+      listenPort = wg_port;
+      privateKeyFile = "${./wireguard/server.key}";
+      peers = [
+        {
+          allowedIPs = [ "192.168.2.2/32" ]; # cole-phone
+          publicKey = builtins.readFile ./wireguard/client-cole-pixel3.pub;
+        }
+        {
+          allowedIPs = [ "192.168.2.3/32" ]; # buddie-phone
+          publicKey = builtins.readFile ./wireguard/client-buddie-pixel3.pub;
+        }
+        {
+          allowedIPs = [ "192.168.2.4/32" ]; # jeff-phone
+          publicKey = builtins.readFile ./wireguard/client-jeff-iphone.pub;
+        }
+      ];
+    };
 
     fileSystems = lib.mkForce {
       "/boot" = {
         device = "/dev/disk/by-label/FIRMWARE";
         fsType = "vfat";
-        # we NEED this mounted
       };
       "/" = {
         device = "/dev/disk/by-label/NIXOS_SD";

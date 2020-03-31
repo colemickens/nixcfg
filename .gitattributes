@@ -1,3 +1,7 @@
 modules/loremipsum-media/sa/*         filter=git-crypt diff=git-crypt
 modules/loremipsum-media/rclone.conf  filter=git-crypt diff=git-crypt
-machines/raspberry/wg-server.key      filter=git-crypt diff=git-crypt
+
+*.key      filter=git-crypt diff=git-crypt
+
+machines/raspberry/home-assistant/esphome/secrets.yaml  filter=git-crypt diff=git-crypt
+machines/raspberry/home-assistant/secrets.nix           filter=git-crypt diff=git-crypt

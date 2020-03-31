@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-set -x
-
-next="$(sudo efibootmgr | rg "Boot(\d+)\*+ Linux Boot Manager" -r '$1')"
-sudo efibootmgr --bootnext "${next}"
-sudo reboot
-
