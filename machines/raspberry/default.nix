@@ -18,15 +18,15 @@ in {
     ./sd-image-raspberrypi4-new.nix
 
     # GUI
-    # ./gui.nix
-    #../../modules/profile-sway-minimal.nix
+    ./gui.nix
+    ../../modules/profile-sway-minimal.nix
   ];
 
   config = {
     nix.nixPath = [ ];
     documentation.nixos.enable = false;
     networking.hostName = "raspberry";
-    environment.systemPackages = with pkgs; [ file ripgrep tmux htop chromium firefox ];
+    environment.systemPackages = with pkgs; [ file ripgrep tmux htop ];
 
     networking.wireless.enable = false;
     networking.interfaces."${eth}".ipv4.addresses = [{

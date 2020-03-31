@@ -1,4 +1,4 @@
-{ config, pkgs }:
+{ config, pkgs, ... }:
 
 {
   config = {
@@ -11,6 +11,18 @@
       base = pkgs.device-tree_rpi;
       overlays = [ "${pkgs.device-tree_rpi.overlays}/vc4-fkms-v3d.dtbo" ];
     };
+
+    hardware.pulseaudio.enable = pkgs.lib.mkForce true;
+    #hardware.pulseaudio.package = pkgs.pulseaudioFull;
+
+    nixpkgs.config.pulseaudio = true;
+
+    environment.systemPackages = with pkgs; [
+      firefox
+      chromium
+      pulsemixer
+      plex-mpv-shim
+    ];
 
     boot.loader.raspberryPi.firmwareConfig = ''
       gpu_mem=192
