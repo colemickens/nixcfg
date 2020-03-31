@@ -26,7 +26,7 @@ in {
     nix.nixPath = [ ];
     documentation.nixos.enable = false;
     networking.hostName = "raspberry";
-    environment.systemPackages = with pkgs; [ file ripgrep tmux htop ];
+    environment.systemPackages = with pkgs; [ file ripgrep tmux htop chromium firefox ];
 
     networking.wireless.enable = false;
     networking.interfaces."${eth}".ipv4.addresses = [{
