@@ -2,19 +2,27 @@
 set -euo pipefail
 set -x
 
-#(
-#  cd ~/code/nixpkgs
-#  git remote update
-#  git rebase nixpkgs/nixos-unstable
-#)
+if [[ "${1:-""}" == "" ]]; then
+  machinename="$(hostname)"
+  remote="self"
+else
+  machinename="${1}"
+  remote="${2}"
+  port="${3}"
+fi
 
-# 1. use ./nixbuild.sh first so that we get caching benefits
-#    even on a blank system
-# 2. we're back to using <nixpkgs/nixos> because my other methods seem
-#    to result in a lot of copies of nixpkgs being copied into the store.
 
-export NIX_PATH=nixpkgs=/home/cole/code/nixpkgs:nixos-config=/home/cole/code/nixcfg/machines/slynux/sway.nix
-./nixbuild.sh '<nixpkgs/nixos>' -A config.system.build.toplevel
+toplevel="$(nix-build \
+  --builders-use-substitutes \
+  --builders 'ssh://colemickens@aarch64.nixos.community aarch64-linux /home/cole/.ssh/id_ed25519; ssh://cole@azdev.westus2.cloudapp.azure.com x86_64-linux /home/cole/.ssh/id_ed25519' \
+  -A "${machinename}" default.nix)"
 
-# we might still need ulimit
-sudo bash -c "ulimit -s 100000; nixos-rebuild switch"
+if [[ "${remote}" == "self" ]]; then
+  sudo nix-env --set --profile '/nix/var/nix/profiles/system' "${toplevel}"
+  sudo "${toplevel}/bin/switch-to-configuration" switch
+else
+  NIX_SSHOPTS="-p ${port}" nix copy --to "ssh://${remote}" "${toplevel}"
+  ssh "${remote}" -p "${port}" "sudo nix-env --set --profile '/nix/var/nix/profiles/system' '${toplevel}'"
+  ssh "${remote}" -p "${port}" "sudo '${toplevel}/bin/switch-to-configuration' switch"
+fi
+

@@ -86,17 +86,12 @@ in {
           ];
         };
 
-        alarmdecoder = {
-          device = { type = "usb"; };
-          panel_display = true;
-        };
         cast = { media_player = { host = "192.168.1.200"; }; };
         config = { };
         discovery = { };
         esphome = { };
         frontend = {
           themes = {
-            # TODO: import vs copyToStore?
             midnight = import ./theme-midnight.nix;
             slate = import ./theme-slate.nix;
           };
@@ -123,6 +118,10 @@ in {
         recorder = { };
         roku = { host = "192.168.1.18"; };
         system_health = { };
+        weather = {
+          platform = "openweathermap";
+          api_key = secrets.openweathermap_apikey;
+        };
         zwave = { usb_path = zwaveAdapter; };
       };
       lovelaceConfig = import ./lovelace.nix;

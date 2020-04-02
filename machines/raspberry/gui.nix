@@ -12,8 +12,11 @@
       overlays = [ "${pkgs.device-tree_rpi.overlays}/vc4-fkms-v3d.dtbo" ];
     };
 
+    sound.enable = true;
     hardware.pulseaudio.enable = pkgs.lib.mkForce true;
     #hardware.pulseaudio.package = pkgs.pulseaudioFull;
+    services.dbus.enable = true;
+    services.dbus.socketActivated = true;
 
     nixpkgs.config.pulseaudio = true;
 

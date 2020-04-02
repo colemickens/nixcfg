@@ -5,8 +5,7 @@ let
     extraModules = [ ./machines/raspberry/default.nix ];
     system = "aarch64-linux";
   }).config.system.build;
-in
-rec {
+in rec {
   # TODO:
   # continue removing these into their machine dirs?
 
@@ -15,6 +14,13 @@ rec {
   xeep-sway = (mkSystem rec {
     nixpkgs = ../nixpkgs;
     extraModules = [ ./machines/xeep/sway.nix ];
+  }).config.system.build.toplevel;
+
+  #
+  ### DESKTOP CONFIG
+  slynux = (mkSystem rec {
+    nixpkgs = ../nixpkgs;
+    extraModules = [ ./machines/slynux/sway.nix ];
   }).config.system.build.toplevel;
 
   #
@@ -34,6 +40,14 @@ rec {
 
   raspberry = raspberry_.toplevel;
   #raspberry_image = raspberry_.sdImage;
+
+  #
+  ### Dad Experimental HA Hyper-V VM
+  jeffhyper = (mkSystem rec {
+    nixpkgs = ../nixpkgs-rpi;
+    extraModules = [ ./machines/jeffhyper/configuration.nix ];
+    system = "x86_64-linux";
+  }).config.system.build.toplevel;
 
   #
   ### RPi4 EXPERIMENTAL!

@@ -4,8 +4,7 @@ let
   lib = pkgs.lib;
   nixosHardware = import ../../imports/nixos-hardware;
   hostname = "slynux";
-in
-{
+in {
   imports = [
     #./power-management.nix
 
@@ -16,7 +15,7 @@ in
     ../../modules/pkgs-common.nix
     ../../modules/pkgs-full.nix
     ../../modules/user-cole.nix
-    
+
     ../../modules/profile-x86-only.nix
 
     ../../modules/profile-interactive.nix
@@ -50,6 +49,8 @@ in
     system.stateVersion = "18.09"; # Did you read the comment?
     services.timesyncd.enable = true;
 
+    time.timeZone = "US/Pacific";
+
     # ??
     services.tor = {
       enable = true;
@@ -59,30 +60,30 @@ in
 
     documentation.nixos.enable = false;
 
-    fileSystems."/" =
-      { device = "rpool/root";
-        fsType = "zfs";
-      };
+    fileSystems."/" = {
+      device = "rpool/root";
+      fsType = "zfs";
+    };
 
-    fileSystems."/nix" =
-      { device = "rpool/nix";
-        fsType = "zfs";
-      };
+    fileSystems."/nix" = {
+      device = "rpool/nix";
+      fsType = "zfs";
+    };
 
-    fileSystems."/var" =
-      { device = "rpool/var";
-        fsType = "zfs";
-      };
+    fileSystems."/var" = {
+      device = "rpool/var";
+      fsType = "zfs";
+    };
 
-    fileSystems."/home" =
-      { device = "rpool/home";
-        fsType = "zfs";
-      };
+    fileSystems."/home" = {
+      device = "rpool/home";
+      fsType = "zfs";
+    };
 
-    fileSystems."/boot" =
-      { device = "/dev/disk/by-uuid/7AC8-EF56";
-        fsType = "vfat";
-      };
+    fileSystems."/boot" = {
+      device = "/dev/disk/by-uuid/7AC8-EF56";
+      fsType = "vfat";
+    };
 
     swapDevices = [ ];
 
@@ -93,13 +94,36 @@ in
     boot = {
       #zfs.requestEncryptionCredentials = true;
       kernelPackages = pkgs.linuxPackages_latest;
-      initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
-      kernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
+      initrd.availableKernelModules = [
+        "xhci_pci"
+        "nvme"
+        "usb_storage"
+        "sd_mod"
+        "rtsx_pci_sdmmc"
+        "intel_agp"
+        "i915"
+      ];
+      kernelModules = [
+        "xhci_pci"
+        "nvme"
+        "usb_storage"
+        "sd_mod"
+        "rtsx_pci_sdmmc"
+        "intel_agp"
+        "i915"
+      ];
       kernelParams = [
         # HIGHLY IRRESPONSIBLE
-        "noibrs" "noibpb" "nopti" "nospectre_v2"
-        "nospectre_v1" "l1tf=off" "nospec_store_bypass_disable"
-        "no_stf_barrier" "mds=off" "mitigations=off"
+        "noibrs"
+        "noibpb"
+        "nopti"
+        "nospectre_v2"
+        "nospectre_v1"
+        "l1tf=off"
+        "nospec_store_bypass_disable"
+        "no_stf_barrier"
+        "mds=off"
+        "mitigations=off"
 
         #"i915.modeset=1"     # nixos-hw = missing
         #"i915.enable_guc=3"  # nixos-hw = missing

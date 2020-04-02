@@ -19,6 +19,7 @@ in {
 
     # GUI
     ./gui.nix
+    ./kiosk.nix
     ../../modules/profile-sway-minimal.nix
   ];
 
