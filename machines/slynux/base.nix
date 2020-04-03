@@ -6,8 +6,6 @@ let
   hostname = "slynux";
 in {
   imports = [
-    #./power-management.nix
-
     ./nouveau.nix
 
     ../../modules/common.nix
@@ -21,25 +19,23 @@ in {
     ../../modules/profile-interactive.nix
     ../../modules/profile-gui.nix
 
-    ../../modules/mixin-docker.nix
+    #../../modules/mixin-docker.nix
     #../../modules/hidden-gateway
     #../../modules/mixin-firecracker.nix
     #../../modules/mixin-intel-iris.nix
-    ../../modules/mixin-libvirt.nix
+    #../../modules/mixin-libvirt.nix
     #../../modules/mixin-plex-mpv.nix
-    ../../modules/mixin-mitmproxy.nix
+    #../../modules/mixin-mitmproxy.nix
     #../../modules/mixin-plex.nix
     ../../modules/mixin-sshd.nix
     #../../modules/mixin-ipfs.nix
     #../../modules/mixin-yubikey.nix
 
     ../../modules/loremipsum-media/rclone-cmd.nix
-    ../../modules/mixin-spotifyd.nix
+    #../../modules/mixin-spotifyd.nix
 
     ../../modules/mixin-v4l2loopback.nix
-    ../../modules/hw-chromecast.nix
-
-    #"${nixosHardware}/dell/xps/13-9370/default.nix"
+    #../../modules/hw-chromecast.nix
   ];
 
   config = {

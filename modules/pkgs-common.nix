@@ -29,5 +29,8 @@ in
       neovim vim
       htop iotop which binutils.bintools stow
       p7zip unrar parallel unzip xz zip
+
+      nixpkgs-fmt
+      nixpkgs-review
     ]);
 }

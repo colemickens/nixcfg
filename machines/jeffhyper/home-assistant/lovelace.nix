@@ -42,8 +42,8 @@
         }
         {
           title = "Motion Sensors";
-          #type = "entities";
           type = "history-graph";
+          hours_to_show = 1;
           entities = [
             {
               name = "Upstairs";
@@ -57,8 +57,8 @@
         }
         {
           title = "Door Sensors";
-          #type = "entities";
           type = "history-graph";
+          hours_to_show = 1;
           entities = [
             {
               name = "Kitchen";
@@ -77,38 +77,68 @@
       ];
     }
     {
-      title = "Media";
+      title = "Plex";
+      cards = [{
+        title = "Plex";
+        type = "entities";
+        entities = [ "sensor.plex_goonr8r" ];
+      }];
+    }
+    {
+      title = "Family Room";
+      cards = [{
+        title = "Denon Family Room";
+        entity = "media_player.denonavr_family_room";
+        type = "media-control";
+      }];
+    }
+    {
+      title = "Patio";
+      cards = [{
+        title = "Denon Patio";
+        entity = "media_player.denonavr_patio";
+        type = "media-control";
+      }];
+    }
+    {
+      title = "Sewing Room";
       cards = [
-
-        {
-          title = "Denon Family Room";
-          entity = "media_player.denonavr_family_room";
-          type = "media-control";
-        }
-        {
-          title = "Denon Patio";
-          entity = "media_player.denonavr_patio";
-          type = "media-control";
-        }
-
         {
           title = "Roku";
           entity = "media_player.sewing_room";
           type = "media-control";
         }
         {
+          title = "Sewing Room Roku";
+          type = "entities";
+          entities = [
+            {
+              name = "Roku (Sewing Room)";
+              entity = "media_player.sewing_room";
+            }
+            {
+              name = "Roku (Sewing Room)";
+              entity = "remote.sewing_room";
+            }
+          ];
+        }
+      ];
+    }
+    {
+      title = "Media Room";
+      cards = [
+        {
           title = "Roku";
           entity = "media_player.media_room_roku";
           type = "media-control";
         }
         {
-          title = "Roku";
+          title = "Media Room Roku";
           type = "entities";
           entities = [
-
             {
-              name = "Roku (Sewing Room)";
-              entity = "media_player.sewing_room";
+              name = "Roku (Media Room)";
+              entity = "media_player.media_room_roku";
             }
             {
               name = "Roku (Media Room)";

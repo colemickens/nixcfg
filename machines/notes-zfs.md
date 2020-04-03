@@ -1,3 +1,7 @@
+# notes
+
+see ./slynux/disk.sh !!! better options??
+
 fdisk ...
 
 zpool create -O mountpoint=none -R /mnt rpool /dev/sda2

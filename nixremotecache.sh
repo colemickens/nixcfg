@@ -11,10 +11,6 @@ cachixkey="$(gopass show websites/cachix.org/gh | grep cachix_key_colemickens | 
 
 drv="$(nix-instantiate -A raspberry)"
 
-# you know what, NO, I'm not using
-# nix-copy-closure
-# this ssh crap is just.. no. no. horrible ux
-# this pisses me off even tho I'm a huge nixos dork
 
 # instead, use an old trick, copy to a new local store
 # rsync that up instead
@@ -32,13 +28,19 @@ nix copy --to "file://${dst}" "${drv}"
 remotetmp="$(ssh "${remote}" mkdir -p "${dst}")"
 rsync -avh "${dst}/" "${remote}:${dst}"
 
-ssh "${remote}" "nix copy --experimental-features 'nix-command ca-references' --from \"file://${dst}\" \"${drv}\""
+ssh "${remote}" \
+  "nix copy --experimental-features 'nix-command ca-references' --from \"file://${dst}\" \"${drv}\""
 
-#    -f 'https://api.cachix.org/api/v1/install' \
-#    -f 'https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz' \
-#ssh "${remote}" "\
-# env CACHIX_KEY=\"${cachixkey}\" nix-build ${drv} \
-# | nix run -v --experimental-features 'nix-command ca-references' -f 'https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz' cachix --command 'cachix push colemickens'"
+ssh "${remote}" \
+  "env CACHIX_KEY=\"${cachixkey}\" nix-build ${drv} \
+    | nix run -v --experimental-features 'nix-command ca-references' \
+      -f 'https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz' \
+        cachix --command 'cachix push colemickens'"
+
+exit 0
+
+###############################################################################
+
 out="$(ssh "${remote}" nix-build "${drv}")"
 
 dst2="/tmp/storeout"
