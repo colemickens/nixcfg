@@ -1,7 +1,7 @@
 let
   mkSystem = (import ./lib.nix { }).mkSystem;
   raspberry_ = (mkSystem rec {
-    nixpkgs = ../nixpkgs-rpi;
+    nixpkgs = ../nixpkgs;
     extraModules = [ ./machines/raspberry/default.nix ];
     system = "aarch64-linux";
   }).config.system.build;
@@ -33,7 +33,7 @@ in rec {
   #
   ### RPi4 Configurations
   raspberry_ = (mkSystem rec {
-    nixpkgs = ../nixpkgs-rpi;
+    nixpkgs = ../nixpkgs;
     extraModules = [ ./machines/raspberry/default.nix ];
     system = "aarch64-linux";
   }).config.system.build;
@@ -44,7 +44,7 @@ in rec {
   #
   ### Dad Experimental HA Hyper-V VM
   jeffhyper = (mkSystem rec {
-    nixpkgs = ../nixpkgs-rpi;
+    nixpkgs = ../nixpkgs;
     extraModules = [ ./machines/jeffhyper/configuration.nix ];
     system = "x86_64-linux";
   }).config.system.build.toplevel;
@@ -53,13 +53,13 @@ in rec {
   ### RPi4 EXPERIMENTAL!
   # this is the payload
   rpikexec = (mkSystem rec {
-    nixpkgs = ../nixpkgs-rpi;
+    nixpkgs = ../nixpkgs;
     extraModules = [ ./machines/rpikexec/default.nix ];
     system = "aarch64-linux";
   }).config.system.build.fullball;
   # this is the initial boot sd card image
   rpiboot = (mkSystem rec {
-    nixpkgs = ../nixpkgs-rpi;
+    nixpkgs = ../nixpkgs;
     extraModules = [ ./machines/rpiboot/default.nix ];
     system = "aarch64-linux";
   }).config.system.build.sdImage;
