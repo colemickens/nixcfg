@@ -1,6 +1,3 @@
-{...}:
-
-rec
 {
   # overlay will load an overlay, either from:
   #  ../overlays/{name}
@@ -33,4 +30,13 @@ rec
       };
     in
       machine;
+
+  findNixpkgs = branchName:
+    let
+      localimportpath = ../nixpkgs- + "${branchName}";
+    in
+      if builtins.pathExists localimportpath then
+        localimportpath
+      else
+        builtins.fetchTarball { url = "https://foo"; };
 }

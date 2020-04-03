@@ -3,7 +3,7 @@ let
   system = lib.mkSystem {
     nixpkgs = lib.findNixpkgs "cmpkgs";
     extraModules = [ ./configuration.nix ];
-    system = "aarch64-linux";
+    system = "x86_64-linux";
   };
 in
 system.config.system.build.toplevel

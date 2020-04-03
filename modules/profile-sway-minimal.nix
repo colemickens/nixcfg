@@ -1,22 +1,14 @@
-{ config, lib, pkgs, ... }:
-with lib;
-
+{ config, pkgs, ... }:
 let
-  overlay = (import ../lib.nix {}).overlay;
+  overlay = (import ../lib.nix).overlay;
 in
 {
   config = {
-    nixpkgs = {
-      overlays = [
-        (overlay "nixpkgs-wayland")
-      ];
-    };
+    nixpkgs.overlays = [
+      (overlay "nixpkgs-wayland")
+    ];
 
-    programs = {
-      sway = {
-        enable = true;
-      };
-    };
+    programs.sway.enable = true;
 
     nix = {
       binaryCachePublicKeys = [ "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA=" ];
@@ -33,4 +25,3 @@ in
     ];
   };
 }
-

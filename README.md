@@ -1,78 +1,44 @@
 # nixcfg
 
+My NixOS Configuration.
 
-TODO: turn aznew.nix into something that can be used with an existing blank image
-   - or can be used to press a flat VHD that can be uploaded and used
-
-   - make GCE image? (free BW in, free BW to google drive)
-   - then I only pay BW to download and watch, or 2x for Azure to transcode
-
-NixOS Configuration for Cole Mickens's machines.
-
-This repository is used for reproducably\* building the entirety of my computing existence. This includes my laptop, Azure VM, and any containers I happen to be using.
-
-\* = not my phone ([yet](nixos-mobile))
-\* = my usage of nixpkgs-mozilla's firefox-nightly attribute is impure
+Feel free to open issues if you're curious about anything.
 
 ## Layout
 
-* `machines/` contains definitions of my machines:
-  * `azdevbox.nix` defines my Azure dev machine
-  * `azplexbox.nix` defines my Azure Plex server
-  * `azmedia.nix` defines my Azure media download server
-  * `xeep-base.nix` defines most of the configuration of my `xeep` laptop (a Dell XPS 13 (9370))
-  * `xeep-plasma.nix` defines a `xeep` variant that runs Plasma
-  * `xeep-gnome.nix` defines a `xeep` variant that runs Gnome-Shell
-  * `xeep-sway.nix` defines a `xeep` variant that runs Sway
-  * `packet/` includes a script to bootstrap a Packet VM to build my machine config.
+- `cloud/` contains scripts/harnesses for building nixos cloud images
+- `imports/` static, pinned references for all imports
+- `machines/` contains definitions of my machines:
+  - `xeep` - Dell XPS 13 9370
+  - `slynux` - gaming desktop machine turned quaranine-era development machine
+  - `jeffhyper` - defines a HyperV system that runs on my Dad's server
+  - `raspberry` - my Raspberry Pi 4 system (Unifi, Home-Assistant, Prometheus, Grafana, Plex-MPV-Shim)
+  - `rpikexec/rpiboot` - a WIP project that might be replaced by nixiosk (or whatever it's called)
+- `misc/` miscellaneous scripts
+- `modules/` various common bits including in machine configs (profiles/package lists/preferences)
+- `shells/` some devenv style shells for developing go/rust apps under NixOS
 
+There are some useful scripts at the toplevel:
 
-### Reproducability
+```bash
+# invoke nix-build with my remote builders, trusted binary caches, etc
+# (by default ./nixbuild.sh with no args will build all of my machine configs)
+./nixbuild.sh
 
-The machine images and configurations are build using a function declared in `lib.nix` that requires `nixpkgs` be passed as an input. In many cases, for myself, this is an impure reference to my own local copy of `nixpkgs`, but more ideally, it can also be a specific pinned revision of nixpkgs.
+# build and deploy machine config
+./nixup.sh ${MACHINE_NAME} ${MACHINE_SSH_IP} ${MACHINE_SSH_PORT}
+./nixup.sh raspberry 192.168.1.2 22
+./nixup.sh jeffhyper sadiethedog.duckdns.org 22
+./nixup.sh slynux localhost 22
+./nixup.sh xeep 192.168.1.35 22
 
-In fact, the repo also comes with an `update.sh` that updates pointer references to the latest `nixos-unstable` release.
+# build $(hostname)'s config and activate (without using ssh)
+./nixup.sh
 
-#### Pinning `nixpkgs`
+# update imports (nixos-hardware, nixpkgs-mozilla, etc)
+./update-imports.sh
+```
 
-This repository is explicitly built to work with a pinned nixpkgs. The build and activation scripts explicitly unset `NIX_PATH`. However, the configuration that I build most often is configured to read from `../nixpkgs` so that I can iterate and test with a custom `nixpkgs`, since I am frequently tweaking things, bumping versions, etc and want to be able to send upstream PRs.
+Nixpkgs is specifically controlled, but currently just uses a local path for all machines at the moment. This is due to on-going work on nixpkgs and wanting to use my fork on my machines.
 
-The (possibly overly verbose) magic for this is stored in `./lib.nix`. Do be warned, this uses IFD and results in a copy of nixpkgs winding up in your store. For me, this is a small price to pay.
-
-### Details
-
-#### Azure Images
-
-The Azure images rely on a fair amount of work that I pushed upstream to `nixpkgs`. In fact, this work can easily be leveraged to build custom images, replicate them around Azure regions, and boot VMs around the world rather quickly and reliably. It also specifically allows pinning `nixpkgs`.
-
-
-#### Packet VM
-
-`machines/packet/` contains a script and a templated nix expression. The script will interpolate a Cachix credential file, and Packet credentials into the configuration.
-
-I use this directory in tandem with my `packet-utils` repository. I simply execute: `{packet-utils}/q-create-nixos.sh`  which calls `gen-bootstrap.sh` to perform interpolation, and then calls other scripts in that repo to boot a Packet Spot VM.
-
-If you look inside `packet/bootstrap.in.nix`, you'll quickly see that the VM has a single purpose - to clone my Nix repos, build my system configuration, push it to Cachix, and then destroy itself (via the Packet API).
-
-Altogether, this allows me to rev my nixpkgs, call this script, wait, and then switch my configuration. This is powerful because I can modify dependencies like `mesa`, triggering a rebuild of nearly all GUI related packages on my system, without needing to build everything locally. With the low prices of some Packet Spot VMs, this is quite a nice solution while still allowing me to tweak low-level system dependencies, or try out unreleased versions of software.
-
-## TODO
-
-* Try with --pure again?
-* See if nixos-generators has anything interesting, though I still think I have a good solution that respect nixpkg configuration changes from inside the configuration (read: overlays), unlike other solutions I've seen.
-
- * prototype what this looks like when using Flakes
-
-<!--nixpkgs-->
-| Channel | Last Channel Commit Time |
-| ------- | ------------------------ |
-| nixos-hardware | 2019-12-31 16:15:24 +0000 |
-| nixpkgs-graphics | 2019-12-12 02:12:01 -0800 |
-| nixpkgs-mozilla | 2020-01-14 11:22:48 -0500 |
-| nixpkgs-wayland | 2020-01-28 09:03:06 +0000 |
-<!--nixpkgs-->
-
-<!--pkgs-->
-| Package | Last Update | Description |
-| ------- | ----------- | ----------- |
-<!--pkgs-->
+In theory, if you removed nixpkgs-mozilla's firefox package (it's impure/nightly), and pinned nixpkgs, all of my machines are fully reproducible.

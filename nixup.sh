@@ -11,7 +11,7 @@ if [[ "${1:-""}" != "" ]]; then
   port="${3}"
 fi
 
-toplevel="$(./nixbuild.sh -A "${machinename}" default.nix)"
+toplevel="$(./nixbuild.sh "./machines/${machinename}")"
 
 if [[ "${remote}" == "self" ]]; then
   sudo nix-env --set --profile '/nix/var/nix/profiles/system' "${toplevel}"

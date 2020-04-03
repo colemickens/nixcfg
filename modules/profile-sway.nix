@@ -1,16 +1,12 @@
 { config, lib, pkgs, ... }:
-with lib;
-
 let
-  overlay = (import ../lib.nix {}).overlay;
+  overlay = (import ../lib.nix).overlay;
 in
 {
   config = {
-    nixpkgs = {
-      overlays = [
-        (overlay "nixpkgs-wayland")
-      ];
-    };
+    nixpkgs.overlays = [
+      (overlay "nixpkgs-wayland")
+    ];
     environment.variables.WLR_DRM_NO_MODIFIERS = "1";
 
     #xdg.portal.enable = true;
@@ -91,4 +87,3 @@ in
     ];
   };
 }
-
