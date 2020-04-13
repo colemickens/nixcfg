@@ -14,27 +14,27 @@ function update() {
   metadata="${pkg}/metadata.nix"
   pkgname="$(basename "${pkg}")"
 
-  branch="$(nix eval --raw -f "${metadata}" branch)"
-  rev="$(nix eval --raw -f "${metadata}" rev)"
-  date="$(nix eval --raw -f "${metadata}" revdate)"
-  sha256="$(nix eval --raw -f "${metadata}" sha256)"
-  url="$(nix eval --raw -f "${metadata}" url)"
-  skip="$(nix eval -f "${metadata}" skip || true)"
+  branch="$(nix-instantiate "${metadata}" --eval --json -A branch | jq -r .)"
+  rev="$(nix-instantiate "${metadata}" --eval --json -A rev | jq -r .)"
+  date="$(nix-instantiate "${metadata}" --eval --json -A revdate | jq -r .)"
+  sha256="$(nix-instantiate "${metadata}" --eval --json -A sha256 | jq -r .)"
+  url="$(nix-instantiate "${metadata}" --eval --json -A url | jq -r .)"
+  skip="$(nix-instantiate "${metadata}" --eval --json -A skip || echo "false" | jq -r .)"
 
   newdate="${date}"
   if [[ "${skip}" != "true" ]]; then
     # Determine RepoTyp (git/hg)
-    if   nix eval --raw -f "${metadata}" repo_git; then repotyp="git";
-    elif nix eval --raw -f "${metadata}" repo_hg;  then repotyp="hg";
+    if   nix-instantiate "${metadata}" --eval --json -A repo_git; then repotyp="git";
+    elif nix-instantiate "${metadata}" --eval --json -A repo_hg; then repotyp="hg";
     else echo "unknown repo_typ" && exit -1;
     fi
 
     # Update Rev
     if [[ "${repotyp}" == "git" ]]; then
-      repo="$(nix eval --raw -f "${metadata}" repo_git)"
+      repo="$(nix-instantiate "${metadata}" --eval --json -A repo_git | jq -r .)"
       newrev="$(git ls-remote "${repo}" "${branch}" | awk '{ print $1}')"
     elif [[ "${repotyp}" == "hg" ]]; then
-      repo="$(nix eval --raw -f "${metadata}" repo_hg)"
+      repo="$(nix-instantiate "${metadata}" --eval --json -A repo_hg | jq -r .)"
       newrev="$(hg identify "${repo}" -r "${branch}")"
     fi
     
@@ -50,6 +50,7 @@ function update() {
       fi
       rm -rf "${d}"
 
+      # Update Sha256
       newsha256="$(nix-prefetch-url --unpack "${url}")"
 
       # TODO: do this with nix instead of sed?

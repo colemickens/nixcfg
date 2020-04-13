@@ -1,10 +1,10 @@
 { pkgs, ... }:
-
 let
   lib = pkgs.lib;
   nixosHardware = import ../../imports/nixos-hardware;
   hostname = "slynux";
-in {
+in
+{
   imports = [
     ./nouveau.nix
 
@@ -45,7 +45,7 @@ in {
     system.stateVersion = "18.09"; # Did you read the comment?
     services.timesyncd.enable = true;
 
-    time.timeZone = "US/Pacific";
+    time.timeZone = "US/Los_Angeles";
 
     # ??
     services.tor = {
@@ -81,7 +81,7 @@ in {
       fsType = "vfat";
     };
 
-    swapDevices = [ ];
+    swapDevices = [];
 
     console.earlySetup = true; # hidpi + luks-open  # TODO : STILL NEEDED?
     console.font = "ter-v32n";

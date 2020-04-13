@@ -92,12 +92,21 @@ with lib;
       gnome3.nautilus
       pavucontrol
       qemu
+      quaternion
       spectral
       termite
       thunderbird
       vscodium
+      remmina
 
       hicolor-icon-theme
+      #pinentry-qt
+      #gnome3.gcr
+
+      # streamy stuff?
+      obs-studio
+      obs-wlrobs
+      obs-v4l2sink
 
       # utils
       brightnessctl
@@ -122,6 +131,11 @@ with lib;
       slack
       spotify
       ripcord
+    ];
+    users.users.cole.packages = with pkgs; [
+      obs-studio
+      obs-wlrobs
+      obs-v4l2sink
     ];
   };
 }

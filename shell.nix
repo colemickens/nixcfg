@@ -12,6 +12,7 @@ pkgs.stdenv.mkDerivation {
     cacert
     curl
     git
+    jq
     mercurial
     nix
     openssh

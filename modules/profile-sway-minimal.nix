@@ -17,7 +17,7 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-      termite
+      alacritty
       cage
       swaybg
       swayidle

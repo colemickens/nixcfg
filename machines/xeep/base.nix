@@ -1,5 +1,4 @@
 { pkgs, ... }:
-
 let
   lib = pkgs.lib;
   nixosHardware = import ../../imports/nixos-hardware;
@@ -20,19 +19,18 @@ in
 
     ../../modules/mixin-docker.nix
     #../../modules/mixin-firecracker.nix
-    ../../modules/mixin-intel-iris.nix
     ../../modules/mixin-libvirt.nix
-    #../../modules/mixin-plex-mpv.nix
-    ../../modules/mixin-mitmproxy.nix
-    ../../modules/mixin-plex.nix
+    ../../modules/mixin-plex-mpv.nix
+    #../../modules/mixin-mitmproxy.nix
+    #../../modules/mixin-plex.nix
     ../../modules/mixin-sshd.nix
     #../../modules/mixin-ipfs.nix
     #../../modules/mixin-yubikey.nix
 
     ../../modules/loremipsum-media/rclone-cmd.nix
-    ../../modules/mixin-spotifyd.nix
+    #../../modules/mixin-spotifyd.nix
 
-    ../../modules/mixin-v4l2loopback.nix
+    #../../modules/mixin-v4l2loopback.nix
     ../../modules/hw-chromecast.nix
 
     "${nixosHardware}/dell/xps/13-9370/default.nix"
@@ -45,23 +43,29 @@ in
     system.stateVersion = "18.09"; # Did you read the comment?
     services.timesyncd.enable = true;
 
-    # ??
-    services.tor.enable = true;
+    #time.timeZone = "US/Los_Angeles";
+
+    nix.nixPath = [];
+
+    services.tor.enable = true; # ??
 
     documentation.nixos.enable = false;
 
     # extract?
     services.ratbagd.enable = true;
 
-    environment.systemPackages = with pkgs; [ 
-      libratbag piper
+    environment.systemPackages = with pkgs; [
+      libratbag
+      piper
       undervolt
-      (pkgs.writeScriptBin "dell-fix-power" ''
-        #!/usr/bin/env bash
-        oldval="$(sudo ${pkgs.msr-tools}/bin/rdmsr 0x1FC)"
-        newval="$(( 0xFFFFFFFE & 0x$oldval ))"
-        sudo ${pkgs.msr-tools}/bin/wrmsr -a 0x1FC "$val"
-      '')
+      (
+        pkgs.writeScriptBin "dell-fix-power" ''
+          #!/usr/bin/env bash
+          oldval="$(sudo ${pkgs.msr-tools}/bin/rdmsr 0x1FC)"
+          newval="$(( 0xFFFFFFFE & 0x$oldval ))"
+          sudo ${pkgs.msr-tools}/bin/wrmsr -a 0x1FC "$val"
+        ''
+      )
     ];
 
     #fileSystems = {
@@ -69,11 +73,11 @@ in
     #  "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/nixos-boot"; };
     #};
     fileSystems = {
-      "/" =     { fsType = "zfs";  device = "rpool2/nixos"; };
+      "/" = { fsType = "zfs"; device = "rpool2/nixos"; };
       "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/nixos-boot"; };
-      "/home" = { fsType = "zfs";  device = "rpool2/home"; };
+      "/home" = { fsType = "zfs"; device = "rpool2/home"; };
     };
-    swapDevices = [ ];
+    swapDevices = [];
 
     console.earlySetup = true; # hidpi + luks-open  # TODO : STILL NEEDED?
     console.font = "ter-v32n";
@@ -86,16 +90,23 @@ in
       kernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
       kernelParams = [
         # HIGHLY IRRESPONSIBLE
-        "noibrs" "noibpb" "nopti" "nospectre_v2"
-        "nospectre_v1" "l1tf=off" "nospec_store_bypass_disable"
-        "no_stf_barrier" "mds=off" "mitigations=off"
+        "noibrs"
+        "noibpb"
+        "nopti"
+        "nospectre_v2"
+        "nospectre_v1"
+        "l1tf=off"
+        "nospec_store_bypass_disable"
+        "no_stf_barrier"
+        "mds=off"
+        "mitigations=off"
 
-        "i915.modeset=1"     # nixos-hw = missing
-        "i915.enable_guc=3"  # nixos-hw = missing
-        "i915.enable_gvt=0"  # nixos-hw = missing
-        "i915.enable_fbc=1"  # nixos-hw = 2
-        "i915.enable_psr=1"  # nixos-hw = missing?
-        "i915.fastboot=1"    # nixos-hw = missing?
+        "i915.modeset=1" # nixos-hw = missing
+        "i915.enable_guc=3" # nixos-hw = missing
+        "i915.enable_gvt=0" # nixos-hw = missing
+        "i915.enable_fbc=1" # nixos-hw = 2
+        "i915.enable_psr=1" # nixos-hw = missing?
+        "i915.fastboot=1" # nixos-hw = missing?
       ];
       supportedFilesystems = [ "btrfs" "zfs" ];
       initrd.supportedFilesystems = [ "btrfs" "zfs" ];
@@ -118,7 +129,7 @@ in
       hostName = hostname;
       firewall = {
         enable = true;
-        allowedTCPPorts = [ 5900 ];
+        allowedTCPPorts = [ 5900 22 ];
         checkReversePath = "loose";
       };
       networkmanager.enable = true;

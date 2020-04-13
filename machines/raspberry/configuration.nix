@@ -11,6 +11,7 @@ in
     ../../modules/mixin-unifi.nix
     ../../modules/mixin-sshd.nix
     ../../modules/mixin-srht-cronjobs.nix
+    ../../modules/mixin-plex-mpv.nix
     ../../modules/loremipsum-media/rclone-mnt.nix
 
     ./home-assistant
@@ -19,8 +20,9 @@ in
 
     # GUI
     ./gui.nix
-    ./kiosk.nix
     ../../modules/profile-sway-minimal.nix
+    ../../modules/mixin-nix-gc.nix
+    ../../modules/mixin-nologs.nix
   ];
 
   config = {
@@ -38,6 +40,7 @@ in
     ];
     networking.defaultGateway = "192.168.1.1";
     networking.nameservers = [ "192.168.1.1" ];
+    networking.useDHCP = false;
     networking.nat = {
       enable = true;
       internalInterfaces = [ wg ];

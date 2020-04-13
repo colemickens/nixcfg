@@ -1,8 +1,13 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ./hardware-configuration.nix ./home-assistant ];
+  imports = [
+    ./hardware-configuration.nix
+    ./home-assistant
+    ../../modules/mixin-nix-gc.nix
+  ];
 
+  # TODO: some of this is redundnat with the hyperv module (enabled at bottom of this file)
   boot.supportedFilesystems = [ "zfs" ];
   networking.hostId = "deadbeef";
   boot.initrd.kernelModules = [ "hv_vmbus" "hv_storvsc" ];
@@ -16,7 +21,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  nix.nixPath = [ ];
+  nix.nixPath = [];
   networking.hostName = "jeffhyper"; # Define your hostname.
   environment.systemPackages = with pkgs; [ file ripgrep tmux htop ];
 
@@ -37,10 +42,12 @@
   #
   # NETWORK
   networking.wireless.enable = false;
-  networking.interfaces.eth0.ipv4.addresses = [{
-    address = "192.168.1.24";
-    prefixLength = 24;
-  }];
+  networking.interfaces.eth0.ipv4.addresses = [
+    {
+      address = "192.168.1.24";
+      prefixLength = 24;
+    }
+  ];
   networking.defaultGateway = "192.168.1.1";
   networking.nameservers = [ "192.168.1.1" ];
   networking.firewall = {
@@ -77,4 +84,3 @@
   networking.interfaces.eth0.useDHCP = true;
   system.stateVersion = "19.09";
 }
-

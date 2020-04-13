@@ -2,11 +2,7 @@
 
 let
   secrets = import ./secrets.nix;
-
-  trusted_networks = [ "192.168.1.0/24" ];
-  ha_host = "127.0.0.1";
   ha_port = 8123;
-  ha_host_port = "${ha_host}:${toString ha_port}";
 in {
   config = {
     networking.firewall = { allowedTCPPorts = [ ha_port ]; };
@@ -27,7 +23,7 @@ in {
             #{ type = "homeassistant"; }
             {
               type = "trusted_networks";
-              trusted_networks = [ "127.0.0.1" ] ++ trusted_networks;
+              trusted_networks = [ "127.0.0.1" "192.168.1.0/24" ];
               allow_bypass_login = true;
             }
           ];

@@ -1,6 +1,6 @@
 substitutions:
   ipnum: "250"
-  devname: generic${ipnum}
+  devname: genericnew${ipnum}
 
 # generic template
 

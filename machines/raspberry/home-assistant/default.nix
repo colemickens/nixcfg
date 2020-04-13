@@ -21,47 +21,47 @@ in {
   config = {
     networking.firewall = { allowedTCPPorts = [ ha_port ]; };
 
-    services.prometheus = {
-      enable = true;
-      scrapeConfigs = [{
-        job_name = "home-assistant-scrape";
-        scrape_interval = "30s";
-        metrics_path = "/api/prometheus";
-        bearer_token = secrets.ha_access_token_prometheus;
-        scheme = "http";
-        static_configs = [{ targets = [ ha_host_port ]; }];
-      }];
-      exporters = {
-        node = {
-          enable = true;
-          enabledCollectors = [ "systemd" ];
-        };
-        tor = { enable = true; };
-        #unifi =  {
-        #  enable = true; 
-        #  unifiInsecure = true;
-        #  unifiAddress = "https://127.0.0.1:8443";
-        #  unifiUsername = "admin";
-        #  unifiPassword = "foo";
-        #};
-      };
-    };
-    services.grafana = {
-      enable = true;
-      domain = "grafana.cleothecat.duckdns.org";
-      auth.anonymous.enable = true;
-      provision = {
-        enable = true;
-        #dashboards = {
-        #};
-        datasources = [{
-          name = "prometheus";
-          url = "http://localhost:9090";
-          type = "prometheus";
-          access = "proxy";
-        }];
-      };
-    };
+    # services.prometheus = {
+    #   enable = true;
+    #   scrapeConfigs = [{
+    #     job_name = "home-assistant-scrape";
+    #     scrape_interval = "30s";
+    #     metrics_path = "/api/prometheus";
+    #     bearer_token = secrets.ha_access_token_prometheus;
+    #     scheme = "http";
+    #     static_configs = [{ targets = [ ha_host_port ]; }];
+    #   }];
+    #   exporters = {
+    #     node = {
+    #       enable = true;
+    #       enabledCollectors = [ "systemd" ];
+    #     };
+    #     tor = { enable = true; };
+    #     #unifi =  {
+    #     #  enable = true; 
+    #     #  unifiInsecure = true;
+    #     #  unifiAddress = "https://127.0.0.1:8443";
+    #     #  unifiUsername = "admin";
+    #     #  unifiPassword = "foo";
+    #     #};
+    #   };
+    # };
+    # services.grafana = {
+    #   enable = true;
+    #   domain = "grafana.cleothecat.duckdns.org";
+    #   auth.anonymous.enable = true;
+    #   provision = {
+    #     enable = true;
+    #     #dashboards = {
+    #     #};
+    #     datasources = [{
+    #       name = "prometheus";
+    #       url = "http://localhost:9090";
+    #       type = "prometheus";
+    #       access = "proxy";
+    #     }];
+    #   };
+    # };
 
     services.home-assistant = {
       enable = true;
@@ -114,7 +114,7 @@ in {
           }
         ];
         plex = { token = secrets.plex_access_token; };
-        prometheus = { namespace = "hass"; };
+        # prometheus = { namespace = "hass"; };
         recorder = { };
         roku = { host = "192.168.1.18"; };
         system_health = { };
@@ -122,7 +122,7 @@ in {
           platform = "openweathermap";
           api_key = secrets.openweathermap_apikey;
         };
-        zwave = { usb_path = zwaveAdapter; };
+        # zwave = { usb_path = zwaveAdapter; };
       };
       lovelaceConfig = import ./lovelace.nix;
       lovelaceConfigWritable = false;

@@ -40,14 +40,6 @@
         ];
       }
       {
-        title = "Dining Table";
-        type = "entities";
-        entities = [{
-          name = "Emerald Lamp";
-          entity = "switch.wp6_sw103_relay";
-        }];
-      }
-      {
         title = "Den";
         type = "entities";
         entities = [{
@@ -58,21 +50,35 @@
       {
         title = "Buddie's Desk";
         type = "entities";
+        entities = [
+          {
+            name = "Desk Lamp";
+            entity = "switch.wp6_sw104_relay";
+          }
+          {
+            name = "Emerald Lamp";
+            entity = "switch.wp6_sw109_relay";
+          }
+        ];
+      }
+      {
+        title = "Bed Room";
+        type = "entities";
         entities = [{
-          name = "Desk Lamp";
-          entity = "switch.wp6_sw104_relay";
+          name = "Bedside Lamp";
+          entity = "switch.wp6_sw103_relay";
         }];
       }
-      # {
-      #   title = "Bathroom";
-      #   type = "entities";
-      #   entities = [
-      #     { name = "Vanity Light";
-      #       entity = "switch.gosundsw121_relay"; }
-      #     { name = "Fan + Heat Lamp";
-      #       entity = "switch.gosundsw122_relay"; }
-      #   ];
-      # }
+      {
+        title = "Bathroom";
+        type = "entities";
+        entities = [
+          { name = "Vanity Light";
+            entity = "switch.gosundsw121_relay"; }
+          { name = "Fan + Heat Lamp";
+            entity = "switch.gosundsw122_relay"; }
+        ];
+      }
     ];
   }
   # (let mkSensor = title: entity:

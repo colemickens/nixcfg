@@ -5,6 +5,7 @@
       enable = true;
       enableSSHSupport = true;
       enableExtraSocket = true;
+      pinentryFlavor = "qt";
     };
     programs.ssh.startAgent = false;
   };

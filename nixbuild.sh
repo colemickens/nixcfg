@@ -11,7 +11,10 @@ nix-build \
   --option "build-cores" "0" \
   --option "narinfo-cache-negative-ttl" "0" \
   --builders-use-substitutes \
-  --builders '\
-    ssh://colemickens@aarch64.nixos.community aarch64-linux /home/cole/.ssh/id_ed25519; \
-    ssh://cole@azdev.westus2.cloudapp.azure.com x86_64-linux /home/cole/.ssh/id_ed25519' \
   "${@}"
+
+exit 0
+
+  --builders '
+    ssh://colemickens@aarch64.nixos.community aarch64-linux /home/cole/.ssh/id_ed25519;
+    ssh://cole@azdev.westus2.cloudapp.azure.com x86_64-linux /home/cole/.ssh/id_ed25519 - - big-parallel' \

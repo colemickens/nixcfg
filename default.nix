@@ -1,4 +1,5 @@
 {
+  azdev = import ./machines/azdev;
   jeffhyper = import ./machines/jeffhyper;
   raspberry = import ./machines/raspberry;
   rpiboot = import ./machines/rpiboot;

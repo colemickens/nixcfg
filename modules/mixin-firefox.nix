@@ -4,14 +4,14 @@ with lib;
 let
   overlay = (import ../lib.nix).overlay;
 
-  #stable = pkgs.firefox;
-  #nightly = pkgs.writeShellScriptBin "firefox-nightly" ''
-  #  exec ${pkgs.latest.firefox-nightly-bin}/bin/firefox "''${@}"
-  #'';
+  stable = pkgs.firefox;
+  nightly = pkgs.writeShellScriptBin "firefox-nightly" ''
+    exec ${pkgs.latest.firefox-nightly-bin}/bin/firefox "''${@}"
+  '';
 
   useNightly = true;
-  #firefoxPkgs = [ stable ] ++ lib.optionals useNightly [ nightly ];
-  firefoxPkgs = [ pkgs.latest.firefox-nightly-bin ];
+  firefoxPkgs = [ stable ] ++ lib.optionals useNightly [ nightly ];
+  #firefoxPkgs = [ pkgs.latest.firefox-nightly-bin ];
 in
 {
   config = {
