@@ -9,15 +9,16 @@ in
     ];
     environment.variables.WLR_DRM_NO_MODIFIERS = "1";
 
-    #xdg.portal.enable = true;
-    #xdg.portal.gtkUsePortal = true;
-    #xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
+    xdg.portal.enable = true;
+    xdg.portal.gtkUsePortal = true;
+    xdg.portal.extraPortals = with pkgs;
+      [ xdg-desktop-portal-wlr xdg-desktop-portal-gtk ];
 
     programs = {
       qt5ct.enable = true;
       sway = {
         enable = true;
-        #wrapperFeatures = { gtk = true; };
+        wrapperFeatures = { gtk = true; };
         extraSessionCommands = ''
           export SDL_VIDEODRIVER=wayland
           export QT_QPA_PLATFORM=wayland

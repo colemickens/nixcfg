@@ -7,6 +7,8 @@ with lib;
     services.nscd.enable = false; # once and for all
     services.resolved.enable = mkForce false;
 
+    environment.systemPackages = with pkgs; [ vim bash ];
+
     boot = {
       tmpOnTmpfs = true;
       cleanTmpDir = true;

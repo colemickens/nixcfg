@@ -1,6 +1,7 @@
 let
   mozpkgs = builtins.fetchTarball { url = "https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz"; };
-  pkgs = import (builtins.fetchTarball { url = "https://github.com/colemickens/nixpkgs/archive/cmpkgs.tar.gz"; }) {
+  #pkgs = import (builtins.fetchTarball { url = "https://github.com/colemickens/nixpkgs/archive/cmpkgs.tar.gz"; }) {
+  pkgs = import /home/cole/code/nixpkgs {
     overlays = [
       (import "${mozpkgs}/rust-overlay.nix")
       (import "${mozpkgs}/rust-src-overlay.nix")

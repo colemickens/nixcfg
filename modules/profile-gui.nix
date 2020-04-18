@@ -9,6 +9,7 @@ with lib;
   ];
   config = {
     hardware = {
+      # TODO: move to separate opengl-y module?
       opengl = {
         enable = true;
         extraPackages = with pkgs; [

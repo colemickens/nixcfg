@@ -8,52 +8,26 @@ in
   imports = [
     ./power-management.nix
 
-    ../../modules/common.nix
-    ../../modules/mixin-devenv.nix
-    ../../modules/pkgs-common.nix
-    ../../modules/pkgs-full.nix
-    ../../modules/user-cole.nix
-
-    ../../modules/profile-interactive.nix
-    ../../modules/profile-gui.nix
+    ../../modules/hm-cole.nix
+    ../../modules/hm-cole-gui.nix
 
     ../../modules/mixin-docker.nix
-    #../../modules/mixin-firecracker.nix
     ../../modules/mixin-libvirt.nix
-    ../../modules/mixin-plex-mpv.nix
-    #../../modules/mixin-mitmproxy.nix
-    #../../modules/mixin-plex.nix
+    #../../modules/mixin-plex-mpv.nix
     ../../modules/mixin-sshd.nix
-    #../../modules/mixin-ipfs.nix
-    #../../modules/mixin-yubikey.nix
 
     ../../modules/loremipsum-media/rclone-cmd.nix
-    #../../modules/mixin-spotifyd.nix
-
-    #../../modules/mixin-v4l2loopback.nix
+    ../../modules/mixin-v4l2loopback.nix
     ../../modules/hw-chromecast.nix
 
     "${nixosHardware}/dell/xps/13-9370/default.nix"
   ];
 
   config = {
-    # TODO move to devenv
+    # <relocate>
+    # TODO
     services.udev.packages = with pkgs; [ libsigrok ];
-
-    system.stateVersion = "18.09"; # Did you read the comment?
-    services.timesyncd.enable = true;
-
-    #time.timeZone = "US/Los_Angeles";
-
-    nix.nixPath = [];
-
-    services.tor.enable = true; # ??
-
-    documentation.nixos.enable = false;
-
-    # extract?
     services.ratbagd.enable = true;
-
     environment.systemPackages = with pkgs; [
       libratbag
       piper
@@ -67,11 +41,13 @@ in
         ''
       )
     ];
+    # </relocate>
 
-    #fileSystems = {
-    #  "/" =     { fsType = "ext4"; device = "/dev/vg/root"; };
-    #  "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/nixos-boot"; };
-    #};
+    system.stateVersion = "18.09"; # Did you read the comment?
+    services.timesyncd.enable = true;
+    nix.nixPath = [];
+    documentation.nixos.enable = false;
+
     fileSystems = {
       "/" = { fsType = "zfs"; device = "rpool2/nixos"; };
       "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/nixos-boot"; };
@@ -110,14 +86,6 @@ in
       ];
       supportedFilesystems = [ "btrfs" "zfs" ];
       initrd.supportedFilesystems = [ "btrfs" "zfs" ];
-      #initrd.luks.devices = [
-      #  {
-      #    name = "root";
-      #    device = "/dev/disk/by-partlabel/nixos-luks";
-      #    preLVM = true;
-      #    allowDiscards = true;
-      #  }
-      #];
       loader = {
         timeout = 1;
         systemd-boot.enable = true;

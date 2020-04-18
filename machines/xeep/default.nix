@@ -4,7 +4,6 @@ let
     nixpkgs = lib.findNixpkgs "cmpkgs";
     extraModules = [
       ./base.nix
-      ../../modules/profile-sway.nix
     ];
     system = "x86_64-linux";
   };

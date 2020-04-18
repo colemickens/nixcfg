@@ -8,12 +8,6 @@ let
     #"192.168.69.0/24" # esphome network (but doesn't need to hit HA frontdoor)
   ];
 
-  # hopefully removing this soon? vvv
-  zwaveAdapter =
-    "/dev/serial/by-id/usb-Silicon_Labs_HubZ_Smart_Home_Controller_813003E3-if00-port0";
-  zigbeeAdapter =
-    "/dev/serial/by-id/usb-Silicon_Labs_HubZ_Smart_Home_Controller_813003E3-if01-port0";
-
   ha_host = "127.0.0.1";
   ha_port = 8123;
   ha_host_port = "${ha_host}:${toString ha_port}";
@@ -113,6 +107,7 @@ in {
             host = "192.168.1.126";
           }
         ];
+        mobile_app = {}; # needs hass_nabucasa or w/e
         plex = { token = secrets.plex_access_token; };
         # prometheus = { namespace = "hass"; };
         recorder = { };
