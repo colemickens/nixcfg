@@ -1,7 +1,6 @@
 let
   mozpkgs = builtins.fetchTarball { url = "https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz"; };
-  #pkgs = import (builtins.fetchTarball { url = "https://github.com/colemickens/nixpkgs/archive/cmpkgs.tar.gz"; }) {
-  pkgs = import /home/cole/code/nixpkgs {
+  pkgs = import ../../nixpkgs/cmpkgs {
     overlays = [
       (import "${mozpkgs}/rust-overlay.nix")
       (import "${mozpkgs}/rust-src-overlay.nix")
@@ -24,6 +23,8 @@ pkgs.stdenv.mkDerivation {
 
   buildInputs = with pkgs; [
     openssl
+    gpgme libgpgerror libgit2 git # passrs
+    dbus # passrs libsecret
   ];
 
   RUST_BACKTRACE = 1;

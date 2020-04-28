@@ -2,16 +2,16 @@
   # overlay will load an overlay, either from:
   #  ../overlays/{name}
   #  ./pkgs/{name}
-  overlay = name:
+  findImport = type: name:
     let
-      localimportpath = ../overlays + "/${name}";
-      importpath = ./imports + "/${name}";
+      localimportpath = ./.. + "/${type}/${name}";
+      importpath = ./imports + "/${type}/${name}";
     in
       if builtins.pathExists localimportpath then
-        (import "${localimportpath}")
+        localimportpath
       else if builtins.pathExists importpath then
-        (import (import "${importpath}"))
-      else (abort "you must vendor overlay imports");
+        (import importpath)
+      else (abort "you must vendor all imports");
 
   # TODO: see if there's way to simplify this, (note: nixpkgs.nixos does not eval overlays)
   mkSystem = { nixpkgs, system ? "x86_64-linux", rev ? "git", extraModules ? [], ... }:
@@ -30,13 +30,4 @@
       };
     in
       machine;
-
-  findNixpkgs = branchName:
-    let
-      localimportpath = ../nixpkgs- + "${branchName}";
-    in
-      if builtins.pathExists localimportpath then
-        localimportpath
-      else
-        builtins.fetchTarball { url = "https://foo"; };
 }

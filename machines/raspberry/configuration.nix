@@ -7,11 +7,12 @@ in
 {
   imports = [
     ../../modules/common.nix
-    ../../modules/user-cole.nix
+    ../../modules/home-manager
+
     ../../modules/mixin-unifi.nix
     ../../modules/mixin-sshd.nix
     ../../modules/mixin-srht-cronjobs.nix
-    ../../modules/mixin-plex-mpv.nix
+    #../../modules/mixin-plex-mpv.nix
     ../../modules/loremipsum-media/rclone-mnt.nix
 
     ./home-assistant
@@ -19,10 +20,10 @@ in
     ./sd-image-raspberrypi4-new.nix
 
     # GUI
-    ./gui.nix
-    ../../modules/profile-sway-minimal.nix
-    ../../modules/mixin-nix-gc.nix
-    ../../modules/mixin-nologs.nix
+    #./gui.nix
+    #../../modules/profile-sway-minimal.nix
+    #../../modules/mixin-nix-gc.nix
+    #../../modules/mixin-nologs.nix
   ];
 
   config = {

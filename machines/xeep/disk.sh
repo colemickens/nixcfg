@@ -2,6 +2,12 @@
 set -x
 set -euo pipefail
 
+# rpool2/
+# rpool2/enc
+# rpool2/nixos/enc/var-lib
+# rpool2/nixos/enc/
+
+
 sudo modprobe zfs
 
 sudo zpool create \

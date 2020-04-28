@@ -37,7 +37,7 @@ function update() {
       repo="$(nix-instantiate "${metadata}" --eval --json -A repo_hg | jq -r .)"
       newrev="$(hg identify "${repo}" -r "${branch}")"
     fi
-    
+
     if [[ "${rev}" != "${newrev}" ]]; then
       # Update RevDate
       d="$(mktemp -d)"
@@ -61,6 +61,9 @@ function update() {
   fi
 }
 
-for p in imports/*; do
+for p in imports/**/*; do
   update "nixpkgs" "${p}"
 done
+
+echo "done"
+

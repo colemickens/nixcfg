@@ -8,4 +8,4 @@ let
     system = "x86_64-linux";
   };
 in
-system.config.system.build.toplevel
+system

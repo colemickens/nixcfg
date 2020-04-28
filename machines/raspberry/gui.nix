@@ -29,7 +29,7 @@
     ];
 
 
-    # TODO: ???? should more configs use this?
+    # according to the issue I opened on kioskix, it might be for tablets
     services.udev.packages = [ pkgs.libinput.out ];
 
     systemd.services."cage-tty1" = {

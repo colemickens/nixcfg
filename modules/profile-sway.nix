@@ -5,7 +5,7 @@ in
 {
   config = {
     nixpkgs.overlays = [
-      (overlay "nixpkgs-wayland")
+      (findImport "overlays" "nixpkgs-wayland")
     ];
     environment.variables.WLR_DRM_NO_MODIFIERS = "1";
 

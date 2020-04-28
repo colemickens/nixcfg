@@ -7,7 +7,9 @@
     ../../modules/loremipsum-media/rclone-mnt.nix
     ../../modules/loremipsum-media/rclone-cmd.nix
     ../../modules/mixin-plex.nix
-    ../../modules/user-cole.nix
+    ../../modules/mixin-cachix.nix
+
+    ../../modules/home-manager/default.nix
   ];
 
   config = {
@@ -17,7 +19,8 @@
     networking.hostName = "azdev";
     boot.kernelPackages = pkgs.linuxPackages_latest;
 
-    nix.package = pkgs.nixUnstable;
+    nix.nrBuildUsers = 100;
+    #nix.package = pkgs.nixUnstable;
 
     #environment.noXlibs = true;
     #documentation.enable = false;

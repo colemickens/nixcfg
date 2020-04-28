@@ -2,6 +2,8 @@
 set -euo pipefail
 set -x
 
+sudo true
+
 machinename="$(hostname)"
 remote="self"
 
@@ -14,11 +16,13 @@ fi
 toplevel="$(./nixbuild.sh "./machines/${machinename}")"
 
 if [[ "${remote}" == "self" ]]; then
-  sudo nix-env --set --profile '/nix/var/nix/profiles/system' "${toplevel}"
-  sudo "${toplevel}/bin/switch-to-configuration" switch
+  sudo bash -c "\
+    nix-env --set --profile /nix/var/nix/profiles/system ${toplevel} \
+    && ${toplevel}/bin/switch-to-configuration switch"
 else
   NIX_SSHOPTS="-p ${port}" nix-copy-closure --to "ssh://${remote}" "${toplevel}"
-  ssh "${remote}" -p "${port}" "sudo nix-env --set --profile '/nix/var/nix/profiles/system' '${toplevel}'"
-  ssh "${remote}" -p "${port}" "sudo '${toplevel}/bin/switch-to-configuration' switch"
+  ssh "${remote}" -p "${port}" "\
+    sudo bash -c \" nix-env --set --profile /nix/var/nix/profiles/system ${toplevel} \
+    && ${toplevel}/bin/switch-to-configuration switch\""
 fi
 
