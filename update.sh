@@ -65,5 +65,7 @@ for p in imports/**/*; do
   update "nixpkgs" "${p}"
 done
 
+nix-build | cachix push colemickens
+
 echo "done"
 

@@ -6,6 +6,8 @@ let
 
   termiteFont = "Noto Sans Mono 11";
 
+  chromium-dev-ozone = import (findImport "overlays" "nixpkgs-chromium");
+
   firefoxNightly = pkgs.writeShellScriptBin "firefox-nightly" ''
     exec ${pkgs.latest.firefox-nightly-bin}/bin/firefox "''${@}"
   '';
@@ -129,7 +131,8 @@ in
 
         # browsers
         firefox firefoxNightly
-        chromium # chromiumDevOzone #TODO
+        #chromium
+        chromium-dev-ozone
 
         # comms
         thunderbird

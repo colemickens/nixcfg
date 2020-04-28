@@ -2,7 +2,7 @@
   url = "https://github.com/rycee/home-manager/archive/master.tar.gz";
   repo_git = "https://github.com/rycee/home-manager";
   branch = "master";
-  rev = "a6037a9eb885d8ad8c2087e3b2091cd5913242b2";
-  sha256 = "1b6pzscx7zss9s5dgnm2vwff56bjl1643qdgq725r5gc067wlqqz";
-  revdate = "2020-04-26 15:50:21 +0200";
+  rev = "a7cdfaa32585fce404cf8890bae099348e53e0ad";
+  sha256 = "0z3pmzdw6hwr72b00bn5j6l3xhwwd8jadwmz4cjb6af9x8jgdxpq";
+  revdate = "2020-04-27 22:04:13 +0200";
 }
