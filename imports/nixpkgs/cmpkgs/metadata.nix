@@ -2,7 +2,7 @@
   url = "https://github.com/colemickens/nixpkgs/archive/cmpkgs.tar.gz";
   repo_git = "https://github.com/colemickens/nixpkgs";
   branch = "cmpkgs";
-  rev = "df70dcb6fb506bfca51f509700b2e7378f8eadcb";
-  sha256 = "0l8jgglscpaijpmqzppcvvwjszypnm3fqjjrw2hfyrc63ks8gi6n";
-  revdate = "2020-05-16 10:27:00 +0200";
+  rev = "e71617b1ba821a5b0bc03452fe3935a6a3efc07f";
+  sha256 = "0as39dq63nbmwxlaazfqivpvz785zjy6r56cirqb63d2wakkxpx3";
+  revdate = "2020-05-16 11:14:18 -0700";
 }

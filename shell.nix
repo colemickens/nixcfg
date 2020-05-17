@@ -1,5 +1,5 @@
 let
-  pkgs = import /home/cole/code/nixpkgs {};
+  pkgs = import /home/cole/code/nixpkgs/cmpkgs {};
   cachixpkgs = (import (builtins.fetchTarball { url = "https://cachix.org/api/v1/install"; }) {});
 in
 pkgs.stdenv.mkDerivation {
@@ -15,6 +15,7 @@ pkgs.stdenv.mkDerivation {
     jq
     mercurial
     nix
+    nix-build-uncached
     openssh
     ripgrep
   ]);

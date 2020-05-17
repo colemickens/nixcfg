@@ -6,8 +6,6 @@ secrets:
 tasks:
   - update: |
       cd nixcfg
-      nix-shell --pure --command "./.ci/prep.sh"
-      nix-shell --pure --command "./machines/azplex/.ci/try.sh"
-      nix-shell --pure --command "./.ci/push.sh"
+      nix-shell --pure --command "./update.sh"
 
 # TODO: how can we push intermediate results ?
