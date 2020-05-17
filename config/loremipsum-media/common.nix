@@ -3,11 +3,11 @@
 rec {
   rcloneConfigFile = pkgs.substituteAll {
     src = ./rclone.conf;
-    rclone_archives   = ./sa/rclone-238701-9118db5df826.json;
-    rclone_backups    = ./sa/rclone-238701-2f39d1bad234.json;
-    rclone_movies     = ./sa/rclone-238701-d77283a08b9a.json;
-    rclone_tvshows    = ./sa/rclone-238701-9a5c922143a1.json;
-    rclone_misc       = ./sa/rclone-238701-9a5c922143a1.json;
+    rclone_archives   = ./sa/rclone-archives.json;
+    rclone_backups    = ./sa/rclone-backups.json;
+    rclone_movies     = ./sa/rclone-movies.json;
+    rclone_tvshows    = ./sa/rclone-tvshows.json;
+    rclone_misc       = ./sa/rclone-misc.json;
   };
 
   rclone-lim = pkgs.writeScriptBin "rclone-lim" ''
