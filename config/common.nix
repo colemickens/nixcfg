@@ -4,7 +4,7 @@ with lib;
 
 {
   config = {
-    services.nscd.enable = false; # once and for all
+    services.nscd.enable = true; # TODO # once and for all
     services.resolved.enable = mkForce false;
 
     environment.systemPackages = with pkgs; [ vim bash ];
