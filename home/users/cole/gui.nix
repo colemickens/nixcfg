@@ -1,12 +1,12 @@
 { pkgs, config, ... }:
 
 let
-  findImport = (import ../../lib.nix).findImport;
+  findImport = (import ../../../lib.nix).findImport;
   home-manager = findImport "extras" "home-manager";
 
   termiteFont = "Noto Sans Mono 11";
 
-  chromium-dev-ozone = import (findImport "overlays" "nixpkgs-chromium");
+  chromium-dev-ozone = import (findImport "extras" "nixpkgs-chromium");
 
   firefoxNightly = pkgs.writeShellScriptBin "firefox-nightly" ''
     exec ${pkgs.latest.firefox-nightly-bin}/bin/firefox "''${@}"
@@ -17,6 +17,8 @@ in
     "${home-manager}/nixos"
   ];
 
+  # TODO: xdg-user-dirs fixup
+
   config = {
     # <nixpkgs + overlays>
     nixpkgs.config.allowUnfree = true;
@@ -25,7 +27,7 @@ in
       (import (findImport "overlays" "nixpkgs-wayland"))
     ];
     # </nixpkgs + overlays>
-    
+
     # <gfx+audio>
     hardware = {
       # TODO: move to separate opengl-y module?
@@ -86,24 +88,29 @@ in
       programs = {
         htop.enable = true;
         mako.enable = true;
-        mpv = import ./include/mpv-config.nix;
+        mpv = import ./config/mpv-config.nix;
         obs-studio = {
           enable = true;
           plugins = with pkgs; [ obs-wlrobs obs-v4l2sink ];
         };
-        termite = import ./include/termite-config.nix {
+        termite = import ./config/termite-config.nix {
           font = termiteFont;
         };
       };
       services = {
-        redshift = import ./include/redshift-config.nix { inherit pkgs; };
+        gpg-agent = {
+          enable = true;
+          enableSshSupport = true;
+          enableExtraSocket = true;
+        };
+        redshift = import ./config/redshift-config.nix { inherit pkgs; };
         udiskie.enable = true;
       };
-      wayland.windowManager.sway = import ./include/sway-config.nix {
+      wayland.windowManager.sway = import ./config/sway-config.nix {
         inherit pkgs firefoxNightly;
       };
       xdg.configFile = {
-        "wayvnc/config".source = ./include/wayvnc/vnc.cfg;
+        "wayvnc/config".source = ./config/wayvnc/vnc.cfg;
       };
       home.packages = with pkgs; [
         calibre
@@ -136,7 +143,8 @@ in
 
         # comms
         thunderbird
-        fractal quaternion spectral
+        #fractal quaternion spectral
+        riot-desktop
 
         # virt-manager # TODO: tie to the system virt-manager enablement somehow?
         # but we don't really want it reaching into HM stuff, so maybe this is just fine
@@ -152,8 +160,8 @@ in
         arc-icon-theme arc-theme numix-icon-theme hicolor-icon-theme
 
         # <nonfree> ewwwww...
-        discord slack spotify ripcord
-        google-chrome-dev
+        discord ripcord slack # => matrix + bridge
+        spotify
         # </nonfree>
       ] ++ lib.optionals (config.system == "x86_64-linux")
         [

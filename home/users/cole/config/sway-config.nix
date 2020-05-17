@@ -2,6 +2,7 @@
 
 let
   blue = "'#004059'";
+  pink = "'#904075'";
   purple = "'#3d326e'";
   purpledark = "'#1b104d'";
   swayfont = "Noto Sans Mono Bold 9";
@@ -10,13 +11,21 @@ let
   terminal = "${pkgs.termite}/bin/termite";
   browser = "${firefoxNightly}/bin/firefox-nightly -P default";
   editor = "${pkgs.vscodium}/bin/codium";
-  menu = "${pkgs.wofi}/bin/wofi --show drun";
 
-  # output identifiers
+  wofi = "${pkgs.wofi}/bin/wofi --insensitive";
+  drun = "${wofi} --show drun";
+
+  # PASS
+  gp = "${pkgs.gopass}/bin/gopass";
+  smsg = "${pkgs.sway}/bin/swaymsg";
+  passShowCmd = "${gp} ls --flat | ${wofi} --dmenu | xargs -r ${smsg} -t command exec -- ${gp} show --clip";
+  passTotpCmd = "${gp} ls --flat | ${wofi} --dmenu | xargs -r ${smsg} -t command exec -- ${gp} totp --clip";
+
+  # OUTPUTS
   out_laptop = "Sharp Corporation 0x148B 0x00000000";
   out_alien = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
 
-  # input identifiers
+  # INPUTS
   in_touchpad = "1739:30383:DELL07E6:00_06CB:76AF_Touchpad";
   in_logi = "1133:16505:Logitech_G_Pro";
 
@@ -32,6 +41,7 @@ let
     timeout 1000 \"${pkgs.systemd}/bin/systemctl suspend\"'';
 
   # silly gtk/gnome wayland schenanigans
+  # TODO: see if this is necessary if we get HM to do it? or our own systemd user units?
   gsettingsscript = pkgs.writeShellScript "gsettings-auto.sh" ''
     expression=""
     for pair in "$@"; do
@@ -39,7 +49,9 @@ let
       expressions="$expressions -e 's:^$2=(.*)$:gsettings set org.gnome.desktop.interface $1 \1:e'"
     done
     IFS=
-    eval exec sed -E $expressions "''${XDG_CONFIG_HOME:-$HOME/.config}"/gtk-3.0/settings.ini >/dev/null
+    echo "" >/tmp/gsettings.log
+    echo exec sed -E $expressions "''${XDG_CONFIG_HOME:-$HOME/.config}"/gtk-3.0/settings.ini &>>/tmp/gsettings.log
+    eval exec sed -E $expressions "''${XDG_CONFIG_HOME:-$HOME/.config}"/gtk-3.0/settings.ini &>>/tmp/gsettings.log
   '';
   gsettingscmd = ''${gsettingsscript} \
     gtk-theme:gtk-theme-name \
@@ -63,11 +75,11 @@ in {
   xwayland = true;
   config = rec {
     modifier = "Mod4";
-    inherit terminal menu;
+    inherit terminal;
     fonts = [ swayfont ];
-    #focus.followMouse = "always";
-    focus.followMouse = true;
-    window.border = 4 ;
+    # TODO: fix this issue in HM:
+    focus.followMouse = "always";
+    window.border = 4;
     window.commands = [
       { criteria = { app_id = "mpv"; }; command = "sticky enable"; }
       { criteria = { app_id = "mpv"; }; command = "floating enable"; }
@@ -78,14 +90,12 @@ in {
       }
     ];
     startup = [
-      { command = "${pkgs.xorg.xrdb}/bin/xrdb -l $HOME/.Xresources";
-        always = false; }
-      { command = "${pkgs.systemd}/bin/systemd-notify --ready || true";
-        always = false; }
-      { command = "${idlecmd}";
-        always = true; }
-      { command = "${gsettingscmd}";
-        always = true; }
+      { always = true; command = "${gsettingscmd}"; }
+      { always = true; command = "${pkgs.xorg.xrdb}/bin/xrdb -l $HOME/.Xresources"; }
+      { always = true; command = "${pkgs.systemd}/bin/systemd-notify --ready || true"; }
+
+      { always = true;  command = "pkill swayidle"; } # Disable swayidle for a bit
+      #{ command = "${idlecmd}"; always = true; }     # Disable swayidle for a bit
     ];
     input = {
       "${in_touchpad}" = {
@@ -126,13 +136,15 @@ in {
       "${modifier}+Shift+Return" = "exec ${browser}";
       "${modifier}+Shift+Backspace" = "exec ${editor}";
       "${modifier}+Shift+q" = "kill";
-      "${modifier}+Escape" = "exec ${menu}";
       "${modifier}+Shift+c" = "reload";
-      "Ctrl+Escape" = "exec ${pkgs.wldash}/bin/wldash start-or-kill";
+
+      "${modifier}+Escape" = "exec ${drun}";
+      "${modifier}+F1" = "exec ${passShowCmd}";
+      "${modifier}+F2" = "exec ${passTotpCmd}";
 
       "${modifier}+Ctrl+Alt+Delete" = "exit";
 
-      "${modifier}+q" = "exec echo"; # the most ridiculous firefox bug ever
+      "Ctrl+q" = "exec echo"; # the most ridiculous firefox bug ever
 
       "${modifier}+Left" = "focus left";
       "${modifier}+Down" = "focus down";
@@ -183,31 +195,21 @@ in {
       "${modifier}+Shift+0" = "move container to workspace number 10";
 
       "${modifier}+Shift+minus" = "move scratchpad";
-      "${modifier}+minus" = "scratchpad show";
+      "${modifier}+minus"       = "scratchpad show";
 
-      "${modifier}+Ctrl+Alt+Home" = "output * enable";
-      "${modifier}+Ctrl+Alt+End" = "output -- disable";
+      "${modifier}+Ctrl+Alt+Home"  = "output * enable";
+      "${modifier}+Ctrl+Alt+End"   = "output -- disable";
       "${modifier}+Ctrl+Alt+equal" = "exec ${outputScale} +.1";
       "${modifier}+Ctrl+Alt+minus" = "exec ${outputScale} -.1";
 
       "${modifier}+Print"       = ''exec ${pkgs.grim}/bin/grim \"''${HOME}/screenshot-$(date '+%s').png\"'';
       "${modifier}+Shift+Print" = ''exec ${pkgs.grim}/bin/grim  -g \"$(slurp)\" \"''${HOME}/screenshot-$(date '+%s').png\"'';
 
-      # ###############################################################################
-      # # gopass
-      # set $gopass_show gopass ls --flat | fzf | xargs -r swaymsg -t command exec -- gopass show --clip
-      # set $gopass_totp gopass ls --flat | fzf | xargs -r swaymsg -t command exec -- gopass totp --clip
-      # set $termite_gopass_show exec termite --name=launcher -e 'bash -c "$gopass_show"'
-      # set $termite_gopass_totp exec termite --name=launcher -e 'bash -c "$gopass_totp"'
-      # bindsym $mod+F1 $termite_gopass_show
-      # bindsym $mod+F2 $termite_gopass_totp
-      # ###############################################################################
-
-      "${modifier}+Ctrl+Alt+Up"   = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +10";
-      "${modifier}+Ctrl+Alt+Down" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 10-";
-      "${modifier}+Ctrl+Alt+Prior"   = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +100";
-      "${modifier}+Ctrl+Alt+Next" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 100-";
-      "${modifier}+Ctrl+Alt+Left" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume -2";
+      "${modifier}+Ctrl+Alt+Up"    = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +10";
+      "${modifier}+Ctrl+Alt+Down"  = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 10-";
+      "${modifier}+Ctrl+Alt+Prior" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +100";
+      "${modifier}+Ctrl+Alt+Next"  = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 100-";
+      "${modifier}+Ctrl+Alt+Left"  = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume -2";
       "${modifier}+Ctrl+Alt+Right" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume +2";
     };
   };

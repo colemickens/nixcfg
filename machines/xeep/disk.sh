@@ -2,11 +2,26 @@
 set -x
 set -euo pipefail
 
-# rpool2/
-# rpool2/enc
-# rpool2/nixos/enc/var-lib
-# rpool2/nixos/enc/
+# TOOD: zstd? gcm encryption for speed-ups?
 
+# rpool2/
+# rpool2/data <- set encryption here
+# rpool2/root <- unencrypted; snapshotted + reset on boot; should be deleted, recreated frequently (can we encrypt this with empty passphrased-key?)
+
+# none prevents mounting
+# legacy allows mounting with mount/umount tooling
+
+  # -O compression=zstd
+  # -O xattr=sa           # journald
+  # -O acltype=posixacl   # journald
+  # -O atime=off
+  # -o ashift=12
+  # -O mountpoint=none
+
+  # different newer mountpoint type?
+  # wait for zstd or just use zstd on new laptop...
+
+# services.zfs.autoScrub.enable = true;
 
 sudo modprobe zfs
 

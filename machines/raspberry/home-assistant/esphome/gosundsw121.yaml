@@ -61,14 +61,16 @@ binary_sensor:
     pin:
       number: GPIO0
       mode: INPUT_PULLUP
-    id: ${devname}_button
+    # id: button           # BEFORE
+    id: ${devname}_button  # AFTER
     on_press:
       - switch.toggle: ${devname}_relay
 
 switch:
   - platform: gpio
-    id: ${devname}_relay_led
-    name: ${devname}_relay_led
+    # id: relay_led            # BEFORE
+    # id: ${devname}_relay_led # AFTER
+    name: "${devname} Relay LED"
     pin:
       number: GPIO02
       inverted: true

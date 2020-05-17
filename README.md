@@ -2,7 +2,7 @@
 
 My NixOS Configuration.
 
-Feel free to open issues if you're curious about anything.
+_**Please**, feel free to open issues if you're curious about anything._
 
 ## Layout
 
@@ -19,6 +19,28 @@ Feel free to open issues if you're curious about anything.
 - `shells/` some devenv style shells for developing go/rust apps under NixOS
 
 ## Notes
+
+#### Guiding Principals
+
+* Multi-user UNIX systems are inpractical, don't try too hard to optimize for it
+* That having been said, Home-Manager makes it easier to be disciplined about it
+* Everything is declarative
+* Everything is pinned (except `firefox-nightly` due to `nixpkgs-mozilla`)
+* Everything is reproducible (again, excepting the differences up
+  the tree due to `firefox-nightly`)
+
+#### Look ma, no channels!
+
+My Nix usage involves NO channels. I do not use any of the NixOS channel infrastructure,
+other than the fact that I rebase my nixpkgs branch on the `nixos-unstable` branch/channel
+to take advantage of Hydra cache hits for store outputs.
+
+While the Nix Flakes proposal would solve additional problems, this allows me to at least get fully
+reproducible results. My default my system is built against a pinned nixpkgs, and all imports are pinned
+as well. I have to opt-in to updates to these imports, and they're reflected in the git history.
+
+The pieces required for this become more clear after reading the next section, and generally by
+following `./default.nix` down the rabbit hole.
 
 #### Pinned Imports & Code Layout
 

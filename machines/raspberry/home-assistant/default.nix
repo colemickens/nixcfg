@@ -107,11 +107,11 @@ in {
             host = "192.168.1.126";
           }
         ];
-        mobile_app = {}; # needs hass_nabucasa or w/e
-        plex = { token = secrets.plex_access_token; };
+        #mobile_app = {}; # needs hass_nabucasa or w/e
+        #plex = { token = secrets.plex_access_token; };
         # prometheus = { namespace = "hass"; };
         recorder = { };
-        roku = { host = "192.168.1.18"; };
+        #roku = { host = "192.168.1.18"; };
         system_health = { };
         weather = {
           platform = "openweathermap";

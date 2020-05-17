@@ -1,5 +1,5 @@
 {
-  url = "https://github.com/colemickens/nixpkgs/archive/master.tar.gz";
+  url = "https://github.com/colemickens/nixpkgs/archive/rpi.tar.gz";
   repo_git = "https://github.com/colemickens/nixpkgs";
   branch = "rpi";
   rev = "268aed551f51c7114799a66883a621a9d208b496";

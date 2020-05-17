@@ -3,7 +3,7 @@
 let
 #  cachixManual = import ./pkgs-cachix.nix pkgs;
 
-  findImport = (import ../../lib.nix).findImport;
+  findImport = (import ../../../lib.nix).findImport;
   home-manager = findImport "extras" "home-manager";
 
   crtFilePath = "/home/cole/.mitmproxy/mitmproxy-ca-cert.pem";
@@ -50,30 +50,26 @@ in
       };
       home.file = {
         ".gdbinit".source = (pkgs.writeText "gdbinit" ''set auto-load safe-path /nix/store'');
-        ".local/bin/gpgssh.sh".source = ./include/bin/gpgssh.sh;
-        ".local/bin/megadl.sh".source = ./include/bin/megadl.sh;
-        ".local/bin/rdpsly.sh".source = ./include/bin/rdpsly.sh;
+        #".local/bin/gpgssh.sh".source = ./config/bin/gpgssh.sh;
+        #".local/bin/megadl.sh".source = ./config/bin/megadl.sh;
+        #".local/bin/rdpsly.sh".source = ./config/bin/rdpsly.sh;
       };
       xdg.enable = true;
       xdg.configFile = {
-        "gopass/config.yml".source = ./include/gopass/config.yml;
+        "gopass/config.yml".source = ./config/gopass/config.yml;
+        # TODO: passrs ?s
       };
       programs = {
         bash.enable = false;
-        fish = import ./include/fish-config.nix pkgs;
-        git = import ./include/git-config.nix pkgs;
+        fish = import ./config/fish-config.nix pkgs;
+        git = import ./config/git-config.nix pkgs;
         gpg.enable = true;
         home-manager.enable = true;
         htop.enable = true;
-        neovim = import ./include/neovim-config.nix pkgs;
+        neovim = import ./config/neovim-config.nix pkgs;
         zsh.enable = false;
       };
       services = {
-        gpg-agent = {
-          enable = true;
-          enableSshSupport = true;
-          enableExtraSocket = true;
-        };
       };
       home.packages = with pkgs; [
         # everything non-gui goes here that I use
@@ -82,7 +78,7 @@ in
         # neovim vim # HM modules
         ripgrep jq fzf tmux
         wget curl stow ncdu tree
-        git-crypt gopass gnupg
+        git-crypt gopass gnupg passrs
         openssh autossh mosh sshuttle
         gitAndTools.gitFull gitAndTools.hub gist tig
         cvs mercurial subversion # pjiul
@@ -90,7 +86,7 @@ in
         mitmproxy
 
         htop iotop which binutils.bintools
-        p7zip unrar parallel unzip xz zip
+        unrar parallel unzip xz zip #p7zip
 
         nix-prefetch nixpkgs-fmt nixpkgs-review
 

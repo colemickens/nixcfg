@@ -15,8 +15,8 @@
       ENERGY_PERF_POLICY_ON_BAT=powersave
     '';
     powerManagement.enable = true;
-    services.upower.enable = false; # fucking tired of it shutting down with hours of battery left
-    
+    services.upower.enable = true; # fucking tired of it shutting down with hours of battery left
+
     #services.undervolt = {
     #  enable = true;
     #  coreOffset = "-100";
@@ -26,7 +26,7 @@
     #  temp = "97";
     #};
     services.thermald.enable = false;
-    
+
     services.throttled = {
       enable = true;
       extraConfig = ''
@@ -98,19 +98,19 @@
 
         # [ICCMAX.AC]
         # # CPU core max current (A)
-        # CORE: 
+        # CORE:
         # # Integrated GPU max current (A)
-        # GPU: 
+        # GPU:
         # # CPU cache max current (A)
-        # CACHE: 
+        # CACHE:
 
         # [ICCMAX.BATTERY]
         # # CPU core max current (A)
-        # CORE: 
+        # CORE:
         # # Integrated GPU max current (A)
-        # GPU: 
+        # GPU:
         # # CPU cache max current (A)
-        # CACHE: 
+        # CACHE:
       '';
     };
   };
