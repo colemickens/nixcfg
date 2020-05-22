@@ -114,11 +114,11 @@ in {
     };
     output = {
       "*".background = "${blue} solid_color";
-      "${out_laptop}" = {
-        mode = "3480x2160@59.997002Hz";
-        subpixel = "rgb";
-        scale = "2.0";
-      };
+      #"${out_laptop}" = {
+      #  mode = "3480x2160@59.997002Hz";
+      #  subpixel = "rgb";
+      #  scale = "2.0";
+      #};
       "${out_alien}" = {
         mode = "3440x1440@100Hz";
         subpixel = "rgb";
@@ -137,6 +137,7 @@ in {
       "${modifier}+Shift+Backspace" = "exec ${editor}";
       "${modifier}+Shift+q" = "kill";
       "${modifier}+Shift+c" = "reload";
+      "${modifier}+Delete" = "${swaylockcmd}";
 
       "${modifier}+Escape" = "exec ${drun}";
       "${modifier}+F1" = "exec ${passShowCmd}";

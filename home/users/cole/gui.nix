@@ -124,6 +124,9 @@ in
         termite
         vscodium
 
+        # misc?
+        wayfire
+
         # fonts
         corefonts
         noto-fonts noto-fonts-extra noto-fonts-emoji

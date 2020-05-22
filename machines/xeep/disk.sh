@@ -2,7 +2,8 @@
 set -x
 set -euo pipefail
 
-# TOOD: zstd? gcm encryption for speed-ups?
+# TODO(future): zstd compression (? dear god though, that PR...)
+# TODO: ensure we use GCM encryption for speed-up on modern procs?
 
 # rpool2/
 # rpool2/data <- set encryption here

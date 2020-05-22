@@ -2,7 +2,7 @@
   url = "https://github.com/nixos/nixos-hardware/archive/master.tar.gz";
   repo_git = "https://github.com/nixos/nixos-hardware";
   branch = "master";
-  rev = "75a850cb3e02203d55fb958d0d8aca8176df83af";
-  sha256 = "0k4ki23513y4ql8rmfgq6y24gvrxwmnpa0x3fqmkg9xg3rrhzbn6";
-  revdate = "2020-05-17 16:00:13 +0100";
+  rev = "2f2c2d9ef5dcc663a504819ad73cc98a4cd26458";
+  sha256 = "159qnxmy720jqhg4zm8di0my1r56ya94m6kd117n8kng8hdsmvgi";
+  revdate = "2020-05-20 15:35:48 +0100";
 }

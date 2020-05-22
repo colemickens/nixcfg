@@ -13,6 +13,21 @@ if [[ "${1:-""}" != "" ]]; then
   port="${3}"
 fi
 
+
+function up() {
+  (cd ~/code/nixpkgs/cmpkgs;
+  git remote update;
+  git rebase nixpkgs/nixos-unstable-small && git push origin HEAD -f)
+
+  (cd ~/code/overlays/nixpkgs-wayland;
+  git remote update;
+  git pull --rebase)
+
+  ./update-imports.sh
+}
+
+up
+
 toplevel="$(./nixbuild.sh "./machines/${machinename}")"
 
 if [[ "${remote}" == "self" ]]; then

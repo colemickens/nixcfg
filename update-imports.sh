@@ -7,8 +7,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 export NIX_PATH="nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz"
 
-# TODO: pre-emptively try to advance `cmpkgs`???
-
 function update() {
   typ="${1}"
   pkg="${2}"
@@ -66,17 +64,3 @@ function update() {
 for p in imports/**/*; do
   update "nixpkgs" "${p}"
 done
-
-nix-build ./default.nix | cachix push colemickens
-
-# TODO: (the following fails)
-# nix-build-uncached ./default.nix | cachix push colemickens
-
-echo "done with current nixpkgs"
-
-echo "trying to upgrade nixpkgs"
-
-# git clone it
-# git check it out
-# change the nixpkgs used for the machine
-# build it anyway

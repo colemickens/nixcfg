@@ -67,6 +67,7 @@ in
         home-manager.enable = true;
         htop.enable = true;
         neovim = import ./config/neovim-config.nix pkgs;
+        tmux = import ./config/tmux-config.nix pkgs;
         zsh.enable = false;
       };
       services = {
@@ -76,7 +77,7 @@ in
         #cachixManual
         wget curl
         # neovim vim # HM modules
-        ripgrep jq fzf tmux
+        ripgrep jq fzf
         wget curl stow ncdu tree
         git-crypt gopass gnupg passrs
         openssh autossh mosh sshuttle

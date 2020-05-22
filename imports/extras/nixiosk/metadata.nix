@@ -2,7 +2,7 @@
   url = "https://github.com/matthewbauer/nixiosk/archive/master.tar.gz";
   repo_git = "https://github.com/matthewbauer/nixiosk";
   branch = "master";
-  rev = "aad26400063854b71cfab3f2f9c629748a691387";
-  sha256 = "1sxsn0i4a01ppvpsi9xdrj085dg0hlgci9q2fvc1b911na64k6mv";
-  revdate = "2020-05-17 13:32:07 -0500";
+  rev = "883019423a1e68a8bcf5f39bfd41d8f996047fdd";
+  sha256 = "1waqly283a96v3dx2kssklgarh01i3br9c8qb0n9km59rvspf5fa";
+  revdate = "2020-05-20 22:23:46 -0500";
 }
