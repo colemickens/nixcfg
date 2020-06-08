@@ -4,7 +4,7 @@ let
   secrets = import ./secrets.nix;
   trusted_networks = [
     "192.168.1.0/24" # default chimera network
-    "192.168.2.0/24" # wireguard network
+    "172.27.66.0/24" # wireguard network
     #"192.168.69.0/24" # esphome network (but doesn't need to hit HA frontdoor)
   ];
 
@@ -81,6 +81,7 @@ in {
         };
 
         cast = { media_player = { host = "192.168.1.200"; }; };
+        cloud = { };
         config = { };
         discovery = { };
         esphome = { };
@@ -107,11 +108,9 @@ in {
             host = "192.168.1.126";
           }
         ];
-        #mobile_app = {}; # needs hass_nabucasa or w/e
-        #plex = { token = secrets.plex_access_token; };
+        mobile_app = {}; # needs hass_nabucasa or w/e
         # prometheus = { namespace = "hass"; };
         recorder = { };
-        #roku = { host = "192.168.1.18"; };
         system_health = { };
         weather = {
           platform = "openweathermap";

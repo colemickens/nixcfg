@@ -6,31 +6,33 @@ let
 in
 {
   imports = [
-    ../../modules/common.nix
-    ../../modules/home-manager
-
-    ../../modules/mixin-unifi.nix
-    ../../modules/mixin-sshd.nix
-    ../../modules/mixin-srht-cronjobs.nix
-    #../../modules/mixin-plex-mpv.nix
-    ../../modules/loremipsum-media/rclone-mnt.nix
+    ../../config-nixos/common.nix
+    ../../config-home/users/cole/core.nix
 
     ./home-assistant
+
+    ../../config-nixos/mixin-unifi.nix
+    ../../config-nixos/mixin-sshd.nix
+    ../../config-nixos/mixin-srht-cronjobs.nix
+    ../../config-nixos/loremipsum-media/rclone-mnt.nix
 
     ./sd-image-raspberrypi4-new.nix
 
     # GUI
-    #./gui.nix
-    #../../modules/profile-sway-minimal.nix
-    #../../modules/mixin-nix-gc.nix
-    #../../modules/mixin-nologs.nix
+    # ../../config-home/users/cole/gui.nix
+    # ../../config-nixos/profile-sway-minimal.nix
+    # ../../config-nixos/mixin-nix-gc.nix
+    # ../../config-nixos/mixin-nologs.nix
   ];
 
   config = {
     nix.nixPath = [];
     documentation.nixos.enable = false;
     networking.hostName = "raspberry";
-    environment.systemPackages = with pkgs; [ file ripgrep tmux htop ];
+    environment.systemPackages = with pkgs; [ file ripgrep tmux htop ]
+     ++ [
+       raspberrypi-tools
+     ];
 
     networking.wireless.enable = false;
     networking.interfaces."${eth}".ipv4.addresses = [
@@ -45,7 +47,7 @@ in
     networking.nat = {
       enable = true;
       internalInterfaces = [ wg ];
-      internalIPs = [ "192.168.2.0/24" ];
+      internalIPs = [ "172.27.66.0/24" ];
       externalInterface = eth;
     };
     networking.firewall = {
@@ -53,34 +55,23 @@ in
       allowedUDPPorts = [ 51820 ];
     };
     networking.wireguard.interfaces."${wg}" = {
-      ips = [ "192.168.2.0/24" ];
+      ips = [ "172.27.66.1/24" ];
       listenPort = 51820;
       privateKeyFile = "${./wireguard/server.key}";
       peers = [
         {
-          allowedIPs = [ "192.168.2.2/32" ]; # cole-phone
-          publicKey = builtins.readFile ./wireguard/cole-phone.pub;
+          allowedIPs = [ "172.27.66.2/32" ];
+          publicKey = builtins.readFile ./wireguard/clients/cole1/client.pub;
         }
         {
-          allowedIPs = [ "192.168.2.3/32" ]; # buddie-phone
-          publicKey = builtins.readFile ./wireguard/bud-phone.pub;
+          allowedIPs = [ "172.27.66.3/32" ];
+          publicKey = builtins.readFile ./wireguard/clients/cole2/client.pub;
         }
         {
-          allowedIPs = [ "192.168.2.4/32" ]; # jeff-phone
-          publicKey = builtins.readFile ./wireguard/jeff-phone.pub;
+          allowedIPs = [ "172.27.66.4/32" ];
+          publicKey = builtins.readFile ./wireguard/clients/bud1/client.pub;
         }
       ];
-    };
-
-    fileSystems = lib.mkForce {
-      "/boot" = {
-        device = "/dev/disk/by-label/FIRMWARE";
-        fsType = "vfat";
-      };
-      "/" = {
-        device = "/dev/disk/by-label/NIXOS_SD";
-        fsType = "ext4";
-      };
     };
   };
 }

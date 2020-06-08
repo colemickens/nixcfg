@@ -5,7 +5,7 @@
   findImport = type: name:
     let
       localimportpath = ./.. + "/${type}/${name}";
-      importpath = ./imports + "/${type}/${name}";
+      importpath = ./.imports + "/${type}/${name}";
     in
       if builtins.pathExists localimportpath then
         localimportpath

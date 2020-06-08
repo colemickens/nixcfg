@@ -73,9 +73,9 @@
         title = "Bathroom";
         type = "entities";
         entities = [
-          { name = "Vanity Light";
-            entity = "switch.gosundsw121_relay"; }
           { name = "Fan + Heat Lamp";
+            entity = "switch.gosundsw121_relay"; }
+          { name = "Vanity Light";
             entity = "switch.gosundsw122_relay"; }
         ];
       }

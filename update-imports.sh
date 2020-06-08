@@ -61,6 +61,6 @@ function update() {
   fi
 }
 
-for p in imports/**/*; do
+for p in .imports/**/*; do
   update "nixpkgs" "${p}"
 done

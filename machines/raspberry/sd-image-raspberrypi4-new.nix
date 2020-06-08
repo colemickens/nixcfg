@@ -3,26 +3,39 @@
 {
   imports = [
     "${modulesPath}/profiles/base.nix"
-    "${modulesPath}/installer/cd-dvd/sd-image.nix"
   ];
+  
+  config = {
+    boot = {
+      loader.grub.enable = false;
+      loader.raspberryPi.enable = true;
+      loader.raspberryPi.version = 4;
+      kernelPackages = pkgs.linuxPackages_rpi4;
+      supportedFilesystems = [ "zfs" ];
+      initrd.availableKernelModules = [ "xhci_pci" "usb_storage" ];
+      kernelModules = [ "xhci_pci" "usb_storage" ];
 
-  boot.loader.grub.enable = false;
-  boot.loader.raspberryPi.enable = true;
-  boot.loader.raspberryPi.version = 4;
-  boot.kernelPackages = pkgs.linuxPackages_rpi4;
+      consoleLogLevel = lib.mkDefault 7;
+    };
 
-  boot.consoleLogLevel = lib.mkDefault 7;
-
-  sdImage = {
-    firmwareSize = 128;
-    # This is a hack to avoid replicating config.txt from boot.loader.raspberryPi
-    populateFirmwareCommands =
-      "${config.system.build.installBootLoader} ${config.system.build.toplevel} -d ./firmware";
-    # As the boot process is done entirely in the firmware partition.
-    populateRootCommands = "";
+    fileSystems = {
+      "/boot" = {
+        device = "/dev/disk/by-partlabel/boot";
+        fsType = "vfat";
+        options = [ "nofail" "noauto" ];
+      };
+      "/" = {
+        device = "tank/root";
+        fsType = "zfs";
+      };
+      "/nix" = {
+        device = "tank/nix";
+        fsType = "zfs";
+      };
+      "/persist" = {
+        device = "tank/persist";
+        fsType = "zfs";
+      };
+    };
   };
-
-  # the installation media is also the installation target,
-  # so we don't want to provide the installation configuration.nix.
-  #installer.cloneConfig = false;
 }

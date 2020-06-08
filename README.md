@@ -1,22 +1,36 @@
 # nixcfg
 
-My NixOS Configuration.
+[![builds.sr.ht status](https://builds.sr.ht/~colemickens/nixcfg.svg)](https://builds.sr.ht/~colemickens/nixcfg?)
+
+My NixOS + Home-Manager configuration. Think of this as a system-level superset of a dotfile s repo.
+
+This configuration:
+ * contains all of my system and application config (except Firefox)
+ * is fully reproducible (all imports are pinned; refs are updated with `update.sh`)
+ * does not rely on `NIX_PATH`, `nixos-config`, and actually disables `nix.nixPath`
+ * avoids `nixos-rebuild`, builds the system config as a normal user
+ * allows local clones of imports to override pinned imports for great nixpkgs/overlay hacking experience
+ * trivially supports building and deploying my remote systems (cloud VMs, raspberry pis, etc)
+   * currently:
+     * `xeep` (XPS 13)
+     * `slynux` (custom gaming pc, moonlighting as non-coil whining dev machine)
+     * `raspberry` (creatively-named rpi4 running `unifi` + `home-assistant`)
+     * `azdev` (azure cloud dev machine, interactive or remote nix builder)
+
 
 _**Please**, feel free to open issues if you're curious about anything._
 
 ## Layout
 
-- `cloud/` contains scripts/harnesses for building nixos cloud images
+The current inspiration for my layout is embracing the divide between 
+
+- `config-homemanager/` - all my user-related config + my modules (*`sway`, `tmux`, `neovim`... configs are here*)
+- `config-nixos/` - all my system-related config + my modules
 - `imports/` static, pinned references for all imports
-- `machines/` contains definitions of my machines:
-  - `xeep` - Dell XPS 13 9370
-  - `slynux` - gaming desktop machine turned quaranine-era development machine
-  - `jeffhyper` - defines a HyperV system that runs on my Dad's server
-  - `raspberry` - my Raspberry Pi 4 system (Unifi, Home-Assistant, Prometheus, Grafana, Plex-MPV-Shim)
-  - `rpikexec/rpiboot` - a WIP project that might be replaced by nixiosk (or whatever it's called)
-- `misc/` miscellaneous scripts
-- `modules/` various common bits including in machine configs (profiles/package lists/preferences)
-- `shells/` some devenv style shells for developing go/rust apps under NixOS
+- `machines/` - definitions of my machines
+- `misc/` - miscellaneous scripts
+- `modules/` - various common bits including in machine configs (profiles/package lists/preferences)
+- `shells/` - some devenv style shells for developing go/rust apps under NixOS
 
 ## Notes
 

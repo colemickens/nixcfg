@@ -5,65 +5,83 @@ set -euo pipefail
 # TODO(future): zstd compression (? dear god though, that PR...)
 # TODO: ensure we use GCM encryption for speed-up on modern procs?
 
-# rpool2/
-# rpool2/data <- set encryption here
-# rpool2/root <- unencrypted; snapshotted + reset on boot; should be deleted, recreated frequently (can we encrypt this with empty passphrased-key?)
+DISK="${1}"
 
-# none prevents mounting
-# legacy allows mounting with mount/umount tooling
+# wipe as much as possible to make fdisk not prompt about FSes (maybe there's a flag too?)
+sudo wipefs -a "${DISK}"
+sudo dd if=/dev/zero of="${DISK}" bs=512 count=10
 
-  # -O compression=zstd
-  # -O xattr=sa           # journald
-  # -O acltype=posixacl   # journald
-  # -O atime=off
-  # -o ashift=12
-  # -O mountpoint=none
+# fdisk script:
+# - new GPT
+# - new boot partition (1g)
+# - new part for zfs (rest)
+# - change part types
+# - adv menu
+# - change labels
+# - return to main menu
+# - write
+echo "g
+n
 
-  # different newer mountpoint type?
-  # wait for zstd or just use zstd on new laptop...
+
++1G
+n
+
+
+
+t
+1
+1
+t
+2
+20
+x
+n
+1
+boot
+n
+2
+zfs
+r
+w
+" | sudo fdisk "${DISK}"
+
+# reminder notes on options:
+# - none prevents mounting
+# - legacy allows mounting with mount/umount tooling (and is needed by nixos)
+
+# TODO: different newer mountpoint type?
+# TODO: zstd in future
 
 # services.zfs.autoScrub.enable = true;
 
+# format boot
+sudo mkdir -p /mnt/boot
+sudo mkfs.vfat -n BOOT /dev/disk/by-partlabel/boot
+
+# format zfs
+sudo mkdir -p /mnt
+sudo zfs import tank || true
+sudo zpool create -O mountpoint=none -R /mnt tank /dev/disk/by-partlabel/zfs
+sudo zfs create -o mountpoint=legacy -o compression=lz4 -o xattr=sa -o acltype=posixacl              tank/root
+sudo zfs create -o mountpoint=legacy -o compression=lz4 -o xattr=sa -o acltype=posixacl -o atime=off tank/nix
+sudo zfs create -o mountpoint=legacy -o compression=lz4 -o xattr=sa -o acltype=posixacl              tank/persist
+
+# if on laptop
+# go back and enable encryption option on tank/persist
+
+# mount zfs + boot
+sudo zpool import tank || true
+sudo mkdir -p /mnt
+sudo mount -t zfs tank/root /mnt
+sudo mkdir /mnt/{nix,persist}
+sudo mount -t zfs tank/nix /mnt/nix
+sudo mount -t zfs tank/persist /mnt/persist
+sudo mount /dev/disk/by-partlabel/boot /mnt/boot
+
+# copy nixcfg, unlock, whatever AND/OR...
+#  do the install if you have an existing $NIXOS_SYSTEM
 sudo modprobe zfs
 
-sudo zpool create \
-  -O atime=off \
-  -O compression=lz4 \
-  -O normalization=formD \
-  -O xattr=sa \
-  -O acltype=posixacl \
-  -o ashift=12 \
-  -O mountpoint=none \
-  -R /mnt \
-  rpool2 /dev/nvme0n1p2
-
-sudo zfs create \
-  -o acltype=posixacl \
-  -o xattr=sa \
-  -o encryption=aes-256-gcm \
-  -o keyformat=passphrase \
-  -o keylocation=prompt \
-  -o mountpoint=legacy \
-  rpool2/nixos
-
-sudo zfs create \
-  -o acltype=posixacl \
-  -o xattr=sa \
-  -o encryption=aes-256-gcm \
-  -o keyformat=passphrase \
-  -o keylocation=prompt \
-  -o mountpoint=legacy \
-  rpool2/home
-
-sudo mkdir -p /mnt
-sudo mount -t zfs -l rpool2/nixos /mnt
-sudo mkdir /mnt/{boot,home}
-sudo mount /dev/nvme0n1p1 /mnt/boot
-sudo mount -t zfs -l rpool2/home /mnt/home
-
-# then, mount
-# then, copy/symlink in config
-# then, nixos-install
-# then reboot & sync data
-# then delete old partition, expand p2
-
+NIXOS_SYSTEM='/nix/store/xbcw9kkdpd7gj83sac03jlxpd39qqlmm-nixos-system-raspberry-20.09pre-git'
+sudo nixos-install --root /mnt --system "${NIXOS_SYSTEM}"

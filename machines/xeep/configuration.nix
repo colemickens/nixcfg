@@ -9,21 +9,20 @@ in
 {
   imports = [
     #./power-management.nix
-    ../../config/common.nix
+    ../../config-nixos/common.nix
 
-    ../../config/mixin-docker.nix
-    ../../config/mixin-libvirt.nix
-    #../../config/mixin-plex-mpv.nix
-    ../../config/mixin-sshd.nix
+    ../../config-nixos/mixin-docker.nix
+    ../../config-nixos/mixin-libvirt.nix
+    #../../config-nixos/mixin-plex-mpv.nix
+    ../../config-nixos/mixin-sshd.nix
 
-    ../../config/loremipsum-media/rclone-cmd.nix
-    ../../config/mixin-v4l2loopback.nix
-    ../../config/hw-chromecast.nix
+    ../../config-nixos/loremipsum-media/rclone-cmd.nix
+    ../../config-nixos/mixin-v4l2loopback.nix
+    ../../config-nixos/hw-chromecast.nix
 
-    ../../modules/default.nix # include all my custom modules
+    ../../modules-nixos/default.nix # include all my custom modules
 
-    ../../home/users/cole/default.nix # include HM (this includes its own custom HM modules)
-    ../../home/users/cole/gui.nix
+    ../../config-home/users/cole/gui.nix
 
     "${nixosHardware}/dell/xps/13-9370/default.nix"
   ];
