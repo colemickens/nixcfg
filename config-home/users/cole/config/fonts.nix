@@ -2,7 +2,7 @@
   fonts = {
     fontconfig = {
       defaultFonts = {
-        monospace = [ "Iosevka" ];
+        monospace = [ "Noto Sans Mono" ];
         emoji = [ "Noto Color Emoji" ];
       };
       localConf = ''
@@ -71,8 +71,9 @@
     fonts = with pkgs; [
       corefonts
       inconsolata
+      overpass
       font-awesome nerdfonts powerline-fonts
-      noto-fonts noto-fonts-emoji
+      noto-fonts noto-fonts-cjk noto-fonts-emoji
     ];
   };
 }

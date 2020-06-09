@@ -1,8 +1,8 @@
-{ font }:
+{ ... }:
 
 {
   enable = true;
-  inherit font;
+  font = "Noto Sans Mono 12";
   backgroundColor = "#000000";
   cursorColor = "#ffffff";
   foregroundColor = "#babdb6";

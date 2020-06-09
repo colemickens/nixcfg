@@ -33,7 +33,6 @@ in
       };
       programs = {
         bash  = import ./config/bash-config.nix pkgs;
-        #fish = import ./config/fish-config.nix pkgs;
         git = import ./config/git-config.nix pkgs;
         home-manager.enable = true;
         htop.enable = true;

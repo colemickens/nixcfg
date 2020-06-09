@@ -1,7 +1,8 @@
 { ... }:
 
 let
-  font = "Inconsolata";
+  #font = "Noto Sans Mono";
+  font = "Iosevka";
 in
 {
   enable = true;

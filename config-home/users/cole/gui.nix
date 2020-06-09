@@ -119,51 +119,41 @@ in
       };
       home.packages = with pkgs; [
         qemu
-        evince #calibre
+        gimp imv vlc evince
         wlfreerdp
-        gimp mpv vlc
-        vscodium
+        vscodium # TODO: maybe home-manager-ize?
 
-        # fonts
-        corefonts
-        inconsolata
-        font-awesome nerdfonts powerline-fonts
-        noto-fonts noto-fonts-emoji
-        numix-icon-theme arc-theme
+        # TODO: copy module, then remove
+        arc-icon-theme arc-theme numix-icon-theme hicolor-icon-theme
 
-        # sway
+        # sway-related
         swaybg swayidle swaylock # TODO: needed with hm module?
-        xwayland i3status-rust slurp grim wf-recorder
+        xwayland slurp grim wf-recorder
+        wdisplays
         udiskie termite drm_info
-        imv mako redshift-wayland
+        mako # systemd?
         wayvnc wl-clipboard wl-gammactl
 
         # browsers
-        firefox firefoxNightly
+        firefox-wayland firefoxNightly
         chromium
         #chromium-dev-ozone
 
-        # comms
-        #thunderbird
-        #fractal quaternion spectral
         riot-desktop
 
         # virt-manager # TODO: tie to the system virt-manager enablement somehow?
         # but we don't really want it reaching into HM stuff, so maybe this is just fine
         virt-manager # TODO: make a home-manager module, clearly
+        # there's some other change we need? for usb passthrough?
 
         # utils/misc
         brightnessctl
         pavucontrol
         pulsemixer
         qt5.qtwayland
-
-        # appearance
-        arc-icon-theme arc-theme numix-icon-theme hicolor-icon-theme
-
+        
         # <nonfree> ewwwww...
-        discord ripcord slack # => matrix + bridge
-        spotify
+        discord spotify
         # </nonfree>
       ] ++ lib.optionals (config.services.upower.enable)
         [

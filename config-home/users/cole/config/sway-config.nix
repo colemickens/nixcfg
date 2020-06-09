@@ -1,10 +1,6 @@
 { pkgs, firefoxNightly, ... }:
 
 let
-  blue = "'#004059'";
-  pink = "'#904075'";
-  purple = "'#3d326e'";
-  purpledark = "'#1b104d'";
   swayfont = "Noto Sans Mono Bold 9";
   barfont = "Noto Sans Mono Bold 9";
 
@@ -72,6 +68,7 @@ let
   '';
 in {
   enable = true;
+  systemdIntegration = true; # beta
   wrapperFeatures = { gtk = true; };
   xwayland = true;
   config = rec {
@@ -92,13 +89,6 @@ in {
       }
 
       {
-        /*
-         "class": "Pinentry",                                                                                                                                                                                                                                                                                                                                                      
-         "instance": "pinentry",                                                                                                                                                                                                                                                                                                                                                   
-         "title": "[3395]@xeep",                                                                                                                                                                                                                                                                                                                                                   
-         "transient_for": null,                                                                                                                                                                                                                                                                                                                                                    
-         "window_type": "normal"   
-        */
         criteria = { instance = "pinentry"; };
         command = "fullscreen on";
       }
@@ -127,12 +117,13 @@ in {
       };
     };
     output = {
-      "*".background = "${blue} solid_color";
       #"${out_laptop}" = {
       #  mode = "3480x2160@59.997002Hz";
       #  subpixel = "rgb";
       #  scale = "2.0";
       #};
+      #"${out_laptop}" = { enable = "off"; }; # disable laptop display for a bit
+      "${out_laptop}" = { disable = ""; };
       "${out_alien}" = {
         mode = "3440x1440@100Hz";
         subpixel = "rgb";

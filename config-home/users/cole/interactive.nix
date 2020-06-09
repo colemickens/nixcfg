@@ -41,6 +41,17 @@ in
         #".local/bin/rdpsly.sh".source = ./config/bin/rdpsly.sh;
       };
       xdg.enable = true;
+      xdg.userDirs = {
+        enable = true;
+        desktop = "$HOME/data/desktop";
+        documents = "$HOME/data/documents";
+        download = "$HOME/data/downloads";
+        music = "$HOME/data/music";
+        pictures = "$HOME/data/pictures";
+        publicShare = "$HOME/data/public";
+        templates = "$HOME/data/templates";
+        videos = "$HOME/data/videos";
+      };
       xdg.configFile = {
         "gopass/config.yml".source = ./config/gopass/config.yml;
         # TODO: passrs ?
@@ -75,7 +86,7 @@ in
         aria2 megatools youtube-dl plowshare
 
         # eh?
-        # TODO: ? xdg_utils
+        xdg_utils
       ] ++ lib.optionals (config.system == "x86_64-linux")
         [
           esphome

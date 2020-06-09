@@ -14,15 +14,15 @@ if [[ "${1:-""}" != "" ]]; then
 fi
 
 
-(cd ~/code/nixpkgs/cmpkgs;
-git remote update;
-git rebase nixpkgs/nixos-unstable-small && git push origin HEAD -f) || true
+# (cd ~/code/nixpkgs/cmpkgs;
+# git remote update;
+# git rebase nixpkgs/nixos-unstable-small && git push origin HEAD -f) || true
 
-(cd ~/code/overlays/nixpkgs-wayland;
-git remote update;
-git pull --rebase) || true
+# (cd ~/code/overlays/nixpkgs-wayland;
+# git remote update;
+# git pull --rebase) || true
 
-./update-imports.sh
+# ./update-imports.sh
 
 
 toplevel="$(./nixbuild.sh "./machines/${machinename}")"
