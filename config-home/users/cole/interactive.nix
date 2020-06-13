@@ -31,8 +31,7 @@ in
       home.stateVersion = "20.03";
       home.sessionVariables = {
         EDITOR = "nvim";
-        TERMINAL = "termite";
-        TERM = "xterm-256color"; # sigh, termite
+        TERMINAL = "alacritty";
       };
       home.file = {
         ".gdbinit".source = (pkgs.writeText "gdbinit" ''set auto-load safe-path /nix/store'');
@@ -69,6 +68,7 @@ in
         gitAndTools.gitFull gitAndTools.hub gist tig
         cvs mercurial subversion
 
+        nushell
         mitmproxy
 
         htop iotop which binutils.bintools
@@ -87,10 +87,7 @@ in
 
         # eh?
         xdg_utils
-      ] ++ lib.optionals (config.system == "x86_64-linux")
-        [
-          esphome
-        ];
+      ];
     };
   };
 }

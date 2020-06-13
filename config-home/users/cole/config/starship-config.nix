@@ -2,6 +2,9 @@
 
 {
   enable = true;
+  enableBashIntegration = false;
+  enableFishIntegration = false;
+  enableZshIntegration = false;
   settings = {
     # add_newline = false;
     prompt_order = [
@@ -48,86 +51,8 @@
       "character"
     ];
 
-    # aws = {
-    #   symbol = " ";
-    # };
-
-    # battery = {
-    #   full_symbol = "";
-    #   charging_symbol = "";
-    #   discharging_symbol = "";
-    # };
-
-    # conda = {
-    #   symbol = " ";
-    # };
-
-    # docker = {
-    #   symbol = " ";
-    # };
-
-    # elixir = {
-    #   symbol = " ";
-    # };
-
-    # elm = {
-    #   symbol = " ";
-    # };
-
-    # git_branch = {
-    #   symbol = " ";
-    # };
-
-    # golang = {
-    #   symbol = " ";
-    # };
-
-    # haskell = {
-    #   symbol = " ";
-    # };
-
-    # hg_branch = {
-    #   symbol = " ";
-    # };
-
-    # java = {
-    #   symbol = " ";
-    # };
-
-    # julia = {
-    #   symbol = " ";
-    # };
-
-    # memory_usage = {
-    #   symbol = " ";
-    # };
-
-    # nix_shell = {
-    #   symbol = " ";
-    # };
-
-    # nodejs = {
-    #   symbol = " ";
-    # };
-
-    # package = {
-    #   symbol = " ";
-    # };
-
-    # php = {
-    #   symbol = " ";
-    # };
-
-    # python = {
-    #   symbol = " ";
-    # };
-
-    # ruby = {
-    #   symbol = " ";
-    # };
-
-    # rust = {
-    #   symbol = " "
-    # };
+    hostname.ssh_only = false;
+    nix-shell.use_name = true;
+    username.show_always = true;
   };
 }

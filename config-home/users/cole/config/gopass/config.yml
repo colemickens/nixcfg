@@ -1,6 +1,6 @@
 root:
-  askformore: true
-  autoclip: true
+  askformore: false
+  autoclip: false
   autoimport: true
   autosync: true
   check_recipient_hash: false

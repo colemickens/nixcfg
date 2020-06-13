@@ -30,7 +30,7 @@ in
   config = {
     # <relocate>
     # TODO
-    services.udev.packages = with pkgs; [ libsigrok ];
+    services.udev.packages = with pkgs; [ libsigrok ]; # doesn't work?
     services.ratbagd.enable = true;
     environment.systemPackages = with pkgs; [
       libratbag

@@ -5,6 +5,10 @@
         monospace = [ "Noto Sans Mono" ];
         emoji = [ "Noto Color Emoji" ];
       };
+
+      # NOTE: This was "borrowed".
+      #  Emojis are still... f'd... 
+
       localConf = ''
         <?xml version='1.0'?>
         <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
@@ -70,10 +74,12 @@
     };
     fonts = with pkgs; [
       corefonts
-      inconsolata
-      overpass
-      font-awesome nerdfonts powerline-fonts
+      cascadia-code
+      fira-code fira-code-symbols
+      gelasio
+      iosevka
       noto-fonts noto-fonts-cjk noto-fonts-emoji
+      source-code-pro
     ];
   };
 }

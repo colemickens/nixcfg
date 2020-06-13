@@ -1,8 +1,8 @@
 { pkgs, firefoxNightly, ... }:
 
 let
-  swayfont = "Noto Sans Mono Bold 9";
-  barfont = "Noto Sans Mono Bold 9";
+  swayfont = "Iosevka Bold 9";
+  barfont = "Iosevka Bold 9";
 
   #terminal = "${pkgs.termite}/bin/termite";
   terminal = "${pkgs.alacritty}/bin/alacritty";
@@ -68,7 +68,7 @@ let
   '';
 in {
   enable = true;
-  systemdIntegration = true; # beta
+  systemdIntegration = true; # beta 
   wrapperFeatures = { gtk = true; };
   xwayland = true;
   config = rec {
@@ -122,8 +122,7 @@ in {
       #  subpixel = "rgb";
       #  scale = "2.0";
       #};
-      #"${out_laptop}" = { enable = "off"; }; # disable laptop display for a bit
-      "${out_laptop}" = { disable = ""; };
+      "${out_laptop}" = { disable = ""; }; # disable laptop display for a bit
       "${out_alien}" = {
         mode = "3440x1440@100Hz";
         subpixel = "rgb";
@@ -178,26 +177,26 @@ in {
       "${modifier}+Shift+Alt+space" = "sticky toggle";
       "${modifier}+space" = "focus mode_toggle";
 
-      "${modifier}+1" = "workspace number 01";
-      "${modifier}+2" = "workspace number 02";
-      "${modifier}+3" = "workspace number 03";
-      "${modifier}+4" = "workspace number 04";
-      "${modifier}+5" = "workspace number 05";
-      "${modifier}+6" = "workspace number 06";
-      "${modifier}+7" = "workspace number 07";
-      "${modifier}+8" = "workspace number 08";
-      "${modifier}+9" = "workspace number 09";
+      "${modifier}+1" = "workspace number 1";
+      "${modifier}+2" = "workspace number 2";
+      "${modifier}+3" = "workspace number 3";
+      "${modifier}+4" = "workspace number 4";
+      "${modifier}+5" = "workspace number 5";
+      "${modifier}+6" = "workspace number 6";
+      "${modifier}+7" = "workspace number 7";
+      "${modifier}+8" = "workspace number 8";
+      "${modifier}+9" = "workspace number 9";
       "${modifier}+0" = "workspace number 10";
 
-      "${modifier}+Shift+1" = "move container to workspace number 01";
-      "${modifier}+Shift+2" = "move container to workspace number 02";
-      "${modifier}+Shift+3" = "move container to workspace number 03";
-      "${modifier}+Shift+4" = "move container to workspace number 04";
-      "${modifier}+Shift+5" = "move container to workspace number 05";
-      "${modifier}+Shift+6" = "move container to workspace number 06";
-      "${modifier}+Shift+7" = "move container to workspace number 07";
-      "${modifier}+Shift+8" = "move container to workspace number 08";
-      "${modifier}+Shift+9" = "move container to workspace number 09";
+      "${modifier}+Shift+1" = "move container to workspace number 1";
+      "${modifier}+Shift+2" = "move container to workspace number 2";
+      "${modifier}+Shift+3" = "move container to workspace number 3";
+      "${modifier}+Shift+4" = "move container to workspace number 4";
+      "${modifier}+Shift+5" = "move container to workspace number 5";
+      "${modifier}+Shift+6" = "move container to workspace number 6";
+      "${modifier}+Shift+7" = "move container to workspace number 7";
+      "${modifier}+Shift+8" = "move container to workspace number 8";
+      "${modifier}+Shift+9" = "move container to workspace number 9";
       "${modifier}+Shift+0" = "move container to workspace number 10";
 
       "${modifier}+Shift+minus" = "move scratchpad";

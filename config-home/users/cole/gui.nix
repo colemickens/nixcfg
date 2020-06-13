@@ -55,6 +55,7 @@ in
 
     services.pipewire.enable = true;
     programs.sway.enable = true; # needed for swaylock/pam stuff
+    programs.sway.extraPackages = []; # block rxvt
     xdg.portal.enable = true;
     xdg.portal.gtkUsePortal = true;
     xdg.portal.extraPortals = with pkgs;
@@ -119,7 +120,7 @@ in
       };
       home.packages = with pkgs; [
         qemu
-        gimp imv vlc evince
+        gimp imv evince #vlc
         wlfreerdp
         vscodium # TODO: maybe home-manager-ize?
 
@@ -151,14 +152,9 @@ in
         pavucontrol
         pulsemixer
         qt5.qtwayland
-        
-        # <nonfree> ewwwww...
-        discord spotify
-        # </nonfree>
-      ] ++ lib.optionals (config.services.upower.enable)
-        [
-          intel-gpu-tools
-        ];
+
+        discord spotify # nonfree ewwwww...
+      ];
     };
   };
 }
