@@ -4,18 +4,19 @@
   imports = [
     "${modulesPath}/virtualisation/azure-common.nix"
     "${modulesPath}/virtualisation/azure-image.nix"
-    ../../modules/loremipsum-media/rclone-mnt.nix
-    ../../modules/loremipsum-media/rclone-cmd.nix
-    ../../modules/mixin-plex.nix
-    ../../modules/mixin-cachix.nix
 
-    ../../modules/home-manager/default.nix
+    ../../config-nixos/loremipsum-media/rclone-mnt.nix
+    ../../config-nixos/loremipsum-media/rclone-cmd.nix
+    ../../config-nixos/mixin-plex.nix
+    ../../config-nixos/mixin-cachix.nix
+
+    ../../config-home/users/cole/core.nix
   ];
 
   config = {
     virtualisation.azureImage.diskSize = 2500;
 
-    system.stateVersion = "19.09";
+    system.stateVersion = "20.03";
     networking.hostName = "azdev";
     boot.kernelPackages = pkgs.linuxPackages_latest;
 
@@ -24,7 +25,7 @@
 
     #environment.noXlibs = true;
     #documentation.enable = false;
-    #documentation.nixos.enable = false;
+    documentation.nixos.enable = false;
 
     services.openssh.passwordAuthentication = false;
     programs.mosh.enable = true;

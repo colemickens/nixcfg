@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-set -euo pipefail
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 set -x
 
-# TODO: possilby move the remote builder stuff behind a flag?
+cd "${DIR}"
+./update-imports.sh
 
 nix-build \
   --pure \
@@ -12,14 +13,3 @@ nix-build \
   --option "narinfo-cache-negative-ttl" "0" \
   --builders-use-substitutes \
   "${@}"
-
-exit 0
-
-  --builders 'ssh://cole@192.168.1.2 aarch64-linux' \
-  --builders 'ssh://colemickens@aarch64.nixos.community aarch64-linux' \
-  --builders 'ssh://cole@azdev.duckdns.org x86_64-linux' \
-  --builders 'ssh://cole@azdev.duckdns.org x86_64-linux \
-  ssh://colemickens@aarch64.nixos.community aarch64-linux' \
-  --builders '
-    ssh://cole@192.168.1.2 aarch64-linux;
-    ssh://cole@52.247.215.49 x86_64-linux' \

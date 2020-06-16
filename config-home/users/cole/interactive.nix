@@ -16,13 +16,6 @@ in
   ];
 
   config = {
-    # <mitmproxy>
-    security.pki.certificateFiles =
-      if (lib.pathExists "${crtFilePath}")
-        then [ "${crtFile}" ]
-        else [];
-    # </mitmproxy>
-
     # HM: ca.desrt.dconf error:
     services.dbus.packages = with pkgs; [ gnome3.dconf ];
 
@@ -30,8 +23,7 @@ in
     home-manager.users.cole = { pkgs, ... }: {
       home.stateVersion = "20.03";
       home.sessionVariables = {
-        EDITOR = "nvim";
-        TERMINAL = "alacritty";
+        EDITOR = "${pkgs.neovim}/bin/nvim";
       };
       home.file = {
         ".gdbinit".source = (pkgs.writeText "gdbinit" ''set auto-load safe-path /nix/store'');
@@ -39,6 +31,7 @@ in
         #".local/bin/megadl.sh".source = ./config/bin/megadl.sh;
         #".local/bin/rdpsly.sh".source = ./config/bin/rdpsly.sh;
       };
+      services.lorri.enable = true;
       xdg.enable = true;
       xdg.userDirs = {
         enable = true;
@@ -55,20 +48,16 @@ in
         "gopass/config.yml".source = ./config/gopass/config.yml;
         # TODO: passrs ?
       };
+      programs.git.package = pkgs.gitAndTools.gitFull;
       programs.gpg.enable = true;
       home.packages = with pkgs; [
-        # everything non-gui goes here that I use
-        #cachixManual
         wget curl
-        # neovim vim # HM modules
         ripgrep jq fzf
         wget curl stow ncdu tree
         git-crypt gopass gnupg passrs
         openssh autossh mosh sshuttle
-        gitAndTools.gitFull gitAndTools.hub gist tig
+        gitAndTools.hub gist tig
         cvs mercurial subversion
-
-        nushell
         mitmproxy
 
         htop iotop which binutils.bintools

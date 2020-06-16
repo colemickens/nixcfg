@@ -2,11 +2,12 @@
 
 {
   enable = true;
-  font = "Noto Sans Mono 12";
-  backgroundColor = "#000000";
+  font = "Iosevka 13";
   cursorColor = "#ffffff";
   foregroundColor = "#babdb6";
   foregroundBoldColor = "#babdb6";
+  backgroundColor = "#000000";
+  clickableUrl = true;
   colorsExtra = ''
     color0  = #2e3436
     color8  = #555753

@@ -2,7 +2,7 @@
 
 {
   enable = true;
-  package = pkgs.gitAndTools.gitFull; # to get send-email
+  # package = pkgs.gitAndTools.gitFull; # to get send-email # (only in interactive!)
 
   # TODO: include git crypt here?
 

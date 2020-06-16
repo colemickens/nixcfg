@@ -1,12 +1,8 @@
-{ pkgs, firefoxNightly, ... }:
+{ pkgs, browser, terminal, ... }:
 
 let
   swayfont = "Iosevka Bold 9";
   barfont = "Iosevka Bold 9";
-
-  #terminal = "${pkgs.termite}/bin/termite";
-  terminal = "${pkgs.alacritty}/bin/alacritty";
-  browser = "${firefoxNightly}/bin/firefox-nightly -P default";
   editor = "${pkgs.vscodium}/bin/codium";
 
   wofi = "${pkgs.wofi}/bin/wofi --insensitive";
@@ -39,11 +35,12 @@ let
 
   # silly gtk/gnome wayland schenanigans
   # TODO: see if this is necessary if we get HM to do it? or our own systemd user units?
+  gsettings="${pkgs.glib}/bin/gsettings";
   gsettingsscript = pkgs.writeShellScript "gsettings-auto.sh" ''
     expression=""
     for pair in "$@"; do
       IFS=:; set -- $pair
-      expressions="$expressions -e 's:^$2=(.*)$:gsettings set org.gnome.desktop.interface $1 \1:e'"
+      expressions="$expressions -e 's:^$2=(.*)$:${gsettings} set org.gnome.desktop.interface $1 \1:e'"
     done
     IFS=
     echo "" >/tmp/gsettings.log
@@ -53,6 +50,7 @@ let
   gsettingscmd = ''${gsettingsscript} \
     gtk-theme:gtk-theme-name \
     icon-theme:gtk-icon-theme-name \
+    font-name:gtk-font-name \
     cursor-theme:gtk-cursor-theme-name'';
 
   # change output scales incrementally w/ kb shortcuts

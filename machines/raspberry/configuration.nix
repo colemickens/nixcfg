@@ -17,22 +17,16 @@ in
     ../../config-nixos/loremipsum-media/rclone-mnt.nix
 
     ./sd-image-raspberrypi4-new.nix
-
-    # GUI
-    # ../../config-home/users/cole/gui.nix
-    # ../../config-nixos/profile-sway-minimal.nix
-    # ../../config-nixos/mixin-nix-gc.nix
-    # ../../config-nixos/mixin-nologs.nix
   ];
 
   config = {
     nix.nixPath = [];
     documentation.nixos.enable = false;
     networking.hostName = "raspberry";
-    environment.systemPackages = with pkgs; [ file ripgrep tmux htop ]
-     ++ [
-       raspberrypi-tools
-     ];
+    environment.systemPackages = with pkgs; [
+      file tmux htop
+      raspberrypi-tools
+    ];
 
     networking.wireless.enable = false;
     networking.interfaces."${eth}".ipv4.addresses = [

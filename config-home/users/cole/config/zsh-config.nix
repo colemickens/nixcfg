@@ -9,10 +9,20 @@
     "ls" = "ls --color --group-directories-first";
   };
 
+  # TODO:
+  # - reverse search w/ fzf
+  # - tab-completion isn't color-highlighted
+  # - can rev search + tab-completion use the same tool/path?
+
   envExtra = ''
     # commands added to .zshenv
     #test
     path+=/home/cole/code/nixcfg
+  '';
+  
+  initExtra = ''
+    # added to .zshrc
+    bindkey -v
   '';
 
   plugins = [
@@ -41,11 +51,6 @@
   # history = {
   #   #path = "${config.xdg.dataHome}/zsh/zsh_history";
   # };
-  # initExtra = ''
-  #   # added to .zshrc
-  #   export TZSH_INIT_EXTRA=1
-  #   bindkey -v
-  # '';
   # initExtraBeforeCompInit = ''
   #   export TZSH_INIT_EXTRA_BEFORE_COMP_INIT=1
   # '';

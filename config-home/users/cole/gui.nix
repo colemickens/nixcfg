@@ -3,14 +3,14 @@
 let
   findImport = (import ../../../lib.nix).findImport;
   home-manager = findImport "extras" "home-manager";
-
-  termiteFont = "Noto Sans Mono 11";
-
   chromium-dev-ozone = import (findImport "extras" "nixpkgs-chromium");
 
   firefoxNightly = pkgs.writeShellScriptBin "firefox-nightly" ''
     exec ${pkgs.latest.firefox-nightly-bin}/bin/firefox "''${@}"
   '';
+
+  browser = "${firefoxNightly}/bin/firefox-nightly -P default";
+  terminal = "${pkgs.kitty}/bin/kitty";
 in
 {
   imports = [
@@ -73,35 +73,22 @@ in
         _JAVA_AWT_WM_NONREPARENTING = "1";
         XDG_SESSION_TYPE = "wayland";
         XDG_CURRENT_DESKTOP = "sway";
+        BROWSER = browser;
+        TERMINAL = terminal;
       };
-      # TODO: can't enable without weird error
-      #fonts.fontconfig.enable = true;
-      gtk = {
-        enable = true;
-        #font = { name = "Noto Sans 11"; package = pkgs.noto-fonts; };
-        #iconTheme = { name = "Numix"; package = pkgs.numix-icon-theme; };
-        #cursorTheme = { name = "Adwaita"; package = pkgs.gnome3.adwaita-icon-theme; };
-        theme = { name = "Arc-Dark"; package = pkgs.arc-theme; };
-      };
-      qt = {
-        enable = true;
-        platformTheme = "gtk";
-        #font = { name = "Noto Sans,10,-1,5,50,0,0,0,0,0,Regular"; package = pkgs.noto-fonts; };
-        #iconTheme = { name = "Numix"; package = pkgs.numix-icon-theme; };
-        #style = { name = "Breeze"; package = pkgs.breeze-qt5; };
-      };
+      gtk = import ./config/gtk-config.nix { inherit pkgs; };
+      qt = { enable = true; platformTheme = "gtk"; };
       programs = {
         alacritty = import ./config/alacritty-config.nix {};
         htop.enable = true;
+        kitty = import ./config/kitty-config.nix { inherit pkgs; };
         mako.enable = true;
         mpv = import ./config/mpv-config.nix;
         obs-studio = {
           enable = true;
           plugins = with pkgs; [ obs-wlrobs obs-v4l2sink ];
         };
-        termite = import ./config/termite-config.nix {
-          font = termiteFont;
-        };
+        termite = import ./config/termite-config.nix {};
       };
       services = {
         gpg-agent = {
@@ -113,7 +100,7 @@ in
         udiskie.enable = true;
       };
       wayland.windowManager.sway = import ./config/sway-config.nix {
-        inherit pkgs firefoxNightly;
+        inherit pkgs browser terminal;
       };
       xdg.configFile = {
         "wayvnc/config".source = ./config/wayvnc/vnc.cfg;
@@ -125,14 +112,12 @@ in
         vscodium # TODO: maybe home-manager-ize?
 
         # TODO: copy module, then remove
-        arc-icon-theme arc-theme numix-icon-theme hicolor-icon-theme
+        #arc-icon-theme arc-theme numix-icon-theme hicolor-icon-theme
 
         # sway-related
-        swaybg swayidle swaylock # TODO: needed with hm module?
         xwayland slurp grim wf-recorder
         wdisplays
-        udiskie termite drm_info
-        mako # systemd?
+        udiskie drm_info
         wayvnc wl-clipboard wl-gammactl
 
         # browsers
@@ -149,7 +134,6 @@ in
 
         # utils/misc
         brightnessctl
-        pavucontrol
         pulsemixer
         qt5.qtwayland
 

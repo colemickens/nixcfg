@@ -12,6 +12,8 @@ pkgs.stdenv.mkDerivation {
   name = "devenv";
 
   nativeBuildInputs = with pkgs; [
+    cmake
+    freetype
     latest.rustChannels.nightly.rust
     ncurses
     pkgconfig

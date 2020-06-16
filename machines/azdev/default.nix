@@ -2,7 +2,7 @@ let
   lib = import ../../lib.nix;
   image_plex = lib.mkSystem {
     nixpkgs = lib.findImport "nixpkgs" "cmpkgs";
-    extraModules = [ ../../cloud/azure/image-plex.nix ];
+    extraModules = [ ../../cloud/azure/image-azdev.nix ];
     system = "x86_64-linux";
   };
 in
