@@ -36,6 +36,10 @@ with lib;
       trustedUsers = [ "@wheel" "root" ];
     };
 
+    nixpkgs.overlays = [
+      (import ../overlay-pkgs)
+    ];
+
     i18n.defaultLocale = "en_US.UTF-8";
 
     security.sudo.wheelNeedsPassword = false;

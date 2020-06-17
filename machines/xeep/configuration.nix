@@ -117,7 +117,6 @@ in
       pulseaudio.package = pkgs.pulseaudioFull;
       enableRedistributableFirmware = true;
       cpu.intel.updateMicrocode = true;
-      u2f.enable = true;
     };
     services.fwupd.enable = true;
   };

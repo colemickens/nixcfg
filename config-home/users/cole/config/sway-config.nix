@@ -77,6 +77,9 @@ in {
     # TODO: fix this issue in HM:
     focus.followMouse = "always";
     window.border = 4;
+    extraConfig = ''
+      seat seat0 xcursor_theme "capitaine-cursors"
+    '';
     window.commands = [
       { criteria = { app_id = "mpv"; }; command = "sticky enable"; }
       { criteria = { app_id = "mpv"; }; command = "floating enable"; }

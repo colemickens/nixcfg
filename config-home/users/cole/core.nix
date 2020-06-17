@@ -16,6 +16,8 @@ in
   ];
 
   config = {
+    nix.trustedUsers = [ "cole" ];
+
     users.extraGroups."cole".gid = 1000;
     users.extraUsers."cole" = {
       isNormalUser = true;
@@ -29,7 +31,6 @@ in
       uid = 1000;
       group = "cole";
     };
-    nix.trustedUsers = [ "cole" ];
 
     home-manager.useGlobalPkgs = true;
     home-manager.users.cole = { pkgs, ... }: {

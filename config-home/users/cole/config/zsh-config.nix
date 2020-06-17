@@ -22,7 +22,7 @@
   
   initExtra = ''
     # added to .zshrc
-    bindkey -v
+    bindkey -e
   '';
 
   plugins = [

@@ -2,7 +2,7 @@
   url = "https://github.com/colemickens/nixpkgs/archive/rpi.tar.gz";
   repo_git = "https://github.com/colemickens/nixpkgs";
   branch = "rpi";
-  rev = "81ad8d561787ee97be86d2308cf07a4de1730ea7";
-  sha256 = "1s40vwf0wa1zr1lmlvkdw45rpxqvm4svxb7hc65y78zsk9vlgs9y";
-  revdate = "2020-06-09 02:23:41 -0700";
+  rev = "f702ff4cf3e29eea5afe98cfb6e2d4d50c6c817f";
+  sha256 = "16a240laa5kcdmgqb84wig37xgf4zlydxwqagmrlk8s2ps2wh0c1";
+  revdate = "2020-06-15 09:14:58 -0700";
 }

@@ -11,6 +11,7 @@ nix-build \
   --option "build-cores" "0" \
   --option "narinfo-cache-negative-ttl" "0" \
   --builders-use-substitutes \
+  --builders 'ssh://root@nixos x86_64-linux' \
   "${@}"
 
 exit 0
@@ -18,6 +19,7 @@ exit 0
   --builders 'ssh://cole@192.168.1.2 aarch64-linux' \
   --builders 'ssh://colemickens@aarch64.nixos.community aarch64-linux' \
   --builders 'ssh://cole@azdev.duckdns.org x86_64-linux' \
+  --builders 'ssh://root@nixos x86_64-linux' \
   --builders 'ssh://cole@azdev.duckdns.org x86_64-linux \
   ssh://colemickens@aarch64.nixos.community aarch64-linux' \
   --builders '

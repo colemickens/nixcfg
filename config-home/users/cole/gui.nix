@@ -9,8 +9,15 @@ let
     exec ${pkgs.latest.firefox-nightly-bin}/bin/firefox "''${@}"
   '';
 
-  browser = "${firefoxNightly}/bin/firefox-nightly -P default";
-  terminal = "${pkgs.kitty}/bin/kitty";
+  browser_nightly = "${firefoxNightly}/bin/firefox-nightly -P nightly-default";
+  browser_firefox = "${pkgs.firefox}/bin/firefox -P stable-default";
+  terminal_termite = "${pkgs.termite}/bin/termite";
+  terminal_alacritty = "${pkgs.alacritty}/bin/alacritty";
+  terminal_kitty = "${pkgs.kitty}/bin/kitty";
+  terminal_wezterm = "${pkgs.wezterm}/bin/wezterm";
+
+  browser = browser_firefox;
+  terminal = terminal_kitty;
 in
 {
   imports = [
