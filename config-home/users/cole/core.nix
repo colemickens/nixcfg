@@ -39,15 +39,13 @@ in
         EDITOR = "nvim";
       };
       programs = {
-        #bash  = import ./config/bash-config.nix pkgs;
-        bash.enable = false;
+        bash  = import ./config/bash-config.nix pkgs;
         git = import ./config/git-config.nix pkgs;
         home-manager.enable = true;
         htop.enable = true;
         neovim = import ./config/neovim-config.nix pkgs;
         #starship = import ./config/starship-config.nix pkgs;
         tmux = import ./config/tmux-config.nix { inherit pkgs hostColor; };
-        #zsh.enable = false;
         zsh = import ./config/zsh-config.nix { inherit config pkgs; };
       };
       home.packages = with pkgs; [

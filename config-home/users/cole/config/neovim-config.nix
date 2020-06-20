@@ -9,13 +9,13 @@
   plugins = with pkgs.vimPlugins; [
     fzf-vim
     fzfWrapper
-    #LanguageClient-neovim
     lightline-vim
-    #nerdtree
+    #nvim-lsp
     supertab
     tabular
     vim-better-whitespace
     vim-multiple-cursors
+    vim-nix
     vim-surround
     #vimproc
     #vimproc-vim
@@ -23,9 +23,7 @@
 
     # themes
     wombat256
-    gruvbox
-
-    vim-nix
+    gruvbox    
   ];
 
   extraConfig = ''
@@ -50,6 +48,8 @@
     "let mapleader=' '
 
     autocmd FileType markdown setlocal conceallevel=0
+
+    "lua require'nvim_lsp'.rust_analyzer.setup({}) 
 
     " TODO: Tabular? fzf?
     " TODO: super-tab?

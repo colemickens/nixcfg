@@ -7,6 +7,7 @@ let
 
   wofi = "${pkgs.wofi}/bin/wofi --insensitive";
   drun = "${wofi} --show drun";
+  riot-ssb = "${pkgs.customGuiCommands.riot-ssb}/bin/riot-ssb";
 
   # PASS
   gp = "${pkgs.gopass}/bin/gopass";
@@ -69,6 +70,9 @@ in {
   systemdIntegration = true; # beta 
   wrapperFeatures = { gtk = true; };
   xwayland = true;
+  extraConfig = ''
+    seat seat0 xcursor_theme "capitaine-cursors"
+  '';
   config = rec {
     modifier = "Mod4";
     inherit terminal;
@@ -77,9 +81,7 @@ in {
     # TODO: fix this issue in HM:
     focus.followMouse = "always";
     window.border = 4;
-    extraConfig = ''
-      seat seat0 xcursor_theme "capitaine-cursors"
-    '';
+    window.titlebar = true;
     window.commands = [
       { criteria = { app_id = "mpv"; }; command = "sticky enable"; }
       { criteria = { app_id = "mpv"; }; command = "floating enable"; }
@@ -139,6 +141,7 @@ in {
     keybindings = {
       "${modifier}+Return" = "exec ${terminal}";
       "${modifier}+Shift+Return" = "exec ${browser}";
+      "${modifier}+Backspace" = "exec ${riot-ssb}";
       "${modifier}+Shift+Backspace" = "exec ${editor}";
       "${modifier}+Shift+q" = "kill";
       "${modifier}+Shift+c" = "reload";

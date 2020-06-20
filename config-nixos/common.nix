@@ -36,6 +36,8 @@ with lib;
       trustedUsers = [ "@wheel" "root" ];
     };
 
+    users.users."root".hashedPassword = config.users.users."cole".hashedPassword;
+
     nixpkgs.overlays = [
       (import ../overlay-pkgs)
     ];

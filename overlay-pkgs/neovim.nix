@@ -1,17 +1,15 @@
-{ neovim }:
+{ neovim-unwrapped, fetchFromGitHub }:
 
 let
-  _rev = "e78658348d2b14f2366b9baf2f7ceed19184dbb6";
-  _sha256 = "03p7pic7hw9yxxv7fbgls1f42apx3lik2k6mpaz1a109ngyc5kaj";
+  _rev = "5f0a1b04c1630f3b685382f881e439b7d4f2feb3";
+  _sha256 = "sha256:069jgjhb7qjvdll7nqpklx3h2przvxyg2r2yx8arsh53iw3his3z";
 in
-{
-  neovim.overrideAttrs(old: {
+  neovim-unwrapped.overrideAttrs(old: {
      version = "0.5.0-${_rev}";
      src = fetchFromGitHub {
        owner = "neovim";
        repo = "neovim";
-       inherit rev sha256;
+       rev = _rev;
        sha256 = _sha256;
      };
-  });
-}
+  })

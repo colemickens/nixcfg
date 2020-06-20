@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-../../../misc/make-wireguard-client.sh 2 cole1
-../../../misc/make-wireguard-client.sh 3 cole2
-../../../misc/make-wireguard-client.sh 4 bud1
-../../../misc/make-wireguard-client.sh 5 jeff1
+mkdir -p ./clients
+
+../../../misc/make-wireguard-client.sh 10 cole-phone
+../../../misc/make-wireguard-client.sh 11 cole-laptop
+../../../misc/make-wireguard-client.sh 20 bud-phone
 

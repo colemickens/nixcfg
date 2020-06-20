@@ -8,6 +8,8 @@ let
 
   crtFilePath = "/home/cole/.mitmproxy/mitmproxy-ca-cert.pem";
   crtFile = pkgs.copyPathToStore crtFilePath;
+  
+  extraCommands = import ./extra/commands.nix {inherit pkgs; };
 in
 {
   imports = [
@@ -33,20 +35,11 @@ in
       };
       services.lorri.enable = true;
       xdg.enable = true;
-      xdg.userDirs = {
-        enable = true;
-        desktop = "$HOME/data/desktop";
-        documents = "$HOME/data/documents";
-        download = "$HOME/data/downloads";
-        music = "$HOME/data/music";
-        pictures = "$HOME/data/pictures";
-        publicShare = "$HOME/data/public";
-        templates = "$HOME/data/templates";
-        videos = "$HOME/data/videos";
-      };
+      xdg.userDirs.enable = true;
+      xdg.userDirs.download = "$HOME/downloads";
       xdg.configFile = {
         "gopass/config.yml".source = ./config/gopass/config.yml;
-        # TODO: passrs ?
+        "cachix/cachix.dhall".source = ./config/cachix/cachix.dhall;
       };
       programs.git.package = pkgs.gitAndTools.gitFull;
       programs.gpg.enable = true;
@@ -62,6 +55,7 @@ in
 
         htop iotop which binutils.bintools
         unrar parallel unzip xz zip
+        gomuks
 
         nix-prefetch nixpkgs-fmt nixpkgs-review
 
@@ -76,7 +70,7 @@ in
 
         # eh?
         xdg_utils
-      ];
+      ] ++ builtins.attrValues customCommands;
     };
   };
 }

@@ -117,10 +117,8 @@ in
         gimp imv evince #vlc
         wlfreerdp
         vscodium # TODO: maybe home-manager-ize?
-
-        # TODO: copy module, then remove
-        #arc-icon-theme arc-theme numix-icon-theme hicolor-icon-theme
-
+        cool-retro-term
+        
         # sway-related
         xwayland slurp grim wf-recorder
         wdisplays
@@ -130,6 +128,7 @@ in
         # browsers
         firefox-wayland firefoxNightly
         chromium
+        torbrowser
         #chromium-dev-ozone
 
         riot-desktop
@@ -145,7 +144,7 @@ in
         qt5.qtwayland
 
         discord spotify # nonfree ewwwww...
-      ];
+      ] ++ builtins.attrValues customGuiCommands;
     };
   };
 }

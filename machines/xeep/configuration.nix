@@ -8,22 +8,21 @@ let
 in
 {
   imports = [
-    #./power-management.nix
     ../../config-nixos/common.nix
+
+    ../../config-nixos/loremipsum-media/rclone-cmd.nix
 
     ../../config-nixos/mixin-docker.nix
     ../../config-nixos/mixin-libvirt.nix
-    #../../config-nixos/mixin-plex-mpv.nix
     ../../config-nixos/mixin-sshd.nix
-
-    ../../config-nixos/loremipsum-media/rclone-cmd.nix
     ../../config-nixos/mixin-v4l2loopback.nix
-    ../../config-nixos/hw-chromecast.nix
 
-    ../../modules-nixos/default.nix # include all my custom modules
+    ../../config-nixos/hw-chromecast.nix
 
     ../../config-home/users/cole/gui.nix
 
+    # Hardware Specific
+    ./power-management.nix
     "${nixosHardware}/dell/xps/13-9370/default.nix"
   ];
 
