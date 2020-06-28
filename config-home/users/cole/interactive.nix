@@ -1,10 +1,12 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, lib, config, inputs, isFlakes, ... }:
 
 let
-#  cachixManual = import ./pkgs-cachix.nix pkgs;
-
   findImport = (import ../../../lib.nix).findImport;
-  home-manager = findImport "extras" "home-manager";
+  hmImport = (
+    if isFlakes
+    then inputs.home.nixosModules."home-manager"
+    else "${findImport "extras" "home-manager"}/nixos"
+  );
 
   crtFilePath = "/home/cole/.mitmproxy/mitmproxy-ca-cert.pem";
   crtFile = pkgs.copyPathToStore crtFilePath;
@@ -14,7 +16,7 @@ in
 {
   imports = [
     ./core.nix
-    "${home-manager}/nixos"
+    hmImport
   ];
 
   config = {
@@ -31,7 +33,7 @@ in
         ".gdbinit".source = (pkgs.writeText "gdbinit" ''set auto-load safe-path /nix/store'');
         #".local/bin/gpgssh.sh".source = ./config/bin/gpgssh.sh;
         #".local/bin/megadl.sh".source = ./config/bin/megadl.sh;
-        #".local/bin/rdpsly.sh".source = ./config/bin/rdpsly.sh;
+        ".megarc".source = ./config/mega/megarc;
       };
       services.lorri.enable = true;
       xdg.enable = true;

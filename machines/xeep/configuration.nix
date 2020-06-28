@@ -1,10 +1,15 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 let
   lib = pkgs.lib;
-  findImport = (import ../../lib.nix).findImport;
+
+  flakesMode = lib.hasAttr "getFlake" builtins;
+  findImport = (import ../../../lib.nix).findImport;
+
   nixosHardware = findImport "extras" "nixos-hardware";
 
-  hostname = "xeep";
+  nhImport = (if flakesMode then "${inputs.nh}/nixos" else "${nixosHardware}");
+
+  hostname = "xeep-1";
 in
 {
   imports = [
@@ -23,7 +28,7 @@ in
 
     # Hardware Specific
     ./power-management.nix
-    "${nixosHardware}/dell/xps/13-9370/default.nix"
+    #"${nhImport}/dell/xps/13-9370/default.nix"
   ];
 
   config = {

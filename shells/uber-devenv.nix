@@ -14,7 +14,8 @@ pkgs.stdenv.mkDerivation {
   nativeBuildInputs = with pkgs; [
     cmake
     freetype
-    latest.rustChannels.nightly.rust
+    latest.rustChannels.beta.rust
+    rust-analyzer
     ncurses
     pkgconfig
     nodejs

@@ -1,4 +1,9 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+let
+  ts = import ./termsettings.nix { inherit pkgs; };
+  font = ts.fonts.default;
+  colors = ts.colors.default;
+in {
   fonts = {
     # fontconfig = {
     #   defaultFonts = {
@@ -80,7 +85,7 @@
       iosevka
       noto-fonts noto-fonts-cjk noto-fonts-emoji
       source-code-pro
-    ];
+    ] ++ [ font.package ];
   };
 }
 

@@ -1,8 +1,12 @@
-#!/usr/bin/env bash
+#! /usr/bin/env nix-shell
+#! nix-shell -I nixpkgs=/home/cole/code/nixpkgs/cmpkgs -i bash -p nixFlakes
+
 set -euo pipefail
 set -x
 
-sudo true
+function nix() {
+  command nix --experimental-features 'nix-command flakes' "${@}"
+}
 
 machinename="$(hostname)"
 remote="self"
@@ -10,6 +14,9 @@ remote="self"
 mode="build"
 if [[ "${1:-""}" == "x" ]]; then
   mode="update"
+  shift
+elif [[ "${1:-""}" == "flake" ]]; then
+  mode="flake"
   shift
 fi
 
@@ -39,6 +46,19 @@ if [[ "${mode}" == "update" ]]; then
     git rebase origin/master || git rebase --abort)
 
   (cd ~/code/nixcfg; ./update-imports.sh)
+elif [[ "${mode}" == "flake" ]]; then
+  (
+    cd ~/code/nixcfg
+    tl='.#nixosConfigurations.xeep.config.system.build.toplevel'
+
+    nix flake update --no-registries
+    nix build "${tl}" --show-trace
+
+    if [[ ! -z "${SWITCH:-""}" ]]; then
+      nix shell -vv "${tl}" -c switch-to-configuration switch
+    fi
+  )
+  exit
 fi
 
 cd ~/code/nixcfg

@@ -1,8 +1,8 @@
 { neovim-unwrapped, fetchFromGitHub }:
 
 let
-  _rev = "5f0a1b04c1630f3b685382f881e439b7d4f2feb3";
-  _sha256 = "sha256:069jgjhb7qjvdll7nqpklx3h2przvxyg2r2yx8arsh53iw3his3z";
+  _rev = "721f69c4af8bc81ba04088e7b56f8cdba653b418";
+  _sha256 = "1zcbv0x48yvr7llfyvb5qdpgf3rb6ccnxakah5bkz8nz42sikwlk";
 in
   neovim-unwrapped.overrideAttrs(old: {
      version = "0.5.0-${_rev}";

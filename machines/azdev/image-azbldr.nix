@@ -14,37 +14,24 @@
   ];
 
   config = {
+    system.stateVersion = "20.03";
     virtualisation.azureImage.diskSize = 2500;
 
-    system.stateVersion = "20.03";
-    networking.hostName = "azdev";
-    boot.kernelPackages = pkgs.linuxPackages_latest;
-
-    nix.nrBuildUsers = 100;
-    #nix.package = pkgs.nixUnstable;
-
-    #environment.noXlibs = true;
-    #documentation.enable = false;
+    fileSystems."/".autoResize = true;
+    
+    boot = {
+      cleanTmpDir = true;
+      growPartition = true;
+      kernelPackages = pkgs.linuxPackages_latest;
+    };
+    nix = rec {
+      trustedUsers = [ "root" "@wheel" "azureuser" "cole" ];
+      allowedUsers = trustedUsers;
+      nrBuildUsers = 128;
+    };
+    networking.hostName = "azbldr";
     documentation.nixos.enable = false;
-
     services.openssh.passwordAuthentication = false;
-    programs.mosh.enable = true;
-
     security.sudo.wheelNeedsPassword = false;
-
-    environment.systemPackages = with pkgs; [
-      git
-      neovim
-      jq
-      file
-      htop
-      ripgrep
-      wget
-      curl
-      tmux
-    ];
-
-    nix.allowedUsers = [ "root" "@wheel" "azureuser" "cole" ];
-    nix.trustedUsers = [ "root" "@wheel" "azureuser" "cole" ];
   };
 }

@@ -1,9 +1,18 @@
-{ pkgs, config, ... }:
+{ pkgs, lib, config, inputs, isFlakes, ... }:
 
 let
   findImport = (import ../../../lib.nix).findImport;
-  home-manager = findImport "extras" "home-manager";
-  chromium-dev-ozone = import (findImport "extras" "nixpkgs-chromium");
+  hmImport = (
+    if isFlakes
+    then inputs.home.nixosModules."home-manager"
+    else "${findImport "extras" "home-manager"}/nixos"
+  );
+  waylandImport = (
+    if lib.hasAttr "getFlake" builtins
+    then import inputs.wayland
+    else import ("${findImport "overlays" "nixpkgs-wayland"}")
+  );
+  #chromium-dev-ozone = import (findImport lib "extras" "nixpkgs-chromium");
 
   firefoxNightly = pkgs.writeShellScriptBin "firefox-nightly" ''
     exec ${pkgs.latest.firefox-nightly-bin}/bin/firefox "''${@}"
@@ -17,13 +26,13 @@ let
   terminal_wezterm = "${pkgs.wezterm}/bin/wezterm";
 
   browser = browser_firefox;
-  terminal = terminal_kitty;
+  terminal = terminal_alacritty;
 in
 {
   imports = [
     ./interactive.nix
     ./config/fonts.nix
-    "${home-manager}/nixos"
+    hmImport
   ];
 
   # TODO: xdg-user-dirs fixup
@@ -32,8 +41,10 @@ in
     # <nixpkgs + overlays>
     nixpkgs.config.allowUnfree = true;
     nixpkgs.overlays =  [
-      (import (findImport "overlays" "nixpkgs-mozilla"))
-      (import (findImport "overlays" "nixpkgs-wayland"))
+      #(import (findImport "overlays" "nixpkgs-mozilla"))
+      #(import (findImport "overlays" "nixpkgs-wayland"))
+      # TODO: am I even allowed to do this with flakes?
+      (import "${inputs.wayland}")
     ];
     # </nixpkgs + overlays>
 
@@ -86,7 +97,7 @@ in
       gtk = import ./config/gtk-config.nix { inherit pkgs; };
       qt = { enable = true; platformTheme = "gtk"; };
       programs = {
-        alacritty = import ./config/alacritty-config.nix {};
+        alacritty = import ./config/alacritty-config.nix { inherit pkgs; };
         htop.enable = true;
         kitty = import ./config/kitty-config.nix { inherit pkgs; };
         mako.enable = true;
@@ -95,7 +106,7 @@ in
           enable = true;
           plugins = with pkgs; [ obs-wlrobs obs-v4l2sink ];
         };
-        termite = import ./config/termite-config.nix {};
+        termite = import ./config/termite-config.nix { inherit pkgs; };
       };
       services = {
         gpg-agent = {
@@ -113,12 +124,22 @@ in
         "wayvnc/config".source = ./config/wayvnc/vnc.cfg;
       };
       home.packages = with pkgs; [
+        # misc
         qemu
         gimp imv evince #vlc
         wlfreerdp
         vscodium # TODO: maybe home-manager-ize?
         cool-retro-term
+        brightnessctl
+        pulsemixer
+        virt-manager # TODO: usb passthrough needs something else?
         
+        fractal
+        mirage-im
+        nheko
+        quarternion
+        spectral
+
         # sway-related
         xwayland slurp grim wf-recorder
         wdisplays
@@ -131,16 +152,7 @@ in
         torbrowser
         #chromium-dev-ozone
 
-        riot-desktop
-
-        # virt-manager # TODO: tie to the system virt-manager enablement somehow?
-        # but we don't really want it reaching into HM stuff, so maybe this is just fine
-        virt-manager # TODO: make a home-manager module, clearly
-        # there's some other change we need? for usb passthrough?
-
-        # utils/misc
-        brightnessctl
-        pulsemixer
+        # environmental? (TODO: a module should maybe do this?)
         qt5.qtwayland
 
         discord spotify # nonfree ewwwww...

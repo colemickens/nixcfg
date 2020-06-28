@@ -7,6 +7,7 @@
       localimportpath = ./.. + "/${type}/${name}";
       importpath = ./.imports + "/${type}/${name}";
     in
+      assert (!(builtins.hasAttr "getFlake" builtins));
       if builtins.pathExists localimportpath then
         localimportpath
       else if builtins.pathExists importpath then
@@ -27,6 +28,7 @@
           #  system.nixos.versionSuffix = ".git.${rev}";
           #})
         ] ++ extraModules;
+        specialArgs = { isFlakes = false; };
       };
     in
       machine;

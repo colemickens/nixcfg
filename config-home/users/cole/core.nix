@@ -1,18 +1,22 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, lib, config, inputs, isFlakes, ... }:
 
 let
   findImport = (import ../../../lib.nix).findImport;
-  home-manager = findImport "extras" "home-manager";
 
-  hostColor = "blue";
+  hostColor = "blue1";
+  hmImport = (
+    if isFlakes
+    then inputs.home.nixosModules."home-manager"
+    else "${findImport "extras" "home-manager"}/nixos"
+  );
 in
 {
   imports = [
-    "${home-manager}/nixos"
-    # <WEIRD>
-    # This is strictly nixos stuff, but is tied to HM
+    # <WEIRD> This is strictly nixos stuff, but is tied to HM
     ../../../config-nixos/config/zsh-sys.nix
     # </WEIRD>
+    # "${home-manager}/nixos"];
+    hmImport
   ];
 
   config = {
@@ -46,7 +50,7 @@ in
         neovim = import ./config/neovim-config.nix pkgs;
         #starship = import ./config/starship-config.nix pkgs;
         tmux = import ./config/tmux-config.nix { inherit pkgs hostColor; };
-        zsh = import ./config/zsh-config.nix { inherit config pkgs; };
+        zsh = import ./config/zsh-config.nix { inherit pkgs; };
       };
       home.packages = with pkgs; [
         git-crypt

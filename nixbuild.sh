@@ -12,8 +12,8 @@ nix-build \
   --option "narinfo-cache-negative-ttl" "0" \
   --builders-use-substitutes \
   --builders '
-    ssh://root@nixos x86_64-linux' \
-  "${@}"
+    ssh://cole@52.247.199.143 x86_64-linux \
+' "${@}" # don't change whitespace on this line!
 
 exit 0
 
