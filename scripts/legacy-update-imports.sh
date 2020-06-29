@@ -61,6 +61,8 @@ function update() {
   fi
 }
 
+cd "${DIR}/.."
+
 for p in .imports/**/*; do
   update "nixpkgs" "${p}"
 done

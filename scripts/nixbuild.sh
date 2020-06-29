@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+set -euo pipefail
 set -x
 
-cd "${DIR}"
-./update-imports.sh
+# TODO: possilby move the remote builder stuff behind a flag?
 
 nix-build \
   --pure \
@@ -12,4 +11,13 @@ nix-build \
   --option "build-cores" "0" \
   --option "narinfo-cache-negative-ttl" "0" \
   --builders-use-substitutes \
-  "${@}"
+  --builders '
+    ssh://root@nixos x86_64-linux
+' "${@}" # don't change whitespace on this line!
+
+exit 0
+
+    ssh://colemickens@aarch64.nixos.community aarch64-linux
+    ssh://cole@192.168.1.2 aarch64-linux
+    ssh://cole@azdev.duckdns.org x86_64-linux
+    ssh://cole@52.247.199.143 x86_64-linux \

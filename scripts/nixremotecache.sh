@@ -25,3 +25,29 @@ ssh "${remote}" \
 exit 0
 
 ###############################################################################
+
+## this is remote build stuff I need for pi but it eneds to be reconciled
+# with nixremotecache.sh
+elif true; then
+  toplevel="$(./scripts/nixbuild.sh "./machines/${machinename}")"
+  NIX_SSHOPTS="-p ${port}" nix-copy-closure --to "ssh://${remote}" "${toplevel}"
+  ssh "${remote}" -p "${port}" "\
+    sudo bash -c \" nix-env --set --profile /nix/var/nix/profiles/system ${toplevel} \
+    && ${toplevel}/bin/switch-to-configuration switch\""
+
+else
+  drv="$(nix-instantiate "./machines/${machinename}")"
+
+  #cachixremote="colemickens"
+  #cachixkey="$(gopass show websites/cachix.org/gh | grep "cachix_key_${cachixremote}" | cut -d' ' -f2)"
+
+  nix-copy-closure --to "ssh://${remote}" "${drv}"
+
+  ssh "${remote}" \
+    "nix-build -j1 ${drv}"
+
+  ssh "${remote}" -p "${port}" "\
+    sudo bash -c \" nix-env --set --profile /nix/var/nix/profiles/system ${toplevel} \
+    && ${toplevel}/bin/switch-to-configuration switch\""
+fi
+

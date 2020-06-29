@@ -1,0 +1,63 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -i bash shell.nix
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+set -euo pipefail
+set -x
+
+cd ~/code/nixcfg
+
+function nix() {
+  command nix --experimental-features 'nix-command flakes' "${@}"
+}
+
+machinename="$(hostname)"
+remote="self"
+
+mode="build"
+if [[ "${1:-""}" == "x" ]]; then
+  mode="update"
+  shift
+elif [[ "${1:-""}" == "flake" ]]; then
+  mode="flake"
+  shift
+fi
+
+if [[ "${1:-""}" != "" ]]; then
+  machinename="${1}"
+  remote="${2}"
+  port="${3}"
+fi
+
+if [[ "${mode}" == "update" ]]; then
+  (cd ~/code/nixcfg/scripts; ./rebase-imports.sh)
+  
+  # non-flakes, update imports now that they've rebased
+  (cd ~/code/nixcfg/scripts; ./legacy-update-imports.sh)
+
+  nix flake update
+
+  exit
+elif [[ "${mode}" == "flake" ]]; then
+  (
+    cd "${DIR}"
+    tl=".#nixosConfigurations.$(hostname).config.system.build.toplevel"
+
+    nix flake update --no-registries
+    nix build "${tl}" --show-trace
+
+    if [[ ! -z "${SWITCH:-""}" ]]; then
+      nix shell -vv "${tl}" -c switch-to-configuration switch
+    fi
+  )
+  exit
+elif [[ "${mode}" == legacy ]]; then
+  (
+    cd "${DIR}"
+    toplevel="$(./scripts/nixbuild.sh "./machines/${machinename}")"
+    if [[ ! -z "${SWITCH:-""}" ]]; then
+      sudo bash -c "\
+        nix-env --set --profile /nix/var/nix/profiles/system ${toplevel} \
+        && ${toplevel}/bin/switch-to-configuration switch"
+    fi
+  )
+fi

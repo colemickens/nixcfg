@@ -4,10 +4,10 @@ let
   findImport = (import ../../../lib.nix).findImport;
 
   hostColor = "blue1";
-  hmImport = (
+  homeImport = (
     if isFlakes
     then inputs.home.nixosModules."home-manager"
-    else "${findImport "extras" "home-manager"}/nixos"
+    else "${findImport "home-manager/cmhm"}/nixos"
   );
 in
 {
@@ -16,7 +16,7 @@ in
     ../../../config-nixos/config/zsh-sys.nix
     # </WEIRD>
     # "${home-manager}/nixos"];
-    hmImport
+    homeImport
   ];
 
   config = {

@@ -1,7 +1,7 @@
 let
   lib = import ../../lib.nix;
   system = lib.mkSystem {
-    nixpkgs = (lib.findImport "nixpkgs" "cmpkgs");
+    nixpkgs = (lib.findImport "nixpkgs/cmpkgs");
     extraModules = [
       ./configuration.nix
     ];

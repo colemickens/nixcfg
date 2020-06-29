@@ -2,10 +2,10 @@
 
 let
   findImport = (import ../../../lib.nix).findImport;
-  hmImport = (
+  homeImport = (
     if isFlakes
     then inputs.home.nixosModules."home-manager"
-    else "${findImport "extras" "home-manager"}/nixos"
+    else "${findImport "extras/home-manager"}/nixos"
   );
 
   crtFilePath = "/home/cole/.mitmproxy/mitmproxy-ca-cert.pem";
@@ -15,8 +15,7 @@ let
 in
 {
   imports = [
-    ./core.nix
-    hmImport
+    ./core.nix  # imports hm
   ];
 
   config = {

@@ -5,11 +5,11 @@ let
   flakesMode = lib.hasAttr "getFlake" builtins;
   findImport = (import ../../../lib.nix).findImport;
 
-  nixosHardware = findImport "extras" "nixos-hardware";
+  nixosHardware = findImport "extras/nixos-hardware";
 
   nhImport = (if flakesMode then "${inputs.nh}/nixos" else "${nixosHardware}");
 
-  hostname = "xeep-1";
+  hostname = "xeep";
 in
 {
   imports = [

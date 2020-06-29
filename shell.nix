@@ -14,7 +14,9 @@ pkgs.stdenv.mkDerivation {
     git
     jq
     mercurial
-    nix
+    (pkgs.writeScriptBin "nix" ''
+      "${nixFlakes}/bin/nix" --experimental-features 'nix-command flakes' "''${@}"
+    '')
     nix-build-uncached
     openssh
     ripgrep

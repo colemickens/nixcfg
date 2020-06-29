@@ -17,6 +17,11 @@
     small = { url = "github:nixos/nixpkgs/nixos-unstable-small"; };
     cmpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
 
+    ## <PRs>
+    mirage = { url = "github:colemickens/nixpkgs/nixpkgs-mirage"; };
+    nheko = { url = "github:colemickens/nixpkgs/nheko"; };
+    ## </PRs>
+
     nix.url = "github:nixos/nix/flakes";
     nix.inputs.nixpkgs.follows = "master";
 
@@ -31,27 +36,38 @@
     wayland  = { url = "github:colemickens/nixpkgs-wayland"; flake=false; };
   };
   
-  outputs = inputs@{ self, unstable, small, cmpkgs, home, wayland, ... }:
+  #outputs = inputs@{ self, unstable, small, cmpkgs, home, wayland, ... }:
+  outputs = inputs:
     let
       pkgImport = pkgs: system:
         import pkgs {
           system = system;
-          overlays = cmpkgs.lib.attrValues self.overlays;
+          overlays = builtins.attrValues inputs.self.overlays;
           config = { allowUnfree = true; };
         };
 
-      cmpkgs_ = pkgImport cmpkgs "x86_64-linux";
+      cmpkgs_ = pkgImport inputs.cmpkgs "x86_64-linux";
+
+      ## <PRs>
+      nheko_ = pkgImport inputs.cmpkgs "x86_64-linux";
+      mirage_ = pkgImport inputs.cmpkgs "x86_64-linux";
+      extraPkgs = [ nheko_.nheko mirage_.mirage-im ];
+      ## </PRs>
     in rec {
       defaultPackage.x86_64-linux =
         nixosConfigurations.xeep.config.system.build;
 
       nixosConfigurations = {
-        xeep = cmpkgs.lib.nixosSystem {
+        xeep = inputs.cmpkgs.lib.nixosSystem {
           system = "x86_64-linux"; # TODO dedupe with above
           modules = [
             (import ./machines/xeep/configuration.nix)
           ];
-          specialArgs = { inherit inputs; isFlakes = true; };
+          specialArgs = {
+            inherit inputs;
+            inherit extraPkgs;
+            isFlakes = true;
+          };
         };
       };
     };

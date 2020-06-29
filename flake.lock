@@ -89,6 +89,22 @@
         "type": "github"
       }
     },
+    "mirage": {
+      "locked": {
+        "lastModified": 1593231000,
+        "narHash": "sha256-Y+OuEukZumWXIYVRc32dltD/np2arhWpdXnKpFWAbKo=",
+        "owner": "colemickens",
+        "repo": "nixpkgs",
+        "rev": "3ce424d1fd02a69f4c9473119149cb4ad12b2e4b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "colemickens",
+        "ref": "nixpkgs-mirage",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "mozilla": {
       "flake": false,
       "locked": {
@@ -102,6 +118,22 @@
       "original": {
         "owner": "mozilla",
         "repo": "nixpkgs-mozilla",
+        "type": "github"
+      }
+    },
+    "nheko": {
+      "locked": {
+        "lastModified": 1593229650,
+        "narHash": "sha256-sbsUj+KGjAdHg8IkidU4XJg30pTV4r0naQWYUt+8cK4=",
+        "owner": "colemickens",
+        "repo": "nixpkgs",
+        "rev": "9925aa3099401342ce6d6a2c4589448cbf5bfa9e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "colemickens",
+        "ref": "nheko",
+        "repo": "nixpkgs",
         "type": "github"
       }
     },
@@ -133,7 +165,9 @@
         "hardware": "hardware",
         "home": "home",
         "master": "master",
+        "mirage": "mirage",
         "mozilla": "mozilla",
+        "nheko": "nheko",
         "nix": "nix",
         "small": "small",
         "unstable": "unstable",

@@ -119,3 +119,15 @@ The split between `cloud/*` and their `machine/*` counterpart is weird.
 
 But that's partly because all of our azure scripts are upstream, versus our GCP
 stuff which will probably just stay local.
+
+
+## Flakes
+
+- lib.nix is unneeded
+- should build same as non-flake
+- nixup / nixup flake
+- ??
+
+#### Feedback
+
+TODO: consolidate here

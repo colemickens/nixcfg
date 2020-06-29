@@ -2,17 +2,17 @@
 
 let
   findImport = (import ../../../lib.nix).findImport;
-  hmImport = (
+  mozillaImport = (
     if isFlakes
-    then inputs.home.nixosModules."home-manager"
-    else "${findImport "extras" "home-manager"}/nixos"
+    then import inputs.mozilla
+    else import "${findImport "overlays/nixpkgs-mozilla"}"
   );
   waylandImport = (
-    if lib.hasAttr "getFlake" builtins
+    if isFlakes
     then import inputs.wayland
-    else import ("${findImport "overlays" "nixpkgs-wayland"}")
+    else import "${findImport "overlays/nixpkgs-wayland"}"
   );
-  #chromium-dev-ozone = import (findImport lib "extras" "nixpkgs-chromium");
+  #TODO  #chromium-dev-ozone = import (findImport lib "extras/nixpkgs-chromium");
 
   firefoxNightly = pkgs.writeShellScriptBin "firefox-nightly" ''
     exec ${pkgs.latest.firefox-nightly-bin}/bin/firefox "''${@}"
@@ -30,9 +30,8 @@ let
 in
 {
   imports = [
-    ./interactive.nix
+    ./interactive.nix # includes core.nix (which imports hm)
     ./config/fonts.nix
-    hmImport
   ];
 
   # TODO: xdg-user-dirs fixup
@@ -41,10 +40,11 @@ in
     # <nixpkgs + overlays>
     nixpkgs.config.allowUnfree = true;
     nixpkgs.overlays =  [
-      #(import (findImport "overlays" "nixpkgs-mozilla"))
-      #(import (findImport "overlays" "nixpkgs-wayland"))
+      #(import (findImport "overlays/nixpkgs-mozilla"))
+      #(import (findImport "overlays/nixpkgs-wayland"))
       # TODO: am I even allowed to do this with flakes?
-      (import "${inputs.wayland}")
+      mozillaImport
+      waylandImport
     ];
     # </nixpkgs + overlays>
 
@@ -135,9 +135,9 @@ in
         virt-manager # TODO: usb passthrough needs something else?
         
         fractal
-        mirage-im
+        # mirage-im # TODO
         nheko
-        quarternion
+        quaternion
         spectral
 
         # sway-related
@@ -147,7 +147,8 @@ in
         wayvnc wl-clipboard wl-gammactl
 
         # browsers
-        firefox-wayland firefoxNightly
+        firefox-wayland
+        #firefoxNightly # TODO: nixpkgs-mozilla is not flake (pure-eval) friendly!
         chromium
         torbrowser
         #chromium-dev-ozone
