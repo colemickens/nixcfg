@@ -4,7 +4,7 @@
   #  ./pkgs/{name}
   findImport = path:
     let
-      localimportpath = ./.. + "/${path}";
+      localimportpath = ./DISABLED/.. + "/${path}"; # DONT USE LOCAL IMPORTS FOR NOW!
       importpath = ./.imports + "/${path}";
     in
       assert (!(builtins.hasAttr "getFlake" builtins));
