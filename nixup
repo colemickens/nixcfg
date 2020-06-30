@@ -13,17 +13,15 @@ host="$(hostname)"
 [[ "${1:-""}" != "" ]]       && mode="${1}"     && shift
 
 function nix() {
-  command nix --experimental-features 'nix-command flakes' "${@}"
+  if [[ "${1:-""}" == "sudo" ]]; then command sudo nix --experimental-features 'nix-command flakes' --pure-eval --show-trace "${@:2}"
+  else command nix --experimental-features 'nix-command flakes' --pure-eval --show-trace "${@}"; fi
 }
 
-#TIHI: thanks, i hate it
-function nixbuild() {
-  t="$(mktemp -d)"
-  link="${t}/out"
-  nix build --out-link "${link}" "${@}"
-  tl="$(readlink -f ${link})";
-  rm -rf "${t}"
-
+function nixbuild() { #TIHI: thanks, i hate it
+  t="$(mktemp -d)"; link="${t}/out"
+  if [[ "${1:-""}" == "sudo" ]]; then nix sudo build --out-link "${link}" "${@:2}"
+  else nix build --out-link "${link}" "${@}"; fi
+  tl="$(readlink -f ${link})"; rm -rf "${t}"
   echo -e "${tl}"
 }
 
@@ -52,12 +50,15 @@ function dev() {
 
 function flake() {
   # lol nix wrapper for output store paths
-  tl="$(nixbuild --pure-eval --show-trace ".#nixosConfigurations.${host}.config.system.build.toplevel")"
+  tl="$(nixbuild ".#nixosConfigurations.${host}.config.system.build.toplevel")"
   nix-store -q --graph "${tl}" > /tmp/nixos-flake
 
   if [[ "${1:-""}" == "switch" ]]; then
-    # TODO: this isn't setting system profile
-    nix shell -vv "${tl}" -c switch-to-configuration "${switch}"
+    nixbuild sudo \
+      --experimental-features 'nix-command flakes' \
+      --profile /nix/var/nix/profiles/system \
+        ".#nixosConfigurations.${host}.config.system.build.toplevel"
+    nix sudo shell -vv "${tl}" -c switch-to-configuration "${1}"
   fi
 }
 
@@ -68,7 +69,7 @@ function legacy() {
   if [[ "${1:-""}" == "switch" ]]; then
     sudo bash -c "\
       nix-env --set --profile /nix/var/nix/profiles/system ${tl} \
-      && ${tl}/bin/switch-to-configuration ${switch}"
+      && ${tl}/bin/switch-to-configuration ${1}"
   fi
 }
 
@@ -79,10 +80,9 @@ function remote() {
   REMOTE_COPY="rsync"
   REMOTE_PUSH="cachix"
 
-  # TODO: "nix eval" with the flake fails?
-  #drv="$(nix eval ".#nixosConfigurations.${machine}.config.system.build.toplevel")"
+  # <investigate>
   #drv="$(nix eval --pure-eval ".#nixosConfigurations.${machine}.config.system.build.toplevel")"
-  #####drv="$(nix-instantiate ./machines/${machine})" # nixFlakes doesn't have nix-instantiate?
+  # </investigate>
   drv="$(nix-instantiate "machines/${machine}")"
   out="$(nix show-derivation "${drv}" | jq -r 'to_entries[].value.outputs.out.path')" # TODO: must be a better way
 
@@ -90,7 +90,14 @@ function remote() {
   if [[ "${REMOTE_COPY:-""}" == "rsync" ]]; then
     
     # <investigate>
-    #nix copy --to "file://${t}" "${drv}" ###????????????????????????????? <_------- regression!!!
+    # looks like: regression when copying aarch64 derivs from x86->aarch64!!!
+    # - the first command fails
+    # - the second one succeeds, doesn't seem right
+    # first error:
+      # + nix --experimental-features 'nix-command flakes' --pure-eval --show-trace copy --to file:///tmp/colemickens-nixtmp /nix/store/7dmhqf7a0w0y128gz1xv3wy55ankcrwm-nixos-system-raspberry-20.09.git.drv
+      # error: --- Error ---------------------------------------------------------------------------------------- nix
+      # a 'aarch64-linux' with features {} is required to build '/nix/store/9psjdx08hy7wbm3hap4lcsgagam8p660-hm_.configzsh.zshrc.drv', but I am a 'x86_64-linux' with features {benchmark, big-parallel, kvm, nixos-test}
+    nix copy --to "file://${t}" "${drv}" &>/dev/stderr || true
     nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nix --command "nix copy --to file://${t} ${drv}"
     # </investigate>
 
@@ -118,10 +125,6 @@ function remote() {
     ssh "${remote}" \
       "nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-20.03.tar.gz -p nixFlakes -p cachix --command \
         \"echo ${out} | env CACHIX_SIGNING_KEY=${cachixkey} cachix push ${cache}\""
-  elif [[ "${REMOTE_PUSH:-""}" == "azure" ]]; then
-    ## PUSH/AZURE
-    echo "unsupported REMOTE_PUSH=azure" > /dev/stderr
-    exit 1
   else
     ## PUSH/NIX (well, more like pull; also, why so slooow)
     nix copy --from "ssh://${remote}" "${out}"
