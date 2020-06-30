@@ -1,14 +1,14 @@
-{ pkgs, lib, config, inputs, isFlakes, ... }:
+{ pkgs, lib, config, inputs, ... }:
 
 let
   findImport = (import ../../../lib.nix).findImport;
   mozillaImport = (
-    if isFlakes
+    if (builtins.hasAttr "getFlake" builtins)
     then import inputs.mozilla
     else import "${findImport "overlays/nixpkgs-mozilla"}"
   );
   waylandImport = (
-    if isFlakes
+    if (builtins.hasAttr "getFlake" builtins)
     then import inputs.wayland
     else import "${findImport "overlays/nixpkgs-wayland"}"
   );
@@ -43,7 +43,7 @@ in
       #(import (findImport "overlays/nixpkgs-mozilla"))
       #(import (findImport "overlays/nixpkgs-wayland"))
       # TODO: am I even allowed to do this with flakes?
-      mozillaImport
+      #mozillaImport
       waylandImport
     ];
     # </nixpkgs + overlays>
@@ -133,7 +133,7 @@ in
         brightnessctl
         pulsemixer
         virt-manager # TODO: usb passthrough needs something else?
-        
+
         fractal
         # mirage-im # TODO
         nheko

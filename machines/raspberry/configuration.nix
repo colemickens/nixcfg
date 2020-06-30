@@ -25,6 +25,7 @@ in
     networking.hostName = "raspberry";
     environment.systemPackages = with pkgs; [
       file tmux htop
+      rumatui
       raspberrypi-tools
     ];
 
@@ -54,16 +55,16 @@ in
       privateKeyFile = "${./wireguard/server.key}";
       peers = [
         {
-          allowedIPs = [ "172.27.66.2/32" ];
-          publicKey = builtins.readFile ./wireguard/clients/cole1/client.pub;
+          allowedIPs = [ "172.27.66.10/32" ];
+          publicKey = builtins.readFile ./wireguard/clients/cole-phone/client.pub;
         }
         {
-          allowedIPs = [ "172.27.66.3/32" ];
-          publicKey = builtins.readFile ./wireguard/clients/cole2/client.pub;
+          allowedIPs = [ "172.27.66.11/32" ];
+          publicKey = builtins.readFile ./wireguard/clients/cole-laptop/client.pub;
         }
         {
-          allowedIPs = [ "172.27.66.4/32" ];
-          publicKey = builtins.readFile ./wireguard/clients/bud1/client.pub;
+          allowedIPs = [ "172.27.66.20/32" ];
+          publicKey = builtins.readFile ./wireguard/clients/bud-phone/client.pub;
         }
       ];
     };

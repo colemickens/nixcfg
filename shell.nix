@@ -1,12 +1,10 @@
-let
-  pkgs = import /home/cole/code/nixpkgs/cmpkgs {};
-  cachixpkgs = (import (builtins.fetchTarball { url = "https://cachix.org/api/v1/install"; }) {});
-in
-pkgs.stdenv.mkDerivation {
-  name = "nixcfg-devenv";
+{ pkgs ? import /home/cole/code/nixpkgs/cmpkgs {}
+, cachixPkgs ? (import (builtins.fetchTarball { url = "https://cachix.org/api/v1/install"; }) {})
+}:
 
+pkgs.mkShell {
   nativeBuildInputs = []
-  ++ (with cachixpkgs; [ cachix ])
+  ++ (with cachixPkgs; [ cachix ])
   ++ (with pkgs; [
     bash
     cacert
@@ -14,11 +12,11 @@ pkgs.stdenv.mkDerivation {
     git
     jq
     mercurial
-    (pkgs.writeScriptBin "nix" ''
-      "${nixFlakes}/bin/nix" --experimental-features 'nix-command flakes' "''${@}"
-    '')
+    nixFlakes
     nix-build-uncached
+    nettools
     openssh
     ripgrep
+    rsync
   ]);
 }

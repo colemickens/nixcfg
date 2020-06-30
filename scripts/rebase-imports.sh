@@ -1,20 +1,47 @@
+#!/usr/bin/env bash
+set -euo pipefail
+set -x
 
-  (cd ~/code/nixpkgs/master;
-    git remote update;
-    git reset --hard nixpkgs/master && git push origin HEAD -f)
+# TODO: tool to help do this?
 
-  (cd ~/code/nixpkgs/cmpkgs;
-    git rebase nixpkgs/nixos-unstable-small && git push origin HEAD -f) || true
+##### NIXPKGS
+# master
+cd ~/code/nixpkgs/master
+git remote update
+git reset --hard nixpkgs/master
+git push origin HEAD -f
 
-  (cd ~/code/nixpkgs/rpi;
-    git rebase nixpkgs/nixos-unstable && git push origin HEAD -f) || true
+# cmpkgs
+cd ~/code/nixpkgs/cmpkgs;
+(git rebase nixpkgs/nixos-unstable-small && git push origin HEAD -f) || true
 
-  (cd ~/code/extras/home-manager;
-    git remote update;
-    git rebase rycee/master || git rebase --abort)
+# rpi
+cd ~/code/nixpkgs/rpi;
+(git rebase nixpkgs/nixos-unstable && git push origin HEAD -f) || true
 
-  (cd ~/code/overlays/nixpkgs-wayland;
-    git remote update;
-    git rebase origin/master || git rebase --abort)
+##### HOME_MANAGER
+# master
+cd ~/code/home-manager/master
+git remote update
+git reset --hard rycee/master
+git push origin HEAD -f
 
-  (cd ~/code/nixcfg; ./update-imports.sh)
+# # bqv-flakes (rycee/bqv-flakes)
+# (cd ~/code/home-manager/bqv-flakes;
+# git remote update;
+# git rebase rycee/bqv-flakes || git rebase --abort)
+
+# # CMHM-flakes (bqv-flakes)
+# (cd ~/code/home-manager/cmhm-flakes;
+# git reset 
+# git rebase bqv-flakes || git rebase --abort)
+
+# # CMHM (rycee/master)
+# (cd ~/code/home-manager/cmhm;
+# git remote update;
+# git rebase rycee/bqv-flakes || git rebase --abort)
+
+# WAYLAND (CI driven, make sure we aren't accidentally holding ourselves back)
+cd ~/code/overlays/nixpkgs-wayland
+git remote update
+git reset --hard origin/master

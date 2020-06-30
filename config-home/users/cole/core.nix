@@ -1,13 +1,13 @@
-{ pkgs, lib, config, inputs, isFlakes, ... }:
+{ pkgs, lib, config, inputs, ... }:
 
 let
   findImport = (import ../../../lib.nix).findImport;
 
   hostColor = "blue1";
   homeImport = (
-    if isFlakes
-    then inputs.home.nixosModules."home-manager"
-    else "${findImport "home-manager/cmhm"}/nixos"
+    if (builtins.hasAttr "getFlake" builtins)
+    then (inputs.home.nixosModules."home-manager")
+    else import "${findImport "home-manager/cmhm"}/nixos"
   );
 in
 {
@@ -42,6 +42,8 @@ in
       home.sessionVariables = {
         EDITOR = "nvim";
       };
+      manual = { manpages.enable = false; };
+      news.display = "silent";
       programs = {
         bash  = import ./config/bash-config.nix pkgs;
         git = import ./config/git-config.nix pkgs;

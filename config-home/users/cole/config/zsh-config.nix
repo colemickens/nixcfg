@@ -14,15 +14,16 @@
   # - tab-completion isn't color-highlighted
   # - can rev search + tab-completion use the same tool/path?
 
+
   envExtra = ''
     # commands added to .zshenv
-    #test
-    path+=/home/cole/code/nixcfg
+    # path+=/home/cole/code/nixcfg # moved to init (since it wasnt in ssh sessions)
   '';
   
   initExtra = ''
     # added to .zshrc
     bindkey -e
+    path+=/home/cole/code/nixcfg
   '';
 
   plugins = [
@@ -35,11 +36,6 @@
       name = "powerlevel10k-config";
       src = pkgs.lib.cleanSource ./p10k-config;
       file = "p10k.zsh";
-    }
-    {
-      name = "zsh-nix-shell";
-      src = pkgs.zsh-nix-shell;
-      file = "share/zsh-nix-shell/nix-shell.plugin.zsh";
     }
     {
       name = "zsh-fast-syntax-highlighting";

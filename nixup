@@ -4,60 +4,160 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 set -euo pipefail
 set -x
 
-cd ~/code/nixcfg
+unset NIX_PATH
+
+cd "${DIR}"
+mode="legacy"
+host="$(hostname)"
+
+[[ "${1:-""}" != "" ]]       && mode="${1}"     && shift
+[[ "${1:-""}" == "switch" ]] && switch="switch" && shift
 
 function nix() {
   command nix --experimental-features 'nix-command flakes' "${@}"
 }
 
-machinename="$(hostname)"
-remote="self"
+#TIHI: thanks, i hate it
+function nixbuild() {
+  t="$(mktemp -d)"
+  link="${t}/out"
+  nix build --out-link "${link}" "${@}"
+  tl="$(readlink -f ${link})";
+  rm -rf "${t}"
 
-mode="build"
-if [[ "${1:-""}" == "x" ]]; then
-  mode="update"
-  shift
-elif [[ "${1:-""}" == "flake" ]]; then
-  mode="flake"
-  shift
-fi
+  echo -e "${tl}"
+}
 
-if [[ "${1:-""}" != "" ]]; then
-  machinename="${1}"
-  remote="${2}"
-  port="${3}"
-fi
+function update() {
+  # our upstreams
+  (cd "./scripts" && ./rebase-imports.sh)
 
-if [[ "${mode}" == "update" ]]; then
-  (cd ~/code/nixcfg/scripts; ./rebase-imports.sh)
+  # our pull requests (also used for our pkgs we used from the prs for testing!)
+  (cd "./scripts" && ./rebase-pulls.sh)
+
+  # flakes
+  nix flake update --no-registries
+
+  # legacy .imports
+  (cd "./.imports" && ./update.sh)
+}
+
+function dev() {
+  nix develop
+}
+
+function flake() {
+  nix flake update --no-registries
+  # WTF? Why does this ever have an effect? Needs to allow for more aggression
+  nix flake update --no-registries --update-input home
+  nix flake update --no-registries --update-input cmpkgs
+  nix flake update --no-registries --update-input construct
+  nix flake update --no-registries --update-input hardware
+  #nix flake update --no-registries --update-input mozilla
+  nix flake update --no-registries --update-input pipkgs
+  nix flake update --no-registries --update-input wayland
+
+  # lol nix wrapper for output store paths
+  tl="$(nixbuild --pure-eval --show-trace ".#nixosConfigurations.${host}.config.system.build.toplevel")"
+  nix-store -q --graph "${tl}" > /tmp/nixos-flake
+
+  if [[ ! -z "${switch:-""}" ]]; then
+    # TODO: this isn't setting system profile
+    nix shell -vv "${tl}" -c switch-to-configuration "${switch}"
+  fi
+}
+
+function legacy() {
+  tl="$(nix-build --show-trace "./machines/${host}")"
+  nix-store -q --graph "${tl}" > /tmp/nixos-legacy
+
+  if [[ ! -z "${switch:-""}" ]]; then
+    sudo bash -c "\
+      nix-env --set --profile /nix/var/nix/profiles/system ${tl} \
+      && ${tl}/bin/switch-to-configuration ${switch}"
+  fi
+}
+
+function remote() {
+  machine="${1}"; shift
+  remote="${1}"; shift
+
+  REMOTE_COPY="rsync"
+  REMOTE_PUSH="cachix"
+
+  # TODO: "nix eval" with the flake fails?
+  #drv="$(nix eval ".#nixosConfigurations.${machine}.config.system.build.toplevel")"
+  #drv="$(nix eval --pure-eval ".#nixosConfigurations.${machine}.config.system.build.toplevel")"
+  #####drv="$(nix-instantiate ./machines/${machine})" # nixFlakes doesn't have nix-instantiate?
+  drv="$(nix-instantiate "machines/${machine}")"
+  out="$(nix show-derivation "${drv}" | jq -r 'to_entries[].value.outputs.out.path')" # TODO: must be a better way
+
+  t="/tmp/colemickens-nixtmp"
+  if [[ "${REMOTE_COPY:-""}" == "rsync" ]]; then
+    
+    # <investigate>
+    #nix copy --to "file://${t}" "${drv}" ###????????????????????????????? <_------- regression!!!
+    nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nix --command "nix copy --to file://${t} ${drv}"
+    # </investigate>
+
+    rsync -avh "${t}/" "${remote}:${t}" # TODO: check slashes (and repeat runs)
+    ssh "${remote}" "nix --experimental-features 'nix-command' copy --from file://${t} ${drv}"
+  else
+    nix copy --to "ssh://${remote}" "${drv}"
+  fi
+
+  ## BUILD
+  # use nixos-unstable to get nixFlakes to build (not sure flakes is actually needed to build tho?)
+  ssh "${remote}" \
+    "nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nixFlakes --command \
+      \"nix build --experimental-features 'nix-command flakes' --pure-eval \
+        --option 'extra-binary-caches' 'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org' \
+        --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA=' \
+        --option 'build-cores' '0' \
+        --option 'narinfo-cache-negative-ttl' '0' ${drv} --keep-going\""
+
+  ## PUSH
+  if [[ "${REMOTE_PUSH:-""}" == "cachix" ]]; then
+    ## PUSH/CACHIX
+    cache="colemickens"
+    cachixkey="$(gopass show "websites/cachix.org/apikey/${cache}")"
+    ssh "${remote}" \
+      "nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-20.03.tar.gz -p nixFlakes -p cachix --command \
+        \"echo ${out} | env CACHIX_SIGNING_KEY=${cachixkey} cachix push ${cache}\""
+  elif [[ "${REMOTE_PUSH:-""}" == "azure" ]]; then
+    ## PUSH/AZURE
+    echo "unsupported REMOTE_PUSH=azure" > /dev/stderr
+    exit 1
+  else
+    ## PUSH/NIX (well, more like pull; also, why so slooow)
+    nix copy --from "ssh://${remote}" "${out}"
+  fi
+
+  nix-store \
+    --option 'extra-binary-caches' 'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org' \
+    --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA=' \
+    -r "${out}" # pull down through cachix? # TODO: check this
+}
+
+function deploy() {
+  machine="${1}"; shift
+  remote="${1}"; shift
   
-  # non-flakes, update imports now that they've rebased
-  (cd ~/code/nixcfg/scripts; ./legacy-update-imports.sh)
+  drv="$(nix-instantiate "machines/${machine}")"
+  out="$(nix show-derivation "${drv}" | jq -r 'to_entries[].value.outputs.out.path')" # TODO: must be a better way
 
-  nix flake update
+  nix copy --to "ssh-ng://${remote}" "${out}"
+  ssh "${remote}" "${out}/bin/switch-to-configuration switch"
+}
 
-  exit
-elif [[ "${mode}" == "flake" ]]; then
-  (
-    cd "${DIR}"
-    tl=".#nixosConfigurations.$(hostname).config.system.build.toplevel"
+function race() {
+  #set +x; echo "*************** UPDATE"
+  #time update
+  set +x; echo "*************** FLAKE"
+  time flake
+  set +x; echo "*************** LEGACY"
+  time legacy
+  set +x; echo "*************** DONE"
+}
 
-    nix flake update --no-registries
-    nix build "${tl}" --show-trace
-
-    if [[ ! -z "${SWITCH:-""}" ]]; then
-      nix shell -vv "${tl}" -c switch-to-configuration switch
-    fi
-  )
-  exit
-elif [[ "${mode}" == legacy ]]; then
-  (
-    cd "${DIR}"
-    toplevel="$(./scripts/nixbuild.sh "./machines/${machinename}")"
-    if [[ ! -z "${SWITCH:-""}" ]]; then
-      sudo bash -c "\
-        nix-env --set --profile /nix/var/nix/profiles/system ${toplevel} \
-        && ${toplevel}/bin/switch-to-configuration switch"
-    fi
-  )
-fi
+time "${mode}" "${@}"

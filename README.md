@@ -123,11 +123,36 @@ stuff which will probably just stay local.
 
 ## Flakes
 
+- my system is now buildable with either flakes or non-flakes
 - lib.nix is unneeded
-- should build same as non-flake
-- nixup / nixup flake
-- ??
+- should build same as non-flake (small diffs due to HM
 
-#### Feedback
+Both `flake` and `legacy` builds are supported via:
+
+  ```nix
+    findImport = (import ../../../lib.nix).findImport;
+    mozillaImport = (
+      if (builtins.hasAttr "getFlake" builtins)
+      then import inputs.mozilla
+      else import "${findImport "overlays/nixpkgs-mozilla"}"
+    );
+  ```
+
+`findImport` was part of my existing pinning system described above.
+
+```bash
+$ nixup flake # builds system with flake
+$ nixup legacy # builds system with flake
+$ nixup flake switch # builds system (flake) then switches to it
+$ nixup legacy switch # builds system (legacy) then switches to it
+
+# nix-instantiates the machine, nix copy to a dir, rsync to server build, cachix
+$ nixup remote machine_name user@remote_builder
+
+#
+$ nixup deploy machine_name user@machine_ip
+```
+
+#### Flakes Feedback
 
 TODO: consolidate here
