@@ -27,7 +27,7 @@
 
     construct.url = "github:matrix-construct/construct";
     construct.inputs.nixpkgs.follows = "cmpkgs";
-
+    
     hardware = { url = "github:nixos/nixos-hardware";        flake = false; };
     #mozilla  = { url = "github:mozilla/nixpkgs-mozilla";     flake = false; };  # firefox overlay never pins so breaks pure-eval
     wayland  = { url = "github:colemickens/nixpkgs-wayland"; flake=false; };
@@ -35,6 +35,7 @@
   
   outputs = inputs:
     let
+      uniformVersionSuffix = true; # clamp versionSuffix to ".git" to get identical build to non-flakes
       nameValuePair = name: value: { inherit name value; };
       genAttrs = names: f: builtins.listToAttrs (map (n: nameValuePair n (f n)) names);
       forAllSystems = genAttrs [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
@@ -49,13 +50,13 @@
       mkSystem = hostname: pkgs_: system:
         pkgs_.lib.nixosSystem {
           inherit system;
-          modules = [
-            (./. + "/machines/${hostname}/configuration.nix")
-            ({config, lib, ...}: {
-              system.nixos.revision = lib.mkForce "git";
-              system.nixos.versionSuffix = lib.mkForce ".git";
-            })
-          ];
+          modules = [ (./. + "/machines/${hostname}/configuration.nix")]
+            ++ (if uniformVersionSuffix then
+                [({config, lib, ...}: {
+                  system.nixos.revision = lib.mkForce "git";
+                  system.nixos.versionSuffix = lib.mkForce ".git";
+                })]
+                else []);
           specialArgs = {
             inherit inputs;
           };

@@ -88,18 +88,9 @@ function remote() {
 
   t="/tmp/colemickens-nixtmp"
   if [[ "${REMOTE_COPY:-""}" == "rsync" ]]; then
-    
-    # <investigate>
-    # looks like: regression when copying aarch64 derivs from x86->aarch64!!!
-    # - the first command fails
-    # - the second one succeeds, doesn't seem right
-    # first error:
-      # + nix --experimental-features 'nix-command flakes' --pure-eval --show-trace copy --to file:///tmp/colemickens-nixtmp /nix/store/7dmhqf7a0w0y128gz1xv3wy55ankcrwm-nixos-system-raspberry-20.09.git.drv
-      # error: --- Error ---------------------------------------------------------------------------------------- nix
-      # a 'aarch64-linux' with features {} is required to build '/nix/store/9psjdx08hy7wbm3hap4lcsgagam8p660-hm_.configzsh.zshrc.drv', but I am a 'x86_64-linux' with features {benchmark, big-parallel, kvm, nixos-test}
-    nix copy --to "file://${t}" "${drv}" &>/dev/stderr || true
-    nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nix --command "nix copy --to file://${t} ${drv}"
-    # </investigate>
+    # nix copy --to "file://${t}" "${drv}" # see: https://github.com/NixOS/nix/issues/3696
+    nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nix \
+      --command "nix copy --to file://${t} ${drv}"
 
     rsync -avh "${t}/" "${remote}:${t}" # TODO: check slashes (and repeat runs)
     ssh "${remote}" "nix --experimental-features 'nix-command' copy --from file://${t} ${drv}"
@@ -139,22 +130,25 @@ function remote() {
 function deploy() {
   machine="${1}"; shift
   remote="${1}"; shift
-  
-  drv="$(nix-instantiate "machines/${machine}")"
-  out="$(nix show-derivation "${drv}" | jq -r 'to_entries[].value.outputs.out.path')" # TODO: must be a better way
 
-  nix copy --to "ssh-ng://${remote}" "${out}"
-  ssh "${remote}" "${out}/bin/switch-to-configuration switch"
+  drv="$(nix-instantiate "machines/${machine}")"
+  tl="$(nix show-derivation "${drv}" | jq -r 'to_entries[].value.outputs.out.path')" # TODO: must be a better way
+
+  nix copy --to "ssh-ng://${remote}" "${tl}"
+  #nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nix \
+  #  --command "nix copy --to ssh-ng://${remote} ${out}"
+
+  ssh "${remote}" "sudo bash -c \"nix-env --set --profile /nix/var/nix/profiles/system ${tl} && ${tl}/bin/switch-to-configuration switch\""
 }
 
 function default() {
   set +x; echo "*************** UPDATE"
   time update
   set +x; echo "*************** FLAKE"
-  time flake
+  time flake switch
   set +x; echo "*************** LEGACY"
-  time legacy
-  set +x; echo "*************** DONE"
+  #time legacy
+  #set +x; echo "*************** DONE"
 }
 
 time "${mode}" "${@}"

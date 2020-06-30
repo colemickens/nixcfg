@@ -14,6 +14,7 @@ pkgs.mkShell {
     mercurial
     nixFlakes
     nix-build-uncached
+    nix-prefetch-git
     nettools
     openssh
     ripgrep

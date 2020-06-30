@@ -56,7 +56,7 @@ in
 
         htop iotop which binutils.bintools
         unrar parallel unzip xz zip
-        gomuks
+        gomuks rumatui
 
         nix-prefetch nixpkgs-fmt nixpkgs-review
 
