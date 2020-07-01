@@ -2,7 +2,7 @@
 
 [![builds.sr.ht status](https://builds.sr.ht/~colemickens/nixcfg.svg)](https://builds.sr.ht/~colemickens/nixcfg?)
 
-My NixOS + Home-Manager configuration. Think of this as a system-level superset of a dotfile s repo.
+My NixOS + Home-Manager configuration. Think of this as a system-level superset of a dotfiles repo.
 
 This configuration:
  * contains all of my system and application config (except Firefox)

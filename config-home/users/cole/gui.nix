@@ -125,6 +125,7 @@ in
       };
       home.packages = with pkgs; [
         # misc
+        asciinema
         qemu
         gimp imv evince #vlc
         wlfreerdp

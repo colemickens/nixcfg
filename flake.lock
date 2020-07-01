@@ -2,11 +2,11 @@
   "nodes": {
     "cmpkgs": {
       "locked": {
-        "lastModified": 1593568840,
-        "narHash": "sha256-+nSTnK8KjvfUwP4L562we41aJ/hRyXhyHwXGcHN+8nE=",
+        "lastModified": 1593619576,
+        "narHash": "sha256-xjRl/CBef8IYTV3/t+GeEh5qsaEtHP2QXy3Z8KrMdgg=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "6e73c2ec7c57888615fc2a4ce346aa963341c56f",
+        "rev": "57c64d97781c65e5c9563118d5b99441e4478389",
         "type": "github"
       },
       "original": {
@@ -112,11 +112,11 @@
     },
     "pipkgs": {
       "locked": {
-        "lastModified": 1593412148,
-        "narHash": "sha256-1GM0Q453Se+z9Qs53PbWe7I3o/lt6hpi8SCk0SxWJ7s=",
+        "lastModified": 1593631181,
+        "narHash": "sha256-xdMJ1Ksl0gZeq9wFEmd/R2qn5v0V0KmJG6rB3YsUGkU=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "c117a4bbcb8fd5668a0c54f5f2677391e3a407e2",
+        "rev": "dcb08bc2442a82b37904f5182a14c4ec9ff909ba",
         "type": "github"
       },
       "original": {
@@ -158,11 +158,11 @@
     "wayland": {
       "flake": false,
       "locked": {
-        "lastModified": 1593468259,
-        "narHash": "sha256-7NoPCry18x5dDnAHK8mL81xDHIlyuwQ6bwQyVGLrdGg=",
+        "lastModified": 1593630326,
+        "narHash": "sha256-c1uP/uIKIt+wR7i/JVD0DE6ikBe4M+tdH8Nd/0KrU5Y=",
         "owner": "colemickens",
         "repo": "nixpkgs-wayland",
-        "rev": "81928cb8b56dd5c6a6fafe7ae11646fac848a0be",
+        "rev": "b154927218ed72b7178204818f26bfac17775594",
         "type": "github"
       },
       "original": {

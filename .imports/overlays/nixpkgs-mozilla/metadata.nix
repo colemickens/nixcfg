@@ -2,7 +2,7 @@
   url = "https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz";
   repo_git = "https://github.com/mozilla/nixpkgs-mozilla";
   branch = "master";
-  rev = "e912ed483e980dfb4666ae0ed17845c4220e5e7c";
-  sha256 = "08fvzb8w80bkkabc1iyhzd15f4sm7ra10jn32kfch5klgl0gj3j3";
-  revdate = "2020-02-19 12:55:00 -0500";
+  rev = "e424ea2e95cdabd8a8f5f4284ee725f2cd27f692";
+  sha256 = "153ksyqyyg8ndvw1gaxac3c83lp9q1c3flvp9qmffh45k67744jv";
+  revdate = "2020-07-01 18:56:06 +0200";
 }
