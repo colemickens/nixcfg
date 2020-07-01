@@ -51,7 +51,8 @@ function dev() {
 function flake() {
   # lol nix wrapper for output store paths
   tl="$(nixbuild ".#nixosConfigurations.${host}.config.system.build.toplevel")"
-  nix-store -q --graph "${tl}" > /tmp/nixos-flake
+  nix-store -q --graph "${tl}" > /tmp/nixos-flakes
+  echo -e "${tl}" > /tmp/nixos-flakes-out
 
   if [[ "${1:-""}" == "switch" ]]; then
     nixbuild sudo \
@@ -65,6 +66,7 @@ function flake() {
 function legacy() {
   tl="$(nix-build --show-trace "./machines/${host}")"
   nix-store -q --graph "${tl}" > /tmp/nixos-legacy
+  echo -e "${tl}" > /tmp/nixos-legacy-out
 
   if [[ "${1:-""}" == "switch" ]]; then
     sudo bash -c "\
@@ -130,15 +132,13 @@ function remote() {
 function deploy() {
   machine="${1}"; shift
   remote="${1}"; shift
-
   drv="$(nix-instantiate "machines/${machine}")"
   tl="$(nix show-derivation "${drv}" | jq -r 'to_entries[].value.outputs.out.path')" # TODO: must be a better way
-
   nix copy --to "ssh-ng://${remote}" "${tl}"
-  #nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nix \
-  #  --command "nix copy --to ssh-ng://${remote} ${out}"
-
-  ssh "${remote}" "sudo bash -c \"nix-env --set --profile /nix/var/nix/profiles/system ${tl} && ${tl}/bin/switch-to-configuration switch\""
+  ssh "${remote}" "\
+    sudo bash -c \"\
+      nix-env --set --profile /nix/var/nix/profiles/system ${tl} \
+      && ${tl}/bin/switch-to-configuration switch\""
 }
 
 function default() {
@@ -147,8 +147,11 @@ function default() {
   set +x; echo "*************** FLAKE"
   time flake switch
   set +x; echo "*************** LEGACY"
-  #time legacy
-  #set +x; echo "*************** DONE"
+  time legacy
+  set +x; echo "*************** DONE"
+
+  legacy: $(cat /tmp/nixos-legacy-out)
+  flakes: $(cat /tmp/nixos-flakes-out)
 }
 
 time "${mode}" "${@}"

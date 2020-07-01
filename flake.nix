@@ -1,8 +1,9 @@
 {
-  description = "A highly structured configuration database.";
+  description = "colemickens-nixcfg";
 
   # flakes feedback
   # - i wish inputs were optional so that I could do my current logic
+  # ---- they're CLI overrideable?
   # - i hate the git url syntax
 
   # cached failure isn't actually showing me the ... error?
@@ -16,8 +17,6 @@
     stable = { url = "github:nixos/nixpkgs/nixos-20.03"; };
     cmpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
     pipkgs = { url = "github:colemickens/nixpkgs/rpi"; };
-
-
 
     nix.url = "github:nixos/nix/flakes";
     nix.inputs.nixpkgs.follows = "master";
