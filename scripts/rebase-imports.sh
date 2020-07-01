@@ -15,8 +15,8 @@ git push origin HEAD -f
 cd ~/code/nixpkgs/cmpkgs;
 (git rebase nixpkgs/nixos-unstable-small && git push origin HEAD -f) || true
 
-# rpi
-cd ~/code/nixpkgs/rpi;
+# pipkgs
+cd ~/code/nixpkgs/pipkgs;
 (git rebase nixpkgs/nixos-unstable && git push origin HEAD -f) || true
 
 ##### HOME_MANAGER
@@ -33,7 +33,7 @@ git push origin HEAD -f
 
 # # CMHM-flakes (bqv-flakes)
 # (cd ~/code/home-manager/cmhm-flakes;
-# git reset 
+# git reset
 # git rebase bqv-flakes || git rebase --abort)
 
 # # CMHM (rycee/master)

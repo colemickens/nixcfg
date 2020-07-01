@@ -74,10 +74,10 @@ in
     services.pipewire.enable = true;
     programs.sway.enable = true; # needed for swaylock/pam stuff
     programs.sway.extraPackages = []; # block rxvt
-    xdg.portal.enable = true;
-    xdg.portal.gtkUsePortal = true;
-    xdg.portal.extraPortals = with pkgs;
-      [ xdg-desktop-portal-wlr xdg-desktop-portal-gtk ];
+    #xdg.portal.enable = true;
+    #xdg.portal.gtkUsePortal = true;
+    #xdg.portal.extraPortals = with pkgs;
+    #  [ xdg-desktop-portal-wlr xdg-desktop-portal-gtk ];
 
     home-manager.users.cole = { pkgs, ... }: {
       home.sessionVariables = {

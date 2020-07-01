@@ -23,10 +23,8 @@ in
   };
 
   systemd.services.srht-nixpkgs-wayland = {
-    path = with pkgs; [ bash curl jq gopass git ];
-    #wantedBy = [ "multi-user.target" ];
+    path = with pkgs; [ bash curl jq git ];
     after = [ "network.target" ];
-    description = "...";
     serviceConfig = {
       Type = "simple";
       User = "cole";

@@ -16,7 +16,7 @@
     #small = { url = "github:nixos/nixpkgs/nixos-unstable-small"; };
     stable = { url = "github:nixos/nixpkgs/nixos-20.03"; };
     cmpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
-    pipkgs = { url = "github:colemickens/nixpkgs/rpi"; };
+    pipkgs = { url = "github:colemickens/nixpkgs/pipkgs"; };
 
     nix.url = "github:nixos/nix/flakes";
     nix.inputs.nixpkgs.follows = "master";

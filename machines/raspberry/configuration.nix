@@ -7,7 +7,7 @@ in
 {
   imports = [
     ../../config-nixos/common.nix
-    ../../config-home/users/cole/core.nix
+    ../../config-home/users/cole/user.nix
 
     ./home-assistant
 
@@ -23,11 +23,7 @@ in
     nix.nixPath = [];
     documentation.nixos.enable = false;
     networking.hostName = "raspberry";
-    environment.systemPackages = with pkgs; [
-      file tmux htop
-      rumatui
-      raspberrypi-tools
-    ];
+    services.udisks2.enable = false;
 
     networking.wireless.enable = false;
     networking.interfaces."${eth}".ipv4.addresses = [

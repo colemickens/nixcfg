@@ -50,9 +50,20 @@ function dev() {
 
 function flakes() {
   # lol nix wrapper for output store paths
-  tl="$(nixbuild ".#nixosConfigurations.${host}.config.system.build.toplevel")"
-  nix-store -q --graph "${tl}" > /tmp/nixos-flakes
-  echo -e "${tl}" > /tmp/nixos-flakes-out
+  if [[ "${1:-""}" == "local" ]]; then
+    shift
+    tl="$(set -e; nixbuild \
+      --override-input master "/home/cole/code/nixpkgs/master" \
+      --override-input cmpkgs "/home/cole/code/nixpkgs/cmpkgs" \
+      --override-input pipkgs "/home/cole/code/nixpkgs/pipkgs" \
+      --override-input hardware "/home/cole/code/extras/nixos-hardware" \
+      --override-input wayland  "/home/cole/code/overlays/nixpkgs-wayland" \
+        ".#nixosConfigurations.${host}.config.system.build.toplevel")"
+    nix-store -q --graph "${tl}" > /tmp/nixos-flakes-local; echo -e "${tl}" > /tmp/nixos-flakes-local-out
+  else
+    tl="$(set -e; nixbuild ".#nixosConfigurations.${host}.config.system.build.toplevel")"
+    nix-store -q --graph "${tl}" > /tmp/nixos-flakes; echo -e "${tl}" > /tmp/nixos-flakes-out
+  fi
 
   if [[ "${1:-""}" == "switch" ]]; then
     nixbuild sudo \
@@ -64,7 +75,7 @@ function flakes() {
 }
 
 function legacy() {
-  tl="$(nix-build --show-trace "./machines/${host}")"
+  tl="$(set -e; nix-build --show-trace "./machines/${host}")"
   nix-store -q --graph "${tl}" > /tmp/nixos-legacy
   echo -e "${tl}" > /tmp/nixos-legacy-out
 
@@ -82,8 +93,8 @@ function remote() {
   remote="${1}"; shift
 
   #drv="$(nix eval --pure-eval ".#nixosConfigurations.${machine}.config.system.build.toplevel")" # TODO: why????
-  drv="$(nix-instantiate "machines/${machine}")"
-  out="$(nix show-derivation "${drv}" | jq -r 'to_entries[].value.outputs.out.path')" # TODO: must be a better way # (in v1, there's nix-store query that works)
+  drv="$(set -e; nix-instantiate "machines/${machine}")"
+  out="$(set -e; nix show-derivation "${drv}" | jq -r 'to_entries[].value.outputs.out.path')" # TODO: must be a better way # (in v1, there's nix-store query that works)
 
   ## COPY DRV
   t="/tmp/tmpnixpath"; rm -rf "${t}"; trap "rm -rf $t" EXIT;
@@ -102,7 +113,7 @@ function remote() {
 
   ## PUSH TO CACHIX
   cache="colemickens"
-  cachixkey="$(gopass show "websites/cachix.org/apikey/${cache}")"
+  cachixkey="$(set -e; gopass show "websites/cachix.org/apikey/${cache}")"
   ssh "${remote}" \
     "nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-20.03.tar.gz -p cachix --command \
       \"echo ${out} | env CACHIX_SIGNING_KEY=${cachixkey} cachix push ${cache}\""
@@ -111,14 +122,14 @@ function remote() {
   nix-store \
     --option 'extra-binary-caches' 'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org' \
     --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA=' \
-    -r "${out}" # pull down through cachix? # TODO: check this
+    -r "${out}"
 }
 
 function deploy() {
   machine="${1}"; shift
   remote="${1}"; shift
-  drv="$(nix-instantiate "machines/${machine}")"
-  tl="$(nix show-derivation "${drv}" | jq -r 'to_entries[].value.outputs.out.path')" # TODO: must be a better way (see above)
+  drv="$(set -e; nix-instantiate "machines/${machine}")"
+  tl="$(set -e; nix show-derivation "${drv}" | jq -r 'to_entries[].value.outputs.out.path')" # TODO: must be a better way (see above)
   nix copy --to "ssh-ng://${remote}" "${tl}"
   ssh "${remote}" "\
     sudo bash -c \"\
@@ -129,15 +140,21 @@ function deploy() {
 function default() {
   set +x; echo "*************** UPDATE"
   time update
-  set +x; echo "*************** FLAKE"
-  time flakes switch
   set +x; echo "*************** LEGACY"
   time legacy
+  #set +x; echo "*************** FLAKE LOCAL"
+  #time flakes local
+  # local blocked on: https://github.com/NixOS/nix/issues/3774
+  set +x; echo "*************** FLAKE"
+  time flakes
+  set +x; echo "*************** SWITCH"
+  time flakes switch
   set +x; echo "*************** DONE"
 
   set +x; echo "***************"
-  echo "legacy: $(cat /tmp/nixos-legacy-out)"
-  echo "flakes: $(cat /tmp/nixos-flakes-out)"
+  echo "legacy: $(set -e; cat /tmp/nixos-legacy-out)"
+  #echo "flocal: $(set -e; cat /tmp/nixos-flakes-local-out)"
+  echo "flakes: $(set -e; cat /tmp/nixos-flakes-out)"
   set +x; echo "***************"
 }
 
