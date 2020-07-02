@@ -24,7 +24,9 @@ let
   in_logi = "1133:16505:Logitech_G_Pro";
 
   i3statusConfig = import ./i3status-rust-config.nix { inherit pkgs; };
-  useWaybar = true;
+  i3statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ${i3statusConfig}";
+  waybarCommand = "${pkgs.waybar}/bin/waybar";
+  statusCommand = waybarCommand; # switch back?
 
   # idle/lock
   # TODO: test and fix/ remove this message
@@ -68,7 +70,7 @@ let
   '';
 in {
   enable = true;
-  systemdIntegration = true; # beta 
+  systemdIntegration = true; # beta
   wrapperFeatures = { gtk = true; };
   xwayland = true;
   extraConfig = ''
@@ -137,10 +139,7 @@ in {
     bars = [{
       fonts = [ barfont ];
       position = "top";
-      statusCommand =
-        if useWaybar
-        then "${pkgs.i3status-rust}/bin/i3status-rs ${i3statusConfig}"
-        else "${pkgs.waybar}/bin/waybar";
+      inherit statusCommand;
     }];
     keybindings = {
       "${modifier}+Return" = "exec ${terminal}";

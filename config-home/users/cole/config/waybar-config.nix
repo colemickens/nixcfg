@@ -10,8 +10,8 @@
   settings = [{
     layer = "top";
     position = "top";
-    height = 30;
-    output = [ "DP-1" ];
+    height = 13;
+    output = [ "DP-1" "eDP-1" "HEADLESS-1" ];
     modules-left = [ "sway/workspaces" "sway/mode" ];
     modules-center = [ "sway/window" ];
     modules-right = [
@@ -25,7 +25,7 @@
       # "battery" # not in default modules, throws warning, but hen again so does smth else
       "clock"
     ];
-    
+
     # modules = {
     #   "sway/workspaces" = {
     #     disable-scroll = true;

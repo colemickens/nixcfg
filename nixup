@@ -10,21 +10,7 @@ cd "${DIR}"
 mode="default"
 host="$(hostname)"
 
-[[ "${1:-""}" != "" ]]       && mode="${1}"     && shift
-
-function nix() {
-  if [[ "${1:-""}" == "sudo" ]]; then command sudo nix --experimental-features 'nix-command flakes' --pure-eval --show-trace "${@:2}"
-  else command nix --experimental-features 'nix-command flakes' --pure-eval --show-trace "${@}"; fi
-}
-
-# lol nix wrapper for output store paths #TIHI
-function nixbuild() {
-  t="$(mktemp -d)"; link="${t}/out"
-  if [[ "${1:-""}" == "sudo" ]]; then nix sudo build --out-link "${link}" "${@:2}"
-  else nix build --out-link "${link}" "${@}"; fi
-  tl="$(readlink -f ${link})"; rm -rf "${t}"
-  echo -e "${tl}"
-}
+[[ "${1:-""}" != "" ]] && mode="${1}" && shift
 
 #
 # TODO: update should update local imports, build local, then go back and push refs if good!
@@ -34,13 +20,15 @@ function update() {
   (cd "./scripts" && ./rebase-imports.sh) # our upstreams
 
   # flakes (TODO: no really, what does this do?)
-  command nix --experimental-features 'nix-command flakes' flake update --no-registries
+  nix --experimental-features 'nix-command flakes' --pure-eval \
+    flake update --no-registries
 
   # TODO: Why does this ever have an effect? Needs to allow for more aggression
-  command nix --experimental-features 'nix-command flakes' flake update --no-registries \
-    --update-input master --update-input stable --update-input cmpkgs --update-input pipkgs \
-    --update-input nix --update-input home --update-input construct \
-    --update-input hardware --update-input mozilla --update-input wayland
+  nix --experimental-features 'nix-command flakes' --pure-eval \
+    flake update --no-registries \
+      --update-input master --update-input stable --update-input cmpkgs --update-input pipkgs \
+      --update-input nix --update-input home --update-input construct \
+      --update-input hardware --update-input mozilla --update-input wayland
 
   # legacy .imports
   (cd "./.imports" && ./update.sh)
@@ -51,45 +39,42 @@ function dev() {
 }
 
 function flakes() {
+  args=()
   if [[ "${1:-""}" == "local" ]]; then
     shift
-    tl="$(set -e; nixbuild \
-      --override-input master "/home/cole/code/nixpkgs/master" \
-      --override-input stable "/home/cole/code/nixpkgs/stable" \
-      --override-input cmpkgs "/home/cole/code/nixpkgs/cmpkgs" \
-      --override-input pipkgs "/home/cole/code/nixpkgs/pipkgs" \
-      --override-input home   "/home/cole/code/home-manager/cmhm-flakes" \
-        ".#nixosConfigurations.${host}.config.system.build.toplevel")"
-    nix-store -q --graph "${tl}" > /tmp/nixos-flakes-local; echo -e "${tl}" > /tmp/nixos-flakes-local-out
-  else
-    tl="$(set -e; nixbuild ".#nixosConfigurations.${host}.config.system.build.toplevel")"
-    nix-store -q --graph "${tl}" > /tmp/nixos-flakes; echo -e "${tl}" > /tmp/nixos-flakes-out
+    args+=(--override-input master "/home/cole/code/nixpkgs/master" \
+            --override-input stable "/home/cole/code/nixpkgs/stable" \
+            --override-input cmpkgs "/home/cole/code/nixpkgs/cmpkgs" \
+            --override-input pipkgs "/home/cole/code/nixpkgs/pipkgs" \
+            --override-input home   "/home/cole/code/home-manager/cmhm-flakes")
   fi
+  args+=(".#nixosConfigurations.${host}.config.system.build.toplevel")
 
   if [[ "${1:-""}" == "switch" ]]; then
-    nixbuild sudo \
-      --experimental-features 'nix-command flakes' \
-      --profile /nix/var/nix/profiles/system \
-        ".#nixosConfigurations.${host}.config.system.build.toplevel"
-    nix sudo shell -vv "${tl}" -c switch-to-configuration "${1}"
+    sudo nix --experimental-features 'nix-command flakes' --pure-eval \
+      build --profile /nix/var/nix/profiles/system "${args[@]}"
+    sudo nix --experimental-features 'nix-command flakes' --pure-eval \
+      shell -vv "$(readlink -f result)" -c switch-to-configuration "${1}"
+  else
+    # just build
+    nix  --experimental-features 'nix-command flakes' --pure-eval \
+      build "${args[@]}"
   fi
+  echo -e "$(readlink -f result)"
 }
 
 function legacy() {
   if [[ "${1:-""}" == "local" ]]; then
     shift
     export NIXPKGS_LOCAL_IMPORTS_ALLOWED="true"
-    tl="$(set -e; nix-build --show-trace "./machines/${host}")"
-    nix-store -q --graph "${tl}" > /tmp/nixos-legacy-local; echo -e "${tl}" > /tmp/nixos-legacy-local-out
+    tl="$(set -e; nix-build --show-trace "./machines/${host}" > /tmp/nixos-legacy-local; cat /tmp/nixos-legacy-local)"
   else
-    tl="$(set -e; nix-build --show-trace "./machines/${host}")"
-    nix-store -q --graph "${tl}" > /tmp/nixos-legacy; echo -e "${tl}" > /tmp/nixos-legacy-out
-  fi  
+    tl="$(set -e; nix-build --show-trace "./machines/${host}" > /tmp/nixos-legacy; cat /tmp/nixos-legacy)"
+  fi
 
   if [[ "${1:-""}" == "switch" ]]; then
-    sudo bash -c "\
-      nix-env --set --profile /nix/var/nix/profiles/system ${tl} \
-      && ${tl}/bin/switch-to-configuration ${1}"
+    sudo nix-env --set --profile /nix/var/nix/profiles/system ${tl}
+    sudo nix-shell -p ${tl} --command "switch-to-configuration ${1}"
   fi
 }
 
@@ -144,26 +129,25 @@ function deploy() {
       && ${tl}/bin/switch-to-configuration switch\""
 }
 
-function default() {
-  set +x; echo "*************** UPDATE"
-  time update
-  set +x; echo "*************** LEGACY"
-  time legacy
-  set +x; echo "*************** LEGACY LOCAL"
-  time legacy local
-  set +x; echo "*************** FLAKE LOCAL"
-  time flakes local
-  set +x; echo "*************** FLAKE"
-  time flakes
-  set +x; echo "*************** SWITCH"
-  time flakes switch
-  set +x; echo "*************** DONE"
+function compare() {
+  set +x;
+  echo "*** update ***";       update       2>/dev/null >/dev/null
+  echo "*** legacy ***";       legacy       2>/dev/null >/tmp/nixos-legacy
+  echo "*** legacy local ***"; legacy local 2>/dev/null >/tmp/nixos-legacy-local
+  echo "*** flakes ***";       flakes       2>/dev/null >/tmp/nixos-flakes
+  echo "*** flakes local ***"; flakes local 2>/dev/null >/tmp/nixos-flakes-local
+  echo "***************"
 
+  echo "legacy      : $(set -e; cat /tmp/nixos-legacy)"
+  echo "legacy local: $(set -e; cat /tmp/nixos-legacy-local)"
+  echo "flakes      : $(set -e; cat /tmp/nixos-flakes)"
+  echo "flakes local: $(set -e; cat /tmp/nixos-flakes-local)"
   set +x; echo "***************"
-  echo "legacy: $(set -e; cat /tmp/nixos-legacy-out)"
-  echo "_local: $(set -e; cat /tmp/nixos-flakes-local-out)"
-  echo "flakes: $(set -e; cat /tmp/nixos-flakes-out)"
-  set +x; echo "***************"
+}
+
+function default() {
+  nixup update
+  nixup flakes local switch
 }
 
 time "${mode}" "${@}"
