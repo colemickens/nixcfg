@@ -32,7 +32,7 @@ in {
     #     };
     #     tor = { enable = true; };
     #     #unifi =  {
-    #     #  enable = true; 
+    #     #  enable = true;
     #     #  unifiInsecure = true;
     #     #  unifiAddress = "https://127.0.0.1:8443";
     #     #  unifiUsername = "admin";
@@ -62,7 +62,7 @@ in {
       port = 8123;
       config = {
         homeassistant = {
-          name = "ChimeraHomeAssistant";
+          name = "ChimeraAss";
           time_zone = "US/Pacific";
           latitude = 47.6;
           longitude = -122.3;
@@ -83,6 +83,7 @@ in {
         cast = { media_player = { host = "192.168.1.200"; }; };
         cloud = { };
         config = { };
+        #denonavr = { };
         discovery = { };
         esphome = { };
         frontend = {

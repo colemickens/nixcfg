@@ -107,6 +107,7 @@ in
           plugins = with pkgs; [ obs-wlrobs obs-v4l2sink ];
         };
         termite = import ./config/termite-config.nix { inherit pkgs; };
+        waybar = import ./config/waybar-config.nix { inherit pkgs; };
       };
       services = {
         gpg-agent = {

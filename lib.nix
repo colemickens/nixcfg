@@ -4,11 +4,12 @@
   #  ./pkgs/{name}
   findImport = path:
     let
-      localimportpath = ./DISABLED/.. + "/${path}"; # DONT USE LOCAL IMPORTS FOR NOW!
+      localimportsAllowed = ((builtins.getEnv "NIXPKGS_LOCAL_IMPORTS_ALLOWED") == "true");
+      localimportpath = ./.. + "/${path}";
       importpath = ./.imports + "/${path}";
     in
       assert (!(builtins.hasAttr "getFlake" builtins));
-      if builtins.pathExists localimportpath then
+      if (localimportsAllowed && builtins.pathExists localimportpath) then
         localimportpath
       else if builtins.pathExists importpath then
         (import importpath)

@@ -12,8 +12,6 @@
   # credits: bqv, balsoft
   inputs = {
     master = { url = "github:nixos/nixpkgs/master"; };
-    #unstable = { url = "github:nixos/nixpkgs/nixos-unstable"; };
-    #small = { url = "github:nixos/nixpkgs/nixos-unstable-small"; };
     stable = { url = "github:nixos/nixpkgs/nixos-20.03"; };
     cmpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
     pipkgs = { url = "github:colemickens/nixpkgs/pipkgs"; };
@@ -22,14 +20,14 @@
     nix.inputs.nixpkgs.follows = "master";
 
     home.url = "github:colemickens/home-manager/cmhm-flakes";
-    home.inputs.nixpkgs.follows = "cmpkgs"; # TODO: text ref??
+    home.inputs.nixpkgs.follows = "cmpkgs";
 
     construct.url = "github:matrix-construct/construct";
     construct.inputs.nixpkgs.follows = "cmpkgs";
     
     hardware = { url = "github:nixos/nixos-hardware";        flake = false; };
-    #mozilla  = { url = "github:mozilla/nixpkgs-mozilla";     flake = false; };  # firefox overlay never pins so breaks pure-eval
-    wayland  = { url = "github:colemickens/nixpkgs-wayland"; flake=false; };
+    mozilla  = { url = "github:mozilla/nixpkgs-mozilla";     flake = false; };
+    wayland  = { url = "github:colemickens/nixpkgs-wayland"; flake = false; };
   };
   
   outputs = inputs:

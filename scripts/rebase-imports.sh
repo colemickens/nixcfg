@@ -19,6 +19,10 @@ cd ~/code/nixpkgs/cmpkgs;
 cd ~/code/nixpkgs/pipkgs;
 (git rebase nixpkgs/nixos-unstable && git push origin HEAD -f) || true
 
+# stable
+cd ~/code/nixpkgs/stable;
+(git rebase "nixpkgs/nixos-20.03" && git push origin HEAD -f) || true
+
 ##### HOME_MANAGER
 # master
 cd ~/code/home-manager/master

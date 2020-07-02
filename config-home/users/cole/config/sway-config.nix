@@ -24,6 +24,7 @@ let
   in_logi = "1133:16505:Logitech_G_Pro";
 
   i3statusConfig = import ./i3status-rust-config.nix { inherit pkgs; };
+  useWaybar = true;
 
   # idle/lock
   # TODO: test and fix/ remove this message
@@ -136,7 +137,10 @@ in {
     bars = [{
       fonts = [ barfont ];
       position = "top";
-      statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ${i3statusConfig}";
+      statusCommand =
+        if useWaybar
+        then "${pkgs.i3status-rust}/bin/i3status-rs ${i3statusConfig}"
+        else "${pkgs.waybar}/bin/waybar";
     }];
     keybindings = {
       "${modifier}+Return" = "exec ${terminal}";

@@ -2,7 +2,7 @@
   url = "https://github.com/colemickens/home-manager/archive/cmhm.tar.gz";
   repo_git = "https://github.com/colemickens/home-manager";
   branch = "cmhm";
-  rev = "4a51d908f0724318b7d7ca496e2968e969c9b40e";
-  sha256 = "0snva5f9rw38hdppdavkijgn9ib9njwjr28rxk27qji98sy2f7al";
-  revdate = "2020-06-28 18:27:56 -0700";
+  rev = "1b89c2dc7758cb9e85dd58bad56cf664e0a9e565";
+  sha256 = "04jacl9h5xqrbbdll4sb2rqrp3srpvhzy5w1r64nqi4sl889rdwf";
+  revdate = "2020-07-01 16:36:19 -0700";
 }
