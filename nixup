@@ -51,13 +51,13 @@ function flakes() {
   args+=(".#nixosConfigurations.${host}.config.system.build.toplevel")
 
   if [[ "${1:-""}" == "switch" ]]; then
-    sudo nix --experimental-features 'nix-command flakes' --pure-eval \
+    time sudo nix --experimental-features 'nix-command flakes' --pure-eval \
       build --profile /nix/var/nix/profiles/system "${args[@]}"
-    sudo nix --experimental-features 'nix-command flakes' --pure-eval \
+    time sudo nix --experimental-features 'nix-command flakes' --pure-eval \
       shell -vv "$(readlink -f result)" -c switch-to-configuration "${1}"
   else
     # just build
-    nix  --experimental-features 'nix-command flakes' --pure-eval \
+    time nix --experimental-features 'nix-command flakes' --pure-eval \
       build "${args[@]}"
   fi
   echo -e "$(readlink -f result)"

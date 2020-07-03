@@ -5,7 +5,7 @@
     # TODO: nothing ensures the font is available in
     # HM modules that don't use `fonts.default.package`
     
-    default = scp;
+    default = iosevka;
     
     scp = {
       name = "Source Code Pro";

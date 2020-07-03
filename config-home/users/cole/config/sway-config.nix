@@ -2,7 +2,7 @@
 
 let
   swayfont = "Iosevka Bold 9";
-  barfont = "Iosevka Bold 9";
+  barfont = "Iosevka Bold 9"; # font matches waybar-config.css
   editor = "${pkgs.vscodium}/bin/codium";
 
   wofi = "${pkgs.wofi}/bin/wofi --insensitive";
@@ -70,8 +70,15 @@ let
   '';
 in {
   enable = true;
-  systemdIntegration = true; # beta
-  wrapperFeatures = { gtk = true; };
+  #systemdIntegration = true; # beta
+  wrapperFeatures = {
+    base = true; # this is the default, but be explicit for now
+    gtk = true;
+  };
+  # extraSessionCommands = ''
+  #   export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
+  #   systemctl --user import-environment
+  # '';
   xwayland = true;
   extraConfig = ''
     seat seat0 xcursor_theme "capitaine-cursors"
@@ -137,9 +144,10 @@ in {
       };
     };
     bars = [{
-      fonts = [ barfont ];
-      position = "top";
-      inherit statusCommand;
+      #fonts = [ barfont ];
+      #position = "top";
+      command = statusCommand;
+      #inherit statusCommand;
     }];
     keybindings = {
       "${modifier}+Return" = "exec ${terminal}";
