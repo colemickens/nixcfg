@@ -1,17 +1,21 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
+let vimpkgs = (import inputs.vimpluginsPkgs { system = pkgs.system; }); in
 {
   enable = true;
   viAlias = true;
   vimAlias = true;
 
-  plugins = with pkgs.vimPlugins; [
-    completion-nvim
-    completion-treesitter
+  # TODO: how can I inherit `system` here?
+  plugins = with vimpkgs.vimPlugins; [
+    nvim-treesitter        # neovim 0.5
+    completion-nvim        # neovim 0.5
+    completion-treesitter  # neovim 0.5
     fzf-vim
     fzfWrapper
     lightline-vim
-    nvim-lsp
+    #lsp-status-nvim        # neovim 0.5
+    nvim-lsp               # neovim 0.5
     tabular
     vim-better-whitespace
     vim-crates
@@ -24,6 +28,8 @@
     # themes
     gruvbox
   ];
+
+  # TODO: why are only some things 'packadd'ed below?
 
   extraConfig = ''
     set background=dark
@@ -52,8 +58,10 @@
     autocmd FileType markdown setlocal conceallevel=0
 
     packadd nvim-lsp
-    packadd completion-nvim
+    "packadd lsp-status-nvim
+    packadd nvim-treesitter
     packadd completion-treesitter
+    packadd completion-nvim
     lua require'nvim_lsp'.rust_analyzer.setup({on_attach=require'completion'.on_attach})
 
     autocmd BufRead Cargo.toml call crates#toggle()

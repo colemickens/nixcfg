@@ -142,6 +142,9 @@ in {
         scale = "1.0";
         adaptive_sync = "on";
       };
+      "*" = {
+        background = "#185373 solid_color";
+      };
     };
     bars = [{
       #fonts = [ barfont ];

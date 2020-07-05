@@ -24,7 +24,12 @@
 
     construct.url = "github:matrix-construct/construct";
     construct.inputs.nixpkgs.follows = "cmpkgs";
+
+    nixops.url = "github:nixos/nixops/master";
+    nixops.inputs.nixpkgs.follows = "cmpkgs";
     
+    vimpluginsPkgs = { type = "path"; path = "/home/cole/code/nixpkgs/pulls/vimplugins"; };
+
     hardware = { url = "github:nixos/nixos-hardware";        flake = false; };
     mozilla  = { url = "github:mozilla/nixpkgs-mozilla";     flake = false; };
     wayland  = { url = "github:colemickens/nixpkgs-wayland"; flake = false; };
@@ -60,6 +65,7 @@
         };
       
       cmpkgs_ = (pkgImport inputs.cmpkgs "x86_64-linux");
+      master_ = (pkgImport inputs.master "x86_64-linux");
       stable_ = (pkgImport inputs.cmpkgs "x86_64-linux");
     in rec {
       defaultPackage.x86_64-linux =
@@ -68,6 +74,7 @@
       devShell = forAllSystems (system:
         import ./shell.nix {
           pkgs = cmpkgs_;
+          masterPkgs = master_;
           cachixPkgs = stable_;
         }
       );

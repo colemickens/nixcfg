@@ -10,6 +10,8 @@ cd "${DIR}"
 mode="default"
 host="$(hostname)"
 
+builderargs=()
+
 [[ "${1:-""}" != "" ]] && mode="${1}" && shift
 
 #
@@ -46,6 +48,7 @@ function flakes() {
             --override-input stable "/home/cole/code/nixpkgs/stable" \
             --override-input cmpkgs "/home/cole/code/nixpkgs/cmpkgs" \
             --override-input pipkgs "/home/cole/code/nixpkgs/pipkgs" \
+            --override-input vimpluginsPkgs "/home/cole/code/nixpkgs/pulls/vimplugins" \
             --override-input home   "/home/cole/code/home-manager/cmhm-flakes")
   fi
   args+=(".#nixosConfigurations.${host}.config.system.build.toplevel")
@@ -81,52 +84,66 @@ function legacy() {
 # sadly, this is considerably faster than
 # using nix and its usual remote building functionality
 function remote() {
+  cache="colemickens"
+  cachixkey="$(set -e; gopass show "websites/cachix.org/apikey/${cache}")"
+
   machine="${1}"; shift
   remote="${1}"; shift
 
   #drv="$(nix eval --pure-eval ".#nixosConfigurations.${machine}.config.system.build.toplevel")" # TODO: why????
   drv="$(set -e; nix-instantiate "machines/${machine}")"
-  out="$(set -e; nix show-derivation "${drv}" | jq -r 'to_entries[].value.outputs.out.path')" # TODO: must be a better way # (in v1, there's nix-store query that works)
+  out="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \
+    show-derivation "${drv}" | jq -r 'to_entries[].value.outputs.out.path')" # TODO: must be a better way # (in v1, there's nix-store query that works)
+  
+  if nix-store \
+    --option "narinfo-cache-negative-ttl" "0" \
+    --option 'extra-binary-caches' 'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org' \
+    --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA=' \
+    -r "${out}"; then
+      return
+  fi
 
-  ## COPY DRV
-  t="/tmp/tmpnixpath"; rm -rf "${t}"; trap "rm -rf $t" EXIT;
+  ## COPY->COMPRESS->RSYNC DRV TO BUILDER
+  t="/tmp/tmpnixpath"; #rm -rf "${t}"; trap "rm -rf $t" EXIT;
   nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nix --command "nix copy --to file://${t} ${drv}" # see: https://github.com/NixOS/nix/issues/3696
   rsync -avh "${t}/" "${remote}:${t}"
   ssh "${remote}" "nix --experimental-features 'nix-command' copy --from file://${t} ${drv}"
 
-  ## BUILD
+  ## (ON BUILDER): BUILD
   ssh "${remote}" \
     "nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nixFlakes --command \
-      \"nix build --experimental-features 'nix-command flakes' --pure-eval \
+      \"nix --experimental-features 'nix-command flakes' --pure-eval \
         --option 'extra-binary-caches' 'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org' \
         --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA=' \
         --option 'build-cores' '0' \
-        --option 'narinfo-cache-negative-ttl' '0' --keep-going ${drv}\""
+        --option 'narinfo-cache-negative-ttl' '0' \
+          build --keep-going ${drv}\""
 
-  ## PUSH TO CACHIX
-  cache="colemickens"
-  cachixkey="$(set -e; gopass show "websites/cachix.org/apikey/${cache}")"
+  ## (ON BUILDER): PUSH TO CACHE
   ssh "${remote}" \
     "nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-20.03.tar.gz -p cachix --command \
       \"echo ${out} | env CACHIX_SIGNING_KEY=${cachixkey} cachix push ${cache}\""
-
-  ## REALIZE FROM CACHIX
-  nix-store \
-    --option 'extra-binary-caches' 'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org' \
-    --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA=' \
-    -r "${out}"
 }
 
 function deploy() {
   machine="${1}"; shift
   remote="${1}"; shift
   drv="$(set -e; nix-instantiate "machines/${machine}")"
-  tl="$(set -e; nix show-derivation "${drv}" | jq -r 'to_entries[].value.outputs.out.path')" # TODO: must be a better way (see above)
-  nix copy --to "ssh-ng://${remote}" "${tl}"
+  out="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \
+    show-derivation "${drv}" | jq -r 'to_entries[].value.outputs.out.path')" # TODO: must be a better way (see above)
+  
+  ## (ON TARGET): REALIZE FROM CACHE
+  ssh "${remote}" "nix-store \
+    --option 'narinfo-cache-negative-ttl' '0' \
+    --option 'extra-binary-caches' 'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org' \
+    --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA=' \
+    -r \"${out}\""
+
+  ## (ON TARGET): ACTIVATE
   ssh "${remote}" "\
     sudo bash -c \"\
-      nix-env --set --profile /nix/var/nix/profiles/system ${tl} \
-      && ${tl}/bin/switch-to-configuration switch\""
+      nix-env --set --profile /nix/var/nix/profiles/system ${out} \
+      && ${out}/bin/switch-to-configuration switch\""
 }
 
 function compare() {
@@ -148,6 +165,7 @@ function compare() {
 function default() {
   nixup update
   nixup flakes local switch
+  nixup flakes local | cachix push colemickens
 }
 
 time "${mode}" "${@}"

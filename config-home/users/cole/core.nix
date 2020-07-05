@@ -34,7 +34,7 @@ in
         git = import ./config/git-config.nix pkgs;
         home-manager.enable = true;
         htop.enable = true;
-        neovim = import ./config/neovim-config.nix pkgs;
+        neovim = import ./config/neovim-config.nix { inherit pkgs inputs; };
         #starship = import ./config/starship-config.nix pkgs;
         tmux = import ./config/tmux-config.nix { inherit pkgs hostColor; };
         zsh = import ./config/zsh-config.nix { inherit pkgs; };

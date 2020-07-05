@@ -2,11 +2,11 @@
   "nodes": {
     "cmpkgs": {
       "locked": {
-        "lastModified": 1593678040,
-        "narHash": "sha256-38zLLCHES6QErvf76ZHwkfJupk/dejeMy8VPf9UQJmw=",
+        "lastModified": 1593983472,
+        "narHash": "sha256-+WkxEqnhHZEEuClrN8F9+S96lKXZCfAupptpm8+87+A=",
         "ref": "cmpkgs",
-        "rev": "2b643351dca37f37b4d9ab376a0cd5b1f6fe3229",
-        "revCount": 232908,
+        "rev": "52ca5083573d560d63bb350fc05e73a183444520",
+        "revCount": 233407,
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs/cmpkgs"
       },
@@ -77,11 +77,11 @@
     },
     "master": {
       "locked": {
-        "lastModified": 1593684585,
-        "narHash": "sha256-GDdhdHse5Xwb6KtSsWqaPEbgwBMw/9I1nvyBdesqO18=",
+        "lastModified": 1593987467,
+        "narHash": "sha256-SMybO5i9V2bpMFn6HZORK487e6YbyYCyGbVNN7RMxYI=",
         "ref": "master",
-        "rev": "881fed836f77f58882afc9b6b21e872531deb3fc",
-        "revCount": 232921,
+        "rev": "973aeb04662564f746ad538705fefaf87a00b80d",
+        "revCount": 233414,
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs/master"
       },
@@ -129,13 +129,35 @@
         "type": "github"
       }
     },
+    "nixops": {
+      "inputs": {
+        "nixpkgs": [
+          "cmpkgs"
+        ],
+        "utils": "utils"
+      },
+      "locked": {
+        "lastModified": 1592899254,
+        "narHash": "sha256-jlTLhww1VqI7gi6Z8pGck56EqCO7FoTDAH6hOdrOPio=",
+        "owner": "nixos",
+        "repo": "nixops",
+        "rev": "b743ad96dcf81122e68059835c23e51410006033",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "master",
+        "repo": "nixops",
+        "type": "github"
+      }
+    },
     "pipkgs": {
       "locked": {
-        "lastModified": 1593678074,
-        "narHash": "sha256-KlxkJZNWX5UdvX/K7349acYfd9SNgiDMuplksevtAg8=",
+        "lastModified": 1593983482,
+        "narHash": "sha256-UsROKdSw8fnVp5vrDX7wNbbFiOB4DOp6mG1GKWi/vDM=",
         "ref": "pipkgs",
-        "rev": "eae6e6a18d73895a473ccabb161b8194996a93eb",
-        "revCount": 232842,
+        "rev": "9ff168ecf600bd5ed5af2bf26e7b8b0c64fa6dfa",
+        "revCount": 233326,
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs/pipkgs"
       },
@@ -155,18 +177,20 @@
         "master": "master",
         "mozilla": "mozilla",
         "nix": "nix",
+        "nixops": "nixops",
         "pipkgs": "pipkgs",
         "stable": "stable",
+        "vimpluginsPkgs": "vimpluginsPkgs",
         "wayland": "wayland"
       }
     },
     "stable": {
       "locked": {
-        "lastModified": 1593591427,
-        "narHash": "sha256-tRK0fzkpmJw6XrdhdoR8JOKw7GLcc0saMSQuIMXgUOY=",
+        "lastModified": 1593909238,
+        "narHash": "sha256-uZEIe5gfp8OlWKrooEz03g1/kK2xdujqSM1ZGogwZJA=",
         "ref": "nixos-20.03",
-        "rev": "f1a79c86358c5464c64b4fad00fca07a10e62a74",
-        "revCount": 215311,
+        "rev": "afa9ca61924f05aacfe495a7ad0fd84709d236cc",
+        "revCount": 215341,
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs/stable"
       },
@@ -177,14 +201,44 @@
         "type": "github"
       }
     },
+    "utils": {
+      "locked": {
+        "lastModified": 1590791977,
+        "narHash": "sha256-l26u9vRsdV9jkoBGlzFxTKLKtrZ38xCMZIG9h9ibFjQ=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "4fbce19a7a9647154a35f0e856d52171c41e14a4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "vimpluginsPkgs": {
+      "locked": {
+        "lastModified": 1593990394,
+        "narHash": "sha256-9xLJIuYoje92aWV69+D8FxQOA9LvtpLeTef1mk8MCgI=",
+        "ref": "vimplugins",
+        "rev": "06694d3c2008de6d92e12f275845f0667f3758c0",
+        "revCount": 233419,
+        "type": "git",
+        "url": "file:///home/cole/code/nixpkgs/pulls/vimplugins"
+      },
+      "original": {
+        "path": "/home/cole/code/nixpkgs/pulls/vimplugins",
+        "type": "path"
+      }
+    },
     "wayland": {
       "flake": false,
       "locked": {
-        "lastModified": 1593655366,
-        "narHash": "sha256-2ZvWqPD5Ajdc1iTTzEX7nye69lxGXBIHwrH5bARZgfI=",
+        "lastModified": 1593972190,
+        "narHash": "sha256-M4B1h/5pnqTL8c8q+sRImscboeiQFAx4i5WrNtGiuX4=",
         "owner": "colemickens",
         "repo": "nixpkgs-wayland",
-        "rev": "0f29b412bddf364c6e25d806056e2a6f5889331b",
+        "rev": "204679ecbdbe9d5e3e9a1fc7e7e78f8c8a989b4d",
         "type": "github"
       },
       "original": {

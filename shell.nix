@@ -1,5 +1,7 @@
 { pkgs ? import /home/cole/code/nixpkgs/cmpkgs {}
+, masterPkgs ? import /home/cole/code/nixpkgs/master {}
 , cachixPkgs ? (import (builtins.fetchTarball { url = "https://cachix.org/api/v1/install"; }) {})
+, ...
 }:
 
 pkgs.mkShell {

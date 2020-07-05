@@ -62,7 +62,7 @@ in {
       port = 8123;
       config = {
         homeassistant = {
-          name = "ChimeraAss";
+          name = "Chimera HomeAss";
           time_zone = "US/Pacific";
           latitude = 47.6;
           longitude = -122.3;
@@ -83,7 +83,8 @@ in {
         cast = { media_player = { host = "192.168.1.200"; }; };
         cloud = { };
         config = { };
-        #denonavr = { };
+        ## default_config = { }; ## TODO?
+        denonavr = { };
         discovery = { };
         esphome = { };
         frontend = {
@@ -103,14 +104,10 @@ in {
             platform = "braviatv";
             host = "192.168.1.119";
           }
-          {
-            name = "denonavr";
-            platform = "denonavr";
-            host = "192.168.1.126";
-          }
         ];
         mobile_app = {}; # needs hass_nabucasa or w/e
         # prometheus = { namespace = "hass"; };
+        ssdp = { };
         recorder = { };
         system_health = { };
         weather = {

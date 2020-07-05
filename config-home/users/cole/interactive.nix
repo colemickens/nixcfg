@@ -8,6 +8,8 @@ let
     else "${findImport "extras/home-manager"}/nixos"
   );
 
+  #nixops = inputs.nixops.pkgs.nixops;
+
   crtFilePath = "/home/cole/.mitmproxy/mitmproxy-ca-cert.pem";
   crtFile = pkgs.copyPathToStore crtFilePath;
   
@@ -19,6 +21,11 @@ in
   ];
 
   config = {
+    nix.extraOptions = ''
+      keep-outputs = true
+      keep-derivations = true
+    '';
+
     # HM: ca.desrt.dconf error:
     services.dbus.packages = with pkgs; [ gnome3.dconf ];
 
@@ -42,9 +49,17 @@ in
         "gopass/config.yml".source = ./config/gopass/config.yml;
         "cachix/cachix.dhall".source = ./config/cachix/cachix.dhall;
       };
-      programs.git.package = pkgs.gitAndTools.gitFull;
-      programs.gpg.enable = true;
+      programs = {
+        direnv = {
+          enable = true;
+          enableNixDirenvIntegration = true;
+        };
+        git.package = pkgs.gitAndTools.gitFull;
+        gpg.enable = true;
+      };
       home.packages = with pkgs; [
+        #nixops
+
         wget curl
         ripgrep jq fzf
         wget curl stow ncdu tree

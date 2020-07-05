@@ -86,7 +86,7 @@ window#waybar.chromium {
 }
 
 #clock {
-    background-color: #64727D;
+    background-color: #000000;
 }
 
 #battery {
@@ -121,20 +121,19 @@ label:focus {
 }
 
 #cpu {
-    background-color: #2ecc71;
-    color: #000000;
+    background-color: #2980b9;
 }
 
 #memory {
-    background-color: #9b59b6;
+    background-color: #75507B;
 }
 
 #backlight {
-    background-color: #90b1b1;
+    background-color: #555753;
 }
 
 #network {
-    background-color: #2980b9;
+    background-color: #06989A;
 }
 
 #network.disconnected {
@@ -142,8 +141,7 @@ label:focus {
 }
 
 #pulseaudio {
-    background-color: #f1c40f;
-    color: #000000;
+    background-color: #4E9A06;
 }
 
 #pulseaudio.muted {
@@ -174,7 +172,7 @@ label:focus {
 }
 
 #tray {
-    background-color: #2980b9;
+    background-color: #C4A000;
 }
 
 #idle_inhibitor {

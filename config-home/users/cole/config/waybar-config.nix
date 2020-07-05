@@ -17,21 +17,21 @@
     modules-center = [];
     modules-right = [
       "idle_inhibitor"
+      "tray"
       "pulseaudio"
       "network"
       "cpu"
       "memory"
       "backlight"
-      "tray"
-      "battery"
       "clock"
+      "battery"
     ];
 
     modules = {
       "sway/workspaces" = {
         all-outputs = true;
         disable-scroll-wraparound = true;
-        enable-bar-scroll = true;
+        #enable-bar-scroll = true;
       };
       "sway/mode" = { tooltip = false; };
 
@@ -44,6 +44,7 @@
         format-wifi = "{ifname} ssid({essid} {signalStrength}%) up({bandwidthUpBits}) down({bandwidthDownBits})";
         format-ethernet = "{ifname} up({bandwidthUpBits}) down({bandwidthDownBits})";
       };
+      cpu.interval = 2;
       cpu.format = "cpu load({load}%) use({usage}%)";
       memory.format = "mem {}%";
       backlight.format = "light {percent}%";

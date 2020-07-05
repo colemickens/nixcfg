@@ -11,17 +11,17 @@
             name = "Television";
             entity = "media_player.braviatv";
           }
-          {
-            name = "Fireplace";
-            entity = "switch.ge_14291_in_wall_smart_switch_switch";
-          }
+          # {
+          #   name = "Fireplace";
+          #   entity = "switch.ge_14291_in_wall_smart_switch_switch";
+          # }
           {
             name = "Fireplace Christmas Lights";
             entity = "switch.wp6_sw102_relay";
           }
           {
             name = "Receiver";
-            entity = "media_player.denonavr";
+            entity = "media_player.denon";
           }
         ];
       }
