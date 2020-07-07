@@ -1,13 +1,12 @@
 { pkgs, inputs, ... }:
 
-let vimpkgs = (import inputs.vimpluginsPkgs { system = pkgs.system; }); in
 {
   enable = true;
   viAlias = true;
   vimAlias = true;
 
   # TODO: how can I inherit `system` here?
-  plugins = with vimpkgs.vimPlugins; [
+  plugins = with pkgs.vimPlugins; [
     nvim-treesitter        # neovim 0.5
     completion-nvim        # neovim 0.5
     completion-treesitter  # neovim 0.5

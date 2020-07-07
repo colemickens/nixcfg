@@ -9,6 +9,9 @@
   # cached failure isn't actually showing me the ... error?
   # how to use local paths when I want to?
 
+  # nix build is UNRELIABLE because /soemtimes/ it checks for updates, I hate this
+  # unpredictable, moves underneath me
+
   # credits: bqv, balsoft
   inputs = {
     master = { url = "github:nixos/nixpkgs/master"; };
@@ -29,12 +32,6 @@
     # this stuff is in-flight but I want to dogfood it
     # until I adopt something like git-assembler, I'll use flakes
     # to pull it in
-
-    # git assembler would be nicer because then I can just have cmpkgs
-    # and not need to update my config to pull from the pr-flake
-    # in fact, I quite don't like this but I'm tired of rebasing stuff
-    vimpluginsPkgs = { type = "path"; path = "/home/cole/code/nixpkgs/pulls/vimplugins"; };
-    # </pull_requests>
 
     hardware = { url = "github:nixos/nixos-hardware";        flake = false; };
     mozilla  = { url = "github:mozilla/nixpkgs-mozilla";     flake = false; };

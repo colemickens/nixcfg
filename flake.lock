@@ -157,7 +157,6 @@
         "nix": "nix",
         "pipkgs": "pipkgs",
         "stable": "stable",
-        "vimpluginsPkgs": "vimpluginsPkgs",
         "wayland": "wayland"
       }
     },
@@ -176,21 +175,6 @@
         "ref": "nixos-20.03",
         "repo": "nixpkgs",
         "type": "github"
-      }
-    },
-    "vimpluginsPkgs": {
-      "locked": {
-        "lastModified": 1594095338,
-        "narHash": "sha256-a7kVHqytMiXFLxDT/i/snGgKLl7jUexfMyi2YGQr380=",
-        "ref": "vimplugins",
-        "rev": "935728bade11fab4bdbfc99df7d99b5b47062ae0",
-        "revCount": 233723,
-        "type": "git",
-        "url": "file:///home/cole/code/nixpkgs/pulls/vimplugins"
-      },
-      "original": {
-        "path": "/home/cole/code/nixpkgs/pulls/vimplugins",
-        "type": "path"
       }
     },
     "wayland": {

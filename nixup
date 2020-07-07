@@ -47,7 +47,6 @@ function flakes() {
             --override-input stable "/home/cole/code/nixpkgs/stable" \
             --override-input cmpkgs "/home/cole/code/nixpkgs/cmpkgs" \
             --override-input pipkgs "/home/cole/code/nixpkgs/pipkgs" \
-            --override-input vimpluginsPkgs "/home/cole/code/nixpkgs/pulls/vimplugins" \
             --override-input home   "/home/cole/code/home-manager/cmhm")
   fi
   args+=(".#nixosConfigurations.${host}.config.system.build.toplevel")
@@ -69,15 +68,16 @@ function legacy() {
   if [[ "${1:-""}" == "local" ]]; then
     shift
     export NIXPKGS_LOCAL_IMPORTS_ALLOWED="true"
-    tl="$(set -e; nix-build --show-trace "./machines/${host}" > /tmp/nixos-legacy-local; cat /tmp/nixos-legacy-local)"
+    out="$(set -e; nix-build --show-trace "./machines/${host}" > /tmp/nixos-legacy-local; cat /tmp/nixos-legacy-local)"
   else
-    tl="$(set -e; nix-build --show-trace "./machines/${host}" > /tmp/nixos-legacy; cat /tmp/nixos-legacy)"
+    out="$(set -e; nix-build --show-trace "./machines/${host}" > /tmp/nixos-legacy; cat /tmp/nixos-legacy)"
   fi
 
   if [[ "${1:-""}" == "switch" ]]; then
-    sudo nix-env --set --profile /nix/var/nix/profiles/system ${tl}
-    sudo nix-shell -p ${tl} --command "switch-to-configuration ${1}"
+    sudo nix-env --set --profile /nix/var/nix/profiles/system ${out}
+    sudo nix-shell -p ${out} --command "switch-to-configuration ${1}"
   fi
+  echo -e "${out}"
 }
 
 # sadly, this is considerably faster than
@@ -146,17 +146,17 @@ function deploy() {
 }
 
 function compare() {
-  echo "*** legacy ***";       legacy      
-  echo "*** legacy local ***"; legacy local
-  echo "*** flakes ***";       flakes      
-  echo "*** flakes local ***"; flakes local
-  echo "***************"
-
-  echo "legacy      : $(set -e; cat /tmp/nixos-legacy)"
-  echo "legacy local: $(set -e; cat /tmp/nixos-legacy-local)"
-  echo "flakes      : $(set -e; cat /tmp/nixos-flakes)"
-  echo "flakes local: $(set -e; cat /tmp/nixos-flakes-local)"
-  set +x; echo "***************"
+  a="$(time legacy 2>/dev/null)"
+  b="$(time legacy local 2>/dev/null)"
+  c="$(time flakes 2>/dev/null)"
+  d="$(time flakes local 2>/dev/null)"
+  
+  set +x;
+  echo; echo;
+  echo "legacy      : ${a}"
+  echo "legacy local: ${b}"
+  echo "flakes      : ${c}"
+  echo "flakes local: ${d}"
 }
 
 function default() {
