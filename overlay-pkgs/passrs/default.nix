@@ -2,22 +2,20 @@
 , libgpgerror, libgit2, gpgme, gnupg }:
 
 let
-  _rev = "8ab984cb5c5c3451b1b3c4d7094541d4052739ab";
-  _sha256 = "118svvgxvi6863yn9chv1cymw2xlgn4mwfryh5snfjgrcnsnn0lb";
-  _cargoSha256 = "1w7w3kvs0sixb39dj94wz8azskxkkg1ff528a0xwwywkd3asq9i9";
+  metadata = import ./metadata.nix;
 in
 rustPlatform.buildRustPackage rec {
   pname = "passrs";
-  version = "0.0.1";
+  version = metadata.rev;
 
   src = fetchFromGitHub {
     owner = "cole-h";
     repo = pname;
-    rev = _rev;
-    sha256 = _sha256;
+    rev = metadata.rev;
+    sha256 = metadata.sha256;
   };
 
-  cargoSha256 = _cargoSha256;
+  cargoSha256 = metadata.cargoSha256;
 
   nativeBuildInputs = [ libgpgerror gpgme gnupg ];
   buildInputs = [ gpgme libgpgerror libgit2 ];

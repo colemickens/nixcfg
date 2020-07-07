@@ -1,10 +1,14 @@
 self: pkgs:
 
-{
+let colePackages = {
   customCommands = pkgs.callPackages ./commands.nix {};
   customGuiCommands = pkgs.callPackages ./commands-gui.nix {};
-  neovim-unwrapped = pkgs.callPackage ./neovim.nix {
+
+  alps = pkgs.callPackage ./alps {};
+  neovim-unwrapped = pkgs.callPackage ./neovim {
     neovim-unwrapped = pkgs.neovim-unwrapped;
   };
-  passrs = pkgs.callPackage ./passrs.nix {};
-}
+  passrs = pkgs.callPackage ./passrs {};
+};
+in
+  colePackages // { inherit colePackages; }

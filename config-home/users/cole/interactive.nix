@@ -59,7 +59,8 @@ in
       };
       home.packages = with pkgs; [
         #nixops
-
+        alps
+        
         wget curl
         ripgrep jq fzf
         wget curl stow ncdu tree

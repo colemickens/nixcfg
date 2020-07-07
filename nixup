@@ -17,9 +17,12 @@ builderargs=()
 #
 # TODO: update should update local imports, build local, then go back and push refs if good!
 #
+# TODO: develop is missing --pure
 
 function update() {
-  (cd "./scripts" && ./rebase-imports.sh) # our upstreams
+  (cd "./scripts" && ./rebase-pulls.sh) # our upstreams
+
+  (cd "./overlay-pkgs" && ./update.sh) # our overlay-pkgs
 
   # flakes (TODO: no really, what does this do?)
   nix --experimental-features 'nix-command flakes' --pure-eval \
@@ -36,10 +39,6 @@ function update() {
   (cd "./.imports" && ./update.sh)
 }
 
-function dev() {
-  nix develop
-}
-
 function flakes() {
   args=()
   if [[ "${1:-""}" == "local" ]]; then
@@ -49,7 +48,7 @@ function flakes() {
             --override-input cmpkgs "/home/cole/code/nixpkgs/cmpkgs" \
             --override-input pipkgs "/home/cole/code/nixpkgs/pipkgs" \
             --override-input vimpluginsPkgs "/home/cole/code/nixpkgs/pulls/vimplugins" \
-            --override-input home   "/home/cole/code/home-manager/cmhm-flakes")
+            --override-input home   "/home/cole/code/home-manager/cmhm")
   fi
   args+=(".#nixosConfigurations.${host}.config.system.build.toplevel")
 
@@ -147,12 +146,10 @@ function deploy() {
 }
 
 function compare() {
-  set +x;
-  echo "*** update ***";       update       2>/dev/null >/dev/null
-  echo "*** legacy ***";       legacy       2>/dev/null >/tmp/nixos-legacy
-  echo "*** legacy local ***"; legacy local 2>/dev/null >/tmp/nixos-legacy-local
-  echo "*** flakes ***";       flakes       2>/dev/null >/tmp/nixos-flakes
-  echo "*** flakes local ***"; flakes local 2>/dev/null >/tmp/nixos-flakes-local
+  echo "*** legacy ***";       legacy      
+  echo "*** legacy local ***"; legacy local
+  echo "*** flakes ***";       flakes      
+  echo "*** flakes local ***"; flakes local
   echo "***************"
 
   echo "legacy      : $(set -e; cat /tmp/nixos-legacy)"

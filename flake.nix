@@ -19,16 +19,22 @@
     nix.url = "github:nixos/nix/flakes";
     nix.inputs.nixpkgs.follows = "master";
 
-    home.url = "github:colemickens/home-manager/cmhm-flakes";
+    home.url = "github:colemickens/home-manager/cmhm";
     home.inputs.nixpkgs.follows = "cmpkgs";
 
     construct.url = "github:matrix-construct/construct";
     construct.inputs.nixpkgs.follows = "cmpkgs";
 
-    nixops.url = "github:nixos/nixops/master";
-    nixops.inputs.nixpkgs.follows = "cmpkgs";
-    
+    # <pull_requests>    
+    # this stuff is in-flight but I want to dogfood it
+    # until I adopt something like git-assembler, I'll use flakes
+    # to pull it in
+
+    # git assembler would be nicer because then I can just have cmpkgs
+    # and not need to update my config to pull from the pr-flake
+    # in fact, I quite don't like this but I'm tired of rebasing stuff
     vimpluginsPkgs = { type = "path"; path = "/home/cole/code/nixpkgs/pulls/vimplugins"; };
+    # </pull_requests>
 
     hardware = { url = "github:nixos/nixos-hardware";        flake = false; };
     mozilla  = { url = "github:mozilla/nixpkgs-mozilla";     flake = false; };
@@ -38,18 +44,15 @@
   outputs = inputs:
     let
       uniformVersionSuffix = true; # clamp versionSuffix to ".git" to get identical build to non-flakes
+      
       nameValuePair = name: value: { inherit name value; };
       genAttrs = names: f: builtins.listToAttrs (map (n: nameValuePair n (f n)) names);
       forAllSystems = genAttrs [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
 
-      pkgImport = pkgs: system:
-        import pkgs {
-          system = system;
-          #overlays = builtins.attrValues inputs.self.overlays;
-          config = { allowUnfree = true; };
-        };
+      pkgsFor = pkgs: system:
+        import pkgs { inherit system; config = { allowUnfree = true; }; };
 
-      mkSystem = hostname: pkgs_: system:
+      mkSystem = system: pkgs_: hostname:
         pkgs_.lib.nixosSystem {
           inherit system;
           modules = [ (./. + "/machines/${hostname}/configuration.nix")]
@@ -63,25 +66,21 @@
             inherit inputs;
           };
         };
-      
-      cmpkgs_ = (pkgImport inputs.cmpkgs "x86_64-linux");
-      master_ = (pkgImport inputs.master "x86_64-linux");
-      stable_ = (pkgImport inputs.cmpkgs "x86_64-linux");
     in rec {
       defaultPackage.x86_64-linux =
         nixosConfigurations.xeep.config.system.build;
 
       devShell = forAllSystems (system:
         import ./shell.nix {
-          pkgs = cmpkgs_;
-          masterPkgs = master_;
-          cachixPkgs = stable_;
+          pkgs       = pkgsFor inputs.cmpkgs system;
+          masterPkgs = pkgsFor inputs.master system;
+          cachixPkgs = pkgsFor inputs.stable system;
         }
       );
 
       nixosConfigurations = {
-        raspberry = mkSystem "raspberry" inputs.pipkgs "aarch64-linux";
-        xeep = mkSystem "xeep" inputs.cmpkgs "x86_64-linux";
+        raspberry = mkSystem "aarch64-linux" inputs.pipkgs "raspberry";
+        xeep      = mkSystem "x86_64-linux"  inputs.cmpkgs "xeep";
       };
     };
 }

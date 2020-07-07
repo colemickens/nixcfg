@@ -110,10 +110,10 @@ in {
         ssdp = { };
         recorder = { };
         system_health = { };
-        weather = {
-          platform = "openweathermap";
-          api_key = secrets.openweathermap_apikey;
-        };
+        # weather = {
+        #   platform = "openweathermap";
+        #   api_key = secrets.openweathermap_apikey;
+        # };
         # zwave = { usb_path = zwaveAdapter; };
       };
       lovelaceConfig = import ./lovelace.nix;

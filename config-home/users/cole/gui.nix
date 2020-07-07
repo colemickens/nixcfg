@@ -26,7 +26,7 @@ let
   terminal_wezterm = "${pkgs.wezterm}/bin/wezterm";
 
   browser = browser_firefox;
-  terminal = terminal_alacritty;
+  terminal = terminal_termite;
 in
 {
   imports = [
@@ -147,7 +147,8 @@ in
         wdisplays
         udiskie drm_info
         wayvnc wl-clipboard wl-gammactl
-
+        wev
+        
         # browsers
         firefox-wayland
         #firefoxNightly # TODO: nixpkgs-mozilla is not flake (pure-eval) friendly!

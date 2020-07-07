@@ -5,21 +5,20 @@
 }:
 
 pkgs.mkShell {
-  nativeBuildInputs = []
-  ++ (with cachixPkgs; [ cachix ])
-  ++ (with pkgs; [
+  nativeBuildInputs = with pkgs; [
+    masterPkgs.nixFlakes
+    cachixPkgs.cachix
     bash
     cacert
     curl
     git
     jq
     mercurial
-    nixFlakes
     nix-build-uncached
     nix-prefetch-git
     nettools
     openssh
     ripgrep
     rsync
-  ]);
+  ];
 }

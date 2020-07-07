@@ -45,24 +45,24 @@ in
       enable = true;
       allowedUDPPorts = [ 51820 ];
     };
-    networking.wireguard.interfaces."${wg}" = {
-      ips = [ "172.27.66.1/24" ];
-      listenPort = 51820;
-      privateKeyFile = "${./wireguard/server.key}";
-      peers = [
-        {
-          allowedIPs = [ "172.27.66.10/32" ];
-          publicKey = builtins.readFile ./wireguard/clients/cole-phone/client.pub;
-        }
-        {
-          allowedIPs = [ "172.27.66.11/32" ];
-          publicKey = builtins.readFile ./wireguard/clients/cole-laptop/client.pub;
-        }
-        {
-          allowedIPs = [ "172.27.66.20/32" ];
-          publicKey = builtins.readFile ./wireguard/clients/bud-phone/client.pub;
-        }
-      ];
-    };
+    # networking.wireguard.interfaces."${wg}" = {
+    #   ips = [ "172.27.66.1/24" ];
+    #   listenPort = 51820;
+    #   privateKeyFile = "${./wireguard/server.key}";
+    #   peers = [
+    #     {
+    #       allowedIPs = [ "172.27.66.10/32" ];
+    #       publicKey = builtins.readFile ./wireguard/clients/cole-phone/client.pub;
+    #     }
+    #     {
+    #       allowedIPs = [ "172.27.66.11/32" ];
+    #       publicKey = builtins.readFile ./wireguard/clients/cole-laptop/client.pub;
+    #     }
+    #     {
+    #       allowedIPs = [ "172.27.66.20/32" ];
+    #       publicKey = builtins.readFile ./wireguard/clients/bud-phone/client.pub;
+    #     }
+    #   ];
+    # };
   };
 }
