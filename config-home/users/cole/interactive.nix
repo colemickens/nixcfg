@@ -74,7 +74,7 @@ in
         unrar parallel unzip xz zip
         gomuks rumatui
 
-        nix-prefetch nixpkgs-fmt nixpkgs-review
+        nix-prefetch  nixpkgs-review
 
         ffmpeg linuxPackages.cpupower
         sshfs cifs-utils ms-sys ntfs3g

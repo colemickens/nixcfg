@@ -15,8 +15,6 @@ builderargs=()
 [[ "${1:-""}" != "" ]] && mode="${1}" && shift
 
 #
-# TODO: update should update local imports, build local, then go back and push refs if good!
-#
 # TODO: develop is missing --pure
 
 function update() {
@@ -93,14 +91,6 @@ function remote() {
   drv="$(set -e; nix-instantiate "machines/${machine}")"
   out="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \
     show-derivation "${drv}" | jq -r 'to_entries[].value.outputs.out.path')" # TODO: must be a better way # (in v1, there's nix-store query that works)
-  
-  if nix-store \
-    --option "narinfo-cache-negative-ttl" "0" \
-    --option 'extra-binary-caches' 'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org' \
-    --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA=' \
-    -r "${out}"; then
-      return
-  fi
 
   ## COPY->COMPRESS->RSYNC DRV TO BUILDER
   t="/tmp/tmpnixpath"; #rm -rf "${t}"; trap "rm -rf $t" EXIT;

@@ -28,11 +28,6 @@
     construct.url = "github:matrix-construct/construct";
     construct.inputs.nixpkgs.follows = "cmpkgs";
 
-    # <pull_requests>    
-    # this stuff is in-flight but I want to dogfood it
-    # until I adopt something like git-assembler, I'll use flakes
-    # to pull it in
-
     hardware = { url = "github:nixos/nixos-hardware";        flake = false; };
     mozilla  = { url = "github:mozilla/nixpkgs-mozilla";     flake = false; };
     wayland  = { url = "github:colemickens/nixpkgs-wayland"; flake = false; };

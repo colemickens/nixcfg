@@ -1,1 +1,0 @@
-shellcheck nixup and ./scripts/
