@@ -1,13 +1,12 @@
 { pkgs, inputs, ... }:
 let
   lib = pkgs.lib;
-
-  flakesMode = lib.hasAttr "getFlake" builtins;
   findImport = (import ../../../lib.nix).findImport;
-
-  nixosHardware = findImport "extras/nixos-hardware";
-
-  nhImport = (if flakesMode then "${inputs.nh}/nixos" else "${nixosHardware}");
+  nhImport = (
+    if (builtins.hasAttr "getFlake" builtins)
+    then inputs.hardware.nixosModules.dell-xps-13-9370
+    else import "${findImport "extras/nixos-hardware"}/nixos/dell/xps/13-9370/default.nix"
+  );
 
   hostname = "xeep";
 in
@@ -28,10 +27,29 @@ in
 
     # Hardware Specific
     ./power-management.nix
-    #"${nhImport}/dell/xps/13-9370/default.nix"
+    nhImport
   ];
 
   config = {
+    # <lol stability>
+    services = {
+      hydra = {
+        enable = true;
+        hydraURL = "https://localhost:3000";
+        notificationSender = "hydra@cleo.cat";
+        #buildMachinesFile = [];
+        useSubstitutes = true;
+        package = pkgs.hydra-unstable;
+      };
+    };
+    nix = {
+      nixPath = [];
+      #package = pkgs.nixFlakes;
+      #extraOptions = "experimental-features = nix-command flakes";
+      trustedUsers = ["hydra"];
+    };
+    # </lol stability>
+
     # <relocate>
     # TODO
     services.udev.packages = with pkgs; [ libsigrok ]; # doesn't work?
@@ -53,7 +71,6 @@ in
 
     system.stateVersion = "18.09"; # Did you read the comment?
     services.timesyncd.enable = true;
-    nix.nixPath = [];
     documentation.nixos.enable = false;
 
     fileSystems = {
@@ -113,6 +130,7 @@ in
       wireguard.enable = true;
     };
     services.resolved.enable = true;
+    programs.adb.enable = true;
 
     nix.maxJobs = 8;
     nixpkgs.config.allowUnfree = true;

@@ -1,25 +1,16 @@
 { pkgs, lib, config, inputs, ... }:
 
 let
-  findImport = (import ../../../lib.nix).findImport;
-  mozillaImport = (
-    if (builtins.hasAttr "getFlake" builtins)
-    then import inputs.mozilla
-    else import "${findImport "overlays/nixpkgs-mozilla"}"
-  );
-  waylandImport = (
-    if (builtins.hasAttr "getFlake" builtins)
-    then import inputs.wayland
-    else import "${findImport "overlays/nixpkgs-wayland"}"
-  );
-  #TODO  #chromium-dev-ozone = import (findImport lib "extras/nixpkgs-chromium");
-
+  firefoxFlake = inputs.firenight.packages.${pkgs.system};
   firefoxNightly = pkgs.writeShellScriptBin "firefox-nightly" ''
-    exec ${pkgs.latest.firefox-nightly-bin}/bin/firefox "''${@}"
+    exec ${firefoxFlake.firefox-nightly-bin}/bin/firefox "''${@}"
+  '';
+  firefoxPipewire = pkgs.writeShellScriptBin "firefox-pipewire" ''
+    exec ${firefoxFlake.firefox-pipewire}/bin/firefox "''${@}"
   '';
 
   browser_nightly = "${firefoxNightly}/bin/firefox-nightly -P nightly-default";
-  browser_firefox = "${pkgs.firefox}/bin/firefox -P stable-default";
+  browser_firefox = "${pkgs.firefox-bin}/bin/firefox -P stable-default";
   terminal_termite = "${pkgs.termite}/bin/termite";
   terminal_alacritty = "${pkgs.alacritty}/bin/alacritty";
   terminal_kitty = "${pkgs.kitty}/bin/kitty";
@@ -27,6 +18,13 @@ let
 
   browser = browser_firefox;
   terminal = terminal_termite;
+
+  #chromium-ozone-dev = chromiumFlake.chromium-ozone-dev;
+  extraPkgs = [
+    firefoxNightly
+    #firefoxPipewire
+    #chromium-ozone-dev
+  ];
 in
 {
   imports = [
@@ -40,11 +38,7 @@ in
     # <nixpkgs + overlays>
     nixpkgs.config.allowUnfree = true;
     nixpkgs.overlays =  [
-      #(import (findImport "overlays/nixpkgs-mozilla"))
-      #(import (findImport "overlays/nixpkgs-wayland"))
-      # TODO: am I even allowed to do this with flakes?
-      #mozillaImport
-      waylandImport
+      inputs.wayland.overlay
     ];
     # </nixpkgs + overlays>
 
@@ -64,7 +58,7 @@ in
       pulseaudio.enable = true;
     };
     nixpkgs.config.pulseaudio = true;
-    nixpkgs.config.packageOverrides = pkgs: {
+    nixpkgs.config.packageOverrides = pkgs: {  
       vaapiIntel = pkgs.vaapiIntel.override {
         enableHybridCodec = true;
       };
@@ -74,10 +68,10 @@ in
     services.pipewire.enable = true;
     programs.sway.enable = true; # needed for swaylock/pam stuff
     programs.sway.extraPackages = []; # block rxvt
-    #xdg.portal.enable = true;
-    #xdg.portal.gtkUsePortal = true;
-    #xdg.portal.extraPortals = with pkgs;
-    #  [ xdg-desktop-portal-wlr xdg-desktop-portal-gtk ];
+    xdg.portal.enable = true;
+    xdg.portal.gtkUsePortal = true;
+    xdg.portal.extraPortals = with pkgs;
+      [ xdg-desktop-portal-wlr xdg-desktop-portal-gtk ];
 
     home-manager.users.cole = { pkgs, ... }: {
       home.sessionVariables = {
@@ -114,6 +108,8 @@ in
           enable = true;
           enableSshSupport = true;
           enableExtraSocket = true;
+          defaultCacheTtl = 34560000;
+          defaultCacheTtlSsh = 34560000;
         };
         redshift = import ./config/redshift-config.nix { inherit pkgs; };
         udiskie.enable = true;
@@ -131,16 +127,18 @@ in
         gimp imv evince #vlc
         wlfreerdp
         vscodium # TODO: maybe home-manager-ize?
+        #vscode
         cool-retro-term
         brightnessctl
         pulsemixer
         virt-manager # TODO: usb passthrough needs something else?
+        #nyxt
 
         fractal
-        # mirage-im # TODO
         nheko
         quaternion
         spectral
+        mirage-im
 
         # sway-related
         xwayland slurp grim wf-recorder
@@ -148,19 +146,19 @@ in
         udiskie drm_info
         wayvnc wl-clipboard wl-gammactl
         wev
-        
+
         # browsers
-        firefox-wayland
-        #firefoxNightly # TODO: nixpkgs-mozilla is not flake (pure-eval) friendly!
         chromium
         torbrowser
-        #chromium-dev-ozone
+        falkon
 
         # environmental? (TODO: a module should maybe do this?)
         qt5.qtwayland
 
         discord spotify # nonfree ewwwww...
-      ] ++ builtins.attrValues customGuiCommands;
+      ]
+      ++ builtins.attrValues customGuiCommands # include custom overlay gui pkgs
+      ++ extraPkgs; # include custom pkgs from this file (firefoxNightly with flakes)
     };
   };
 }

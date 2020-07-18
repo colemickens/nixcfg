@@ -1,34 +1,40 @@
-{ pkgs, ... }: 
+{ pkgs, lib, ... }: 
 
 let
-  doBuild = pkgs.writeScript "doBuild.sh" ''
+  doBuild = repo: pkgs.writeScript "doBuild.sh" ''
     #! /usr/bin/env bash
     set -eu
     mkdir -p /tmp/overlaydir
     cd /tmp/overlaydir
-    if [[ ! -d ./nixpkgs-wayland ]]; then
-      git clone https://github.com/colemickens/nixpkgs-wayland
+    if [[ ! -d ./${repo} ]]; then
+      git clone https://github.com/colemickens/${repo}
     fi
-    cd nixpkgs-wayland
+    cd ${repo}
     git remote update
     git reset --hard origin/master
     bash .ci/srht-submit.sh
   '';
+  repos = ["nixpkgs-wayland" "flake-firefox-nightly"];
+  genPrefixAttrs = prefix: names: f: lib.listToAttrs (map (n: lib.nameValuePair "${prefix}${n}" (f n)) names);
 in
 {
-  systemd.timers.srht-nixpkgs-wayland = {
-      wantedBy = [ "timers.target" ];
-      partOf = [ "srht-nixpkgs-wayland.service" ];
-      timerConfig.OnCalendar = "hourly";
-  };
+  systemd.timers = genPrefixAttrs "srht-" repos (repo:
+    {
+        wantedBy = [ "timers.target" ];
+        partOf = [ "srht-${repo}.service" ];
+        timerConfig.OnCalendar = "hourly";
+    }
+  );
 
-  systemd.services.srht-nixpkgs-wayland = {
-    path = with pkgs; [ bash curl jq git ];
-    after = [ "network.target" ];
-    serviceConfig = {
-      Type = "simple";
-      User = "cole";
-      ExecStart = ''${doBuild}'';
-    };
-  };
+  systemd.services = genPrefixAttrs "srht-" repos (repo:
+    {
+      path = with pkgs; [ bash curl jq git ];
+      after = [ "network.target" ];
+      serviceConfig = {
+        Type = "simple";
+        User = "cole";
+        ExecStart = ''${doBuild repo}'';
+      };
+    }
+  );
 }

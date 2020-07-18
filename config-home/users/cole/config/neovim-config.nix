@@ -23,7 +23,7 @@
     vim-nix
     vim-surround
     vim-vinegar
-    
+
     # themes
     gruvbox
   ];
@@ -42,7 +42,7 @@
     set foldlevelstart=99
     set foldcolumn=0
     set mouse=a
-    
+
     set wildmenu
     set wildmode=longest:full,full
 
@@ -81,6 +81,6 @@
     " something to mirror vs code as easily as possible
 
     " don't quit, muahah
-    cabbrev q <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
+    "cabbrev q <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
   '';
 }

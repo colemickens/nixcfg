@@ -156,3 +156,16 @@ $ nixup deploy machine_name user@machine_ip
 #### Flakes Feedback
 
 TODO: consolidate here
+# TODO: I wish outputs were restricted to a "outputs" attribute
+
+
+## Flakes
+
+Some commands that might be useful (notes to self):
+
+```shell
+armbuilder="ssh-ng://colemickens@..."
+nix build --experimental-features 'nix-command flakes' \
+  --builders "${armbuilder} aarch64-linux" \
+    '.#nixosConfigurations.raspberry.config.system.build.toplevel'
+```

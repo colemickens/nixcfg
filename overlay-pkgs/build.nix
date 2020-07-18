@@ -1,5 +1,5 @@
 let
-  pkgs = import (import ../.imports/nixpkgs/cmpkgs) {
+  pkgs = import (builtins.fetchTarball "https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz") {
     overlays = [ (import ./default.nix) ];
   };
 in

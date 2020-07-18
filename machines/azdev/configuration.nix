@@ -5,30 +5,40 @@
     "${modulesPath}/virtualisation/azure-common.nix"
     "${modulesPath}/virtualisation/azure-image.nix"
 
-    ../../config-nixos/loremipsum-media/rclone-mnt.nix
-    ../../config-nixos/loremipsum-media/rclone-cmd.nix
-    ../../config-nixos/mixin-plex.nix
-    ../../config-nixos/mixin-cachix.nix
-
-    ../../config-home/users/cole/core.nix
+    ../../config-home/users/cole/user.nix
   ];
 
   config = {
     system.stateVersion = "20.03";
     virtualisation.azureImage.diskSize = 2500;
 
-    fileSystems."/".autoResize = true;
+    fileSystems."/" = {
+      fsType = "ext4";
+      autoResize = true;
+    };
     
     boot = {
       cleanTmpDir = true;
-      growPartition = true;
+      growPartition = true; # TODO: This doesn't work?
       kernelPackages = pkgs.linuxPackages_latest;
     };
     nix = rec {
       trustedUsers = [ "root" "@wheel" "azureuser" "cole" ];
       allowedUsers = trustedUsers;
       nrBuildUsers = 128;
+      package = pkgs.nixFlakes;
     };
+
+    services = {
+      hydra = {
+        enable = true;
+        hydraURL = "https://hydra.cleo.cat";
+        notificationSender = "hydra@cleo.cat";
+        #buildMachinesFile = [];
+        useSubstitutes = true;
+      };
+    };
+
     networking.hostName = "azbldr";
     documentation.nixos.enable = false;
     services.openssh.passwordAuthentication = false;

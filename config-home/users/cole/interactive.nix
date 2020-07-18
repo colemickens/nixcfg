@@ -12,7 +12,7 @@ let
 
   crtFilePath = "/home/cole/.mitmproxy/mitmproxy-ca-cert.pem";
   crtFile = pkgs.copyPathToStore crtFilePath;
-  
+
   extraCommands = import ./extra/commands.nix {inherit pkgs; };
 in
 {
@@ -60,19 +60,20 @@ in
       home.packages = with pkgs; [
         #nixops
         alps
-        
+
         wget curl
         ripgrep jq fzf
         wget curl stow ncdu tree
-        git-crypt gopass gnupg passrs
+        git-crypt gopass gnupg passrs ripasso-cursive
         openssh autossh mosh sshuttle
-        gitAndTools.hub gist tig
+        gitAndTools.hub gist tig #git-absorb
         cvs mercurial subversion
         mitmproxy
+        nix-du
 
         htop iotop which binutils.bintools
         unrar parallel unzip xz zip
-        gomuks rumatui
+        gomuks #rumatui
 
         nix-prefetch  nixpkgs-review
 

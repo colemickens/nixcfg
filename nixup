@@ -10,17 +10,14 @@ cd "${DIR}"
 mode="default"
 host="$(hostname)"
 
-builderargs=()
+function join_by { local IFS="$1"; shift; echo "$*"; }
 
 [[ "${1:-""}" != "" ]] && mode="${1}" && shift
 
-#
 # TODO: develop is missing --pure
 
 function update() {
-  (cd "./scripts" && ./rebase-pulls.sh) # our upstreams
-
-  (cd "./overlay-pkgs" && ./update.sh) # our overlay-pkgs
+  (set -e; cd "./overlay-pkgs" && ./update.sh) # our overlay-pkgs
 
   # flakes (TODO: no really, what does this do?)
   nix --experimental-features 'nix-command flakes' --pure-eval \
@@ -32,20 +29,32 @@ function update() {
       --update-input master --update-input stable --update-input cmpkgs --update-input pipkgs \
       --update-input nix --update-input home --update-input construct \
       --update-input hardware --update-input mozilla --update-input wayland
-
-  # legacy .imports
-  (cd "./.imports" && ./update.sh)
 }
 
 function flakes() {
   args=()
   if [[ "${1:-""}" == "local" ]]; then
     shift
-    args+=(--override-input master "/home/cole/code/nixpkgs/master" \
-            --override-input stable "/home/cole/code/nixpkgs/stable" \
-            --override-input cmpkgs "/home/cole/code/nixpkgs/cmpkgs" \
-            --override-input pipkgs "/home/cole/code/nixpkgs/pipkgs" \
-            --override-input home   "/home/cole/code/home-manager/cmhm")
+    args+=(
+      --override-input master "/home/cole/code/nixpkgs/master"
+      --override-input stable "/home/cole/code/nixpkgs/stable"
+      --override-input cmpkgs "/home/cole/code/nixpkgs/cmpkgs"
+      --override-input pipkgs "/home/cole/code/nixpkgs/pipkgs"
+      --override-input firenight "/home/cole/code/flake-firefox-nightly"
+      --override-input wayland "/home/cole/code/overlays/nixpkgs-wayland"
+      --override-input hardware "/home/cole/code/extras/nixos-hardware"
+      --override-input home "/home/cole/code/home-manager/cmhm"
+    )
+  fi
+  if [[ "${1:-""}" == "remote" ]]; then
+    shift
+    bldrs=(
+      'ssh://cole@azdev.westus2.cloudapp.azure.com x86_64-linux - - - big-parallel kvm'
+      ' ssh://root@nixos x86_64-linux - - - big-parallel kvm'
+      ' ssh://colemickens@aarch64.nixos.community aarch64-linux'
+    )
+    builders="$(join_by ';' "${bldrs[@]}")"
+    args+=(-j 0 --builders-use-substitutes --builders "${builders}")
   fi
   args+=(".#nixosConfigurations.${host}.config.system.build.toplevel")
 
@@ -62,22 +71,6 @@ function flakes() {
   echo -e "$(readlink -f result)"
 }
 
-function legacy() {
-  if [[ "${1:-""}" == "local" ]]; then
-    shift
-    export NIXPKGS_LOCAL_IMPORTS_ALLOWED="true"
-    out="$(set -e; nix-build --show-trace "./machines/${host}" > /tmp/nixos-legacy-local; cat /tmp/nixos-legacy-local)"
-  else
-    out="$(set -e; nix-build --show-trace "./machines/${host}" > /tmp/nixos-legacy; cat /tmp/nixos-legacy)"
-  fi
-
-  if [[ "${1:-""}" == "switch" ]]; then
-    sudo nix-env --set --profile /nix/var/nix/profiles/system ${out}
-    sudo nix-shell -p ${out} --command "switch-to-configuration ${1}"
-  fi
-  echo -e "${out}"
-}
-
 # sadly, this is considerably faster than
 # using nix and its usual remote building functionality
 function remote() {
@@ -86,9 +79,12 @@ function remote() {
 
   machine="${1}"; shift
   remote="${1}"; shift
-
+ 
   #drv="$(nix eval --pure-eval ".#nixosConfigurations.${machine}.config.system.build.toplevel")" # TODO: why????
-  drv="$(set -e; nix-instantiate "machines/${machine}")"
+  drv="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \
+    eval --raw ".#machines.${machine}")"
+  drv="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \
+    show-derivation "${drv}" | jq -r 'to_entries[].key')"
   out="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \
     show-derivation "${drv}" | jq -r 'to_entries[].value.outputs.out.path')" # TODO: must be a better way # (in v1, there's nix-store query that works)
 
@@ -96,14 +92,16 @@ function remote() {
   t="/tmp/tmpnixpath"; #rm -rf "${t}"; trap "rm -rf $t" EXIT;
   nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nix --command "nix copy --to file://${t} ${drv}" # see: https://github.com/NixOS/nix/issues/3696
   rsync -avh "${t}/" "${remote}:${t}"
-  ssh "${remote}" "nix --experimental-features 'nix-command' copy --from file://${t} ${drv}"
+  ssh "${remote}" \
+    "nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nix --command \
+      \"nix copy --from file://${t} ${drv}\""
 
   ## (ON BUILDER): BUILD
   ssh "${remote}" \
     "nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nixFlakes --command \
       \"nix --experimental-features 'nix-command flakes' --pure-eval \
-        --option 'extra-binary-caches' 'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org' \
-        --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA=' \
+        --option 'extra-binary-caches' 'https://cache.nixos.org' \
+        --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=' \
         --option 'build-cores' '0' \
         --option 'narinfo-cache-negative-ttl' '0' \
           build --keep-going ${drv}\""
@@ -117,10 +115,14 @@ function remote() {
 function deploy() {
   machine="${1}"; shift
   remote="${1}"; shift
-  drv="$(set -e; nix-instantiate "machines/${machine}")"
-  out="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \
-    show-derivation "${drv}" | jq -r 'to_entries[].value.outputs.out.path')" # TODO: must be a better way (see above)
   
+  drv="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \
+    eval --raw ".#machines.${machine}")"
+  drv="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \
+    show-derivation "${drv}" | jq -r 'to_entries[].key')"
+  out="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \
+    show-derivation "${drv}" | jq -r 'to_entries[].value.outputs.out.path')" # TODO: must be a better way # (in v1, there's nix-store query that works)
+
   ## (ON TARGET): REALIZE FROM CACHE
   ssh "${remote}" "nix-store \
     --option 'narinfo-cache-negative-ttl' '0' \
@@ -133,20 +135,6 @@ function deploy() {
     sudo bash -c \"\
       nix-env --set --profile /nix/var/nix/profiles/system ${out} \
       && ${out}/bin/switch-to-configuration switch\""
-}
-
-function compare() {
-  a="$(time legacy 2>/dev/null)"
-  b="$(time legacy local 2>/dev/null)"
-  c="$(time flakes 2>/dev/null)"
-  d="$(time flakes local 2>/dev/null)"
-  
-  set +x;
-  echo; echo;
-  echo "legacy      : ${a}"
-  echo "legacy local: ${b}"
-  echo "flakes      : ${c}"
-  echo "flakes local: ${d}"
 }
 
 function default() {

@@ -3,6 +3,7 @@
 set -euo pipefail
 set -x
 
+exit 0
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # keep track of what we build for the README
@@ -119,7 +120,7 @@ function update() {
   fi
 }
 
-tmpnixpath="nixpkgs=$(nix-instantiate --eval --json ../.imports/nixpkgs/cmpkgs/default.nix | jq -r .)"
+tmpnixpath="nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz"
 for p in ./*/; do
   update "pkgs" "${p}"
 done

@@ -7,7 +7,6 @@ let
 
   wofi = "${pkgs.wofi}/bin/wofi --insensitive";
   drun = "${wofi} --show drun";
-  riot-ssb = "${pkgs.customGuiCommands.riot-ssb}/bin/riot-ssb";
 
   # PASS
   gp = "${pkgs.gopass}/bin/gopass";
@@ -155,7 +154,6 @@ in {
     keybindings = {
       "${modifier}+Return" = "exec ${terminal}";
       "${modifier}+Shift+Return" = "exec ${browser}";
-      "${modifier}+Backspace" = "exec ${riot-ssb}";
       "${modifier}+Shift+Backspace" = "exec ${editor}";
       "${modifier}+Shift+q" = "kill";
       "${modifier}+Shift+c" = "reload";
