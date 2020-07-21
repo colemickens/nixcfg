@@ -17,7 +17,15 @@ function join_by { local IFS="$1"; shift; echo "$*"; }
 # TODO: develop is missing --pure
 
 function update() {
-  (set -e; cd "./overlay-pkgs" && ./update.sh) # our overlay-pkgs
+  (set -e; cd "./packages" && ./update.sh) # our overlay-pkgs
+
+  (set -e
+    cd ~/code/nixpkgs/master; git reset --hard "nixpkgs/master" && git push origin HEAD -f; cd -
+    cd ~/code/nixpkgs/stable; git reset --hard "nixpkgs/nixos-20.03" && git push origin HEAD -f; cd -
+
+    cd ~/code/nixpkgs/cmpkgs; git rebase nixpkgs/nixos-unstable-small; git push origin HEAD -f
+    cd ~/code/nixpkgs/pipkgs; git rebase nixpkgs/nixos-unstable; git push origin HEAD -f
+  )
 
   # flakes (TODO: no really, what does this do?)
   nix --experimental-features 'nix-command flakes' --pure-eval \
@@ -36,13 +44,13 @@ function flakes() {
   if [[ "${1:-""}" == "local" ]]; then
     shift
     args+=(
-      --override-input master "/home/cole/code/nixpkgs/master"
-      --override-input stable "/home/cole/code/nixpkgs/stable"
+      #--override-input master "/home/cole/code/nixpkgs/master"
+      #--override-input stable "/home/cole/code/nixpkgs/stable"
       --override-input cmpkgs "/home/cole/code/nixpkgs/cmpkgs"
       --override-input pipkgs "/home/cole/code/nixpkgs/pipkgs"
-      --override-input firenight "/home/cole/code/flake-firefox-nightly"
-      --override-input wayland "/home/cole/code/overlays/nixpkgs-wayland"
-      --override-input hardware "/home/cole/code/extras/nixos-hardware"
+      #--override-input firenight "/home/cole/code/flake-firefox-nightly"
+      #--override-input wayland "/home/cole/code/overlays/nixpkgs-wayland"
+      #--override-input hardware "/home/cole/code/extras/nixos-hardware"
       --override-input home "/home/cole/code/home-manager/cmhm"
     )
   fi

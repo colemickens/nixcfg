@@ -20,6 +20,8 @@
     cmpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
     pipkgs = { url = "github:colemickens/nixpkgs/pipkgs"; };
 
+    cmpkgsnext = { url = "github:nixos/nixpkgs/nixos-unstable"; };
+
     nix.url = "github:nixos/nix/flakes";
     nix.inputs.nixpkgs.follows = "master";
 
@@ -43,8 +45,6 @@
 
   outputs = inputs:
     let
-      uniformVersionSuffix = true; # clamp versionSuffix to ".git" to get identical build to non-flakes
-
       nameValuePair = name: value: { inherit name value; };
       genAttrs = names: f: builtins.listToAttrs (map (n: nameValuePair n (f n)) names);
       forAllSystems = genAttrs [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
@@ -59,15 +59,9 @@
         };
 
       mkSystem = system: pkgs_: hostname:
-        #(pkgsFor pkgs_ system).lib.nixosSystem {
         pkgs_.lib.nixosSystem {
           inherit system;
-          modules = [(./. + "/machines/${hostname}/configuration.nix")]
-            ++ (if uniformVersionSuffix then
-                [({config, lib, ...}: {
-                    system.nixos.revision = lib.mkForce "git";
-                    system.nixos.versionSuffix = lib.mkForce ".git";
-                })] else []);
+          modules = [(./. + "/machines/${hostname}/configuration.nix")];
           specialArgs.inputs = inputs;
         };
     in rec {
@@ -105,6 +99,13 @@
       defaultPackage = [
         inputs.self.nixosConfigurations.xeep.config.system.build.toplevel
         inputs.self.nixosConfigurations.raspberry.config.system.build.toplevel
+      ];
+
+      hydraJobs = [
+        # build my laptop config with nixos-unstable-small
+        # since cmpkgs rides on top of that
+        (mkSystem "x86_64-linux" inputs.cmpkgsnext "xeep")
+          .config.system.build.toplevel
       ];
     };
 }

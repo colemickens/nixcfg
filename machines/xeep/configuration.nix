@@ -1,51 +1,38 @@
 { pkgs, inputs, ... }:
 let
-  lib = pkgs.lib;
-  findImport = (import ../../../lib.nix).findImport;
-  nhImport = (
-    if (builtins.hasAttr "getFlake" builtins)
-    then inputs.hardware.nixosModules.dell-xps-13-9370
-    else import "${findImport "extras/nixos-hardware"}/nixos/dell/xps/13-9370/default.nix"
-  );
-
   hostname = "xeep";
 in
 {
   imports = [
-    ../../config-nixos/common.nix
+    ../../mixins/common.nix
 
-    ../../config-nixos/loremipsum-media/rclone-cmd.nix
+    ../../mixins/chromecast.nix
+    ../../mixins/docker.nix
+    ../../mixins/libvirt.nix
+    ../../mixins/sshd.nix
+    ../../mixins/v4l2loopback.nix
+    ../../mixins/loremipsum-media/rclone-cmd.nix
 
-    ../../config-nixos/mixin-docker.nix
-    ../../config-nixos/mixin-libvirt.nix
-    ../../config-nixos/mixin-sshd.nix
-    ../../config-nixos/mixin-v4l2loopback.nix
+    ../../profiles/sway.nix
 
-    ../../config-nixos/hw-chromecast.nix
-
-    ../../config-home/users/cole/gui.nix
-
-    # Hardware Specific
+    # xps 13 9370 specific:
     ./power-management.nix
-    nhImport
+    inputs.hardware.nixosModules.dell-xps-13-9370
   ];
 
   config = {
-    # <lol stability>
-    services = {
-      hydra = {
-        enable = true;
-        hydraURL = "https://localhost:3000";
-        notificationSender = "hydra@cleo.cat";
-        #buildMachinesFile = [];
-        useSubstitutes = true;
-        package = pkgs.hydra-unstable;
-      };
-    };
+    # services = {
+    #   hydra = {
+    #     enable = true;
+    #     hydraURL = "https://localhost:3000";
+    #     notificationSender = "hydra@cleo.cat";
+    #     #buildMachinesFile = [];
+    #     useSubstitutes = true;
+    #     package = pkgs.hydra-unstable;
+    #   };
+    # };
     nix = {
       nixPath = [];
-      #package = pkgs.nixFlakes;
-      #extraOptions = "experimental-features = nix-command flakes";
       trustedUsers = ["hydra"];
     };
     # </lol stability>
