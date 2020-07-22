@@ -1,5 +1,9 @@
 # nixcfg
 
+### note, this README is out of date
+
+### it needs touch-ups for the huge flakes refactor
+
 [![builds.sr.ht status](https://builds.sr.ht/~colemickens/nixcfg.svg)](https://builds.sr.ht/~colemickens/nixcfg?)
 
 My NixOS + Home-Manager configuration. Think of this as a system-level superset of a dotfiles repo.
