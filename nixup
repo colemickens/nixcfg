@@ -8,7 +8,7 @@ unset NIX_PATH
 
 cd "${DIR}"
 mode="default"
-host="$(hostname)"
+host="xeep"
 
 function join_by { local IFS="$1"; shift; echo "$*"; }
 
@@ -59,7 +59,8 @@ function flakes() {
     bldrs=(
       'ssh://cole@azdev.westus2.cloudapp.azure.com x86_64-linux - - - big-parallel kvm'
       ' ssh://root@nixos x86_64-linux - - - big-parallel kvm'
-      ' ssh://colemickens@aarch64.nixos.community aarch64-linux'
+      #' ssh://colemickens@aarch64.nixos.community aarch64-linux'
+      ' ssh://cole@192.168.1.2 aarch64-linux'
     )
     builders="$(join_by ';' "${bldrs[@]}")"
     args+=(-j 0 --builders-use-substitutes --builders "${builders}")
@@ -87,7 +88,7 @@ function remote() {
 
   machine="${1}"; shift
   remote="${1}"; shift
- 
+
   #drv="$(nix eval --pure-eval ".#nixosConfigurations.${machine}.config.system.build.toplevel")" # TODO: why????
   drv="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \
     eval --raw ".#machines.${machine}")"
@@ -114,16 +115,21 @@ function remote() {
         --option 'narinfo-cache-negative-ttl' '0' \
           build --keep-going ${drv}\""
 
-  ## (ON BUILDER): PUSH TO CACHE
-  ssh "${remote}" \
-    "nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-20.03.tar.gz -p cachix --command \
-      \"echo ${out} | env CACHIX_SIGNING_KEY=${cachixkey} cachix push ${cache}\""
+  if [[ "${1:-""}" == "push" ]]; then
+    shift
+    ## (ON BUILDER): PUSH TO CACHE
+    ssh "${remote}" \
+      "nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-20.03.tar.gz -p cachix --command \
+        \"echo ${out} | env CACHIX_SIGNING_KEY=${cachixkey} cachix push ${cache}\""
+  fi
 }
 
 function deploy() {
   machine="${1}"; shift
   remote="${1}"; shift
-  
+
+  set -x
+
   drv="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \
     eval --raw ".#machines.${machine}")"
   drv="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \

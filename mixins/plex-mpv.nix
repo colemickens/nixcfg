@@ -13,7 +13,7 @@ in
   # we can do better.
 
   config = {
-    environment.systemPackages = with pkgs; [ plex-mpv-shim ];
+    environment.systemPackages = with pkgs; [ plex-mpv-shim mpv ];
 
     networking.firewall.allowedTCPPorts = [ 3000 ];
     networking.firewall.allowedUDPPorts = [ 32410 32412 32413 32414 ];

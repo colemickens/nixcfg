@@ -6,15 +6,17 @@ let
 in
 {
   imports = [
-    ../../config-nixos/common.nix
-    ../../config-home/users/cole/user.nix
+    ../../mixins/common.nix
+    ../../profiles/user.nix
 
     ./home-assistant
 
-    ../../config-nixos/mixin-unifi.nix
-    ../../config-nixos/mixin-sshd.nix
-    ../../config-nixos/mixin-srht-cronjobs.nix
-    ../../config-nixos/loremipsum-media/rclone-mnt.nix
+    ../../mixins/plex-mpv.nix
+    ../../mixins/sshd.nix
+    ../../mixins/srht-cronjobs.nix
+    ../../mixins/unifi.nix
+
+    ../../mixins/loremipsum-media/rclone-mnt.nix
 
     ./sd-image-raspberrypi4-new.nix
   ];
@@ -45,6 +47,7 @@ in
       enable = true;
       allowedUDPPorts = [ 51820 ];
     };
+    
     # networking.wireguard.interfaces."${wg}" = {
     #   ips = [ "172.27.66.1/24" ];
     #   listenPort = 51820;

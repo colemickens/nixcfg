@@ -22,7 +22,7 @@
       "/boot" = {
         device = "/dev/disk/by-partlabel/boot";
         fsType = "vfat";
-        options = [ "nofail" "noauto" ];
+        options = [ "nofail" ];
       };
       "/" = {
         device = "tank/root";

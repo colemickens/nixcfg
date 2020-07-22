@@ -158,6 +158,10 @@ $ nixup deploy machine_name user@machine_ip
 TODO: consolidate here
 # TODO: I wish outputs were restricted to a "outputs" attribute
 
+- if we're restricted to single derivation output then why not output path at the end?
+- don't do this restriction ,or allow a way around it
+- the auto-name-coercion is confusin
+
 
 ## Flakes
 

@@ -17,10 +17,11 @@
     master = { url = "github:nixos/nixpkgs/master"; };
     stable = { url = "github:nixos/nixpkgs/nixos-20.03"; };
     unstable = { url = "github:nixos/nixpkgs/nixos-unstable"; };
-    cmpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
+    #cmpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
+    # FOR NOW, to figure out this initrd-append-secrets/aarch64 issue
+    cmpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
+    
     pipkgs = { url = "github:colemickens/nixpkgs/pipkgs"; };
-
-    cmpkgsnext = { url = "github:nixos/nixpkgs/nixos-unstable"; };
 
     nix.url = "github:nixos/nix/flakes";
     nix.inputs.nixpkgs.follows = "master";
@@ -49,18 +50,18 @@
       genAttrs = names: f: builtins.listToAttrs (map (n: nameValuePair n (f n)) names);
       forAllSystems = genAttrs [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
 
-      pkgsFor = pkgs: system:
+      pkgsFor = pkgs: sys:
         import pkgs {
-          inherit system;
+          system = sys;
           config = { allowUnfree = true; };
           # overlays = if false then [] else [
           #   inputs.wayland.overlay
           # ];
         };
 
-      mkSystem = system: pkgs_: hostname:
+      mkSystem = sys: pkgs_: hostname:
         pkgs_.lib.nixosSystem {
-          inherit system;
+          system = builtins.trace "___________________ SYS=${sys} HOSTNAME=${hostname}" sys;
           modules = [(./. + "/machines/${hostname}/configuration.nix")];
           specialArgs.inputs = inputs;
         };
@@ -71,7 +72,9 @@
       devShell = forAllSystems (system:
         (pkgsFor inputs.unstable system).mkShell { # TODO: "legacy" packages, doesn't work for mkShell why?
           nativeBuildInputs = with (pkgsFor inputs.unstable system); [
+            #(pkgsFor inputs.master system).nixFlakes
             (pkgsFor inputs.master system).nixFlakes
+            #inputs.nix.packages."${system}".nix  # ?????????????
             (pkgsFor inputs.stable system).cachix
             bash cacert curl git jq mercurial
             nettools openssh ripgrep rsync
@@ -82,12 +85,9 @@
 
       nixosConfigurations = {
         azdev     = mkSystem "x86_64-linux" inputs.unstable "azdev";
-        raspberry = mkSystem "aarch64-linux" inputs.pipkgs "raspberry";
+        #raspberry = mkSystem "aarch64-linux" inputs.pipkgs "raspberry";
         #fastraz   = mkSystem "aarch64-linux" inputs.cmpkgs "raspberry";
-        torob-fe    = mkSystem "aarch64-linux" inputs.cmpkgs "torob-fe";
-        torob-be    = mkSystem "aarch64-linux" inputs.cmpkgs "torob-be";
         xeep      = mkSystem "x86_64-linux"  inputs.cmpkgs "xeep";
-        xeep_     = mkSystem "x86_64-linux"  inputs.cmpkgs "xeep";
       };
 
       machines = {
@@ -99,13 +99,6 @@
       defaultPackage = [
         inputs.self.nixosConfigurations.xeep.config.system.build.toplevel
         inputs.self.nixosConfigurations.raspberry.config.system.build.toplevel
-      ];
-
-      hydraJobs = [
-        # build my laptop config with nixos-unstable-small
-        # since cmpkgs rides on top of that
-        (mkSystem "x86_64-linux" inputs.cmpkgsnext "xeep")
-          .config.system.build.toplevel
       ];
     };
 }
