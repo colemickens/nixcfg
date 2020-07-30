@@ -1,2 +1,0 @@
-rclone.conf filter=git-crypt diff=git-crypt
-sa/*.json   filter=git-crypt diff=git-crypt
