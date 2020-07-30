@@ -17,10 +17,7 @@
     master = { url = "github:nixos/nixpkgs/master"; };
     stable = { url = "github:nixos/nixpkgs/nixos-20.03"; };
     unstable = { url = "github:nixos/nixpkgs/nixos-unstable"; };
-    #cmpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
-    # FOR NOW, to figure out this initrd-append-secrets/aarch64 issue
-    cmpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
-    
+    cmpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
     pipkgs = { url = "github:colemickens/nixpkgs/pipkgs"; };
 
     nix.url = "github:nixos/nix/flakes";
@@ -54,26 +51,20 @@
         import pkgs {
           system = sys;
           config = { allowUnfree = true; };
-          # overlays = if false then [] else [
-          #   inputs.wayland.overlay
-          # ];
         };
 
       mkSystem = sys: pkgs_: hostname:
         pkgs_.lib.nixosSystem {
-          system = builtins.trace "___________________ SYS=${sys} HOSTNAME=${hostname}" sys;
+          system = sys;
           modules = [(./. + "/machines/${hostname}/configuration.nix")];
           specialArgs.inputs = inputs;
         };
     in rec {
-      # defaultPackage.x86_64-linux =
-      #   nixosConfigurations.xeep.config.system.build.toplevel;
-
       devShell = forAllSystems (system:
-        (pkgsFor inputs.unstable system).mkShell { # TODO: "legacy" packages, doesn't work for mkShell why?
+        (pkgsFor inputs.unstable system).mkShell {
           nativeBuildInputs = with (pkgsFor inputs.unstable system); [
             #(pkgsFor inputs.master system).nixFlakes
-            (pkgsFor inputs.master system).nixFlakes
+            (pkgsFor inputs.unstable system).nixFlakes
             #inputs.nix.packages."${system}".nix  # ?????????????
             (pkgsFor inputs.stable system).cachix
             bash cacert curl git jq mercurial
@@ -85,7 +76,7 @@
 
       nixosConfigurations = {
         azdev     = mkSystem "x86_64-linux" inputs.unstable "azdev";
-        #raspberry = mkSystem "aarch64-linux" inputs.pipkgs "raspberry";
+        raspberry = mkSystem "aarch64-linux" inputs.pipkgs "raspberry";
         #fastraz   = mkSystem "aarch64-linux" inputs.cmpkgs "raspberry";
         xeep      = mkSystem "x86_64-linux"  inputs.cmpkgs "xeep";
       };

@@ -46,7 +46,17 @@ AllowedIPs = 192.168.1.0/24
 Endpoint = summit.mickens.us:51820
 EOF
 
-cat "./chimera-lan.conf" | nix run -f ~/code/nixpkgs/cmpkgs qrencode -c qrencode -t png -o "./chimera-lan.png"
-cat "./chimera-all.conf" | nix run -f ~/code/nixpkgs/cmpkgs qrencode -c qrencode -t png -o "./chimera-all.png"
+cat "./chimera-lan.conf" | nix-shell -I nixpkgs=~/code/nixpkgs/cmpkgs -p qrencode \
+  --command "qrencode -t png -o './chimera-lan.png'"
+
+cat "./chimera-all.conf" | nix-shell -I nixpkgs=~/code/nixpkgs/cmpkgs -p qrencode \
+  --command "qrencode -t png -o './chimera-all.png'"
+
+sops --encrypt ./client.key > ./client.key.sops
+sops --encrypt ./client.pub > ./client.pub.sops
+sops --encrypt ./chimera-lan.conf > ./chimera-lan.conf.sops
+sops --encrypt ./chimera-all.conf > ./chimera-all.conf.sops
+sops --encrypt ./chimera-lan.png > ./chimera-lan.png.sops
+sops --encrypt ./chimera-all.png > ./chimera-all.png.sops
 
 echo "done" &>/dev/stderr

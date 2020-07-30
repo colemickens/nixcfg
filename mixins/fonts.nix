@@ -11,6 +11,7 @@ in
         corefonts
         cascadia-code
         fira-code fira-code-symbols
+        jetbrains-mono
         gelasio
         iosevka
         noto-fonts noto-fonts-cjk noto-fonts-emoji

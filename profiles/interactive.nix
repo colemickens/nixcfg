@@ -60,8 +60,10 @@ in
         openssh autossh mosh sshuttle
         gitAndTools.hub gist tig #git-absorb
         cvs mercurial subversion
-        mitmproxy
+        #mitmproxy
         nix-du
+
+        sops
 
         htop iotop which binutils.bintools
         unrar parallel unzip xz zip

@@ -18,7 +18,7 @@ in
 {
   imports = [
     ./interactive.nix # includes core.nix (which imports hm)
-    
+
     ../mixins/alacritty.nix
     ../mixins/chromecast.nix
     ../mixins/fonts.nix
@@ -52,7 +52,7 @@ in
       pulseaudio.enable = true;
     };
     nixpkgs.config.pulseaudio = true;
-    nixpkgs.config.packageOverrides = pkgs: {  
+    nixpkgs.config.packageOverrides = pkgs: {
       vaapiIntel = pkgs.vaapiIntel.override {
         enableHybridCodec = true;
       };
@@ -73,7 +73,9 @@ in
         imv
         qemu
         vscodium
-        
+        freerdp
+        vlc
+
         # misc utils for desktop
         brightnessctl
         pulsemixer
@@ -83,14 +85,15 @@ in
         cool-retro-term
         kitty
         termite
-        
+
         # matrix clients
         fractal
         nheko
         quaternion
         spectral
         mirage-im
-        
+        element-desktop
+
         # browsers
         firefox-bin
         chromium

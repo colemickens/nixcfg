@@ -26,9 +26,12 @@ pkgs.stdenv.mkDerivation {
 
   buildInputs = with pkgs; [
     openssl
+    clang
     gpgme libgpgerror libgit2 git # passrs
     dbus # passrs libsecret
+    nettle # pass-rust (sequoia->nettle-sys)
   ];
 
+  LIBCLANG_PATH="${pkgs.llvmPackages.libclang}/lib";
   RUST_BACKTRACE = 1;
 }

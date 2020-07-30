@@ -16,19 +16,35 @@
         "type": "github"
       }
     },
+    "cachixpkgs_2": {
+      "locked": {
+        "lastModified": 1595357489,
+        "narHash": "sha256-hogc9RVcShK+r9h9rnRlHdBS/Ptaxa+SE8kcVyMLKjM=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "9ea61f7bc4454734ffbff73c9b6173420fe3147b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-20.03",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "cmpkgs": {
       "locked": {
-        "lastModified": 1595175601,
-        "narHash": "sha256-NMxaD3mdKyp+6nidFkZe7XOzVXtWMpOH1v4KYZxo/Z0=",
+        "lastModified": 1595996365,
+        "narHash": "sha256-sV8N2dttoQRtEyUfjDD1+9w3Jv+Dc3CQ2Twps71EElE=",
         "ref": "cmpkgs",
-        "rev": "5717d9d2f7ca0662291910c52f1d7b95b568fec2",
-        "revCount": 235279,
+        "rev": "d3ff247475f50829a87bf248261ad5462cf07936",
+        "revCount": 236334,
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs/cmpkgs"
       },
       "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
+        "owner": "colemickens",
+        "ref": "cmpkgs",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -40,11 +56,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1595321434,
-        "narHash": "sha256-rBjZWdlEfo0M1qj/vWKoJbgiGn3nRMET5HJR100irIw=",
+        "lastModified": 1595694061,
+        "narHash": "sha256-N+Q6bK3p8ZnrmE4vqk+7XprULBhcrkS9b/XqSjQVLFI=",
         "owner": "matrix-construct",
         "repo": "construct",
-        "rev": "ecefcea599f5baea7b90817d86693bcf19045615",
+        "rev": "dd17ba9decb3177edf6e8182ffaf760505cc05b3",
         "type": "github"
       },
       "original": {
@@ -75,11 +91,11 @@
     },
     "hardware": {
       "locked": {
-        "lastModified": 1594048951,
-        "narHash": "sha256-tZGngCmJoK1Lzz7kqTHxa5bK3dIYd9JNHN2Wfuhqku8=",
+        "lastModified": 1595927197,
+        "narHash": "sha256-sJefwDbZVn1PENw+rMyl96BxYoP95DteUHUeyVL5hQw=",
         "owner": "nixos",
         "repo": "nixos-hardware",
-        "rev": "cc353d439e3135dbe3f5473d897d2c35537f260c",
+        "rev": "b5a87414c691cc80350d4b87087fadf5b573a278",
         "type": "github"
       },
       "original": {
@@ -112,11 +128,11 @@
     },
     "master": {
       "locked": {
-        "lastModified": 1595456088,
-        "narHash": "sha256-Pzh85Mplv9zSffvH5mHQiHPwhijo7h8MAbCUIjjZB1s=",
+        "lastModified": 1596068459,
+        "narHash": "sha256-Pa3EtEsE+NdKH48G4rQBePgOZAamvr7DW7kMbjhBEdY=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "9b6a00ba11940ecbdd5b786bf090efcc0a212c87",
+        "rev": "b69c61eb39852b11c6d00cf54fc055777c2da35e",
         "type": "github"
       },
       "original": {
@@ -165,11 +181,11 @@
     },
     "pipkgs": {
       "locked": {
-        "lastModified": 1595175601,
-        "narHash": "sha256-NMxaD3mdKyp+6nidFkZe7XOzVXtWMpOH1v4KYZxo/Z0=",
+        "lastModified": 1595770343,
+        "narHash": "sha256-GTmeVtwj+ZvtPMYyliFspWRoLly1P25suz694NfD9d8=",
         "ref": "pipkgs",
-        "rev": "5717d9d2f7ca0662291910c52f1d7b95b568fec2",
-        "revCount": 235279,
+        "rev": "28fce082c8ca1a8fb3dfac5c938829e51fb314c8",
+        "revCount": 236091,
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs/pipkgs"
       },
@@ -197,11 +213,11 @@
     },
     "stable": {
       "locked": {
-        "lastModified": 1595357489,
-        "narHash": "sha256-hogc9RVcShK+r9h9rnRlHdBS/Ptaxa+SE8kcVyMLKjM=",
+        "lastModified": 1595939063,
+        "narHash": "sha256-tW8J0JZqgJ9kGYeGYYDA6noZCkiRHodi8fzOJxKj+7E=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "9ea61f7bc4454734ffbff73c9b6173420fe3147b",
+        "rev": "7c85b91589222b3710e9ff24b228b83f8be8e937",
         "type": "github"
       },
       "original": {
@@ -229,16 +245,17 @@
     },
     "wayland": {
       "inputs": {
+        "cachixpkgs": "cachixpkgs_2",
         "nixpkgs": [
           "cmpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1595455784,
-        "narHash": "sha256-keZBYHqW2ZaE7PDE3YsHYuK30Q0MyEq/e0ZAyrFN7wE=",
+        "lastModified": 1596007848,
+        "narHash": "sha256-cD6xInGHx38MquOhxycZ8wtq8a0bQuJkP1dbChUj6rI=",
         "owner": "colemickens",
         "repo": "nixpkgs-wayland",
-        "rev": "ecd70c95033da25acb2e31ab620ace57321d8885",
+        "rev": "0316a9ae0322380ba7daf02e2550570147023a78",
         "type": "github"
       },
       "original": {

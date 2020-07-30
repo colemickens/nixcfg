@@ -1,0 +1,28 @@
+{
+	"data": "ENC[AES256_GCM,data:bIk56Pi2hsk2LWSW1w/W7lOG/vn82+x4/RkHRG70ucmHQCb4EPNBIyHgzzQtzfSxfAcUwZLq6JaB5pzWkgf1ljFSydxTzL2RfUXjTEJ9p01px9FEzuaQj44y9oqb10DSXmn3h1X8K5Vj/wi0LbdeeoHaHqFEE60j+xaHqcpjxIYb3PH5Ad1FSO/rwgtvAHhnAVbHtYDbmk5JOppK+70O2NQSdpnBnT6Ja1c5aaUBVAuqwpTfzVP2vCASLKA5dHIfrlsZlIc7PSnv81lcljtVpY4wpMWGx8FqS7NMxOtC9/Ak+jkR40X1t6EsPdOfTGBRxzJb,iv:AJ+O7+YEUNHDEzjn+HX+xMfGLSYYGkdQDJW20pYYn/4=,tag:5rhZN6hBH0OHCkwZwCCKEg==,type:str]",
+	"sops": {
+		"kms": null,
+		"gcp_kms": null,
+		"azure_kv": [
+			{
+				"vault_url": "https://sops-b5078e18c0c34221.vault.azure.net",
+				"name": "sops-key",
+				"version": "6e538f7c6d714d138226082070d1fe99",
+				"created_at": "2020-07-30T02:06:22Z",
+				"enc": "ndNMO45clXS5CyM0B4hfmt9LbdFN2r8s7Eml80mGXhjfdZAZs6J54YLpFNe65Ixm3oT5NqoZw_YH6BY-3eS5SFdl_Idn3rhnhJJEHRl1kjGTgvM2j0ytM0ovkNg-n-gGfYYUp9F_a5Oz-e_VPN7H7t56EfabpUD4qWV2oOopXRqYtEfFuG0Sra6hJxh9p37LObbzc2Ou3vEnK4T9NUckWJnP10L3m6_ysuCUwd20hcKelKzMpF_WDKLwsiFTtO3gmRW6fOgeuzmsblEX5n02-8bl1g_7cqPVhlhSj9xn3Z9hCWPTX3oqRdVOMg0CyAojspxl_xQtOikFBF5672CVuw"
+			}
+		],
+		"hc_vault": null,
+		"lastmodified": "2020-07-30T02:06:24Z",
+		"mac": "ENC[AES256_GCM,data:cV+pJE57Ve5MZvL/D9k2qiFV122mRu2viKBY9miiLzcBuCZq0S1OTdeVufnGYHTZCY6SNHl9m1TWBqs4wJy2XqvEw3kLRKEoztwMEuG5E6hRUf3yyBAaKDoI/7UpyMBjjmsME+HzHm7XClRKpywVcHb3M72eJy60tChSVB6EAjc=,iv:K51Eq5kCoSNwwPoqC53Y3EnOLu1/C011bwTHKN/RyAA=,tag:tlUDXJNErsq5pyQU5rpqbA==,type:str]",
+		"pgp": [
+			{
+				"created_at": "2020-07-30T02:06:22Z",
+				"enc": "-----BEGIN PGP MESSAGE-----\n\nwcBMAyUpShfNkFB/AQgAG6DbkaoU2xkOtKylAWOOvb9NW2ytZsPL+VXSywMU0Tzs\nMqvEDi2qg9jyf53AfroOjyqGya6YcT65LvVRImJnybNKyhzPiD9u1FzNGmqNt+VA\n3cBfanovF+9UUq9+1jeEl1Zde3wqHOJcnBC1RJnToKtZlItlJR/jlL7VWoOv3F6E\n1OqCjdzFU3x8epayV6awaDyvC7rI7iZSG2Cm92r1QgG7Yjp4LfEboBEDNUivp2Cn\ng3Ub776Cf907VNSrNkDzzjNnR5fNqo/gH4BSaxhB5yIThkVVD4QAsOr8dfnwDv6h\na9X97+59g+8UHTOG1+JODrVi+xTZ9KFvH2c+E9gtHdLgAeQ26NXy5fcv9dGW6TSl\nG/AR4fms4FDgR+Hwj+C34hENyGPgt+U5iqCvp7yKWo84zlr+oU2OO/XdIHDoh8+M\ndKjITPY7l+BZ5FrPr1MBAFG5OQp25rvgpUPi/X1RWuFNqgA=\n=JGye\n-----END PGP MESSAGE-----",
+				"fp": "FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4"
+			}
+		],
+		"unencrypted_suffix": "_unencrypted",
+		"version": "3.6.0"
+	}
+}

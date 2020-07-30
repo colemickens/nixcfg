@@ -1,0 +1,28 @@
+{
+	"data": "ENC[AES256_GCM,data:S82kI0j3YWSW+hhFUs/YIXBfqO3TxLRbQ1b5idXl2xmAdLFYm+clc76CXOuecZpYYlwclctLzs+n1NveuOPTt0M5owE1puOksoaJxmHKb/mEmFSYKaVLaBryEE6BWNwDIh1E/xGNSbT3xTXX8AZ1pQUcQ/CNfmoYQS6mGKVeYVvaNmgSQrNxX+97exlCZe/bwRsz40+lfqZEgXCMTTa1Tc+V0YpbswuTkULtYYBynjFbQ+iNaQv7yEWoZ0+fIYgD0O0pmQfZqBn3p4eSj65rdp7Lxvn93ApSnGDmOxNUblf2l2QEbmm8Ujt7o9GMPtSn2yk=,iv:D1qpgYK6Y6olgxHkqvAqtnVHgQrQtwCJ5QsrRvD1y8A=,tag:HZA8UhvubODLwpPL0qVB/g==,type:str]",
+	"sops": {
+		"kms": null,
+		"gcp_kms": null,
+		"azure_kv": [
+			{
+				"vault_url": "https://sops-b5078e18c0c34221.vault.azure.net",
+				"name": "sops-key",
+				"version": "6e538f7c6d714d138226082070d1fe99",
+				"created_at": "2020-07-30T02:06:20Z",
+				"enc": "mH9u3stBsPvuECzC3CjE9lmtBQthICyPaZDHosz66YlqTKGX2XdnaqtvqkSeiaScaP6TiJxTJTNQ9FKOWuvVYIBmxbD7wrqokvimckoJ5xO7XrQQArShDMvpIvrl8R5kuIa3-BFbBsvZ0DwmqNtKyHQIX-kIKdQMAR8N-c7cvCpWDwe-XN7Qi4HewpBgOCVMTNAewpOfHNWWT3O1Oi8gUBBBK5tQmsu0yXlnIvqlBbHPc2m8pjH0ZGCPVzvE50fR0Fw-LWeYnv_uFA3Qrqy6GTSyu-UUQ8fapPJPEubOmlvzaSvaOTeuXgCFUEIY4XI_o5mAG9-eZyP6GvT77TyYqQ"
+			}
+		],
+		"hc_vault": null,
+		"lastmodified": "2020-07-30T02:06:22Z",
+		"mac": "ENC[AES256_GCM,data:7cRbyHXD9fVUw/W4l64HR9hFhego7aRniy5NF4Xh87FUzolDZ0ZepiTLarBap1pEsopZxytd21U1MjVw9uHGjmB9X9mFViDPcD8SsLwDYKfRdatmG8JjuRTrc5zNaVWxtRl0t9hUDPGvE1B8jnTY7KpHKWeLsjIbJZk8G7ShVuc=,iv:aomY4/LyINJIKgmqnBllrmhbZrpFZq3VscGbx+/YUQc=,tag:JGd0RdZPiaH0eJwonX4eLg==,type:str]",
+		"pgp": [
+			{
+				"created_at": "2020-07-30T02:06:20Z",
+				"enc": "-----BEGIN PGP MESSAGE-----\n\nwcBMAyUpShfNkFB/AQgAbM4rwfWThUFOF2s4NfUVEOZ+o1/nWcVybp7a/YhIFNTx\n5Vghy2cfadGerggw9NsT+90T1BiQSOo1gzYo8a4BB7bVcWOac0dBXuKIUk9C8gZB\nLS4IJd0dzBeo7ADuKz6OV2HDRRDVxDHgZO0LQio5Ba+gae/M9D/emCammpRnzB+r\nihwmbEteJeU51MjiBQ815/Mz2QoCSWdcsYbrxRfT4XVOeX3gFGHGL7+bwNAhqCrd\nMjY4/ZN3w8g1Wa0YN2AbU182BOSiiVcSUqZmlEivxSL5t+FTcOwO2Q8sLRCaTgKP\nNBItQ49wAkgvHpU+/f2PtLUqG2N3lZ/P15XSvAv+ZdLgAeQIkjyM/VejAjy2/qeC\n6qlW4fC24OTgxOH1BuAJ4rzSfMjgj+Xpz476QtWNCMmJ5Jx0V3EJUg6frQfKTUEW\niq3NKGO9HeAG5DKOEqwF/rvH33DJXeU9DabiGCKdyOGsNQA=\n=dMQw\n-----END PGP MESSAGE-----",
+				"fp": "FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4"
+			}
+		],
+		"unencrypted_suffix": "_unencrypted",
+		"version": "3.6.0"
+	}
+}

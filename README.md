@@ -1,19 +1,44 @@
 # nixcfg
+*Nix-flakes rules everything around me*
 
-### note, this README is out of date
+<!--[![builds.sr.ht status](https://builds.sr.ht/~colemickens/nixcfg.svg)](https://builds.sr.ht/~colemickens/nixcfg?)-->
 
-### it needs touch-ups for the huge flakes refactor
+- [nixcfg](#nixcfg)
+  - [TODO](#todo)
+  - [Overview](#overview)
+  - [Advanced Details](#advanced-details)
+  - [Layout](#layout)
+  - [Notes](#notes)
+      - [Guiding Principals](#guiding-principals)
+      - [Look ma, no channels!](#look-ma-no-channels)
+      - [Pinned Imports & Code Layout](#pinned-imports--code-layout)
+      - [Scripts](#scripts)
+  - [Todo/complaints](#todocomplaints)
+  - [Flakes](#flakes)
+      - [Flakes Feedback](#flakes-feedback)
+- [TODO: I wish outputs were restricted to a "outputs" attribute](#todo-i-wish-outputs-were-restricted-to-a-outputs-attribute)
+  - [Flakes](#flakes-1)
 
-[![builds.sr.ht status](https://builds.sr.ht/~colemickens/nixcfg.svg)](https://builds.sr.ht/~colemickens/nixcfg?)
+## TODO
 
-My NixOS + Home-Manager configuration. Think of this as a system-level superset of a dotfiles repo.
+Use sops instead of `git-crypt`.
+
+## Overview
 
 This configuration:
- * contains all of my system and application config (except Firefox)
- * is fully reproducible (all imports are pinned; refs are updated with `update.sh`)
+ * contains all of my system and virtually all application config (Firefox and Codium are the big exceptions)
+ * is fully reproducible if you rebuild one of my system images at a given commit you will get the IDENTICAL set of software
+   and configuration that I run on my machine
+ * assumes a single-user system (me) - notice that mixins/ contains nixos and home-manager modules for my user interspersed. (This is partly due to needing to practically limit the level of abstracting I'm doing in Nix, but also an admission that Linux isn't necessary great for multi-human user systems.)
+
+_**Please**, feel free to open issues if you're curious about anything._
+
+
+## Advanced Details
+
+Regarding this repo's use of Nix, it:
  * does not rely on `NIX_PATH`, `nixos-config`, and actually disables `nix.nixPath`
- * avoids `nixos-rebuild`, builds the system config as a normal user
- * allows local clones of imports to override pinned imports for great nixpkgs/overlay hacking experience
+ * does not use `nixos-rebuild` (though this is partly due to using Flakes without using it system-wide)
  * trivially supports building and deploying my remote systems (cloud VMs, raspberry pis, etc)
    * currently:
      * `xeep` (XPS 13)
@@ -21,8 +46,6 @@ This configuration:
      * `raspberry` (creatively-named rpi4 running `unifi` + `home-assistant`)
      * `azdev` (azure cloud dev machine, interactive or remote nix builder)
 
-
-_**Please**, feel free to open issues if you're curious about anything._
 
 ## Layout
 

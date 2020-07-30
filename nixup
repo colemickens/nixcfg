@@ -4,9 +4,12 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 set -euo pipefail
 set -x
 
+azmachine="13.66.201.252"
+nix --version
 unset NIX_PATH
 
 cd "${DIR}"
+rm -f result
 mode="default"
 host="xeep"
 
@@ -36,7 +39,7 @@ function update() {
     flake update --no-registries \
       --update-input master --update-input stable --update-input cmpkgs --update-input pipkgs \
       --update-input nix --update-input home --update-input construct \
-      --update-input hardware --update-input mozilla --update-input wayland
+      --update-input hardware --update-input mozilla  --update-input flake-firefox-nightly --update-input wayland
 }
 
 function flakes() {
@@ -57,10 +60,11 @@ function flakes() {
   if [[ "${1:-""}" == "remote" ]]; then
     shift
     bldrs=(
-      'ssh://cole@azdev.westus2.cloudapp.azure.com x86_64-linux - - - big-parallel kvm'
-      ' ssh://root@nixos x86_64-linux - - - big-parallel kvm'
+      "ssh://azurenixosuser@${azmachine} x86_64-linux - - - big-parallel,kvm"
+      #' ssh://cole@azdev.westus2.cloudapp.azure.com x86_64-linux - - - big-parallel,kvm'
+      #' ssh://root@nixos x86_64-linux - - - big-parallel kvm'
       #' ssh://colemickens@aarch64.nixos.community aarch64-linux'
-      ' ssh://cole@192.168.1.2 aarch64-linux'
+      #' ssh://cole@192.168.1.2 aarch64-linux'
     )
     builders="$(join_by ';' "${bldrs[@]}")"
     args+=(-j 0 --builders-use-substitutes --builders "${builders}")
@@ -68,16 +72,33 @@ function flakes() {
   args+=(".#nixosConfigurations.${host}.config.system.build.toplevel")
 
   if [[ "${1:-""}" == "switch" ]]; then
+    command="${1}"
+    shift
+    # build and set sys profile
     time sudo nix --experimental-features 'nix-command flakes' --pure-eval \
       build --profile /nix/var/nix/profiles/system "${args[@]}"
+
+    # switch-to-cfg switch
     time sudo nix --experimental-features 'nix-command flakes' --pure-eval \
-      shell -vv "$(readlink -f result)" -c switch-to-configuration "${1}"
+      shell -vv "$(readlink -f result)" -c switch-to-configuration "${command}"
   else
     # just build
     time nix --experimental-features 'nix-command flakes' --pure-eval \
       build "${args[@]}"
   fi
-  echo -e "$(readlink -f result)"
+  
+  out="$(readlink -f result)"
+
+  if [[ "${1:-""}" == "push" ]]; then
+    # push to cachix
+    shift
+    time nix-shell \
+      -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-20.03.tar.gz \
+      -p cachix --command \
+        "echo ${out} | env CACHIX_SIGNING_KEY=${cachixkey} cachix push ${cache}" \
+          >/dev/stderr
+  fi
+  echo -e "${out}"
 }
 
 # sadly, this is considerably faster than
@@ -100,7 +121,7 @@ function remote() {
   ## COPY->COMPRESS->RSYNC DRV TO BUILDER
   t="/tmp/tmpnixpath"; #rm -rf "${t}"; trap "rm -rf $t" EXIT;
   nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nix --command "nix copy --to file://${t} ${drv}" # see: https://github.com/NixOS/nix/issues/3696
-  rsync -avh "${t}/" "${remote}:${t}"
+  rsync -ah "${t}/" "${remote}:${t}"
   ssh "${remote}" \
     "nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nix --command \
       \"nix copy --from file://${t} ${drv}\""
@@ -120,22 +141,16 @@ function remote() {
     ## (ON BUILDER): PUSH TO CACHE
     ssh "${remote}" \
       "nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-20.03.tar.gz -p cachix --command \
-        \"echo ${out} | env CACHIX_SIGNING_KEY=${cachixkey} cachix push ${cache}\""
+        \"echo ${out} | env CACHIX_SIGNING_KEY=${cachixkey} cachix push ${cache}\" >/dev/stderr"
   fi
+  echo -e "${out}"
 }
 
 function deploy() {
-  machine="${1}"; shift
   remote="${1}"; shift
+  out="${1}"; shift
 
   set -x
-
-  drv="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \
-    eval --raw ".#machines.${machine}")"
-  drv="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \
-    show-derivation "${drv}" | jq -r 'to_entries[].key')"
-  out="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \
-    show-derivation "${drv}" | jq -r 'to_entries[].value.outputs.out.path')" # TODO: must be a better way # (in v1, there's nix-store query that works)
 
   ## (ON TARGET): REALIZE FROM CACHE
   ssh "${remote}" "nix-store \
@@ -152,9 +167,12 @@ function deploy() {
 }
 
 function default() {
-  nixup update
-  nixup flakes local switch
-  nixup flakes local | cachix push colemickens
+  set -e
+  update
+  flakes local switch
+  flakes local | cachix push colemickens
+  rasp="$(remote raspberry cole@192.168.1.2 push)" # build on rpi and push when done w/ bld
+  deploy cole@192.168.1.2 "${rasp}"
 }
 
 time "${mode}" "${@}"

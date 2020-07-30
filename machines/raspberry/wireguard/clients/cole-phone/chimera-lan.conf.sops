@@ -1,0 +1,28 @@
+{
+	"data": "ENC[AES256_GCM,data:cjLCrgP42OqeSWoKMjncP6SlFONncanF2zfy4hlpXmLz2j1EVCXxbc5ApkkOzELaT1E61XGBlYfom6EUfZhEpTfaujDGNxMwoqlFalUsSCn2qjRwlmc7xHmtN+BqHp8XzsUJdgXPJYou4PbO42Ac5I42gFrI9rPO2orPP+Yq+c3VcHvM54Fgtpv94uWbxQUUf5EWb6X+BJ3sckYb2iBPwHl1H3kjjaCNrbj2MlnGn6JOjrYlI3hyydbkpbestPDAnxvD5mvWnvMArqUL+44ST8OANus+UILH4AsDcXEp9Qe6ncrCGpDSHuFRDr/yqRrDG8g=,iv:xrPU6CZXcYp42oKgy5vY+TmVSK72XX5wzJlt3B00Lnk=,tag:iKpfF20fKcf9aZ+fZ4AeBQ==,type:str]",
+	"sops": {
+		"kms": null,
+		"gcp_kms": null,
+		"azure_kv": [
+			{
+				"vault_url": "https://sops-b5078e18c0c34221.vault.azure.net",
+				"name": "sops-key",
+				"version": "6e538f7c6d714d138226082070d1fe99",
+				"created_at": "2020-07-30T02:06:00Z",
+				"enc": "kFz7XEFJK3oDmV_baI9hBZAK9VzcwmC_4bpklo5hMoSs07cHwTJ5sKNSQUrMyMPxgI-zU-Nw_aMy24wgveC_3Jsn_QZ_RdoXWKjkLI0tv8oCMy5-LxjwQ1lJGJ0dlHzZ2AFf5_4F_2mSK5zKQaeoyZYG1d8KhmQ374uCdSn8n_p7n23S2K-kbDIReZmDmzxJ-mQynJ-U0C-KW_0u53X6FXAabUM75hIP6jABggO7FpKzM4yw0J_uA9YOV3S_YMwMhm3lTltaXoHkghReUF8CHFAiVAMBXIyXNUR4VZyut6Wjm4hA24RLT8obpMuw6OTL_lHxJXbM9GCvTsOBdaw2_A"
+			}
+		],
+		"hc_vault": null,
+		"lastmodified": "2020-07-30T02:06:01Z",
+		"mac": "ENC[AES256_GCM,data:BB+Y4yJGAqFTfbKVDXfQ1r98i7nVcPdvxZn746DZwvigBHKuxwp/dCJFW61jWAl7oHXatFwV9NmNAfRI48Vi6Pdw6LJnxSM9FQmdxNheFzECsTd3BmNvhLRhrPbQpCXZ+rCUvY8epaP4lJC2icPe3kSPZU3Rcz0ZPxF4YCuY+24=,iv:Yr3sBzNW7eHohh8Vavk+xDIlkds/yg/8K7zcp44hR1Y=,tag:ahxPR7VOgHVzOTSNHp0B6w==,type:str]",
+		"pgp": [
+			{
+				"created_at": "2020-07-30T02:06:00Z",
+				"enc": "-----BEGIN PGP MESSAGE-----\n\nwcBMAyUpShfNkFB/AQgAWhl4nfpzbKZg2VP+uuBeIPdPoG5ndquY/jqrBbEQ1Y4O\nHY3V317ioAw8ZoBN1iby4XuFuIxTK6SwHBXYfEvoDTTmM78FiEvB4Whvl923dHjw\nWJAS3tLr7mMcq5t4EA0XR0yYu23XQszKgOfoH1bxPRQ2yA7RvzaUDP4xXD/H7dC8\nr/6WsNaJUMF7UdbjBedxW0RYUgphl0+pD91/VduPkZJyCWG5brIkCqappQ99iohq\n1QyLCOSsBjcKa3sxgsxrUeHO0sBQc+uqN/TOeJLuNj2petF+dJIcCTBlq1dw640k\nuGDgS6Uc9Kr+EinSe+v9AUIa6IJ7iSII4XauKzflEtLgAeSyKom7LXQNEiCD9Nwt\nr3YF4etJ4H3g6eF5I+Du4mG+IQzgXeXdbq+LHgyQTETTP1jgvAYgOE8HPeipZsWN\necTXrAjnduDl5EL6Rq1ZSX5ijh8yJJz3C4TiDzIKDeFCPAA=\n=1TMh\n-----END PGP MESSAGE-----",
+				"fp": "FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4"
+			}
+		],
+		"unencrypted_suffix": "_unencrypted",
+		"version": "3.6.0"
+	}
+}
