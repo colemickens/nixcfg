@@ -29,6 +29,9 @@
     construct.url = "github:matrix-construct/construct";
     construct.inputs.nixpkgs.follows = "cmpkgs";
 
+    sops-nix.url = "github:Mic92/sops-nix/master";
+    sops-nix.inputs.nixpkgs.follows = "cmpkgs";
+
     firenight  = { url = "github:colemickens/flake-firefox-nightly"; };
     firenight.inputs.nixpkgs.follows = "cmpkgs";
 

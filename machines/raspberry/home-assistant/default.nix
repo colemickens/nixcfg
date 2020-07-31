@@ -81,11 +81,11 @@ in {
         };
 
         cast = { media_player = { host = "192.168.1.200"; }; };
-        cloud = { };
+        #cloud = { };
         config = { };
         ## default_config = { }; ## TODO?
         denonavr = { };
-        discovery = { };
+        #discovery = { };
         esphome = { };
         frontend = {
           themes = {
@@ -105,7 +105,7 @@ in {
             host = "192.168.1.119";
           }
         ];
-        mobile_app = {}; # needs hass_nabucasa or w/e
+        #mobile_app = {}; # needs hass_nabucasa or w/e
         # prometheus = { namespace = "hass"; };
         ssdp = { };
         recorder = { };

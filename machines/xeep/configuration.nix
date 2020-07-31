@@ -11,7 +11,7 @@ in
     ../../mixins/libvirt.nix
     ../../mixins/sshd.nix
     ../../mixins/v4l2loopback.nix
-    ../../mixins/loremipsum-media/rclone-cmd.nix
+    #../../mixins/loremipsum-media/rclone-cmd.nix
 
     ../../profiles/sway.nix
 

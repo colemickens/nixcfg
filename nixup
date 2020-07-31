@@ -11,7 +11,7 @@ unset NIX_PATH
 cd "${DIR}"
 rm -f result
 mode="default"
-host="xeep"
+host="raspberry"
 
 function join_by { local IFS="$1"; shift; echo "$*"; }
 
@@ -63,13 +63,13 @@ function flakes() {
       "ssh://azurenixosuser@${azmachine} x86_64-linux - - - big-parallel,kvm"
       #' ssh://cole@azdev.westus2.cloudapp.azure.com x86_64-linux - - - big-parallel,kvm'
       #' ssh://root@nixos x86_64-linux - - - big-parallel kvm'
-      #' ssh://colemickens@aarch64.nixos.community aarch64-linux'
+      ' ssh://colemickens@aarch64.nixos.community aarch64-linux'
       #' ssh://cole@192.168.1.2 aarch64-linux'
     )
     builders="$(join_by ';' "${bldrs[@]}")"
     args+=(-j 0 --builders-use-substitutes --builders "${builders}")
   fi
-  args+=(".#nixosConfigurations.${host}.config.system.build.toplevel")
+  args+=(".#machines.${host}")
 
   if [[ "${1:-""}" == "switch" ]]; then
     command="${1}"
@@ -112,7 +112,9 @@ function remote() {
 
   #drv="$(nix eval --pure-eval ".#nixosConfigurations.${machine}.config.system.build.toplevel")" # TODO: why????
   drv="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \
-    eval --raw ".#machines.${machine}")"
+    eval \
+    --override-input cmpkgs "/home/cole/code/nixpkgs/cmpkgs" --override-input pipkgs "/home/cole/code/nixpkgs/pipkgs" --override-input home "/home/cole/code/home-manager/cmhm" \
+    --raw ".#machines.${machine}")"
   drv="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \
     show-derivation "${drv}" | jq -r 'to_entries[].key')"
   out="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \

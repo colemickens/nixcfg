@@ -16,7 +16,10 @@ in
     ../../mixins/srht-cronjobs.nix
     ../../mixins/unifi.nix
 
-    ../../mixins/loremipsum-media/rclone-mnt.nix
+    #../../mixins/loremipsum-media/rclone-mnt.nix
+
+    ./nfs-netboot-server.nix
+    #./flush.nix
 
     ./sd-image-raspberrypi4-new.nix
   ];
@@ -47,6 +50,16 @@ in
       enable = true;
       allowedUDPPorts = [ 51820 ];
     };
+
+    fileSystems."/export/rpitwo" = {
+      device = "/mnt/rpitwo";
+      options = [ "bind" ];
+    };
+    services.nfs.server.enable = true;
+    services.nfs.server.exports = ''
+      /export          192.168.1.3(rw,fsid=0,no_subtree_check)
+      /export/rpitwo   192.168.1.3(rw,nohide,insecure,no_subtree_check)
+    '';
     
     # networking.wireguard.interfaces."${wg}" = {
     #   ips = [ "172.27.66.1/24" ];
