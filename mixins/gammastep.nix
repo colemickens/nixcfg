@@ -3,7 +3,7 @@
 {
   config = {
     home-manager.users.cole = { pkgs, ... }: {
-      programs.gammastep = {
+      services.gammastep = {
         enable = true;
         longitude = "-122.3321";
         latitude = "47.6062";

@@ -20,9 +20,6 @@
     cmpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
     pipkgs = { url = "github:colemickens/nixpkgs/pipkgs"; };
 
-    nix.url = "github:nixos/nix/flakes";
-    nix.inputs.nixpkgs.follows = "master";
-
     home.url = "github:colemickens/home-manager/cmhm";
     home.inputs.nixpkgs.follows = "cmpkgs";
 
@@ -66,8 +63,8 @@
       devShell = forAllSystems (system:
         (pkgsFor inputs.unstable system).mkShell {
           nativeBuildInputs = with (pkgsFor inputs.unstable system); [
-            #(pkgsFor inputs.master system).nixFlakes
-            (pkgsFor inputs.unstable system).nixFlakes
+            (pkgsFor inputs.master system).nixFlakes
+            #(pkgsFor inputs.unstable system).nixFlakes
             #inputs.nix.packages."${system}".nix  # ?????????????
             (pkgsFor inputs.stable system).cachix
             bash cacert curl git jq mercurial
@@ -76,6 +73,8 @@
           ];
         }
       );
+
+      # packages = // import nixpkgs, expose colePkgs
 
       nixosConfigurations = {
         azdev     = mkSystem "x86_64-linux" inputs.unstable "azdev";

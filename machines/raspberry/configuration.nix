@@ -51,6 +51,11 @@ in
       allowedUDPPorts = [ 51820 ];
     };
 
+    environment.systemPackages = with pkgs; [
+      raspberrypifw
+      raspberrypi-eeprom
+      raspberrypi-tools
+    ];
     fileSystems."/export/rpitwo" = {
       device = "/mnt/rpitwo";
       options = [ "bind" ];

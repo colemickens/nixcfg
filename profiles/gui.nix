@@ -11,7 +11,7 @@ let
 
   extraPkgs = [
     firefoxNightly
-    #firefoxPipewire
+    firefoxPipewire # see mixins/xdg.nix for the xdg parts
     #inputs.chromium.chromium-ozone-dev
   ];
 in
@@ -70,7 +70,6 @@ in
         # misc
         evince
         gimp
-        imv
         qemu
         vscodium
         freerdp
@@ -88,7 +87,7 @@ in
 
         # matrix clients
         fractal
-        nheko
+        #nheko
         quaternion
         spectral
         mirage-im

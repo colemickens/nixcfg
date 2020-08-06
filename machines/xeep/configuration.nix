@@ -22,7 +22,9 @@ in
 
   config = {
     # services = {
-    #   hydra = {
+    #   hydra = let
+      
+    #   in {
     #     enable = true;
     #     hydraURL = "https://localhost:3000";
     #     notificationSender = "hydra@cleo.cat";
@@ -31,9 +33,46 @@ in
     #     package = pkgs.hydra-unstable;
     #   };
     # };
+    # services.cyclops = {
+    #   enable = true;
+    #   config = {
+    #     "default" = {
+    #       # I don't believe in global nix config
+    #       # period.
+    #       trustedSubstituters = [
+    #         "nixpkgs-wayland.cachix.org"
+    #         "nixos-wayland-apps.r10e.org"
+    #         # r10e.org
+    #         # r10e.services
+    #         # r10e.technology
+    #         # r10e.systems
+    #         # reproducible.*
+    #         # 
+    #       ];
+    #       remote-builders = [
+    #         ""
+    #         ""
+    #       ];
+    #     }
+    #     "nixpkgs-wayland-x86_64-linux" = {
+    #       flake = "github:colemickens/nixpkgs-wayland#packages.x86_64-linux";
+    #     };
+    #     "nixpkgs-wayland-x86_64-linux" = {
+    #       flake = "github:colemickens/nixpkgs-wayland#packages.x86_64-linux";
+    #     };
+    #     "nixos-wayland-apps" = {
+    #       flake = "github:colemickens/nixcfg#machines.xeep";
+    #       extraArgs = {
+    #         nextgen = true; # enable flakes + rename + new-cache
+    #       };
+    #       checkInterval = "60s"; # todo: common interval syntax?
+    #       updateInputs = true;
+    #     };
+    #   }
+    # };
     nix = {
       nixPath = [];
-      trustedUsers = ["hydra"];
+      #trustedUsers = ["hydra"];
     };
     # </lol stability>
 

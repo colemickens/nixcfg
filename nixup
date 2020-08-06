@@ -1,7 +1,9 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash shell.nix
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-set -euo pipefail
+set -e
+set -u
+set -o pipefail
 set -x
 
 azmachine="13.66.201.252"
@@ -11,7 +13,10 @@ unset NIX_PATH
 cd "${DIR}"
 rm -f result
 mode="default"
-host="raspberry"
+host="xeep"
+cache="colemickens"
+cachixkey="$(set -e; gopass show "websites/cachix.org/apikey/${cache}")"
+
 
 function join_by { local IFS="$1"; shift; echo "$*"; }
 
@@ -26,7 +31,9 @@ function update() {
     cd ~/code/nixpkgs/master; git reset --hard "nixpkgs/master" && git push origin HEAD -f; cd -
     cd ~/code/nixpkgs/stable; git reset --hard "nixpkgs/nixos-20.03" && git push origin HEAD -f; cd -
 
-    cd ~/code/nixpkgs/cmpkgs; git rebase nixpkgs/nixos-unstable-small; git push origin HEAD -f
+    #cmpkgs-upstream="nixos-unstable-small"
+    cmpkgsupstream="nixpkgs/nixos-unstable"
+    cd ~/code/nixpkgs/cmpkgs; git rebase "${cmpkgsupstream}"; git push origin HEAD -f
     cd ~/code/nixpkgs/pipkgs; git rebase nixpkgs/nixos-unstable; git push origin HEAD -f
   )
 
@@ -39,7 +46,7 @@ function update() {
     flake update --no-registries \
       --update-input master --update-input stable --update-input cmpkgs --update-input pipkgs \
       --update-input nix --update-input home --update-input construct \
-      --update-input hardware --update-input mozilla  --update-input flake-firefox-nightly --update-input wayland
+      --update-input hardware --update-input firenight --update-input wayland
 }
 
 function flakes() {
@@ -51,7 +58,7 @@ function flakes() {
       #--override-input stable "/home/cole/code/nixpkgs/stable"
       --override-input cmpkgs "/home/cole/code/nixpkgs/cmpkgs"
       --override-input pipkgs "/home/cole/code/nixpkgs/pipkgs"
-      #--override-input firenight "/home/cole/code/flake-firefox-nightly"
+      --override-input firenight "/home/cole/code/flake-firefox-nightly"
       #--override-input wayland "/home/cole/code/overlays/nixpkgs-wayland"
       #--override-input hardware "/home/cole/code/extras/nixos-hardware"
       --override-input home "/home/cole/code/home-manager/cmhm"
@@ -86,7 +93,7 @@ function flakes() {
     time nix --experimental-features 'nix-command flakes' --pure-eval \
       build "${args[@]}"
   fi
-  
+
   out="$(readlink -f result)"
 
   if [[ "${1:-""}" == "push" ]]; then
@@ -101,24 +108,25 @@ function flakes() {
   echo -e "${out}"
 }
 
+function instantiate() {
+  machine="${1}"; shift
+  # do it
+  true
+  #drv="$(nix eval --pure-eval ".#nixosConfigurations.${machine}.config.system.build.toplevel")" # TODO: why????
+  set -e
+  drv="$(set -eu; nix --experimental-features 'nix-command flakes' --pure-eval \
+    eval \
+    --raw ".#machines.${machine}")"
+  drv="$(set -euo pipefail; nix --experimental-features 'nix-command flakes' --pure-eval \
+    show-derivation "${drv}" | jq -r 'to_entries[].key')"
+  echo -e "${drv}"
+}
+
 # sadly, this is considerably faster than
 # using nix and its usual remote building functionality
 function remote() {
-  cache="colemickens"
-  cachixkey="$(set -e; gopass show "websites/cachix.org/apikey/${cache}")"
-
-  machine="${1}"; shift
   remote="${1}"; shift
-
-  #drv="$(nix eval --pure-eval ".#nixosConfigurations.${machine}.config.system.build.toplevel")" # TODO: why????
-  drv="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \
-    eval \
-    --override-input cmpkgs "/home/cole/code/nixpkgs/cmpkgs" --override-input pipkgs "/home/cole/code/nixpkgs/pipkgs" --override-input home "/home/cole/code/home-manager/cmhm" \
-    --raw ".#machines.${machine}")"
-  drv="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \
-    show-derivation "${drv}" | jq -r 'to_entries[].key')"
-  out="$(set -e; nix --experimental-features 'nix-command flakes' --pure-eval \
-    show-derivation "${drv}" | jq -r 'to_entries[].value.outputs.out.path')" # TODO: must be a better way # (in v1, there's nix-store query that works)
+  drv="${1}"; shift
 
   ## COPY->COMPRESS->RSYNC DRV TO BUILDER
   t="/tmp/tmpnixpath"; #rm -rf "${t}"; trap "rm -rf $t" EXIT;
@@ -129,14 +137,23 @@ function remote() {
       \"nix copy --from file://${t} ${drv}\""
 
   ## (ON BUILDER): BUILD
-  ssh "${remote}" \
+  # ssh "${remote}" \
+  #   "nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nixFlakes --command \
+  #     \"nix --experimental-features 'nix-command flakes' --pure-eval \
+  #       --option 'extra-binary-caches' 'https://cache.nixos.org' \
+  #       --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=' \
+  #       --option 'build-cores' '0' \
+  #       --option 'narinfo-cache-negative-ttl' '0' \
+  #         build --keep-going ${drv}\""
+
+  out="$(ssh "${remote}" \
     "nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nixFlakes --command \
-      \"nix --experimental-features 'nix-command flakes' --pure-eval \
+      \"nix-build \
         --option 'extra-binary-caches' 'https://cache.nixos.org' \
         --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=' \
         --option 'build-cores' '0' \
         --option 'narinfo-cache-negative-ttl' '0' \
-          build --keep-going ${drv}\""
+        --keep-going ${drv}\"")"
 
   if [[ "${1:-""}" == "push" ]]; then
     shift
@@ -169,12 +186,38 @@ function deploy() {
 }
 
 function default() {
-  set -e
   update
-  flakes local switch
-  flakes local | cachix push colemickens
-  rasp="$(remote raspberry cole@192.168.1.2 push)" # build on rpi and push when done w/ bld
+  flakes local push
+}
+
+function pi() {
+  drv=$(instantiate raspberry)
+  rasp="$(remote "cole@192.168.1.2" $drv push)" # build on rpi and push when done w/ bld
   deploy cole@192.168.1.2 "${rasp}"
 }
 
+function pixel() {
+  cd ~/code/mobile-nixos-blueline
+  export NIX_PATH=nixpkgs=/home/cole/code/nixpkgs/cmpkgs
+  drv="$(nix-instantiate examples/demo/ --argstr device google-blueline -A android-burn-tool)"
+  pixel="$(remote cole@13.77.182.36 $drv push)" # build on rpi and push when done w/ bld
+  #pixel="$(remote $drv root@nixos push)" # build on rpi and push when done w/ bld
+}
+
+function azdev() {
+  image_id="$(AZURE_GROUP=colemick-dev ./scripts/upload-image.sh '.#examples.basic.azureImage')"
+  az group create -n "colemick-dev" -l "westus2"
+  az vm create \
+    --name "colemick-dev" \
+    --resource-group "colemick-dev" \
+    --image "${image_id}" \
+    --size "Standard_D32s_v3" \
+    --admin-username "cole" --location "westus2" \
+    --ssh-key-values "$(ssh-add -L)" \
+    --ephemeral-os-disk true
+}
+
 time "${mode}" "${@}"
+# p=
+# ssh -A cole@192.168.1.2 nix copy --from ssh://colemickens@aarch64.nixos.community --no-check-sigs $p
+# nixup deploy cole@192.168.1.2 $p

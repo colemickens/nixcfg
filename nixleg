@@ -1,0 +1,17 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -i bash shell.nix
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+set -e
+set -u
+set -o pipefail
+set -x
+
+unset NIX_PATH
+
+# flake attribute to build:
+flakebuild="${1}"; shift
+
+out="$(set -eu; nix --experimental-features 'nix-command flakes' --pure-eval eval --raw "${flakebuild}")"
+drv="$(set -euo pipefail; nix --experimental-features 'nix-command flakes' --pure-eval show-derivation "${drv}" | jq -r 'to_entries[].key')"
+
+nix-build "${drv}" "${@}"

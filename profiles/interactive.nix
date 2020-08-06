@@ -21,9 +21,9 @@ in
 
     ../mixins/gpg-agent.nix
 
-    ../mixins/cachix/cachix.nix
+    #../mixins/cachix/cachix.nix
     ../mixins/gopass/gopass.nix
-    ../mixins/mega/mega.nix
+    #../mixins/mega/mega.nix
     ../mixins/nushell.nix
     ../mixins/xdg.nix
   ];
@@ -62,6 +62,12 @@ in
         cvs mercurial subversion
         #mitmproxy
         nix-du
+
+        # https://zaiste.net/posts/shell-commands-rust/
+        dust tealdeer ytop
+        bandwidth
+        fd
+        #grex # regex
 
         sops
 

@@ -4,13 +4,17 @@
   imports = [
     ./gui.nix
     
-    #../mixins/gammastep.nix
+    ../mixins/gammastep.nix
     ../mixins/mako.nix
     ../mixins/sway.nix
     ../mixins/waybar.nix
   ];
   config = {
     home-manager.users.cole = { pkgs, ... }: {
+      
+      # block auto-sway reload, it crashes my machine
+      xdg.configFile."sway/config".onChange = lib.mkForce "";
+
       home.sessionVariables = {
         MOZ_ENABLE_WAYLAND = "1";
         MOZ_USE_XINPUT2 = "1";
@@ -27,10 +31,11 @@
       home.packages = with pkgs; [
         # sway-related
         drm_info
-        grim 
+        grim
+        imv
         qt5.qtwayland
         slurp
-        udiskie 
+        udiskie
         wayvnc
         wf-recorder
         wl-clipboard

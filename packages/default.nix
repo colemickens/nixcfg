@@ -10,6 +10,8 @@ let colePackages = {
     neovim-unwrapped = pkgs.neovim-unwrapped;
   };
   passrs = pkgs.callPackage ./passrs {};
+  raspberrypi-eeprom = pkgs.callPackage ./raspberrypi-eeprom {};
+  rpi4-uefi-fw = pkgs.callPackage ./rpi4-uefi-fw {};
 };
 in
   colePackages // { inherit colePackages; }
