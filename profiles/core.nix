@@ -8,9 +8,12 @@ in
     ./user.nix
     inputs.home.nixosModules."home-manager"
     
+    ../mixins/common.nix
+    
     ../mixins/bash.nix
     ../mixins/git.nix
     ../mixins/neovim.nix
+    ../mixins/ssh.nix
     ../mixins/tmux.nix
     ../mixins/zsh.nix
   ];

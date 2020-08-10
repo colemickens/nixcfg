@@ -1,8 +1,13 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 with lib;
 
 {
+  imports = [
+    inputs.sops-nix.nixosModules.sops
+    ../secrets
+  ];
+  
   config = {
     boot = {
       tmpOnTmpfs = true;

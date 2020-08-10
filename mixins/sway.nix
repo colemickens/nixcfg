@@ -10,7 +10,8 @@ let
 
   terminal = "${pkgs.termite}/bin/termite";
   #browser = "${pkgs.firefox-bin}/bin/firefox";
-  browser = "${inputs.firenight.packages."${pkgs.system}".firefox-nightly-bin}/bin/firefox";
+  #browser = "${inputs.firefox.firefox-nightly-bin}/bin/firefox";
+  browser = "firefox-nightly";
 
   # PASS
   gp = "${pkgs.gopass}/bin/gopass";

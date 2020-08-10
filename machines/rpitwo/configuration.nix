@@ -27,7 +27,7 @@
   networking.wireless.enable = false;
   networking.interfaces."eth0".ipv4.addresses = [
     {
-      address = "192.168.1.4";
+      address = "192.168.1.3";
       prefixLength = 16;
     }
   ];
@@ -38,7 +38,10 @@
   networking.firewall.allowedUDPPorts = [ 51820 ];
 
   boot = {
-    #kernelPackages = pkgs.linuxPackages_latest;
+    loader.grub.enable = false;
+    loader.raspberryPi.enable = true;
+    loader.raspberryPi.version = 4;
+    kernelPackages = pkgs.linuxPackages_rpi4;
     supportedFilesystems = [ "zfs" ];
     initrd.availableKernelModules = [ "xhci_pci" "usb_storage" ];
     kernelModules = [ "xhci_pci" "usb_storage" ];

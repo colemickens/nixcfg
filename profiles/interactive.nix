@@ -21,7 +21,7 @@ in
 
     ../mixins/gpg-agent.nix
 
-    #../mixins/cachix/cachix.nix
+    ../mixins/cachix.nix
     ../mixins/gopass/gopass.nix
     #../mixins/mega/mega.nix
     ../mixins/nushell.nix
@@ -58,18 +58,22 @@ in
         wget curl stow ncdu tree
         git-crypt gopass gnupg passrs ripasso-cursive
         openssh autossh mosh sshuttle
-        gitAndTools.hub gist tig #git-absorb
+        gist tig #git-absorb
+        github-cli
         cvs mercurial subversion
         #mitmproxy
-        nix-du
-
+        nix-du pv
+        dnsutils
+        usbutils
+        yubikey-agent
+        
         # https://zaiste.net/posts/shell-commands-rust/
         dust tealdeer ytop
         bandwidth
         fd
-        #grex # regex
+        grex # regex
 
-        sops
+        sops age
 
         htop iotop which binutils.bintools
         unrar parallel unzip xz zip

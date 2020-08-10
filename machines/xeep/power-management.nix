@@ -7,13 +7,13 @@
     ];
 
     services.tlp.enable = true;
-    services.tlp.extraConfig = ''
-      #START_CHARGE_THRESH_BAT0=75
-      #STOP_CHARGE_THRESH_BAT0=80
-      CPU_SCALING_GOVERNOR_ON_BAT=powersave
-      CPU_SCALING_GOVERNOR_ON_AC=performance
-      ENERGY_PERF_POLICY_ON_BAT=powersave
-    '';
+    services.tlp.settings = {
+    #   #START_CHARGE_THRESH_BAT0=75
+    #   #STOP_CHARGE_THRESH_BAT0=80
+    #   CPU_SCALING_GOVERNOR_ON_BAT=powersave
+       CPU_SCALING_GOVERNOR_ON_AC = "performance";
+    #   ENERGY_PERF_POLICY_ON_BAT=powersave
+    };
     powerManagement.enable = true;
     services.upower.enable = true; # fucking tired of it shutting down with hours of battery left
 

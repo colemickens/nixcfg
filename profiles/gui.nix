@@ -1,7 +1,7 @@
 { pkgs, lib, config, inputs, ... }:
 
 let
-  firefoxFlake = inputs.firenight.packages.${pkgs.system};
+  firefoxFlake = inputs.firefox.packages.${pkgs.system};
   firefoxNightly = pkgs.writeShellScriptBin "firefox-nightly" ''
     exec ${firefoxFlake.firefox-nightly-bin}/bin/firefox "''${@}"
   '';
@@ -10,9 +10,10 @@ let
   '';
 
   extraPkgs = [
-    firefoxNightly
-    firefoxPipewire # see mixins/xdg.nix for the xdg parts
-    #inputs.chromium.chromium-ozone-dev
+    # see mixins/xdg.nix for the xdg parts
+    firefoxNightly   # this would test if we got the wrapper working
+    #firefoxPipewire # this tests if the pipewire-0.3 patched overlay build works
+    #firefox          # this tests if the pipewire-0.3 patched nixpkgs build works
   ];
 in
 {
@@ -58,6 +59,8 @@ in
       };
     };
 
+    services.pcscd.enable = true;
+
     home-manager.users.cole = { pkgs, ... }: {
       home.sessionVariables = {
         BROWSER = "firefox";
@@ -102,6 +105,7 @@ in
 
         # yucky non-free
         discord
+        ripcord
         spotify
       ]
       ++ builtins.attrValues pkgs.customGuiCommands # include custom overlay gui pkgs

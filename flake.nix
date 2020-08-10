@@ -29,8 +29,11 @@
     sops-nix.url = "github:Mic92/sops-nix/master";
     sops-nix.inputs.nixpkgs.follows = "cmpkgs";
 
-    firenight  = { url = "github:colemickens/flake-firefox-nightly"; };
-    firenight.inputs.nixpkgs.follows = "cmpkgs";
+    firefox  = { url = "github:colemickens/flake-firefox-nightly"; };
+    firefox.inputs.nixpkgs.follows = "cmpkgs";
+
+    chromium  = { url = "github:colemickens/flake-chromium"; };
+    chromium.inputs.nixpkgs.follows = "cmpkgs";
 
     wayland  = { url = "github:colemickens/nixpkgs-wayland"; };
     # these are kind of weird, they don't really apply
@@ -57,19 +60,22 @@
         pkgs_.lib.nixosSystem {
           system = sys;
           modules = [(./. + "/machines/${hostname}/configuration.nix")];
-          specialArgs.inputs = inputs;
+          specialArgs = {
+            inputs = inputs;
+            #secrets = import ./secrets;
+          };
         };
     in rec {
       devShell = forAllSystems (system:
         (pkgsFor inputs.unstable system).mkShell {
-          nativeBuildInputs = with (pkgsFor inputs.unstable system); [
+          nativeBuildInputs = with (pkgsFor inputs.cmpkgs system); [
             (pkgsFor inputs.master system).nixFlakes
-            #(pkgsFor inputs.unstable system).nixFlakes
-            #inputs.nix.packages."${system}".nix  # ?????????????
             (pkgsFor inputs.stable system).cachix
             bash cacert curl git jq mercurial
             nettools openssh ripgrep rsync
             nix-build-uncached nix-prefetch-git
+            packet-cli
+            sops
           ];
         }
       );
@@ -77,21 +83,47 @@
       # packages = // import nixpkgs, expose colePkgs
 
       nixosConfigurations = {
-        azdev     = mkSystem "x86_64-linux" inputs.unstable "azdev";
-        raspberry = mkSystem "aarch64-linux" inputs.pipkgs "raspberry";
-        #fastraz   = mkSystem "aarch64-linux" inputs.cmpkgs "raspberry";
-        xeep      = mkSystem "x86_64-linux"  inputs.cmpkgs "xeep";
+        azdev  = mkSystem "x86_64-linux" inputs.unstable "azdev";
+        rpione = mkSystem "aarch64-linux" inputs.pipkgs "rpione";
+        xeep   = mkSystem "x86_64-linux"  inputs.cmpkgs "xeep";
       };
 
       machines = {
         azdev = inputs.self.nixosConfigurations.azdev.config.system.build.azureImage;
         xeep = inputs.self.nixosConfigurations.xeep.config.system.build.toplevel;
-        raspberry = inputs.self.nixosConfigurations.raspberry.config.system.build.toplevel;
+        rpione = inputs.self.nixosConfigurations.rpione.config.system.build.toplevel;
       };
 
       defaultPackage = [
         inputs.self.nixosConfigurations.xeep.config.system.build.toplevel
-        inputs.self.nixosConfigurations.raspberry.config.system.build.toplevel
+        inputs.self.nixosConfigurations.rpione.config.system.build.toplevel
       ];
+
+      cyclopsJobs = {
+        # 1. provision an age1 key
+        # 2. get cyclops's advertised age1 pubkey
+        # 3. add to .sops.yml
+        # 4. ./util.sh e
+
+        # cyclops:
+        # - /nix is shared, but only per-customer
+        # - same story with the cache
+        xeep-update = {
+          triggers = {
+            cron = "*/*"; # use systemd format?
+          };
+          secrets = [
+            { name="id_ed25519";   sopsFile = ./secrets/encrypted/id_ed25519;   path = "$HOME/.ssh/id_ed25519"; }
+            { name="cachix.dhall"; sopsFile = ./secrets/encrypted/cachix.dhall; path = "$HOME/.cachix/cachix.dhall"; }
+          ];
+          stages = [
+            # TODO: we can make some of these steps generic+shared, yay nix
+            { name="prep";          script="./prep.sh"; }
+            { name="update";        script="./update.sh"; }
+            { name="build";         script="./build.sh"; }
+            { name="update-flakes"; script="./update-flakes.sh"; }
+          ];
+        };
+      };
     };
 }

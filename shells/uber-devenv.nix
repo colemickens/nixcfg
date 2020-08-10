@@ -22,6 +22,7 @@ pkgs.stdenv.mkDerivation {
     go
     lldb
     python3
+    pcsclite
   ];
 
   buildInputs = with pkgs; [
