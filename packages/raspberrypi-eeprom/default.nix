@@ -2,13 +2,14 @@
 , binutils-unwrapped, raspberrypi-tools, makeWrapper }:
 
 let
-  version = "2020.07.16-138a1";
+  version = "2020.07.31-stable";
+  rev = "0e7da7ecd84cdf7b65d6fc8d43446aee665187dc";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
-    rev = "v${version}";
-    sha256 = "sha256-/4YpAUKsgfFp9pLi5WAbqVxycoEwzfLUmDRBYaPMqio=";
+    inherit rev;
+    sha256 = "sha256-1kYKCQ2idMjeVACC46WYv0acouUbcLWkTLGGmfw4yiQ=";
   };
 
   configFile = writeText "rpi-eeprom-update-config" ''

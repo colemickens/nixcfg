@@ -7,10 +7,12 @@ with lib;
     inputs.sops-nix.nixosModules.sops
     ../secrets
   ];
-  
+
   config = {
+    i18n.defaultLocale = "en_US.UTF-8";
+
     boot = {
-      tmpOnTmpfs = true;
+      tmpOnTmpfs = true;   # probably not appropriate for all machines (rpi)
       cleanTmpDir = true;
       kernel.sysctl = {
         "fs.file-max" = 100000;
@@ -19,6 +21,8 @@ with lib;
       };
     };
 
+    environment.systemPackages = with pkgs; [ coreutils ];
+    
     # TODO: root ssh config to get nix daemon to use user's gpg-agent for ssh (closer to gpg conf hopefully)
 
     nix = {
@@ -34,18 +38,21 @@ with lib;
         "https://nixpkgs-wayland.cachix.org"
       ];
       trustedUsers = [ "@wheel" "root" ];
+
+      package = pkgs.nixFlakes;
+      extraOptions =
+        lib.optionalString (config.nix.package == pkgs.nixFlakes)
+          "experimental-features = nix-command flakes ca-references recursive-nix";
     };
 
-    users.users."root".hashedPassword = "$6$k.vT0coFt3$BbZN9jqp6Yw75v9H/wgFs9MZfd5Ycsfthzt3Jdw8G93YhaiFjkmpY5vCvJ.HYtw0PZOye6N9tBjNS698tM3i/1";
+    security.sudo.wheelNeedsPassword = false;
+    users.mutableUsers = false;
+    users.users."root".initialHashedPassword = lib.mkForce "$6$k.vT0coFt3$BbZN9jqp6Yw75v9H/wgFs9MZfd5Ycsfthzt3Jdw8G93YhaiFjkmpY5vCvJ.HYtw0PZOye6N9tBjNS698tM3i/1";
+    users.users."root".hashedPassword = config.users.users."root".initialHashedPassword;
 
     nixpkgs.overlays = [
       (import ../packages)
     ];
-
-    i18n.defaultLocale = "en_US.UTF-8";
-
-    security.sudo.wheelNeedsPassword = false;
-    users.mutableUsers = false;
   };
 }
 

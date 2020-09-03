@@ -50,7 +50,7 @@
             cpu.interval = 2;
             cpu.format = "cpu load({load}%) use({usage}%)";
             memory.format = "mem {}%";
-            backlight.format = "light {percent}%";
+            #backlight.format = "light {percent}%";
             tray.spacing = 10;
             # battery
             clock.format = "{:%a %b %d %H:%M}";

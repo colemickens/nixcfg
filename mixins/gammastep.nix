@@ -4,7 +4,7 @@
   config = {
     home-manager.users.cole = { pkgs, ... }: {
       services.gammastep = {
-        enable = true;
+        enable = (pkgs.system == "x86_64-linux");
         longitude = "-122.3321";
         latitude = "47.6062";
         temperature.day = 6500;

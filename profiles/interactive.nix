@@ -24,9 +24,11 @@ in
     ../mixins/cachix.nix
     ../mixins/gopass/gopass.nix
     #../mixins/mega/mega.nix
-    ../mixins/nushell.nix
+    #../mixins/nushell.nix
     ../mixins/xdg.nix
-  ];
+  ]
+ # ++ lib.optionals (pkgs.system=="x86_64-linux") [ ../mixins/nushell.nix ]
+  ;
 
   config = {
     # HM: ca.desrt.dconf error:
@@ -45,7 +47,16 @@ in
         ".gdbinit".source = (pkgs.writeText "gdbinit" ''set auto-load safe-path /nix/store'');
       };
       programs = {
-        direnv.enable = true;
+        direnv = {
+          enable = true;
+          enableNixDirenvIntegration = true;
+          stdlib = ''
+            # $HOME/.config/direnv/direnvrc
+            : ''${XDG_CACHE_HOME:=$HOME/.cache}
+            pwd_hash=$(echo -n $PWD | sha256sum | cut -d ' ' -f 1)
+            direnv_layout_dir=$XDG_CACHE_HOME/direnv/layouts/$pwd_hash
+          '';
+        };
         git.package = pkgs.gitAndTools.gitFull;
         gpg.enable = true;
         htop.enable = true;
@@ -53,7 +64,7 @@ in
       home.packages = with pkgs; [
         #nixops
         asciinema
-        wget curl
+        wget curl rsync
         ripgrep jq fzf
         wget curl stow ncdu tree
         git-crypt gopass gnupg passrs ripasso-cursive
@@ -65,16 +76,18 @@ in
         nix-du pv
         dnsutils
         usbutils
-        yubikey-agent
-        
+        yubico-piv-tool
+
         # https://zaiste.net/posts/shell-commands-rust/
-        dust tealdeer ytop
-        bandwidth
+        tealdeer ytop
+        du-dust
         fd
-        grex # regex
+        #grex # regex
 
         sops age
+        meli
 
+        #bottom
         htop iotop which binutils.bintools
         unrar parallel unzip xz zip
         gomuks #rumatui
@@ -91,8 +104,12 @@ in
         aria2 megatools youtube-dl plowshare
 
         # eh?
+        cordless
         xdg_utils
-      ] ++ builtins.attrValues customCommands;
+      ]
+      ++ builtins.attrValues customCommands
+      ++ lib.optionals (pkgs.system == "x86_64-linux") [pkgs.bandwidth]
+      ;
     };
   };
 }

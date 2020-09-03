@@ -9,7 +9,7 @@ function ssh-to-pgp() {
 }
 
 function d() {
-  cd encrypted
+  mkdir -p encrypted; cd encrypted
   for f in *; do
     sops \
       --input-type binary --output-type binary \
@@ -18,7 +18,7 @@ function d() {
 }
 
 function e() {
-  cd unencrypted
+  mkdir -p unencrypted; cd unencrypted
   for f in *; do
     sops \
       --input-type binary --output-type binary \
@@ -28,19 +28,22 @@ function e() {
 
 function keys() {
   mkdir -p ./keys
-  
-  
 
   set +x # fucking bash (otherwise it shits out a set-x echo line into the fp file)
   host="rpione"
   ssh "cole@192.168.1.2" "sudo cat /etc/ssh/ssh_host_rsa_key" \
     | ssh-to-pgp -o "./keys/${host}.pub" 2> "./keys/${host}.fingerprint"
-  
+
   set +x # fucking bash
   host="xeep"
   ssh "cole@${host}" "sudo cat /etc/ssh/ssh_host_rsa_key" \
     | ssh-to-pgp -o "./keys/${host}.pub" 2> "./keys/${host}.fingerprint"
-  
+
+  set +x # fucking bash
+  host="slynux"
+  ssh "cole@${host}" "sudo cat /etc/ssh/ssh_host_rsa_key" \
+    | ssh-to-pgp -o "./keys/${host}.pub" 2> "./keys/${host}.fingerprint"
+
   set -x
   kid="0x62556A61E301DC21" # colemickens
   gpg --fingerprint --fingerprint "${kid}" | grep -A1 "${kid}"  \
@@ -67,7 +70,7 @@ function newkey() {
   ssh-keygen -q -t rsa -N '' -f "${d}/id_rsa" <<<y 2>&1 >/dev/null
   ssh-to-pgp -private-key -i "${d}/id_rsa" > ./unencrypted/${host}.asc
   cat "${d}/id_rsa" | ssh-to-pgp -o "keys/${host}.pub" 2>"./keys/${host}.fingerprint"
-  
+
   # copy to yubikey?
   echo "now maybe copy ./unencrypted/${host}.asc to yubikey"
 

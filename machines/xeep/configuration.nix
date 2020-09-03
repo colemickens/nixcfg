@@ -23,7 +23,7 @@ in
   config = {
     # services = {
     #   hydra = let
-      
+
     #   in {
     #     enable = true;
     #     hydraURL = "https://localhost:3000";
@@ -47,7 +47,7 @@ in
     #         # r10e.technology
     #         # r10e.systems
     #         # reproducible.*
-    #         # 
+    #         #
     #       ];
     #       remote-builders = [
     #         ""

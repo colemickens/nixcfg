@@ -1,4 +1,4 @@
-{ pkgs, modulesPath, ... }:
+{ pkgs, modulesPath, inputs, ... }:
 let
   lib = pkgs.lib;
   eth = "eth0";
@@ -13,7 +13,7 @@ in
     ./modules/wireguard
 
     #./modules/drone.nix
-    ./modules/cyclops.nix
+    #./modules/cyclops.nix
     ./modules/netboot-server.nix
     ./modules/nginx.nix
     ./modules/postgres.nix
@@ -22,7 +22,7 @@ in
     ../../mixins/docker.nix
     ../../mixins/plex-mpv.nix
     ../../mixins/sshd.nix
-    #../../mixins/srht-cronjobs.nix
+    ../../mixins/srht-cronjobs.nix
     ../../mixins/unifi.nix
 
     #../../mixins/loremipsum-media/rclone-mnt.nix

@@ -32,7 +32,6 @@
         # sway-related
         drm_info
         grim
-        imv
         qt5.qtwayland
         slurp
         udiskie
@@ -41,7 +40,7 @@
         wl-clipboard
         wl-gammactl
         xwayland
-      ];
+      ] ++ lib.optionals (pkgs.system == "x86_64-linux") [ pkgs.imv ];
     };
   };
 }

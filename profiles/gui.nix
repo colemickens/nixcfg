@@ -5,16 +5,6 @@ let
   firefoxNightly = pkgs.writeShellScriptBin "firefox-nightly" ''
     exec ${firefoxFlake.firefox-nightly-bin}/bin/firefox "''${@}"
   '';
-  firefoxPipewire = pkgs.writeShellScriptBin "firefox-pipewire" ''
-    exec ${firefoxFlake.firefox-pipewire}/bin/firefox "''${@}"
-  '';
-
-  extraPkgs = [
-    # see mixins/xdg.nix for the xdg parts
-    firefoxNightly   # this would test if we got the wrapper working
-    #firefoxPipewire # this tests if the pipewire-0.3 patched overlay build works
-    #firefox          # this tests if the pipewire-0.3 patched nixpkgs build works
-  ];
 in
 {
   imports = [
@@ -27,7 +17,7 @@ in
     ../mixins/kitty.nix
     ../mixins/mpv.nix
     ../mixins/mako.nix
-    ../mixins/obs.nix
+    #../mixins/obs.nix
     ../mixins/qt.nix
     ../mixins/termite.nix
   ];
@@ -42,13 +32,14 @@ in
     hardware = {
       opengl = {
         enable = true;
-        extraPackages = with pkgs; [
+        extraPackages = []
+        ++ lib.optionals (pkgs.system=="x86_64-linux") (with pkgs; [
           intel-media-driver
           vaapiIntel
           vaapiVdpau
           libvdpau-va-gl
-        ];
-        driSupport32Bit = true;
+        ]);
+        driSupport32Bit = (pkgs.system=="x86_64-linux");
       };
       pulseaudio.enable = true;
     };
@@ -76,6 +67,7 @@ in
         qemu
         vscodium
         freerdp
+        wlvncc
         vlc
 
         # misc utils for desktop
@@ -97,19 +89,35 @@ in
         element-desktop
 
         # browsers
-        firefox-bin
+        firefox
         chromium
-        torbrowser
-        falkon
+        #firefox-bin
+        #torbrowser
+        #falkon
         #nyxt
 
         # yucky non-free
-        discord
-        ripcord
-        spotify
+        #discord
+        gtkcord3
+        #ripcord
+        #spotify
+
+        # games
+        #inputs.nixos-veloren.packages.${pkgs.system}.veloren
       ]
       ++ builtins.attrValues pkgs.customGuiCommands # include custom overlay gui pkgs
-      ++ extraPkgs; # include custom pkgs from this file (firefoxNightly with flakes)
+      ++ lib.optionals (pkgs.system == "x86_64-linux") [
+        pkgs.vscodium
+        firefoxNightly
+        pkgs.chromium
+        pkgs.torbrowser
+        pkgs.falkon
+
+        # yucky non-free
+        pkgs.discord
+        pkgs.ripcord
+        pkgs.spotify
+      ];
     };
   };
 }

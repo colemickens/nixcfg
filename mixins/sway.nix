@@ -9,9 +9,9 @@ let
   drun = "${wofi} --show drun";
 
   terminal = "${pkgs.termite}/bin/termite";
-  #browser = "${pkgs.firefox-bin}/bin/firefox";
+  browser = "${pkgs.firefox-bin}/bin/firefox";
   #browser = "${inputs.firefox.firefox-nightly-bin}/bin/firefox";
-  browser = "firefox-nightly";
+  #browser = "firefox";
 
   # PASS
   gp = "${pkgs.gopass}/bin/gopass";
@@ -24,6 +24,7 @@ let
   out_alien = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
 
   # INPUTS
+  in_pine_touchpad = "9610:30:HAILUCK_CO.,LTD_USB_KEYBOARD_Touchpad";
   in_touchpad = "1739:30383:DELL07E6:00_06CB:76AF_Touchpad";
   in_logi = "1133:16505:Logitech_G_Pro";
 
@@ -82,7 +83,7 @@ in
       capitaine-cursors
     ];
 
-    home-manager.users.cole = { pkgs, ... }: {  
+    home-manager.users.cole = { pkgs, ... }: {
       wayland.windowManager.sway = {
         enable = true;
         #systemdIntegration = true; # beta
@@ -137,6 +138,15 @@ in
               accel_profile = "adaptive";
               pointer_accel = "1";
             };
+            "${in_pine_touchpad}" = {
+              click_method = "clickfinger";
+              tap = "enabled";
+              dwt = "enabled";
+              scroll_method = "two_finger";
+              natural_scroll = "enabled";
+              accel_profile = "adaptive";
+              pointer_accel = ".5";
+            };
             "${in_logi}" = {
               accel_profile = "adaptive";
               pointer_accel = ".1";
@@ -167,8 +177,8 @@ in
           }];
           keybindings = {
             "${modifier}+Return" = "exec ${terminal}";
-            "${modifier}+Shift+Return" = "exec ${browser}";
-            "${modifier}+Shift+Backspace" = "exec ${editor}";
+            #"${modifier}+Shift+Return" = "exec ${browser}";
+            #"${modifier}+Shift+Backspace" = "exec ${editor}";
             "${modifier}+Shift+q" = "kill";
             "${modifier}+Shift+c" = "reload";
             "${modifier}+Delete" = "${swaylockcmd}";

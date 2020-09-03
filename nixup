@@ -1,5 +1,7 @@
-#! /usr/bin/env nix-shell
-#! nix-shell -i bash shell.nix
+#! /usr/bin/env bash
+
+##! /usr/bin/env nix-shell
+##! nix-shell -i bash shell.nix
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 set -euo pipefail
 set -x
@@ -9,6 +11,8 @@ cd "${DIR}"
 
 cache="colemickens"
 cachixkey="$(set -e; gopass show "websites/cachix.org/apikey/${cache}")"
+tarunstable="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz"
+tarstable="https://github.com/nixos/nixpkgs/archive/nixos-20.03.tar.gz"
 
 function update() {
   (set -e; cd "./packages" && ./update.sh) # our overlay-pkgs
@@ -17,10 +21,11 @@ function update() {
     cd ~/code/nixpkgs/master; git reset --hard "nixpkgs/master" && git push origin HEAD -f; cd -
     cd ~/code/nixpkgs/stable; git reset --hard "nixpkgs/nixos-20.03" && git push origin HEAD -f; cd -
 
-    cmpkgsupstream="nixpkgs/nixos-unstable-small"
+    #cmpkgsupstream="nixpkgs/nixos-unstable-small"
+    cmpkgsupstream="nixpkgs/nixos-unstable"
     pipkgsupstream="nixpkgs/nixos-unstable"
     cd ~/code/nixpkgs/cmpkgs; git rebase "${cmpkgsupstream}"; git push origin HEAD -f
-    #cd ~/code/nixpkgs/pipkgs; git rebase "${pipkgsupstream}"; git push origin HEAD -f
+    cd ~/code/nixpkgs/pipkgs; git rebase "${pipkgsupstream}"; git push origin HEAD -f
   )
 
   # flakes (TODO: no really, what does this do?)
@@ -32,14 +37,17 @@ function update() {
     flake update --no-registries \
       --update-input master --update-input stable --update-input cmpkgs --update-input pipkgs \
       --update-input nix --update-input home --update-input construct \
-      --update-input hardware --update-input firefox --update-input wayland
+      --update-input hardware --update-input firefox --update-input wayland \
+      --update-input mobile-nixos --update-input wip-pinebook-pro \
+      --update-input nixos-veloren
 }
 
 buildargs=(
-  --option 'extra-binary-caches' 'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org' \
-  --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA=' \
-  --option 'build-cores' '0' \
+  --option 'extra-binary-caches' 'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org'
+  --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA='
+  --option 'build-cores' '0'
   --option 'narinfo-cache-negative-ttl' '0'
+  -j 2
 )
 
 function build() {
@@ -47,7 +55,7 @@ function build() {
   thing="${1:-".#machines.$(hostname)"}"; shift
   drv="$(set -euo pipefail; instantiate "${thing}")"
   out="$(set -euo pipefail; nix-build "${buildargs[@]}" --keep-going "${drv}")"
-  echo "${out}" | env CACHIX_SIGNING_KEY=${cachixkey} cachix push "${cache}" &>/dev/stderr
+  #echo "${out}" | env CACHIX_SIGNING_KEY=${cachixkey} cachix push "${cache}" &>/dev/stderr
   echo -e "${out}"
 }
 
@@ -71,7 +79,10 @@ function instantiate() {
       --override-input firefox "/home/cole/code/flake-firefox-nightly" \
       --override-input sops-nix "/home/cole/code/sops-nix" \
       --override-input home "/home/cole/code/home-manager/cmhm" \
-    --raw "${thing}")"
+      --override-input mobile-nixos "/home/cole/code/mobile-nixos" \
+      --override-input wip-pinebook-pro "/home/cole/code/wip-pinebook-pro" \
+      --override-input nixos-veloren "/home/cole/code/nixos-veloren" \
+      --raw "${thing}")"
   drv="$(set -euo pipefail; nix --experimental-features 'nix-command flakes' --pure-eval \
     show-derivation "${drv}" | jq -r 'to_entries[].key')"
   echo -e "${drv}"
@@ -85,28 +96,28 @@ function remote() {
 
   ## COPY->COMPRESS->RSYNC DRV TO BUILDER
   t="/tmp/tmpnixpath"; #rm -rf "${t}"; trap "rm -rf $t" EXIT;
+
+  # local, push drvs to remote
   nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nix --command "nix copy --to file://${t} ${drv}" # see: https://github.com/NixOS/nix/issues/3696
   rsync -ah "${t}/" "${remote}:${t}"
-  ssh "${remote}" \
-    "nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nix --command \
-      \"nix copy --from file://${t} ${drv}\""
-  out="$(set -euo pipefail; ssh "${remote}" \
-    "nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nixFlakes --command \
-      \"nix-build ${buildargs[@]} --keep-going ${drv}\"")"
-  ssh "${remote}" \
-    "nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-20.03.tar.gz -p cachix --command \
-      \"echo ${out} | env CACHIX_SIGNING_KEY=${cachixkey} cachix push ${cache}\" >/dev/stderr"
-  echo -e "${out}"
+
+  # build drvs, push to cachix
+  ssh "${remote}" "nix-shell -I nixpkgs=${tarstable}   -p nix       --command \"nix copy --from file://${t} ${drv}\"" &>/dev/stderr
+  ssh "${remote}" "nix-shell -I nixpkgs=${tarunstable} -p nixFlakes --command '$(printf '\"%s\" ' nix-build "${buildargs[@]}" --keep-going ${drv}) > /tmp/s_out'" &>/dev/stderr
+  ssh "${remote}" "nix-shell -I nixpkgs=${tarstable}   -p cachix    --command 'cat /tmp/s_out | env CACHIX_SIGNING_KEY=${cachixkey} cachix push ${cache} >/dev/stderr'" &>/dev/stderr
+
+  # done
+  echo -e "$(ssh ${remote} cat /tmp/s_out)"
 }
 
 function deploy() {
   remote="${1}"; shift
-  thing="${1:-".#machines.$(hostname)"}"; [[ ! -z "${1:-}" ]] && shift
-  drv="$(instantiate "${thing}")"
+  if [[ "${1:-}" != "" ]]; then out="${1}"; shift;
+  else drv="$(instantiate "${thing}")"; out="READ_OUT_FROM_DRV"; fi
 
   ## (ON TARGET): REALIZE FROM CACHE
-  ssh "${remote}" "nix-store ${buildargs[@]} -r \"${out}\""
-  
+  ssh "${remote}" "$(printf '\"%s\" ' nix-store "${buildargs[@]}" -r "${out}")"
+
   ## (ON TARGET): ACTIVATE
   ssh "${remote}" "sudo bash -c \"\
     nix-env --set --profile /nix/var/nix/profiles/system ${out} \
@@ -122,7 +133,24 @@ function default() {
 function pi() {
   thing=".#machines.rpione"
   rasp="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
+  #rasp="$(set -euo pipefail; remote "cole@192.168.1.2" "${thing}")"
   deploy cole@192.168.1.2 "${rasp}"
+}
+
+function book() {
+  thing=".#machines.pinebook"
+  book="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
+
+  thing=".#machines.pinebook-uboot"
+  uboot="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
+
+  thing=".#machines.pinebook-kbfw"
+  kbfw="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
+
+  echo "book"; echo "$book"; echo
+  echo "uboot"; echo "$uboot"; echo
+  echo "kbfw"; echo "$kbfw"; echo
+  #deploy cole@192.168.1.2 "${rasp}"
 }
 
 # function pixel() {

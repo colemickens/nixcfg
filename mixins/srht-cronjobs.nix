@@ -14,7 +14,10 @@ let
     git reset --hard origin/master
     bash .ci/srht-submit.sh
   '';
-  repos = ["nixpkgs-wayland" "flake-firefox-nightly"];
+  repos = [
+    "nixpkgs-wayland"
+    "flake-firefox-nightly"
+  ];
   genPrefixAttrs = prefix: names: f: lib.listToAttrs (map (n: lib.nameValuePair "${prefix}${n}" (f n)) names);
 in
 {

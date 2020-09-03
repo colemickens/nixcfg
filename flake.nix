@@ -35,6 +35,15 @@
     chromium  = { url = "github:colemickens/flake-chromium"; };
     chromium.inputs.nixpkgs.follows = "cmpkgs";
 
+    nixos-veloren = { url = "github:colemickens/nixos-veloren"; };
+    nixos-veloren.inputs.nixpkgs.follows = "cmpkgs";
+
+    mobile-nixos = { url = "github:colemickens/mobile-nixos"; };
+    mobile-nixos.inputs.nixpkgs.follows = "cmpkgs";
+
+    wip-pinebook-pro = { url = "github:colemickens/wip-pinebook-pro"; };
+    wip-pinebook-pro.inputs.nixpkgs.follows = "cmpkgs";
+
     wayland  = { url = "github:colemickens/nixpkgs-wayland"; };
     # these are kind of weird, they don't really apply
     # to me if I'm using just  `wayland#overlay`, afaict?
@@ -42,6 +51,8 @@
     wayland.inputs.master.follows = "master";
 
     hardware = { url = "github:nixos/nixos-hardware"; };
+
+    wfvm = { type = "git"; url = "https://git.m-labs.hk/M-Labs/wfvm"; flake = false;};
   };
 
   outputs = inputs:
@@ -83,21 +94,46 @@
       # packages = // import nixpkgs, expose colePkgs
 
       nixosConfigurations = {
+        # cloud VMs
         azdev  = mkSystem "x86_64-linux" inputs.unstable "azdev";
+
+        # raspberry Pis
         rpione = mkSystem "aarch64-linux" inputs.pipkgs "rpione";
-        xeep   = mkSystem "x86_64-linux"  inputs.cmpkgs "xeep";
+        rpitwo = mkSystem "aarch64-linux" inputs.pipkgs "rpitwo";
+
+        # Gaming PC VM / Linux workstation
+        slynux = mkSystem "x86_64-linux"  inputs.cmpkgs "slynux";
+
+        # laptops
+        xeep     = mkSystem "x86_64-linux"  inputs.cmpkgs "xeep";
+        pinebook = mkSystem "aarch64-linux" inputs.pipkgs "pinebook";
+
+        # phones
+        pinephone = mkSystem "aarch64-linux" inputs.cmpkgs "pinephone";
       };
 
       machines = {
         azdev = inputs.self.nixosConfigurations.azdev.config.system.build.azureImage;
         xeep = inputs.self.nixosConfigurations.xeep.config.system.build.toplevel;
+        slynux = inputs.self.nixosConfigurations.slynux.config.system.build.toplevel;
         rpione = inputs.self.nixosConfigurations.rpione.config.system.build.toplevel;
-      };
+        rpitwo = inputs.self.nixosConfigurations.rpitwo.config.system.build.toplevel;
 
-      defaultPackage = [
-        inputs.self.nixosConfigurations.xeep.config.system.build.toplevel
-        inputs.self.nixosConfigurations.rpione.config.system.build.toplevel
-      ];
+        pinebook = inputs.self.nixosConfigurations.pinebook.config.system.build.toplevel;
+        pinebook-uboot = inputs.wip-pinebook-pro.packages.aarch64-linux.uBootPinebookPro;
+        pinebook-kbfw = inputs.wip-pinebook-pro.packages.aarch64-linux.pinebookpro-keyboard-updater;
+
+        pinephone = (import "${inputs.mobile-nixos}/examples/demo" {
+          device = "pine64-pinephone-braveheart";
+          pkgs =  inputs.cmpkgs;
+        }).build.disk-image;
+
+        # Automated Nix-powered Windows VM
+        winvm = import ./machines/winvm {
+          pkgs = pkgsFor inputs.cmpkgs "x86_64-linux";
+          inherit inputs;
+        };
+      };
 
       cyclopsJobs = {
         # 1. provision an age1 key
@@ -127,3 +163,4 @@
       };
     };
 }
+

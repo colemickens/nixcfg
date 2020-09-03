@@ -10,9 +10,9 @@
 
         # TODO: how can I inherit `system` here?
         plugins = with pkgs.vimPlugins; [
-          nvim-treesitter        # neovim 0.5
+          #nvim-treesitter        # neovim 0.5
           completion-nvim        # neovim 0.5
-          completion-treesitter  # neovim 0.5
+          #completion-treesitter  # neovim 0.5
           fzf-vim
           fzfWrapper
           lightline-vim
@@ -61,8 +61,8 @@
 
           packadd nvim-lsp
           "packadd lsp-status-nvim
-          packadd nvim-treesitter
-          packadd completion-treesitter
+          "packadd nvim-treesitter
+          "packadd completion-treesitter
           packadd completion-nvim
           lua require'nvim_lsp'.rust_analyzer.setup({on_attach=require'completion'.on_attach})
 
