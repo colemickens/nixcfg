@@ -8,7 +8,7 @@
 It's everything. It's all of my system configurations. It's all of my dotfiles. All right here. All in Nix.
 
 ## Layout
-* `cloud` - contains some scripts for booting GCP/Azure instances
+* `cloud` - contains some scripts/configs for booting NixOS instances in GCP/Azure
 * `machines` - machine definitions for:
   * `azdev` - an Azure dev env machine
   * `pinebook` - my current daily-driver laptop (Pinebook Pro, aarch64)
@@ -20,7 +20,7 @@ It's everything. It's all of my system configurations. It's all of my dotfiles. 
     * Tor Hidden Service (for _reliable_ permanent remote-access into my network)
     * (WIP) a netboot server for `rpitwo`
   * `rpitwo` - a WIP attempt at fully netbooting an UEFI-powered RPI4 with NixOS over NFS
-  * `slynux` - this config runs natively on my gaming machine, or as a hyperV VM when the host is running Windows **(Very Useful!)**
+  * `slynux` - this is my gaming-machine turns quarantine-dev-machine. This runs natively on my gaming machine, or as a hyperV VM when the host is running Windows **(Very Useful!)**
   * `winvm` - an example Windows VM built with Nix, via the awesome `wfvm` project
   * `xeep` - my old, dead XPS 13 (9370) laptop
 * `misc/` - literally just a script I have no better home for
@@ -31,6 +31,8 @@ It's everything. It's all of my system configurations. It's all of my dotfiles. 
 * `profiles/` - these are the bits that primarily get pulled into a system configuration.
   * `gui.nix` - all of my GUI related settings that only apply to machines that I sit in front of
   * `interactive.nix` - anything related to a machine that I interact with regularly (and thus want `neovim`, etc)
+* `secrets/` - some light infra around `sops-nix` for dealing with encrypted secrets in this repo and my systems
+* `shells/` - a few `shell.nix`s for being able to hack on random source code trees
 
 
 ## Dotfiles
@@ -49,4 +51,4 @@ Secrets are all stored encrypted with `sops` (via `sops-nix`) so that they remai
 ## Highlights
 
 * Everything builds in Nix, with Flakes (meaning Pure mode). This necessitated the  creation of `colemickens/flake-firefox-nightly`.
-* The terminal colors and fonts for all of my terminal emulators are declared in Nix. I can change the appearance of all of them uniformly, in one place.
+* The terminal colors and fonts for all of my terminal emulators are declared in Nix. I can change the appearance of all of them uniformly, in one place. (https://github.com/colemickens/nixcfg/blob/main/mixins/_common/termsettings.nix)
