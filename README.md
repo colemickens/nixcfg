@@ -11,7 +11,7 @@ It's everything. It's all of my system configurations. It's all of my dotfiles. 
 
 I package these things, mostly for myself:
 
-- cchat-gtk (a new GTK chat client supporting, so far, Discord)
+- cchat-gtk (a new GTK chat client supporting, so far, **Discord**!)
 - obs-v4l2sink (my fork of obs-v4l2sink)
 - mirage-im (an Qt5 Matrix client)
 - neovim (nightly 0.5 build for LSP support)
@@ -19,9 +19,25 @@ I package these things, mostly for myself:
 - raspberrypi-eeprom (the rpi4 boot eeprom files)
 - rpi4-uefi (a rpi4 uefi build)
 
+These are easily runnable, if you [have enabled Nix flakes]():
+
+```shell
+# if you have not enabled flakes globally, and have not cloned this repo,
+# you can still run these!
+
+nix --experimental-features 'nix-command flakes' \
+  shell "github:colemickens/nixcfg#cchat-gtk" --command cchat-gtk
+
+# or if you have configured Nix to enable flakes system-wide,
+# and you've cloned this repo:
+
+nix shell ".#neovim" --command nvim
+nix shell ".#passrs" --command passrs
+```
+
 ## Layout
 * `cloud` - contains some scripts/configs for booting NixOS instances in GCP/Azure
-* `machines` - machine definitions for:
+* `hosts` - machine definitions for:
   * `azdev` - an Azure dev env machine
   * `pinebook` - my current daily-driver laptop (Pinebook Pro, aarch64)
   * `pinephone` - my future daily-driver phone (Pinephone Pro, via NixOS Mobile, aarch64)

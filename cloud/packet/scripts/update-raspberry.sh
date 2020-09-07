@@ -22,5 +22,5 @@ fi
 
 (
     cd ~/code/nixcfg
-    nix-shell --command "./update.sh machines/raspberry/default.nix"
+    nix-shell --command "./update.sh hosts/raspberry/default.nix"
 )

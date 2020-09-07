@@ -68,7 +68,7 @@
       mkSystem = sys: pkgs_: hostname:
         pkgs_.lib.nixosSystem {
           system = sys;
-          modules = [(./. + "/machines/${hostname}/configuration.nix")];
+          modules = [(./. + "/hosts/${hostname}/configuration.nix")];
           specialArgs = { inherit inputs; };
         };
     in rec {
@@ -86,7 +86,35 @@
         }
       );
 
-      # packages = // import nixpkgs, expose colePkgs
+      packages = forAllSystems (sys:
+        let pkgs = import inputs.nixpkgs {
+          system = sys;
+            config = { allowUnfree = true; };
+            overlays = [ inputs.self.overlay ];
+          };
+        in pkgs.colePackages
+      );
+
+      overlay = self: pkgs:
+        let p = {
+          customCommands = pkgs.callPackages ./pkgs/commands.nix {};
+          customGuiCommands = pkgs.callPackages ./pkgs/commands-gui.nix {};
+
+          alps = pkgs.callPackage ./pkgs/alps {};
+          mirage-im = pkgs.libsForQt5.callPackage ./pkgs/mirage-im {};
+          neovim-unwrapped = pkgs.callPackage ./pkgs/neovim {
+            neovim-unwrapped = pkgs.neovim-unwrapped;
+          };
+          passrs = pkgs.callPackage ./pkgs/passrs {};
+
+          raspberrypi-eeprom = pkgs.callPackage ./pkgs/raspberrypi-eeprom {};          
+          rpi4-uefi = pkgs.callPackage ./pkgs/rpi4-uefi {};
+
+          cchat-gtk = pkgs.callPackage ./pkgs/cchat-gtk {
+            libhandy = pkgs.callPackage ./pkgs/libhandy {};
+          };
+          obs-v4l2sink = pkgs.libsForQt5.callPackage ./pkgs/obs-v4l2sink {};
+        }; in p // { colePackages = p; };
 
       nixosConfigurations = {
         # cloud VMs
@@ -107,7 +135,7 @@
         pinephone = mkSystem "aarch64-linux" inputs.nixpkgs "pinephone";
       };
 
-      machines = {
+      hosts = {
         azdev = inputs.self.nixosConfigurations.azdev.config.system.build.azureImage;
         xeep = inputs.self.nixosConfigurations.xeep.config.system.build.toplevel;
         slynux = inputs.self.nixosConfigurations.slynux.config.system.build.toplevel;
@@ -133,7 +161,7 @@
         '';
 
         # Nix-built Windows 10 VM
-        winvm = import ./machines/winvm {
+        winvm = import ./hosts/winvm {
           pkgs = pkgsFor inputs.cmpkgs "x86_64-linux";
           inherit inputs;
         };

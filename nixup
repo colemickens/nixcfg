@@ -51,7 +51,7 @@ buildargs=(
 
 function build() {
   set -euo pipefail
-  thing="${1:-".#machines.$(hostname)"}"; shift
+  thing="${1:-".#hosts.$(hostname)"}"; shift
   drv="$(set -euo pipefail; instantiate "${thing}")"
   out="$(set -euo pipefail; nix-build "${buildargs[@]}" --keep-going "${drv}")"
   #echo "${out}" | env CACHIX_SIGNING_KEY=${cachixkey} cachix push "${cache}" &>/dev/stderr
@@ -60,7 +60,7 @@ function build() {
 
 function activate() {
   set -euo pipefail
-  thing="${1:-".#machines.$(hostname)"}"; [[ ! -z "${1:-}" ]] && shift
+  thing="${1:-".#hosts.$(hostname)"}"; [[ ! -z "${1:-}" ]] && shift
   out="$(set -euo pipefail; build "${thing}")"
   time sudo nix --experimental-features 'nix-command flakes' --pure-eval \
       build --profile /nix/var/nix/profiles/system "${out}"
@@ -70,7 +70,7 @@ function activate() {
 
 function instantiate() {
   set -euo pipefail
-  thing="${1:-".#machines.$(hostname)"}"; [[ ! -z "${1:-}" ]] && shift
+  thing="${1:-".#hosts.$(hostname)"}"; [[ ! -z "${1:-}" ]] && shift
   drv="$(set -euo pipefail; nix --experimental-features 'nix-command flakes' --pure-eval \
     eval \
       --override-input nixpkgs "/home/cole/code/nixpkgs/cmpkgs" \
@@ -91,7 +91,7 @@ function instantiate() {
 function remote() {
   set -euo pipefail
   remote="${1}"; shift
-  thing="${1:-".#machines.$(hostname)"}"; [[ ! -z "${1:-}" ]] && shift
+  thing="${1:-".#hosts.$(hostname)"}"; [[ ! -z "${1:-}" ]] && shift
   drv="$(set -euo pipefail; instantiate "${thing}")"
 
   ## COPY->COMPRESS->RSYNC DRV TO BUILDER
@@ -126,12 +126,12 @@ function deploy() {
 
 function default() {
   update
-  thing=".#machines.$(hostname)"
+  thing=".#hosts.$(hostname)"
   activate "${thing}"
 }
 
 function pi() {
-  thing=".#machines.rpione"
+  thing=".#hosts.rpione"
   out="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
   #rasp="$(set -euo pipefail; remote "cole@192.168.1.2" "${thing}")"
   echo "rasp"; echo "$out"; echo
@@ -139,14 +139,14 @@ function pi() {
 }
 
 function book() {
-  thing=".#machines.pinebook"
+  thing=".#hosts.pinebook"
   out="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
   echo "book"; echo "$out"; echo
   deploy cole@192.168.1.155 "${out}/toplevel"
 }
 
 function peep() {
-  thing=".#machines.pinephone"
+  thing=".#hosts.pinephone"
   out="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
   echo "book"; echo "$out"; echo
   deploy cole@192.168.1.256 "${out}/toplevel"

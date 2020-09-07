@@ -7,5 +7,5 @@ are flexible enough to work for anyone with just a few env vars.
 Usage in this repo:
 
 ```bash
-./upload-image.sh ../../machines/gcpvm/default.nix
+./upload-image.sh ../../hosts/gcpvm/default.nix
 ```

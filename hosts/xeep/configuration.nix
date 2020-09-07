@@ -63,7 +63,7 @@ in
     #       flake = "github:colemickens/nixpkgs-wayland#packages.x86_64-linux";
     #     };
     #     "nixos-wayland-apps" = {
-    #       flake = "github:colemickens/nixcfg#machines.xeep";
+    #       flake = "github:colemickens/nixcfg#hosts.xeep";
     #       extraArgs = {
     #         nextgen = true; # enable flakes + rename + new-cache
     #       };
