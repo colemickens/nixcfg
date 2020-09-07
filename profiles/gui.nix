@@ -17,7 +17,7 @@ in
     ../mixins/kitty.nix
     ../mixins/mpv.nix
     ../mixins/mako.nix
-    #../mixins/obs.nix
+    ../mixins/obs.nix
     ../mixins/qt.nix
     ../mixins/termite.nix
   ];
@@ -26,29 +26,12 @@ in
   config = {
     nixpkgs.config.allowUnfree = true;
     nixpkgs.overlays =  [
-      inputs.wayland.overlay
+      inputs.nixpkgs-wayland.overlay
     ];
 
-    hardware = {
-      opengl = {
-        enable = true;
-        extraPackages = []
-        ++ lib.optionals (pkgs.system=="x86_64-linux") (with pkgs; [
-          intel-media-driver
-          vaapiIntel
-          vaapiVdpau
-          libvdpau-va-gl
-        ]);
-        driSupport32Bit = (pkgs.system=="x86_64-linux");
-      };
-      pulseaudio.enable = true;
-    };
+    hardware.opengl.enable = true; 
+    hardware.pulseaudio.enable = true;
     nixpkgs.config.pulseaudio = true;
-    nixpkgs.config.packageOverrides = pkgs: {
-      vaapiIntel = pkgs.vaapiIntel.override {
-        enableHybridCodec = true;
-      };
-    };
 
     services.pcscd.enable = true;
 
@@ -69,6 +52,7 @@ in
         freerdp
         wlvncc
         vlc
+        carla
 
         # misc utils for desktop
         brightnessctl
@@ -87,33 +71,20 @@ in
         spectral
         mirage-im
         element-desktop
+        cchat-gtk
 
         # browsers
         firefox
-        chromium
-        #firefox-bin
-        #torbrowser
-        #falkon
-        #nyxt
-
-        # yucky non-free
-        #discord
-        gtkcord3
-        #ripcord
-        #spotify
-
-        # games
-        #inputs.nixos-veloren.packages.${pkgs.system}.veloren
+        #chromium
+        falkon
+        torbrowser
       ]
       ++ builtins.attrValues pkgs.customGuiCommands # include custom overlay gui pkgs
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
-        pkgs.vscodium
-        firefoxNightly
-        pkgs.chromium
-        pkgs.torbrowser
-        pkgs.falkon
+        firefoxNightly # pre-built, Moz doesn't seem to build nightly aarch64?
 
         # yucky non-free
+        pkgs.google-chrome-dev
         pkgs.discord
         pkgs.ripcord
         pkgs.spotify

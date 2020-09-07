@@ -19,7 +19,6 @@ function update() {
 
   (set -e
     cd ~/code/nixpkgs/master; git reset --hard "nixpkgs/master" && git push origin HEAD -f; cd -
-    cd ~/code/nixpkgs/stable; git reset --hard "nixpkgs/nixos-20.03" && git push origin HEAD -f; cd -
 
     #cmpkgsupstream="nixpkgs/nixos-unstable-small"
     cmpkgsupstream="nixpkgs/nixos-unstable"
@@ -74,14 +73,15 @@ function instantiate() {
   thing="${1:-".#machines.$(hostname)"}"; [[ ! -z "${1:-}" ]] && shift
   drv="$(set -euo pipefail; nix --experimental-features 'nix-command flakes' --pure-eval \
     eval \
-      --override-input cmpkgs "/home/cole/code/nixpkgs/cmpkgs" \
-      --override-input pipkgs "/home/cole/code/nixpkgs/pipkgs" \
+      --override-input nixpkgs "/home/cole/code/nixpkgs/cmpkgs" \
       --override-input firefox "/home/cole/code/flake-firefox-nightly" \
       --override-input sops-nix "/home/cole/code/sops-nix" \
-      --override-input home "/home/cole/code/home-manager/cmhm" \
+      --override-input home-manager "/home/cole/code/home-manager/cmhm" \
       --override-input mobile-nixos "/home/cole/code/mobile-nixos" \
+      --override-input nixpkgs-wayland "/home/cole/code/nixpkgs-wayland" \
       --override-input wip-pinebook-pro "/home/cole/code/wip-pinebook-pro" \
       --override-input nixos-veloren "/home/cole/code/nixos-veloren" \
+      --show-trace \
       --raw "${thing}")"
   drv="$(set -euo pipefail; nix --experimental-features 'nix-command flakes' --pure-eval \
     show-derivation "${drv}" | jq -r 'to_entries[].key')"
@@ -132,25 +132,24 @@ function default() {
 
 function pi() {
   thing=".#machines.rpione"
-  rasp="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
+  out="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
   #rasp="$(set -euo pipefail; remote "cole@192.168.1.2" "${thing}")"
-  deploy cole@192.168.1.2 "${rasp}"
+  echo "rasp"; echo "$out"; echo
+  deploy cole@192.168.1.2 "${out}"
 }
 
 function book() {
   thing=".#machines.pinebook"
-  book="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
+  out="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
+  echo "book"; echo "$out"; echo
+  deploy cole@192.168.1.155 "${out}/toplevel"
+}
 
-  thing=".#machines.pinebook-uboot"
-  uboot="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
-
-  thing=".#machines.pinebook-kbfw"
-  kbfw="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
-
-  echo "book"; echo "$book"; echo
-  echo "uboot"; echo "$uboot"; echo
-  echo "kbfw"; echo "$kbfw"; echo
-  #deploy cole@192.168.1.2 "${rasp}"
+function peep() {
+  thing=".#machines.pinephone"
+  out="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
+  echo "book"; echo "$out"; echo
+  deploy cole@192.168.1.256 "${out}/toplevel"
 }
 
 # function pixel() {

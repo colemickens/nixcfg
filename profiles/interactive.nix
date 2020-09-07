@@ -24,11 +24,9 @@ in
     ../mixins/cachix.nix
     ../mixins/gopass/gopass.nix
     #../mixins/mega/mega.nix
-    #../mixins/nushell.nix
+    ../mixins/nushell.nix
     ../mixins/xdg.nix
-  ]
- # ++ lib.optionals (pkgs.system=="x86_64-linux") [ ../mixins/nushell.nix ]
-  ;
+  ];
 
   config = {
     # HM: ca.desrt.dconf error:

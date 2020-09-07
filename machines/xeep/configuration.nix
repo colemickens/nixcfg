@@ -6,6 +6,8 @@ in
   imports = [
     ../../mixins/common.nix
 
+    ../../mixins/gfx-intel.nix
+
     ../../mixins/chromecast.nix
     ../../mixins/docker.nix
     ../../mixins/libvirt.nix

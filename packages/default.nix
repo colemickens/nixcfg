@@ -14,6 +14,12 @@ let colePackages = {
   raspberrypi-eeprom = pkgs.callPackage ./raspberrypi-eeprom {};
   
   rpi4-uefi = pkgs.callPackage ./rpi4-uefi {};
+
+  cchat-gtk = pkgs.callPackage ./cchat-gtk {
+    libhandy = pkgs.callPackage ./libhandy {};
+  };
+
+  obs-v4l2sink = pkgs.libsForQt5.callPackage ./obs-v4l2sink {};
 };
 in
   colePackages // { inherit colePackages; }

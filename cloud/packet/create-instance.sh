@@ -16,7 +16,7 @@ hostname="pkt-$(printf "%x" "$(date '+%s')")"
 
 
 if [[ "${os}" == "custom_ipxe" ]]; then
-  ~/code/packet-cli/bin/packet device create \
+  packet device create \
     --hostname "${hostname}" \
     --plan "${plan}" \
     --operating-system "custom_ipxe" \
@@ -26,7 +26,7 @@ if [[ "${os}" == "custom_ipxe" ]]; then
   exit 0
 fi
 
-~/code/packet-cli/bin/packet device create \
+packet device create \
   --hostname "${hostname}" \
   --userdata "${userdata}" \
   --plan "${plan}" \

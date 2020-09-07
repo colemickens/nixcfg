@@ -12,7 +12,7 @@
   config = {
     home-manager.users.cole = { pkgs, ... }: {
       
-      # block auto-sway reload, it crashes my machine
+      # block auto-sway reload, Sway crashes...
       xdg.configFile."sway/config".onChange = lib.mkForce "";
 
       home.sessionVariables = {
@@ -32,15 +32,17 @@
         # sway-related
         drm_info
         grim
+        imv
         qt5.qtwayland
         slurp
         udiskie
+        nwg-launchers
         wayvnc
         wf-recorder
         wl-clipboard
         wl-gammactl
         xwayland
-      ] ++ lib.optionals (pkgs.system == "x86_64-linux") [ pkgs.imv ];
+      ];
     };
   };
 }

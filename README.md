@@ -7,6 +7,18 @@
 
 It's everything. It's all of my system configurations. It's all of my dotfiles. All right here. All in Nix.
 
+## Custom Packages
+
+I package these things, mostly for myself:
+
+- cchat-gtk (a new GTK chat client supporting, so far, Discord)
+- obs-v4l2sink (my fork of obs-v4l2sink)
+- mirage-im (an Qt5 Matrix client)
+- neovim (nightly 0.5 build for LSP support)
+- passrs (a Rust pass implementation, not actually using though)
+- raspberrypi-eeprom (the rpi4 boot eeprom files)
+- rpi4-uefi (a rpi4 uefi build)
+
 ## Layout
 * `cloud` - contains some scripts/configs for booting NixOS instances in GCP/Azure
 * `machines` - machine definitions for:

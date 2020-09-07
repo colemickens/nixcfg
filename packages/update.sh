@@ -3,7 +3,6 @@
 set -euo pipefail
 set -x
 
-exit 0
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # keep track of what we build for the README
@@ -15,12 +14,16 @@ up=0 # updated_performed # up=$(( $up + 1 ))
 unset NIX_PATH
 
 function update() {
-  set +x
+  #set +x
   typ="${1}"
   pkg="${2}"
 
   echo "============================================================================"
   echo "${pkg}: checking"
+
+  if [[ ! -f "${pkg}/metadata.nix" ]]; then
+    return
+  fi
 
   metadata="${pkg}/metadata.nix"
   pkgname="$(basename "${pkg}")"
@@ -86,14 +89,14 @@ function update() {
       # TODO: do this with nix instead of sed?
       sed -i "s/${rev}/${newrev}/" "${metadata}"
       sed -i "s|${date}|${newdate}|" "${metadata}"
-      sed -i "s/${sha256}/${newsha256}/" "${metadata}"
+      sed -i "s|${sha256}|${newsha256}|" "${metadata}"
 
       # CargoSha256 has to happen AFTER the other rev/sha256 bump
       if [[ "${cargoSha256}" != "missing_cargoSha256" ]]; then
         newcargoSha256="$(NIX_PATH="${tmpnixpath}" \
           nix-prefetch \
             "{ sha256 }: let p=(import ./build.nix).${upattr}; in p.cargoDeps.overrideAttrs (_: { cargoSha256 = sha256; })")"
-        sed -i "s/${cargoSha256}/${newcargoSha256}/" "${metadata}"
+        sed -i "s|${cargoSha256}|${newcargoSha256}|" "${metadata}"
       fi
 
       # VendorSha256 has to happen AFTER the other rev/sha256 bump
@@ -101,7 +104,7 @@ function update() {
         newvendorSha256="$(NIX_PATH="${tmpnixpath}" \
           nix-prefetch \
             "{ sha256 }: let p=(import ./build.nix).${upattr}; in p.go-modules.overrideAttrs (_: { vendorSha256 = sha256; })")"
-        sed -i "s/${vendorSha256}/${newvendorSha256}/" "${metadata}"
+        sed -i "s|${vendorSha256}|${newvendorSha256}|" "${metadata}"
       fi
 
       set +x
@@ -124,3 +127,5 @@ tmpnixpath="nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.
 for p in ./*/; do
   update "pkgs" "${p}"
 done
+
+echo "all done."

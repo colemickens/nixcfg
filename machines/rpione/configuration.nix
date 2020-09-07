@@ -14,7 +14,7 @@ in
 
     #./modules/drone.nix
     #./modules/cyclops.nix
-    ./modules/netboot-server.nix
+    #./modules/netboot-server.nix
     ./modules/nginx.nix
     ./modules/postgres.nix
     

@@ -30,6 +30,13 @@ in
     system.stateVersion = "20.03"; # Did you read the comment?
     services.timesyncd.enable = true;
 
+    services.tor = {
+      enable = true;
+      relay.enable = true;
+      relay.port = 443;
+      relay.role = "bridge";
+    };
+
     documentation.nixos.enable = false;
 
     fileSystems."/" = {
