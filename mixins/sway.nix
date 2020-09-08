@@ -7,6 +7,7 @@ let
 
   wofi = "${pkgs.wofi}/bin/wofi --insensitive";
   drun = "${wofi} --show drun";
+  nwggrid = "${pkgs.nwg-launchers}/bin/nwggrid";
 
   terminal = "${pkgs.termite}/bin/termite";
   browser = "${pkgs.firefox-bin}/bin/firefox";
@@ -183,7 +184,7 @@ in
             "${modifier}+Shift+c" = "reload";
             "${modifier}+Delete" = "${swaylockcmd}";
 
-            "${modifier}+Escape" = "exec ${drun}";
+            "${modifier}+Escape" = "exec ${nwggrid}";
             "${modifier}+F1" = "exec ${passShowCmd}";
             "${modifier}+F2" = "exec ${passTotpCmd}";
 

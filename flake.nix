@@ -117,22 +117,26 @@
         }; in p // { colePackages = p; };
 
       nixosConfigurations = {
-        # cloud VMs
+        # Cloud VMs
         azdev  = mkSystem "x86_64-linux" inputs.nixpkgs "azdev";
 
-        # raspberry Pis
+        # Raspberry Pi Model 4B
         rpione = mkSystem "aarch64-linux" inputs.nixpkgs "rpione";
         rpitwo = mkSystem "aarch64-linux" inputs.nixpkgs "rpitwo";
 
-        # Gaming PC VM / Linux workstation
+        # Gaming PC - VM  or dual-booted Linux workstation
         slynux = mkSystem "x86_64-linux"  inputs.nixpkgs "slynux";
 
-        # laptops
+        # Laptops
         xeep     = mkSystem "x86_64-linux"  inputs.nixpkgs "xeep";
         pinebook = mkSystem "aarch64-linux" inputs.nixpkgs "pinebook";
 
-        # phones
+        # Phones
         pinephone = mkSystem "aarch64-linux" inputs.nixpkgs "pinephone";
+        #pixelthree = mkSystem ...
+
+        # Virtual Machines
+        testipfsvm = mkSystem "x86_64-linux" inputs.nixpkgs "testipfsvm";
       };
 
       hosts = {
@@ -159,6 +163,8 @@
           ln -s "${dev.config.system.build.u-boot}" $out/uboot;
           ln -s "${dev.config.system.build.boot-partition}" $out/boot-partition;
         '';
+
+        testipfsvm = inputs.self.nixosConfigurations.testipfsvm.config.system.build.vm;
 
         # Nix-built Windows 10 VM
         winvm = import ./hosts/winvm {

@@ -51,7 +51,7 @@ with lib;
     users.users."root".hashedPassword = config.users.users."root".initialHashedPassword;
 
     nixpkgs.overlays = [
-      (import ../packages)
+      inputs.self.overlay
     ];
   };
 }

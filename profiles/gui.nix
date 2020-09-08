@@ -29,7 +29,7 @@ in
       inputs.nixpkgs-wayland.overlay
     ];
 
-    hardware.opengl.enable = true; 
+    hardware.opengl.enable = true;
     hardware.pulseaudio.enable = true;
     nixpkgs.config.pulseaudio = true;
 
@@ -52,7 +52,6 @@ in
         freerdp
         wlvncc
         vlc
-        carla
 
         # misc utils for desktop
         brightnessctl

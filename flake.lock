@@ -311,8 +311,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1599163326,
-        "narHash": "sha256-iwqMSe9SX+wq+d7RYvXWLGoGdjdd/Qq3iGUImuBWsbs=",
+        "lastModified": 1599583337,
+        "narHash": "sha256-ceiHBbJY2pFFoMWZSGOgvqGzsw+xmPR2E9NzA7fj398=",
+        "ref": "master",
+        "rev": "6f879b922159a2bb31c0aec27b3077e0f71931e8",
+        "revCount": 1713,
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs-wayland"
       },

@@ -15,7 +15,7 @@ tarunstable="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz"
 tarstable="https://github.com/nixos/nixpkgs/archive/nixos-20.03.tar.gz"
 
 function update() {
-  (set -e; cd "./packages" && ./update.sh) # our overlay-pkgs
+  (set -e; cd "./pkgs" && ./update.sh) # our overlay-pkgs
 
   (set -e
     cd ~/code/nixpkgs/master; git reset --hard "nixpkgs/master" && git push origin HEAD -f; cd -
