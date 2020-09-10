@@ -2,8 +2,8 @@
 
 {
   gpgssh = pkgs.writeShellScriptBin "gpgssh" ''
-    lpath="$(gpgconf --list-dirs agent-extra-socket)
-    rpath="$(ssh "$@" gpgconf --list-dirs agent-extra-socket)
+    lpath="$(${pkgs.gpg2}/bin/gpgconf --list-dirs agent-extra-socket)
+    rpath="$(${pkgs.openssh}/bin/ssh "$@" gpgconf --list-dirs agent-socket)
     ssh \
         -o "RemoteForward $rpath:$lpath" \
         -o StreamLocalBindUnlink=yes \

@@ -10,14 +10,13 @@
 
         # TODO: how can I inherit `system` here?
         plugins = with pkgs.vimPlugins; [
-          #nvim-treesitter        # neovim 0.5
+          nvim-treesitter        # neovim 0.5
           completion-nvim        # neovim 0.5
-          #completion-treesitter  # neovim 0.5
+          completion-treesitter  # neovim 0.5
           fzf-vim
           fzfWrapper
           lightline-vim
-          #lsp-status-nvim        # neovim 0.5
-          nvim-lsp               # neovim 0.5
+          lsp-status-nvim        # neovim 0.5
           tabular
           vim-better-whitespace
           vim-crates
