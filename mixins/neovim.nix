@@ -58,10 +58,10 @@
 
           autocmd FileType markdown setlocal conceallevel=0
 
-          packadd nvim-lsp
-          "packadd lsp-status-nvim
-          "packadd nvim-treesitter
-          "packadd completion-treesitter
+          #packadd nvim-lsp
+          #packadd lsp-status-nvim
+          #packadd nvim-treesitter
+          #packadd completion-treesitter
           packadd completion-nvim
           lua require'nvim_lsp'.rust_analyzer.setup({on_attach=require'completion'.on_attach})
 

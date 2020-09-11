@@ -22,6 +22,8 @@
       });
     };
 
+    services.ipfs.enable = true;
+
     networking.hostName = "testipfsvm";
   };
 }

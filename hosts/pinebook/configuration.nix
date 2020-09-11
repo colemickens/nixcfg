@@ -12,7 +12,7 @@ in
 
     ../../profiles/sway.nix
 
-    inputs.wip-pinebook-pro.nixosModule.aarch64-linux
+    inputs.wip-pinebook-pro.nixosModule
     # TODO: ^ module isn't arch specific
     # TODO: ^ boot options should be exposed too
   ];

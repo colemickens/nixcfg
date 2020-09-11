@@ -9,6 +9,7 @@
         latitude = "47.6062";
         temperature.day = 6500;
         temperature.night = 3500;
+        extraOptions = [ "-v" ];
       };
     };
   };
