@@ -13,6 +13,8 @@
     # TODO move to devenv
     system.stateVersion = "21.03"; # Did you read the comment?
 
+    virtualisation.graphics = false;
+
     nix = {
       package = lib.mkForce inputs.nix-ipfs.packages.${pkgs.system}.nix;
     };
