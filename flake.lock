@@ -100,13 +100,12 @@
         ]
       },
       "locked": {
-        "lastModified": 1598357343,
-        "narHash": "sha256-TBPfT5KHhOa5enUJVU0EEmWfu3NGQFxChjfh9sZ2PaA=",
-        "ref": "master",
-        "rev": "dceec5b9d213b3d11f684f25fe3db5d81687d823",
-        "revCount": 129,
-        "type": "git",
-        "url": "file:///home/cole/code/flake-firefox-nightly"
+        "lastModified": 1599912222,
+        "narHash": "sha256-trt1HyBBwQHd+ojY++DotnOAlL+5hzbEYblQ58o6OEo=",
+        "owner": "colemickens",
+        "repo": "flake-firefox-nightly",
+        "rev": "af9759fc50e9a3e79a6e407caa06b2407d0e69f1",
+        "type": "github"
       },
       "original": {
         "owner": "colemickens",
@@ -168,11 +167,10 @@
       "locked": {
         "lastModified": 1598741068,
         "narHash": "sha256-mPK90pdr5sQYOofbqyKlwEjoBDgZ3BIeIsfxjmzhWZI=",
-        "ref": "cmhm",
+        "owner": "colemickens",
+        "repo": "home-manager",
         "rev": "c9b83e0e0462990c82074aa023d40734d4306b00",
-        "revCount": 1185,
-        "type": "git",
-        "url": "file:///home/cole/code/home-manager/cmhm"
+        "type": "github"
       },
       "original": {
         "owner": "colemickens",
@@ -181,13 +179,30 @@
         "type": "github"
       }
     },
+    "lowdown-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1598296217,
+        "narHash": "sha256-ha7lyNY1d8m+osmDpPc9f/bfZ3ZC1IVIXwfyklSWg8I=",
+        "owner": "edolstra",
+        "repo": "lowdown",
+        "rev": "c7a4e715af1e233080842db82d15b261cb74cb28",
+        "type": "github"
+      },
+      "original": {
+        "owner": "edolstra",
+        "ref": "no-structs-in-anonymous-unions",
+        "repo": "lowdown",
+        "type": "github"
+      }
+    },
     "master": {
       "locked": {
-        "lastModified": 1599768602,
-        "narHash": "sha256-zsLfsH2b6ZjLCZ1vEBwcvxFqK7JsGgyY65BG40tKZNI=",
+        "lastModified": 1599911388,
+        "narHash": "sha256-h2XExMtWjjOrXz+j4ak70rjnGkUpTrm2WS/I9vSzDhQ=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "5f3be6b66961a5ea148d83faa2ec949d39b65a1e",
+        "rev": "0527aaa44708c0a56417868e4db881b5d4fffb74",
         "type": "github"
       },
       "original": {
@@ -199,11 +214,11 @@
     },
     "master_2": {
       "locked": {
-        "lastModified": 1599782035,
-        "narHash": "sha256-EeuQiuvKU/ACQFeTQgHgaM8NSYJZ4BB3BL5rFYrSpm0=",
+        "lastModified": 1599955100,
+        "narHash": "sha256-RMUJu5AhOk15GTt128slk/re4pMNT1HecvSB7kKs1lQ=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "619061532aabb4a7c6341b0674b9d9dd4faef1bd",
+        "rev": "d5a689edda8219a1e20fd3871174b994cf0a94a3",
         "type": "github"
       },
       "original": {
@@ -220,10 +235,12 @@
         ]
       },
       "locked": {
-        "lastModified": 1599461650,
-        "narHash": "sha256-R2zW45Cv5ixvKnY2b6GDDvuI41MdJyUbyS/Td+NXFL4=",
-        "type": "git",
-        "url": "file:///home/cole/code/mobile-nixos"
+        "lastModified": 1597713600,
+        "narHash": "sha256-24fq24/W3zknfubWzuxtKH76PvWyz4F4s3kUt/ekyZg=",
+        "owner": "colemickens",
+        "repo": "mobile-nixos",
+        "rev": "48da8d8e1ad9989b357d142556a2ccf6efce1e0a",
+        "type": "github"
       },
       "original": {
         "owner": "colemickens",
@@ -247,6 +264,46 @@
         "type": "github"
       }
     },
+    "nix-ipfs": {
+      "inputs": {
+        "lowdown-src": "lowdown-src",
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1599678855,
+        "narHash": "sha256-tfqnzKM4o/JBaDKqB+D+QiXyP5EXKxBfPRQD5PCMM7s=",
+        "owner": "obsidiansystems",
+        "repo": "nix",
+        "rev": "c0dab0f6197d8b9bd0e82ed3810d04cff8de0d78",
+        "type": "github"
+      },
+      "original": {
+        "owner": "obsidiansystems",
+        "repo": "nix",
+        "type": "github"
+      }
+    },
+    "nixos-azure": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1597360480,
+        "narHash": "sha256-c9lfssgkLIwe/KY0csjpPrC9uivu6AfUTdsnPD7kvtI=",
+        "owner": "colemickens",
+        "repo": "nixos-azure",
+        "rev": "4c0873e7d7074bb2b4dd3afc019bf8646749c09d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "colemickens",
+        "ref": "dev",
+        "repo": "nixos-azure",
+        "type": "github"
+      }
+    },
     "nixos-veloren": {
       "inputs": {
         "nixpkgs": [
@@ -257,11 +314,10 @@
       "locked": {
         "lastModified": 1598423696,
         "narHash": "sha256-P88bLXXEP0pLzBY5KHV+OULssPd9GIBPGEoxWgXtNDY=",
-        "ref": "master",
+        "owner": "colemickens",
+        "repo": "nixos-veloren",
         "rev": "79f528e5b700133f0fbb994fd2f3060db80d8b04",
-        "revCount": 5,
-        "type": "git",
-        "url": "file:///home/cole/code/nixos-veloren"
+        "type": "github"
       },
       "original": {
         "owner": "colemickens",
@@ -271,19 +327,17 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1599756438,
-        "narHash": "sha256-h6X5Pw1IMDvlIpuMU81M8BLT/VjHgPsfHYK84ba6ey8=",
-        "ref": "cmpkgs",
-        "rev": "8360ef80ba0ea53a8093cf34ce00480b904d5488",
-        "revCount": 239338,
-        "type": "git",
-        "url": "file:///home/cole/code/nixpkgs/cmpkgs"
+        "lastModified": 1591633336,
+        "narHash": "sha256-oVXv4xAnDJB03LvZGbC72vSVlIbbJr8tpjEW5o/Fdek=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "70717a337f7ae4e486ba71a500367cad697e5f09",
+        "type": "github"
       },
       "original": {
-        "owner": "colemickens",
-        "ref": "cmpkgs",
-        "repo": "nixpkgs",
-        "type": "github"
+        "id": "nixpkgs",
+        "ref": "nixos-20.03-small",
+        "type": "indirect"
       }
     },
     "nixpkgs-mozilla": {
@@ -311,17 +365,32 @@
         ]
       },
       "locked": {
-        "lastModified": 1599770923,
-        "narHash": "sha256-O9UV5b/v8zGyY9TPaFM4/BHx0XTlSqPP7Yoot1fJ+bs=",
-        "ref": "master",
-        "rev": "f846415f6ef8d91c6b3ae0a2fa60ca0c0c0543d1",
-        "revCount": 1717,
-        "type": "git",
-        "url": "file:///home/cole/code/nixpkgs-wayland"
+        "lastModified": 1599944949,
+        "narHash": "sha256-79p4F3+/k0DshNTcnxSIVrPVXuZzcQy04ZJO1de6ltw=",
+        "owner": "colemickens",
+        "repo": "nixpkgs-wayland",
+        "rev": "4661fd224b1474a0fa4514c36668bf3274fd9048",
+        "type": "github"
       },
       "original": {
         "owner": "colemickens",
         "repo": "nixpkgs-wayland",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1599802301,
+        "narHash": "sha256-nfGKQ/MTRYHx1dhFuo3zn3UjZ5opjyxao/Yc05lihFM=",
+        "owner": "colemickens",
+        "repo": "nixpkgs",
+        "rev": "895cd45413f6214012a67ff7fd1b539beb8dfa25",
+        "type": "github"
+      },
+      "original": {
+        "owner": "colemickens",
+        "ref": "cmpkgs",
+        "repo": "nixpkgs",
         "type": "github"
       }
     },
@@ -334,8 +403,10 @@
         "home-manager": "home-manager",
         "master": "master_2",
         "mobile-nixos": "mobile-nixos",
+        "nix-ipfs": "nix-ipfs",
+        "nixos-azure": "nixos-azure",
         "nixos-veloren": "nixos-veloren",
-        "nixpkgs": "nixpkgs",
+        "nixpkgs": "nixpkgs_2",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "sops-nix": "sops-nix",
         "stable": "stable",
@@ -350,13 +421,12 @@
         ]
       },
       "locked": {
-        "lastModified": 1598357047,
-        "narHash": "sha256-1I6OY0xsG6c2xsp/qoXF3MClHUCcC+ZPKq4mbdW5UdA=",
-        "ref": "wip",
-        "rev": "b22301730f92a410cc6416acd7559dba3f7446a9",
-        "revCount": 115,
-        "type": "git",
-        "url": "file:///home/cole/code/sops-nix"
+        "lastModified": 1598620579,
+        "narHash": "sha256-t4ImALU9Kx2Ayzgcq/AmoYJ0NcRCH0YaCKsHFC88BvY=",
+        "owner": "Mic92",
+        "repo": "sops-nix",
+        "rev": "412ba17f0d21043fa30fc2d9db4cd9bd5e1da440",
+        "type": "github"
       },
       "original": {
         "owner": "Mic92",
@@ -407,11 +477,10 @@
       "locked": {
         "lastModified": 1599789544,
         "narHash": "sha256-CTZpvSnwfdaUTXnOwsnPq6bkvqJz1qcrRme2n40xh8Y=",
-        "ref": "master",
+        "owner": "colemickens",
+        "repo": "wip-pinebook-pro",
         "rev": "6c2d23065a3e590cc973e166c234d98e9c09b280",
-        "revCount": 65,
-        "type": "git",
-        "url": "file:///home/cole/code/wip-pinebook-pro"
+        "type": "github"
       },
       "original": {
         "owner": "colemickens",

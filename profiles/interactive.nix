@@ -82,12 +82,12 @@ in
         fd
         #grex # regex
 
-        sops age
+        sops age cryptsetup
         meli
 
         #bottom
         htop iotop which binutils.bintools
-        unrar parallel unzip xz zip
+        parallel unzip xz zip
         gomuks #rumatui
 
         nix-prefetch  nixpkgs-review

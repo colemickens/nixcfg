@@ -1,16 +1,14 @@
-{ pkgs, config, modulesPath, ... }:
+{ pkgs, config, modulesPath, inputs, ... }:
 
 {
   imports = [
-    "${modulesPath}/virtualisation/azure-common.nix"
-    "${modulesPath}/virtualisation/azure-image.nix"
-
-    ../../config-home/users/cole/user.nix
+    inputs.nixos-azure.nixosModules.azure-image
+    ../../profiles/user.nix
   ];
 
   config = {
     system.stateVersion = "20.03";
-    virtualisation.azureImage.diskSize = 2500;
+    virtualisation.azure.image.diskSize = 2500;
 
     fileSystems."/" = {
       fsType = "ext4";
@@ -26,17 +24,7 @@
       trustedUsers = [ "root" "@wheel" "azureuser" "cole" ];
       allowedUsers = trustedUsers;
       nrBuildUsers = 128;
-      package = pkgs.nixFlakes;
-    };
-
-    services = {
-      hydra = {
-        enable = true;
-        hydraURL = "https://hydra.cleo.cat";
-        notificationSender = "hydra@cleo.cat";
-        #buildMachinesFile = [];
-        useSubstitutes = true;
-      };
+      package = pkgs.nixUnstable;
     };
 
     networking.hostName = "azbldr";

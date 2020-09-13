@@ -42,6 +42,7 @@ in
       };
       services = {
         udiskie.enable = true;
+        spotifyd.enable = true;
       };
       home.packages = with pkgs; [
         # misc

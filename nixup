@@ -23,8 +23,12 @@ function update() {
     #cmpkgsupstream="nixpkgs/nixos-unstable-small"
     cmpkgsupstream="nixpkgs/nixos-unstable"
     pipkgsupstream="nixpkgs/nixos-unstable"
-    cd ~/code/nixpkgs/cmpkgs; git rebase "${cmpkgsupstream}"; git push origin HEAD -f
-    cd ~/code/nixpkgs/pipkgs; git rebase "${pipkgsupstream}"; git push origin HEAD -f
+    cd ~/code/nixpkgs/cmpkgs; git rebase "${cmpkgsupstream}" && git push origin HEAD -f
+    cd ~/code/nixpkgs/pipkgs; git rebase "${pipkgsupstream}" && git push origin HEAD -f
+
+    cd ~/code/nixpkgs-wayland; git pull --rebase
+    cd ~/code/home-manager/cmhm; git remote update && git rebase rycee/master && git push origin HEAD -f
+    cd ~/code/home-manager/cmhm; git pull --rebase && git push origin HEAD -f
   )
 
   # flakes (TODO: no really, what does this do?)
@@ -38,7 +42,7 @@ function update() {
       --update-input nix --update-input home --update-input construct \
       --update-input hardware --update-input firefox --update-input wayland \
       --update-input mobile-nixos --update-input wip-pinebook-pro \
-      --update-input nixos-veloren
+      --update-input nixos-veloren --update-input nixos-azure
 }
 
 buildargs=(
@@ -81,6 +85,7 @@ function instantiate() {
       --override-input nixpkgs-wayland "/home/cole/code/nixpkgs-wayland" \
       --override-input wip-pinebook-pro "/home/cole/code/wip-pinebook-pro" \
       --override-input nixos-veloren "/home/cole/code/nixos-veloren" \
+      --override-input nixos-azure "/home/cole/code/nixos-azure" \
       --show-trace \
       --raw "${thing}")"
   drv="$(set -euo pipefail; nix --experimental-features 'nix-command flakes' --pure-eval \

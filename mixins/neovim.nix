@@ -16,7 +16,7 @@
           fzf-vim
           fzfWrapper
           lightline-vim
-          lsp-status-nvim        # neovim 0.5
+          #lsp-status-nvim        # neovim 0.5
           tabular
           vim-better-whitespace
           vim-crates
@@ -58,12 +58,12 @@
 
           autocmd FileType markdown setlocal conceallevel=0
 
-          #packadd nvim-lsp
-          #packadd lsp-status-nvim
-          #packadd nvim-treesitter
-          #packadd completion-treesitter
-          packadd completion-nvim
-          lua require'nvim_lsp'.rust_analyzer.setup({on_attach=require'completion'.on_attach})
+          "packadd nvim-lsp
+          "packadd lsp-status-nvim
+          "packadd nvim-treesitter
+          "packadd completion-treesitter
+          "packadd completion-nvim
+          "lua require'nvim_lsp'.rust_analyzer.setup({on_attach=require'completion'.on_attach})
 
           autocmd BufRead Cargo.toml call crates#toggle()
           autocmd BufEnter * lua require'completion'.on_attach()

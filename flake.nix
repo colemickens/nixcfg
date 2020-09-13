@@ -39,6 +39,11 @@
     mobile-nixos = { url = "github:colemickens/mobile-nixos"; };
     mobile-nixos.inputs.nixpkgs.follows = "nixpkgs";
 
+    nix-ipfs = { url = "github:obsidiansystems/nix"; };
+
+    nixos-azure = { url = "github:colemickens/nixos-azure/dev"; };
+    nixos-azure.inputs.nixpkgs.follows = "nixpkgs";
+
     wip-pinebook-pro = { url = "github:colemickens/wip-pinebook-pro"; };
     wip-pinebook-pro.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -168,7 +173,7 @@
 
         # Nix-built Windows 10 VM
         winvm = import ./hosts/winvm {
-          pkgs = pkgsFor inputs.cmpkgs "x86_64-linux";
+          pkgs = pkgsFor inputs.nixpkgs "x86_64-linux";
           inherit inputs;
         };
       };

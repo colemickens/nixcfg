@@ -32,7 +32,7 @@ in
 
     services.tor = {
       enable = true;
-      relay.enable = true;
+      relay.enable = false;
       relay.port = 443;
       relay.role = "bridge";
     };
