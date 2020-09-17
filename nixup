@@ -21,7 +21,7 @@ function update() {
     cd ~/code/nixpkgs/master; git reset --hard "nixpkgs/master" && git push origin HEAD -f; cd -
 
     #cmpkgsupstream="nixpkgs/nixos-unstable-small"
-    cmpkgsupstream="nixpkgs/nixos-unstable"
+    cmpkgsupstream="nixpkgs/nixos-unstable-small"
     pipkgsupstream="nixpkgs/nixos-unstable"
     cd ~/code/nixpkgs/cmpkgs; git rebase "${cmpkgsupstream}" && git push origin HEAD -f
     cd ~/code/nixpkgs/pipkgs; git rebase "${pipkgsupstream}" && git push origin HEAD -f
@@ -141,6 +141,10 @@ function pi() {
   #rasp="$(set -euo pipefail; remote "cole@192.168.1.2" "${thing}")"
   echo "rasp"; echo "$out"; echo
   deploy cole@192.168.1.2 "${out}"
+
+  thing=".#hosts.rpitwo"
+  out="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
+  nix-store --realize "${out}"
 }
 
 function book() {

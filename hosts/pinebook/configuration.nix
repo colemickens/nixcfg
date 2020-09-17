@@ -20,6 +20,9 @@ in
   config = {      
     boot.loader.grub.enable = false;
     boot.loader.generic-extlinux-compatible.enable = true;
+  
+    boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+    boot.initrd.kernelModules = [ "nvme" ];
 
     boot.consoleLogLevel = pkgs.lib.mkDefault 7;
 
@@ -46,8 +49,8 @@ in
     documentation.nixos.enable = false;
 
     fileSystems = {
-      "/" =     { fsType = "ext4"; device = "/dev/disk/by-partlabel/nixos"; };
-      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/boot"; };
+      "/" =     { fsType = "ext4"; device = "/dev/nvme0n1p2"; };
+      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/nvme-boot"; };
     };
     swapDevices = [];
 

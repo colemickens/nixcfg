@@ -17,7 +17,7 @@
     
     boot = {
       cleanTmpDir = true;
-      growPartition = true; # TODO: This doesn't work?
+      growPartition = true;
       kernelPackages = pkgs.linuxPackages_latest;
     };
     nix = rec {

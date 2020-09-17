@@ -2,23 +2,18 @@
 set -x
 set -euo pipefail
 
-nix build \
-  --out-link /tmp/azdev \
-  --override-input nixpkgs "/home/cole/code/nixpkgs/cmpkgs" \
-  --override-input firefox "/home/cole/code/flake-firefox-nightly" \
-  --override-input sops-nix "/home/cole/code/sops-nix" \
-  --override-input home-manager "/home/cole/code/home-manager/cmhm" \
-  --override-input mobile-nixos "/home/cole/code/mobile-nixos" \
-  --override-input nixpkgs-wayland "/home/cole/code/nixpkgs-wayland" \
-  --override-input wip-pinebook-pro "/home/cole/code/wip-pinebook-pro" \
-  --override-input nixos-veloren "/home/cole/code/nixos-veloren" \
-  --override-input nixos-azure "/home/cole/code/nixos-azure" \
-  "../..#hosts.azdev"
+export AZURE_GROUP="defaultaz1"
 
-d="${HOME}/code/nixos-azure/scripts"
+(cd ../..; nix flake update --update-input nixos-azure)
 
-# -> nixos-azure/scripts/upload-image.sh /tmp/azdev
-# -> nixos-azure/scripts/boot-image.sh
+#upstream="github:colemickens/nixos-azure"
+upstream="/home/cole/code/nixos-azure"
 
-img_id="$("${d}/upload-image.sh" "/tmp/azdev")"
-"${d}/boot-vm.sh" "${img_id}"
+# build the VHD
+nix build "../..#hosts.azdev" --out-link /tmp/azdev
+
+# upload the VHD
+img_id="$(set -euo pipefail; nix shell "${upstream}" --command azutil upload /tmp/azdev)"
+
+# boot a VM
+nix shell "${upstream}" --command azutil boot "${img_id}"

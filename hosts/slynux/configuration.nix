@@ -124,9 +124,14 @@ in
           device = "/dev/disk/by-partlabel/newluks";
           preLVM = true;
           allowDiscards = true;
-          keyFile = "/dev/sdb";
-          keyFileSize = 4096;
-          fallbackToPassword = true;
+          
+          # disabling this for now
+          # so that it doesn't work in Win10
+          # see if its the cause of corruption
+
+          #keyFile = "/dev/sdb";
+          #keyFileSize = 4096;
+          #fallbackToPassword = true;
         };
       };
       loader = {

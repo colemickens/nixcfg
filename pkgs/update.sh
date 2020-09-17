@@ -33,7 +33,6 @@ function update() {
 
   branch="$(nix-instantiate "${metadata}" --eval --json -A branch 2>/dev/null | jq -r .)"
   rev="$(nix-instantiate "${metadata}" --eval --json -A rev  2>/dev/null | jq -r .)"
-  date="$(nix-instantiate "${metadata}" --eval --json -A revdate  2>/dev/null | jq -r .)"
   sha256="$(nix-instantiate "${metadata}" --eval --json -A sha256  2>/dev/null | jq -r .)"
   upattr="$(nix-instantiate "${metadata}" --eval --json -A upattr  2>/dev/null | jq -r . || echo "${pkgname}")"
   url="$(nix-instantiate "${metadata}" --eval --json -A url  2>/dev/null | jq -r . || echo "missing_url")"
@@ -41,7 +40,6 @@ function update() {
   vendorSha256="$(nix-instantiate "${metadata}" --eval --json -A vendorSha256  2>/dev/null | jq -r . || echo "missing_vendorSha256")"
   skip="$(nix-instantiate "${metadata}" --eval --json -A skip  2>/dev/null | jq -r . || echo "false")"
 
-  newdate="${date}"
   if [[ "${skip}" != "true" ]]; then
     # Determine RepoTyp (git/hg)
     if   nix-instantiate "${metadata}" --eval --json -A repo_git &>/dev/null; then repotyp="git";
@@ -66,17 +64,6 @@ function update() {
 
       set -x
 
-      # Update RevDate
-      d="$(mktemp -d)"
-      if [[ "${repotyp}" == "git" ]]; then
-        git clone -b "${branch}" --single-branch --depth=1 "${repo}" "${d}" &>/dev/null
-        newdate="$(cd "${d}"; TZ=UTC git show --quiet --date='format-local:%Y-%m-%d %H:%M:%SZ' --format="%cd")"
-      elif [[ "${repotyp}" == "hg" ]]; then
-        hg clone "${repo}#${branch}" "${d}"
-        newdate="$(cd "${d}"; TZ=UTC hg log -l1 --template "{date(date, '%Y-%m-%d %H:%M:%S')}\n")" &>/dev/null
-      fi
-      rm -rf "${d}"
-
       # Update Sha256
       if [[ "${typ}" == "pkgs" ]]; then
         newsha256="$(NIX_PATH="${tmpnixpath}" nix-prefetch --output raw \
@@ -88,7 +75,6 @@ function update() {
 
       # TODO: do this with nix instead of sed?
       sed -i "s/${rev}/${newrev}/" "${metadata}"
-      sed -i "s|${date}|${newdate}|" "${metadata}"
       sed -i "s|${sha256}|${newsha256}|" "${metadata}"
 
       # CargoSha256 has to happen AFTER the other rev/sha256 bump
@@ -109,17 +95,6 @@ function update() {
 
       set +x
     fi
-  fi
-
-  if [[ "${skip}" == "true" ]]; then
-    newdate="${newdate} (pinned)"
-  fi
-  if [[ "${typ}" == "pkgs" ]]; then
-    desc="$(nix-instantiate --eval -E "(import ./build.nix).${upattr}.meta.description" | jq -r .)"
-    home="$(nix-instantiate --eval -E "(import ./build.nix).${upattr}.meta.homepage" | jq -r .)"
-    pkgentries=("${pkgentries[@]}" "| [${pkgname}](${home}) | ${newdate} | ${desc} |");
-  elif [[ "${typ}" == "nixpkgs" ]]; then
-    nixpkgentries=("${nixpkgentries[@]}" "| ${pkgname} | ${newdate} |");
   fi
 }
 

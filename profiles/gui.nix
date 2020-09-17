@@ -19,6 +19,7 @@ in
     ../mixins/mako.nix
     ../mixins/obs.nix
     ../mixins/qt.nix
+    ../mixins/spotify.nix
     ../mixins/termite.nix
   ];
   # TODO: xdg-user-dirs fixup
@@ -42,7 +43,6 @@ in
       };
       services = {
         udiskie.enable = true;
-        spotifyd.enable = true;
       };
       home.packages = with pkgs; [
         # misc
@@ -52,7 +52,7 @@ in
         vscodium
         freerdp
         wlvncc
-        vlc
+        #vlc
 
         # misc utils for desktop
         brightnessctl
