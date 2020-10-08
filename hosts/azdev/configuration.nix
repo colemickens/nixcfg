@@ -8,7 +8,7 @@
 
   config = {
     system.stateVersion = "20.03";
-    virtualisation.azure.image.diskSize = 2500;
+    virtualisation.azure.image.diskSize = 30000;
 
     fileSystems."/" = {
       fsType = "ext4";

@@ -17,7 +17,8 @@ in
     # TODO: ^ boot options should be exposed too
   ];
 
-  config = {      
+  config = {
+    environment.systemPackages = with pkgs; [ drm-howto ];
     boot.loader.grub.enable = false;
     boot.loader.generic-extlinux-compatible.enable = true;
   
@@ -49,8 +50,8 @@ in
     documentation.nixos.enable = false;
 
     fileSystems = {
-      "/" =     { fsType = "ext4"; device = "/dev/nvme0n1p2"; };
-      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/nvme-boot"; };
+      "/" =     { fsType = "ext4"; device = "/dev/disk/by-partlabel/nixos"; };
+      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/boot"; };
     };
     swapDevices = [];
 

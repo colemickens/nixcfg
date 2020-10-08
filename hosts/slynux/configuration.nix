@@ -15,10 +15,10 @@ in
     ../../mixins/v4l2loopback.nix
 
     ../../profiles/sway.nix
-    #../../profiles/gaming.nix
+    ../../profiles/gaming.nix
 
     "${modulesPath}/virtualisation/hyperv-guest.nix"
-    
+
     ./hs.nix
   ];
 
@@ -40,27 +40,27 @@ in
     documentation.nixos.enable = false;
 
     fileSystems."/" = {
-      device = "tank2/root";
+      device = "tank3/root";
       fsType = "zfs";
     };
 
     fileSystems."/nix" = {
-      device = "tank2/nix";
+      device = "tank3/nix";
       fsType = "zfs";
     };
 
     fileSystems."/persist" = {
-      device = "tank2/persist";
+      device = "tank3/persist";
       fsType = "zfs";
     };
 
     fileSystems."/semivolatile" = {
-      device = "tank2/semivolatile";
+      device = "tank3/semivolatile";
       fsType = "zfs";
     };
 
     fileSystems."/boot" = {
-      device = "/dev/disk/by-partlabel/newboot";
+      device = "/dev/disk/by-partlabel/boot";
       fsType = "vfat";
     };
 
@@ -121,10 +121,10 @@ in
       initrd.luks.devices = {
         root = {
           name = "root";
-          device = "/dev/disk/by-partlabel/newluks";
+          device = "/dev/disk/by-partlabel/luks3";
           preLVM = true;
           allowDiscards = true;
-          
+
           # disabling this for now
           # so that it doesn't work in Win10
           # see if its the cause of corruption
@@ -137,7 +137,6 @@ in
       loader = {
         timeout = 1;
         systemd-boot.enable = true;
-        systemd-boot.configurationLimit = 2;
         systemd-boot.memtest86.enable = true;
         efi.canTouchEfiVariables = true;
       };

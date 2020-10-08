@@ -125,6 +125,7 @@ in
             { always = true; command = "${gsettingscmd}"; }
             { always = true; command = "${pkgs.xorg.xrdb}/bin/xrdb -l $HOME/.Xresources"; }
             { always = true; command = "${pkgs.systemd}/bin/systemd-notify --ready || true"; }
+            { always = true; command = "${pkgs.mako}/bin/mako"; }
 
             { always = true;  command = "pkill swayidle"; } # Disable swayidle for a bit
             #{ command = "${idlecmd}"; always = true; }     # Disable swayidle for a bit

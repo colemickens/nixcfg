@@ -77,12 +77,14 @@ in
         firefox
         #chromium
         falkon
-        torbrowser
       ]
       ++ builtins.attrValues pkgs.customGuiCommands # include custom overlay gui pkgs
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
         firefoxNightly # pre-built, Moz doesn't seem to build nightly aarch64?
+        scrcpy
 
+        torbrowser
+        
         # yucky non-free
         pkgs.google-chrome-dev
         pkgs.discord

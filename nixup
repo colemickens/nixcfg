@@ -24,7 +24,6 @@ function update() {
     cmpkgsupstream="nixpkgs/nixos-unstable-small"
     pipkgsupstream="nixpkgs/nixos-unstable"
     cd ~/code/nixpkgs/cmpkgs; git rebase "${cmpkgsupstream}" && git push origin HEAD -f
-    cd ~/code/nixpkgs/pipkgs; git rebase "${pipkgsupstream}" && git push origin HEAD -f
 
     cd ~/code/nixpkgs-wayland; git pull --rebase
     cd ~/code/home-manager/cmhm; git remote update && git rebase rycee/master && git push origin HEAD -f
@@ -38,7 +37,7 @@ function update() {
   # TODO: Why does this ever have an effect? Needs to allow for more aggression
   nix --experimental-features 'nix-command flakes' --pure-eval \
     flake update --no-registries \
-      --update-input master --update-input stable --update-input cmpkgs --update-input pipkgs \
+      --update-input master --update-input stable --update-input nixpkgs \
       --update-input nix --update-input home --update-input construct \
       --update-input hardware --update-input firefox --update-input wayland \
       --update-input mobile-nixos --update-input wip-pinebook-pro \
@@ -52,6 +51,32 @@ buildargs=(
   --option 'narinfo-cache-negative-ttl' '0'
   -j 2
 )
+
+function instantiate() {
+  set -euo pipefail
+  thing="${1:-".#hosts.$(hostname)"}"; [[ ! -z "${1:-}" ]] && shift
+  drv="$(set -euo pipefail; nix --experimental-features 'nix-command flakes' --pure-eval \
+    eval \
+      --override-input nixpkgs "/home/cole/code/nixpkgs/cmpkgs" \
+      --override-input firefox "/home/cole/code/flake-firefox-nightly" \
+      --override-input sops-nix "/home/cole/code/sops-nix" \
+      --override-input home-manager "/home/cole/code/home-manager/cmhm" \
+      --override-input nixpkgs-wayland "/home/cole/code/nixpkgs-wayland" \
+      --override-input wip-pinebook-pro "/home/cole/code/wip-pinebook-pro" \
+      --override-input nixos-veloren "/home/cole/code/nixos-veloren" \
+      --override-input nixos-azure "/home/cole/code/nixos-azure" \
+      --override-input mobile-nixos "/home/cole/code/mobile-nixos" \
+      --show-trace \
+      --raw "${thing}")"
+  echo -e "${drv}"
+}
+
+function out2drv() {
+  out="${1}"
+  drv="$(set -euo pipefail; nix --experimental-features 'nix-command flakes' --pure-eval \
+    show-derivation "${out}" | jq -r 'to_entries[].key')"
+  echo -e "${drv}"
+}
 
 function build() {
   set -euo pipefail
@@ -72,38 +97,19 @@ function activate() {
     shell -vv "${out}" -c switch-to-configuration switch
 }
 
-function instantiate() {
-  set -euo pipefail
-  thing="${1:-".#hosts.$(hostname)"}"; [[ ! -z "${1:-}" ]] && shift
-  drv="$(set -euo pipefail; nix --experimental-features 'nix-command flakes' --pure-eval \
-    eval \
-      --override-input nixpkgs "/home/cole/code/nixpkgs/cmpkgs" \
-      --override-input firefox "/home/cole/code/flake-firefox-nightly" \
-      --override-input sops-nix "/home/cole/code/sops-nix" \
-      --override-input home-manager "/home/cole/code/home-manager/cmhm" \
-      --override-input mobile-nixos "/home/cole/code/mobile-nixos" \
-      --override-input nixpkgs-wayland "/home/cole/code/nixpkgs-wayland" \
-      --override-input wip-pinebook-pro "/home/cole/code/wip-pinebook-pro" \
-      --override-input nixos-veloren "/home/cole/code/nixos-veloren" \
-      --override-input nixos-azure "/home/cole/code/nixos-azure" \
-      --show-trace \
-      --raw "${thing}")"
-  drv="$(set -euo pipefail; nix --experimental-features 'nix-command flakes' --pure-eval \
-    show-derivation "${drv}" | jq -r 'to_entries[].key')"
-  echo -e "${drv}"
-}
-
 function remote() {
   set -euo pipefail
   remote="${1}"; shift
   thing="${1:-".#hosts.$(hostname)"}"; [[ ! -z "${1:-}" ]] && shift
-  drv="$(set -euo pipefail; instantiate "${thing}")"
+  out="$(set -euo pipefail; instantiate "${thing}")"
+  drv="$(set -euo pipefail; out2drv "${out}")"
 
   ## COPY->COMPRESS->RSYNC DRV TO BUILDER
   t="/tmp/tmpnixpath"; #rm -rf "${t}"; trap "rm -rf $t" EXIT;
 
   # local, push drvs to remote
-  nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nix --command "nix copy --to file://${t} ${drv}" # see: https://github.com/NixOS/nix/issues/3696
+  # OLD:  nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz -p nix --command "nix copy --to file://${t} ${drv}" # see: https://github.com/NixOS/nix/issues/3696
+  nix copy --to file://${t} --derivation "${drv}" # NEW
   rsync -ah "${t}/" "${remote}:${t}"
 
   # build drvs, push to cachix
@@ -117,8 +123,7 @@ function remote() {
 
 function deploy() {
   remote="${1}"; shift
-  if [[ "${1:-}" != "" ]]; then out="${1}"; shift;
-  else drv="$(instantiate "${thing}")"; out="READ_OUT_FROM_DRV"; fi
+  out="${1}"; shift;
 
   ## (ON TARGET): REALIZE FROM CACHE
   ssh "${remote}" "$(printf '\"%s\" ' nix-store "${buildargs[@]}" -r "${out}")"
@@ -132,6 +137,7 @@ function deploy() {
 function default() {
   update
   thing=".#hosts.$(hostname)"
+  build "${thing}"
   activate "${thing}"
 }
 
@@ -147,6 +153,65 @@ function pi() {
   nix-store --realize "${out}"
 }
 
+#
+# PIXEL 3
+#
+
+function bluereset() {
+  (
+    cd ~/downloads/BLUE/blueline-qq3a.200805.001
+    # base should be sufficient to restore boot_a
+    # which lets us get to fastbootd where we can then flash what we need
+    ./flash-base.sh
+  )
+  fastboot flash userdata "/home/cole/downloads/BLUE/NIXOS_SYSTEM.img"
+  fastboot reboot bootloader
+}
+
+function blue() {
+  remote="ssh://root@172.16.42.1"
+  thing=".#hosts.bluephone.toplevel"
+  toplevel="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
+  
+  nix-store -r "${toplevel}"
+  nix copy --to "${remote}" "${toplevel}"
+  ssh "${remote}" "sudo bash -c \"\
+    nix-env --set --profile /nix/var/nix/profiles/system ${toplevel} \
+    && ${toplevel}/bin/switch-to-configuration switch\""
+  
+  # simpler form of ^, but doesnt work - phone can't realize from internet yet
+  #deploy root@172.16.42.1 "${toplevel}"
+}
+
+function blueboot() {
+  thing=".#hosts.bluephone.bootimg"
+  out="$(set -euo pipefail; instantiate "${thing}")"
+  if [[ ! -e "${out}" ]]; then
+    bootimg="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
+    nix-store -r "${bootimg}"
+  fi
+  fastboot set_active a
+  fastboot boot "${out}"
+}
+
+#
+# PINEPHONE
+#
+
+function pine() {
+  thing=".#hosts.pinephone"
+  export NIX_PATH=nixpkgs=/home/cole/code/nixpkgs/cmpkgs
+  out="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
+  echo "book"; echo "$out"; echo
+  #deploy cole@192.168.1.256 "${out}/toplevel"
+  nix-store -r "${out}"
+  fastboot boot "${out}/android-bootimg"
+}
+
+#
+# PINEBOOK PRO
+#
+
 function book() {
   thing=".#hosts.pinebook"
   out="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
@@ -154,20 +219,9 @@ function book() {
   deploy cole@192.168.1.155 "${out}/toplevel"
 }
 
-function peep() {
-  thing=".#hosts.pinephone"
-  out="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
-  echo "book"; echo "$out"; echo
-  deploy cole@192.168.1.256 "${out}/toplevel"
-}
-
-# function pixel() {
-#   cd ~/code/mobile-nixos-blueline
-#   export NIX_PATH=nixpkgs=/home/cole/code/nixpkgs/cmpkgs
-#   drv="$(nix-instantiate examples/demo/ --argstr device google-blueline -A android-burn-tool)"
-#   pixel="$(remote cole@13.77.182.36 $drv push)" # build on rpi and push when done w/ bld
-#   #pixel="$(remote $drv root@nixos push)" # build on rpi and push when done w/ bld
-# }
+#
+# AZURE DEVBOX
+#
 
 function azdev() {
   image_id="$(set -euo pipefail; AZURE_GROUP=colemick-dev ./scripts/upload-image.sh '.#examples.basic.azureImage')"

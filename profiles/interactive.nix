@@ -60,6 +60,8 @@ in
         htop.enable = true;
       };
       home.packages = with pkgs; [
+        fish
+        
         #nixops
         asciinema
         wget curl rsync

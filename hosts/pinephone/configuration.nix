@@ -1,17 +1,25 @@
 { pkgs, inputs, ... }:
 let
-  hostname = "pinebook";
+  hostname = "pinephone";
 in
 {
   imports = [
-    inputs.mobile-nixos.devices.pine64-pinephone
-  ] ++ inputs.mobile-nixos.nixosModules;
+    (import "${inputs.mobile-nixos}/lib/configuration.nix" {
+      device = "pine64-pinephone";
+    })
+  ];
 
   config = {
       # https://github.com/Dejvino/pinephone-sway-poc
       # package: https://git.sr.ht/~mil/lisgd
       # https://aur.archlinux.org/packages/squeekboard/
       # https://github.com/efernau/rot8
+
+      nixpkgs.config.allowUnfree = true;
+      nixpkgs.overlays = [ inputs.self.overlay ];
+
+      ### BEGIN HACKY COPY
+      
   };
 }
 

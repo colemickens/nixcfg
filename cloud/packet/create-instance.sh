@@ -6,8 +6,8 @@ data="$(mktemp)"
 ./gen-bootstrap.sh "${1}" > "${data}"
 userdata="$(cat ${data})"
 
-loc="dfw2";  plan="c2.medium.x86";  os="nixos_19_03"; price="0.25"; duration="6 hour";
-#loc="ams1";  plan="c2.large.arm";   os="nixos_19_03"; price="0.3"; duration="6 hour";
+#loc="dfw2";  plan="c2.medium.x86";  os="nixos_19_03"; price="0.25"; duration="6 hour";
+loc="ams1";  plan="c2.large.arm";   os="nixos_19_03"; price="0.5"; duration="6 hour";
 #loc="sjc1";  plan="c2.large.arm";   os="custom_ipxe"; price="0.3"; duration="6 hour";
 
 projectid="$(gopass show colemickens/packet.net | grep default_project_id | cut -d' ' -f2)"

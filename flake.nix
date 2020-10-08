@@ -36,7 +36,7 @@
     nixos-veloren = { url = "github:colemickens/nixos-veloren"; };
     nixos-veloren.inputs.nixpkgs.follows = "nixpkgs";
 
-    mobile-nixos = { url = "github:colemickens/mobile-nixos"; };
+    mobile-nixos = { url = "github:colemickens/mobile-nixos/mobile-nixos-blueline"; };
     mobile-nixos.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-ipfs = { url = "github:obsidiansystems/nix"; };
@@ -100,6 +100,15 @@
         in pkgs.colePackages
       );
 
+      pkgs = forAllSystems (sys:
+        let pkgs = import inputs.nixpkgs {
+          system = sys;
+            config = { allowUnfree = true; };
+            overlays = [ inputs.self.overlay ];
+          };
+        in pkgs
+      );
+
       overlay = self: pkgs:
         let p = {
           customCommands = pkgs.callPackages ./pkgs/commands.nix {};
@@ -112,45 +121,39 @@
           };
           passrs = pkgs.callPackage ./pkgs/passrs {};
 
-          raspberrypi-eeprom = pkgs.callPackage ./pkgs/raspberrypi-eeprom {};          
+          raspberrypi-eeprom = pkgs.callPackage ./pkgs/raspberrypi-eeprom {};
           rpi4-uefi = pkgs.callPackage ./pkgs/rpi4-uefi {};
 
           cchat-gtk = pkgs.callPackage ./pkgs/cchat-gtk {
             libhandy = pkgs.callPackage ./pkgs/libhandy {};
           };
           obs-v4l2sink = pkgs.libsForQt5.callPackage ./pkgs/obs-v4l2sink {};
+
+          drm-howto = pkgs.callPackage ./pkgs/drm-howto {};
         }; in p // { colePackages = p; };
 
       nixosConfigurations = {
-        # Cloud VMs
-        azdev  = mkSystem "x86_64-linux" inputs.nixpkgs "azdev";
-
-        # Raspberry Pi Model 4B
-        rpione = mkSystem "aarch64-linux" inputs.nixpkgs "rpione";
-        rpitwo = mkSystem "aarch64-linux" inputs.nixpkgs "rpitwo";
-
-        # Gaming PC - VM  or dual-booted Linux workstation
-        slynux = mkSystem "x86_64-linux"  inputs.nixpkgs "slynux";
-
-        # Laptops
-        xeep     = mkSystem "x86_64-linux"  inputs.nixpkgs "xeep";
-        pinebook = mkSystem "aarch64-linux" inputs.nixpkgs "pinebook";
-
-        # Phones
-        pinephone = mkSystem "aarch64-linux" inputs.nixpkgs "pinephone";
-        #pixelthree = mkSystem ...
-
-        # Virtual Machines
-        testipfsvm = mkSystem "x86_64-linux" inputs.nixpkgs "testipfsvm";
+        azdev      = mkSystem "x86_64-linux"  inputs.nixpkgs "azdev";
+        rpione     = mkSystem "aarch64-linux" inputs.nixpkgs "rpione";
+        rpitwo     = mkSystem "aarch64-linux" inputs.nixpkgs "rpitwo";
+        slynux     = mkSystem "x86_64-linux"  inputs.nixpkgs "slynux";
+        xeep       = mkSystem "x86_64-linux"  inputs.nixpkgs "xeep";
+        pinebook   = mkSystem "aarch64-linux" inputs.nixpkgs "pinebook";
+        testipfsvm = mkSystem "x86_64-linux"  inputs.nixpkgs "testipfsvm";
+        bluephone  = mkSystem "aarch64-linux" inputs.nixpkgs "bluephone";
       };
 
-      hosts = {
+      hosts = rec {
+        ## Regular x86_64 hosts
         azdev = inputs.self.nixosConfigurations.azdev.config.system.build.azureImage;
         xeep = inputs.self.nixosConfigurations.xeep.config.system.build.toplevel;
         slynux = inputs.self.nixosConfigurations.slynux.config.system.build.toplevel;
+
+        ## Raspberry Pi 4 systems
         rpione = inputs.self.nixosConfigurations.rpione.config.system.build.toplevel;
         rpitwo = inputs.self.nixosConfigurations.rpitwo.config.system.build.toplevel;
 
+        ## Pine64 Pinebook Pro Laptop
         pinebook = (pkgsFor inputs.nixpkgs "aarch64-linux").runCommandNoCC "pinebook-bundle" {} ''
           mkdir $out
           ln -s "${inputs.self.nixosConfigurations.pinebook.config.system.build.toplevel}" $out/toplevel
@@ -158,8 +161,18 @@
           ln -s "${inputs.wip-pinebook-pro.packages.aarch64-linux.pinebookpro-keyboard-updater}" $out/kbfw
         '';
 
+        ## Demo NixOS VMs
+        testipfsvm = inputs.self.nixosConfigurations.testipfsvm.config.system.build.vm;
+
+        ## Windows VMs (automatically built with Nix)
+        winvm = import ./hosts/winvm {
+          pkgs = pkgsFor inputs.nixpkgs "x86_64-linux";
+          inherit inputs;
+        };
+
+        ## Mobile-NixOS: Pine64 Pinephone
         pinephone = let
-          dev = inputs.self.nixosConfigurations.pinephone;
+          dev = mkSystem "aarch64-linux" inputs.nixpkgs "pinephone";
         in
           (pkgsFor inputs.nixpkgs "aarch64-linux").runCommandNoCC "pinephone-bundle" {} ''
           mkdir $out
@@ -169,13 +182,15 @@
           ln -s "${dev.config.system.build.boot-partition}" $out/boot-partition;
         '';
 
-        testipfsvm = inputs.self.nixosConfigurations.testipfsvm.config.system.build.vm;
-
-        # Nix-built Windows 10 VM
-        winvm = import ./hosts/winvm {
-          pkgs = pkgsFor inputs.nixpkgs "x86_64-linux";
-          inherit inputs;
-        };
+        ## Mobile-NixOS: Pixel 3
+        bluephone = let
+          dev = inputs.self.nixosConfigurations.bluephone;
+        in
+          {
+            toplevel = dev.config.system.build.toplevel;
+            bootimg = dev.config.system.build.android-bootimg;
+            # device = dev.config.system.build.android-device;
+          };
       };
     };
 }
