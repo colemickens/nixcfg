@@ -1,6 +1,10 @@
 { pkgs, lib, inputs, ... }:
 let
   hostname = "bluephone";
+  extras = with pkgs; [
+    drm-howto
+    dtc
+  ];
 in
 {
   imports = [
@@ -8,6 +12,7 @@ in
       device = "google-blueline";
     })
 
+    ../../mixins/docker.nix
     ../../mixins/sshd.nix
 
     ../../mixins/common.nix #?
@@ -15,6 +20,43 @@ in
   ];
 
   config = {
+    services.udev.packages = [ pkgs.libinput.out ];
+
+  users.users.kiosk = {
+    isNormalUser = true;
+    useDefaultShell = true;
+  };
+
+  systemd.services."cage@" = {
+    serviceConfig.Restart = "always";
+    environment = {
+      WLR_LIBINPUT_NO_DEVICES = "1";
+      NO_AT_BRIDGE = "1";
+    };
+  };
+
+  systemd.enableEmergencyMode = false;
+  systemd.services."serial-getty@ttyS0".enable = false;
+  systemd.services."serial-getty@hvc0".enable = false;
+  systemd.services."getty@tty1".enable = false;
+  systemd.services."autovt@".enable = false;
+
+  documentation.enable = false;
+  programs.command-not-found.enable = false;
+
+  services.cage = {
+    enable = true;
+    user = "kiosk";
+  };
+
+
+
+
+
+
+
+
+
       nixpkgs.config.allowUnfree = true;
       nixpkgs.overlays = [
         inputs.self.overlay
@@ -37,21 +79,22 @@ in
         sudo ip route add 172.16.42.0/24 dev usb0
         */
       #mobile.boot.stage-1.ssh.enable = false; # breaks stage-2 ssh
-      mobile.boot.stage-1.extraUtils = with pkgs; [ drm-howto ];
+      mobile.boot.stage-1.extraUtils = extras;
       
       ### BEGIN HACKY COPY
+      systemd.services.systemd-udev-settle.enable = false;
+
       boot.growPartition = lib.mkDefault true;
       powerManagement.enable = true;
       hardware.pulseaudio.enable = true;
 
       environment.systemPackages = with pkgs; [
-        drm-howto
         (writeShellScriptBin "firefox" ''
           export MOZ_USE_XINPUT2=1
           exec ${pkgs.firefox}/bin/firefox "$@"
         '')
         sgtpuzzles
-      ];
+      ] ++ extras;
 
       networking.firewall.enable = false;
 

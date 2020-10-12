@@ -7,10 +7,11 @@ in
   imports = [
     ./user.nix
     inputs.home-manager.nixosModules."home-manager"
-    
+
     ../mixins/common.nix
-    
+
     ../mixins/bash.nix
+    ../mixins/fish.nix
     ../mixins/git.nix
     ../mixins/neovim.nix
     ../mixins/ssh.nix

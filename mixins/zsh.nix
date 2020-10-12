@@ -24,7 +24,7 @@
           # commands added to .zshenv
           # path+=/home/cole/code/nixcfg # moved to init (since it wasnt in ssh sessions)
         '';
-        
+
         initExtra = ''
           # added to .zshrc
           bindkey -e
@@ -36,10 +36,6 @@
             name = "powerlevel10k-config";
             src = pkgs.substituteAll { src=./zsh-p10k.zsh; dir="bin"; };
             file = "bin/zsh-p10k.zsh";
-            
-            # doesn't work ?
-            # src = ./zsh-p10k.zsh;
-            # file = "./zsh-p10k.zsh";
           }
           {
             name = "powerlevel10k";

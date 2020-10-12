@@ -81,7 +81,8 @@ function out2drv() {
 function build() {
   set -euo pipefail
   thing="${1:-".#hosts.$(hostname)"}"; shift
-  drv="$(set -euo pipefail; instantiate "${thing}")"
+  eout="$(set -euo pipefail; instantiate "${thing}")"
+  drv="$(set -euo pipefail; out2drv "${eout}")"
   out="$(set -euo pipefail; nix-build "${buildargs[@]}" --keep-going "${drv}")"
   #echo "${out}" | env CACHIX_SIGNING_KEY=${cachixkey} cachix push "${cache}" &>/dev/stderr
   echo -e "${out}"
@@ -169,18 +170,29 @@ function bluereset() {
 }
 
 function blue() {
-  remote="ssh://root@172.16.42.1"
+  sudo ip link set usb0 up || true
+  sudo ip addr add 172.16.42.2/24 dev usb0 || true
+  sudo ip addr add brd 172.16.42.255 dev usb0 || true
+  sudo ip route add 172.16.42.0/24 dev usb0 || true
+
+  remote="ssh://cole@172.16.42.1"
   thing=".#hosts.bluephone.toplevel"
   toplevel="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
-  
+
   nix-store -r "${toplevel}"
   nix copy --to "${remote}" "${toplevel}"
   ssh "${remote}" "sudo bash -c \"\
     nix-env --set --profile /nix/var/nix/profiles/system ${toplevel} \
     && ${toplevel}/bin/switch-to-configuration switch\""
-  
+
   # simpler form of ^, but doesnt work - phone can't realize from internet yet
   #deploy root@172.16.42.1 "${toplevel}"
+}
+
+function bluereboot() {
+  nixup blue || true
+  nixup bluessh sudo reboot bootloader || true
+  nixup blueboot
 }
 
 function blueboot() {
@@ -192,6 +204,25 @@ function blueboot() {
   fi
   fastboot set_active a
   fastboot boot "${out}"
+}
+
+function bluekernel() {
+  thing=".#hosts.bluephone.kernel"
+  out="$(set -euo pipefail; instantiate "${thing}")"
+  if [[ ! -e "${out}" ]]; then
+    kernel="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
+    nix-store -r "${kernel}"
+  fi
+  nix-store -r "${out}"
+}
+
+
+function bluessh() {
+  sudo ip link set usb0 up || true
+  sudo ip addr add 172.16.42.2/24 dev usb0 || true
+  sudo ip addr add brd 172.16.42.255 dev usb0 || true
+  sudo ip route add 172.16.42.0/24 dev usb0 || true
+  TERM=xterm-256color ssh cole@172.16.42.1 "${@}"
 }
 
 #

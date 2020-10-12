@@ -189,6 +189,7 @@
           {
             toplevel = dev.config.system.build.toplevel;
             bootimg = dev.config.system.build.android-bootimg;
+            kernel = dev.config.mobile.boot.stage-1.kernel.package;
             # device = dev.config.system.build.android-device;
           };
       };

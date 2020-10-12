@@ -1,8 +1,8 @@
 {
   repo_git = "https://github.com/cole-h/passrs";
   branch = "master";
-  rev = "5254dbad5efa52aaad0b09cb9bea1c4fcdbc385f";
-  sha256 = "sha256-EJp6zmCApOKdKYx1REJCfiqvmKFfp66V6oasi+CvYxw=";
-  cargoSha256 = "sha256-jZRJmfY//gRlmj7YgMHVtR9hmpPXxEbP1BladFGmsqo=";
+  rev = "3800bdf593f7f4fd08268f0dd7df924c43fd5cd1";
+  sha256 = "sha256-Mv0xBBokinO6Wuwj6DByUhmOZgwt4B4SMp2brotI8Lg=";
+  cargoSha256 = "sha256-mVU9VciyIvnklvMNurobaJkQiQWF361RZi568s5mkzY=";
   revdate = "2020-08-31 06:57:21Z";
 }
