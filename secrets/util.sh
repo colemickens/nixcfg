@@ -26,6 +26,17 @@ function e() {
   done
 }
 
+function addhost() {
+  host="${1}"
+  ip="${2}"
+  set +x # fucking bash (otherwise it shits out a set-x echo line into the fp file)
+  ssh "cole@${ip}" "sudo cat /etc/ssh/ssh_host_rsa_key" \
+    | ssh-to-pgp -o "./keys/${host}.pub" 2> "./keys/${host}.fingerprint"
+  gpg --import "./keys/${host}.pub"
+  echo "add this to .sops.yaml: "
+  echo "- \"$(cat "./keys/${host}.fingerprint")\" # ssh-to-pgp(${host} host-rsa)"
+}
+
 function keys() {
   mkdir -p ./keys
 

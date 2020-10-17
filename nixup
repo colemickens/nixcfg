@@ -24,6 +24,7 @@ function update() {
     cmpkgsupstream="nixpkgs/nixos-unstable-small"
     pipkgsupstream="nixpkgs/nixos-unstable"
     cd ~/code/nixpkgs/cmpkgs; git rebase "${cmpkgsupstream}" && git push origin HEAD -f
+    cd ~/code/nixpkgs/pipkgs; git rebase "${pipkgsupstream}" && git push origin HEAD -f
 
     cd ~/code/nixpkgs-wayland; git pull --rebase
     cd ~/code/home-manager/cmhm; git remote update && git rebase rycee/master && git push origin HEAD -f
@@ -58,6 +59,7 @@ function instantiate() {
   drv="$(set -euo pipefail; nix --experimental-features 'nix-command flakes' --pure-eval \
     eval \
       --override-input nixpkgs "/home/cole/code/nixpkgs/cmpkgs" \
+      --override-input pipkgs "/home/cole/code/nixpkgs/pipkgs" \
       --override-input firefox "/home/cole/code/flake-firefox-nightly" \
       --override-input sops-nix "/home/cole/code/sops-nix" \
       --override-input home-manager "/home/cole/code/home-manager/cmhm" \
@@ -66,7 +68,6 @@ function instantiate() {
       --override-input nixos-veloren "/home/cole/code/nixos-veloren" \
       --override-input nixos-azure "/home/cole/code/nixos-azure" \
       --override-input mobile-nixos "/home/cole/code/mobile-nixos" \
-      --show-trace \
       --raw "${thing}")"
   echo -e "${drv}"
 }
@@ -84,7 +85,7 @@ function build() {
   eout="$(set -euo pipefail; instantiate "${thing}")"
   drv="$(set -euo pipefail; out2drv "${eout}")"
   out="$(set -euo pipefail; nix-build "${buildargs[@]}" --keep-going "${drv}")"
-  #echo "${out}" | env CACHIX_SIGNING_KEY=${cachixkey} cachix push "${cache}" &>/dev/stderr
+  echo "${out}" | env CACHIX_SIGNING_KEY=${cachixkey} cachix push "${cache}" &>/dev/stderr
   echo -e "${out}"
 }
 
@@ -148,8 +149,15 @@ function pi() {
   #rasp="$(set -euo pipefail; remote "cole@192.168.1.2" "${thing}")"
   echo "rasp"; echo "$out"; echo
   deploy cole@192.168.1.2 "${out}"
-
+}
+function pi2() {
   thing=".#hosts.rpitwo"
+  out="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
+  nix-store --realize "${out}"
+  deploy cole@192.168.1.3 "${out}"
+}
+function pi2sd() {
+  thing=".#hosts.rpitwo_sd"
   out="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
   nix-store --realize "${out}"
 }
@@ -265,6 +273,10 @@ function azdev() {
     --admin-username "cole" --location "westus2" \
     --ssh-key-values "$(ssh-add -L)" \
     --ephemeral-os-disk true
+}
+
+function all() {
+  nixup && nixup book && nixup pi && nixup pi2
 }
 
 mode="${1:-"default"}"

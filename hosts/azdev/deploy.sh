@@ -18,8 +18,6 @@ export AZURE_GROUP="azdev2020img"
 img_id="/subscriptions/aff271ee-e9be-4441-b9bb-42f5af4cbaeb/resourceGroups/azdev2020img/providers/Microsoft.Compute/images/21.03.20201007.dirty.vhd"
 #img_id="$(set -euo pipefail; nix shell "${upstream}" --command azutil upload /tmp/azdev)"
 
-img_id=""
-
 # boot a VM
 export AZURE_GROUP="azdev2020${RANDOM}"
 nix shell "${upstream}" --command azutil boot "${img_id}"

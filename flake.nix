@@ -15,6 +15,7 @@
   # credits: bqv, balsoft
   inputs = {
     nixpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; }; # for my regular nixpkgs
+    pipkgs = { url = "github:colemickens/nixpkgs/pipkgs"; }; # for experimenting with rpi4
     master = { url = "github:nixos/nixpkgs/master"; }; # for nixFlakes
     stable = { url = "github:nixos/nixpkgs/nixos-20.03"; }; # for cachix
 
@@ -120,6 +121,8 @@
             neovim-unwrapped = pkgs.neovim-unwrapped;
           };
           passrs = pkgs.callPackage ./pkgs/passrs {};
+          
+          mesa-git = pkgs.callPackage ./pkgs/mesa-git {};
 
           raspberrypi-eeprom = pkgs.callPackage ./pkgs/raspberrypi-eeprom {};
           rpi4-uefi = pkgs.callPackage ./pkgs/rpi4-uefi {};
@@ -135,7 +138,7 @@
       nixosConfigurations = {
         azdev      = mkSystem "x86_64-linux"  inputs.nixpkgs "azdev";
         rpione     = mkSystem "aarch64-linux" inputs.nixpkgs "rpione";
-        rpitwo     = mkSystem "aarch64-linux" inputs.nixpkgs "rpitwo";
+        rpitwo     = mkSystem "aarch64-linux" inputs.pipkgs "rpitwo";
         slynux     = mkSystem "x86_64-linux"  inputs.nixpkgs "slynux";
         xeep       = mkSystem "x86_64-linux"  inputs.nixpkgs "xeep";
         pinebook   = mkSystem "aarch64-linux" inputs.nixpkgs "pinebook";
@@ -152,6 +155,7 @@
         ## Raspberry Pi 4 systems
         rpione = inputs.self.nixosConfigurations.rpione.config.system.build.toplevel;
         rpitwo = inputs.self.nixosConfigurations.rpitwo.config.system.build.toplevel;
+        rpitwo_sd = inputs.self.nixosConfigurations.rpitwo.config.system.build.sdImage;
 
         ## Pine64 Pinebook Pro Laptop
         pinebook = (pkgsFor inputs.nixpkgs "aarch64-linux").runCommandNoCC "pinebook-bundle" {} ''

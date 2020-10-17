@@ -31,6 +31,7 @@ in
 
   config = {
     nix.nixPath = [];
+
     documentation.nixos.enable = false;
     networking.hostName = "rpione";
     services.udisks2.enable = false;

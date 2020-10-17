@@ -8,8 +8,6 @@ let
     else "${findImport "extras/home-manager"}/nixos"
   );
 
-  #nixops = inputs.nixops.pkgs.nixops;
-
   crtFilePath = "/home/cole/.mitmproxy/mitmproxy-ca-cert.pem";
   crtFile = pkgs.copyPathToStore crtFilePath;
 
@@ -60,8 +58,8 @@ in
         htop.enable = true;
       };
       home.packages = with pkgs; [
-        fish
-        
+        inputs.stable.legacyPackages.${pkgs.system}.cachix
+
         #nixops
         asciinema
         wget curl rsync
@@ -101,7 +99,8 @@ in
         gdb lldb file gptfdisk
         parted psmisc wipe
 
-        aria2 megatools youtube-dl plowshare
+        aria2 megatools youtube-dl
+        #plowshare
 
         # eh?
         cordless

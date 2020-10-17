@@ -4,10 +4,9 @@ let
   hostname = "rpitwo";
 in {
   imports = [
-    "${modulesPath}/installer/cd-dvd/sd-image-aarch64.nix"
+    #"${modulesPath}/profiles/base.nix"
     ../../mixins/common.nix
-
-    ../../profiles/user.nix
+    "${modulesPath}/installer/netboot/netboot-minimal.nix"
   ];
   config = {
     environment.systemPackages = with pkgs; [
@@ -16,15 +15,13 @@ in {
       raspberrypi-tools
     ];
 
-    # nixpkgs.overlays = [
-    #   (old: pkgs: {
-    #     mesa = pkgs.mesa-git; # mesa-20.3 for the new vulkan rpi4 changes
-    #   })
-    # ];
-
-    # TODO, why can root ssh?
-
+    services.mingetty.autologinUser = lib.mkForce "root";
     systemd.services.sshd.wantedBy = lib.mkOverride 0 [ "multi-user.target" ];
+
+    fileSystems."/var/lib" = {
+      device = "192.168.1.2:/${hostname}";
+      fsType = "nfs";
+    };
 
     nix.nixPath = [];
     documentation.enable = false;
@@ -45,14 +42,10 @@ in {
     networking.firewall.enable = true;
 
     boot = {
-      loader.grub.enable = false;
-      loader.raspberryPi.uboot.enable = true;
-      #kernelPackages = pkgs.linuxPackages_5_10; # whenever 5.10-rc1 is out... to test the new vc4/drm changes
-      kernelPackages = pkgs.linuxPackages_rpi4;
+      kernelPackages = pkgs.linuxPackages_latest;
+      #supportedFilesystems = [ "ext4" "zfs" ];
       initrd.availableKernelModules = [ "xhci_pci" "usb_storage" ];
       kernelModules = [ "xhci_pci" "usb_storage" ];
-
-      consoleLogLevel = lib.mkDefault 7;
     };
   };
 }

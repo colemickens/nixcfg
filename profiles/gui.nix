@@ -5,6 +5,11 @@ let
   firefoxNightly = pkgs.writeShellScriptBin "firefox-nightly" ''
     exec ${firefoxFlake.firefox-nightly-bin}/bin/firefox "''${@}"
   '';
+
+  torbrowserPkg =
+    if pkgs.system == "aarch64-linux"
+    then pkgs.tor-browser-bundle-ports-bin
+    else pkgs.tor-browser-bundle-bin;
 in
 {
   imports = [
@@ -77,15 +82,15 @@ in
         firefox
         #chromium
         falkon
+        #torbrowserPkg
       ]
       ++ builtins.attrValues pkgs.customGuiCommands # include custom overlay gui pkgs
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
         firefoxNightly # pre-built, Moz doesn't seem to build nightly aarch64?
         scrcpy
 
-        torbrowser
-        
         # yucky non-free
+        pkgs.google-chrome-beta
         pkgs.google-chrome-dev
         pkgs.discord
         pkgs.ripcord

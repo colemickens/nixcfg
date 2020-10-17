@@ -4,7 +4,7 @@
   imports = [
     "${modulesPath}/profiles/base.nix"
   ];
-  
+
   config = {
     boot = {
       loader.grub.enable = false;
