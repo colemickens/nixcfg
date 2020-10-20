@@ -121,7 +121,7 @@
             neovim-unwrapped = pkgs.neovim-unwrapped;
           };
           passrs = pkgs.callPackage ./pkgs/passrs {};
-          
+
           mesa-git = pkgs.callPackage ./pkgs/mesa-git {};
 
           raspberrypi-eeprom = pkgs.callPackage ./pkgs/raspberrypi-eeprom {};

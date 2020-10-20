@@ -30,7 +30,7 @@ in
         map = [{ port = "80"; toPort = "80"; }];
       };
     };
-    
+
     # doesn't work for us
     systemd.services.tor = {
       serviceConfig.SupplementaryGroups = [ config.users.groups.keys.name ]; # we shouldn't need this AND owner/mode below tho?

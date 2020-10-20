@@ -83,7 +83,6 @@ in
         #grex # regex
 
         sops age cryptsetup
-        meli
 
         #bottom
         htop iotop which binutils.bintools

@@ -9,15 +9,16 @@ in
 
     ../../mixins/chromecast.nix
     ../../mixins/docker.nix
-    ../../mixins/ipfs.nix
+    #../../mixins/ipfs.nix
     ../../mixins/libvirt.nix
+    ../../mixins/meli.nix
     ../../mixins/sshd.nix
     ../../mixins/v4l2loopback.nix
 
     ../../profiles/sway.nix
     ../../profiles/gaming.nix
 
-    "${modulesPath}/virtualisation/hyperv-guest.nix"
+    #"${modulesPath}/virtualisation/hyperv-guest.nix"
 
     ./hs.nix
   ];

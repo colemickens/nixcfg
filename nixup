@@ -22,7 +22,7 @@ function update() {
 
     #cmpkgsupstream="nixpkgs/nixos-unstable-small"
     cmpkgsupstream="nixpkgs/nixos-unstable-small"
-    pipkgsupstream="nixpkgs/nixos-unstable"
+    pipkgsupstream="nixpkgs/nixos-unstable-small"
     cd ~/code/nixpkgs/cmpkgs; git rebase "${cmpkgsupstream}" && git push origin HEAD -f
     cd ~/code/nixpkgs/pipkgs; git rebase "${pipkgsupstream}" && git push origin HEAD -f
 

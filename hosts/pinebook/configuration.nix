@@ -18,7 +18,10 @@ in
   ];
 
   config = {
-    environment.systemPackages = with pkgs; [ drm-howto ];
+    environment.systemPackages = with pkgs; [
+      drm-howto
+      virt-viewer
+    ];
     boot.loader.grub.enable = false;
     boot.loader.generic-extlinux-compatible.enable = true;
   
@@ -38,14 +41,14 @@ in
       # its messages. Comment or move abot ttyS2 for better serial debugging.
       "console=tty0"
     ];
-    
+
     nix = {
       nixPath = [];
     };
 
     system.stateVersion = "20.03"; # Did you read the comment?
     services.timesyncd.enable = true;
-    
+
     documentation.enable = false;
     documentation.nixos.enable = false;
 

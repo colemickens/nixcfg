@@ -55,8 +55,10 @@ in
         gimp
         qemu
         vscodium
+        #vscode
         freerdp
         wlvncc
+        virt-viewer
         #vlc
 
         # misc utils for desktop
