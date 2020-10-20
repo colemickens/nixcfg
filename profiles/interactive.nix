@@ -106,7 +106,6 @@ in
         xdg_utils
       ]
       ++ builtins.attrValues customCommands
-      ++ lib.optionals (pkgs.system == "x86_64-linux") [pkgs.bandwidth]
       ;
     };
   };

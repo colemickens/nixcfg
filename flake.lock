@@ -210,11 +210,8 @@
         ]
       },
       "locked": {
-        "lastModified": 1603181901,
-        "narHash": "sha256-T9eSLcgEPbVRLOLam6/C/IGqrn9uR6SYLB25UseDpfw=",
-        "ref": "cmhm",
-        "rev": "7bd8bc238f30d1802a2f0ba77a9993f43e2cd260",
-        "revCount": 1238,
+        "lastModified": 1603190161,
+        "narHash": "sha256-QUpwspL4NPFiYCqKR1OgQfwrNY8RcutNrWfSyIJ9V4M=",
         "type": "git",
         "url": "file:///home/cole/code/home-manager/cmhm"
       },
@@ -243,11 +240,11 @@
     },
     "master": {
       "locked": {
-        "lastModified": 1603073724,
-        "narHash": "sha256-WD60zSu96QyEViQW+oUQ7m0w3DaEfSrjZ2obZq2hpDY=",
+        "lastModified": 1603183212,
+        "narHash": "sha256-9OPvUsNVqFsFfyNLpdrFu1xN1AkxhafNigvCPpN4Z7A=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "ad3234b7d68d65e5d1ccfc6ddfb4cea267441255",
+        "rev": "1a9e02dec6e2dcf3d9e90ac0d5232586f991271d",
         "type": "github"
       },
       "original": {
@@ -259,11 +256,11 @@
     },
     "master_2": {
       "locked": {
-        "lastModified": 1603179570,
-        "narHash": "sha256-Wc7gTcdtaJNrRPyl2uMmuCmpNPDQtZ7X7yHs0zdOiP0=",
+        "lastModified": 1603189840,
+        "narHash": "sha256-qqBDoCn0nm7NXUrHD9OZvv1gJr2n9V+aSgxOIcUiZiU=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "466194482c2a46466a54ddf3c6adf8579ec9c7b1",
+        "rev": "dba3e198d40f9aaab1fb15beda2f6b9285847f5f",
         "type": "github"
       },
       "original": {
@@ -406,11 +403,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1602889450,
-        "narHash": "sha256-mib9DuWrl5z1Q5CVwgo0vw7/d2d7I3IOq6TftzF/S6A=",
+        "lastModified": 1603188551,
+        "narHash": "sha256-vzRGuwa6TCf64A0OrJ2IaZQ8OaZjJ6nVQ2b4gItVOYs=",
         "ref": "master",
-        "rev": "e63703d70092cef2ed483daa014927be01c7623a",
-        "revCount": 1809,
+        "rev": "58aa00f96b4aa2df0b34c5dbb002bb5f5402caaa",
+        "revCount": 1810,
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs-wayland"
       },
