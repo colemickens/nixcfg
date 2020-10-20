@@ -21,6 +21,7 @@ in
 
     ../mixins/cachix.nix
     ../mixins/gopass/gopass.nix
+    ../mixins/htop.nix
     #../mixins/mega/mega.nix
     ../mixins/nushell.nix
     ../mixins/xdg.nix
@@ -55,7 +56,6 @@ in
         };
         git.package = pkgs.gitAndTools.gitFull;
         gpg.enable = true;
-        htop.enable = true;
       };
       home.packages = with pkgs; [
         inputs.stable.legacyPackages.${pkgs.system}.cachix
@@ -85,7 +85,7 @@ in
         sops age cryptsetup
 
         #bottom
-        htop iotop which binutils.bintools
+        iotop which binutils.bintools
         parallel unzip xz zip
         gomuks #rumatui
 
