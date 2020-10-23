@@ -19,7 +19,7 @@ I package these things, mostly for myself:
 - raspberrypi-eeprom (the rpi4 boot eeprom files)
 - rpi4-uefi (a rpi4 uefi build)
 
-These are easily runnable, if you [have enabled Nix flakes]():
+These are easily runnable, if you [have enabled Nix flakes](https://discourse.nixos.org/t/using-experimental-nix-features-in-nixos-and-when-they-will-land-in-stable/7401/4):
 
 ```shell
 # if you have not enabled flakes globally, and have not cloned this repo,
