@@ -1,6 +1,7 @@
 { config, pkgs, lib, modulesPath, inputs, ... }:
 
 let
+  rpitwo_serial = "e43b854b";
   rpitwo = inputs.self.nixosConfigurations.rpitwo;
   configtxt = pkgs.writeText "config.txt" ''
     [all]
@@ -43,12 +44,12 @@ let
 
   tftp_parent_dir = pkgs.runCommandNoCC "build-uefi" {} ''
     mkdir -p $out
-    
-    cp -a "${pkgs.ipxe}/bin-aarch64-efi/ipxe.efi" $out/ipxe.efi
 
-    ln -s ${uefi_dir_with_update}/ $out/e43b854b
+    #cp -a "''${pkgs.ipxe}/bin-aarch64-efi/ipxe.efi" $out/ipxe.efi
+
+    ln -s ${uefi_dir_with_update}/ $out/${rpione_serial}
   '';
-  
+
   boot_dir = pkgs.runCommandNoCC "build-bootdir" {} ''
     (
       set -x
@@ -59,7 +60,7 @@ let
   '';
 
   nixos = import "${modulesPath}/../lib/eval-config.nix" {
-    modules = [ (import ../rasptwo/configuration.nix) ];
+    modules = [ (import ../rpitwonet/configuration.nix) ];
     system = "aarch64-linux";
   };
   build = nixos.config.system.build;

@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "drm-sample1";
+  pname = "drm-sample";
   version = "2020-08-17";
 
   src = fetchFromGitHub {

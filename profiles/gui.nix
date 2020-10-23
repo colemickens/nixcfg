@@ -22,7 +22,6 @@ in
     ../mixins/kitty.nix
     ../mixins/mpv.nix
     ../mixins/mako.nix
-    ../mixins/obs.nix
     ../mixins/qt.nix
     ../mixins/spotify.nix
     ../mixins/termite.nix
@@ -92,7 +91,6 @@ in
         scrcpy
 
         # yucky non-free
-        pkgs.google-chrome-beta
         pkgs.google-chrome-dev
         pkgs.discord
         pkgs.ripcord

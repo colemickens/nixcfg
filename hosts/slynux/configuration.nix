@@ -8,12 +8,13 @@ in
     ../../mixins/common.nix
 
     ../../mixins/chromecast.nix
+    #../../mixins/debug-xdg.nix
     ../../mixins/docker.nix
     #../../mixins/ipfs.nix
     ../../mixins/libvirt.nix
     ../../mixins/meli.nix
     ../../mixins/sshd.nix
-    ../../mixins/v4l2loopback.nix
+    #../../mixins/v4l2loopback.nix
 
     ../../profiles/sway.nix
     ../../profiles/gaming.nix

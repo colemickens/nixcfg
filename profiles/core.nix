@@ -13,6 +13,7 @@ in
     ../mixins/bash.nix
     ../mixins/fish.nix
     ../mixins/git.nix
+    ../mixins/htop.nix
     ../mixins/neovim.nix
     ../mixins/ssh.nix
     ../mixins/tmux.nix
@@ -30,7 +31,6 @@ in
       news.display = "silent";
       programs = {
         home-manager.enable = true;
-        htop.enable = true;
       };
       home.packages = with pkgs; [
         git-crypt

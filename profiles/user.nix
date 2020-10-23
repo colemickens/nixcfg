@@ -4,8 +4,6 @@
   config = {
     nix.trustedUsers = [ "cole" ];
 
-    environment.systemPackages = with pkgs; [ neovim ];
-
     users.extraGroups."cole".gid = 1000;
     users.extraUsers."cole" = {
       isNormalUser = true;

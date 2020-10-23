@@ -149,12 +149,14 @@ function pi() {
   #rasp="$(set -euo pipefail; remote "cole@192.168.1.2" "${thing}")"
   echo "rasp"; echo "$out"; echo
   deploy cole@192.168.1.2 "${out}"
+  ssh cole@192.168.1.2 sudo reboot
 }
 function pi2() {
   thing=".#hosts.rpitwo"
   out="$(set -euo pipefail; remote "colemickens@aarch64.nixos.community" "${thing}")"
   nix-store --realize "${out}"
   deploy cole@192.168.1.3 "${out}"
+  ssh cole@192.168.1.3 sudo reboot
 }
 function pi2sd() {
   thing=".#hosts.rpitwo_sd"

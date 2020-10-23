@@ -14,10 +14,10 @@ in
 
     #./modules/drone.nix
     #./modules/cyclops.nix
-    #./modules/netboot-server.nix
+    ./modules/netboot-server.nix
     ./modules/nginx.nix
     ./modules/postgres.nix
-    
+
     ../../mixins/avahi-publish.nix
     ../../mixins/docker.nix
     ../../mixins/plex-mpv.nix

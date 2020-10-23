@@ -115,24 +115,21 @@
           customCommands = pkgs.callPackages ./pkgs/commands.nix {};
           customGuiCommands = pkgs.callPackages ./pkgs/commands-gui.nix {};
 
-          alps = pkgs.callPackage ./pkgs/alps {};
+          #alps = pkgs.callPackage ./pkgs/alps {};
+          cchat-gtk = pkgs.callPackage ./pkgs/cchat-gtk {
+            libhandy = pkgs.callPackage ./pkgs/libhandy {};
+          };
+          drm-howto = pkgs.callPackage ./pkgs/drm-howto {};
+          fluffychat = pkgs.callPackage ./pkgs/fluffychat {};
+          #mesa-git = pkgs.callPackage ./pkgs/mesa-git {};
           mirage-im = pkgs.libsForQt5.callPackage ./pkgs/mirage-im {};
           neovim-unwrapped = pkgs.callPackage ./pkgs/neovim {
             neovim-unwrapped = pkgs.neovim-unwrapped;
           };
+          obs-v4l2sink = pkgs.libsForQt5.callPackage ./pkgs/obs-v4l2sink {};
           passrs = pkgs.callPackage ./pkgs/passrs {};
-
-          mesa-git = pkgs.callPackage ./pkgs/mesa-git {};
-
           raspberrypi-eeprom = pkgs.callPackage ./pkgs/raspberrypi-eeprom {};
           rpi4-uefi = pkgs.callPackage ./pkgs/rpi4-uefi {};
-
-          cchat-gtk = pkgs.callPackage ./pkgs/cchat-gtk {
-            libhandy = pkgs.callPackage ./pkgs/libhandy {};
-          };
-          obs-v4l2sink = pkgs.libsForQt5.callPackage ./pkgs/obs-v4l2sink {};
-
-          drm-howto = pkgs.callPackage ./pkgs/drm-howto {};
         }; in p // { colePackages = p; };
 
       nixosConfigurations = {

@@ -1,16 +1,8 @@
 { pkgs, lib, config, inputs, isFlakes, ... }:
 
 let
-  findImport = (import ../../../lib.nix).findImport;
-  homeImport = (
-    if isFlakes
-    then inputs.home.nixosModules."home-manager"
-    else "${findImport "extras/home-manager"}/nixos"
-  );
-
-  crtFilePath = "/home/cole/.mitmproxy/mitmproxy-ca-cert.pem";
-  crtFile = pkgs.copyPathToStore crtFilePath;
-
+#   crtFilePath = "/home/cole/.mitmproxy/mitmproxy-ca-cert.pem";
+#   crtFile = pkgs.copyPathToStore crtFilePath;
   extraCommands = import ./extra/commands.nix {inherit pkgs; };
 in
 {
@@ -20,8 +12,8 @@ in
     ../mixins/gpg-agent.nix
 
     ../mixins/cachix.nix
+    ../mixins/direnv.nix
     ../mixins/gopass/gopass.nix
-    ../mixins/htop.nix
     #../mixins/mega/mega.nix
     ../mixins/nushell.nix
     ../mixins/xdg.nix
@@ -44,16 +36,6 @@ in
         ".gdbinit".source = (pkgs.writeText "gdbinit" ''set auto-load safe-path /nix/store'');
       };
       programs = {
-        direnv = {
-          enable = true;
-          enableNixDirenvIntegration = true;
-          stdlib = ''
-            # $HOME/.config/direnv/direnvrc
-            : ''${XDG_CACHE_HOME:=$HOME/.cache}
-            pwd_hash=$(echo -n $PWD | sha256sum | cut -d ' ' -f 1)
-            direnv_layout_dir=$XDG_CACHE_HOME/direnv/layouts/$pwd_hash
-          '';
-        };
         git.package = pkgs.gitAndTools.gitFull;
         gpg.enable = true;
       };
