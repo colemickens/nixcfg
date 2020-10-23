@@ -120,7 +120,6 @@
             libhandy = pkgs.callPackage ./pkgs/libhandy {};
           };
           drm-howto = pkgs.callPackage ./pkgs/drm-howto {};
-          fluffychat = pkgs.callPackage ./pkgs/fluffychat {};
           #mesa-git = pkgs.callPackage ./pkgs/mesa-git {};
           mirage-im = pkgs.libsForQt5.callPackage ./pkgs/mirage-im {};
           neovim-unwrapped = pkgs.callPackage ./pkgs/neovim {
