@@ -113,6 +113,7 @@ in
     console.packages = [ pkgs.terminus_font ];
 
     boot = {
+      tmpOnTmpfs = true;
       zfs.requestEncryptionCredentials = true;
       kernelPackages = pkgs.linuxPackages_latest;
       initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];

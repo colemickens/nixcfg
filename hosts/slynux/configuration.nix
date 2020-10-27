@@ -13,8 +13,9 @@ in
     #../../mixins/ipfs.nix
     ../../mixins/libvirt.nix
     ../../mixins/meli.nix
+    ../../mixins/obs.nix
     ../../mixins/sshd.nix
-    #../../mixins/v4l2loopback.nix
+    ../../mixins/v4l2loopback.nix
 
     ../../profiles/sway.nix
     ../../profiles/gaming.nix
@@ -76,6 +77,7 @@ in
     console.packages = [ pkgs.terminus_font ];
 
     boot = {
+      tmpOnTmpfs = true;
       #zfs.requestEncryptionCredentials = true;
       kernelPackages = pkgs.linuxPackages_latest;
       initrd.availableKernelModules = [
@@ -140,6 +142,7 @@ in
         timeout = 1;
         systemd-boot.enable = true;
         systemd-boot.memtest86.enable = true;
+        systemd-boot.configurationLimit = 2;
         efi.canTouchEfiVariables = true;
       };
     };

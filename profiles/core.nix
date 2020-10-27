@@ -22,6 +22,7 @@ in
 
   config = {
     home-manager.useGlobalPkgs = true;
+    home-manager.useUserPackages = true;
     home-manager.users.cole = { pkgs, ... }: {
       home.stateVersion = "20.03";
       home.sessionVariables = {

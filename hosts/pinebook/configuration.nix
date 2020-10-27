@@ -24,9 +24,14 @@ in
     ];
     boot.loader.grub.enable = false;
     boot.loader.generic-extlinux-compatible.enable = true;
-  
+
     boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
     boot.initrd.kernelModules = [ "nvme" ];
+
+    services.logind.extraConfig = ''
+      # TODO: figure out how to reverse `del+power`, `fn+del` for power wouldn't be the worst
+      HandlePowerKey=ignore
+    '';
 
     boot.consoleLogLevel = pkgs.lib.mkDefault 7;
 

@@ -16,6 +16,7 @@
   inputs = {
     nixpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; }; # for my regular nixpkgs
     pipkgs = { url = "github:colemickens/nixpkgs/pipkgs"; }; # for experimenting with rpi4
+    nixos-unstable = { url = "github:nixos/nixpkgs/nixos-unstable"; };
     master = { url = "github:nixos/nixpkgs/master"; }; # for nixFlakes
     stable = { url = "github:nixos/nixpkgs/nixos-20.03"; }; # for cachix
 
@@ -87,7 +88,7 @@
             nettools openssh ripgrep rsync
             nix-build-uncached nix-prefetch-git
             packet-cli
-            sops
+            sops oil
           ];
         }
       );
@@ -127,6 +128,10 @@
           };
           obs-v4l2sink = pkgs.libsForQt5.callPackage ./pkgs/obs-v4l2sink {};
           passrs = pkgs.callPackage ./pkgs/passrs {};
+
+          libquotient = pkgs.libsForQt5.callPackage ./pkgs/quaternion/libquotient.nix {};
+          quaternion = pkgs.libsForQt5.callPackage ./pkgs/quaternion {};
+
           raspberrypi-eeprom = pkgs.callPackage ./pkgs/raspberrypi-eeprom {};
           rpi4-uefi = pkgs.callPackage ./pkgs/rpi4-uefi {};
         }; in p // { colePackages = p; };

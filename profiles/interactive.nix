@@ -26,9 +26,7 @@ in
       keep-outputs = true
       keep-derivations = true
     '';
-    home-manager.useGlobalPkgs = true;
     home-manager.users.cole = { pkgs, ... }: {
-      home.stateVersion = "20.03";
       home.sessionVariables = {
         EDITOR = "${pkgs.neovim}/bin/nvim";
       };
@@ -59,7 +57,8 @@ in
         yubico-piv-tool
 
         # https://zaiste.net/posts/shell-commands-rust/
-        tealdeer ytop
+        tealdeer
+        bottom
         du-dust
         fd
         #grex # regex

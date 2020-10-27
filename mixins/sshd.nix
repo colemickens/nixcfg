@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   config = {
@@ -6,7 +6,7 @@
     services.openssh = {
       enable = true;
       passwordAuthentication = false;
-      permitRootLogin = "no";
+      permitRootLogin = lib.mkForce "no";
       extraConfig = ''
         StreamLocalBindUnlink yes
       '';

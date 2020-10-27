@@ -12,7 +12,6 @@ with lib;
     i18n.defaultLocale = "en_US.UTF-8";
 
     boot = {
-      tmpOnTmpfs = true;   # probably not appropriate for all machines (rpi)
       cleanTmpDir = true;
       kernel.sysctl = {
         "fs.file-max" = 100000;
@@ -22,7 +21,7 @@ with lib;
     };
 
     environment.systemPackages = with pkgs; [ coreutils ];
-    
+
     # TODO: root ssh config to get nix daemon to use user's gpg-agent for ssh (closer to gpg conf hopefully)
 
     nix = {

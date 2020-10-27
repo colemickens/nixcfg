@@ -10,9 +10,17 @@ unset NIX_PATH
 cd "${DIR}"
 
 cache="colemickens"
-cachixkey="$(set -e; gopass show "websites/cachix.org/apikey/${cache}")"
+#cachixkey="$(set -e; gopass show "websites/cachix.org/apikey/${cache}")"
 tarunstable="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz"
 tarstable="https://github.com/nixos/nixpkgs/archive/nixos-20.03.tar.gz"
+
+buildargs=(
+  --option 'extra-binary-caches' 'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org'
+  --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA='
+  --option 'build-cores' '0'
+  --option 'narinfo-cache-negative-ttl' '0'
+  -j 2
+)
 
 function update() {
   (set -e; cd "./pkgs" && ./update.sh) # our overlay-pkgs
@@ -36,22 +44,8 @@ function update() {
     flake update --no-registries
 
   # TODO: Why does this ever have an effect? Needs to allow for more aggression
-  nix --experimental-features 'nix-command flakes' --pure-eval \
-    flake update --no-registries \
-      --update-input master --update-input stable --update-input nixpkgs \
-      --update-input nix --update-input home --update-input construct \
-      --update-input hardware --update-input firefox --update-input wayland \
-      --update-input mobile-nixos --update-input wip-pinebook-pro \
-      --update-input nixos-veloren --update-input nixos-azure
+  nix flake update --no-registries --recreate-lock-file
 }
-
-buildargs=(
-  --option 'extra-binary-caches' 'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org'
-  --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA='
-  --option 'build-cores' '0'
-  --option 'narinfo-cache-negative-ttl' '0'
-  -j 2
-)
 
 function instantiate() {
   set -euo pipefail
@@ -85,7 +79,9 @@ function build() {
   eout="$(set -euo pipefail; instantiate "${thing}")"
   drv="$(set -euo pipefail; out2drv "${eout}")"
   out="$(set -euo pipefail; nix-build "${buildargs[@]}" --keep-going "${drv}")"
-  echo "${out}" | env CACHIX_SIGNING_KEY=${cachixkey} cachix push "${cache}" &>/dev/stderr
+  if [[ ! -z "${CACHIX_SIGNING_KEY}" ]]; then
+    echo "${out}" | env CACHIX_SIGNING_KEY=${cachixkey} cachix push "${cache}" &>/dev/stderr
+  fi
   echo -e "${out}"
 }
 
@@ -117,7 +113,9 @@ function remote() {
   # build drvs, push to cachix
   ssh "${remote}" "nix-shell -I nixpkgs=${tarstable}   -p nix       --command \"nix copy --from file://${t} ${drv}\"" &>/dev/stderr
   ssh "${remote}" "nix-shell -I nixpkgs=${tarunstable} -p nixFlakes --command '$(printf '\"%s\" ' nix-build "${buildargs[@]}" --keep-going ${drv}) > /tmp/s_out'" &>/dev/stderr
-  ssh "${remote}" "nix-shell -I nixpkgs=${tarstable}   -p cachix    --command 'cat /tmp/s_out | env CACHIX_SIGNING_KEY=${cachixkey} cachix push ${cache} >/dev/stderr'" &>/dev/stderr
+  if [[ ! -z "${CACHIX_SIGNING_KEY}" ]]; then
+    ssh "${remote}" "nix-shell -I nixpkgs=${tarstable}   -p cachix    --command 'cat /tmp/s_out | env CACHIX_SIGNING_KEY=${cachixkey} cachix push ${cache} >/dev/stderr'" &>/dev/stderr
+  fi
 
   # done
   echo -e "$(ssh ${remote} cat /tmp/s_out)"

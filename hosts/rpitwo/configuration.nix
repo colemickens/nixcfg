@@ -4,8 +4,10 @@ let
   hostname = "rpitwo";
 in {
   imports = [
-    "${modulesPath}/installer/cd-dvd/sd-image-aarch64.nix"
+    #"${modulesPath}/installer/cd-dvd/sd-image-aarch64.nix"
+    "./sd-aarch64.nix"
     ../../mixins/common.nix
+    ../../mixins/sshd.nix
 
     ../../profiles/user.nix
   ];
@@ -23,8 +25,6 @@ in {
     # ];
 
     # TODO, why can root ssh?
-
-    systemd.services.sshd.wantedBy = lib.mkOverride 0 [ "multi-user.target" ];
 
     nix.nixPath = [];
     documentation.enable = false;
@@ -44,14 +44,21 @@ in {
     networking.useDHCP = false;
     networking.firewall.enable = true;
 
+    hardware.deviceTree = {
+      enable = true;
+      filter = "*rpi*dtb";
+    };
     boot = {
       loader.grub.enable = false;
       loader.raspberryPi.uboot.enable = true;
-      #kernelPackages = pkgs.linuxPackages_5_10; # whenever 5.10-rc1 is out... to test the new vc4/drm changes
-      kernelPackages = pkgs.linuxPackages_rpi4;
+      #kernelPackages = pkgs.linuxPackages_5_9; # whenever 5.10-rc1 is out... to test the new vc4/drm changes
+      kernelPackages = pkgs.linuxPackages_5_10; # whenever 5.10-rc1 is out... to test the new vc4/drm changes
+      #kernelPackages = pkgs.linuxPackages_rpi4;
       initrd.availableKernelModules = [ "xhci_pci" "usb_storage" ];
       kernelModules = [ "xhci_pci" "usb_storage" ];
 
+      #supportedFilesystems = lib.mkForce [ "ext4" ];
+      #initrd.supportedFilesystems = lib.mkForce [ "ext4" ];
       consoleLogLevel = lib.mkDefault 7;
     };
   };

@@ -4,6 +4,8 @@
 let
   version = "2020.09.03-138a1";
   rev = "v2020.09.03-138a1";
+  pieeprom-latest = "pieeprom-2020-09-03.bin";
+  vl805-latest = "vl805-000138a1.bin";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
@@ -49,6 +51,12 @@ in stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin/
     cp rpi-eeprom-config rpi-eeprom-update firmware/vl805 $out/bin/
+
+    mkdir -p $out/stable/
+    cp "firmware/stable/${pieeprom-latest}" $out/stable/
+    cp "firmware/stable/${vl805-latest}" $out/stable/
+    ln -s "$out/stable/${pieeprom-latest}" $out/stable/pieeprom-latest.bin
+    ln -s "$out/stable/${vl805-latest}"      $out/stable/vl805-latest.bin
   '';
 
   fixupPhase = ''

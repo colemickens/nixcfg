@@ -1,6 +1,7 @@
 { config, pkgs, lib, modulesPath, inputs, ... }:
 
 let
+  rpione_serial = "156b6214";
   rpitwo_serial = "e43b854b";
   rpitwo = inputs.self.nixosConfigurations.rpitwo;
   configtxt = pkgs.writeText "config.txt" ''
@@ -26,10 +27,10 @@ let
 
       # TODO Move some of this stuff to a "rpi-eeprom-sane" package
       # TODO "raspberrypi-eeprom{,-sane,-tools}"
-      cp ${pkgs.raspberrypi-eeprom.src}/firmware/stable/vl805-000138a1.bin $out/vl805.bin
+      cp ${pkgs.raspberrypi-eeprom}/stable/vl805-latest.bin $out/vl805.bin
       sha256sum $out/vl805.bin | cut -d' ' -f1 > $out/vl805.sig
 
-      cp ${pkgs.raspberrypi-eeprom.src}/firmware/stable/pieeprom-2020-07-31.bin $out/pieeprom.orig.bin
+      cp ${pkgs.raspberrypi-eeprom}/stable/pieeprom-latest.bin $out/pieeprom.orig.bin
       ${pkgs.raspberrypi-eeprom}/bin/rpi-eeprom-config \
         --out $out/pieeprom.upd \
         --config ${configtxt} \
@@ -48,6 +49,7 @@ let
     #cp -a "''${pkgs.ipxe}/bin-aarch64-efi/ipxe.efi" $out/ipxe.efi
 
     ln -s ${uefi_dir_with_update}/ $out/${rpione_serial}
+    ln -s ${uefi_dir_with_update}/ $out/${rpitwo_serial}
   '';
 
   boot_dir = pkgs.runCommandNoCC "build-bootdir" {} ''

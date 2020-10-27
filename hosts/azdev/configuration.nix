@@ -3,6 +3,9 @@
 {
   imports = [
     inputs.nixos-azure.nixosModules.azure-image
+
+    ../../mixins/reposup.nix
+
     ../../profiles/user.nix
   ];
 
@@ -14,8 +17,9 @@
       fsType = "ext4";
       autoResize = true;
     };
-    
+
     boot = {
+      tmpOnTmpfs = true;
       cleanTmpDir = true;
       growPartition = true;
       kernelPackages = pkgs.linuxPackages_latest;

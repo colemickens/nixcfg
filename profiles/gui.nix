@@ -80,7 +80,7 @@ in
         cchat-gtk
 
         # browsers
-        firefox
+        inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox
         #chromium
         falkon
         #torbrowserPkg
