@@ -5,7 +5,7 @@ let
 in {
   imports = [
     #"${modulesPath}/installer/cd-dvd/sd-image-aarch64.nix"
-    "./sd-aarch64.nix"
+    ./sd-aarch64.nix
     ../../mixins/common.nix
     ../../mixins/sshd.nix
 
@@ -16,6 +16,8 @@ in {
       raspberrypifw
       raspberrypi-eeprom
       raspberrypi-tools
+
+      dnsutils
     ];
 
     # nixpkgs.overlays = [
