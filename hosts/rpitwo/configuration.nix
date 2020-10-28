@@ -46,22 +46,21 @@ in {
     networking.useDHCP = false;
     networking.firewall.enable = true;
 
+    # grub, [questioning drake]
+    # uboot, [enthusiast drake]
+    boot.loader.grub.enable = false;
+    boot.loader.raspberryPi.uboot.enable = true;
+
+    # 5.10 has Rpi4 DRM support: https://www.phoronix.com/scan.php?page=news_item&px=RPi4-Display-Linux-5.10-Coming
+    boot.kernelPackages = pkgs.linuxPackages_5_10;
     hardware.deviceTree = {
       enable = true;
       filter = "*rpi*dtb";
     };
-    boot = {
-      loader.grub.enable = false;
-      loader.raspberryPi.uboot.enable = true;
-      #kernelPackages = pkgs.linuxPackages_5_9; # whenever 5.10-rc1 is out... to test the new vc4/drm changes
-      kernelPackages = pkgs.linuxPackages_5_10; # whenever 5.10-rc1 is out... to test the new vc4/drm changes
-      #kernelPackages = pkgs.linuxPackages_rpi4;
-      initrd.availableKernelModules = [ "xhci_pci" "usb_storage" ];
-      kernelModules = [ "xhci_pci" "usb_storage" ];
 
-      #supportedFilesystems = lib.mkForce [ "ext4" ];
-      #initrd.supportedFilesystems = lib.mkForce [ "ext4" ];
-      consoleLogLevel = lib.mkDefault 7;
-    };
+    boot.initrd.availableKernelModules = [ "xhci_pci" "usb_storage" ];
+    boot.kernelModules = [ "xhci_pci" "usb_storage" ];
+ 
+    boot.consoleLogLevel = lib.mkDefault 7;
   };
 }

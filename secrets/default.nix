@@ -2,7 +2,7 @@
 
 let
   encrypted_files = lib.mapAttrs' (name: v: (lib.nameValuePair name {
-    sopsFile = builtins.trace (./encrypted + "/${name}") (./encrypted + "/${name}");
+    sopsFile =  ./encrypted + "/${name}";
     format = "binary";
   })) (builtins.readDir ./encrypted);
 in {

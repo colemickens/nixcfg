@@ -12,17 +12,31 @@ pkgs.stdenv.mkDerivation {
   name = "devenv";
 
   nativeBuildInputs = with pkgs; [
-    cmake
-    freetype
+    # rust
     latest.rustChannels.beta.rust
-    rust-analyzer
+    #rust-analyzer
+
+    # deps
+    freetype
+
+    # native stuffs
+    cmake
     ncurses
     pkgconfig
-    nodejs
-    go
     lldb
     python3
     pcsclite
+
+    # node
+    nodejs
+    yarn
+
+    # golang
+    go
+    delve
+    go-outline
+    godef
+    goreturns
   ];
 
   buildInputs = with pkgs; [

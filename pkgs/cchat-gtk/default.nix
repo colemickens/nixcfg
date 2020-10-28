@@ -22,7 +22,7 @@ buildGoModule rec {
     pkg-config
   ];
   buildInputs = [
-    gtk3 libhandy gspell
+    gtk3 libhandy libhandy gspell
     wrapGAppsHook
   ];
 

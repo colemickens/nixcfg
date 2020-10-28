@@ -4,7 +4,7 @@
   imports = [
     inputs.nixos-azure.nixosModules.azure-image
 
-    ../../mixins/reposup.nix
+    #../../mixins/reposup.nix
 
     ../../profiles/user.nix
   ];

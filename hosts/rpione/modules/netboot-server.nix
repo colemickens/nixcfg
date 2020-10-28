@@ -4,6 +4,27 @@ let
   rpione_serial = "156b6214";
   rpitwo_serial = "e43b854b";
   rpitwo = inputs.self.nixosConfigurations.rpitwo;
+
+  /*
+  BOOT_ORDER fields
+  The BOOT_ORDER property defines the sequence for the different boot modes. It is read right to left and up to 8 digits may be defined.
+
+      0x0 - NONE (stop with error pattern)
+      0x1 - SD CARD
+      0x2 - NETWORK
+      0x3 - USB device boot - Reserved - Compute Module only.
+      0x4 - USB mass storage boot (since 2020-09-03)
+      0xf - RESTART (loop) - start again with the first boot order field. (since 2020-09-03)
+
+  Default: 0xf41 (0x1 in versions prior to 2020-09-03)
+  Version: 2020-04-16
+
+      Boot mode 0x0 will retry the SD boot if the SD card detect pin indicates that the card has been inserted or replaced.
+      The default boot order is 0xf41 which means continuously try SD then USB mass storage.
+  */
+  #bootOrder="0xf412"; # network, sd, usbMSD, restart
+  bootOrder="0xf41"; # sd, usbMSD, restart
+
   configtxt = pkgs.writeText "config.txt" ''
     [all]
     BOOT_UART=0
@@ -14,7 +35,7 @@ let
     TFTP_FILE_TIMEOUT=30000
     ENABLE_SELF_UPDATE=1
     DISABLE_HDMI=0
-    BOOT_ORDER=0xf412
+    BOOT_ORDER=${bootOrder}
     TFTP_PREFIX=0
   '';
 

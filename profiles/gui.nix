@@ -49,6 +49,8 @@ in
         udiskie.enable = true;
       };
       home.packages = with pkgs; [
+        colePackages.customGuiCommands # from overlay
+
         # misc
         evince
         gimp
@@ -79,22 +81,22 @@ in
         element-desktop
         cchat-gtk
 
+        gnome3.nautilus
+        gnome3.gnome-tweaks
+
         # browsers
         inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox
-        #chromium
+        inputs.nixos-unstable.legacyPackages.${pkgs.system}.chromium
+        #inputs.nixos-unstable.legacyPackages.${pkgs.system}.chromiumBeta
         falkon
         #torbrowserPkg
       ]
-      ++ builtins.attrValues pkgs.customGuiCommands # include custom overlay gui pkgs
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
-        firefoxNightly # pre-built, Moz doesn't seem to build nightly aarch64?
         scrcpy
 
         # yucky non-free
         pkgs.google-chrome-dev
-        pkgs.discord
         pkgs.ripcord
-        pkgs.spotify
       ];
     };
   };

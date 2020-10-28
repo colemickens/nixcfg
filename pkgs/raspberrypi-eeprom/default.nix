@@ -65,4 +65,6 @@ in stdenv.mkDerivation {
       --prefix PATH : ${raspberrypi-tools}/bin \
       --prefix PATH : $out
   '';
+
+  meta.platforms = [ "aarch64-linux" ];
 }

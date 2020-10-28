@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
       aarch64-linux = "bin/64bit";
     }.${stdenv.targetPlatform.system} or (throw "Unsupported system: ${stdenv.targetPlatform.system}");
   in ''
+    true
+    true; true; true
     mkdir -p $out/share/obs/obs-plugins/v4l2sink/${pluginPath}
     ln -s $out/lib/obs-plugins/v4l2sink.so $out/share/obs/obs-plugins/v4l2sink/${pluginPath}
   '';
@@ -45,6 +47,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/colemickens/obs-v4l2sink";
     maintainers = with maintainers; [ colemickens peelz ];
     license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

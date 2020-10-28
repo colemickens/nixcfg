@@ -1,24 +1,17 @@
 {
+  # flakes feedback
+  # - flake-overrides.nix: https://github.com/NixOS/nix/issues/4193
+  # - I dislike the special-cased GitHub special URL syntax
+  # shout-outs to: @bqv, @balsoft, @cole-h for flake.nix inspriation
+
   description = "colemickens-nixcfg";
 
-  # flakes feedback
-  # - i wish inputs were optional so that I could do my current logic
-  # ---- they're CLI overrideable?
-  # - i hate the git url syntax
-
-  # cached failure isn't actually showing me the ... error?
-  # how to use local paths when I want to?
-
-  # nix build is UNRELIABLE because /soemtimes/ it checks for updates, I hate this
-  # unpredictable, moves underneath me
-
-  # credits: bqv, balsoft
   inputs = {
     nixpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; }; # for my regular nixpkgs
     pipkgs = { url = "github:colemickens/nixpkgs/pipkgs"; }; # for experimenting with rpi4
     nixos-unstable = { url = "github:nixos/nixpkgs/nixos-unstable"; };
     master = { url = "github:nixos/nixpkgs/master"; }; # for nixFlakes
-    stable = { url = "github:nixos/nixpkgs/nixos-20.03"; }; # for cachix
+    stable = { url = "github:nixos/nixpkgs/nixos-20.09"; }; # for cachix
 
     home-manager.url = "github:colemickens/home-manager/cmhm";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -26,7 +19,8 @@
     construct.url = "github:matrix-construct/construct";
     construct.inputs.nixpkgs.follows = "nixpkgs";
 
-    sops-nix.url = "github:Mic92/sops-nix/master";
+    #sops-nix.url = "github:Mic92/sops-nix/master";
+    sops-nix.url = "github:colemickens/sops-nix/wip";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     firefox  = { url = "github:colemickens/flake-firefox-nightly"; };
@@ -53,7 +47,6 @@
     # these are kind of weird, they don't really apply
     # to me if I'm using just  `wayland#overlay`, afaict?
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
-    nixpkgs-wayland.inputs.master.follows = "master";
 
     hardware = { url = "github:nixos/nixos-hardware"; };
 
@@ -64,13 +57,14 @@
     let
       nameValuePair = name: value: { inherit name value; };
       genAttrs = names: f: builtins.listToAttrs (map (n: nameValuePair n (f n)) names);
-      forAllSystems = genAttrs [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+      supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
+      forAllSystems = genAttrs supportedSystems;
 
-      pkgsFor = pkgs: sys:
-        import pkgs {
-          system = sys;
-          config = { allowUnfree = true; };
-        };
+      pkgsFor = pkgs: sys: import pkgs {
+        system = sys;
+        config = { allowUnfree = true; };
+      };
+      pkgs_ = genAttrs (builtins.attrNames inputs) (inp: genAttrs supportedSystems (sys: pkgsFor inputs."${inp}" sys));
 
       mkSystem = sys: pkgs_: hostname:
         pkgs_.lib.nixosSystem {
@@ -80,60 +74,79 @@
         };
     in rec {
       devShell = forAllSystems (system:
-        (pkgsFor inputs.nixpkgs system).mkShell {
-          nativeBuildInputs = with (pkgsFor inputs.nixpkgs system); [
-            (pkgsFor inputs.master system).nixFlakes
-            (pkgsFor inputs.stable system).cachix
+        pkgs_.nixpkgs.${system}.mkShell {
+          nativeBuildInputs = []
+          ++ (with pkgs_.nixos-unstable.${system}; [ nixUnstable ])
+          ++ (with pkgs_.stable.${system}; [ cachix ])
+          ++ (with pkgs_.nixpkgs.${system}; [
             bash cacert curl git jq mercurial
             nettools openssh ripgrep rsync
             nix-build-uncached nix-prefetch-git
             packet-cli
-            sops oil
-          ];
+            sops oil awsweeper
+            (writeScriptBin "awsweeper-tag" ''
+              #!/usr/bin/env bash
+              set -x
+              t=$(mktemp)
+              cat <<EOF >''${t}
+              aws_instance: [ { "tags": { "project": "''${1}" } } ]
+              aws_internet_gateway: [ { "tags": { "project": "''${1}" } } ]
+              aws_route_table: [ { "tags": { "project": "''${1}" } } ]
+              aws_security_group: [ { "tags": { "project": "''${1}" } } ]
+              aws_subnet: [ { "tags": { "project": "''${1}" } } ]
+              aws_vpc: [ { "tags": { "project": "''${1}" } } ]
+              EOF
+              ${awsweeper}/bin/awsweeper --region "us-west-2" ''${t}
+            '')
+          ])
+          ;
         }
       );
 
-      packages = forAllSystems (sys:
-        let pkgs = import inputs.nixpkgs {
-          system = sys;
+      packages = forAllSystems (system:
+        let
+          pkgs = import inputs.nixpkgs {
+            inherit system;
             config = { allowUnfree = true; };
             overlays = [ inputs.self.overlay ];
           };
-        in pkgs.colePackages
+          accept = pkg: pkg.meta.platforms or [ "x86_64-linux" "aarch64-linux" ];
+          filter = (name: pkg: builtins.elem "${system}" (accept pkg));
+        in pkgs.lib.filterAttrs filter pkgs.colePackages
       );
 
-      pkgs = forAllSystems (sys:
-        let pkgs = import inputs.nixpkgs {
-          system = sys;
-            config = { allowUnfree = true; };
-            overlays = [ inputs.self.overlay ];
+      # TODO: eventually maybe we should only compose nixpkgs here, and then make a unified,
+      # overlaid nixpkgs available, both as an output and as 'nixpkgs' for our systems?
+      pkgs = forAllSystems (sys: import inputs.nixpkgs {
+        system = sys;
+        config = { allowUnfree = true; };
+        overlays = [ inputs.self.overlay ];
+      });
+
+      overlay = final: prev:
+        let p = rec {
+          customCommands = prev.callPackage ./pkgs/commands.nix {};
+          customGuiCommands = prev.callPackage ./pkgs/commands-gui.nix {};
+
+          #alps = prev.callPackage ./pkgs/alps {};
+          cchat-gtk = prev.callPackage ./pkgs/cchat-gtk {
+            libhandy = prev.callPackage ./pkgs/libhandy {};
           };
-        in pkgs
-      );
-
-      overlay = self: pkgs:
-        let p = {
-          customCommands = pkgs.callPackages ./pkgs/commands.nix {};
-          customGuiCommands = pkgs.callPackages ./pkgs/commands-gui.nix {};
-
-          #alps = pkgs.callPackage ./pkgs/alps {};
-          cchat-gtk = pkgs.callPackage ./pkgs/cchat-gtk {
-            libhandy = pkgs.callPackage ./pkgs/libhandy {};
+          conduit = prev.callPackage ./pkgs/conduit {};
+          drm-howto = prev.callPackage ./pkgs/drm-howto {};
+          #mesa-git = prev.callPackage ./pkgs/mesa-git {};
+          mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
+          neovim-unwrapped = prev.callPackage ./pkgs/neovim {
+            neovim-unwrapped = prev.neovim-unwrapped;
           };
-          drm-howto = pkgs.callPackage ./pkgs/drm-howto {};
-          #mesa-git = pkgs.callPackage ./pkgs/mesa-git {};
-          mirage-im = pkgs.libsForQt5.callPackage ./pkgs/mirage-im {};
-          neovim-unwrapped = pkgs.callPackage ./pkgs/neovim {
-            neovim-unwrapped = pkgs.neovim-unwrapped;
-          };
-          obs-v4l2sink = pkgs.libsForQt5.callPackage ./pkgs/obs-v4l2sink {};
-          passrs = pkgs.callPackage ./pkgs/passrs {};
+          obs-v4l2sink = prev.libsForQt5.callPackage ./pkgs/obs-v4l2sink {};
+          passrs = prev.callPackage ./pkgs/passrs {};
 
-          libquotient = pkgs.libsForQt5.callPackage ./pkgs/quaternion/libquotient.nix {};
-          quaternion = pkgs.libsForQt5.callPackage ./pkgs/quaternion {};
+          libquotient = prev.libsForQt5.callPackage ./pkgs/quaternion/libquotient.nix {};
+          quaternion = prev.libsForQt5.callPackage ./pkgs/quaternion {};
 
-          raspberrypi-eeprom = pkgs.callPackage ./pkgs/raspberrypi-eeprom {};
-          rpi4-uefi = pkgs.callPackage ./pkgs/rpi4-uefi {};
+          raspberrypi-eeprom = prev.callPackage ./pkgs/raspberrypi-eeprom {};
+          rpi4-uefi = prev.callPackage ./pkgs/rpi4-uefi {};
         }; in p // { colePackages = p; };
 
       nixosConfigurations = {
@@ -142,61 +155,70 @@
         rpitwo     = mkSystem "aarch64-linux" inputs.pipkgs "rpitwo";
         slynux     = mkSystem "x86_64-linux"  inputs.nixpkgs "slynux";
         xeep       = mkSystem "x86_64-linux"  inputs.nixpkgs "xeep";
+        pinephone  = mkSystem "aarch64-linux" inputs.nixpkgs "pinephone";
         pinebook   = mkSystem "aarch64-linux" inputs.nixpkgs "pinebook";
         testipfsvm = mkSystem "x86_64-linux"  inputs.nixpkgs "testipfsvm";
         bluephone  = mkSystem "aarch64-linux" inputs.nixpkgs "bluephone";
       };
+      toplevels = genAttrs
+        (builtins.attrNames inputs.self.outputs.nixosConfigurations)
+        (attr: nixosConfigurations.${attr}.config.system.build.toplevel);
 
-      hosts = rec {
-        ## Regular x86_64 hosts
+      bundles = rec {
+        x86_64-linux = pkgs_.nixpkgs.x86_64-linux.linkFarmFromDrvs "x86_64-linux-outputs" ([
+          # inputs.self.nixosConfigurations.azdev.config.system.build.toplevel
+          # inputs.self.nixosConfigurations.slynux.config.system.build.toplevel
+          # inputs.self.nixosConfigurations.xeep.config.system.build.toplevel
+          # inputs.self.nixosConfigurations.testipfsvm.config.system.build.toplevel
+          # TODO: how to include some devshell-y type stuff here too, so it's always pre-cached?
+        ]
+        ++ builtins.attrValues inputs.self.outputs.packages.x86_64-linux); # plus let's always pre-build our own custom pacakges
+
+        aarch64-linux = pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "aarch64-linux-outputs" ([
+          inputs.self.nixosConfigurations.rpione.config.system.build.toplevel
+          inputs.self.nixosConfigurations.rpitwo.config.system.build.toplevel
+          #inputs.self.nixosConfigurations.pinephone.config.system.build.toplevel
+          inputs.self.nixosConfigurations.pinebook.config.system.build.toplevel
+          #inputs.self.nixosConfigurations.bluephone.config.system.build.toplevel
+          # TODO: how to include some devshell-y type stuff here too, so it's always pre-cached?
+        ]
+        ++ builtins.attrValues inputs.self.outputs.packages.aarch64-linux);  # plus let's always pre-build our own custom pacakges
+      };
+      images = {
+        # azure vhd for azdev machine (a custom Azure image using `nixos-azure` module)
         azdev = inputs.self.nixosConfigurations.azdev.config.system.build.azureImage;
-        xeep = inputs.self.nixosConfigurations.xeep.config.system.build.toplevel;
-        slynux = inputs.self.nixosConfigurations.slynux.config.system.build.toplevel;
 
-        ## Raspberry Pi 4 systems
-        rpione = inputs.self.nixosConfigurations.rpione.config.system.build.toplevel;
-        rpitwo = inputs.self.nixosConfigurations.rpitwo.config.system.build.toplevel;
-        rpitwo_sd = inputs.self.nixosConfigurations.rpitwo.config.system.build.sdImage;
-
-        ## Pine64 Pinebook Pro Laptop
-        pinebook = (pkgsFor inputs.nixpkgs "aarch64-linux").runCommandNoCC "pinebook-bundle" {} ''
+        pinebook_bundle = pkgs_.nixpkgs.aarch64-linux.runCommandNoCC "pinebook-bundle" {} ''
           mkdir $out
           ln -s "${inputs.self.nixosConfigurations.pinebook.config.system.build.toplevel}" $out/toplevel
           ln -s "${inputs.wip-pinebook-pro.packages.aarch64-linux.uBootPinebookPro}" $out/uboot
           ln -s "${inputs.wip-pinebook-pro.packages.aarch64-linux.pinebookpro-keyboard-updater}" $out/kbfw
         '';
+        bluephone_bootimg =
+          let
+            dev = inputs.self.nixosConfigurations.bluephone;
+          in
+            dev.config.system.build.android-bootimg;
 
-        ## Demo NixOS VMs
+        pinephone_bundle =
+          let
+            dev = mkSystem "aarch64-linux" inputs.nixpkgs "pinephone";
+          in
+            pkgs_.nixpkgs.aarch64-linux.runCommandNoCC "pinephone-bundle" {} ''
+            mkdir $out
+            ln -s "${dev.config.system.build.disk-image}" $out/disk-image;
+            ln -s "${dev.config.system.build.u-boot}" $out/uboot;
+            ln -s "${dev.config.system.build.boot-partition}" $out/boot-partition;
+          '';
+      };
+      linuxVirtualMachines = {
         testipfsvm = inputs.self.nixosConfigurations.testipfsvm.config.system.build.vm;
-
-        ## Windows VMs (automatically built with Nix)
-        winvm = import ./hosts/winvm {
-          pkgs = pkgsFor inputs.nixpkgs "x86_64-linux";
+      };
+      windowsVirtualMachines = {
+        nixwinvm = import ./hosts/nixwinvm {
+          pkgs = pkgs_.nixpkgs.x86_64-linux;
           inherit inputs;
         };
-
-        ## Mobile-NixOS: Pine64 Pinephone
-        pinephone = let
-          dev = mkSystem "aarch64-linux" inputs.nixpkgs "pinephone";
-        in
-          (pkgsFor inputs.nixpkgs "aarch64-linux").runCommandNoCC "pinephone-bundle" {} ''
-          mkdir $out
-          ln -s "${dev.config.system.build.disk-image}" $out/disk-image;
-          ln -s "${dev.config.system.build.toplevel}" $out/toplevel;
-          ln -s "${dev.config.system.build.u-boot}" $out/uboot;
-          ln -s "${dev.config.system.build.boot-partition}" $out/boot-partition;
-        '';
-
-        ## Mobile-NixOS: Pixel 3
-        bluephone = let
-          dev = inputs.self.nixosConfigurations.bluephone;
-        in
-          {
-            toplevel = dev.config.system.build.toplevel;
-            bootimg = dev.config.system.build.android-bootimg;
-            kernel = dev.config.mobile.boot.stage-1.kernel.package;
-            # device = dev.config.system.build.android-device;
-          };
       };
     };
 }

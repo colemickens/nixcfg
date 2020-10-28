@@ -53,16 +53,16 @@
     documentation.enable = false;
     powerManagement.enable = false;
     programs.command-not-found.enable = false;
-  
+
     users.users.kiosk = {
       isNormalUser = true;
       useDefaultShell = true;
     };
-    services.cage = {
-      enable = true;
-      user = "kiosk";
-      program = "${pkgs.plex-mpv-shim}/bin/plex-mpv-shim";
-    };
+    #services.cage = {
+      #enable = true;
+      #user = "kiosk";
+      #program = "${pkgs.plex-mpv-shim}/bin/plex-mpv-shim";
+    #};
 
     services.avahi = {
       enable = true;

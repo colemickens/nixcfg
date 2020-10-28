@@ -1,4 +1,4 @@
-{ neovim-unwrapped, fetchFromGitHub }:
+{ neovim-unwrapped, fetchFromGitHub, tree-sitter }:
 
 let
   metadata = import ./metadata.nix;
@@ -11,4 +11,5 @@ in
        rev = metadata.rev;
        sha256 = metadata.sha256;
      };
+     buildInputs = old.buildInputs ++ [ tree-sitter ];
   })

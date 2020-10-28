@@ -7,6 +7,14 @@
 
 It's everything. It's all of my system configurations. It's all of my dotfiles. All right here. All in Nix.
 
+## Examples
+
+* custom commands (provided via overlay, exposed in flake)
+* TODO: add link, flesh out this section so nixcfg can be a reference
+* multi-arch packages in one flake
+  * -> flake-utils
+* sops
+* 
 ## Custom Packages
 
 I package these things, mostly for myself:

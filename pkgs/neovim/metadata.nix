@@ -2,7 +2,7 @@
   upattr = "neovim-unwrapped";
   repo_git = "https://github.com/neovim/neovim";
   branch = "nightly";
-  rev = "6312792d8a6a7d293661d33d440343d4cc6e0e6e";
-  sha256 = "sha256-XpvC4QxtksHZf20X71sFEq1ydbgi0BpN449yOhTPbxc=";
+  rev = "d17e508796be60eefe4a597df62de1fd9e7e1725";
+  sha256 = "sha256-sZhGd/sUo2r223pLXzS1VOKh9SAZG4fkzqGUC3vtG2k=";
   revdate = "2020-09-14 15:03:02Z";
 }

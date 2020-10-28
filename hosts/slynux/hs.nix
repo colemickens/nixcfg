@@ -4,7 +4,7 @@ let
   hs = "nixoorrxe2yyjab7ufuua6dsbcrbxe4ysb7q3t4iirxtvpa7d6bebxad";
 
   template = pkgs.writeText "template.html" ''
-    <pre>nixos + sops-nix + tor = &lt;3</pre>
+    <pre>nixos + sops-nix + tor = &lt;3 !asdf</pre>
     <pre>Hello from [@systemLabel@]!</pre>
   '';
 

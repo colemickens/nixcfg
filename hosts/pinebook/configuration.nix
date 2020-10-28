@@ -7,6 +7,7 @@ in
     ../../mixins/common.nix
 
     ../../mixins/chromecast.nix
+    ../../mixins/gammastep.nix
     ../../mixins/sshd.nix
     ../../mixins/v4l2loopback.nix
 

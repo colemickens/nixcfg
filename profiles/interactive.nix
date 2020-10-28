@@ -39,15 +39,18 @@ in
       };
       home.packages = with pkgs; [
         inputs.stable.legacyPackages.${pkgs.system}.cachix
+        colePackages.customCommands
 
         #nixops
+        anu
         asciinema
         wget curl rsync
         ripgrep jq fzf
         wget curl stow ncdu tree
         git-crypt gopass gnupg passrs ripasso-cursive
         openssh autossh mosh sshuttle
-        gist tig #git-absorb
+        tig #git-absorb
+        gist # use `gh gist create` instead
         github-cli
         cvs mercurial subversion
         #mitmproxy
@@ -58,9 +61,9 @@ in
 
         # https://zaiste.net/posts/shell-commands-rust/
         tealdeer
-        bottom
         du-dust
         fd
+        wireguard-tools
         #grex # regex
 
         sops age cryptsetup
@@ -85,8 +88,11 @@ in
         # eh?
         cordless
         xdg_utils
+        lynis
+
+        azure-cli
+        awscli2
       ]
-      ++ builtins.attrValues customCommands
       ;
     };
   };
