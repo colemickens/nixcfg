@@ -42,7 +42,6 @@ in
         colePackages.customCommands
 
         #nixops
-        anu
         asciinema
         wget curl rsync
         ripgrep jq fzf
@@ -93,6 +92,9 @@ in
         azure-cli
         awscli2
       ]
+      ++ (if pkgs.system != "x86_64-linux" then [] else [
+        anu
+      ])
       ;
     };
   };

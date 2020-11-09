@@ -3,8 +3,25 @@ set -x
 set -euo pipefail
 
 export AZURE_LOCATION="westus2"
-export AZURE_VM_SIZE="Standard_D4s_v3"
+export AZURE_VM_SIZE="Standard_D64s_v3"
 export AZURE_VM_OS_DISK_SIZE="100"
+
+data_disk_id="/subscriptions/aff271ee-e9be-4441-b9bb-42f5af4cbaeb/resourceGroups/azdev2020data/providers/Microsoft.Compute/disks/datadisk"
+# function create_dist() {
+#   az group create -n 'azdev2020data' -l "${AZURE_LOCATION}"
+
+#   az disk create \
+#     --name 'datadisk' \
+#     --resource-group 'azdev2020data' \
+#     --size-gb 128 \
+#     --location "${AZURE_LOCATION}"
+
+#   az group lock create \
+#     --name 'azdev2020datalock' \
+#     --lock-type 'CanNotDelete' \
+#     --resource-group 'azdev2020data'
+# }
+# 
 
 function deploy() {
   (cd ../..; nix flake update --update-input nixos-azure)
@@ -17,15 +34,29 @@ function deploy() {
 
   # upload the VHD
   export AZURE_GROUP="azdev2020nov"
-  img_id="/subscriptions/aff271ee-e9be-4441-b9bb-42f5af4cbaeb/resourceGroups/azdev2020nov/providers/Microsoft.Compute/images/21.03.20201101.dirty.vhd"
-  #img_id="$(set -euo pipefail; \
+  image_id="/subscriptions/aff271ee-e9be-4441-b9bb-42f5af4cbaeb/resourceGroups/azdev2020nov/providers/Microsoft.Compute/images/21.03.20201101.dirty.vhd"
+  #image_id="$(set -euo pipefail; \
   #  nix shell "${upstream}" --command \
   #    azutil upload /tmp/azdev)"
 
   # boot a VM
-  export AZURE_GROUP="azdev2020x${RANDOM}"
-  nix shell "${upstream}" --command \
-  azutil boot "${img_id}"
+  export AZURE_GROUP="azdev2020vm"
+  export deploy="azdev2020vm"
+
+  az group create -n "${deploy}" -l "${AZURE_LOCATION}"
+
+  az vm create \
+    --name "${deploy}" \
+    --resource-group "${deploy}" \
+    --size "${AZURE_VM_SIZE}" \
+    --image "${image_id}" \
+    --attach-data-disks "${data_disk_id}" \
+    --admin-username "azureuser" \
+    --location "${AZURE_LOCATION}" \
+    --ssh-key-values "$(ssh-add -L | head -1)" \
+    --os-disk-size-gb "128" \
+    --public-ip-address-dns-name "${deploy}" \
+    --ephemeral-os-disk true
 
   az vm show -g "${AZURE_GROUP}" -n "${AZURE_GROUP}"
 
@@ -35,12 +66,16 @@ function deploy() {
 
   host="${AZURE_GROUP}.${AZURE_LOCATION}.cloudapp.azure.com"
 
+  # TODO: probably need to remove old entries
+  # for the given hostname:
   ssh-keyscan -H "${host}" >> ~/.ssh/known_hosts
   export REMOTE="cole@${host}"
-
-  ~/code/nixcfg/nixup build \
-    '.#bundles.x86_64-linux' \
-    "${REMOTE}" 'cole@localhost'
+  # OPTION 2: use nixus to deploy azdev config
+  # update the ip for nixus/azdev
+  # nix-build nixus/azdev
+  # run nixus/azdev->deploy
 }
+
+
 
 time deploy

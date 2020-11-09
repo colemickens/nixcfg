@@ -31,6 +31,21 @@
       package = pkgs.nixUnstable;
     };
 
+    fileSystems = {
+      "/nix" = {
+        device = "/dev/disk/by-partlabel/nix";
+      };
+      "/data" = {
+        device = "/dev/disk/by-partlabel/azdev_data";
+      };
+      "/home" = {
+        fsType = "none"; options = [ "bind" ]; device = "/data/home";
+      };
+      "/var/lib/docker" = {
+        fsType = "none"; options = [ "bind" ]; device = "/data/var/lib/docker";
+      };
+    }
+
     networking.hostName = "azbldr";
     documentation.nixos.enable = false;
     services.openssh.passwordAuthentication = false;
