@@ -10,6 +10,7 @@ in
 
 pkgs.stdenv.mkDerivation {
   name = "devenv";
+  hardeningDisable = [ "fortify" ];
 
   nativeBuildInputs = with pkgs; [
     # rust
@@ -35,8 +36,10 @@ pkgs.stdenv.mkDerivation {
     go
     delve
     go-outline
+    goimports
     godef
-    goreturns
+    golint
+    gopls
   ];
 
   buildInputs = with pkgs; [

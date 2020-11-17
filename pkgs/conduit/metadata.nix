@@ -1,8 +1,8 @@
 {
   repo_git = "https://gitlab.com/famedly/conduit";
   branch = "master";
-  rev = "18f33b1ece291797f22b27e186f93b21a423341c";
-  sha256 = "sha256-m5OqM+9UuE4YlLbE7X4z7gc10tl8GMwFSLgZQ43Xppk=";
-  cargoSha256 = "sha256-NPfHMpdxyH2ZzSg2P0v5z0qDE3dwFhBJ+JkJ9fVjBcw=";
+  rev = "998f9e2109d522df9200965e8c7eaae8864ad2a5";
+  sha256 = "sha256-h9Hyn1cIz1LhS0LvH3ggCcPGOtz0QfstLMxmtmgK7+E=";
+  cargoSha256 = "sha256-MH19TSIIfm0GX7eJuT8Tyk1LLQyQfNbf9V0Awqn7+v8=";
   revdate = "2020-08-31 06:57:21Z";
 }

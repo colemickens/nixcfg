@@ -9,7 +9,8 @@ let
   drun = "${wofi} --show drun";
   nwggrid = "${pkgs.nwg-launchers}/bin/nwggrid";
 
-  terminal = "${pkgs.termite}/bin/termite";
+  #terminal = "${pkgs.termite}/bin/termite";
+  terminal = "${pkgs.kitty}/bin/kitty";
   browser = "${pkgs.firefox-bin}/bin/firefox";
   #browser = "${inputs.firefox.firefox-nightly-bin}/bin/firefox";
   #browser = "firefox";
@@ -162,7 +163,7 @@ in
             #};
             "${out_laptop}" = { disable = ""; }; # disable laptop display for a bit
             "${out_alien}" = {
-              mode = "3440x1440@100Hz";
+              mode = "3440x1440@120Hz";
               subpixel = "rgb";
               scale = "1.0";
               adaptive_sync = "on";

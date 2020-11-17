@@ -78,6 +78,7 @@
           nativeBuildInputs = []
           ++ (with pkgs_.nixos-unstable.${system}; [ nixUnstable ])
           ++ (with pkgs_.stable.${system}; [ cachix ])
+          ++ (with pkgs.${system}; [ niche ])
           ++ (with pkgs_.nixpkgs.${system}; [
             bash cacert curl git jq mercurial
             nettools openssh ripgrep rsync
@@ -139,6 +140,7 @@
           neovim-unwrapped = prev.callPackage ./pkgs/neovim {
             neovim-unwrapped = prev.neovim-unwrapped;
           };
+          niche = prev.callPackage ./pkgs/niche {};
           obs-v4l2sink = prev.libsForQt5.callPackage ./pkgs/obs-v4l2sink {};
           passrs = prev.callPackage ./pkgs/passrs {};
 

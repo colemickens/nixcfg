@@ -93,7 +93,6 @@ in
         awscli2
       ]
       ++ (if pkgs.system != "x86_64-linux" then [] else [
-        anu
       ])
       ;
     };

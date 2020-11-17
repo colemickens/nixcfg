@@ -70,7 +70,7 @@ in
         alacritty
         cool-retro-term
         kitty
-        termite
+        #termite
 
         # matrix clients
         fractal
@@ -95,6 +95,7 @@ in
         scrcpy
 
         # yucky non-free
+        discord
         pkgs.google-chrome-dev
         pkgs.ripcord
       ];
