@@ -22,13 +22,12 @@
 
         envExtra = ''
           # commands added to .zshenv
-          # path+=/home/cole/code/nixcfg # moved to init (since it wasnt in ssh sessions)
         '';
 
         initExtra = ''
           # added to .zshrc
+          # executed in login+interactive+ssh (I think)
           bindkey -e
-          path+=/home/cole/code/nixcfg
         '';
 
         plugins = [

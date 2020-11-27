@@ -7,7 +7,7 @@ unset NIX_PATH
 cd "${DIR}"
 
 cache="colemickens"
-cachixpkgs="https://github.com/nixos/nixpkgs/archive/nixos-20.03.tar.gz" # where to find pkgs.cachix
+cachixpkgs="https://github.com/nixos/nixpkgs/archive/nixos-20.09.tar.gz" # where to find pkgs.cachix
 unstablepkgs="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # where to find nixUnstable
 cachixkey="$(set -e; gopass show "websites/cachix.org/apikey/${cache}")"
 
