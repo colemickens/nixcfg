@@ -84,19 +84,23 @@ in
         gnome3.nautilus
         gnome3.gnome-tweaks
 
+        #webcamoid
+        #nyxt
+
         # browsers
         inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox
         inputs.nixos-unstable.legacyPackages.${pkgs.system}.chromium
         #inputs.nixos-unstable.legacyPackages.${pkgs.system}.chromiumBeta
-        falkon
-        #torbrowserPkg
+        #falkon
       ]
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
         scrcpy
+        imv
 
         # yucky non-free
         discord
         pkgs.google-chrome-dev
+        torbrowserPkg
         pkgs.ripcord
       ];
     };

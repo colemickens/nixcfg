@@ -23,7 +23,7 @@ buildGoModule rec {
 
   vendorSha256 = metadata.vendorSha256;
 
-  #subPackages = [ "." ];
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/colemickens/niche";

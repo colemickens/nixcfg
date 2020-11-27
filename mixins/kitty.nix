@@ -20,6 +20,9 @@ in
         settings = {
           font_size = font.size;
 
+          enable_audio_bell = "no";
+          visual_bell_duration = "1.0";
+
           dim_opacity = "0.8";
 
           foreground = colors.foreground;

@@ -90,7 +90,7 @@ in
         lynis
 
         azure-cli
-        awscli2
+        #awscli2
       ]
       ++ (if pkgs.system != "x86_64-linux" then [] else [
       ])

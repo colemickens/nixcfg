@@ -78,9 +78,10 @@
           nativeBuildInputs = []
           ++ (with pkgs_.nixos-unstable.${system}; [ nixUnstable ])
           ++ (with pkgs_.stable.${system}; [ cachix ])
-          ++ (with pkgs.${system}; [ niche ])
+          ++ (with pkgs.${system}; [ /*niche*/ ])
           ++ (with pkgs_.nixpkgs.${system}; [
-            bash cacert curl git jq mercurial
+            bash cacert curl git jq
+            #mercurial
             nettools openssh ripgrep rsync
             nix-build-uncached nix-prefetch-git
             packet-cli
@@ -121,7 +122,10 @@
       pkgs = forAllSystems (sys: import inputs.nixpkgs {
         system = sys;
         config = { allowUnfree = true; };
-        overlays = [ inputs.self.overlay ];
+        overlays = [
+          inputs.self.overlay
+          inputs.nixpkgs-wayland.overlay
+        ];
       });
 
       overlay = final: prev:
@@ -130,9 +134,7 @@
           customGuiCommands = prev.callPackage ./pkgs/commands-gui.nix {};
 
           #alps = prev.callPackage ./pkgs/alps {};
-          cchat-gtk = prev.callPackage ./pkgs/cchat-gtk {
-            libhandy = prev.callPackage ./pkgs/libhandy {};
-          };
+          cchat-gtk = prev.callPackage ./pkgs/cchat-gtk {};
           conduit = prev.callPackage ./pkgs/conduit {};
           drm-howto = prev.callPackage ./pkgs/drm-howto {};
           #mesa-git = prev.callPackage ./pkgs/mesa-git {};
@@ -143,6 +145,9 @@
           niche = prev.callPackage ./pkgs/niche {};
           obs-v4l2sink = prev.libsForQt5.callPackage ./pkgs/obs-v4l2sink {};
           passrs = prev.callPackage ./pkgs/passrs {};
+          # tree-sitter = prev.callPackage ./pkgs/tree-sitter {
+          #   tree-sitter = prev.tree-sitter;
+          # };
 
           libquotient = prev.libsForQt5.callPackage ./pkgs/quaternion/libquotient.nix {};
           quaternion = prev.libsForQt5.callPackage ./pkgs/quaternion {};
@@ -172,6 +177,7 @@
           # inputs.self.nixosConfigurations.slynux.config.system.build.toplevel
           # inputs.self.nixosConfigurations.xeep.config.system.build.toplevel
           # inputs.self.nixosConfigurations.testipfsvm.config.system.build.toplevel
+
           # TODO: how to include some devshell-y type stuff here too, so it's always pre-cached?
         ]
         ++ builtins.attrValues inputs.self.outputs.packages.x86_64-linux); # plus let's always pre-build our own custom pacakges
@@ -182,6 +188,7 @@
           #inputs.self.nixosConfigurations.pinephone.config.system.build.toplevel
           inputs.self.nixosConfigurations.pinebook.config.system.build.toplevel
           #inputs.self.nixosConfigurations.bluephone.config.system.build.toplevel
+
           # TODO: how to include some devshell-y type stuff here too, so it's always pre-cached?
         ]
         ++ builtins.attrValues inputs.self.outputs.packages.aarch64-linux);  # plus let's always pre-build our own custom pacakges

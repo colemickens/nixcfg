@@ -25,7 +25,7 @@
             "network"
             "cpu"
             "memory"
-            "backlight"
+            "light"
             "clock"
             "battery"
           ];

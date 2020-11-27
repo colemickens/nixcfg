@@ -12,7 +12,7 @@
         plugins = with pkgs.vimPlugins; [
           nvim-treesitter        # neovim 0.5
           completion-nvim        # neovim 0.5
-          completion-treesitter  # neovim 0.5
+          #completion-treesitter  # neovim 0.5
           fzf-vim
           fzfWrapper
           lightline-vim

@@ -32,7 +32,7 @@
         # sway-related
         drm_info
         grim
-        #imv
+        imv
         qt5.qtwayland
         slurp
         udiskie
