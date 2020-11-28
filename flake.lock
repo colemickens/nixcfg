@@ -2,11 +2,11 @@
   "nodes": {
     "cachix": {
       "locked": {
-        "lastModified": 1606086654,
-        "narHash": "sha256-VFl+3eGIMqNp7cyOMJ6TjM/+UcsLKtodKoYexrlTJMI=",
+        "lastModified": 1606344557,
+        "narHash": "sha256-IVIMVKWNNt6VODiLfINaW6sfrWPw5ZT91GQMgLUl7ZA=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "19db3e5ea2777daa874563b5986288151f502e27",
+        "rev": "ffb3aab257e8851b558cdc6079241a7eb0c7239e",
         "type": "github"
       },
       "original": {
@@ -71,11 +71,11 @@
     },
     "cmpkgs": {
       "locked": {
-        "lastModified": 1606389506,
-        "narHash": "sha256-l1q6vU5811XxLM42XHEpcCPFSx0m3XqPnoMzgpYBzIA=",
+        "lastModified": 1606528931,
+        "narHash": "sha256-999XOxEqIirdAcIHhEF1pWBhStKVKzSJqFFt+nol4R4=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "ad6d66959a8c3901d65b71055b9fe4c395566baf",
+        "rev": "c5febdd83fb7c4e63000523206322128e73da2bf",
         "type": "github"
       },
       "original": {
@@ -147,11 +147,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1606442756,
-        "narHash": "sha256-nOPBkgnWf0n3sW16pDqiX1yfu+zq+1SrageFcd6bHvY=",
+        "lastModified": 1606532859,
+        "narHash": "sha256-aU6Ts/oJntoDeCxOpIQEmQWvZnNs6+K29GRAvwNeYo0=",
         "ref": "master",
-        "rev": "9d3bda7366c7f90d046243e45949cb97493d3ed5",
-        "revCount": 340,
+        "rev": "46d095542cc7505c186e1788cb1b965aabee927e",
+        "revCount": 341,
         "type": "git",
         "url": "file:///home/cole/code/flake-firefox-nightly"
       },
@@ -246,11 +246,11 @@
     },
     "master": {
       "locked": {
-        "lastModified": 1606528621,
-        "narHash": "sha256-ZbwBr5P02iQ7fZ8O7uc7CFi8eef5zZGlFNEnK60PVM0=",
+        "lastModified": 1606536587,
+        "narHash": "sha256-TDP/tDJ6alDtsf7Re4SF6pNli/sxsJTipPVekupseh8=",
         "ref": "master",
-        "rev": "b846497091c3c4bba1ae65cf5e8b3987bd6bdbd5",
-        "revCount": 255131,
+        "rev": "9eb94d02635557087cb46c2dd189e44ac7b2baac",
+        "revCount": 255151,
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs/master"
       },
@@ -417,8 +417,11 @@
         "unstableSmall": "unstableSmall"
       },
       "locked": {
-        "lastModified": 1606464204,
-        "narHash": "sha256-lvOc8X8WaRDBxmnjEwBjUWCNQruLEcTGplkJ4aLi7lQ=",
+        "lastModified": 1606536779,
+        "narHash": "sha256-k3pXObr+H+8QBDuJxvcoeiNwn+p/TF4vY3hfDbrPWuI=",
+        "ref": "master",
+        "rev": "d9bf6dea5aab708c40743c6b8b0921b9d4d8831b",
+        "revCount": 1925,
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs-wayland"
       },
@@ -430,11 +433,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1606528931,
-        "narHash": "sha256-999XOxEqIirdAcIHhEF1pWBhStKVKzSJqFFt+nol4R4=",
+        "lastModified": 1606536568,
+        "narHash": "sha256-pXEdV9I+g2ZlesUt7JR2pE9nzgeVD3grJtdVd9cBkhs=",
         "ref": "cmpkgs",
-        "rev": "c5febdd83fb7c4e63000523206322128e73da2bf",
-        "revCount": 255048,
+        "rev": "d9c8a8a7a8d34c4ad8b6cbbb59ae8873ee330b41",
+        "revCount": 253645,
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs/cmpkgs"
       },
@@ -524,11 +527,11 @@
     },
     "unstableSmall": {
       "locked": {
-        "lastModified": 1606508102,
-        "narHash": "sha256-CNNswtAp/kksFhVetB0FRq8jcTVaRWpYKxqRaLcdppI=",
+        "lastModified": 1606421705,
+        "narHash": "sha256-sX485VPB0P19k2UIiN/eZJaxH4sdolqs+WoI3dqnC58=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "d26aa3293c928576eb4b5cee310df5b8ba158c4e",
+        "rev": "ea84f9d409d0a2216b592591a14608d2148067dc",
         "type": "github"
       },
       "original": {
