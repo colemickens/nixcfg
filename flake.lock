@@ -213,11 +213,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1606189210,
-        "narHash": "sha256-k9SBVlaBsdsbQGHm2FcL39Cfs7JF4LxJqapDcVdcCAs=",
+        "lastModified": 1606542181,
+        "narHash": "sha256-hwL2gcgkGDsn+uFTIdx/0ZaEJ+BH3CBLa8c6bzN2sVc=",
         "ref": "cmhm",
-        "rev": "9ad23514cbaa8bf148617891a0bb0fd60606d58f",
-        "revCount": 1284,
+        "rev": "525701c5802d3e04bc68832b172f3d5045f9e7b8",
+        "revCount": 1285,
         "type": "git",
         "url": "file:///home/cole/code/home-manager/cmhm"
       },
@@ -246,11 +246,11 @@
     },
     "master": {
       "locked": {
-        "lastModified": 1606536587,
-        "narHash": "sha256-TDP/tDJ6alDtsf7Re4SF6pNli/sxsJTipPVekupseh8=",
+        "lastModified": 1606541261,
+        "narHash": "sha256-VVyrWcfw2XUmdUAP1yLyrojFvaz7K2QM+MYX8q7asAA=",
         "ref": "master",
-        "rev": "9eb94d02635557087cb46c2dd189e44ac7b2baac",
-        "revCount": 255151,
+        "rev": "2d07844281ea1d00a963384e4cf037b179fbd175",
+        "revCount": 255166,
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs/master"
       },
@@ -417,11 +417,8 @@
         "unstableSmall": "unstableSmall"
       },
       "locked": {
-        "lastModified": 1606536779,
-        "narHash": "sha256-k3pXObr+H+8QBDuJxvcoeiNwn+p/TF4vY3hfDbrPWuI=",
-        "ref": "master",
-        "rev": "d9bf6dea5aab708c40743c6b8b0921b9d4d8831b",
-        "revCount": 1925,
+        "lastModified": 1606541915,
+        "narHash": "sha256-gEhKt5KpEYRO3bTXqIEWAEaqf4hcj7j+DYEKxlcWDlg=",
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs-wayland"
       },
@@ -434,10 +431,7 @@
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1606536568,
-        "narHash": "sha256-pXEdV9I+g2ZlesUt7JR2pE9nzgeVD3grJtdVd9cBkhs=",
-        "ref": "cmpkgs",
-        "rev": "d9c8a8a7a8d34c4ad8b6cbbb59ae8873ee330b41",
-        "revCount": 253645,
+        "narHash": "sha256-jgzOtGhgMnwvlPEZRu5NOKVOjH8Q1BkxYmIg4yq/eTg=",
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs/cmpkgs"
       },

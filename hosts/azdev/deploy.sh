@@ -21,7 +21,7 @@ data_disk_id="/subscriptions/aff271ee-e9be-4441-b9bb-42f5af4cbaeb/resourceGroups
 #     --lock-type 'CanNotDelete' \
 #     --resource-group 'azdev2020data'
 # }
-# 
+#
 
 function deploy() {
   (cd ../..; nix flake update --update-input nixos-azure)
@@ -30,7 +30,7 @@ function deploy() {
   upstream="/home/cole/code/nixos-azure"
 
   # build the VHD
-  nix build "../..#images.azdev" --out-link /tmp/azdev
+  #nix build "../..#images.azdev" --out-link /tmp/azdev
 
   # upload the VHD
   export AZURE_GROUP="azdev2020nov"

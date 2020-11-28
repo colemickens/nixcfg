@@ -4,7 +4,8 @@
   imports = [
     ./gui.nix
 
-    ../mixins/gammastep.nix
+    #../mixins/gammastep.nix
+    ../mixins/wlsunset.nix
     ../mixins/mako.nix
     ../mixins/sway.nix
     ../mixins/waybar.nix
