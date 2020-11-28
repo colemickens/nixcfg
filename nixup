@@ -41,7 +41,7 @@ function update() {
     cd ~/code/nixpkgs/master; git remote update; git reset --hard "nixpkgs/master" && git push origin HEAD -f || false
   cd -; cd ~/code/nixcfg;                git pull --rebase && git push origin HEAD -f || false
   #cd -; cd ~/code/nixpkgs/cmpkgs;        git pull --rebase && git push origin HEAD -f || false
-  cd -; cd ~/code/nixpkgs/pipkgs;        git pull --rebase && git push origin HEAD -f || false
+  #cd -; cd ~/code/nixpkgs/pipkgs;        git pull --rebase && git push origin HEAD -f || false
   cd -; cd ~/code/flake-firefox-nightly; git pull --rebase && git push origin HEAD -f || false
   cd -; cd ~/code/nixpkgs-wayland;       git pull --rebase && git push origin HEAD -f || false
   cd -; cd ~/code/home-manager/cmhm;     git pull --rebase && git push origin HEAD -f || false
