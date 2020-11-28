@@ -66,7 +66,7 @@
           "lua require'nvim_lsp'.rust_analyzer.setup({on_attach=require'completion'.on_attach})
 
           autocmd BufRead Cargo.toml call crates#toggle()
-          autocmd BufEnter * lua require'completion'.on_attach()
+          "autocmd BufEnter * lua require'completion'.on_attach()
 
           " Use <Tab> and <S-Tab> to navigate through popup menu
           inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"

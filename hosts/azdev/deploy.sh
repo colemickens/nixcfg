@@ -30,14 +30,14 @@ function deploy() {
   upstream="/home/cole/code/nixos-azure"
 
   # build the VHD
-  nix build "../..#images.azdev" --out-link /tmp/azdev
+  #nix build "../..#images.azdev" --out-link /tmp/azdev
 
   # upload the VHD
   export AZURE_GROUP="azdev2020nov"
-  #image_id="/subscriptions/aff271ee-e9be-4441-b9bb-42f5af4cbaeb/resourceGroups/azdev2020nov/providers/Microsoft.Compute/images/21.03.20201101.dirty.vhd"
-  image_id="$(set -euo pipefail; \
-    nix shell "${upstream}" --command \
-      azutil upload /tmp/azdev)"
+  image_id="/subscriptions/aff271ee-e9be-4441-b9bb-42f5af4cbaeb/resourceGroups/azdev2020nov/providers/Microsoft.Compute/images/21.03.20201101.dirty.vhd"
+  #image_id="$(set -euo pipefail; \
+  #  nix shell "${upstream}" --command \
+  #    azutil upload /tmp/azdev)"
 
   # boot a VM
   export AZURE_GROUP="azdev2020vm"
