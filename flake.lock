@@ -324,11 +324,10 @@
       "locked": {
         "lastModified": 1604292731,
         "narHash": "sha256-4KKZCQ2qO2M3exw+CUyUDeUypJEiSKiIhrycOtdeK08=",
-        "ref": "dev",
+        "owner": "colemickens",
+        "repo": "nixos-azure",
         "rev": "33965628e0b4cabbdcdebb6ba50e01b065b1f205",
-        "revCount": 18,
-        "type": "git",
-        "url": "file:///home/cole/code/nixos-azure"
+        "type": "github"
       },
       "original": {
         "owner": "colemickens",
