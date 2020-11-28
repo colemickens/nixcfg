@@ -77,7 +77,7 @@ in
     console.packages = [ pkgs.terminus_font ];
 
     boot = {
-      tmpOnTmpfs = true;
+      # tmpOnTmpfs = true;  # re-enable when RAM RMA is complete and we're back to 64GB
       #zfs.requestEncryptionCredentials = true;
       kernelPackages = pkgs.linuxPackages_latest;
       initrd.availableKernelModules = [
