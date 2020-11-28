@@ -44,7 +44,7 @@
       "/var/lib/docker" = {
         fsType = "none"; options = [ "bind" ]; device = "/data/var/lib/docker";
       };
-    }
+    };
 
     networking.hostName = "azbldr";
     documentation.nixos.enable = false;
