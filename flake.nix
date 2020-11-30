@@ -134,7 +134,7 @@
           customCommands = prev.callPackage ./pkgs/commands.nix {};
           customGuiCommands = prev.callPackage ./pkgs/commands-gui.nix {};
 
-          #alps = prev.callPackage ./pkgs/alps {};
+          bb = prev.callPackage ./pkgs/bb {};
           cchat-gtk = prev.callPackage ./pkgs/cchat-gtk {};
           conduit = prev.callPackage ./pkgs/conduit {};
           drm-howto = prev.callPackage ./pkgs/drm-howto {};
