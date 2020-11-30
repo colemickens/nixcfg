@@ -4,6 +4,11 @@ let
   dir = "test_gcal_api__gmail_com";
 in {
   config = {
+    sops.secrets."gmail-meli-client.json" = {
+      owner = "cole";
+      group = "cole";
+    };
+
     sops.secrets."gmail-meli-pw.txt" = {
       owner = "cole";
       group = "cole";
@@ -21,7 +26,9 @@ in {
               server_port = 993;
               use_starttls = false; # gmail expects false
               server_username = "${email}";
-              server_password_command = "${pkgs.coreutils}/bin/cat ${config.sops.secrets."gmail-meli-pw.txt".path}";
+              use_oauth2 = true;
+              #server_password_command = "${pkgs.coreutils}/bin/cat ${config.sops.secrets."gmail-meli-pw.txt".path}";
+              server_password_command = "${pkgs.get-xoauth2-token}/bin/get-xoauth2-token --client-secret-path ${config.sops.secrets."gmail-meli-client.json".path} --auth-method redirect --username '${email}'";
               root_mailbox = "$HOME/.local/share/meli/${dir}";
             };
           };

@@ -74,8 +74,9 @@
         };
     in rec {
       devShell = forAllSystems (system:
-        pkgs_.nixpkgs.${system}.mkShell {
-          nativeBuildInputs = []
+        pkgs_.nixpkgs.${system}.buildEnv {
+          name = "nixcfg-devshell";
+          paths = []
           ++ (with pkgs_.nixos-unstable.${system}; [ nixUnstable ])
           ++ (with pkgs_.stable.${system}; [ cachix ])
           ++ (with pkgs.${system}; [ /*niche*/ ])
@@ -137,8 +138,10 @@
           cchat-gtk = prev.callPackage ./pkgs/cchat-gtk {};
           conduit = prev.callPackage ./pkgs/conduit {};
           drm-howto = prev.callPackage ./pkgs/drm-howto {};
+          get-xoauth2-token = prev.callPackage ./pkgs/get-xoauth2-token {};
           #mesa-git = prev.callPackage ./pkgs/mesa-git {};
           mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
+          meli = prev.callPackage ./pkgs/meli {};
           neovim-unwrapped = prev.callPackage ./pkgs/neovim {
             neovim-unwrapped = prev.neovim-unwrapped;
           };
@@ -173,25 +176,17 @@
 
       bundles = rec {
         x86_64-linux = pkgs_.nixpkgs.x86_64-linux.linkFarmFromDrvs "x86_64-linux-outputs" ([
-          # inputs.self.nixosConfigurations.azdev.config.system.build.toplevel
-          # inputs.self.nixosConfigurations.slynux.config.system.build.toplevel
-          # inputs.self.nixosConfigurations.xeep.config.system.build.toplevel
-          # inputs.self.nixosConfigurations.testipfsvm.config.system.build.toplevel
-
-          # TODO: how to include some devshell-y type stuff here too, so it's always pre-cached?
-        ]
-        ++ builtins.attrValues inputs.self.outputs.packages.x86_64-linux); # plus let's always pre-build our own custom pacakges
-
+            # regular toplevels/hosts/vms
+            inputs.self.nixosConfigurations.azdev.config.system.build.toplevel
+            inputs.self.nixosConfigurations.slynux.config.system.build.toplevel
+            # relevant devShells
+            inputs.self.devShell.x86_64-linux
+        ] ++ builtins.attrValues inputs.self.outputs.packages.x86_64-linux);
         aarch64-linux = pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "aarch64-linux-outputs" ([
           inputs.self.nixosConfigurations.rpione.config.system.build.toplevel
-          inputs.self.nixosConfigurations.rpitwo.config.system.build.toplevel
-          #inputs.self.nixosConfigurations.pinephone.config.system.build.toplevel
           inputs.self.nixosConfigurations.pinebook.config.system.build.toplevel
-          #inputs.self.nixosConfigurations.bluephone.config.system.build.toplevel
-
-          # TODO: how to include some devshell-y type stuff here too, so it's always pre-cached?
-        ]
-        ++ builtins.attrValues inputs.self.outputs.packages.aarch64-linux);  # plus let's always pre-build our own custom pacakges
+          #shells
+        ] ++ builtins.attrValues inputs.self.outputs.packages.aarch64-linux);
       };
       images = {
         # azure vhd for azdev machine (a custom Azure image using `nixos-azure` module)
@@ -220,10 +215,10 @@
             ln -s "${dev.config.system.build.boot-partition}" $out/boot-partition;
           '';
       };
-      linuxVirtualMachines = {
+      linuxVMs = {
         testipfsvm = inputs.self.nixosConfigurations.testipfsvm.config.system.build.vm;
       };
-      windowsVirtualMachines = {
+      winVMs = {
         nixwinvm = import ./hosts/nixwinvm {
           pkgs = pkgs_.nixpkgs.x86_64-linux;
           inherit inputs;

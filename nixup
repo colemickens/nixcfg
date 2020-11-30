@@ -3,6 +3,9 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 set -euo pipefail
 set -x
 
+# ❯ ./nixup build .#bundles.aarch64-linux colemickens@aarch64.nixos.community cole@localhost
+# ❯ ./nixup build .#bundles.x86_64-linux cole@azdev2020vm.westus2.cloudapp.azure.com cole@localhost
+
 unset NIX_PATH
 cd "${DIR}"
 
@@ -43,7 +46,7 @@ function update() {
   #cd -; cd ~/code/nixpkgs/cmpkgs;        git pull --rebase && git push origin HEAD -f || false
   #cd -; cd ~/code/nixpkgs/pipkgs;        git pull --rebase && git push origin HEAD -f || false
   cd -; cd ~/code/flake-firefox-nightly; git pull --rebase && git push origin HEAD -f || false
-  cd -; cd ~/code/nixpkgs-wayland;       git pull --rebase && git push origin HEAD -f || false
+  #cd -; cd ~/code/nixpkgs-wayland;       git pull --rebase && git push origin HEAD -f || false
   cd -; cd ~/code/home-manager/cmhm;     git pull --rebase && git push origin HEAD -f || false
   cd -; cd ~/code/mobile-nixos;          git pull --rebase && git push origin HEAD -f || false
   cd -; cd ~/code/nixos-azure;           git pull --rebase && git push origin HEAD -f || false
@@ -60,7 +63,7 @@ function update() {
 }
 function ssh_cachix_path() {
   set -euo pipefail
-  ssh "${1}" "nix-shell -I nixpkgs=${cachixpkgs} -p cachix --command \
+  ssh "${1}" "nix-shell -I nixpkgs=${cachixpkgs} -p cachix --run \
     'echo ${2} | env CACHIX_SIGNING_KEY=${cachixkey} cachix push ${cache} >/dev/stderr'" &>/dev/stderr
 }
 function ssh_nix_unstable() {
@@ -72,7 +75,7 @@ function build() {
   set -euo pipefail
   thing="${1}"; shift
   remote="${1}"; shift
-  target="${1:-""}"; shift
+  target="${1:-"${USER}@localhost"}"; shift
 
   # LOCAL: eval the out to be able to check for substitute
   set +x; printf "\n\n%s\n" ":::::::: eval ${thing}" &>/dev/stderr; set -x
@@ -103,7 +106,7 @@ function build() {
   # REMOTE: build
   set +x; printf "\n\n%s\n" ":::::::: build ${drv} on ${remote}" &>/dev/stderr; set -x
 
-  ssh_nix_unstable "${remote}" nix "${nixargs[@]}" build "${buildargs[@]}" --keep-going "${drv}"
+  ssh_nix_unstable "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --keep-going "${drv}"
 
   if [[ ! -z "${cachixkey:-""}" ]]; then
     # REMOTE: push $out to cachix
