@@ -88,6 +88,7 @@ in
         cordless
         xdg_utils
         lynis
+        bb
 
         azure-cli
         #awscli2

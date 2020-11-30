@@ -24,17 +24,17 @@ buildargs=(
 )
 evalargs=(
   #--impure
-  --override-input master "/home/cole/code/nixpkgs/master"
-  --override-input nixpkgs "/home/cole/code/nixpkgs/cmpkgs"
-  --override-input pipkgs "/home/cole/code/nixpkgs/pipkgs"
-  --override-input firefox "/home/cole/code/flake-firefox-nightly"
-  --override-input home-manager "/home/cole/code/home-manager/cmhm"
-  --override-input mobile-nixos "/home/cole/code/mobile-nixos"
-  --override-input nixos-azure "/home/cole/code/nixos-azure"
-  --override-input nixos-veloren "/home/cole/code/nixos-veloren"
-  --override-input nixpkgs-wayland "/home/cole/code/nixpkgs-wayland"
-  --override-input sops-nix "/home/cole/code/sops-nix"
-  --override-input wip-pinebook-pro "/home/cole/code/wip-pinebook-pro"
+  # --override-input master "/home/cole/code/nixpkgs/master"
+  # --override-input nixpkgs "/home/cole/code/nixpkgs/cmpkgs"
+  # --override-input pipkgs "/home/cole/code/nixpkgs/pipkgs"
+  # --override-input firefox "/home/cole/code/flake-firefox-nightly"
+  # --override-input home-manager "/home/cole/code/home-manager/cmhm"
+  # --override-input mobile-nixos "/home/cole/code/mobile-nixos"
+  # --override-input nixos-azure "/home/cole/code/nixos-azure"
+  # --override-input nixos-veloren "/home/cole/code/nixos-veloren"
+  # --override-input nixpkgs-wayland "/home/cole/code/nixpkgs-wayland"
+  # --override-input sops-nix "/home/cole/code/sops-nix"
+  # --override-input wip-pinebook-pro "/home/cole/code/wip-pinebook-pro"
 )
 
 function update() {
