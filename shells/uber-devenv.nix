@@ -38,6 +38,7 @@ pkgs.stdenv.mkDerivation {
     go-outline
     goimports
     godef
+    #godoctor
     golint
     gopls
   ];
