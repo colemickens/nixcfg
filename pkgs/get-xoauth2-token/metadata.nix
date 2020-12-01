@@ -1,7 +1,7 @@
 {
   repo_git = "https://github.com/colemickens/get-xoauth2-token";
   branch = "master";
-  rev = "ee0ffca65eb00fd38377725e9dfbb641b3b2fa86";
-  sha256 = "sha256-4R3BcWBaAjvhihcygOBSITpNZfpxrcNhcXnbOHZyU44=";
-  cargoSha256 = "sha256-LZwSFVEL+Yzr7RGi9mQVMIgUXOCEHTd2RjJu5v3R3lo=";
+  rev = "5ce47ccc3cc63300b03c0a9c0edc50ae9a88de77";
+  sha256 = "sha256-j0Fd57sfAiOL10N4D7MAUdqj24XG0IEqYp2iNFwJfa8=";
+  cargoSha256 = "sha256-PqXa/3Qk3zcDXAeMv0yriT4RLMobK6tPuqlB2V49zW4=";
 }
