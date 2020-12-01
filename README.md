@@ -5,7 +5,10 @@
 
 ## Overview
 
-It's everything. It's all of my system configurations. It's all of my dotfiles. All right here. All in Nix.
+* nix configuration for my laptops, desktops, phone, and cloud servers - **all of my devices**
+* **nix flake**-powered
+* guaranteed to be **reproducible**
+* all of my **dotfiles**
 
 **Note**: this readme assumes [you have enabled nixUnstable + flakes](https://www.tweag.io/blog/2020-07-31-nixos-flakes/).
 
