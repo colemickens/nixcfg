@@ -89,8 +89,8 @@ in
 
         # browsers
         inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox
-        #inputs.nixos-unstable.legacyPackages.${pkgs.system}.chromium
-        inputs.nixos-unstable.legacyPackages.${pkgs.system}.ungoogled-chromium
+        inputs.nixos-unstable.legacyPackages.${pkgs.system}.chromium
+        #inputs.nixos-unstable.legacyPackages.${pkgs.system}.ungoogled-chromium
         #inputs.nixos-unstable.legacyPackages.${pkgs.system}.chromiumBeta
         #falkon
       ]
