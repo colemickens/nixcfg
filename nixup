@@ -85,34 +85,33 @@ function build() {
   target="${1:-"${USER}@localhost"}"; shift
 
   # LOCAL: eval the out to be able to check for substitute
-  set +x; printf "\n\n%s\n" ":::::::: eval ${thing}" &>/dev/stderr; set -x
+  set +x; printf "\n\n%s\n" ":::::::: eval ${thing}" &>/dev/stderr;
   out="$(nix "${nixargs[@]}" eval "${evalargs[@]}" --raw "${thing}")"
 
-  # TARGET: return if we can realize on target
-  set +x; printf "\n\n%s\n" ":::::::: trying to realize ${out} on ${target}" &>/dev/stderr; set -x
+  # TARGET: short circuit if we can realize $out on $target
+  set +x; printf "\n\n%s\n" ":::::::: TARGET: short circuit if we can realize $out on $target" &>/dev/stderr;
   if ssh_nix_unstable "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}"; then
     echo -e "${out}"; return 0
   fi
 
-  # LOCAL: eval the drvPath to build the derivation
-  set +x; printf "\n\n%s\n" ":::::::: eval '${thing}.drvPath'" &>/dev/stderr; set -x
+  # LOCAL: eval $thing.drvPath to build the derivation
+  set +x; printf "\n\n%s\n" ":::::::: eval '${thing}.drvPath'" &>/dev/stderr
   local drv="$(set -euo pipefail; nix "${nixargs[@]}" eval "${evalargs[@]}" --raw "${thing}.drvPath")"
 
   # LOCAL: copy drvs to tmp
   local t="/tmp/tmpnixpath"
   nix "${nixargs[@]}" copy --to "file://${t}" --derivation "${drv}"
 
-  # LOCAL->REMOTE: rsync drvs
-  set +x; printf "\n\n%s\n" ":::::::: rsync ${t} to ${remote}" &>/dev/stderr; set -x
-
+  # LOCAL: rsync $t to $remote
+  set +x; printf "\n\n%s\n" ":::::::: LOCAL: rsync $t to $remote" &>/dev/stderr
   rsync -ah "${t}/" "${remote}:${t}"
 
   # REMOTE: copy drvs to store
+  set +x; printf "\n\n%s\n" ":::::::: REMOTE: copy $drv => /nix/store" &>/dev/stderr
   ssh_nix_unstable "${remote}" nix "${nixargs[@]}" copy --from file://${t} --derivation ${drv}
 
-  # REMOTE: build
-  set +x; printf "\n\n%s\n" ":::::::: build ${drv} on ${remote}" &>/dev/stderr; set -x
-
+  # REMOTE: build $drv => $out
+  set +x; printf "\n\n%s\n" ":::::::: REMOTE: build $drv => $out" &>/dev/stderr; set -x
 ####
   ssh_nix_unstable "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --keep-going "${drv}"
 ####
@@ -121,7 +120,7 @@ function build() {
 
   if [[ ! -z "${cachixkey:-""}" ]]; then
     # REMOTE: push $out to cachix
-    set +x; printf "\n\n%s\n" ":::::::: pushing ${out} to cachix" &>/dev/stderr; set -x
+    set +x; printf "\n\n%s\n" ":::::::: REMOTE: push $out to cachix" &>/dev/stderr
 
     ssh_cachix_path "${remote}" "${out}"
   fi
@@ -132,13 +131,14 @@ function build() {
   fi
 
   if [[ ! -z "${cachixkey:-""}" ]]; then
-    # TARGET: copy $out from cachix
-    set +x; printf "\n\n%s\n" ":::::::: trying to realize ${out} (from cache) on ${target}" &>/dev/stderr; set -x
-    ssh_nix_unstable "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}"
-    echo -e "${out}"; return 0
+    # TARGET: copy $out from cachix (on $target)
+    set +x; printf "\n\n%s\n" ":::::::: TARGET: copy $out from cachix (on $target)" &>/dev/stderr
+    if ssh_nix_unstable "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}"; then
+      echo -e "${out}"; return 0
+    fi
   else
-    # TARGET: copy $out from builder
-    set +x; printf "\n\n%s\n" ":::::::: copying ${out} from ${remote} on ${target}" &>/dev/stderr; set -x
+    # TARGET: copy $out from $remote (on $target)
+    set +x; printf "\n\n%s\n" ":::::::: TARGET: copy $out from $remote (on $target)" &>/dev/stderr
     if ssh -A "${target}" "$(printf '\"%s\" ' nix copy --from "ssh://${remote}" "${out}")"; then
       echo -e "${out}"; return 0
     fi
@@ -148,18 +148,17 @@ function build() {
   # see if we can realize here and then push to device
   # (this applies for blueline where we cant pull but can be pushed to)
   if [[ ! -z "${cachixkey:-""}" ]]; then
-    set +x; printf "\n\n%s\n" ":::::::: trying to realize ${out} (from cache)" &>/dev/stderr; set -x
-
+    # LOCAL: copy $out from cachix
+    set +x; printf "\n\n%s\n" ":::::::: LOCAL: copy $out from cachix" &>/dev/stderr
     nix "${nixargs[@]}" build "${buildargs[@]}" "${thing}" -j0
   else
-    set +x; printf "\n\n%s\n" ":::::::: manually copy ${out} from ${remote}" &>/dev/stderr; set -x
-
+    # LOCAL: copy $out from $remote
+    set +x; printf "\n\n%s\n" ":::::::: LOCAL: copy $out from $remote" &>/dev/stderr
     nix "${nixargs[@]}" copy --from "ssh://${remote}" "${out}"
   fi
 
-  # now that we have $out here, we can push to remote
-  set +x; printf "\n\n%s\n" ":::::::: manually copy ${out} to ${target}" &>/dev/stderr; set -x
-
+  # LOCAL: copy $out to $target
+  set +x; printf "\n\n%s\n" ":::::::: LOCAL: copy $out to $target" &>/dev/stderr
   nix "${nixargs[@]}" copy --to "ssh://${target}" "${out}"
 
   echo -e "${out}"; return 0
