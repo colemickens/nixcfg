@@ -56,6 +56,8 @@ function update() {
   cd -; cd ~/code/sops-nix;              git pull --rebase && git push origin HEAD -f || false
   cd -; cd ~/code/wip-pinebook-pro;      git pull --rebase && git push origin HEAD -f || false; cd -
 
+  cp -a /home/cole/code/nixcfg/pkgs/niche/* /home/cole/code/nixpkgs/cmpkgs/pkgs/development/tools/misc/niche/
+
   set +x; printf "\n\n%s\n" ":::::::: updating all inputs" &>/dev/stderr; set -x
   nix flake update --recreate-lock-file --no-registries
 
