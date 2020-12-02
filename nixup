@@ -12,8 +12,7 @@ cd "${DIR}"
 cache="colemickens"
 niche_cache="https://azdev2020nov.blob.core.windows.net/nixcache"
 cachixpkgs="https://github.com/nixos/nixpkgs/archive/nixos-20.09.tar.gz" # where to find pkgs.cachix
-#unstablepkgs="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # where to find nixUnstable
-unstablepkgs="https://github.com/colemickens/nixpkgs/archive/$(cd ~/code/nixpkgs/cmpkgs; git rev-parse HEAD).tar.gz" # where to find nixUnstable
+unstablepkgs="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # where to find nixUnstable
 cachixkey="$(set -e; gopass show "websites/cachix.org/apikey/${cache}")"
 
 nixargs=(--experimental-features "nix-command flakes ca-references recursive-nix")
@@ -75,7 +74,8 @@ function ssh_nix_unstable() {
 }
 function ssh_niche_build() {
   local r="${1}"; shift;
-  ssh "${r}" -- "nix-shell -I nixpkgs=${unstablepkgs} -p niche -p gnupg -p nixUnstable --command '$(printf '\"%s\" ' "${@}")'"
+  cmpkgs="https://github.com/colemickens/nixpkgs/archive/$(cd ~/code/nixpkgs/cmpkgs; git rev-parse HEAD).tar.gz"
+  ssh "${r}" -- "nix-shell -I nixpkgs=${cmpkgs} -p niche -p gnupg -p nixUnstable --command '$(printf '\"%s\" ' "${@}")'"
 }
 
 function build() {
