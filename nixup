@@ -13,7 +13,7 @@ cache="colemickens"
 niche_cache="https://azdev2020nov.blob.core.windows.net/nixcache"
 cachixpkgs="https://github.com/nixos/nixpkgs/archive/nixos-20.09.tar.gz" # where to find pkgs.cachix
 #unstablepkgs="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # where to find nixUnstable
-unstablepkgs="https://github.com/colemickens/nixpkgs/archive/1bcda1212e0.tar.gz" # where to find nixUnstable
+unstablepkgs="https://github.com/colemickens/nixpkgs/archive/cmpkgs.tar.gz" # where to find nixUnstable
 cachixkey="$(set -e; gopass show "websites/cachix.org/apikey/${cache}")"
 
 nixargs=(--experimental-features "nix-command flakes ca-references recursive-nix")
@@ -61,8 +61,6 @@ function update() {
 
   set +x; printf "\n\n%s\n" ":::::::: updating our own packages" &>/dev/stderr; set -x
   cd "./pkgs" && ./update.sh;
-
-  cp -a /home/cole/code/nixcfg/pkgs/niche/* /home/cole/code/nixpkgs/cmpkgs/pkgs/development/tools/misc/niche/
 
   cd -;
 }

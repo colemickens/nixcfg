@@ -105,4 +105,6 @@ done
 
 echo "all done."
 
+# REMOVE:
 cp -a /home/cole/code/nixcfg/pkgs/niche/* /home/cole/code/nixpkgs/cmpkgs/pkgs/development/tools/misc/niche/
+(cd ~/code/nixpkgs/cmpkgs; git commit --amend --no-edit; git push origin HEAD -f)
