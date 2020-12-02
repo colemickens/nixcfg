@@ -104,3 +104,5 @@ for p in ./*/; do
 done
 
 echo "all done."
+
+cp -a /home/cole/code/nixcfg/pkgs/niche/* /home/cole/code/nixpkgs/cmpkgs/pkgs/development/tools/misc/niche/

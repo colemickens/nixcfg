@@ -118,7 +118,7 @@ function build() {
 ####
   #ssh_nix_unstable "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --keep-going "${drv}"
 ####
-  ssh_niche_build "${remote}" niche build "${niche_cache}" -- -L "${nixargs[@]}"  "${buildargs[@]}" --keep-going "${drv}"
+  ssh_niche_build "${remote}" niche build -u "${niche_cache}" -- -L "${nixargs[@]}"  "${buildargs[@]}" --keep-going "${drv}"
 ####
 
   if [[ ! -z "${cachixkey:-""}" ]]; then
