@@ -88,13 +88,18 @@ in
         #nyxt
 
         # browsers
-        inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox
-        inputs.nixos-unstable.legacyPackages.${pkgs.system}.chromium
+        # firefox+chromium are now arch-specific
+        #inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox
+        #inputs.nixos-unstable.legacyPackages.${pkgs.system}.chromium
         #inputs.nixos-unstable.legacyPackages.${pkgs.system}.ungoogled-chromium
         #inputs.nixos-unstable.legacyPackages.${pkgs.system}.chromiumBeta
         #falkon
       ]
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
+        # use nixos-unstable on x86_64-linux
+        inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox
+        inputs.nixos-unstable.legacyPackages.${pkgs.system}.chromium
+
         scrcpy
         imv
 
@@ -103,6 +108,10 @@ in
         pkgs.google-chrome-dev
         torbrowserPkg
         pkgs.ripcord
+      ] ++ lib.optionals (pkgs.system == "x86_64-linux") [
+        # use stable on aarch64-linux
+        inputs.stable.legacyPackages.${pkgs.system}.firefox
+        inputs.stable.legacyPackages.${pkgs.system}.chromium
       ];
     };
   };
