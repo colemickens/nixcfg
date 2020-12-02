@@ -1,7 +1,7 @@
 {
   repo_git = "https://github.com/colemickens/niche";
   branch = "master";
-  rev = "0709b095892fc67625760efe8ad92e21085d496e";
-  sha256 = "sha256-bP+xxVKhhb/Uh0BE3twtes/l4Pf1u/yRWdhLYYZy+xU=";
+  rev = "c50138017101ed3f96cb247073f95d2e3b068f95";
+  sha256 = "sha256-X1zPUqFkci74lLUGIeAgbPJ4uI0MPU/zfdRo5Ptqfok=";
   vendorSha256 = "sha256-LDLwXmOOeGWUCov/cJt/d2VbFgF19LHCcF+UZxhVNiY=";
 }
