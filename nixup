@@ -71,6 +71,10 @@ function ssh_nix_unstable() {
   local r="${1}"; shift;
   ssh "${r}" -- "nix-shell -I nixpkgs=${unstablepkgs} -p nixUnstable --run '$(printf '\"%s\" ' "${@}")'"
 }
+function ssh_niche_build() {
+  thing="$1"
+  niche build "${thing}" -- "${buildargs[@]}"
+}
 
 function build() {
   set -euo pipefail
