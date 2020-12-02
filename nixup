@@ -11,7 +11,8 @@ cd "${DIR}"
 
 cache="colemickens"
 cachixpkgs="https://github.com/nixos/nixpkgs/archive/nixos-20.09.tar.gz" # where to find pkgs.cachix
-unstablepkgs="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # where to find nixUnstable
+#unstablepkgs="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # where to find nixUnstable
+unstablepkgs="https://github.com/colemickens/nixpkgs/archive/cmpkgs.tar.gz" # where to find nixUnstable
 cachixkey="$(set -e; gopass show "websites/cachix.org/apikey/${cache}")"
 
 nixargs=(--experimental-features "nix-command flakes ca-references recursive-nix")
