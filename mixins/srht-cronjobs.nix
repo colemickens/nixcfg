@@ -31,6 +31,8 @@ in
 
   systemd.services = genPrefixAttrs "srht-" repos (repo:
     {
+      # I need these in path for the `srht-submit.sh` script in the repo,
+      # so no point in trying to embed them in doBuild, directly, above.
       path = with pkgs; [ bash curl jq git ];
       after = [ "network.target" ];
       serviceConfig = {
