@@ -20,6 +20,8 @@ in
     ../mixins/zsh.nix
   ];
 
+  # gpg --pinentry-mode loopback --batch --passphrase '' --quick-generate-key "testkeyrpione"
+
   config = {
     home-manager.useGlobalPkgs = true;
     home-manager.useUserPackages = true;
@@ -35,6 +37,7 @@ in
       };
       home.packages = with pkgs; [
         git-crypt
+        gnupg
       ];
     };
   };

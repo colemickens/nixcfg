@@ -29,7 +29,7 @@ in {
       maximumJavaHeapSize = 256;
     };
 
-    systemd.services.unifi.wantedBy = pkgs.lib.mkForce [];
+    # systemd.services.unifi.wantedBy = pkgs.lib.mkForce [];
 
     networking.firewall.allowedTCPPorts = [ 8080 8443 ];
   };

@@ -89,7 +89,7 @@ function build() {
   out="$(nix "${nixargs[@]}" eval "${evalargs[@]}" --raw "${thing}")"
 
   # TARGET: short circuit if we can realize $out on $target
-  set +x; printf "\n\n%s\n" ":::::::: TARGET: short circuit if we can realize $out on $target" &>/dev/stderr;
+  set +x; printf "\n\n%s\n" ":::::::: TARGET: short circuit if we can realize $out on $target" &>/dev/stderr; set -x;
   if ssh_nix_unstable "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}"; then
     echo -e "${out}"; return 0
   fi
@@ -113,9 +113,9 @@ function build() {
   # REMOTE: build $drv => $out
   set +x; printf "\n\n%s\n" ":::::::: REMOTE: build $drv => $out" &>/dev/stderr; set -x
 ####
-  ssh_nix_unstable "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --keep-going "${drv}"
+  #ssh_nix_unstable "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --keep-going "${drv}"
 ####
-  #ssh_niche_build "${remote}" niche build -u "${niche_cache}" -- -L "${nixargs[@]}"  "${buildargs[@]}" --keep-going "${drv}"
+  ssh_niche_build "${remote}" niche build -u "${niche_cache}" -- -L "${nixargs[@]}"  "${buildargs[@]}" --keep-going "${drv}"
 ####
 
   if [[ ! -z "${cachixkey:-""}" ]]; then
@@ -173,28 +173,8 @@ function activate() {
   ssh -A "${target}" "$(printf '\"%s\" ' sudo nix shell -vv "${bo}" -c switch-to-configuration switch)";
 }
 
-function repro() {
-  local thing="${1:-".#hosts.$(hostname)"}";
-
-  nix build --out-link "/tmp/nixcfg_local" "${buildargs[@]}" "${evalargs[@]}" "${thing}"
-  local out_local="$(readlink -f /tmp/nixcfg_local)"
-
-  nix build --out-link "/tmp/nixcfg_github" "${buildargs[@]}" "github:colemickens/nixcfg#${thing:2}"
-  local out_github="$(readlink -f /tmp/nixcfg_github)"
-
-  nix flake update --no-registries --recreate-lock-file
-  nix build --out-link "/tmp/nixcfg_locked" "${buildargs[@]}" "${thing}"
-  local out_locked="$(readlink -f /tmp/nixcfg_locked)"
-
-  set +x; echo; echo; echo;
-  echo "out (flake.lock): ${out_locked}"
-  echo "out (local repo): ${out_local}"
-  echo "out     (github): ${out_github}"
-
-  if [[ "${out_locked}" != "${out_local}" ]]; then
-    exit -1
-  fi
-}
+function rpione()   { activate ".#toplevels.rpione"   "colemickens@aarch64.nixos.community" "cole@192.168.1.2"; }
+function pinebook() { activate ".#toplevels.pinebook" "colemickens@aarch64.nixos.community" "cole@192.168.1.155"; }
 
 ## nixup
 
