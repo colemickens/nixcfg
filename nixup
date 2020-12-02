@@ -131,19 +131,17 @@ function build() {
     echo -e "${out}"; return 0
   fi
 
-  if [[ ! -z "${USE_CACHIX:-""}" ]]; then
-    # TARGET: realize from cachix (if it has internet and USE_CACHIX)
+  if [[ ! -z "${cachixkey:-""}" ]]; then
+    # TARGET: copy $out from cachix
     set +x; printf "\n\n%s\n" ":::::::: trying to realize ${out} (from cache) on ${target}" &>/dev/stderr; set -x
-
     ssh_nix_unstable "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}"
-    #fi
-  fi
-
-  # TARGET: copy from builder (if it has internet)
-  set +x; printf "\n\n%s\n" ":::::::: copying ${out} from ${remote} on ${target}" &>/dev/stderr; set -x
-
-  if ssh -A "${target}" "$(printf '\"%s\" ' nix copy --from "ssh://${remote}" "${out}")"; then
     echo -e "${out}"; return 0
+  else
+    # TARGET: copy $out from builder
+    set +x; printf "\n\n%s\n" ":::::::: copying ${out} from ${remote} on ${target}" &>/dev/stderr; set -x
+    if ssh -A "${target}" "$(printf '\"%s\" ' nix copy --from "ssh://${remote}" "${out}")"; then
+      echo -e "${out}"; return 0
+    fi
   fi
 
   # if we still cna't realize on device,
