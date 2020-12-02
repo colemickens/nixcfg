@@ -10,9 +10,10 @@ unset NIX_PATH
 cd "${DIR}"
 
 cache="colemickens"
+niche_cache="https://azdev2020nov.blob.core.windows.net/nixcache"
 cachixpkgs="https://github.com/nixos/nixpkgs/archive/nixos-20.09.tar.gz" # where to find pkgs.cachix
 #unstablepkgs="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # where to find nixUnstable
-unstablepkgs="https://github.com/colemickens/nixpkgs/archive/cmpkgs.tar.gz" # where to find nixUnstable
+unstablepkgs="https://github.com/colemickens/nixpkgs/archive/cb7279c5511.tar.gz" # where to find nixUnstable
 cachixkey="$(set -e; gopass show "websites/cachix.org/apikey/${cache}")"
 
 nixargs=(--experimental-features "nix-command flakes ca-references recursive-nix")
@@ -72,8 +73,8 @@ function ssh_nix_unstable() {
   ssh "${r}" -- "nix-shell -I nixpkgs=${unstablepkgs} -p nixUnstable --run '$(printf '\"%s\" ' "${@}")'"
 }
 function ssh_niche_build() {
-  thing="$1"
-  niche build "${thing}" -- "${buildargs[@]}"
+  local r="${1}"; shift;
+  ssh "${r}" -- "nix-shell -I nixpkgs=${unstablepkgs} -p niche -p nixUnstable --run '$(printf '\"%s\" ' "${@}")'"
 }
 
 function build() {
@@ -111,7 +112,11 @@ function build() {
   # REMOTE: build
   set +x; printf "\n\n%s\n" ":::::::: build ${drv} on ${remote}" &>/dev/stderr; set -x
 
-  ssh_nix_unstable "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --keep-going "${drv}"
+####
+  #ssh_nix_unstable "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --keep-going "${drv}"
+####
+  ssh_niche_build "${remote}" niche build "${niche_cache}" -- -L "${nixargs[@]}"  "${buildargs[@]}" --keep-going "${drv}"
+####
 
   if [[ ! -z "${cachixkey:-""}" ]]; then
     # REMOTE: push $out to cachix
