@@ -43,7 +43,7 @@ function update() {
 
   set +x; printf "\n\n%s\n" ":::::::: updating all (local, override) inputs" &>/dev/stderr; set -x
     cd ~/code/nixpkgs/master; git remote update; git reset --hard "nixpkgs/master" && git push origin HEAD -f || false
-  cd -; cd ~/code/nixcfg; git add -A . && git commit -m stash && git pull --rebase && git push origin HEAD -f || false
+    cd -; cd ~/code/nixcfg; git add -A . && (git commit -m stash && git pull --rebase && git push origin HEAD -f || false) || true
   cd -; cd ~/code/nixpkgs/cmpkgs;        git pull --rebase && git push origin HEAD -f || false
   cd -; cd ~/code/nixpkgs/pipkgs;        git pull --rebase && git push origin HEAD -f || false
   cd -; cd ~/code/flake-firefox-nightly; git pull --rebase && git push origin HEAD -f || false
