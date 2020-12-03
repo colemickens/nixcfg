@@ -88,13 +88,15 @@ in
         cordless
         xdg_utils
         lynis
-        bb
 
         azure-cli
         #awscli2
       ]
-      ++ (if pkgs.system != "x86_64-linux" then [] else [
-      ])
+      ++ lib.optionals (pkgs.system == "x86_64-linux") [
+        bb
+      ] ++ lib.optionals (pkgs.system == "aarch64-linux") [
+        #
+      ]
       ;
     };
   };
