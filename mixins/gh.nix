@@ -10,7 +10,7 @@
       programs.gh = {
         enable = true;
         #hostsFile = secrets."gh-hosts.yml".path;
-        hostsFile = config.sops.secrets."cachix.dhall".path;
+        hostsFile = config.sops.secrets."gh-hosts.yml".path;
       };
     };
   };
