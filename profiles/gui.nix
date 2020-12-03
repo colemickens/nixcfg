@@ -110,7 +110,7 @@ in
         pkgs.ripcord
       ] ++ lib.optionals (pkgs.system == "aarch64-linux") [
         # use stable on aarch64-linux
-        inputs.stable.legacyPackages.${pkgs.system}.firefox
+        #inputs.stable.legacyPackages.${pkgs.system}.firefox
         inputs.stable.legacyPackages.${pkgs.system}.chromium
       ];
     };

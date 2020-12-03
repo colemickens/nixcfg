@@ -11,6 +11,7 @@ in
     #../../mixins/debug-xdg.nix
     ../../mixins/docker.nix
     #../../mixins/ipfs.nix
+    ../../mixins/jellyfin.nix
     ../../mixins/libvirt.nix
     ../../mixins/meli.nix
     ../../mixins/obs.nix
