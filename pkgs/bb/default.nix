@@ -16,6 +16,16 @@ rustPlatform.buildRustPackage rec {
     sha256 = metadata.sha256;
   };
 
+  postPatch = ''
+    set -x
+    ls ./src/main.rs
+    sed -i 's/all(target_arch = "arm", target_pointer_width = "32")/any(target_arch = "arm", target_arch = "aarch64")/g' ./src/main.rs
+    echo "------"
+    cat ./src/main.rs
+    echo "------"
+    set +x
+  '';
+
   cargoSha256 = metadata.cargoSha256;
 
   meta = with stdenv.lib; {

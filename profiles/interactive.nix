@@ -88,12 +88,13 @@ in
         cordless
         xdg_utils
         lynis
+        bb
 
         azure-cli
         #awscli2
       ]
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
-        bb
+        #
       ] ++ lib.optionals (pkgs.system == "aarch64-linux") [
         #
       ]
