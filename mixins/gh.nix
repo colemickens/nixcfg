@@ -9,9 +9,8 @@
     home-manager.users.cole = { pkgs, ... }: {
       programs.gh = {
         enable = true;
-        #hostsFile = secrets."gh-hosts.yml".path;
-        hostsFile = config.sops.secrets."gh-hosts.yml".path;
       };
+      xdg.configFile."gh/hosts.yml".path = config.sops.secrets."gh-hosts.yml".path;
     };
   };
 }
