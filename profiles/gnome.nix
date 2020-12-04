@@ -22,7 +22,7 @@
       };
       home.packages = with pkgs; [
         # sway-related
-        gnome-tweaks
+        gnome-tweak-tool
       ];
     };
   };
