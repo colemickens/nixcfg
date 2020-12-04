@@ -1,7 +1,7 @@
 {
   repo_git = "https://github.com/epilys/bb";
   branch = "master";
-  rev = "a9eb29d43d04e18e4c24e19762e1724077a916c0";
-  sha256 = "sha256-ZIm7JMSZ6HY3Po71rfnRkBzSb9k2d89ldfojffh39+4=";
-  cargoSha256 = "sha256-UTVrYhFwznkB47S3OT3sJVp2wLME1D/lCJ3zXxgTMlE=";
+  rev = "c903d4c2975509299fd3d2600a0c4c2102f445d0";
+  sha256 = "sha256-KOXK+1arUWtu/QU7dwXhojIM0faMtwNN3AqVbofq1lY=";
+  cargoSha256 = "sha256-3Sjw5azODSAjqp/7+WcQlqCfB4OENKKdDuW7XtYqmqg=";
 }
