@@ -145,7 +145,7 @@
           neovim-unwrapped = prev.callPackage ./pkgs/neovim {
             neovim-unwrapped = prev.neovim-unwrapped;
           };
-          niche = prev.callPackage ./pkgs/niche {};
+          #niche = prev.callPackage ./pkgs/niche {};
           obs-v4l2sink = prev.libsForQt5.callPackage ./pkgs/obs-v4l2sink {};
           passrs = prev.callPackage ./pkgs/passrs {};
           # tree-sitter = prev.callPackage ./pkgs/tree-sitter {
