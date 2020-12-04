@@ -5,6 +5,9 @@
     ./gui.nix
   ];
   config = {
+    services.xserver.displayManager.gdm.enable = true;
+    services.xserver.desktopManager.gnome3.enable = true;
+
     home-manager.users.cole = { pkgs, ... }: {
       home.sessionVariables = {
         MOZ_ENABLE_WAYLAND = "1";
@@ -17,8 +20,6 @@
 
         XDG_SESSION_TYPE = "wayland";
       };
-      services.xserver.displayManager.gdm.enable = true;
-      services.xserver.desktopManager.gnome3.enable = true;
       home.packages = with pkgs; [
         # sway-related
         gnome-tweaks
