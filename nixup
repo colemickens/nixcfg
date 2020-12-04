@@ -50,7 +50,7 @@ function update() {
   cd -; cd ~/code/nixpkgs-wayland;       git pull --rebase && git push origin HEAD -f || false
   cd -; cd ~/code/home-manager/cmhm;     git pull --rebase && git push origin HEAD -f || false
   cd -; cd ~/code/mobile-nixos;          git pull --rebase && git push origin HEAD -f || false
-  cd -; cd ~/code/nixos-azure;           git pull --rebase && git push origin HEAD -f || false
+  #cd -; cd ~/code/nixos-azure;           git pull --rebase && git push origin HEAD -f || false
   #cd -; cd ~/code/nixos-veloren;         git pull --rebase && git push origin HEAD -f || false
   cd -; cd ~/code/sops-nix;              git pull --rebase && git push origin HEAD -f || false
   cd -; cd ~/code/wip-pinebook-pro;      git pull --rebase && git push origin HEAD -f || false; cd -
