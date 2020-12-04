@@ -18,7 +18,8 @@ in
     ../../mixins/sshd.nix
     ../../mixins/v4l2loopback.nix
 
-    ../../profiles/sway.nix
+    #../../profiles/sway.nix
+    ../../profiles/gnome.nix
     ../../profiles/gaming.nix
 
     #"${modulesPath}/virtualisation/hyperv-guest.nix"
