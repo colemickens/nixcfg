@@ -13,7 +13,7 @@ in
 
     ../mixins/cachix.nix
     ../mixins/direnv.nix
-    ../mixins/gh.nix
+    #../mixins/gh.nix
     ../mixins/gopass/gopass.nix
     #../mixins/mega/mega.nix
     ../mixins/nushell.nix
