@@ -114,9 +114,9 @@ function build() {
   # REMOTE: build $drv => $out
   set +x; printf "\n\n%s\n" ":::::::: REMOTE: build $drv => $out" &>/dev/stderr; set -x
 ####
-  ssh_nix_unstable "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --keep-going "${drv}"
+  #ssh_nix_unstable "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --keep-going "${drv}"
 ####
-  #ssh_niche_build "${remote}" niche build -u "${niche_cache}" -- -L "${nixargs[@]}"  "${buildargs[@]}" --keep-going "${drv}"
+  ssh_niche_build "${remote}" niche build -u "${niche_cache}" -- -L "${nixargs[@]}"  "${buildargs[@]}" --keep-going "${drv}"
 ####
 
   if [[ ! -z "${cachixkey:-""}" ]]; then
