@@ -19,7 +19,8 @@ in
     ../../mixins/v4l2loopback.nix
 
     #../../profiles/desktop-sway.nix
-    ../../profiles/desktop-gnome.nix
+    #../../profiles/desktop-gnome.nix
+    ../../profiles/desktop-plasma.nix
     ../../profiles/gaming.nix
 
     #"${modulesPath}/virtualisation/hyperv-guest.nix"
