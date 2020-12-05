@@ -2,8 +2,10 @@
 
 {
   config = {
+    # put this in a "pipewire.nix" ??
     services.pipewire.enable = true;
 
+    # split these out based on DE
     xdg.portal.enable = true;
     xdg.portal.gtkUsePortal = true;
     xdg.portal.extraPortals = with pkgs;
