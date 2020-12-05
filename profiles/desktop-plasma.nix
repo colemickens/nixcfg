@@ -6,8 +6,8 @@
   ];
   config = {
     services.xserver.enable = true;
-    services.xserver.displayManager.gdm.enable = true;
-    services.xserver.desktopManager.plasma.enable = true;
+    services.xserver.displayManager.plasma5.enable = true;
+    services.xserver.desktopManager.sddm.enable = true;
 
     home-manager.users.cole = { pkgs, ... }: {
       home.sessionVariables = {
