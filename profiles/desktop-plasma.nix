@@ -15,7 +15,7 @@
       };
       home.packages = with pkgs; [
         # sway-related
-        kedit
+        #kedit
         konsole
       ];
     };
