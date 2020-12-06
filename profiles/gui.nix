@@ -44,6 +44,7 @@ in
       home.sessionVariables = {
         BROWSER = "firefox";
         TERMINAL = "termite";
+        MOZ_USE_XINPUT2 = "1";
       };
       services = {
         udiskie.enable = true;

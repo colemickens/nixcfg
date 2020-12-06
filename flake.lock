@@ -196,11 +196,11 @@
     },
     "master": {
       "locked": {
-        "lastModified": 1607197517,
-        "narHash": "sha256-HhIpwI8AvLEoWqkRlbbnJl+rd8PbWUgaYX8aF98Eh/w=",
+        "lastModified": 1607215923,
+        "narHash": "sha256-FR51tWRAegXy33o6W9BC8lCguAjmmxQ/Nw0fIoX21gc=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "bd171fa7d8740e1bf90f86e289f9a881f2ee4674",
+        "rev": "1f054acade96320bc9c336501c69570a216a6676",
         "type": "github"
       },
       "original": {
@@ -239,6 +239,27 @@
       "original": {
         "owner": "mozilla",
         "repo": "nixpkgs-mozilla",
+        "type": "github"
+      }
+    },
+    "niche": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1607215470,
+        "narHash": "sha256-ojRBbmXdY2QakLoy+ywFSQ/VpuWIOq0BCrich8kWxco=",
+        "owner": "colemickens",
+        "repo": "niche",
+        "rev": "2d6736301283fa2ff3f1c16b25f7350d581e0952",
+        "type": "github"
+      },
+      "original": {
+        "owner": "colemickens",
+        "ref": "master",
+        "repo": "niche",
         "type": "github"
       }
     },
@@ -415,6 +436,7 @@
         "home-manager": "home-manager",
         "master": "master",
         "mobile-nixos": "mobile-nixos",
+        "niche": "niche",
         "nix-ipfs": "nix-ipfs",
         "nixos-azure": "nixos-azure",
         "nixos-unstable": "nixos-unstable",

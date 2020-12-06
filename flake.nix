@@ -13,6 +13,9 @@
     master = { url = "github:nixos/nixpkgs/master"; }; # for nixFlakes
     stable = { url = "github:nixos/nixpkgs/nixos-20.09"; }; # for cachix
 
+    niche.url = "github:colemickens/niche/master";
+    niche.inputs.nixpkgs.follows = "nixpkgs";
+
     home-manager.url = "github:colemickens/home-manager/cmhm";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -74,15 +77,15 @@
         };
     in rec {
       devShell = forAllSystems (system:
-        pkgs_.nixpkgs.${system}.buildEnv {
+        pkgs_.nixpkgs.${system}.mkShell {
           name = "nixcfg-devshell";
-          paths = []
+          nativeBuildInputs = []
           ++ (with pkgs_.nixos-unstable.${system}; [ nixUnstable ])
           ++ (with pkgs_.stable.${system}; [ cachix ])
-          ++ (with pkgs.${system}; [ /*niche*/ ])
+          ++ (with inputs.niche.packages.${system}; [ niche ])
           ++ (with pkgs_.nixpkgs.${system}; [
             bash cacert curl git jq
-            #mercurial
+            mercurial
             nettools openssh ripgrep rsync
             nix-build-uncached nix-prefetch-git
             packet-cli
@@ -226,4 +229,3 @@
       };
     };
 }
-

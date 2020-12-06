@@ -3,9 +3,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 set -euo pipefail
 set -x
 
-# ❯ ./nixup build .#bundles.aarch64-linux colemickens@aarch64.nixos.community cole@localhost
-# ❯ ./nixup build .#bundles.x86_64-linux cole@azdev2020vm.westus2.cloudapp.azure.com cole@localhost
-
 unset NIX_PATH
 cd "${DIR}"
 
@@ -13,7 +10,7 @@ cache="colemickens"
 niche_cache="https://azdev2020nov.blob.core.windows.net/nixcache"
 cachixpkgs="https://github.com/nixos/nixpkgs/archive/nixos-20.09.tar.gz" # where to find pkgs.cachix
 unstablepkgs="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # where to find nixUnstable
-#cachixkey="$(set -e; gopass show "websites/cachix.org/apikey/${cache}")"
+nichepkgs="https://github.com/colemickens/niche/archive/$(cd ~/code/niche; git rev-parse HEAD).tar.gz" # where to find niche + all nixpkgs
 cachixkey="$(cat ~/.config/cachix/cachix.dhall | grep eIu | tr -d ' "')"
 
 nixargs=(--experimental-features "nix-command flakes ca-references recursive-nix")
@@ -64,19 +61,21 @@ function update() {
 
   cd -;
 }
-function ssh_cachix_path() {
+# this includes the actual `cachix push` command, just send it a path
+function ssh_cachix_push() {
   set -euo pipefail
   ssh "${1}" "nix-shell -I nixpkgs=${cachixpkgs} -p cachix --run \
     'echo ${2} | env CACHIX_SIGNING_KEY=${cachixkey} cachix push ${cache} >/dev/stderr'" &>/dev/stderr
 }
-function ssh_nix_unstable() {
+# this just wraps the shell, give it the full command: ssh_nixUnstable_shell nix build ...
+function ssh_nixUnstable_shell() {
   local r="${1}"; shift;
   ssh "${r}" -- "nix-shell -I nixpkgs=${unstablepkgs} -p nixUnstable --run '$(printf '\"%s\" ' "${@}")'"
 }
-function ssh_niche_build() {
+# this just wraps the shell, give it the full command: ssh_niche_shell niche build ...
+function ssh_niche_shell() {
   local r="${1}"; shift;
-  cmpkgs="https://github.com/colemickens/nixpkgs/archive/$(cd ~/code/nixpkgs/cmpkgs; git rev-parse HEAD).tar.gz"
-  ssh "${r}" -- "nix-shell -I nixpkgs=${cmpkgs} -p niche -p gnupg -p nixUnstable --command '$(printf '\"%s\" ' "${@}")'"
+  ssh "${r}" -- "nix-shell -I nixpkgs=${nichepkgs} -p niche -p gnupg -p nixUnstable --command '$(printf '\"%s\" ' "${@}")'"
 }
 
 function build() {
@@ -91,7 +90,7 @@ function build() {
 
   # TARGET: short circuit if we can realize $out on $target
   set +x; printf "\n\n%s\n" ":::::::: TARGET: short circuit if we can realize $out on $target" &>/dev/stderr; set -x;
-  if ssh_nix_unstable "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}"; then
+  if ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}"; then
     echo -e "${out}"; return 0
   fi
 
@@ -109,32 +108,35 @@ function build() {
 
   # REMOTE: copy drvs to store
   set +x; printf "\n\n%s\n" ":::::::: REMOTE: copy $drv => /nix/store" &>/dev/stderr
-  ssh_nix_unstable "${remote}" nix "${nixargs[@]}" copy --from file://${t} --derivation ${drv}
+  ssh_nixUnstable_shell "${remote}" nix "${nixargs[@]}" copy --from file://${t} --derivation ${drv}
 
   # REMOTE: build $drv => $out
   set +x; printf "\n\n%s\n" ":::::::: REMOTE: build $drv => $out" &>/dev/stderr; set -x
 ####
-  ssh_nix_unstable "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --keep-going "${drv}"
+  #ssh_nixUnstable_shell "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --keep-going "${drv}"
 ####
-  #ssh_niche_build "${remote}" niche build -u "${niche_cache}" -- -L "${nixargs[@]}"  "${buildargs[@]}" --keep-going "${drv}"
+  ssh_niche_shell "${remote}" niche build -u "${niche_cache}" -- -L "${nixargs[@]}"  "${buildargs[@]}" --keep-going "${drv}"
 ####
 
   if [[ ! -z "${cachixkey:-""}" ]]; then
     # REMOTE: push $out to cachix
     set +x; printf "\n\n%s\n" ":::::::: REMOTE: push $out to cachix" &>/dev/stderr
 
-    ssh_cachix_path "${remote}" "${out}"
+# this includes the actual `cachix push` command, just send it a path
+    ssh_cachix_push "${remote}" "${out}"
   fi
 
   # if we didn't list a target, we're just pushing the build up, we can be done
   if [[ -z "${target:-""}" ]]; then
+  # this just wraps the shell, give it the full command: ssh_nixUnstable_shell nix build ...
     echo -e "${out}"; return 0
   fi
 
   if [[ ! -z "${cachixkey:-""}" ]]; then
+  # this just wraps the shell, give it the full command: ssh_niche_shell niche build ...
     # TARGET: copy $out from cachix (on $target)
     set +x; printf "\n\n%s\n" ":::::::: TARGET: copy $out from cachix (on $target)" &>/dev/stderr
-    if ssh_nix_unstable "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}"; then
+    if ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}"; then
       echo -e "${out}"; return 0
     fi
   else
@@ -174,10 +176,16 @@ function activate() {
   ssh -A "${target}" "$(printf '\"%s\" ' sudo nix shell -vv "${bo}" -c switch-to-configuration switch)";
 }
 
-function rpione()   { activate ".#toplevels.rpione"   "colemickens@aarch64.nixos.community" "cole@192.168.1.2"; }
-function pinebook() { activate ".#toplevels.pinebook" "colemickens@aarch64.nixos.community" "cole@192.168.1.155"; }
+function rpione()   { activate ".#toplevels.rpione"      "colemickens@aarch64.nixos.community"         "cole@192.168.1.2";   }
+function pinebook() { activate ".#toplevels.pinebook"    "colemickens@aarch64.nixos.community"         "cole@192.168.1.155"; }
+function aarch64()  { build    ".#bundles.aarch64-linux" "colemickens@aarch64.nixos.community"         "cole@localhost";     }
+function x86()      { build    ".#bundles.x86_64-linux"  "cole@azdev2020vm.westus2.cloudapp.azure.com" "cole@localhost";     }
 
-## nixup
+function niche() {
+  # this is just to test niche out the way this wrapper expects to be able to call it
+  ssh_niche_shell 'cole@localhost' \
+    niche build -u "${niche_cache}" -- 'github:colemickens/flake-impure' --impure
+}
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 
