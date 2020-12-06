@@ -59,7 +59,6 @@ in
         vscodium
         #vscode
         freerdp
-        wlvncc
         virt-viewer
         #vlc
 

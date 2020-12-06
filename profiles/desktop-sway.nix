@@ -39,6 +39,7 @@
         wf-recorder
         wl-clipboard
         #wl-gammactl
+        #wlvncc
         xwayland
       ];
     };
