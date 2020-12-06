@@ -31,7 +31,7 @@ in
   config = {
     nixpkgs.config.allowUnfree = true;
     nixpkgs.overlays =  [
-      inputs.nixpkgs-wayland.overlay
+      #inputs.nixpkgs-wayland.overlay
     ];
 
     hardware.opengl.enable = true;
