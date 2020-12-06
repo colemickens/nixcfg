@@ -22,6 +22,7 @@ in
     ../mixins/kitty.nix
     ../mixins/mpv.nix
     ../mixins/mako.nix
+    ../mixins/pipewire.nix
     ../mixins/qt.nix
     ../mixins/spotify.nix
     ../mixins/termite.nix
@@ -35,8 +36,7 @@ in
     ];
 
     hardware.opengl.enable = true;
-    hardware.pulseaudio.enable = true;
-    nixpkgs.config.pulseaudio = true;
+    # see pipewire.nix for pulseaudio/pipewire stuffs
 
     services.pcscd.enable = true;
 

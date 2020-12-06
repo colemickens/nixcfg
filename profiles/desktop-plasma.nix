@@ -11,7 +11,7 @@
 
     home-manager.users.cole = { pkgs, ... }: {
       home.sessionVariables = {
-        
+
       };
       home.packages = with pkgs; [
         # sway-related
