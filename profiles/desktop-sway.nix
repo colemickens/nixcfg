@@ -6,7 +6,7 @@
     ../mixins/mako.nix
     ../mixins/sway.nix
     ../mixins/waybar.nix
-    
+
     ./gui.nix
   ];
   config = {
@@ -38,7 +38,7 @@
         wayvnc
         wf-recorder
         wl-clipboard
-        wl-gammactl
+        #wl-gammactl
         xwayland
       ];
     };
