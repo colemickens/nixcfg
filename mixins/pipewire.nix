@@ -7,7 +7,7 @@
   #hardware.pulseaudio.enable = true; # we're trying pipewire
 
   environment.systemPackages = with pkgs; [
-    wireplumber
+    #wireplumber
   ];
 
   services.pipewire = {
