@@ -160,6 +160,9 @@
 
           raspberrypi-eeprom = prev.callPackage ./pkgs/raspberrypi-eeprom {};
           rpi4-uefi = prev.callPackage ./pkgs/rpi4-uefi {};
+
+          cpptoml = prev.callPackage ./pkgs/cpptoml {};
+          wireplumber = prev.callPackage ./pkgs/wireplumber {};
         }; in p // { colePackages = p; };
 
       nixosConfigurations = {
