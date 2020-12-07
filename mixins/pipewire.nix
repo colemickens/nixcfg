@@ -6,6 +6,10 @@
   nixpkgs.config.pulseaudio = true;
   #hardware.pulseaudio.enable = true; # we're trying pipewire
 
+  environment.systemPackages = with pkgs; [
+    wireplumber
+  ];
+
   services.pipewire = {
     enable = true;
     alsa.enable = true;
