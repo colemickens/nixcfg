@@ -3,20 +3,19 @@
 }:
 
 let metadata = {
-    rev="v0.1.1";
-    sha256="sha256-PcPIajifRQE0Qjx1rQX6vPRgq6lSCdZRrlNrmyZtj34=";
+    rev="121b4b664fd7b98546bb45adc4d45ee8a3043295";
+    sha256="sha256-vBIImuiUqeZXhNQ55qpS8+wxCddnHu4jIY+dsjieHHE=";
 }; in
 stdenv.mkDerivation rec {
   pname = "cpptoml";
   version = "${metadata.rev}";
 
-#   src = fetchFromGitHub {
-#     owner = "skystrife";
-#     repo = "cpptoml";
-#     rev = metadata.rev;
-#     sha256 = metadata.sha256;
-#   };
-  src = /home/cole/code/cpptoml;
+  src = fetchFromGitHub {
+    owner = "colemickens";
+    repo = "cpptoml";
+    rev = metadata.rev;
+    sha256 = metadata.sha256;
+  };
 
   nativeBuildInputs = [
     cmake
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [];
 
   meta = with stdenv.lib; {
-    description = " cpptoml is a header-only library for parsing TOML";
+    description = "cpptoml is a header-only library for parsing TOML";
     homepage    = "https://github.com/skystrife/cpptoml";
     license     = licenses.mit;
     platforms   = platforms.linux;

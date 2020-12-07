@@ -76,6 +76,9 @@ I package these things, mostly for myself:
 - raspberrypi-eeprom (the rpi4 boot eeprom files)
 - rpi4-uefi (a rpi4 uefi build)
 
+Many of these are building latest from the tip of their development branches,
+using an auto-update script that is also used in `nixpkgs-wayland`.
+
 These are easily runnable, if you [have enabled Nix flakes](https://discourse.nixos.org/t/using-experimental-nix-features-in-nixos-and-when-they-will-land-in-stable/7401/4):
 
 ```shell
@@ -96,6 +99,9 @@ Some examples:
 - `neovim` config + pinned plugins: https://github.com/colemickens/nixcfg/blob/main/mixins/neovim.nix
 - `obs-studio` config + pinned plugins: https://github.com/colemickens/nixcfg/blob/main/mixins/obs.nix
 
+If you think converting config to Nix is overkill, you can also include the raw config files and instruct
+Home-Manager to symlink them into place.
+
 ## Secrets
 
 Secrets are all stored encrypted with `sops` (via `sops-nix`) so that they remain encrypted at rest in the Nix store.
@@ -109,6 +115,7 @@ Secrets are all stored encrypted with `sops` (via `sops-nix`) so that they remai
 * home-assistant config
 * unifi
 * sops for secrets stored in-tree
+* auto-update script for ./pkgs/ that keep everything building from their tips-of-trees
 
 ## Other Interesting Nix Repos
 
@@ -116,17 +123,13 @@ Secrets are all stored encrypted with `sops` (via `sops-nix`) so that they remai
   - particularly of note:
     - use of NixGL to use GUI apps built with Nix on other Linuxes:
       https://github.com/jtojnar/nixfiles/blob/522466da4dd5206c7b444ba92c8d387eedf32a22/hosts/brian/profile.nix#L10-L12
-
 - Mic92: https://github.com/Mic92/dotfiles
   - in particular:
     - https://github.com/Mic92/dotfiles/tree/master/nixos/images
       - kexec stuff is neat
       - base-config does a Hidden Service + announces over IRC, very cool
-
 - cole-h: https://github.com/cole-h/nixos-config
-
 - bqv: https://github.com/bqv/nixos
-
 - nixos-org-configurations:
   - in particular:
     - configs for building NixOS images containing MacOS VM guests
