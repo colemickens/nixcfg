@@ -49,7 +49,8 @@ in {
     # grub, [questioning drake]
     # uboot, [enthusiast drake]
     boot.loader.grub.enable = false;
-    boot.loader.raspberryPi.uboot.enable = true;
+    #boot.loader.raspberryPi.uboot.enable = true;
+    boot.loader.raspberryPi.enable = true;
 
     # 5.10 has Rpi4 DRM support: https://www.phoronix.com/scan.php?page=news_item&px=RPi4-Display-Linux-5.10-Coming
     boot.kernelPackages = pkgs.linuxPackages_5_10;

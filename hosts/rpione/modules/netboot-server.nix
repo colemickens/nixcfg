@@ -67,7 +67,7 @@ let
   tftp_parent_dir = pkgs.runCommandNoCC "build-uefi" {} ''
     mkdir -p $out
 
-    #cp -a "''${pkgs.ipxe}/bin-aarch64-efi/ipxe.efi" $out/ipxe.efi
+    cp -a "${pkgs.ipxe}/bin-aarch64-efi/ipxe.efi" $out/ipxe.efi
 
     ln -s ${uefi_dir_with_update}/ $out/${rpione_serial}
     ln -s ${uefi_dir_with_update}/ $out/${rpitwo_serial}
