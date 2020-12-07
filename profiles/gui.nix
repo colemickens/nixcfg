@@ -31,9 +31,6 @@ in
 
   config = {
     nixpkgs.config.allowUnfree = true;
-    nixpkgs.overlays =  [
-      #inputs.nixpkgs-wayland.overlay
-    ];
 
     hardware.opengl.enable = true;
     # see pipewire.nix for pulseaudio/pipewire stuffs

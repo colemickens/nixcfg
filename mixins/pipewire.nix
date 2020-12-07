@@ -8,6 +8,7 @@
 
   environment.systemPackages = with pkgs; [
     #wireplumber
+    pavucontrol
   ];
 
   services.pipewire = {

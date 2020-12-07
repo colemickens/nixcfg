@@ -10,6 +10,10 @@
     ./gui.nix
   ];
   config = {
+    nixpkgs.overlays =  [
+      #inputs.nixpkgs-wayland.overlay
+    ];
+
     home-manager.users.cole = { pkgs, ... }: {
 
       # block auto-sway reload, Sway crashes...
