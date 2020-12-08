@@ -3,7 +3,7 @@
 let
   rpione_serial = "156b6214";
   rpitwo_serial = "e43b854b";
-  rpitwo = inputs.self.nixosConfigurations.rpitwo;
+  rpitwo = inputs.self.nixosConfigurations.rpitwonet;
 
   /*
   BOOT_ORDER fields

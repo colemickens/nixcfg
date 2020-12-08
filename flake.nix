@@ -169,6 +169,7 @@
         azdev      = mkSystem "x86_64-linux"  inputs.nixpkgs "azdev";
         rpione     = mkSystem "aarch64-linux" inputs.nixpkgs "rpione";
         rpitwo     = mkSystem "aarch64-linux" inputs.pipkgs "rpitwo";
+        rpitwonet  = mkSystem "aarch64-linux" inputs.pipkgs "rpitwonet";
         slynux     = mkSystem "x86_64-linux"  inputs.nixpkgs "slynux";
         xeep       = mkSystem "x86_64-linux"  inputs.nixpkgs "xeep";
         pinephone  = mkSystem "aarch64-linux" inputs.nixpkgs "pinephone";
