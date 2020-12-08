@@ -40,8 +40,8 @@ function update() {
   set -euo pipefail
 
   set +x; printf "\n\n%s\n" ":::::::: updating all (local, override) inputs" &>/dev/stderr; set -x
-    cd ~/code/nixpkgs/master; git remote update; git reset --hard "nixpkgs/master" && git push origin HEAD -f || false
-    cd -; cd ~/code/nixcfg; git add -A . && (git commit -m stash && git pull --rebase && git push origin HEAD -f || false) || true
+  cd ~/code/nixpkgs/master; git remote update; git reset --hard "nixpkgs/master" && git push origin HEAD -f || false
+
   cd -; cd ~/code/nixpkgs/cmpkgs;        git pull --rebase && git push origin HEAD -f || false
   cd -; cd ~/code/nixpkgs/pipkgs;        git pull --rebase && git push origin HEAD -f || false
   cd -; cd ~/code/flake-firefox-nightly; git pull --rebase && git push origin HEAD -f || false
@@ -51,10 +51,13 @@ function update() {
   #cd -; cd ~/code/nixos-azure;           git pull --rebase && git push origin HEAD -f || false
   #cd -; cd ~/code/nixos-veloren;         git pull --rebase && git push origin HEAD -f || false
   cd -; cd ~/code/sops-nix;              git pull --rebase && git push origin HEAD -f || false
-  cd -; cd ~/code/wip-pinebook-pro;      git pull --rebase && git push origin HEAD -f || false; cd -
+  cd -; cd ~/code/wip-pinebook-pro;      git pull --rebase && git push origin HEAD -f || false
+  cd -
 
   set +x; printf "\n\n%s\n" ":::::::: updating all inputs" &>/dev/stderr; set -x
   nix flake update --recreate-lock-file --no-registries
+
+  cd -; cd ~/code/nixcfg; git add -A . && (git commit -m stash && git pull --rebase && git push origin HEAD -f || false) || true
 
   set +x; printf "\n\n%s\n" ":::::::: updating our own packages" &>/dev/stderr; set -x
   cd "./pkgs" && ./update.sh;

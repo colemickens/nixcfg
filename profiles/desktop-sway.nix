@@ -11,7 +11,7 @@
   ];
   config = {
     nixpkgs.overlays =  [
-      #inputs.nixpkgs-wayland.overlay
+      inputs.nixpkgs-wayland.overlay
     ];
 
     home-manager.users.cole = { pkgs, ... }: {
