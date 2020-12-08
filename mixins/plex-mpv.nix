@@ -18,9 +18,6 @@ in
     networking.firewall.allowedTCPPorts = [ 3000 ];
     networking.firewall.allowedUDPPorts = [ 32410 32412 32413 32414 ];
 
-    sound.enable = true;
-    hardware.pulseaudio.enable = true;
-
     #services.mingetty.autologinUser = "cole";
     #systemd.services.plex-mpv = {
     #  description = "plex-mpv";

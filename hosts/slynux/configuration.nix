@@ -20,10 +20,11 @@ in
 
     #../../profiles/desktop-sway.nix
     #../../profiles/desktop-gnome.nix
-    ../../profiles/desktop-plasma.nix
+    #../../profiles/desktop-plasma.nix
     #../../profiles/desktop-elementary.nix
+    ../../profiles/interactive.nix
 
-    ../../profiles/gaming.nix
+    #../../profiles/gaming.nix
 
     #"${modulesPath}/virtualisation/hyperv-guest.nix"
 
@@ -72,15 +73,15 @@ in
       fsType = "vfat";
     };
 
-    # specialisation = {
-    #   #sway.configuration = { imports = [ ../mixins/desktop-sway.nix ]; };
-    #   gnome.configuration.config = {
-    #     boot.loader.grub.configurationName = "gnome";
-    #     services.xserver.enable = true;
-    #   };
-    #   #plasma.configuration = { imports = ["../mixins/desktop-plasma.nix"]; };
-    #   #elementary.configuration = { imports = ["../mixins/desktop-elementary.nix"]; };
-    # };
+    specialisation = {
+      sway.configuration = { imports = [ ../../profiles/desktop-sway.nix ]; };
+      gnome.configuration = {
+        boot.loader.grub.configurationName = "gnome";
+        imports = [ ../../profiles/desktop-gnome.nix ];
+      };
+      plasma.configuration = { imports = [ ../../profiles/desktop-plasma.nix ]; };
+      elementary.configuration = { imports = [ ../../profiles/desktop-elementary.nix ]; };
+    };
 
     swapDevices = [];
 

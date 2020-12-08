@@ -6,7 +6,8 @@
   ];
   config = {
     services.xserver.enable = true;
-    services.xserver.displayManager.sddm.enable = true;
+    services.xserver.displayManager.lightdm.greeters.pantheon.enable = true;
+    services.xserver.displayManager.lightdm.enable = true;
     services.xserver.desktopManager.pantheon.enable = true;
 
     services.pantheon.apps.enable = true;
@@ -14,7 +15,7 @@
 
     home-manager.users.cole = { pkgs, ... }: {
       home.sessionVariables = {
-        
+
       };
       home.packages = with pkgs; [
         # sway-related

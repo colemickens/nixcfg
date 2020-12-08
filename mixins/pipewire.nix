@@ -5,6 +5,7 @@
 
   nixpkgs.config.pulseaudio = true;
   #hardware.pulseaudio.enable = true; # we're trying pipewire
+  hardware.pulseaudio.enable = pkgs.lib.mkForce false;
 
   environment.systemPackages = with pkgs; [
     #wireplumber
