@@ -9,6 +9,7 @@
   environment.systemPackages = with pkgs; [
     #wireplumber
     pavucontrol
+    pavucontrol-qt
     qjackctl
   ];
 
