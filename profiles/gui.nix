@@ -67,7 +67,7 @@ in
         alacritty
         cool-retro-term
         kitty
-        #termite
+        termite
 
         # matrix clients
         fractal
