@@ -38,9 +38,8 @@ in
         git.package = pkgs.gitAndTools.gitFull;
         gpg.enable = true;
       };
-      home.packages = with pkgs; [
+      home.packages = with pkgs; colePackages.customCommands ++ [
         inputs.stable.legacyPackages.${pkgs.system}.cachix
-        (lib.attrValues colePackages.customCommands)
 
         #nixops
         asciinema

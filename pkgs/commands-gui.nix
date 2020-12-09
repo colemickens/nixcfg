@@ -20,4 +20,5 @@ let
     '')
   ];
 in
-  linkFarmFromDrvs name drvs
+  #linkFarmFromDrvs name drvs
+  drvs
