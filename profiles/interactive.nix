@@ -40,7 +40,7 @@ in
       };
       home.packages = with pkgs; [
         inputs.stable.legacyPackages.${pkgs.system}.cachix
-        colePackages.customCommands
+        (lib.attrValues colePackages.customCommands)
 
         #nixops
         asciinema
