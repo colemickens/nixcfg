@@ -11,22 +11,15 @@ in
     #../../mixins/debug-xdg.nix
     ../../mixins/docker.nix
     #../../mixins/ipfs.nix
-    ../../mixins/jellyfin.nix
+    #../../mixins/jellyfin.nix
     ../../mixins/libvirt.nix
     ../../mixins/meli.nix
     ../../mixins/obs.nix
     ../../mixins/sshd.nix
     ../../mixins/v4l2loopback.nix
 
-    #../../profiles/desktop-sway.nix
-    #../../profiles/desktop-gnome.nix
-    #../../profiles/desktop-plasma.nix
-    #../../profiles/desktop-elementary.nix
     ../../profiles/interactive.nix
-
-    #../../profiles/gaming.nix
-
-    #"${modulesPath}/virtualisation/hyperv-guest.nix"
+    ../../profiles/specialisations.nix
 
     ./hs.nix
   ];
@@ -38,13 +31,6 @@ in
 
     system.stateVersion = "20.03"; # Did you read the comment?
     services.timesyncd.enable = true;
-
-    services.tor = {
-      enable = true;
-      relay.enable = false;
-      relay.port = 443;
-      relay.role = "bridge";
-    };
 
     documentation.nixos.enable = false;
 
@@ -73,15 +59,6 @@ in
       fsType = "vfat";
     };
 
-    specialisation = {
-      sway.configuration = { imports = [ ../../profiles/desktop-sway.nix ]; };
-      gnome.configuration = {
-        boot.loader.grub.configurationName = "gnome";
-        imports = [ ../../profiles/desktop-gnome.nix ];
-      };
-      plasma.configuration = { imports = [ ../../profiles/desktop-plasma.nix ]; };
-      elementary.configuration = { imports = [ ../../profiles/desktop-elementary.nix ]; };
-    };
 
     swapDevices = [];
 
@@ -115,6 +92,7 @@ in
       ];
       kernelParams = [
         # HIGHLY IRRESPONSIBLE
+        # not entirely sure these are working
         "noibrs"
         "noibpb"
         "nopti"

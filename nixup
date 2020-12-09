@@ -88,7 +88,7 @@ function build() {
   target="${1:-"${USER}@localhost"}"; shift
 
   # LOCAL: eval the out to be able to check for substitute
-  set +x; printf "\n\n%s\n" ":::::::: eval ${thing}" &>/dev/stderr;
+  set +x; printf "\n\n%s\n" ":::::::: eval ${thing}" &>/dev/stderr; set -x
   out="$(nix "${nixargs[@]}" eval "${evalargs[@]}" --raw "${thing}")"
 
   # TARGET: short circuit if we can realize $out on $target

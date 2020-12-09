@@ -13,6 +13,9 @@
     master = { url = "github:nixos/nixpkgs/master"; }; # for nixFlakes
     stable = { url = "github:nixos/nixpkgs/nixos-20.09"; }; # for cachix
 
+    nix.url = "github:nixos/nix/master";
+    #nix.inputs.nixpkgs.follows = "nixpkgs";
+
     niche.url = "github:colemickens/niche/master";
     niche.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -80,7 +83,7 @@
         pkgs_.nixpkgs.${system}.mkShell {
           name = "nixcfg-devshell";
           nativeBuildInputs = []
-          ++ (with pkgs_.nixos-unstable.${system}; [ nixUnstable ])
+          ++ ([ inputs.nix.defaultPackage.${system} ])
           ++ (with pkgs_.stable.${system}; [ cachix ])
           ++ (with inputs.niche.packages.${system}; [ niche ])
           ++ (with pkgs_.nixpkgs.${system}; [
@@ -174,8 +177,10 @@
         xeep       = mkSystem "x86_64-linux"  inputs.nixpkgs "xeep";
         pinephone  = mkSystem "aarch64-linux" inputs.nixpkgs "pinephone";
         pinebook   = mkSystem "aarch64-linux" inputs.nixpkgs "pinebook";
-        testipfsvm = mkSystem "x86_64-linux"  inputs.nixpkgs "testipfsvm";
         bluephone  = mkSystem "aarch64-linux" inputs.nixpkgs "bluephone";
+
+        demovm = mkSystem "x86_64-linux"  inputs.nixpkgs "demovm";
+        testipfsvm = mkSystem "x86_64-linux"  inputs.nixpkgs "testipfsvm";
       };
       toplevels = genAttrs
         (builtins.attrNames inputs.self.outputs.nixosConfigurations)
@@ -223,6 +228,7 @@
           '';
       };
       linuxVMs = {
+        demovm = inputs.self.nixosConfigurations.demovm.config.system.build.vm;
         testipfsvm = inputs.self.nixosConfigurations.testipfsvm.config.system.build.vm;
       };
       winVMs = {

@@ -37,6 +37,12 @@ let
     DISABLE_HDMI=0
     BOOT_ORDER=${bootOrder}
     TFTP_PREFIX=0
+
+    [pi4]
+    arm_64bit=1
+    kernel=u-boot-rpi4.bin
+    enable_gic=1
+    armstub=armstub8-gic.bin
   '';
 
   uefi_dir_with_update = pkgs.runCommandNoCC "build-tftp-rpitwo" {} ''
@@ -61,13 +67,22 @@ let
       # TODO: do the same with the vl805.bin firmware?
       # TODO: auto-script to make sure our own firmware is updated?
       # TODO: this can take out an entire cluster if a bad update were pushed
+
+      mkdir grub/
+      ${pkgs.grub2}/bin/grub-mknetdir --net-directory=./grub/
     )
   '';
 
   tftp_parent_dir = pkgs.runCommandNoCC "build-uefi" {} ''
     mkdir -p $out
 
-    cp -a "${pkgs.ipxe}/bin-aarch64-efi/ipxe.efi" $out/ipxe.efi
+    #cp -a "''${pkgs.ipxe}/bin-aarch64-efi/ipxe.efi" $out/ipxe.efi
+
+    # copy u-boot stuff to boot dir
+    # name it and write config.txt
+
+    # copy grub.efi to boot dir
+    # load entries from http server
 
     ln -s ${uefi_dir_with_update}/ $out/${rpione_serial}
     ln -s ${uefi_dir_with_update}/ $out/${rpitwo_serial}
