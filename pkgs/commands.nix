@@ -17,7 +17,7 @@ let
           -A "$@"
     '')
 
-    (writeShellScriptBin "fix-gpg" ''
+    (writeShellScriptBin "gpg-fix" ''
       set -x
       sudo systemctl stop pcscd.service
       sudo systemctl stop pcscd.socket
