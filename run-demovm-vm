@@ -1,0 +1,38 @@
+#! /nix/store/r3j288vpmczbl500w6zz89gyfa4nr0b1-bash-4.4-p23/bin/bash
+
+NIX_DISK_IMAGE=$(readlink -f ${NIX_DISK_IMAGE:-./demovm.qcow2})
+
+if ! test -e "$NIX_DISK_IMAGE"; then
+    /nix/store/ivx3ng4imfvzkwb3d2ynqzlbjrp65qlx-qemu-5.1.0/bin/qemu-img create -f qcow2 "$NIX_DISK_IMAGE" \
+      512M || exit 1
+fi
+
+# Create a directory for storing temporary data of the running VM.
+if [ -z "$TMPDIR" -o -z "$USE_TMPDIR" ]; then
+    TMPDIR=$(mktemp -d nix-vm.XXXXXXXXXX --tmpdir)
+fi
+
+# Create a directory for exchanging data with the VM.
+mkdir -p $TMPDIR/xchg
+
+
+
+cd $TMPDIR
+idx=0
+
+
+# Start QEMU.
+exec /nix/store/ivx3ng4imfvzkwb3d2ynqzlbjrp65qlx-qemu-5.1.0/bin/qemu-kvm -cpu max \
+    -name demovm \
+    -m 384 \
+    -smp 1 \
+    -vga qxl -device virtio-serial-pci -spice port=5930,disable-ticketing -device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0 -chardev spicevmc,id=spicechannel0,name=vdagent \
+    -device virtio-rng-pci \
+    -net nic,netdev=user.0,model=virtio -netdev user,id=user.0${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} \
+    -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
+    -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
+    -virtfs local,path=${SHARED_DIR:-$TMPDIR/xchg},security_model=none,mount_tag=shared \
+    -drive cache=writeback,file=$NIX_DISK_IMAGE,id=drive1,if=none,index=1,werror=report -device virtio-blk-pci,drive=drive1 \
+    -usb -device usb-tablet,bus=usb-bus.0 -kernel /nix/store/jyvyi7hqx1n33j18nfsidh5xk9516vic-nixos-system-demovm-21.03pre-git/kernel -initrd /nix/store/jyvyi7hqx1n33j18nfsidh5xk9516vic-nixos-system-demovm-21.03pre-git/initrd -append "$(cat /nix/store/jyvyi7hqx1n33j18nfsidh5xk9516vic-nixos-system-demovm-21.03pre-git/kernel-params) init=/nix/store/jyvyi7hqx1n33j18nfsidh5xk9516vic-nixos-system-demovm-21.03pre-git/init regInfo=/nix/store/7ax7yfdfihnbqr5kg5fkg6whavglz979-closure-info/registration console=ttyS0,115200n8 console=tty0 $QEMU_KERNEL_PARAMS" \
+    $QEMU_OPTS \
+    "$@"

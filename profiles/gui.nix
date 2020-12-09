@@ -78,6 +78,7 @@ in
 
         gnome3.nautilus
         gnome3.gnome-tweaks
+        spice-gtk
 
         #webcamoid
         #nyxt

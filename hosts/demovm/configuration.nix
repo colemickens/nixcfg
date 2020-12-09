@@ -12,7 +12,7 @@
     ../../mixins/v4l2loopback.nix
     ../../profiles/user.nix
 
-    #"${modulesPath}/profiles/qemu-guest.nix"
+    "${modulesPath}/profiles/qemu-guest.nix"
     "${modulesPath}/virtualisation/qemu-vm.nix"
 
     ../../profiles/interactive.nix
