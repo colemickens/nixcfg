@@ -13,7 +13,7 @@ in
     #../../mixins/ipfs.nix
     #../../mixins/jellyfin.nix
     ../../mixins/libvirt.nix
-    ../../mixins/meli.nix
+    #../../mixins/meli.nix
     ../../mixins/obs.nix
     ../../mixins/sshd.nix
     ../../mixins/v4l2loopback.nix

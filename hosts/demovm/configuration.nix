@@ -16,7 +16,7 @@
     "${modulesPath}/virtualisation/qemu-vm.nix"
 
     ../../profiles/interactive.nix
-    ../../profiles/specialisations.nix
+    ../../profiles/desktop-gnome.nix
   ];
 
   config = {
@@ -33,6 +33,13 @@
 
     # demovm options
     virtualisation.graphics = true;
+    virtualisation.cores = 2;
+    virtualisation.memorySize = 4096;
+    #virtualisation.useSpice = true;
+    #virtualisation.spicePort = 5930;
     services.openssh.enable = true;
+
+    services.qemuGuest.enable = true;
+    services.spice-vdagentd.enable = lib.mkForce true;
   };
 }

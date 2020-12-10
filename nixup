@@ -89,17 +89,14 @@ function build() {
 
   # LOCAL: eval the out to be able to check for substitute
   set +x; printf "\n\n%s\n" ":::::::: eval ${thing}" &>/dev/stderr; set -x
-  out="$(nix "${nixargs[@]}" eval "${evalargs[@]}" --raw "${thing}")"
+  local drv="$(set -euo pipefail; nix "${nixargs[@]}" eval "${evalargs[@]}" --raw "${thing}.drvPath" | tr -d '"')"
+  local out="$(set -euo pipefail; nix "${nixargs[@]}" path-info "${drv}" --json | jq -r '.[0].path')"
 
   # TARGET: short circuit if we can realize $out on $target
   set +x; printf "\n\n%s\n" ":::::::: TARGET: short circuit if we can realize $out on $target" &>/dev/stderr; set -x;
   if ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}"; then
     echo -e "${out}"; return 0
   fi
-
-  # LOCAL: eval $thing.drvPath to build the derivation
-  set +x; printf "\n\n%s\n" ":::::::: eval '${thing}.drvPath'" &>/dev/stderr
-  local drv="$(set -euo pipefail; nix "${nixargs[@]}" eval "${evalargs[@]}" --raw "${thing}.drvPath")"
 
   # LOCAL: copy drvs to tmp
   local t="/tmp/tmpnixpath"

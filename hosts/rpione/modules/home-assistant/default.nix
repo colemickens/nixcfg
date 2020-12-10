@@ -58,7 +58,7 @@ in {
     # };
 
     services.home-assistant = {
-      enable = false;
+      enable = true;
       port = 8123;
       config = {
         homeassistant = {
