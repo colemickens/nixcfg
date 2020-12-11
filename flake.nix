@@ -87,6 +87,7 @@
           ++ (with pkgs_.stable.${system}; [ cachix ])
           ++ (with inputs.niche.packages.${system}; [ niche ])
           ++ (with pkgs_.nixpkgs.${system}; [
+            #nixUnstable
             bash cacert curl git jq
             mercurial
             nettools openssh ripgrep rsync

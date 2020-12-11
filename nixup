@@ -57,10 +57,10 @@ function update() {
   set +x; printf "\n\n%s\n" ":::::::: updating all inputs" &>/dev/stderr; set -x
   nix flake update --recreate-lock-file --no-registries
 
-  cd -; cd ~/code/nixcfg; git add -A . && (git commit -m stash && git pull --rebase && git push origin HEAD -f || false) || true
-
   set +x; printf "\n\n%s\n" ":::::::: updating our own packages" &>/dev/stderr; set -x
   cd "./pkgs" && ./update.sh;
+
+  cd -; cd ~/code/nixcfg; git add -A . && (git commit -m stash && git pull --rebase && git push origin HEAD -f || false) || true
 
   cd -;
 }
@@ -89,8 +89,8 @@ function build() {
 
   # LOCAL: eval the out to be able to check for substitute
   set +x; printf "\n\n%s\n" ":::::::: eval ${thing}" &>/dev/stderr; set -x
-  local drv="$(set -euo pipefail; nix "${nixargs[@]}" eval "${evalargs[@]}" --raw "${thing}.drvPath" | tr -d '"')"
-  local out="$(set -euo pipefail; nix "${nixargs[@]}" path-info "${drv}" --json | jq -r '.[0].path')"
+  drv="$(set -euo pipefail; nix "${nixargs[@]}" eval "${evalargs[@]}" --raw "${thing}.drvPath" | tr -d '"')"
+  out="$(set -euo pipefail; nix "${nixargs[@]}" path-info "${drv}" --json | jq -r '.[0].path')"
 
   # TARGET: short circuit if we can realize $out on $target
   set +x; printf "\n\n%s\n" ":::::::: TARGET: short circuit if we can realize $out on $target" &>/dev/stderr; set -x;
@@ -169,11 +169,16 @@ function build() {
 
 function activate() {
   set -euo pipefail
-  local bo="$(set -euo pipefail; build "${@}")"
-  local target="${3:-"cole@localhost"}"
+  bo="$(set -euo pipefail; build "${@}")"
+  target="${3:-"cole@localhost"}"
+  spz="${4:-""}"
 
   ssh -A "${target}" "$(printf '\"%s\" ' sudo nix build --profile /nix/var/nix/profiles/system "${bo}")";
-  ssh -A "${target}" "$(printf '\"%s\" ' sudo nix shell -vv "${bo}" -c switch-to-configuration switch)";
+  if [[ "${spz}" == "" ]]; then
+    ssh -A "${target}" "$(printf '\"%s\" ' sudo nix shell -vv "${bo}" -c switch-to-configuration switch)";
+  else
+    ssh -A "${target}" "$(printf '\"%s\" ' sudo nix shell -vv "${bo}" -c ${bo}/specialisations/${spz}/bin/switch-to-configuration switch)";
+  fi
 }
 
 function rpione()   { activate ".#toplevels.rpione"      "colemickens@aarch64.nixos.community"         "cole@192.168.1.2";   }
@@ -194,5 +199,5 @@ if [[ ! -z "${cmd:-""}" ]]; then
 else
   set -euo pipefail
   update
-  activate ".#toplevels.$(hostname)" "cole@localhost" "cole@localhost"
+  activate ".#toplevels.$(hostname)" "cole@localhost" "cole@localhost" sway
 fi

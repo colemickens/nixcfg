@@ -1,8 +1,17 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 let
   svc = "nixpkgs-wayland";
   jobpath = "/run/user/1000/srht/jobs";
+  jobsScript = pkgs.writeShellScriptBin "jobs.sh" ''
+    TOKEN=$(cat ${config.sops.secrets."srht-pat".path})
+    BUILD_HOST="https://builds.sr.ht"
+    "${pkgs.coreutils}/bin/mkdir" -p "$(${pkgs.coreutils}/bin/dirname ${jobpath})"
+    "${pkgs.curl}/bin/curl" \
+      -H "Authorization:token ''${TOKEN}" \
+      -H "Content-Type: application/json" -X GET \
+      "''${BUILD_HOST}/api/jobs" > ${jobpath}
+  '';
 in
 {
   config = {
@@ -13,19 +22,14 @@ in
 
     home-manager.users.cole = { pkgs, ... }: {
       systemd.user.services."srht-jobs-status" = {
-        description = "check srht-jobs status";
-        script = ''
-          TOKEN=$(cat ${config.sops.secrets."srht-pat".path})
-          BUILD_HOST="https://build.sr.ht"
-          "${pkgs.coreutils}/bin/mkdir -p "$(${pkgs.coreutils}/bin/dirname ${jobpath})"
-          "${pkgs.curl}/bin/curl" \
-            -H "Authorization:token ''${TOKEN}" \
-            -H "Content-Type: application/json" -X GET \
-            "''${BUILD_HOST}/api/jobs" > ${jobpath}
-        '';
+        Unit.Description = "check srht-jobs status";
+        Service = {
+          Type = "oneshot";
+          ExecStart = "${jobsScript}";
+        };
       };
       systemd.user.timers."srht-jobs-status" = {
-        Unit.Description = "check srht-${svc} status";
+        Unit.Description = "check srht jobs status";
         Timer = { OnBootSec = "1m"; OnUnitInactiveSec = "1m"; Unit = "srht-jobs-status.service"; };
         Install.WantedBy = [ "timers.target" ];
       };
@@ -62,14 +66,14 @@ in
             "custom/srht-nixpkgs-wayland" = {
               format = "n-w: {}";
               interval = 10;
-              exec = "jq -r '[.results[] | select(.tags==\"nixpkgs-wayland\" and .status!=\"running\")][0] | .status' ${jobpath}";
+              exec = "${pkgs.jq}/bin/jq -r '[.results[] | select(.tags==\"nixpkgs-wayland\" and .status!=\"running\")][0] | .status' ${jobpath}";
               #return-type = "json";
             };
 
             "custom/srht-flake-firefox-nightly" = {
               format = "f-f-n: {}";
               interval = 10;
-              exec = "jq -r '[.results[] | select(.tags==\"flake-firefox-nightly\" and .status!=\"running\")][0] | .status' ${jobpath}";
+              exec = "${pkgs.jq}/bin/jq -r '[.results[] | select(.tags==\"flake-firefox-nightly\" and .status!=\"running\")][0] | .status' ${jobpath}";
               #return-type = "json";
             };
 

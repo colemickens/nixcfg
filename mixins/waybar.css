@@ -79,6 +79,7 @@ window#waybar.chromium {
 #tray,
 #mode,
 #idle_inhibitor,
+#custom,
 #mpd {
     padding: 0 10px;
     margin: 0 4px;
