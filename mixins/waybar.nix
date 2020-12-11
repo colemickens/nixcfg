@@ -25,7 +25,7 @@ in
         Unit.Description = "check srht-jobs status";
         Service = {
           Type = "oneshot";
-          ExecStart = "${jobsScript}";
+          ExecStart = "${jobsScript}/bin/jobs.sh";
         };
       };
       systemd.user.timers."srht-jobs-status" = {
