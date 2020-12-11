@@ -8,8 +8,8 @@ let
   };
 
   suffix = pkgs.lib.mapAttrsToList (k: v: ''
-    status="$("${pkgs.jq}/bin/jq" -r '[.results[] | select(.tags=="${k}" and .status!="running")][0] | .status' "${jobpath}/data")"
-    echo "{\"text\":\"''${status}\", \"class\":\"srht-''${status}\"}" > "${jobpath}/${k}-json"
+    status="$("${pkgs.jq}/bin/jq" -r '[.results[] | select(.tags=="${v}" and .status!="running")][0] | .status' "${jobpath}/data")"
+    echo "{\"text\":\"''${status}\", \"class\":\"srht-''${status}\"}" > "${jobpath}/${v}-json"
   '') jobs;
 
   jobsScript = pkgs.writeShellScriptBin "jobs.sh" (pkgs.lib.concatStrings (
@@ -42,6 +42,11 @@ in
         Unit.Description = "check srht jobs status";
         Timer = { OnBootSec = "1m"; OnUnitInactiveSec = "1m"; Unit = "srht-jobs-status.service"; };
         Install.WantedBy = [ "timers.target" ];
+        # {
+        #     wantedBy = [ "timers.target" ];
+        #     partOf = [ "srht-${repo}.service" ];
+        #     timerConfig.OnCalendar = "hourly";
+        # }
       };
       programs.waybar = {
         enable = true;

@@ -4,8 +4,7 @@ let
   hostname = "rpitwo";
 in {
   imports = [
-    #"${modulesPath}/installer/cd-dvd/sd-image-aarch64.nix"
-    ./sd-aarch64.nix
+    "${modulesPath}/installer/cd-dvd/sd-image-aarch64.nix"
     ../../mixins/common.nix
     ../../mixins/sshd.nix
 

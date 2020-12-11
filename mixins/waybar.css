@@ -76,7 +76,7 @@ window#waybar.chromium {
 #network,
 #pulseaudio,
 #custom-media,
-.srht-failure,
+.srht-failed,
 .srht-success,
 #tray,
 #mode,
@@ -207,7 +207,6 @@ label:focus {
     background-color: #4E9A06;
 }
 
-.srht-failure {
-    color: black;
+.srht-failed {
     background-color: #f53c3c;
 }

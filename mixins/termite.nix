@@ -10,7 +10,7 @@ in
   config = {
     home-manager.users.cole = { pkgs, ... }: {
       programs.termite = {
-        enable = false;
+        enable = true;
         font = "${font.name} ${toString font.size}";
         cursorColor = colors.cursorColor;
         foregroundColor = colors.foreground;

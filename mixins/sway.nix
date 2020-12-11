@@ -9,8 +9,8 @@ let
   drun = "${wofi} --show drun";
   nwggrid = "${pkgs.nwg-launchers}/bin/nwggrid";
 
-  #terminal = "${pkgs.termite}/bin/termite";
-  terminal = "${pkgs.kitty}/bin/kitty";
+  terminal = "${pkgs.termite}/bin/termite";
+  #terminal = "${pkgs.kitty}/bin/kitty";
   browser = "${pkgs.firefox-bin}/bin/firefox";
   #browser = "${inputs.firefox.firefox-nightly-bin}/bin/firefox";
   #browser = "firefox";

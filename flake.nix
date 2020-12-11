@@ -205,6 +205,8 @@
         # azure vhd for azdev machine (a custom Azure image using `nixos-azure` module)
         azdev = inputs.self.nixosConfigurations.azdev.config.system.build.azureImage;
 
+        rpitwo = inputs.self.nixosConfigurations.rpitwo.config.system.build.sdImage;
+
         pinebook_bundle = pkgs_.nixpkgs.aarch64-linux.runCommandNoCC "pinebook-bundle" {} ''
           mkdir $out
           ln -s "${inputs.self.nixosConfigurations.pinebook.config.system.build.toplevel}" $out/toplevel

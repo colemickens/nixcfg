@@ -11,7 +11,8 @@ in
     ../../mixins/sshd.nix
     ../../mixins/v4l2loopback.nix
 
-    ../../profiles/desktop-sway.nix
+    ../../profiles/interactive.nix
+    ../../profiles/specialisations.nix
 
     inputs.wip-pinebook-pro.nixosModule
     # TODO: ^ module isn't arch specific
