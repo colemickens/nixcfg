@@ -76,10 +76,11 @@ window#waybar.chromium {
 #network,
 #pulseaudio,
 #custom-media,
+.srht-failure,
+.srht-success,
 #tray,
 #mode,
 #idle_inhibitor,
-#custom,
 #mpd {
     padding: 0 10px;
     margin: 0 4px;
@@ -200,4 +201,13 @@ label:focus {
 
 #mpd.paused {
     background-color: #51a37a;
+}
+
+.srht-success {
+    background-color: #4E9A06;
+}
+
+.srht-failure {
+    color: black;
+    background-color: #f53c3c;
 }

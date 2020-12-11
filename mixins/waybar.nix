@@ -1,17 +1,30 @@
 { pkgs, config, ... }:
 
 let
-  svc = "nixpkgs-wayland";
   jobpath = "/run/user/1000/srht/jobs";
-  jobsScript = pkgs.writeShellScriptBin "jobs.sh" ''
+  jobs = {
+    "n-w"= "nixpkgs-wayland";
+    "f-f-n" = "flake-firefox-nightly";
+  };
+
+  prefix = ''
     TOKEN=$(cat ${config.sops.secrets."srht-pat".path})
     BUILD_HOST="https://builds.sr.ht"
-    "${pkgs.coreutils}/bin/mkdir" -p "$(${pkgs.coreutils}/bin/dirname ${jobpath})"
+    "${pkgs.coreutils}/bin/mkdir" -p "${jobpath}"
     "${pkgs.curl}/bin/curl" \
       -H "Authorization:token ''${TOKEN}" \
       -H "Content-Type: application/json" -X GET \
-      "''${BUILD_HOST}/api/jobs" > ${jobpath}
+      "''${BUILD_HOST}/api/jobs" > "${jobpath}/data"
   '';
+
+  suffix = pkgs.lib.mapAttrsToList (k: v: ''
+    status="$("${pkgs.jq}/bin/jq" -r '[.results[] | select(.tags=="${k}" and .status!="running")][0] | .status' "${jobpath}/data")"
+    echo "{\"text\":\"''${status}\", \"class\":\"srht-''${status}\"}" > "${jobpath}/${k}-json"
+  '') jobs;
+
+  wholeScript = pkgs.lib.concatStrings ([prefix] ++ suffix);
+
+  jobsScript = pkgs.writeShellScriptBin "jobs.sh" wholeScript;
 in
 {
   config = {
@@ -49,8 +62,6 @@ in
           ];
           modules-center = [];
           modules-right = [
-            "custom/srht-nixpkgs-wayland"
-            "custom/srht-flake-firefox-nightly"
             "idle_inhibitor"
             "tray"
             "pulseaudio"
@@ -60,23 +71,15 @@ in
             "light"
             "clock"
             "battery"
-          ];
+          ] ++ (pkgs.lib.mapAttrsToList (k: v: "custom/srht-${k}") jobs);
 
-          modules = {
-            "custom/srht-nixpkgs-wayland" = {
-              format = "n-w: {}";
+          modules = (pkgs.lib.mapAttrs' (k: v: 
+            pkgs.lib.nameValuePair "custom/srht-${k}" {
+              format = "${k}: {}";
               interval = 10;
-              exec = "${pkgs.jq}/bin/jq -r '[.results[] | select(.tags==\"nixpkgs-wayland\" and .status!=\"running\")][0] | .status' ${jobpath}";
-              #return-type = "json";
-            };
-
-            "custom/srht-flake-firefox-nightly" = {
-              format = "f-f-n: {}";
-              interval = 10;
-              exec = "${pkgs.jq}/bin/jq -r '[.results[] | select(.tags==\"flake-firefox-nightly\" and .status!=\"running\")][0] | .status' ${jobpath}";
-              #return-type = "json";
-            };
-
+              exec = "${pkgs.coreutils}/bin/cat ${jobpath}/${v}-json";
+              return-type = "json";
+            }) jobs) // {
             "sway/workspaces" = {
               all-outputs = true;
               disable-scroll-wraparound = true;
