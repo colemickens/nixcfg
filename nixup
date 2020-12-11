@@ -177,7 +177,7 @@ function activate() {
   if [[ "${spz}" == "" ]]; then
     ssh -A "${target}" "$(printf '\"%s\" ' sudo nix shell -vv "${bo}" -c switch-to-configuration switch)";
   else
-    ssh -A "${target}" "$(printf '\"%s\" ' sudo nix shell -vv "${bo}" -c ${bo}/specialisations/${spz}/bin/switch-to-configuration switch)";
+    ssh -A "${target}" "$(printf '\"%s\" ' sudo nix shell -vv "${bo}" -c ${bo}/specialisation/${spz}/bin/switch-to-configuration switch)";
   fi
 }
 
