@@ -3,28 +3,25 @@
 let
   jobpath = "/run/user/1000/srht/jobs";
   jobs = {
-    "n-w"= "nixpkgs-wayland";
+    "n-w" = "nixpkgs-wayland";
     "f-f-n" = "flake-firefox-nightly";
   };
-
-  prefix = ''
-    TOKEN=$(cat ${config.sops.secrets."srht-pat".path})
-    BUILD_HOST="https://builds.sr.ht"
-    "${pkgs.coreutils}/bin/mkdir" -p "${jobpath}"
-    "${pkgs.curl}/bin/curl" \
-      -H "Authorization:token ''${TOKEN}" \
-      -H "Content-Type: application/json" -X GET \
-      "''${BUILD_HOST}/api/jobs" > "${jobpath}/data"
-  '';
 
   suffix = pkgs.lib.mapAttrsToList (k: v: ''
     status="$("${pkgs.jq}/bin/jq" -r '[.results[] | select(.tags=="${k}" and .status!="running")][0] | .status' "${jobpath}/data")"
     echo "{\"text\":\"''${status}\", \"class\":\"srht-''${status}\"}" > "${jobpath}/${k}-json"
   '') jobs;
 
-  wholeScript = pkgs.lib.concatStrings ([prefix] ++ suffix);
-
-  jobsScript = pkgs.writeShellScriptBin "jobs.sh" wholeScript;
+  jobsScript = pkgs.writeShellScriptBin "jobs.sh" (pkgs.lib.concatStrings (
+    [''
+      TOKEN=$(cat ${config.sops.secrets."srht-pat".path})
+      BUILD_HOST="https://builds.sr.ht"
+      "${pkgs.coreutils}/bin/mkdir" -p "${jobpath}"
+      "${pkgs.curl}/bin/curl" \
+        -H "Authorization:token ''${TOKEN}" \
+        -H "Content-Type: application/json" -X GET \
+        "''${BUILD_HOST}/api/jobs" > "${jobpath}/data"
+    ''] ++ suffix ));
 in
 {
   config = {
@@ -61,17 +58,19 @@ in
             "sway/workspaces"
           ];
           modules-center = [];
-          modules-right = [
-            "idle_inhibitor"
-            "tray"
-            "pulseaudio"
-            "network"
-            "cpu"
-            "memory"
-            "light"
-            "clock"
-            "battery"
-          ] ++ (pkgs.lib.mapAttrsToList (k: v: "custom/srht-${k}") jobs);
+          modules-right =
+            (pkgs.lib.mapAttrsToList (k: v: "custom/srht-${k}") jobs)
+            ++ [
+              "idle_inhibitor"
+              "tray"
+              "pulseaudio"
+              "network"
+              "cpu"
+              "memory"
+              "light"
+              "clock"
+              "battery"
+            ];
 
           modules = (pkgs.lib.mapAttrs' (k: v: 
             pkgs.lib.nameValuePair "custom/srht-${k}" {
