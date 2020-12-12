@@ -43,7 +43,7 @@ function update() {
   cd ~/code/nixpkgs/master; git remote update; git reset --hard "nixpkgs/master" && git push origin HEAD -f || false
 
   cd -; cd ~/code/nixpkgs/cmpkgs;        git pull --rebase && git push origin HEAD -f || false
-  cd -; cd ~/code/nixpkgs/pipkgs;        git pull --rebase && git push origin HEAD -f || false
+  #cd -; cd ~/code/nixpkgs/pipkgs;        git pull --rebase && git push origin HEAD -f || false
   cd -; cd ~/code/flake-firefox-nightly; git pull --rebase && git push origin HEAD -f || false
   cd -; cd ~/code/nixpkgs-wayland;       git pull --rebase && git push origin HEAD -f || false
   cd -; cd ~/code/home-manager/cmhm;     git pull --rebase && git push origin HEAD -f || false
@@ -182,7 +182,8 @@ function activate() {
 }
 
 function rpione()   { activate ".#toplevels.rpione"      "colemickens@aarch64.nixos.community"         "cole@192.168.1.2";   }
-function rpitwoimg(){ activate ".#images.rpitwo"         "colemickens@aarch64.nixos.community"         "cole@localhost";     }
+function rpitwoboot() { build ".#images.rpitwoboot"         "colemickens@aarch64.nixos.community"         "cole@localhost";     }
+function rpitwoefi() { build ".#images.newimg"         "colemickens@aarch64.nixos.community"         "cole@localhost";     }
 function pinebook() { activate ".#toplevels.pinebook"    "colemickens@aarch64.nixos.community"         "cole@192.168.1.155" sway; }
 function aarch64()  { build    ".#bundles.aarch64-linux" "colemickens@aarch64.nixos.community"         "cole@localhost";     }
 function x86()      { build    ".#bundles.x86_64-linux"  "cole@azdev2020vm.westus2.cloudapp.azure.com" "cole@localhost";     }

@@ -8,7 +8,6 @@
 
   inputs = {
     nixpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; }; # for my regular nixpkgs
-    pipkgs = { url = "github:colemickens/nixpkgs/pipkgs"; }; # for experimenting with rpi4
     nixos-unstable = { url = "github:nixos/nixpkgs/nixos-unstable"; };
     master = { url = "github:nixos/nixpkgs/master"; }; # for nixFlakes
     stable = { url = "github:nixos/nixpkgs/nixos-20.09"; }; # for cachix
@@ -172,8 +171,9 @@
       nixosConfigurations = {
         azdev      = mkSystem "x86_64-linux"  inputs.nixpkgs "azdev";
         rpione     = mkSystem "aarch64-linux" inputs.nixpkgs "rpione";
-        rpitwo     = mkSystem "aarch64-linux" inputs.pipkgs "rpitwo";
-        rpitwonet  = mkSystem "aarch64-linux" inputs.pipkgs "rpitwonet";
+        rpitwo     = mkSystem "aarch64-linux" inputs.nixpkgs "rpitwo";
+        rpitwoefi  = mkSystem "aarch64-linux" inputs.nixpkgs "rpitwoefi";
+        rpitwonet  = mkSystem "aarch64-linux" inputs.nixpkgs "rpitwonet";
         slynux     = mkSystem "x86_64-linux"  inputs.nixpkgs "slynux";
         xeep       = mkSystem "x86_64-linux"  inputs.nixpkgs "xeep";
         pinephone  = mkSystem "aarch64-linux" inputs.nixpkgs "pinephone";
@@ -205,7 +205,7 @@
         # azure vhd for azdev machine (a custom Azure image using `nixos-azure` module)
         azdev = inputs.self.nixosConfigurations.azdev.config.system.build.azureImage;
 
-        rpitwo = inputs.self.nixosConfigurations.rpitwo.config.system.build.sdImage;
+        newimg = inputs.self.nixosConfigurations.rpitwoefi.config.system.build.newimg;
 
         pinebook_bundle = pkgs_.nixpkgs.aarch64-linux.runCommandNoCC "pinebook-bundle" {} ''
           mkdir $out

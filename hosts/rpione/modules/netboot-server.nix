@@ -67,9 +67,6 @@ let
       # TODO: do the same with the vl805.bin firmware?
       # TODO: auto-script to make sure our own firmware is updated?
       # TODO: this can take out an entire cluster if a bad update were pushed
-
-      mkdir $out/grub/
-      ${pkgs.grub2}/bin/grub-mknetdir --net-directory=$out/grub/
     )
   '';
 

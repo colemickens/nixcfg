@@ -1,7 +1,7 @@
 { pkgs, lib, modulesPath, inputs, ... }:
 
 let
-  hostname = "rpitwo";
+  hostname = "rpitwonet";
 in {
   imports = [
     #"${modulesPath}/profiles/base.nix"
