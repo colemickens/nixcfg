@@ -17,6 +17,7 @@ let
   repos = [
     "nixpkgs-wayland"
     "flake-firefox-nightly"
+    "niche"
   ];
   genPrefixAttrs = prefix: names: f: lib.listToAttrs (map (n: lib.nameValuePair "${prefix}${n}" (f n)) names);
 in
