@@ -28,8 +28,19 @@ let
       systemctl --user restart gpg-agent-ssh.socket
       export GPG_TTY=$(tty)
       gpg-connect-agent updatestartuptty /bye
-      sleep 3
+      sleep 1
       sudo systemctl start pcscd.service
+      sleep 1
+      gpg --card-status
+    '')
+
+    (writeShellScriptBin "pulse-fix" ''
+      set -x
+      systemctl --user daemon-reload
+      systemctl --user start pipewire.service
+      systemctl --user start pipewire-pulse.socket
+      pkill waybar; sleep 1
+      swaymsg reload
     '')
 
     (writeShellScriptBin "reboot-nixos" ''

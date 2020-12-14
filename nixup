@@ -188,6 +188,8 @@ function pinebook() { activate ".#toplevels.pinebook"    "colemickens@aarch64.ni
 function aarch64()  { build    ".#bundles.aarch64-linux" "colemickens@aarch64.nixos.community"         "cole@localhost";     }
 function x86()      { build    ".#bundles.x86_64-linux"  "cole@azdev2020vm.westus2.cloudapp.azure.com" "cole@localhost";     }
 
+function a64() { build "$1" "colemickens@aarch64.nixos.community" "colemickens@aarch64.nixos.community"; }
+
 function niche() {
   # this is just to test niche out the way this wrapper expects to be able to call it
   ssh_niche_shell 'cole@localhost' \

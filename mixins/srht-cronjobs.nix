@@ -21,6 +21,11 @@ let
   genPrefixAttrs = prefix: names: f: lib.listToAttrs (map (n: lib.nameValuePair "${prefix}${n}" (f n)) names);
 in
 {
+  sops.secrets."srht-pat" = {
+    owner = "cole";
+    group = "cole";
+  };
+
   systemd.timers = genPrefixAttrs "srht-" repos (repo:
     {
         wantedBy = [ "timers.target" ];
