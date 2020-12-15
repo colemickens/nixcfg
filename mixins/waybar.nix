@@ -41,7 +41,7 @@ in
       systemd.user.timers."srht-jobs-status" = {
         Unit.Description = "check srht jobs status";
         Timer = { OnBootSec = "1m"; OnUnitInactiveSec = "1m"; Unit = "srht-jobs-status.service"; };
-        Install.WantedBy = [ "timers.target" ];
+        Install.WantedBy = [ "default.target" ];
         # {
         #     wantedBy = [ "timers.target" ];
         #     partOf = [ "srht-${repo}.service" ];
