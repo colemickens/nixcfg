@@ -9,7 +9,7 @@ let
   };
 
   suffix = pkgs.lib.mapAttrsToList (k: v: ''
-    status="$("${pkgs.jq}/bin/jq" -r '[.results[] | select(.tags=="${v}" and .status!="running")][0] | .status' "${jobpath}/data")"
+    status="$("${pkgs.jq}/bin/jq" -r '[.results[] | select(.tags=="${v}" and .status!="running" and .status!="cancelled")][0] | .status' "${jobpath}/data")"
     echo "{\"text\":\"''${status}\", \"class\":\"srht-''${status}\"}" > "${jobpath}/${v}-json"
   '') jobs;
 
