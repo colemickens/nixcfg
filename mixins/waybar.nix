@@ -3,6 +3,7 @@
 let
   jobpath = "/run/user/1000/srht/jobs";
   jobs = {
+    "niche" = "niche";
     "n-w" = "nixpkgs-wayland";
     "f-f-n" = "flake-firefox-nightly";
   };
