@@ -11,7 +11,7 @@ niche_cache="https://azdev2020nov.blob.core.windows.net/nixcache"
 cachixpkgs="https://github.com/nixos/nixpkgs/archive/nixos-20.09.tar.gz" # where to find pkgs.cachix
 unstablepkgs="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # where to find nixUnstable
 nichepkgs="https://github.com/colemickens/niche/archive/$(cd ~/code/niche; git rev-parse HEAD).tar.gz" # where to find niche + all nixpkgs
-cachixkey="$(cat ~/.config/cachix/cachix.dhall | grep eIu | tr -d ' "' || echo "")"
+cachixkey="$(cat ~/.config/cachix/cachix.dhall | grep eIu | cut -f 2 -d '"' || echo "")"
 
 nixargs=(--experimental-features "nix-command flakes ca-references recursive-nix")
 # TODO: research post-build hooks?
