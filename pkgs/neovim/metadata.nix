@@ -4,5 +4,4 @@
   branch = "nightly";
   rev = "2debabb0805ccd014478e6aff88fce8129a352d0";
   sha256 = "sha256-U5LxIq9mmy0CJj6eK7vexQxB1NLUOoqci4BnIT2cRp8=";
-  revdate = "2020-09-14 15:03:02Z";
 }

@@ -44,7 +44,7 @@ in
         #nixops
         asciinema
         wget curl rsync
-        ripgrep jq fzf
+        ripgrep jq fzy
         wget curl stow ncdu tree
         git-crypt gopass gnupg passrs ripasso-cursive
         openssh autossh mosh sshuttle
