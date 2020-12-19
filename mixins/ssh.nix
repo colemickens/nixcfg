@@ -18,6 +18,7 @@
       programs.ssh = {
         enable = true;
         controlMaster = "auto";
+        controlPath = "master-%C";
         controlPersist = "10m";
         matchBlocks = {
           "aarch64" = {
