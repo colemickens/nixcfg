@@ -28,6 +28,9 @@
     sops-nix.url = "github:colemickens/sops-nix/wip";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
+    deploy-rs.url = "github:colemickens/deploy-rs";
+    deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
+
     firefox  = { url = "github:colemickens/flake-firefox-nightly"; };
     firefox.inputs.nixpkgs.follows = "nixpkgs";
 
