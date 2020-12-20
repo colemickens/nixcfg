@@ -10,8 +10,8 @@ defaultcommitmsg="auto-updates:"
 pkgentries=(); nixpkgentries=(); commitmsg="${defaultcommitmsg}";
 
 up=0 # updated_performed # up=$(( $up + 1 ))
-
-unset NIX_PATH
+nixpkgs="https://api.github.com/repos/$(jq -r '.nodes.nixpkgs.locked.owner' ../flake.lock)/$(jq -r '.nodes.nixpkgs.locked.repo' ../flake.lock)/tarball/$(jq -r '.nodes.nixpkgs.locked.rev' ../flake.lock)"
+NIX_PATH="nixpkgs=${nixpkgs}"
 
 function update() {
   #set +x
@@ -66,11 +66,11 @@ function update() {
 
       # Update Sha256
       if [[ "${typ}" == "pkgs" ]]; then
-        newsha256="$(NIX_PATH="${tmpnixpath}" nix-prefetch --output raw \
+        newsha256="$(nix-prefetch --output raw \
             -E "(import ./build.nix).${upattr}" \
             --rev "${newrev}")"
       elif [[ "${typ}" == "nixpkgs" ]]; then
-        newsha256="$(NIX_PATH="${tmpnixpath}" nix-prefetch-url --unpack "${url}" 2>/dev/null)"
+        newsha256="$(nix-prefetch-url --unpack "${url}" 2>/dev/null)"
       fi
 
       # TODO: do this with nix instead of sed?
@@ -79,16 +79,14 @@ function update() {
 
       # CargoSha256 has to happen AFTER the other rev/sha256 bump
       if [[ "${cargoSha256}" != "missing_cargoSha256" ]]; then
-        newcargoSha256="$(NIX_PATH="${tmpnixpath}" \
-          nix-prefetch \
+        newcargoSha256="$(nix-prefetch \
             "{ sha256 }: let p=(import ./build.nix).${upattr}; in p.cargoDeps.overrideAttrs (_: { cargoSha256 = sha256; })")"
         sed -i "s|${cargoSha256}|${newcargoSha256}|" "${metadata}"
       fi
 
       # VendorSha256 has to happen AFTER the other rev/sha256 bump
       if [[ "${vendorSha256}" != "missing_vendorSha256" ]]; then
-        newvendorSha256="$(NIX_PATH="${tmpnixpath}" \
-          nix-prefetch \
+        newvendorSha256="$(nix-prefetch \
             "{ sha256 }: let p=(import ./build.nix).${upattr}; in p.go-modules.overrideAttrs (_: { vendorSha256 = sha256; })")"
         sed -i "s|${vendorSha256}|${newvendorSha256}|" "${metadata}"
       fi
@@ -98,7 +96,6 @@ function update() {
   fi
 }
 
-tmpnixpath="nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz"
 for p in ./*/; do
   update "pkgs" "${p}"
 done

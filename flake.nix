@@ -124,19 +124,20 @@
           };
           accept = pkg: pkg.meta.platforms or [ "x86_64-linux" "aarch64-linux" ];
           filter = (name: pkg: builtins.elem "${system}" (accept pkg));
-        in pkgs.lib.filterAttrs filter pkgs.colePackages
+        in {
+          pkgs = import inputs.nixpkgs {
+            system = system;
+            config = { allowUnfree = true; };
+            overlays = [
+              inputs.self.overlay
+              inputs.nixpkgs-wayland.overlay
+            ];
+          };
+        } // (pkgs.lib.filterAttrs filter pkgs.colePackages)
       );
 
       # TODO: eventually maybe we should only compose nixpkgs here, and then make a unified,
       # overlaid nixpkgs available, both as an output and as 'nixpkgs' for our systems?
-      pkgs = forAllSystems (sys: import inputs.nixpkgs {
-        system = sys;
-        config = { allowUnfree = true; };
-        overlays = [
-          inputs.self.overlay
-          inputs.nixpkgs-wayland.overlay
-        ];
-      });
 
       overlay = final: prev:
         let p = rec {
@@ -157,6 +158,7 @@
           #niche = prev.callPackage ./pkgs/niche {};
           obs-v4l2sink = prev.libsForQt5.callPackage ./pkgs/obs-v4l2sink {};
           passrs = prev.callPackage ./pkgs/passrs {};
+          rkvm = prev.callPackage ./pkgs/rkvm {};
           # tree-sitter = prev.callPackage ./pkgs/tree-sitter {
           #   tree-sitter = prev.tree-sitter;
           # };

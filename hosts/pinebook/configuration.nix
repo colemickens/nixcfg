@@ -7,9 +7,9 @@ in
     ../../mixins/common.nix
 
     ../../mixins/chromecast.nix
-    ../../mixins/gammastep.nix
     ../../mixins/sshd.nix
     ../../mixins/v4l2loopback.nix
+    ../../mixins/wlsunset.nix
 
     ../../profiles/interactive.nix
     ../../profiles/specialisations.nix
