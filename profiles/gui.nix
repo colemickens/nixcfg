@@ -74,6 +74,7 @@ in
         mirage-im
         element-desktop
         cchat-gtk
+        radicle
 
         gnome3.nautilus
         gnome3.gnome-tweaks

@@ -31,6 +31,11 @@
       package = pkgs.nixUnstable;
     };
 
+    environment.systemPackages = with pkgs; [
+      cryptsetup
+    ];
+
+/*
     fileSystems = {
       "/nix" = {
         device = "/dev/disk/by-partlabel/nix";
@@ -45,7 +50,7 @@
         fsType = "none"; options = [ "bind" ]; device = "/data/var/lib/docker";
       };
     };
-
+*/
     networking.hostName = "azbldr";
     documentation.nixos.enable = false;
     services.openssh.passwordAuthentication = false;
