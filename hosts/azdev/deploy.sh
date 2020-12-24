@@ -6,6 +6,7 @@ export AZURE_LOCATION="westus2"
 export AZURE_VM_SIZE="Standard_D64s_v3"
 export AZURE_VM_SIZE="Standard_F64s_v2"
 export AZURE_VM_SIZE="Standard_F72s_v2"
+export AZURE_VM_SIZE="Standard_F8s_v2"
 export AZURE_VM_OS_DISK_SIZE="100"
 
 data_disk_id="/subscriptions/aff271ee-e9be-4441-b9bb-42f5af4cbaeb/resourceGroups/azdev2020data/providers/Microsoft.Compute/disks/datadisk"

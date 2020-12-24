@@ -11,7 +11,7 @@ pkgentries=(); nixpkgentries=(); commitmsg="${defaultcommitmsg}";
 
 up=0 # updated_performed # up=$(( $up + 1 ))
 nixpkgs="https://api.github.com/repos/$(jq -r '.nodes.nixpkgs.locked.owner' ../flake.lock)/$(jq -r '.nodes.nixpkgs.locked.repo' ../flake.lock)/tarball/$(jq -r '.nodes.nixpkgs.locked.rev' ../flake.lock)"
-NIX_PATH="nixpkgs=${nixpkgs}"
+export NIX_PATH="nixpkgs=${nixpkgs}"
 
 function update() {
   #set +x

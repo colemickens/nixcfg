@@ -75,6 +75,7 @@ in
         element-desktop
         cchat-gtk
         radicle-upstream
+        neochat
 
         gnome3.nautilus
         gnome3.gnome-tweaks
