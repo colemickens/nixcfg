@@ -28,6 +28,13 @@
           # added to .zshrc
           # executed in login+interactive+ssh (I think)
           bindkey -e
+
+          # surely something else has these defaults?
+          bindkey "^[[H"    beginning-of-line
+          bindkey "^[[F"    end-of-line
+          bindkey "^[[3~"   delete-char
+          bindkey "^[[1;5C" forward-word
+          bindkey "^[[1;5D" backward-word
         '';
 
         plugins = [
