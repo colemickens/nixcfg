@@ -1,5 +1,5 @@
 {
-  repo_git = "https://gitlab.com/famedly/conduit";
+  repo_git = "https://gitlab.com/famedly/conduit.git/";
   branch = "master";
   rev = "9d4c7c34a0af0768146ee9e789039f16cf85d834";
   sha256 = "sha256-6Kc40FhK85Lxgx6zaMgshsclpOuDHk77cj8TJOC37nI=";
