@@ -161,11 +161,13 @@ function activate() {
   target="${3:-"cole@localhost"}"
   spz="${4:-""}"
 
-  ssh -A "${target}" "$(printf '\"%s\" ' sudo nix build --profile /nix/var/nix/profiles/system "${bo}")";
+  spz="$(ssh -A "${target}" "cat /run/current-system/configuration-name || echo")"
+  spz=""
+  ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --profile /nix/var/nix/profiles/system "${bo}")";
   if [[ "${spz}" == "" ]]; then
-    ssh -A "${target}" "$(printf '\"%s\" ' sudo nix shell -vv "${bo}" -c switch-to-configuration switch)";
+    ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${bo}" -c switch-to-configuration switch)";
   else
-    ssh -A "${target}" "$(printf '\"%s\" ' sudo nix shell -vv "${bo}" -c ${bo}/specialisation/${spz}/bin/switch-to-configuration switch)";
+    ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${bo}" -c ${bo}/specialisation/${spz}/bin/switch-to-configuration switch)";
   fi
 }
 
