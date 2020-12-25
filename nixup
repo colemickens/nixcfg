@@ -159,7 +159,6 @@ function activate() {
   set -euo pipefail
   bo="$(set -euo pipefail; build "${@}")"
   target="${3:-"cole@localhost"}"
-  spz="${4:-""}"
 
   spz="$(ssh -A "${target}" "cat /run/current-system/configuration-name || echo")"
   spz=""
@@ -175,7 +174,7 @@ function rpione()     { activate ".#toplevels.rpione"      "colemickens@aarch64.
 function rpitwoboot() { build ".#images.rpitwoboot"        "colemickens@aarch64.nixos.community"         "cole@localhost";          }
 function rpitwoefi()  { build ".#images.newimg"            "colemickens@aarch64.nixos.community"         "cole@localhost";          }
 function pinebook()   { if [[ "$(hostname)" != "pinebook" ]]; then exit 1; fi; activate ".#toplevels.pinebook"    "cole@localhost"         "cole@localhost" sway-unstable; }
-#function pinebook()   { activate ".#toplevels.pinebook"    "colemickens@aarch64.nixos.community"         "cole@192.168.1.155" sway; }
+#function pinebook()   { activate ".#toplevels.pinebook"    "colemickens@aarch64.nixos.community"         "cole@192.168.1.155"; }
 function aarch64()    { build    ".#bundles.aarch64-linux" "colemickens@aarch64.nixos.community"         "cole@localhost";          }
 function x86()        { build    ".#bundles.x86_64-linux"  "cole@azdev2020vm.westus2.cloudapp.azure.com" "cole@localhost";          }
 
@@ -194,5 +193,5 @@ if [[ ! -z "${cmd:-""}" ]]; then
 else
   set -euo pipefail
   update
-  activate ".#toplevels.$(hostname)" "cole@localhost" "cole@localhost" sway
+  activate ".#toplevels.$(hostname)" "cole@localhost" "cole@localhost"
 fi
