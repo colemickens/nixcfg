@@ -21,7 +21,6 @@
         #XDG_SESSION_TYPE = "wayland";
       };
       home.packages = with pkgs; [
-        # sway-related
         gnome3.gnome-tweaks
       ];
     };

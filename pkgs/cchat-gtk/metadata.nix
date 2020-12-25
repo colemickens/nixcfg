@@ -1,7 +1,7 @@
 {
   repo_git = "https://github.com/diamondburned/cchat-gtk";
   branch = "master";
-  rev = "d3048fe08ccf0a0994b88c6a04292f0fbb06b093";
-  sha256 = "sha256-sDJk/lUcVGaxQakHZZtZDU1F6wW0zUxPNeEiB1pmIJE=";
-  vendorSha256 = "sha256-fqUcgW0nLt2f0cq5MPIiMMjQbdZh+FDJcPT0b32u1a8=";
+  rev = "e159b0d611396ee470a244a45fbf0915cd2fd5d3";
+  sha256 = "sha256-rOsAjhrbaZCg/iY5oGL8LUt7j2yhbSvo3EAWG5bLv8U=";
+  vendorSha256 = "sha256-K2z6/RVLf2EUI4gNeNAJxO7mzccCZ84cmJ6uAuWu9aw=";
 }

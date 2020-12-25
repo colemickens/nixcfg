@@ -10,10 +10,6 @@
     ./gui.nix
   ];
   config = {
-    nixpkgs.overlays =  [
-      #inputs.nixpkgs-wayland.overlay
-    ];
-
     home-manager.users.cole = { pkgs, ... }: {
 
       # block auto-sway reload, Sway crashes...
@@ -32,7 +28,6 @@
         XDG_CURRENT_DESKTOP = "sway"; # todo: maybe move to sway config so we can have this enabled with gnome enabled?
       };
       home.packages = with pkgs; [
-        # sway-related
         drm_info
         grim
         qt5.qtwayland

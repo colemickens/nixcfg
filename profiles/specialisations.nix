@@ -15,8 +15,8 @@ in
       pkgs.lib.genAttrs desktops (desktop:
         {
           configuration = { 
-            boot.loader.grub.configurationName = "sway";
-            imports = [ ./desktop-sway.nix ];
+            boot.loader.grub.configurationName = "${desktop}";
+            imports = [ ./desktop-${desktop}.nix ];
           };
         }
       );
