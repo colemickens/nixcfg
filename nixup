@@ -163,8 +163,11 @@ function activate() {
   set -euo pipefail
   bo="$(set -euo pipefail; build "${@}")"
   target="${3:-"cole@localhost"}"
+  spz="${4:-""}"
 
-  spz="$(ssh -A "${target}" "cat /run/current-system/configuration-name || echo")"
+  if [[ "${spz}" == "" ]]; then
+    spz="$(ssh -A "${target}" "cat /run/current-system/configuration-name || echo")"
+  fi
   ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --profile /nix/var/nix/profiles/system "${bo}")";
   if [[ "${spz}" == "" ]]; then
     ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${bo}" -c switch-to-configuration switch)";
@@ -196,5 +199,5 @@ if [[ ! -z "${cmd:-""}" ]]; then
 else
   set -euo pipefail
   update
-  activate ".#toplevels.$(hostname)" "cole@localhost" "cole@localhost"
+  activate ".#toplevels.$(hostname)" "cole@localhost" "cole@localhost" "${1:-""}"
 fi

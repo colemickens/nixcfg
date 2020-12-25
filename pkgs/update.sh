@@ -27,9 +27,9 @@ if [[ "${1:-}" == "updateinternal" ]]; then
   ## internal script (called in parallel)
   ##
   shift
-  t="$(mktemp)"; trap "rm ${t}" EXIT;
-  m="$(mktemp)"; trap "rm ${m}" EXIT;
-  l="$(mktemp)"; trap "rm ${l}" EXIT;
+  t="$(mktemp)"; #trap "rm ${t}" EXIT;
+  m="$(mktemp)"; #trap "rm ${m}" EXIT;
+  l="$(mktemp)"; #trap "rm ${l}" EXIT;
   pkg="${1}"
   metadata="${pkg}/metadata.nix"
   pkgname="$(basename "${pkg}")"
