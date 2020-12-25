@@ -195,9 +195,8 @@ function niche() {
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 
 if [[ ! -z "${cmd:-""}" ]]; then
-  "${cmd}" "${@}"
-else
-  set -euo pipefail
-  update
-  activate ".#toplevels.$(hostname)" "cole@localhost" "cole@localhost" "${1:-""}"
+  if [[ "${cmd}" == _* ]]; then
+    update
+    activate ".#toplevels.$(hostname)" "cole@localhost" "cole@localhost" "${cmd#"_"}"
+  fi
 fi
