@@ -18,7 +18,7 @@
       programs.ssh = {
         enable = true;
         controlMaster = "auto";
-        controlPath = "$HOME/.ssh/master-%C";
+        controlPath = "/home/cole/.ssh/master-%C"; # TODO: lolwut
         controlPersist = "10m";
         matchBlocks = {
           "aarch64" = {
