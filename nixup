@@ -53,7 +53,7 @@ function update() {
   set +x; printf "\n\n%s\n" ":::::::: stashing nixcfg" &>/dev/stderr; set -x
   cd "${DIR}"; git add -A . && (git commit -m stash && git pull --rebase && git push origin HEAD -f || false) || true
 
-  cd -;
+  cd "${DIR}";
 }
 
 # this includes the actual `cachix push` command, just send it a path
