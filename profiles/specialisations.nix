@@ -16,7 +16,7 @@ in
         {
           configuration = {
             boot.loader.grub.configurationName = "${desktop}";
-            imports = [ ./. + "desktop-${desktop}.nix" ];
+            imports = [ ./desktop-${desktop}.nix ];
           };
         }
       );
