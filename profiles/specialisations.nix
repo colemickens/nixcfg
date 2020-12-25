@@ -1,7 +1,7 @@
 { config, pkgs, inputs, ... }:
 
 let
-  desktops = [ "elementary" "gnome" "plasma" "sway" "sway-unwrapped" ];
+  desktops = [ "elementary" "gnome" "plasma" "sway" "sway-unstable" ];
 in
 {
   config.specialisation = 
