@@ -1,7 +1,7 @@
 {
   repo_git = "https://git.meli.delivery/meli/meli";
   branch = "master";
-  rev = "b2e853dd7b3f4c59f189b99df17a9b34920745f1";
-  sha256 = "sha256-niazseBm3sRCpF8+wnc/c/n3x4K2Jyzd3xUHyJT1YCs=";
-  cargoSha256 = "sha256-ta2HpbBOV5ebN9UBDQ7eo1JwfWeeINx3ROTQfHEr6BU=";
+  rev = "2d5f5e767cfa150ae5408f7518f6d5c84337b9f0";
+  sha256 = "sha256-4JpvmS3868ei2Q8GD538vWrjq2HYSvd+sqzx/dLnC0A=";
+  cargoSha256 = "sha256-xXNyA+s7bbyB3ak9VdhB8S77dhP9uAnHvs1e1ubZjAQ=";
 }

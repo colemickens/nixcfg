@@ -15,6 +15,7 @@ export NIX_PATH="nixpkgs=${nixpkgs}"
 
 function update() {
   #set +x
+  set -euo pipefail
   typ="${1}"
   pkg="${2}"
 
@@ -95,6 +96,10 @@ function update() {
     fi
   fi
 }
+
+if [[ "${1:-""}" == "internal" ]]; then
+  update $2
+fi
 
 for p in ./*/; do
   update "pkgs" "${p}"
