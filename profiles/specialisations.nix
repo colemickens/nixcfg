@@ -14,9 +14,9 @@ in
     specialisation = 
       pkgs.lib.genAttrs desktops (desktop:
         {
-          configuration = { 
+          configuration = {
             boot.loader.grub.configurationName = "${desktop}";
-            imports = [ "./desktop-${desktop}.nix" ];
+            imports = [ ./. + "desktop-${desktop}.nix" ];
           };
         }
       );
