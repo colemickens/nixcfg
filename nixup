@@ -198,5 +198,8 @@ if [[ ! -z "${cmd:-""}" ]]; then
   if [[ "${cmd}" == _* ]]; then
     update
     activate ".#toplevels.$(hostname)" "cole@localhost" "cole@localhost" "${cmd#"_"}"
+    exit 0
   fi
+
+  "${cmd}" "${@}"
 fi
