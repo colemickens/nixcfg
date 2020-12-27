@@ -11,3 +11,5 @@ git config --global user.name \
 
 git config --global user.email \
  "cole.mickens+colebot@gmail.com"
+
+git status
