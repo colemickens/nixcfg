@@ -95,6 +95,7 @@ in
         # use nixos-unstable on x86_64-linux
         inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox
         inputs.nixos-unstable.legacyPackages.${pkgs.system}.chromium
+        torbrowserPkg
 
         scrcpy
         imv
@@ -102,7 +103,6 @@ in
         # yucky non-free
         discord
         pkgs.google-chrome-dev
-        torbrowserPkg
         pkgs.ripcord
 
         # not supported on aarch64, likely its an appimage or something
