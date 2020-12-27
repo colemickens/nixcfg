@@ -12,7 +12,7 @@ in
     ../../mixins/wlsunset.nix
 
     ../../profiles/interactive.nix
-    ../../profiles/specialisations.nix
+    ../../profiles/desktop-sway.nix
 
     inputs.wip-pinebook-pro.nixosModule
     # TODO: ^ module isn't arch specific
