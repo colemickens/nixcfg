@@ -197,7 +197,8 @@ if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 if [[ ! -z "${cmd:-""}" ]]; then
   if [[ "${cmd}" == _* ]]; then
     update
-    activate ".#toplevels.$(hostname)" "cole@localhost" "cole@localhost" "${cmd#"_"}"
+    spz="${cmd#"_"}"
+    activate ".#toplevels.$(hostname)" "cole@localhost" "cole@localhost" "${spz}"
     exit 0
   fi
 
