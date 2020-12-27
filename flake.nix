@@ -85,11 +85,11 @@
         pkgs_.nixpkgs.${system}.mkShell {
           name = "nixcfg-devshell";
           nativeBuildInputs = []
-          ++ ([ inputs.nix.defaultPackage.${system} ])
+          #++ ([ inputs.nix.defaultPackage.${system} ])
           ++ (with pkgs_.stable.${system}; [ cachix ])
           ++ (with inputs.niche.packages.${system}; [ niche ])
           ++ (with pkgs_.nixpkgs.${system}; [
-            #nixUnstable
+            nixUnstable
             bash cacert curl git jq
             mercurial
             nettools openssh ripgrep rsync
