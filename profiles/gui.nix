@@ -74,7 +74,6 @@ in
         mirage-im
         element-desktop
         cchat-gtk
-        radicle-upstream
         neochat
 
         gnome3.nautilus
@@ -105,6 +104,10 @@ in
         pkgs.google-chrome-dev
         torbrowserPkg
         pkgs.ripcord
+
+        # not supported on aarch64, likely its an appimage or something
+        radicle-upstream
+
       ] ++ lib.optionals (pkgs.system == "aarch64-linux") [
         # use stable on aarch64-linux
         #inputs.stable.legacyPackages.${pkgs.system}.firefox
