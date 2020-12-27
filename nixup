@@ -169,7 +169,7 @@ function activate() {
     spz="$(ssh -A "${target}" "cat /run/current-system/configuration-name || echo")"
   fi
   ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --profile /nix/var/nix/profiles/system "${bo}")";
-  if [[ "${spz}" == "" ]]; then
+  if [[ "${spz}" == "" || "${spz}" == "none" ]]; then
     ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${bo}" -c switch-to-configuration switch)";
   else
     ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${bo}" -c ${bo}/specialisation/${spz}/bin/switch-to-configuration switch)";
@@ -179,10 +179,14 @@ function activate() {
 function rpione()     { activate ".#toplevels.rpione"      "colemickens@aarch64.nixos.community"         "cole@192.168.1.2";        }
 function rpitwoboot() { build ".#images.rpitwoboot"        "colemickens@aarch64.nixos.community"         "cole@localhost";          }
 function rpitwoefi()  { build ".#images.newimg"            "colemickens@aarch64.nixos.community"         "cole@localhost";          }
-function pinebook() { activate ".#toplevels.pinebook" "colemickens@aarch64.nixos.community" "cole@192.168.1.155"; }
-function pinebook_() { activate ".#toplevels.pinebook" "colemickens@aarch64.nixos.community" "cole@192.168.1.254"; }
+function pinebook() { activate ".#toplevels.pinebook" "colemickens@aarch64.nixos.community" "cole@192.168.1.155" none; }
+function pinebook_() { activate ".#toplevels.pinebook" "colemickens@aarch64.nixos.community" "cole@192.168.1.254" none; }
 function aarch64()    { build    ".#bundles.aarch64-linux" "colemickens@aarch64.nixos.community"         "cole@localhost";          }
 function x86()        { build    ".#bundles.x86_64-linux"  "cole@azdev2020vm.westus2.cloudapp.azure.com" "cole@localhost";          }
+
+##
+## note, there's a problem with specialisations because
+## configurationName isn't proof that it was a specialisation
 
 function a64() { build "$1" "colemickens@aarch64.nixos.community" "colemickens@aarch64.nixos.community"; }
 
