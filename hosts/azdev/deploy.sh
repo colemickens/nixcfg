@@ -9,8 +9,13 @@ export AZURE_VM_SIZE="Standard_F72s_v2"
 export AZURE_VM_SIZE="Standard_F8s_v2"
 export AZURE_VM_OS_DISK_SIZE="100"
 
+# uncomment to use a pre-existing image
+# instead of building and uploading a new one
+
+#image_id="/subscriptions/aff271ee-e9be-4441-b9bb-42f5af4cbaeb/resourceGroups/azdev2020nov/providers/Microsoft.Compute/images/21.03.20201101.dirty.vhd"
+
 data_disk_id="/subscriptions/aff271ee-e9be-4441-b9bb-42f5af4cbaeb/resourceGroups/azdev2020data/providers/Microsoft.Compute/disks/datadisk"
-# function create_dist() {
+# function create_disk() {
 #   az group create -n 'azdev2020data' -l "${AZURE_LOCATION}"
 
 #   az disk create \
@@ -33,18 +38,19 @@ function deploy() {
   upstream="/home/cole/code/nixos-azure"
 
   # build the VHD
-  #nix build "../..#images.azdev" --out-link /tmp/azdev
+  nix build "../..#images.azdev" --out-link /tmp/azdev
 
   # upload the VHD
   export AZURE_GROUP="azdev2020nov"
-  image_id="/subscriptions/aff271ee-e9be-4441-b9bb-42f5af4cbaeb/resourceGroups/azdev2020nov/providers/Microsoft.Compute/images/21.03.20201101.dirty.vhd"
-  #image_id="$(set -euo pipefail; \
-  #  nix shell "${upstream}" --command \
-  #    azutil upload /tmp/azdev)"
+  if [[ "${image_id}" == "" ]]; then
+    image_id="$(set -euo pipefail; \
+      nix shell "${upstream}" --command \
+        azutil upload /tmp/azdev)"
+  fi
 
   # boot a VM
-  export AZURE_GROUP="azdev2020vm"
-  export deploy="azdev2020vm"
+  export AZURE_GROUP="azdev2020vm1"
+  export deploy="${AZURE_GROUP}"
 
   az group create -n "${deploy}" -l "${AZURE_LOCATION}"
 

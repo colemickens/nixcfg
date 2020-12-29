@@ -139,7 +139,7 @@ function build() {
     fi
   fi
 
-  # if we still cna't realize on device,
+  # if we still can't realize on device,
   # see if we can realize here and then push to device
   # (this applies for blueline where we cant pull but can be pushed to)
   if [[ ! -z "${cachixkey:-""}" ]]; then
