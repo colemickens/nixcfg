@@ -35,6 +35,13 @@
           bindkey "^[[3~"   delete-char
           bindkey "^[[1;5C" forward-word
           bindkey "^[[1;5D" backward-word
+
+          bindkey '\ec' fzy-cd-widget
+          bindkey '^T'  fzy-file-widget
+          bindkey '^R'  fzy-history-widget
+          bindkey '^P'  fzy-proc-widget
+
+          zstyle :fzy:tmux    enabled      yes
         '';
 
         plugins = [
