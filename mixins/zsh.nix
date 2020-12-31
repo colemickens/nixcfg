@@ -42,6 +42,8 @@
           bindkey '^P'  fzy-proc-widget
 
           zstyle :fzy:tmux    enabled      yes
+
+          # autoload -U compinit && compinit
         '';
 
         plugins = [
@@ -65,7 +67,7 @@
             src = pkgs.zsh-fzy;
             file = "share/zsh/plugins/zsh-fzy/zsh-fzy.plugin.zsh";
           }
-          # nix-zsh-completions
+          # nix-zsh-completions <- doesn't support flakes (yet) anyway: https://github.com/spwhitt/nix-zsh-completions/issues/32
           # zsh-completions
         ];
 
