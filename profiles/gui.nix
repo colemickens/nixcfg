@@ -77,7 +77,7 @@ in
         neochat
 
         gnome3.nautilus
-        file-roller
+        gnome3.file-roller
         gnome3.gnome-tweaks
         spice-gtk
 
