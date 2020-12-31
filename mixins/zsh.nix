@@ -53,6 +53,13 @@
             src = pkgs.zsh-fast-syntax-highlighting;
             file = "share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh";
           }
+          {
+            name = "zsh-fzy";
+            src = pkgs.zsh-fzy;
+            file = "share/zsh/plugins/zsh-fzy/zsh-fzy.plugin.zsh";
+          }
+          # nix-zsh-completions
+          # zsh-completions
         ];
 
         # history = {
