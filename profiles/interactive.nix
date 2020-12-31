@@ -49,7 +49,6 @@ in
         git-crypt gopass gnupg passrs ripasso-cursive
         openssh autossh mosh sshuttle
         tig #git-absorb
-        gist # use `gh gist create` instead
         github-cli
         cvs mercurial subversion
         #mitmproxy

@@ -42,10 +42,11 @@ function deploy() {
 
   # upload the VHD
   export AZURE_GROUP="azdev2020nov"
-  if [[ "${image_id}" == "" ]]; then
+  if [[ "${image_id:-""}" == "" ]]; then
     image_id="$(set -euo pipefail; \
       nix shell "${upstream}" --command \
         azutil upload /tmp/azdev)"
+    echo "image_id=$image_id"
   fi
 
   # boot a VM
