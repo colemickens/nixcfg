@@ -24,7 +24,9 @@
           vim-commentary         # (un)comment things
           vim-crates
           vim-fugitive
-          neovim-fuzzy
+          neovim-fuzzy  # fzf replacement
+          #skim # ???
+          #skim-vim      # fzf replacement
           vim-multiple-cursors
           vim-nix
           vim-signify

@@ -60,7 +60,7 @@ in
     environment.systemPackages = with pkgs; [
       raspberrypifw
       raspberrypi-eeprom
-      raspberrypi-tools
+      libraspberrypi
     ];
     fileSystems."/export/rpitwo" = {
       device = "/mnt/rpitwo";
