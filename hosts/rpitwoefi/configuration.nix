@@ -14,7 +14,7 @@ in {
     environment.systemPackages = with pkgs; [
       raspberrypifw
       raspberrypi-eeprom
-      raspberrypi-tools
+      libraspberrypi
 
       dnsutils
     ];

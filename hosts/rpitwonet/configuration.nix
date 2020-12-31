@@ -12,7 +12,7 @@ in {
     environment.systemPackages = with pkgs; [
       raspberrypifw
       raspberrypi-eeprom
-      raspberrypi-tools
+      libraspberrypi
     ];
 
     services.mingetty.autologinUser = lib.mkForce "root";

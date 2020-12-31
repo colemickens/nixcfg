@@ -60,7 +60,7 @@ in {
     environment.systemPackages = with pkgs; [
       raspberrypifw
       raspberrypi-eeprom
-      raspberrypi-tools
+      libraspberrypi
 
       dnsutils
     ];
@@ -116,7 +116,7 @@ in {
 
     boot.initrd.availableKernelModules = [ "xhci_pci" "usb_storage" ];
     boot.kernelModules = [ "xhci_pci" "usb_storage" ];
- 
+
     boot.consoleLogLevel = lib.mkDefault 7;
   };
 }

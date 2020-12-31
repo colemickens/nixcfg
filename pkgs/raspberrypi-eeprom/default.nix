@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, python, writeText
-, binutils-unwrapped, raspberrypi-tools, makeWrapper }:
+, binutils-unwrapped, libraspberrypi, makeWrapper }:
 
 let
   version = "2020.09.03-138a1";
@@ -62,7 +62,7 @@ in stdenv.mkDerivation {
   fixupPhase = ''
     wrapProgram $out/bin/rpi-eeprom-update \
       --prefix PATH : ${binutils-unwrapped}/bin \
-      --prefix PATH : ${raspberrypi-tools}/bin \
+      --prefix PATH : ${libraspberrypi}/bin \
       --prefix PATH : $out
   '';
 
