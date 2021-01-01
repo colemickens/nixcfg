@@ -59,6 +59,7 @@ in
 
         # misc utils for desktop
         brightnessctl
+        carla
         pulsemixer
 
         # terminals
