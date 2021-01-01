@@ -44,8 +44,7 @@ function deploy() {
   export AZURE_GROUP="azdev2020nov"
   if [[ "${image_id:-""}" == "" ]]; then
     image_id="$(set -euo pipefail; \
-      nix shell "${upstream}" --command \
-        azutil upload /tmp/azdev)"
+      nix run "${upstream}#azutil" -- /tmp/azdev)"
     echo "image_id=$image_id"
   fi
 
