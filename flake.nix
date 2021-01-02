@@ -149,6 +149,7 @@
           conduit = prev.callPackage ./pkgs/conduit {};
           drm-howto = prev.callPackage ./pkgs/drm-howto {};
           get-xoauth2-token = prev.callPackage ./pkgs/get-xoauth2-token {};
+          jj = prev.callPackage ./pkgs/jj {};
           #mesa-git = prev.callPackage ./pkgs/mesa-git {};
           mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
           meli = prev.callPackage ./pkgs/meli {};

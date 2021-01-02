@@ -40,7 +40,7 @@ function update() {
   set -euo pipefail
   set +x; printf "\n\n%s\n" ":::::::: updating all (local, override) inputs" &>/dev/stderr; set -x
   printf '%s\n' "${srcdirs[@]}" | \
-    parallel --jobs $(nproc) --tag --progress -- \
+    parallel --jobs $(nproc) --halt soon,fail=1 --tag --progress -- \
       "git -C '{.}' pull --rebase && git -C '{.}' push origin HEAD -f"
 
   cd "${DIR}"
