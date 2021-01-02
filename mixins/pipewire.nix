@@ -8,7 +8,7 @@
   hardware.pulseaudio.enable = pkgs.lib.mkForce false;
 
   environment.systemPackages = with pkgs; [
-    #wireplumber
+    wireplumber
     pavucontrol
     pavucontrol-qt
     qjackctl
