@@ -1,5 +1,5 @@
 { stdenv, rustPlatform, fetchFromGitHub
-, pkg-config, libevdev, openssl, llvmPackages_latest }:
+, pkg-config, libevdev, openssl, llvmPackages_latest, linuxHeaders }:
 
 let
   metadata = import ./metadata.nix;
@@ -17,9 +17,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = metadata.cargoSha256;
 
+  postPatch = ''
+    sed -i 's|.clang_arg("-I/usr/include/libevdev-1.0/")|.clang_arg("-I${libevdev}/include/libevdev-1.0").clang_arg("-I${linuxHeaders}/include")|g' ./input/build.rs
+  '';
+
   nativeBuildInputs = [ pkg-config openssl llvmPackages_latest.libclang ];
   LIBCLANG_PATH = "${llvmPackages_latest.libclang}/lib";
-  buildInputs = [ libevdev openssl ];
+  buildInputs = [ libevdev openssl linuxHeaders ];
 
   meta = with stdenv.lib; {
     description = "Virtual KVM switch for Linux machines";
