@@ -196,6 +196,11 @@ function niche() {
     niche build -u "${niche_cache}" -- 'github:colemickens/flake-impure' --impure
 }
 
+function nix() {
+  # allows to call nix the same way nixup does internall
+  command nix "${nixargs[@]}" "${@}"
+}
+
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 
 if [[ ! -z "${cmd:-""}" ]]; then

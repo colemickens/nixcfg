@@ -27,7 +27,7 @@
             port = 22;
           };
           "*" = {
-            identityAgent = "/run/user/1000/gnupg/S.gpg-agent.ssh";
+            #identityAgent = "/run/user/1000/gnupg/S.gpg-agent.ssh";
             forwardAgent = true;
           };
         };

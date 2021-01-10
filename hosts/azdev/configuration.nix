@@ -12,7 +12,7 @@
   ];
 
   config = {
-    system.stateVersion = "20.03";
+    system.stateVersion = "21.03";
     virtualisation.azure.image.diskSize = 30000;
 
     fileSystems."/" = {
@@ -53,7 +53,7 @@
       };
     };
 */
-    networking.hostName = "azbldr";
+    networking.hostName = "azdev";
     documentation.nixos.enable = false;
     services.openssh.passwordAuthentication = false;
     security.sudo.wheelNeedsPassword = false;

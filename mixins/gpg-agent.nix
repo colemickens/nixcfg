@@ -3,13 +3,16 @@
 {
   config = {
     home-manager.users.cole = { pkgs, ... }: {
-      home.sessionVariables = {
-        SSH_AUTH_SOCK = "/run/user/1000/gnupg/S.gpg-agent.ssh";
-      };
+      # TODO: this needs to move to some sort of zsh init optiony thingy
+      #home.sessionVariables = {
+        #SSH_AUTH_SOCK = "/run/user/1000/gnupg/S.gpg-agent.ssh";
+      #};
 
       services.gpg-agent = {
+        # this has the SAME problem as above^, or rather is the same thing!
+        #enableSshSupport = true;
+
         enable = true;
-        enableSshSupport = true;
         enableExtraSocket = true;
         defaultCacheTtl = 34560000;
         defaultCacheTtlSsh = 34560000;
