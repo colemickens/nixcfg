@@ -2,18 +2,19 @@
 , pkg-config, libevdev, openssl, llvmPackages, linuxHeaders
 }:
 
+let metadata = import ./metadata.nix; in
 rustPlatform.buildRustPackage rec {
   pname = "rkvm-unstable";
-  version = "ec404c69";
+  version = metadata.rev;
 
   src = fetchFromGitHub {
     owner = "htrefil";
     repo = "rkvm";
-    rev = "ec404c69b38f7feff5103f898612734ee8d7ee95";
-    sha256 = "sha256-YZXHbZ71EsSyAtTenQ4rgp1fJbatkk7BW4Cmr/RpyXc=";
+    rev = metadata.rev;
+    sha256 = metadata.sha256;
   };
 
-  cargoSha256 = "sha256-/VNnqKSPqAYXS312GaTtpl5j0uOHLfUX8u7LuEDhUTg=";
+  cargoSha256 = metadata.cargoSha256;
 
   nativeBuildInputs = [ llvmPackages.clang pkg-config openssl ];
   buildInputs = [ libevdev openssl linuxHeaders ];
