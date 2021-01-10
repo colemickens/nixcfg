@@ -8,8 +8,8 @@ let
   drvs = [
     (writeShellScriptBin "gpgssh" ''
       set -x
-      lpath="$(${gnupg}/bin/gpgconf --list-dirs agent-socket)
-      rpath="$(${openssh}/bin/ssh "$1" gpgconf --list-dirs agent-socket)
+      lpath="$(${gnupg}/bin/gpgconf --list-dirs agent-socket)"
+      rpath="$(${openssh}/bin/ssh "$1" gpgconf --list-dirs agent-socket)"
       ssh \
           -o "RemoteForward $rpath:$lpath.extra" \
           -o "RemoteForward $rpath.ssh:$lpath.ssh" \
