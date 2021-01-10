@@ -63,7 +63,7 @@ in
 
         # terminals
         alacritty
-        cool-retro-term
+        #cool-retro-term
         kitty
 
         # matrix clients
@@ -100,6 +100,7 @@ in
 
         scrcpy
         imv
+	rkvm
 
         # yucky non-free
         discord

@@ -90,7 +90,7 @@
           ++ (with inputs.niche.packages.${system}; [ niche ])
           ++ (with pkgs_.nixpkgs.${system}; [
             nixUnstable
-            bash cacert curl git jq
+            bash cacert curl git jq parallel
             mercurial
             nettools openssh ripgrep rsync
             nix-build-uncached nix-prefetch-git

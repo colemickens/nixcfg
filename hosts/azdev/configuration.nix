@@ -7,6 +7,8 @@
     #../../mixins/reposup.nix
 
     ../../profiles/user.nix
+    ../../profiles/interactive.nix
+    ../../profiles/desktop-sway.nix
   ];
 
   config = {
@@ -25,10 +27,10 @@
       kernelPackages = pkgs.linuxPackages_latest;
     };
     nix = rec {
-      trustedUsers = [ "root" "@wheel" "azureuser" "cole" ];
-      allowedUsers = trustedUsers;
+      #trustedUsers = [ "root" "@wheel" "azureuser" "cole" ];
+      #allowedUsers = trustedUsers;
       nrBuildUsers = 128;
-      package = pkgs.nixUnstable;
+      #package = pkgs.nixUnstable;
     };
 
     environment.systemPackages = with pkgs; [
