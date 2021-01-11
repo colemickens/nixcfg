@@ -47,8 +47,8 @@ function update() {
   set +x; printf "\n\n%s\n" ":::::::: updating all inputs" &>/dev/stderr; set -x
   nix "${nixargs[@]}" flake update --recreate-lock-file --no-registries
 
-  set +x; printf "\n\n%s\n" ":::::::: updating our own packages" &>/dev/stderr; set -x
-  cd "${DIR}/pkgs" && ./update.sh;
+#  set +x; printf "\n\n%s\n" ":::::::: updating our own packages" &>/dev/stderr; set -x
+#  cd "${DIR}/pkgs" && ./update.sh;
 
   set +x; printf "\n\n%s\n" ":::::::: stashing nixcfg" &>/dev/stderr; set -x
   cd "${DIR}"; git add -A . && (git commit -m stash && git pull --rebase && git push origin HEAD -f || false) || true

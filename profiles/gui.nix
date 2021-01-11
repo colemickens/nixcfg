@@ -76,6 +76,8 @@ in
         cchat-gtk
         neochat
 
+        rkvm
+
         gnome3.nautilus
         gnome3.file-roller
         gnome3.gnome-tweaks
@@ -100,7 +102,6 @@ in
 
         scrcpy
         imv
-	rkvm
 
         # yucky non-free
         discord
