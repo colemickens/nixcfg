@@ -26,6 +26,12 @@ rustPlatform.buildRustPackage rec {
   # contain indentation which Cargo tries to interpret as doc tests.
   doCheck = false;
 
+  postInstall = ''
+    mv $out/bin/server $out/bin/rkvm-server
+    mv $out/bin/client $out/bin/rkvm-client
+    mv $out/bin/certificate-gen $out/bin/rkvm-certificate-gen
+  '';
+
   meta = with lib; {
     description = "Virtual KVM switch for Linux machines";
     homepage = "https://github.com/htrefil/rkvm";
