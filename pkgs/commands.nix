@@ -9,10 +9,10 @@ let
     (writeShellScriptBin "gpgssh" ''
       set -x
       lpath="$(${gnupg}/bin/gpgconf --list-dirs agent-socket)"
-      rpath="$(${openssh}/bin/ssh "$1" gpgconf --list-dirs agent-socket)"
+      rpath="$(${openssh}/bin/ssh "$1" -- "pkill -9 gpg-agent; systemctl --user stop gpg-agent.service; sleep 1; rm -f ''${rpath}*")"
+      ${openssh}/bin/ssh "$1" -- "pkill -9 gpg-agent; systemctl --user stop gpg-agent.service; sleep 1; rm -f ''${rpath}*"
       ssh \
           -o "RemoteForward $rpath:$lpath.extra" \
-          -o "RemoteForward $rpath.ssh:$lpath.ssh" \
           -o StreamLocalBindUnlink=yes \
           -A "$@"
     '')
