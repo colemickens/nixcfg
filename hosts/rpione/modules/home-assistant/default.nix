@@ -105,7 +105,7 @@ in {
             host = "192.168.1.119";
           }
         ];
-        #mobile_app = {}; # needs hass_nabucasa or w/e
+        mobile_app = {}; # needs hass_nabucasa or w/e
         # prometheus = { namespace = "hass"; };
         ssdp = { };
         recorder = { };

@@ -10,12 +10,12 @@
 
         # TODO: how can I inherit `system` here?
         plugins = with pkgs.vimPlugins; [
-          nvim-treesitter        # neovim 0.5
-          nvim-lspconfig         # neovim 0.5
-          completion-nvim        # neovim 0.5
-          completion-treesitter  # neovim 0.5
-          lsp-status-nvim        # neovim 0.5
-          lsp_extensions-nvim    # neovim 0.5
+          #nvim-treesitter        # neovim 0.5
+          #nvim-lspconfig         # neovim 0.5
+          #completion-nvim        # neovim 0.5
+          #completion-treesitter  # neovim 0.5
+          #lsp-status-nvim        # neovim 0.5
+          #lsp_extensions-nvim    # neovim 0.5
 
           #tabular  # format selection into tables?
           gv-vim
@@ -96,12 +96,12 @@
 
           autocmd FileType markdown setlocal conceallevel=0
 
-          packadd lsp-status-nvim
-          packadd nvim-lspconfig
-          packadd nvim-treesitter
-          packadd completion-treesitter
-          packadd completion-nvim
-          lua require'lspconfig'.rust_analyzer.setup({on_attach=require'completion'.on_attach})
+          "packadd lsp-status-nvim
+          "packadd nvim-lspconfig
+          "packadd nvim-treesitter
+          "packadd completion-treesitter
+          "packadd completion-nvim
+          "lua require'lspconfig'.rust_analyzer.setup({on_attach=require'completion'.on_attach})
 
           " vim-crates
           autocmd BufRead Cargo.toml call crates#toggle()
