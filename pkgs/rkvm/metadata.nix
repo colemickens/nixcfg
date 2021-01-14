@@ -1,7 +1,7 @@
 {
   repo_git = "https://github.com/htrefil/rkvm";
   branch = "master";
-  rev = "ec404c69b38f7feff5103f898612734ee8d7ee95";
-  sha256 = "sha256-YZXHbZ71EsSyAtTenQ4rgp1fJbatkk7BW4Cmr/RpyXc=";
-  cargoSha256 = "sha256-5uXHLC+f4idlBkOvWO3y1u24f/WSjv/DHfx1LaU8VGc=";
+  rev = "b670f14e43f7ebbfae230a0f1f705aa2f3e0cc0a";
+  sha256 = "sha256-2ntj5hDBuB9y8JWLsUcUrvEL+eOPDPh1uI4ufcCLtug=";
+  cargoSha256 = "sha256-xKiH+0CXSaStkpyh81vC3CyPvVhv64E3xT1dX60fJ5g=";
 }
