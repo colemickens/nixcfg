@@ -58,6 +58,9 @@
 
     hardware = { url = "github:nixos/nixos-hardware"; };
 
+    fenix = { url = "github:figsoda/fenix"; };
+    fenix.inputs.nixpkgs.follows = "nixpkgs";
+
     wfvm = { type = "git"; url = "https://git.m-labs.hk/M-Labs/wfvm"; flake = false;};
   };
 
@@ -149,7 +152,14 @@
           conduit = prev.callPackage ./pkgs/conduit {};
           drm-howto = prev.callPackage ./pkgs/drm-howto {};
           get-xoauth2-token = prev.callPackage ./pkgs/get-xoauth2-token {};
-          jj = prev.callPackage ./pkgs/jj {};
+          jj = prev.callPackage ./pkgs/jj {
+            rustPlatform = prev.makeRustPlatform {
+              #cargo = inputs.fenix.packages.${prev.system}.cargo;
+              cargo = inputs.fenix.x86_64-linux.default.toolchain.cargo;
+              rustc = inputs.fenix.x86_64-linux.default.toolchain.rustc;
+              #rustc = inputs.fenix.packages.${prev.system}.rustc;
+            };
+          };
           #mesa-git = prev.callPackage ./pkgs/mesa-git {};
           mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
           meli = prev.callPackage ./pkgs/meli {};

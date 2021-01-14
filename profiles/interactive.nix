@@ -62,7 +62,7 @@ in
         du-dust
         fd
         wireguard-tools
-        jj
+        #jj
         #grex # regex
 
         sops age cryptsetup
