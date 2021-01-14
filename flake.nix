@@ -153,12 +153,9 @@
           drm-howto = prev.callPackage ./pkgs/drm-howto {};
           get-xoauth2-token = prev.callPackage ./pkgs/get-xoauth2-token {};
           jj = prev.callPackage ./pkgs/jj {
-            rustPlatform = prev.makeRustPlatform {
-              #cargo = inputs.fenix.packages.${prev.system}.cargo;
-              cargo = inputs.fenix.x86_64-linux.default.toolchain.cargo;
-              rustc = inputs.fenix.x86_64-linux.default.toolchain.rustc;
-              #rustc = inputs.fenix.packages.${prev.system}.rustc;
-            };
+            rustPlatform = (prev.makeRustPlatform {
+              inherit (inputs.fenix.packages.${prev.system}.minimal) cargo rustc;
+            });
           };
           #mesa-git = prev.callPackage ./pkgs/mesa-git {};
           mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
