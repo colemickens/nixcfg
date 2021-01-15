@@ -37,8 +37,8 @@
     chromium  = { url = "github:colemickens/flake-chromium"; };
     chromium.inputs.nixpkgs.follows = "nixpkgs";
 
-    nixos-veloren = { url = "github:colemickens/nixos-veloren"; };
-    nixos-veloren.inputs.nixpkgs.follows = "nixpkgs";
+    #nixos-veloren = { url = "github:colemickens/nixos-veloren"; };
+    #nixos-veloren.inputs.nixpkgs.follows = "nixpkgs";
 
     mobile-nixos = { url = "github:colemickens/mobile-nixos/mobile-nixos-blueline"; };
     mobile-nixos.inputs.nixpkgs.follows = "nixpkgs";
