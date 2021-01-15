@@ -8,7 +8,6 @@
 
     ../../profiles/user.nix
     ../../profiles/interactive.nix
-    ../../profiles/desktop-sway.nix
   ];
 
   config = {
