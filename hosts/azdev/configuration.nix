@@ -5,6 +5,7 @@
     inputs.nixos-azure.nixosModules.azure-image
 
     #../../mixins/reposup.nix
+    ../../mixins/tailscale.nix
 
     ../../profiles/user.nix
     ../../profiles/interactive.nix
