@@ -83,6 +83,8 @@ in
         gnome3.gnome-tweaks
         spice-gtk
 
+        ddccontrol i2c-tools
+
         #webcamoid
         #nyxt
 

@@ -22,7 +22,7 @@ in
     #../../profiles/specialisations.nix
     ../../profiles/desktop-gnome.nix
 
-    ./hs.nix
+    # ./hs.nix
   ];
 
   config = {
