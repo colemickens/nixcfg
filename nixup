@@ -177,7 +177,7 @@ function activate() {
 }
 
 function rpione()     { activate ".#toplevels.rpione"      "colemickens@aarch64.nixos.community"         "cole@192.168.1.2";        }
-function rpitwoboot() { build ".#images.rpitwoboot"        "colemickens@aarch64.nixos.community"         "cole@localhost";          }
+function rpitwo()     { build ".#toplevels.rpitwo"         "colemickens@aarch64.nixos.community"         "cole@localhost";          }
 function rpitwoefi()  { build ".#images.newimg"            "colemickens@aarch64.nixos.community"         "cole@localhost";          }
 function pinebook() { activate ".#toplevels.pinebook" "colemickens@aarch64.nixos.community" "cole@192.168.1.155" none; }
 function pinebook_() { activate ".#toplevels.pinebook" "colemickens@aarch64.nixos.community" "cole@192.168.1.254" none; }

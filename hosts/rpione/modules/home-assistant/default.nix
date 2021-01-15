@@ -87,13 +87,17 @@ in {
             mode = "single";
             max_exceeded = "silent";
             variables = {
-              media_players = {
-                adfadsfasdf = "media_player.spotify_balloob";
-              };
+              # media_players = {
+              #    SCANNER_ID => "playback.device"
+              #   "ae114876cf32566742995fe050bdb55a" = "media_player.denon";
+              # };
               tags = {
-                "04-B1-C6-62-2F-64-80" = {
-                  media_content_id = "spotify:playlist:0OtWh3u6fZrBJTQtVBQWge";
-                  media_content_type = "playlist";
+                "A4-B2-75-D5" = {
+                  media_content_id = "https://open.spotify.com/track/6I9VzXrHxO9rA9A5euc8Ak";
+                  media_content_type = "track";
+                };
+                "7C-3C-26-17" = {
+                  # cascade trigger something else?
                 };
               };
             };
@@ -103,18 +107,17 @@ in {
             };
             condition = [
               "{{ trigger.event.data.tag_id in tags }}"
-              "{{ trigger.event.data.device_id in media_players }}"
+              # "{{ trigger.event.data.device_id in media_players }}"
             ];
             action = [
               {
-                service = {
-                  data = {
-                    entity_id = "{{ media_players[trigger.event.data.device_id] }}";
-                    media_content_id = "{{ tags[trigger.event.data.tag_id].media_content_id }}";
-                    media_content_type = "{{ tags[trigger.event.data.tag_id].media_content_type }}";
-                  };
+                service = "media_player.play_media";
+                data = {
+                  entity_id = "media_player.spotify_cole_mickens";
+                  #entity_id = "{{ media_players[trigger.event.data.device_id] }}";
+                  media_content_id = "{{ tags[trigger.event.data.tag_id].media_content_id }}";
+                  media_content_type = "{{ tags[trigger.event.data.tag_id].media_content_type }}";
                 };
-                delay = 2;
               }
             ];
           }
@@ -146,6 +149,10 @@ in {
         ];
         mobile_app = {}; # needs hass_nabucasa or w/e
         # prometheus = { namespace = "hass"; };
+        spotify = {
+          client_id = "564722c0ad94" + "4866b156c4da0184e062";
+          client_secret = "87f63124e3454" + "d369f971cfa90f903b0";
+        };
         ssdp = { };
         recorder = { };
         system_health = { };
