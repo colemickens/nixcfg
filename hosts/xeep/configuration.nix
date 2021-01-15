@@ -5,87 +5,17 @@ in
 {
   imports = [
     ../../mixins/common.nix
-
     ../../mixins/gfx-intel.nix
-
-    ../../mixins/chromecast.nix
-    ../../mixins/docker.nix
-    ../../mixins/libvirt.nix
     ../../mixins/sshd.nix
-    ../../mixins/v4l2loopback.nix
-    #../../mixins/loremipsum-media/rclone-cmd.nix
 
-    ../../profiles/sway.nix
+    ../../profiles/interactive.nix
 
     # xps 13 9370 specific:
-    ./power-management.nix
     inputs.hardware.nixosModules.dell-xps-13-9370
   ];
 
   config = {
-    # services = {
-    #   hydra = let
-
-    #   in {
-    #     enable = true;
-    #     hydraURL = "https://localhost:3000";
-    #     notificationSender = "hydra@cleo.cat";
-    #     #buildMachinesFile = [];
-    #     useSubstitutes = true;
-    #     package = pkgs.hydra-unstable;
-    #   };
-    # };
-    # services.cyclops = {
-    #   enable = true;
-    #   config = {
-    #     "default" = {
-    #       # I don't believe in global nix config
-    #       # period.
-    #       trustedSubstituters = [
-    #         "nixpkgs-wayland.cachix.org"
-    #         "nixos-wayland-apps.r10e.org"
-    #         # r10e.org
-    #         # r10e.services
-    #         # r10e.technology
-    #         # r10e.systems
-    #         # reproducible.*
-    #         #
-    #       ];
-    #       remote-builders = [
-    #         ""
-    #         ""
-    #       ];
-    #     }
-    #     "nixpkgs-wayland-x86_64-linux" = {
-    #       flake = "github:colemickens/nixpkgs-wayland#packages.x86_64-linux";
-    #     };
-    #     "nixpkgs-wayland-x86_64-linux" = {
-    #       flake = "github:colemickens/nixpkgs-wayland#packages.x86_64-linux";
-    #     };
-    #     "nixos-wayland-apps" = {
-    #       flake = "github:colemickens/nixcfg#hosts.xeep";
-    #       extraArgs = {
-    #         nextgen = true; # enable flakes + rename + new-cache
-    #       };
-    #       checkInterval = "60s"; # todo: common interval syntax?
-    #       updateInputs = true;
-    #     };
-    #   }
-    # };
-    nix = {
-      nixPath = [];
-      #trustedUsers = ["hydra"];
-    };
-    # </lol stability>
-
-    # <relocate>
-    # TODO
-    services.udev.packages = with pkgs; [ libsigrok ]; # doesn't work?
-    services.ratbagd.enable = true;
     environment.systemPackages = with pkgs; [
-      libratbag
-      piper
-      undervolt
       (
         pkgs.writeScriptBin "dell-fix-power" ''
           #!/usr/bin/env bash
@@ -95,16 +25,35 @@ in
         ''
       )
     ];
-    # </relocate>
 
-    system.stateVersion = "18.09"; # Did you read the comment?
+    system.stateVersion = "20.09";
+
     services.timesyncd.enable = true;
     documentation.nixos.enable = false;
 
-    fileSystems = {
-      "/" = { fsType = "zfs"; device = "rpool2/nixos"; };
-      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/nixos-boot"; };
-      "/home" = { fsType = "zfs"; device = "rpool2/home"; };
+    fileSystems."/" = {
+      device = "tank2/root";
+      fsType = "zfs";
+    };
+
+    fileSystems."/nix" = {
+      device = "tank2/nix";
+      fsType = "zfs";
+    };
+
+    fileSystems."/persist" = {
+      device = "tank2/persist";
+      fsType = "zfs";
+    };
+
+    fileSystems."/semivolatile" = {
+      device = "tank2/semivolatile";
+      fsType = "zfs";
+    };
+
+    fileSystems."/boot" = {
+      device = "/dev/disk/by-partlabel/newboot";
+      fsType = "vfat";
     };
     swapDevices = [];
 
@@ -114,7 +63,7 @@ in
 
     boot = {
       tmpOnTmpfs = true;
-      zfs.requestEncryptionCredentials = true;
+      #zfs.requestEncryptionCredentials = true;
       kernelPackages = pkgs.linuxPackages_latest;
       initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
       kernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
@@ -140,6 +89,14 @@ in
       ];
       supportedFilesystems = [ "btrfs" "zfs" ];
       initrd.supportedFilesystems = [ "btrfs" "zfs" ];
+      initrd.luks.devices = {
+        root = {
+          name = "root";
+          device = "/dev/disk/by-partlabel/newluks";
+          preLVM = true;
+          allowDiscards = true;
+        };
+      };
       loader = {
         timeout = 1;
         systemd-boot.enable = true;
@@ -159,13 +116,11 @@ in
       wireguard.enable = true;
     };
     services.resolved.enable = true;
-    programs.adb.enable = true;
 
     nix.maxJobs = 8;
     nixpkgs.config.allowUnfree = true;
+
     hardware = {
-      bluetooth.enable = true;
-      pulseaudio.package = pkgs.pulseaudioFull;
       enableRedistributableFirmware = true;
       cpu.intel.updateMicrocode = true;
     };

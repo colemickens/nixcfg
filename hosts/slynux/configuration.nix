@@ -19,7 +19,8 @@ in
     ../../mixins/v4l2loopback.nix
 
     ../../profiles/interactive.nix
-    ../../profiles/specialisations.nix
+    #../../profiles/specialisations.nix
+    ../../profiles/desktop-gnome.nix
 
     ./hs.nix
   ];

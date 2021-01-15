@@ -80,6 +80,45 @@ in {
           ];
         };
 
+        automation = [
+          {
+            id = "handle_tag_scan";
+            alias = "Handle Tag Scan";
+            mode = "single";
+            max_exceeded = "silent";
+            variables = {
+              media_players = {
+                adfadsfasdf = "media_player.spotify_balloob";
+              };
+              tags = {
+                "04-B1-C6-62-2F-64-80" = {
+                  media_content_id = "spotify:playlist:0OtWh3u6fZrBJTQtVBQWge";
+                  media_content_type = "playlist";
+                };
+              };
+            };
+            trigger = {
+              platform = "event";
+              event_type = "tag_scanned";
+            };
+            condition = [
+              "{{ trigger.event.data.tag_id in tags }}"
+              "{{ trigger.event.data.device_id in media_players }}"
+            ];
+            action = [
+              {
+                service = {
+                  data = {
+                    entity_id = "{{ media_players[trigger.event.data.device_id] }}";
+                    media_content_id = "{{ tags[trigger.event.data.tag_id].media_content_id }}";
+                    media_content_type = "{{ tags[trigger.event.data.tag_id].media_content_type }}";
+                  };
+                };
+                delay = 2;
+              }
+            ];
+          }
+        ];
         #cast = { media_player = { host = "192.168.1.200"; }; };
         #cloud = { };
         config = { };

@@ -181,6 +181,7 @@ function rpitwoboot() { build ".#images.rpitwoboot"        "colemickens@aarch64.
 function rpitwoefi()  { build ".#images.newimg"            "colemickens@aarch64.nixos.community"         "cole@localhost";          }
 function pinebook() { activate ".#toplevels.pinebook" "colemickens@aarch64.nixos.community" "cole@192.168.1.155" none; }
 function pinebook_() { activate ".#toplevels.pinebook" "colemickens@aarch64.nixos.community" "cole@192.168.1.254" none; }
+function xeep() { activate ".#toplevels.xeep" "cole@192.168.1.250" "cole@192.168.1.250" none; }
 function aarch64()    { build    ".#bundles.aarch64-linux" "colemickens@aarch64.nixos.community"         "cole@localhost";          }
 function x86()        { build    ".#bundles.x86_64-linux"  "cole@azdev2020vm.westus2.cloudapp.azure.com" "cole@localhost";          }
 
