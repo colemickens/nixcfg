@@ -76,7 +76,7 @@ in
 
         ffmpeg linuxPackages.cpupower
         sshfs cifs-utils ms-sys ntfs3g
-        imgurbash2 spotify-tui
+        imgurbash2
 
         gdb lldb file gptfdisk
         parted psmisc wipe
