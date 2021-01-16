@@ -8,7 +8,7 @@
         viAlias = true;
         vimAlias = true;
 
-        package = inputs.neovim-nightly."${pkgs.system}".defaultPackage;
+        package = inputs.neovim-nightly.defaultPackage."${pkgs.system}"; #.defaultPackage;
 
         # TODO: how can I inherit `system` here?
         plugins = with pkgs.vimPlugins; [
