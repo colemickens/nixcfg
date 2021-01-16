@@ -19,7 +19,7 @@ in
     ./modules/postgres.nix
 
     ../../mixins/avahi-publish.nix
-    ../../mixins/docker.nix
+    #../../mixins/docker.nix
     #../../mixins/plex-mpv.nix
     ../../mixins/sshd.nix
     ../../mixins/srht-cronjobs.nix
