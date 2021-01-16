@@ -3,6 +3,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 set -euo pipefail
 set -x
 
+function __() { printf "\n\n%s\n" "${1}" >/dev/stderr; }
 unset NIX_PATH
 cd "${DIR}"
 
@@ -38,22 +39,22 @@ evalargs=()
 
 function update() {
   set -euo pipefail
-  set +x; printf "\n\n%s\n" ":::::::: updating all (local, override) inputs" &>/dev/stderr; set -x
+
+  __ "updating all (local, override) inputs"
   printf '%s\n' "${srcdirs[@]}" | \
     parallel --jobs $(nproc) --halt soon,fail=1 --tag --progress -- \
       "[[ ! -d "{.}" ]] || (git -C '{.}' pull --rebase && git -C '{.}' push origin HEAD -f)"
 
-  cd "${DIR}"
-  set +x; printf "\n\n%s\n" ":::::::: updating all inputs" &>/dev/stderr; set -x
-  nix "${nixargs[@]}" flake update --recreate-lock-file --no-registries
+  __ "updating all inputs"
+  cd "${DIR}"; nix "${nixargs[@]}" flake update --recreate-lock-file --no-registries
 
-  set +x; printf "\n\n%s\n" ":::::::: updating our own packages" &>/dev/stderr; set -x
-  cd "${DIR}/pkgs" && ./update.sh;
+  __ "updating our own packages"
+  cd "${DIR}/pkgs" && ./update.sh
 
-  set +x; printf "\n\n%s\n" ":::::::: stashing nixcfg" &>/dev/stderr; set -x
+  __ "stashing nixcfg"
   cd "${DIR}"; git add -A . && (git commit -m stash && git pull --rebase && git push origin HEAD -f || false) || true
 
-  cd "${DIR}";
+  cd "${DIR}"
 }
 
 # this includes the actual `cachix push` command, just send it a path
@@ -78,83 +79,39 @@ function build() {
   thing="${1}"; shift
   remote="${1}"; shift
   target="${1:-"${USER}@localhost"}"; shift
+  set +x
 
-  # LOCAL: eval the out to be able to check for substitute
-  set +x; printf "\n\n%s\n" ":::::::: eval ${thing}" &>/dev/stderr; set -x
+  __ "LOCAL: evaluate drv ${thing}"
   drv="$(set -euo pipefail; nix "${nixargs[@]}" eval "${evalargs[@]}" --raw "${thing}.drvPath" | tr -d '"')"
   out="$(set -euo pipefail; nix "${nixargs[@]}" path-info "${drv}" --json | jq -r '.[0].path')"
 
-  # TARGET: short circuit if we can realize $out on $target
-  set +x; printf "\n\n%s\n" ":::::::: TARGET: short circuit if we can realize $out on $target" &>/dev/stderr; set -x;
-  if ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}"; then
+  __ "TARGET: try to realize ${out} on ${target}"
+  if ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}" &>/dev/null; then
     echo -e "${out}"; return 0
   fi
 
-  # LOCAL: copy drvs to tmp
+  __ "LOCAL: rsync ${drv} to ${remote}"
   local t="/tmp/tmpnixpath"
   nix "${nixargs[@]}" copy --to "file://${t}" --derivation "${drv}"
-
-  # LOCAL: rsync $t to $remote
-  set +x; printf "\n\n%s\n" ":::::::: LOCAL: rsync $t to $remote" &>/dev/stderr
   rsync -ah "${t}/" "${remote}:${t}"
 
-  # REMOTE: copy drvs to store
-  set +x; printf "\n\n%s\n" ":::::::: REMOTE: copy $drv => /nix/store" &>/dev/stderr
+  __ "REMOTE: copy ${drv} => /nix/store"
   ssh_nixUnstable_shell "${remote}" nix "${nixargs[@]}" copy --from file://${t} --derivation ${drv}
 
-  # REMOTE: build $drv => $out
-  set +x; printf "\n\n%s\n" ":::::::: REMOTE: build $drv => $out" &>/dev/stderr; set -x
-####
+  __ "REMOTE: build ${drv} => ${out}"
   ssh_nixUnstable_shell "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --keep-going "${drv}"
-####
   #ssh_niche_shell "${remote}" niche build -u "${niche_cache}" -- -L "${nixargs[@]}"  "${buildargs[@]}" --keep-going "${drv}"
-####
 
-  if [[ ! -z "${cachixkey:-""}" ]]; then
-    # REMOTE: push $out to cachix
-    set +x; printf "\n\n%s\n" ":::::::: REMOTE: push $out to cachix" &>/dev/stderr
+  __ "REMOTE: push ${out} to cachix"
+  ssh_cachix_push "${remote}" "${out}"
 
-# this includes the actual `cachix push` command, just send it a path
-    ssh_cachix_push "${remote}" "${out}"
-  fi
-
-  # if we didn't list a target, we're just pushing the build up, we can be done
+  __ "LOCAL: exit if no target for build"
   if [[ -z "${target:-""}" ]]; then
-  # this just wraps the shell, give it the full command: ssh_nixUnstable_shell nix build ...
     echo -e "${out}"; return 0
   fi
 
-  if [[ ! -z "${cachixkey:-""}" ]]; then
-  # this just wraps the shell, give it the full command: ssh_niche_shell niche build ...
-    # TARGET: copy $out from cachix (on $target)
-    set +x; printf "\n\n%s\n" ":::::::: TARGET: copy $out from cachix (on $target)" &>/dev/stderr
-    if ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}"; then
-      echo -e "${out}"; return 0
-    fi
-  else
-    # TARGET: copy $out from $remote (on $target)
-    set +x; printf "\n\n%s\n" ":::::::: TARGET: copy $out from $remote (on $target)" &>/dev/stderr
-    if ssh -A "${target}" "$(printf '\"%s\" ' nix copy --from "ssh://${remote}" "${out}")"; then
-      echo -e "${out}"; return 0
-    fi
-  fi
-
-  # if we still can't realize on device,
-  # see if we can realize here and then push to device
-  # (this applies for blueline where we cant pull but can be pushed to)
-  if [[ ! -z "${cachixkey:-""}" ]]; then
-    # LOCAL: copy $out from cachix
-    set +x; printf "\n\n%s\n" ":::::::: LOCAL: copy $out from cachix" &>/dev/stderr
-    nix "${nixargs[@]}" build "${buildargs[@]}" "${thing}" -j0
-  else
-    # LOCAL: copy $out from $remote
-    set +x; printf "\n\n%s\n" ":::::::: LOCAL: copy $out from $remote" &>/dev/stderr
-    nix "${nixargs[@]}" copy --from "ssh://${remote}" "${out}"
-  fi
-
-  # LOCAL: copy $out to $target
-  set +x; printf "\n\n%s\n" ":::::::: LOCAL: copy $out to $target" &>/dev/stderr
-  nix "${nixargs[@]}" copy --to "ssh://${target}" "${out}"
+  __ "TARGET: copy $out from cachix (on $target)"
+  ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}"
 
   echo -e "${out}"; return 0
 }
