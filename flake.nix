@@ -61,6 +61,11 @@
     fenix = { url = "github:figsoda/fenix"; };
     fenix.inputs.nixpkgs.follows = "nixpkgs";
 
+    neovim-nightly = { url = "github:nix-community/neovim-nightly-overlay"; };
+    neovim-nightly.inputs.nixpkgs.follows = "nixpkgs";
+
+    rust-overlay.url = "github:oxalica/rust-overlay";
+
     wfvm = { type = "git"; url = "https://git.m-labs.hk/M-Labs/wfvm"; flake = false;};
   };
 
@@ -161,9 +166,9 @@
           #mesa-git = prev.callPackage ./pkgs/mesa-git {};
           mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
           meli = prev.callPackage ./pkgs/meli {};
-          neovim-unwrapped = prev.callPackage ./pkgs/neovim {
-            neovim-unwrapped = prev.neovim-unwrapped;
-          };
+    #     #neovim-unwrapped = prev.callPackage ./pkgs/neovim {
+    #     #  neovim-unwrapped = prev.neovim-unwrapped;
+    #     #};
           #niche = prev.callPackage ./pkgs/niche {};
           obs-v4l2sink = prev.libsForQt5.callPackage ./pkgs/obs-v4l2sink {};
           passrs = prev.callPackage ./pkgs/passrs {};
