@@ -8,7 +8,7 @@ let
   drvs = [
     (writeShellScriptBin "gpgssh" ''
       #!/nix/store/zcl19h06322c3kss6bvf05w2pxg4kfll-bash-4.4-p23/bin/bash
-      set -x
+      [[ -z "''${DEBUG_GPGSSH}" ]] || set -x
       set -euo pipefail
 
       lpath="$(${gnupg}/bin/gpgconf --list-dirs agent-socket)"
@@ -17,7 +17,7 @@ let
         systemctl --user stop gpg-agent.service; \
         pkill -9 gpg-agent; \
         gpgconf --list-dirs agent-socket \
-          | xargs -d $'\n' sh -c 'for arg do rm -i "\$arg"; echo "\$arg"; done' _")"
+          | xargs -d $'\n' sh -c 'for arg do rm -f "\$arg"; echo "\$arg"; done' _")"
 
       ssh \
           -o "RemoteForward $rpath:$lpath.extra" \
