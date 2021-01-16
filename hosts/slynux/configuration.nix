@@ -21,7 +21,7 @@ in
 
     ../../profiles/interactive.nix
     #../../profiles/specialisations.nix
-    ../../profiles/desktop-gnome.nix
+    ../../profiles/desktop-sway.nix
 
     # ./hs.nix
   ];
