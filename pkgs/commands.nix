@@ -11,8 +11,8 @@ let
       set -x
       set -euo pipefail
 
-      lpath="$(${pkgs.gnupg}/bin/gpgconf --list-dirs agent-socket)"
-      rpath="$(${pkgs.openssh}/bin/ssh "$1" -- "\
+      lpath="$(${gnupg}/bin/gpgconf --list-dirs agent-socket)"
+      rpath="$(${openssh}/bin/ssh "$1" -- "\
         pkill -9 gpg-agent; \
         systemctl --user stop gpg-agent.service; \
         pkill -9 gpg-agent; \
