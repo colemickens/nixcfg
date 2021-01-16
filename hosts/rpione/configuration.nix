@@ -23,6 +23,7 @@ in
     #../../mixins/plex-mpv.nix
     ../../mixins/sshd.nix
     ../../mixins/srht-cronjobs.nix
+    ../../mixins/tailscale.nix
     ../../mixins/unifi.nix
 
     #../../mixins/loremipsum-media/rclone-mnt.nix

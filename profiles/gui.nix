@@ -83,8 +83,6 @@ in
         gnome3.gnome-tweaks
         spice-gtk
 
-        ddccontrol i2c-tools
-
         #webcamoid
         #nyxt
 
@@ -101,6 +99,8 @@ in
         inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox
         inputs.nixos-unstable.legacyPackages.${pkgs.system}.chromium
         torbrowserPkg
+
+        ddccontrol i2c-tools
 
         scrcpy
         imv

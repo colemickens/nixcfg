@@ -176,31 +176,25 @@ function activate() {
   fi
 }
 
-function rpione()     { activate ".#toplevels.rpione"      "colemickens@aarch64.nixos.community"         "cole@192.168.1.2";        }
-function rpitwo()     { build ".#toplevels.rpitwo"         "colemickens@aarch64.nixos.community"         "cole@localhost";          }
-function rpitwoefi()  { build ".#images.newimg"            "colemickens@aarch64.nixos.community"         "cole@localhost";          }
-function pinebook() { activate ".#toplevels.pinebook" "colemickens@aarch64.nixos.community" "cole@192.168.1.155" none; }
-function pinebook_() { activate ".#toplevels.pinebook" "colemickens@aarch64.nixos.community" "cole@192.168.1.254" none; }
-function xeep() { activate ".#toplevels.xeep" "cole@192.168.1.250" "cole@192.168.1.250" none; }
-function aarch64()    { build    ".#bundles.aarch64-linux" "colemickens@aarch64.nixos.community"         "cole@localhost";          }
-function x86()        { build    ".#bundles.x86_64-linux"  "cole@azdev2020vm.westus2.cloudapp.azure.com" "cole@localhost";          }
+AARCH64="colemickens@aarch64.nixos.community"
+AZDEV="cole@100.68.232.46"
+PINEBOOK="cole@100.89.55.100"
+RPIONE="cole@100.111.5.113"
+SLYNUX="cole@100.79.123.116"
+XEEP="cole@100.72.11.62"
+# praise be to tailscale
 
-##
-## note, there's a problem with specialisations because
-## configurationName isn't proof that it was a specialisation
+function a64() { build "$1" "${AARCH64}" "${AARCH64}"; }
+function nix() { command nix "${nixargs[@]}" "${@}"; }
 
-function a64() { build "$1" "colemickens@aarch64.nixos.community" "colemickens@aarch64.nixos.community"; }
+function azdev()    { activate ".#toplevels.azdev"    "${AZDEV}"   "${AZDEV}";    }
+function pinebook() { activate ".#toplevels.pinebook" "${AARCH64}" "${PINEBOOK}"; }
+function rpione()   { activate ".#toplevels.rpione"   "${AARCH64}" "${RPIONE}";   }
+function slynux()   { activate ".#toplevels.slynux"   "${AZDEV}"   "${SLYNUX}";   }
+function xeep()     { activate ".#toplevels.xeep"     "${AZDEV}"   "${XEEP}";     }
 
-function niche() {
-  # this is just to test niche out the way this wrapper expects to be able to call it
-  ssh_niche_shell 'cole@localhost' \
-    niche build -u "${niche_cache}" -- 'github:colemickens/flake-impure' --impure
-}
-
-function nix() {
-  # allows to call nix the same way nixup does internall
-  command nix "${nixargs[@]}" "${@}"
-}
+#function aarch64()    { build    ".#bundles.aarch64-linux" "${AARCH64}"         "cole@localhost";          }
+#function x86()        { build    ".#bundles.x86_64-linux"  "cole@azdev2020vm.westus2.cloudapp.azure.com" "cole@localhost";          }
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 

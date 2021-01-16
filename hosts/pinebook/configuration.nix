@@ -8,6 +8,7 @@ in
 
     ../../mixins/chromecast.nix
     ../../mixins/sshd.nix
+    ../../mixins/tailscale.nix
     ../../mixins/v4l2loopback.nix
     ../../mixins/wlsunset.nix
 
