@@ -7,9 +7,18 @@ let
   name = "cole-custom-commands";
   drvs = [
     (writeShellScriptBin "gpgssh" ''
+      #!/nix/store/zcl19h06322c3kss6bvf05w2pxg4kfll-bash-4.4-p23/bin/bash
       set -x
-      lpath="$(${gnupg}/bin/gpgconf --list-dirs agent-socket)"
-      rpath="$(${openssh}/bin/ssh "$1" -- "pkill -9 gpg-agent; systemctl --user stop gpg-agent.service; sleep 1; rm -f ''${rpath}*; gpgconf --list-dirs agent-socket")"
+      set -euo pipefail
+
+      lpath="$(${pkgs.gnupg}/bin/gpgconf --list-dirs agent-socket)"
+      rpath="$(${pkgs.openssh}/bin/ssh "$1" -- "\
+        pkill -9 gpg-agent; \
+        systemctl --user stop gpg-agent.service; \
+        pkill -9 gpg-agent; \
+        gpgconf --list-dirs agent-socket \
+          | xargs -d $'\n' sh -c 'for arg do rm -i "\$arg"; echo "\$arg"; done' _")"
+
       ssh \
           -o "RemoteForward $rpath:$lpath.extra" \
           -o StreamLocalBindUnlink=yes \

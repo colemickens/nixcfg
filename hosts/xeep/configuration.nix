@@ -5,6 +5,7 @@ in
 {
   imports = [
     ../../mixins/common.nix
+    ../../mixins/docker.nix
     ../../mixins/gfx-intel.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix

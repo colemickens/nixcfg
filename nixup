@@ -111,7 +111,9 @@ function build() {
   fi
 
   __ "TARGET: copy $out from cachix (on $target)"
+  set -x
   ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}"
+  set +x
 
   echo -e "${out}"; return 0
 }
@@ -134,11 +136,11 @@ function activate() {
 }
 
 AARCH64="colemickens@aarch64.nixos.community"
-AZDEV="cole@100.68.232.46"
-PINEBOOK="cole@100.89.55.100"
-RPIONE="cole@100.111.5.113"
-SLYNUX="cole@100.79.123.116"
-XEEP="cole@100.72.11.62"
+AZDEV="cole@100.68.232.46";     AZDEV="azdev.ts.r10e.tech"
+PINEBOOK="cole@100.89.55.100";  PINEBOOK="pinebook.ts.r10e.tech"
+RPIONE="cole@100.111.5.113";    RPIONE="cole@rpione.ts.r10e.tech"
+SLYNUX="cole@100.79.123.116";   SLYNUX="cole@slynux.ts.r10e.tech"
+XEEP="cole@100.72.11.62";       XEEP="cole@xeep.ts.r10e.tech"
 # praise be to tailscale
 
 function a64() { build "$1" "${AARCH64}" "${AARCH64}"; }
