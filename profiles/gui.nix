@@ -46,7 +46,8 @@ in
       services = {
         udiskie.enable = true;
       };
-      home.packages = with pkgs; colePackages.customGuiCommands ++ [
+      home.packages = with pkgs; [
+        colePackages.customGuiCommands
         # misc
         evince
         gimp

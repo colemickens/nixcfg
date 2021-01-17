@@ -24,16 +24,10 @@ buildargs=(
 )
 
 srcdirs=(
-  "$HOME/code/nixpkgs/master"
-  "$HOME/code/nixpkgs/cmpkgs"
-  "$HOME/code/home-manager/cmhm"
-  "$HOME/code/nixpkgs-wayland"
-  "$HOME/code/flake-firefox-nightly"
-  "$HOME/code/mobile-nixos"
-  #"$HOME/code/nixos-veloren"
-  #"$HOME/code/nixos-azure"
-  "$HOME/code/sops-nix"
-  "$HOME/code/wip-pinebook-pro"
+  "nixpkgs/master"  "nixpkgs/cmpkgs"  "home-manager/cmhm"
+  "nixpkgs-wayland" "flake-firefox-nightly"
+  "mobile-nixos"    "sops-nix"        "wip-pinebook-pro"
+  "nixos-veloren"   "nixos-azure"
 )
 evalargs=()
 
@@ -43,7 +37,7 @@ function update() {
   __ "updating all (local, override) inputs"
   printf '%s\n' "${srcdirs[@]}" | \
     parallel --jobs $(nproc) --halt soon,fail=1 --tag --progress -- \
-      "[[ ! -d "{.}" ]] || (git -C '{.}' pull --rebase && git -C '{.}' push origin HEAD -f)"
+      "[[ ! -d "{.}" ]] || (git -C '$HOME/code/{.}' pull --rebase && git -C '{.}' push origin HEAD -f)"
 
   __ "updating all inputs"
   cd "${DIR}"; nix "${nixargs[@]}" flake update --recreate-lock-file --no-registries
@@ -93,7 +87,7 @@ function build() {
   __ "LOCAL: rsync ${drv} to ${remote}"
   local t="/tmp/tmpnixpath"
   nix "${nixargs[@]}" copy --to "file://${t}" --derivation "${drv}"
-  rsync -ah "${t}/" "${remote}:${t}"
+  rsync -ah --info=progress2 "${t}/" "${remote}:${t}"
 
   __ "REMOTE: copy ${drv} => /nix/store"
   ssh_nixUnstable_shell "${remote}" nix "${nixargs[@]}" copy --from file://${t} --derivation ${drv}
@@ -113,7 +107,6 @@ function build() {
   __ "TARGET: copy $out from cachix (on $target)"
   set -x
   ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}"
-  set +x
 
   echo -e "${out}"; return 0
 }
@@ -152,8 +145,8 @@ function rpione()   { activate ".#toplevels.rpione"   "${AARCH64}" "${RPIONE}"; 
 function slynux()   { activate ".#toplevels.slynux"   "${AZDEV}"   "${SLYNUX}";   }
 function xeep()     { activate ".#toplevels.xeep"     "${AZDEV}"   "${XEEP}";     }
 
-#function aarch64()    { build    ".#bundles.aarch64-linux" "${AARCH64}"         "cole@localhost";          }
-#function x86()        { build    ".#bundles.x86_64-linux"  "cole@azdev2020vm.westus2.cloudapp.azure.com" "cole@localhost";          }
+function aarch64()    { build  ".#bundles.aarch64-linux" "${AARCH64}"  "cole@localhost"; }
+function x86()        { build  ".#bundles.x86_64-linux"  "${AZDEV}"    "cole@localhost"; }
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 

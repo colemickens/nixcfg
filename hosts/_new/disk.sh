@@ -38,8 +38,7 @@ function disk() {
   sudo zpool create -O mountpoint=none -R "/mnt" "${POOL}" "/dev/mapper/${NIXOSLABEL}"
   sudo zfs create -o mountpoint=legacy -o compression=lz4 -o xattr=sa -o acltype=posixacl -o atime=off "${POOL}/nix"
   sudo zfs create -o mountpoint=legacy -o compression=lz4 -o xattr=sa -o acltype=posixacl "${POOL}/root"
-  sudo zfs create -o mountpoint=legacy -o compression=lz4 -o xattr=sa -o acltype=posixacl "${POOL}/persist"
-  sudo zfs create -o mountpoint=legacy -o compression=lz4 -o xattr=sa -o acltype=posixacl "${POOL}/semivolatile"
+  sudo zfs create -o mountpoint=legacy -o compression=lz4 -o xattr=sa -o acltype=posixacl "${POOL}/home"
   sudo zpool set autotrim=on "${POOL}" # enable autotrim
 }
 

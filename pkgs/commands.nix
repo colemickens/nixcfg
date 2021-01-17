@@ -1,5 +1,8 @@
 { gnupg, openssh, efibootmgr
-, writeShellScriptBin, linkFarmFromDrvs }:
+, writeShellScriptBin
+, linkFarmFromDrvs
+, symlinkJoin
+}:
 
 let
   efibootmgr_ = "${efibootmgr}/bin/efibootmgr";
@@ -61,5 +64,5 @@ let
     '')
   ];
 in
-  #linkFarmFromDrvs name drvs
-  drvs
+  (symlinkJoin { name="commands"; paths=drvs; })
+

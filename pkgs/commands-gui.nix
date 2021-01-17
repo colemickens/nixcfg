@@ -1,6 +1,7 @@
-{ #wlfreerdp
-#,
-writeShellScriptBin, linkFarmFromDrvs }:
+{ writeShellScriptBin
+, freerdp
+, symlinkJoin
+}:
 
 let
   name = "cole-custom-commands-gui";
@@ -11,8 +12,7 @@ let
 
       RDPHOST="''${RDPHOST:-"192.168.1.11"}"
 
-      #{wlfreerdp}/bin/
-      wlfreerdp \
+      ${freerdp}/bin/wlfreerdp
         /v:"''${RDPHOST}" \
         /u:"''${RDPUSER}" \
         /p:"''${RDPPASS}" \
@@ -20,5 +20,5 @@ let
     '')
   ];
 in
-  #linkFarmFromDrvs name drvs
-  drvs
+  (symlinkJoin { name="commands-gui"; paths=drvs; })
+

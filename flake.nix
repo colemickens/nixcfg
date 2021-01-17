@@ -90,6 +90,7 @@
         };
     in rec {
       devShell = forAllSystems (system:
+        #pkgs_.nixpkgs.${system}.stdenv.mkDerivation {
         pkgs_.nixpkgs.${system}.mkShell {
           name = "nixcfg-devshell";
           nativeBuildInputs = []
@@ -98,28 +99,11 @@
           ++ (with inputs.niche.packages.${system}; [ niche ])
           ++ (with pkgs_.nixpkgs.${system}; [
             nixUnstable
-            bash cacert curl git jq parallel
-            mercurial
+            bash cacert curl git jq parallel mercurial
             nettools openssh ripgrep rsync
             nix-build-uncached nix-prefetch-git
-            packet-cli
-            sops oil awsweeper
-            (writeScriptBin "awsweeper-tag" ''
-              #!/usr/bin/env bash
-              set -x
-              t=$(mktemp)
-              cat <<EOF >''${t}
-              aws_instance: [ { "tags": { "project": "''${1}" } } ]
-              aws_internet_gateway: [ { "tags": { "project": "''${1}" } } ]
-              aws_route_table: [ { "tags": { "project": "''${1}" } } ]
-              aws_security_group: [ { "tags": { "project": "''${1}" } } ]
-              aws_subnet: [ { "tags": { "project": "''${1}" } } ]
-              aws_vpc: [ { "tags": { "project": "''${1}" } } ]
-              EOF
-              ${awsweeper}/bin/awsweeper --region "us-west-2" ''${t}
-            '')
-          ])
-          ;
+            sops awsweeper packet-cli
+          ]);
         }
       );
 
@@ -133,15 +117,16 @@
           accept = pkg: pkg.meta.platforms or [ "x86_64-linux" "aarch64-linux" ];
           filter = (name: pkg: builtins.elem "${system}" (accept pkg));
         in {
-          pkgs = import inputs.nixpkgs {
-            system = system;
-            config = { allowUnfree = true; };
-            overlays = [
-              inputs.self.overlay
-              inputs.nixpkgs-wayland.overlay
-            ];
-          };
-        } // (pkgs.lib.filterAttrs filter pkgs.colePackages)
+        #  pkgs = import inputs.nixpkgs {
+        #    system = system;
+        #    config = { allowUnfree = true; };
+        #    overlays = [
+        #      inputs.self.overlay
+        #      inputs.nixpkgs-wayland.overlay
+        #    ];
+        #  };
+        }
+        // (pkgs.lib.filterAttrs filter pkgs.colePackages)
       );
 
       # TODO: eventually maybe we should only compose nixpkgs here, and then make a unified,
@@ -190,9 +175,6 @@
       nixosConfigurations = {
         azdev      = mkSystem "x86_64-linux"  inputs.nixpkgs "azdev";
         rpione     = mkSystem "aarch64-linux" inputs.nixpkgs "rpione";
-        rpitwo     = mkSystem "aarch64-linux" inputs.nixpkgs "rpitwo";
-        rpitwoefi  = mkSystem "aarch64-linux" inputs.nixpkgs "rpitwoefi";
-        rpitwonet  = mkSystem "aarch64-linux" inputs.nixpkgs "rpitwonet";
         slynux     = mkSystem "x86_64-linux"  inputs.nixpkgs "slynux";
         xeep       = mkSystem "x86_64-linux"  inputs.nixpkgs "xeep";
         pinephone  = mkSystem "aarch64-linux" inputs.nixpkgs "pinephone";
@@ -206,19 +188,30 @@
         (builtins.attrNames inputs.self.outputs.nixosConfigurations)
         (attr: nixosConfigurations.${attr}.config.system.build.toplevel);
 
-      bundles = rec {
-        x86_64-linux = pkgs_.nixpkgs.x86_64-linux.linkFarmFromDrvs "x86_64-linux-outputs" ([
+      bundles = let
+          x86pkgs_ = (builtins.attrValues inputs.self.outputs.packages.x86_64-linux);
+          #x86pkgs = builtins.trace x86pkgs_ x86pkgs_;
+          x86pkgs = x86pkgs_;
+        in rec {
+        x86_64-linux = pkgs_.nixpkgs.x86_64-linux.linkFarmFromDrvs "x86_64-linux-outputs" (
+          [
             # regular toplevels/hosts/vms
             inputs.self.nixosConfigurations.azdev.config.system.build.toplevel
             inputs.self.nixosConfigurations.slynux.config.system.build.toplevel
+            inputs.self.nixosConfigurations.xeep.config.system.build.toplevel
             # relevant devShells
-            inputs.self.devShell.x86_64-linux
-        ] ++ builtins.attrValues inputs.self.outputs.packages.x86_64-linux);
-        aarch64-linux = pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "aarch64-linux-outputs" ([
-          inputs.self.nixosConfigurations.rpione.config.system.build.toplevel
-          inputs.self.nixosConfigurations.pinebook.config.system.build.toplevel
-          #shells
-        ] ++ builtins.attrValues inputs.self.outputs.packages.aarch64-linux);
+            #inputs.self.devShell.x86_64-linux
+          ] ++ (builtins.attrValues inputs.self.outputs.packages.x86_64-linux)
+        );
+        aarch64-linux = pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "aarch64-linux-outputs" (
+          [
+            inputs.self.nixosConfigurations.rpione.config.system.build.toplevel
+            inputs.self.nixosConfigurations.pinebook.config.system.build.toplevel
+            #shells
+            #inputs.self.devShell.aarch64-linux
+          ]
+          ++ (builtins.attrValues inputs.self.outputs.packages.aarch64-linux)
+        );
       };
       images = {
         # azure vhd for azdev machine (a custom Azure image using `nixos-azure` module)

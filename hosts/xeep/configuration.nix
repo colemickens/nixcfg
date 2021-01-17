@@ -39,19 +39,19 @@ in
     };
 
     fileSystems."/nix" = {
-      device = "tank2/nix";
+      device = "tank2/nix2";
       fsType = "zfs";
     };
 
-    fileSystems."/persist" = {
-      device = "tank2/persist";
-      fsType = "zfs";
-    };
+    # fileSystems."/persist" = {
+    #   device = "tank2/persist";
+    #   fsType = "zfs";
+    # };
 
-    fileSystems."/semivolatile" = {
-      device = "tank2/semivolatile";
-      fsType = "zfs";
-    };
+    # fileSystems."/semivolatile" = {
+    #   device = "tank2/semivolatile";
+    #   fsType = "zfs";
+    # };
 
     fileSystems."/boot" = {
       device = "/dev/disk/by-partlabel/newboot";
