@@ -5,7 +5,6 @@ in
 {
   imports = [
     ../../mixins/common.nix
-    ../../mixins/docker.nix
     ../../mixins/gfx-intel.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
@@ -42,16 +41,6 @@ in
       device = "tank2/nix2";
       fsType = "zfs";
     };
-
-    # fileSystems."/persist" = {
-    #   device = "tank2/persist";
-    #   fsType = "zfs";
-    # };
-
-    # fileSystems."/semivolatile" = {
-    #   device = "tank2/semivolatile";
-    #   fsType = "zfs";
-    # };
 
     fileSystems."/boot" = {
       device = "/dev/disk/by-partlabel/newboot";
@@ -97,6 +86,7 @@ in
           device = "/dev/disk/by-partlabel/newluks";
           preLVM = true;
           allowDiscards = true;
+          fallbackToPassword = true;
         };
       };
       loader = {
