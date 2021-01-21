@@ -27,7 +27,15 @@
             port = 22;
           };
           "*" = {
-            #identityAgent = "/run/user/1000/gnupg/S.gpg-agent.ssh";
+            # look, idk, I think doing this myself by hand will be best:
+            #  if /run/user/1000/sshagent is missing, or a bad path,
+            #    then try to set it to S.gpg-agent.ssh
+            #    or SSH_AUTH_SOCK if it's something provided via ssh-login
+            #  -- that way, we control the sshagent path at all times
+            #    and just like we can forward or gpg-fix to get our gpg sock,
+            #    now we will control our own ssh sock too (makes tmux easier too)
+            identityAgent = "/run/user/1000/sshagent";
+            serverAliveInterval = 11;
             forwardAgent = true;
           };
         };

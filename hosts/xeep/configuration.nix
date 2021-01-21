@@ -10,6 +10,7 @@ in
     ../../mixins/tailscale.nix
 
     ../../profiles/interactive.nix
+    ../../profiles/desktop-sway.nix
 
     # xps 13 9370 specific:
     inputs.hardware.nixosModules.dell-xps-13-9370
@@ -53,7 +54,7 @@ in
     console.packages = [ pkgs.terminus_font ];
 
     boot = {
-      tmpOnTmpfs = true;
+      tmpOnTmpfs = false;
       #zfs.requestEncryptionCredentials = true;
       kernelPackages = pkgs.linuxPackages_latest;
       initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
@@ -89,6 +90,11 @@ in
           fallbackToPassword = true;
         };
       };
+      # initrd.network.enable = true;
+      # initrd.network.ssh = {
+      #   enable = true;
+      #   authorizedKeys = import ../../data/sshkeys.nix;
+      # };
       loader = {
         timeout = 1;
         systemd-boot.enable = true;
@@ -98,14 +104,10 @@ in
     networking = {
       hostId = "ef66d560";
       hostName = hostname;
-      firewall = {
-        enable = true;
-        allowedTCPPorts = [ 5900 22 ];
-        checkReversePath = "loose";
-      };
-      networkmanager.enable = true;
-      networkmanager.wifi.backend = "iwd";
-      wireguard.enable = true;
+      firewall.enable = true;
+      firewall.allowedTCPPorts = [ 22 ];
+      networkmanager.enable = false;
+      wireless.iwd.enable = true;
     };
     services.resolved.enable = true;
 

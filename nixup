@@ -87,7 +87,7 @@ function build() {
   __ "LOCAL: rsync ${drv} to ${remote}"
   local t="/tmp/tmpnixpath"
   nix "${nixargs[@]}" copy --to "file://${t}" --derivation "${drv}"
-  rsync -ah --info=progress2 "${t}/" "${remote}:${t}"
+  rsync -ah --info=progress2 "${t}/" "${remote}:${t}" &>/dev/stderr
 
   __ "REMOTE: copy ${drv} => /nix/store"
   ssh_nixUnstable_shell "${remote}" nix "${nixargs[@]}" copy --from file://${t} --derivation ${drv}

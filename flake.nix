@@ -90,8 +90,8 @@
         };
     in rec {
       devShell = forAllSystems (system:
-        #pkgs_.nixpkgs.${system}.stdenv.mkDerivation {
-        pkgs_.nixpkgs.${system}.mkShell {
+        pkgs_.nixpkgs.${system}.stdenv.mkDerivation {
+        #pkgs_.nixpkgs.${system}.mkShell {
           name = "nixcfg-devshell";
           nativeBuildInputs = []
           #++ ([ inputs.nix.defaultPackage.${system} ])
@@ -117,14 +117,14 @@
           accept = pkg: pkg.meta.platforms or [ "x86_64-linux" "aarch64-linux" ];
           filter = (name: pkg: builtins.elem "${system}" (accept pkg));
         in {
-        #  pkgs = import inputs.nixpkgs {
-        #    system = system;
-        #    config = { allowUnfree = true; };
-        #    overlays = [
-        #      inputs.self.overlay
-        #      inputs.nixpkgs-wayland.overlay
-        #    ];
-        #  };
+         pkgs = import inputs.nixpkgs {
+           system = system;
+           config = { allowUnfree = true; };
+           overlays = [
+             inputs.self.overlay
+             inputs.nixpkgs-wayland.overlay
+           ];
+         };
         }
         // (pkgs.lib.filterAttrs filter pkgs.colePackages)
       );
@@ -196,13 +196,14 @@
         x86_64-linux = pkgs_.nixpkgs.x86_64-linux.linkFarmFromDrvs "x86_64-linux-outputs" (
           [
             # regular toplevels/hosts/vms
-            inputs.self.nixosConfigurations.azdev.config.system.build.toplevel
-            inputs.self.nixosConfigurations.slynux.config.system.build.toplevel
-            inputs.self.nixosConfigurations.xeep.config.system.build.toplevel
+            #inputs.self.nixosConfigurations.azdev.config.system.build.toplevel
+            #inputs.self.nixosConfigurations.slynux.config.system.build.toplevel
+            #inputs.self.nixosConfigurations.xeep.config.system.build.toplevel
             # relevant devShells
-            #inputs.self.devShell.x86_64-linux
-          ] ++ (builtins.attrValues inputs.self.outputs.packages.x86_64-linux)
+            (inputs.self.devShell.x86_64-linux // {name="foo";})
+          ] #++ (builtins.attrValues inputs.self.outputs.packages.x86_64-linux)
         );
+        test = inputs.self.devShell.x86_64-linux;
         aarch64-linux = pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "aarch64-linux-outputs" (
           [
             inputs.self.nixosConfigurations.rpione.config.system.build.toplevel
