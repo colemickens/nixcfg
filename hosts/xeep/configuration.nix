@@ -6,6 +6,7 @@ in
   imports = [
     ../../mixins/common.nix
     ../../mixins/gfx-intel.nix
+    ../../mixins/libvirt.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
 
@@ -108,8 +109,15 @@ in
       firewall.allowedTCPPorts = [ 22 ];
       networkmanager.enable = false;
       wireless.iwd.enable = true;
+      useNetworkd = true;
+      useDHCP = false;
+      #usePredictableNames = false;
+      interfaces."eth0".useDHCP = true;
+      interfaces."enp56s0u2u3".useDHCP = true;
+      interfaces."wlan0".useDHCP = true;
     };
     services.resolved.enable = true;
+    systemd.network.enable = true;
 
     nix.maxJobs = 8;
     nixpkgs.config.allowUnfree = true;

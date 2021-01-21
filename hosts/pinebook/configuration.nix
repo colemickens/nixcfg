@@ -24,6 +24,10 @@ in
     environment.systemPackages = with pkgs; [
       drm-howto
       virt-viewer
+      (pkgs.writeScriptBin "pinebook-fix-sound" ''
+        export NIX_PATH="nixpkgs=${toString inputs.nixpkgs}"
+        ${toString inputs.wip-pinebook-pro}/sound/reset-sound.rb
+      '')
     ];
     boot.loader.grub.enable = false;
     boot.loader.generic-extlinux-compatible.enable = true;

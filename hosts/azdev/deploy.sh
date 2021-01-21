@@ -65,24 +65,12 @@ function deploy() {
     --ssh-key-values "$(ssh-add -L | head -1)" \
     --os-disk-size-gb "128" \
     --public-ip-address-dns-name "${deploy}" \
-    --ephemeral-os-disk true
+    --ephemeral-os-disk true \
+    --accelerated-networking
 
   az vm show -g "${AZURE_GROUP}" -n "${AZURE_GROUP}"
 
-  # unneeded with auto dns label
-  #ip="$(az vm list-ip-addresses -n "${name}" -g "${name}" -o tsv \
-  #  --query '[0].virtualMachine.network.publicIpAddresses[0].ipAddress')"
-
   host="${AZURE_GROUP}.${AZURE_LOCATION}.cloudapp.azure.com"
-
-  # TODO: probably need to remove old entries
-  # for the given hostname:
-  ssh-keyscan -H "${host}" >> ~/.ssh/known_hosts
-  export REMOTE="cole@${host}"
-  # OPTION 2: use nixus to deploy azdev config
-  # update the ip for nixus/azdev
-  # nix-build nixus/azdev
-  # run nixus/azdev->deploy
 }
 
 
