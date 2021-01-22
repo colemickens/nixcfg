@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/stderr 2>&1 && pwd )"
 set -euo pipefail
 set -x
 
@@ -37,7 +37,7 @@ function update() {
   __ "updating all (local, override) inputs"
   printf '%s\n' "${srcdirs[@]}" | \
     parallel --jobs $(nproc) --halt soon,fail=1 --tag --progress -- \
-      "[[ ! -d "{.}" ]] || (git -C '$HOME/code/{.}' pull --rebase && git -C '{.}' push origin HEAD -f)"
+      "[[ ! -d "${HOME}/code/{.}" ]] || (git -C '${HOME}/code/{.}' pull --rebase && git -C '${HOME}/code/{.}' push origin HEAD -f)"
 
   __ "updating all inputs"
   cd "${DIR}"; nix "${nixargs[@]}" flake update --recreate-lock-file --no-registries
@@ -80,12 +80,12 @@ function build() {
   out="$(set -euo pipefail; nix "${nixargs[@]}" path-info "${drv}" --json | jq -r '.[0].path')"
 
   __ "TARGET: try to realize ${out} on ${target}"
-  if ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}" &>/dev/null; then
+  if ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}" &>/dev/stderr; then
     echo -e "${out}"; return 0
   fi
 
   __ "LOCAL: rsync ${drv} to ${remote}"
-  local t="/tmp/tmpnixpath"
+  local t="/tmp/.nixup"
   nix "${nixargs[@]}" copy --to "file://${t}" --derivation "${drv}"
   rsync -ah --info=progress2 "${t}/" "${remote}:${t}" &>/dev/stderr
 
@@ -106,7 +106,7 @@ function build() {
 
   __ "TARGET: copy $out from cachix (on $target)"
   set -x
-  ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}" &>/dev/null
+  ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}" &>/dev/stderr
 
   echo -e "${out}"; return 0
 }

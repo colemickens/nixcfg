@@ -17,9 +17,9 @@
     home-manager.users.cole = { pkgs, lib, ... }: {
       programs.ssh = {
         enable = true;
-        controlMaster = "auto";
-        controlPath = "/home/cole/.ssh/master-%C"; # TODO: lolwut
-        controlPersist = "10m";
+        #controlMaster = "auto";
+        #controlPath = "/home/cole/.ssh/master-%C"; # TODO: lolwut
+        #controlPersist = "10m";
         matchBlocks = {
           "aarch64" = {
             hostname = "aarch64.nixos.community";
@@ -36,7 +36,6 @@
             #    now we will control our own ssh sock too (makes tmux easier too)
             identityAgent = "/run/user/1000/sshagent";
             serverAliveInterval = 11;
-            forwardAgent = true;
           };
         };
       };

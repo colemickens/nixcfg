@@ -75,26 +75,34 @@
       genAttrs = names: f: builtins.listToAttrs (map (n: nameValuePair n (f n)) names);
       supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
       forAllSystems = genAttrs supportedSystems;
-
-      pkgsFor = pkgs: sys: import pkgs {
-        system = sys;
-        config = { allowUnfree = true; };
-      };
-      pkgs_ = genAttrs (builtins.attrNames inputs) (inp: genAttrs supportedSystems (sys: pkgsFor inputs."${inp}" sys));
-
-      mkSystem = sys: pkgs_: hostname:
-        pkgs_.lib.nixosSystem {
-          system = sys;
+      filterPkg_ = system: (name: pkg: builtins.elem "${system}" (pkg.meta.platforms or [ "x86_64-linux" "aarch64-linux" ]));
+      # TODO: we probably want to skip broken?
+      filterPkgs = pkgs: pkgSet: builtins.attrValues ((pkgs.lib.filterAttrs (filterPkg_ pkgs.system) pkgSet.${pkgs.system}));
+      filterHosts = pkgs: cfgs: (builtins.filter (c: pkgs.system == c.config.nixpkgs.system) (builtins.attrValues cfgs));
+      pkgsFor = pkgs: system: overlays:
+        import pkgs {
+          inherit system overlays;
+          config.allowUnfree = true;
+        };
+      pkgs_ = genAttrs (builtins.attrNames inputs) (inp: genAttrs supportedSystems (sys: pkgsFor inputs."${inp}" sys []));
+      fullPkgs_ = genAttrs supportedSystems (sys:
+        pkgsFor inputs.nixpkgs sys [ inputs.self.overlay inputs.nixpkgs-wayland.overlay ]);
+      mkSystem = pkgs_: hostname:
+        #pkgs_.lib.nixosSystem { ## <- to use this, I have to have a ref to the flake top, not *just* the imported-sys version
+        # also, this version suffix might be different...?
+        # TODO
+        # TODO: chek ver
+        import "${toString pkgs_.path}/nixos/lib/eval-config.nix" {
+          system = pkgs_.system;
           modules = [(./. + "/hosts/${hostname}/configuration.nix")];
           specialArgs = { inherit inputs; };
         };
     in rec {
       devShell = forAllSystems (system:
-        pkgs_.nixpkgs.${system}.stdenv.mkDerivation {
-        #pkgs_.nixpkgs.${system}.mkShell {
+        pkgs_.nixpkgs.${system}.mkShell {
           name = "nixcfg-devshell";
           nativeBuildInputs = []
-          #++ ([ inputs.nix.defaultPackage.${system} ])
+          #++ ([ inputs.nix.defaultPackage.${system} ]) # TODO: drop nix input?
           ++ (with pkgs_.stable.${system}; [ cachix ])
           ++ (with inputs.niche.packages.${system}; [ niche ])
           ++ (with pkgs_.nixpkgs.${system}; [
@@ -107,30 +115,11 @@
         }
       );
 
-      packages = forAllSystems (system:
-        let
-          pkgs = import inputs.nixpkgs {
-            inherit system;
-            config = { allowUnfree = true; };
-            overlays = [ inputs.self.overlay ];
-          };
-          accept = pkg: pkg.meta.platforms or [ "x86_64-linux" "aarch64-linux" ];
-          filter = (name: pkg: builtins.elem "${system}" (accept pkg));
-        in {
-         pkgs = import inputs.nixpkgs {
-           system = system;
-           config = { allowUnfree = true; };
-           overlays = [
-             inputs.self.overlay
-             inputs.nixpkgs-wayland.overlay
-           ];
-         };
-        }
-        // (pkgs.lib.filterAttrs filter pkgs.colePackages)
-      );
+      apps = {
+        # buildkite-init # TODO: flesh this out
+      };
 
-      # TODO: eventually maybe we should only compose nixpkgs here, and then make a unified,
-      # overlaid nixpkgs available, both as an output and as 'nixpkgs' for our systems?
+      packages = forAllSystems (system: fullPkgs_.${system}.colePackages);
 
       overlay = final: prev:
         let p = rec {
@@ -148,19 +137,12 @@
               inherit (inputs.fenix.packages.${prev.system}.minimal) cargo rustc;
             });
           };
-          #mesa-git = prev.callPackage ./pkgs/mesa-git {};
           mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
           meli = prev.callPackage ./pkgs/meli {};
-    #     #neovim-unwrapped = prev.callPackage ./pkgs/neovim {
-    #     #  neovim-unwrapped = prev.neovim-unwrapped;
-    #     #};
           #niche = prev.callPackage ./pkgs/niche {};
           obs-v4l2sink = prev.libsForQt5.callPackage ./pkgs/obs-v4l2sink {};
           passrs = prev.callPackage ./pkgs/passrs {};
           rkvm = prev.callPackage ./pkgs/rkvm {};
-          # tree-sitter = prev.callPackage ./pkgs/tree-sitter {
-          #   tree-sitter = prev.tree-sitter;
-          # };
 
           libquotient = prev.libsForQt5.callPackage ./pkgs/quaternion/libquotient.nix {};
           quaternion = prev.libsForQt5.callPackage ./pkgs/quaternion {};
@@ -173,51 +155,35 @@
         }; in p // { colePackages = p; };
 
       nixosConfigurations = {
-        azdev      = mkSystem "x86_64-linux"  inputs.nixpkgs "azdev";
-        rpione     = mkSystem "aarch64-linux" inputs.nixpkgs "rpione";
-        slynux     = mkSystem "x86_64-linux"  inputs.nixpkgs "slynux";
-        xeep       = mkSystem "x86_64-linux"  inputs.nixpkgs "xeep";
-        pinephone  = mkSystem "aarch64-linux" inputs.nixpkgs "pinephone";
-        pinebook   = mkSystem "aarch64-linux" inputs.nixpkgs "pinebook";
-        bluephone  = mkSystem "aarch64-linux" inputs.nixpkgs "bluephone";
+        azdev    = mkSystem fullPkgs_.x86_64-linux  "azdev";
+        rpione   = mkSystem fullPkgs_.aarch64-linux "rpione";
+        slynux   = mkSystem fullPkgs_.x86_64-linux  "slynux";
+        xeep     = mkSystem fullPkgs_.x86_64-linux  "xeep";
+        pinebook = mkSystem fullPkgs_.aarch64-linux "pinebook";
 
-        demovm = mkSystem "x86_64-linux"  inputs.nixpkgs "demovm";
-        testipfsvm = mkSystem "x86_64-linux"  inputs.nixpkgs "testipfsvm";
+        #pinephone     = mkSystem fullPkgs_.aarch64-linux "pinephone";
+        #bluephone     = mkSystem fullPkgs_.aarch64-linux "bluephone";
+
+        demovm      = mkSystem fullPkgs_.x86_64-linux  "demovm";
+        testipfsvm  = mkSystem fullPkgs_.x86_64-linux  "testipfsvm";
       };
+
       toplevels = genAttrs
         (builtins.attrNames inputs.self.outputs.nixosConfigurations)
         (attr: nixosConfigurations.${attr}.config.system.build.toplevel);
 
-      bundles = let
-          x86pkgs_ = (builtins.attrValues inputs.self.outputs.packages.x86_64-linux);
-          #x86pkgs = builtins.trace x86pkgs_ x86pkgs_;
-          x86pkgs = x86pkgs_;
-        in rec {
-        x86_64-linux = pkgs_.nixpkgs.x86_64-linux.linkFarmFromDrvs "x86_64-linux-outputs" (
-          [
-            # regular toplevels/hosts/vms
-            #inputs.self.nixosConfigurations.azdev.config.system.build.toplevel
-            #inputs.self.nixosConfigurations.slynux.config.system.build.toplevel
-            #inputs.self.nixosConfigurations.xeep.config.system.build.toplevel
-            # relevant devShells
-            (inputs.self.devShell.x86_64-linux // {name="foo";})
-          ] #++ (builtins.attrValues inputs.self.outputs.packages.x86_64-linux)
-        );
-        test = inputs.self.devShell.x86_64-linux;
-        aarch64-linux = pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "aarch64-linux-outputs" (
-          [
-            inputs.self.nixosConfigurations.rpione.config.system.build.toplevel
-            inputs.self.nixosConfigurations.pinebook.config.system.build.toplevel
-            #shells
-            #inputs.self.devShell.aarch64-linux
-          ]
-          ++ (builtins.attrValues inputs.self.outputs.packages.aarch64-linux)
-        );
-      };
+      bundles = forAllSystems (system:
+        pkgs_.nixpkgs.${system}.linkFarmFromDrvs "${system}-outputs" ([]
+          ++ [ inputs.self.devShell.${system}.inputDerivation ]
+          ++ (filterPkgs  pkgs_.nixpkgs.${system} inputs.self.packages)
+          ++ (builtins.map (host: host.config.system.build.toplevel)
+                (filterHosts pkgs_.nixpkgs.${system} inputs.self.nixosConfigurations))
+         ));
+
       images = {
         # azure vhd for azdev machine (a custom Azure image using `nixos-azure` module)
         azdev = inputs.self.nixosConfigurations.azdev.config.system.build.azureImage;
-
+        awsone = inputs.self.nixosConfigurations.azdev.config.system.build.amazonImage;
         newimg = inputs.self.nixosConfigurations.rpitwoefi.config.system.build.newimg;
 
         pinebook_bundle = pkgs_.nixpkgs.aarch64-linux.runCommandNoCC "pinebook-bundle" {} ''

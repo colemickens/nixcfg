@@ -47,7 +47,8 @@ in
         udiskie.enable = true;
       };
       home.packages = with pkgs; [
-        colePackages.customGuiCommands
+        #colePackages.customGuiCommands
+        
         # misc
         evince
         gimp

@@ -12,14 +12,14 @@
         shellAliases = {
           "ls" = "ls --color --group-directories-first";
         };
-        plugins = [
-          # bax instead?
-          {name="fish-foreign-env"; src=pkgs.fish-foreign-env.src;}
+        #plugins = [
+        # # bax instead?
+        #  pkgs.fishPlugins.foreign-env
 
           # jethrokuan/fzf
 
-          #  acomagu/fish-async-prompt 
-        ];
+          #  acomagu/fish-async-prompt
+        #];
       };
     };
   };

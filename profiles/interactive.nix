@@ -39,7 +39,7 @@ in
         gpg.enable = true;
       };
       home.packages = with pkgs; [
-        colePackages.customCommands
+        #colePackages.customCommands
 
         inputs.stable.legacyPackages.${pkgs.system}.cachix
 
@@ -91,6 +91,8 @@ in
         xdg_utils
         lynis
         bb
+        buildkite-cli #buildkite
+        buildkite-agent #buildkite
       ]
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
         esphome
