@@ -47,8 +47,8 @@ in
         udiskie.enable = true;
       };
       home.packages = with pkgs; [
-        #colePackages.customGuiCommands
-        
+        colePackages.customGuiCommands
+
         # misc
         evince
         gimp
@@ -85,22 +85,12 @@ in
         gnome3.gnome-tweaks
         spice-gtk
 
-        #webcamoid
-        #nyxt
-
         # browsers
-        # firefox+chromium are now arch-specific
-        #inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox
-        #inputs.nixos-unstable.legacyPackages.${pkgs.system}.chromium
-        #inputs.nixos-unstable.legacyPackages.${pkgs.system}.ungoogled-chromium
-        #inputs.nixos-unstable.legacyPackages.${pkgs.system}.chromiumBeta
-        #falkon
       ]
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
         # use nixos-unstable on x86_64-linux
         inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox
-        inputs.nixos-unstable.legacyPackages.${pkgs.system}.chromium
-        torbrowserPkg
+        inputs.nixos-unstable.legacyPackages.${pkgs.system}.ungoogled-chromium
 
         ddccontrol i2c-tools
 
@@ -114,10 +104,9 @@ in
 
         # not supported on aarch64, likely its an appimage or something
         radicle-upstream
-
       ] ++ lib.optionals (pkgs.system == "aarch64-linux") [
         # use stable on aarch64-linux
-        #inputs.stable.legacyPackages.${pkgs.system}.firefox
+        inputs.stable.legacyPackages.${pkgs.system}.firefox
         inputs.stable.legacyPackages.${pkgs.system}.chromium
       ];
     };

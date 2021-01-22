@@ -164,8 +164,8 @@
         #pinephone     = mkSystem fullPkgs_.aarch64-linux "pinephone";
         #bluephone     = mkSystem fullPkgs_.aarch64-linux "bluephone";
 
-        demovm      = mkSystem fullPkgs_.x86_64-linux  "demovm";
-        testipfsvm  = mkSystem fullPkgs_.x86_64-linux  "testipfsvm";
+        #demovm      = mkSystem fullPkgs_.x86_64-linux  "demovm";
+        #testipfsvm  = mkSystem fullPkgs_.x86_64-linux  "testipfsvm";
       };
 
       toplevels = genAttrs
@@ -175,7 +175,7 @@
       bundles = forAllSystems (system:
         pkgs_.nixpkgs.${system}.linkFarmFromDrvs "${system}-outputs" ([]
           ++ [ inputs.self.devShell.${system}.inputDerivation ]
-          ++ (filterPkgs  pkgs_.nixpkgs.${system} inputs.self.packages)
+          ++ (filterPkgs pkgs_.nixpkgs.${system} inputs.self.packages)
           ++ (builtins.map (host: host.config.system.build.toplevel)
                 (filterHosts pkgs_.nixpkgs.${system} inputs.self.nixosConfigurations))
          ));

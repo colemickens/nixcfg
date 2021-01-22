@@ -39,7 +39,7 @@ in
         gpg.enable = true;
       };
       home.packages = with pkgs; [
-        #colePackages.customCommands
+        colePackages.customCommands
 
         inputs.stable.legacyPackages.${pkgs.system}.cachix
 
@@ -60,12 +60,13 @@ in
         yubico-piv-tool
 
         # https://zaiste.net/posts/shell-commands-rust/
+        bat
         tealdeer
         du-dust
         fd
         wireguard-tools
-        #jj
-        #grex # regex
+        jj
+        grex # regex
 
         sops age cryptsetup
 
