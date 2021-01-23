@@ -9,25 +9,25 @@ in
     ../../mixins/common.nix
     ../../profiles/user.nix
 
-    ./modules/home-assistant
-    ./modules/wireguard
+    #UNDO ./modules/home-assistant
+    #UNDO./modules/wireguard
 
     #./modules/drone.nix
     #./modules/cyclops.nix
     #./modules/netboot-server.nix
-    ./modules/nginx.nix
-    ./modules/postgres.nix
+    #UNDO./modules/nginx.nix
+    #UNDO./modules/postgres.nix
 
-    ../../mixins/avahi-publish.nix
+    #UNDO../../mixins/avahi-publish.nix
     #../../mixins/docker.nix
     #../../mixins/plex-mpv.nix
     ../../mixins/sshd.nix
-    ../../mixins/srht-cronjobs.nix
+    #UNDO../../mixins/srht-cronjobs.nix
     ../../mixins/tailscale.nix
-    ../../mixins/unifi.nix
+    #UNDO../../mixins/unifi.nix
 
     #../../mixins/loremipsum-media/rclone-mnt.nix
-    ./sd-image-raspberrypi4-new.nix
+    ./rpi4-uboot-mainline.nix
   ];
 
   config = {
@@ -37,9 +37,9 @@ in
     documentation.doc.enable = false;
     documentation.info.enable = false;
     documentation.nixos.enable = false;
+
     networking.hostName = "rpione";
     services.udisks2.enable = false;
-
     networking.wireless.enable = false;
     networking.interfaces."${eth}".ipv4.addresses = [
       {
@@ -49,31 +49,5 @@ in
     ];
     networking.defaultGateway = "192.168.1.1";
     networking.nameservers = [ "192.168.1.1" ];
-    networking.useDHCP = false;
-    networking.nat = {
-      enable = true;
-      internalInterfaces = [ wg ];
-      internalIPs = [ "172.27.66.0/24" ];
-      externalInterface = eth;
-    };
-    networking.firewall = {
-      enable = true;
-      allowedUDPPorts = [ 51820 ];
-    };
-
-    environment.systemPackages = with pkgs; [
-      raspberrypifw
-      raspberrypi-eeprom
-      libraspberrypi
-    ];
-    fileSystems."/export/rpitwo" = {
-      device = "/mnt/rpitwo";
-      options = [ "bind" ];
-    };
-    services.nfs.server.enable = true;
-    services.nfs.server.exports = ''
-      /export          192.168.1.3(rw,fsid=0,no_subtree_check)
-      /export/rpitwo   192.168.1.3(rw,nohide,insecure,no_subtree_check)
-    '';
   };
 }

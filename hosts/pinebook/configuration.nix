@@ -41,6 +41,7 @@ in
     '';
 
     boot.consoleLogLevel = pkgs.lib.mkDefault 7;
+    boot.supportedFilesystems = [ "zfs" ];
 
     boot.kernelParams = [
       "cma=32M"

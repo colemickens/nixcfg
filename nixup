@@ -62,6 +62,10 @@ function ssh_nixUnstable_shell() {
   local r="${1}"; shift;
   ssh "${r}" -- "nix-shell -I nixpkgs=${unstablepkgs} -p nixUnstable --run '$(printf '\"%s\" ' "${@}")'"
 }
+function ssh_nixUnstable_shell2() {
+  local r="${1}"; shift;
+  ssh "${r}" -- "$(printf '\"%s\" ' "${@}")"
+}
 # this just wraps the shell, give it the full command: ssh_niche_shell niche build ...
 function ssh_niche_shell() {
   local r="${1}"; shift;
@@ -72,16 +76,18 @@ function build() {
   set -euo pipefail
   thing="${1}"; shift
   remote="${1}"; shift
-  target="${1:-"${USER}@localhost"}"; shift
+  target="${1:-""}"; shift
   set +x
 
   __ "LOCAL: evaluate drv ${thing}"
   drv="$(set -euo pipefail; nix "${nixargs[@]}" eval "${evalargs[@]}" --raw "${thing}.drvPath" | tr -d '"')"
   out="$(set -euo pipefail; nix "${nixargs[@]}" path-info "${drv}" --json | jq -r '.[0].path')"
 
-  __ "TARGET: try to realize ${out} on ${target}"
-  if ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}" &>/dev/stderr; then
-    echo -e "${out}"; return 0
+  if [[ ! -z "${target:-""}" ]]; then
+    __ "TARGET: try to realize ${out} on ${target}"
+    if ssh_nixUnstable_shell2 "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}" &>/dev/stderr; then
+      echo -e "${out}"; return 0
+    fi
   fi
 
   __ "LOCAL: rsync ${drv} to ${remote}"
@@ -90,13 +96,16 @@ function build() {
   rsync -ah --info=progress2 "${t}/" "${remote}:${t}" &>/dev/stderr
 
   __ "REMOTE: copy ${drv} => /nix/store"
-  ssh_nixUnstable_shell "${remote}" nix "${nixargs[@]}" copy --from file://${t} --derivation ${drv}
+  ssh_nixUnstable_shell2 "${remote}" nix "${nixargs[@]}" copy --from file://${t} --derivation ${drv}
 
   __ "REMOTE: build ${drv} => ${out}"
-  ssh_nixUnstable_shell "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --keep-going "${drv}"
+  #ssh_nixUnstable_shell "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --keep-going "${drv}"
+  ssh_nixUnstable_shell2 "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --keep-going "${drv}"
   #ssh_niche_shell "${remote}" niche build -u "${niche_cache}" -- -L "${nixargs[@]}"  "${buildargs[@]}" --keep-going "${drv}"
 
   __ "REMOTE: push ${out} to cachix"
+  rm -rf ~/.config/nix
+  ssh_nixUnstable_shell2 "${remote}" rm -rf .cache/nix
   ssh_cachix_push "${remote}" "${out}"
 
   __ "LOCAL: exit if no target for build"
@@ -106,6 +115,7 @@ function build() {
 
   __ "TARGET: copy $out from cachix (on $target)"
   set -x
+  ssh_nixUnstable_shell2 "${target}" rm -rf .cache/nix
   ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -j0 "${out}" &>/dev/stderr
 
   echo -e "${out}"; return 0

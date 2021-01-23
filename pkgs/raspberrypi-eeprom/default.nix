@@ -3,15 +3,15 @@
 
 let
   version = "2020.09.03-138a1";
-  rev = "v2020.09.03-138a1";
-  pieeprom-latest = "pieeprom-2020-09-03.bin";
+  rev = "9b74ec49a138ac559a7d376963eb165d08656c4c";
+  pieeprom-latest = "pieeprom-2021-01-16.bin";
   vl805-latest = "vl805-000138a1.bin";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
     inherit rev;
-    sha256 = "sha256-BlVjFb0WC+ukn00i4O5Qv56OwC+AAnyh+j9e0KLnSKY=";
+    sha256 = "sha256-z2hDAIJYcZIaK/m1dq4On1nkZ2iXZ7w288IUeF758tI=";
   };
 
   configFile = writeText "rpi-eeprom-update-config" ''

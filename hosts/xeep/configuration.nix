@@ -13,6 +13,8 @@ in
     ../../profiles/interactive.nix
     ../../profiles/desktop-sway.nix
 
+    ../../profiles/gaming.nix
+
     # xps 13 9370 specific:
     inputs.hardware.nixosModules.dell-xps-13-9370
   ];
@@ -117,6 +119,8 @@ in
       interfaces."wlan0".useDHCP = true;
     };
     services.resolved.enable = true;
+    networking.search = [ "ts.r10e.tech." ];
+    services.resolved.domains = [ "ts.r10e.tech." ];
     systemd.network.enable = true;
 
     nix.maxJobs = 8;

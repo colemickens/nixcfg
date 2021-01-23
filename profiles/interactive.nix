@@ -44,6 +44,7 @@ in
         inputs.stable.legacyPackages.${pkgs.system}.cachix
 
         #nixops
+        screen minicom
         asciinema
         wget curl rsync
         ripgrep jq fzy skim
