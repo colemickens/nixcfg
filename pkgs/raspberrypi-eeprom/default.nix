@@ -2,7 +2,7 @@
 , binutils-unwrapped, libraspberrypi, makeWrapper }:
 
 let
-  version = "2020.09.03-138a1";
+  version = "2021.01.16-9b74ec";
   rev = "9b74ec49a138ac559a7d376963eb165d08656c4c";
   pieeprom-latest = "pieeprom-2021-01-16.bin";
   vl805-latest = "vl805-000138a1.bin";

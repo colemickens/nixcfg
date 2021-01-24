@@ -11,6 +11,7 @@
     environment.systemPackages = with pkgs; [
       lutris
       steam-run-native
+      wine
     ];
   };
 }

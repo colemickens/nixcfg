@@ -129,7 +129,7 @@ function activate() {
 
   ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --profile /nix/var/nix/profiles/system "${bo}")";
   ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${bo}" -c switch-to-configuration switch)";
-  
+
   #if [[ "${spz}" == "" ]]; then
   #  spz="$(ssh -A "${target}" "cat /run/current-system/configuration-name || echo")"
   #fi
@@ -145,6 +145,7 @@ AARCH64="colemickens@aarch64.nixos.community"
 AZDEV="cole@100.68.232.46";     AZDEV="azdev.ts.r10e.tech"
 PINEBOOK="cole@100.89.55.100";  PINEBOOK="pinebook.ts.r10e.tech"
 RPIONE="cole@100.111.5.113";    RPIONE="cole@rpione.ts.r10e.tech"
+RPITWO="cole@192.168.1.3";      RPITWO="cole@rpitwo.ts.r10e.tech"
 SLYNUX="cole@100.79.123.116";   SLYNUX="cole@slynux.ts.r10e.tech"
 XEEP="cole@100.72.11.62";       XEEP="cole@xeep.ts.r10e.tech"
 # praise be to tailscale
@@ -155,6 +156,7 @@ function nix() { command nix "${nixargs[@]}" "${@}"; }
 function azdev()    { activate ".#toplevels.azdev"    "${AZDEV}"   "${AZDEV}";    }
 function pinebook() { activate ".#toplevels.pinebook" "${AARCH64}" "${PINEBOOK}"; }
 function rpione()   { activate ".#toplevels.rpione"   "${AARCH64}" "${RPIONE}";   }
+function rpitwo()   { activate ".#toplevels.rpitwo"   "${AARCH64}" "${RPITWO}";   }
 function slynux()   { activate ".#toplevels.slynux"   "${AZDEV}"   "${SLYNUX}";   }
 function xeep()     { activate ".#toplevels.xeep"     "${AZDEV}"   "${XEEP}";     }
 

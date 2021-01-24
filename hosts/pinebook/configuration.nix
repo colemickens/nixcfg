@@ -57,6 +57,10 @@ in
     };
     swapDevices = [];
 
+    console.earlySetup = true; # hidpi + luks-open  # TODO : STILL NEEDED?
+    console.font = "ter-v32n";
+    console.packages = [ pkgs.terminus_font ];
+
     boot = {
       tmpOnTmpfs = false;
       cleanTmpDir = true;
@@ -78,9 +82,6 @@ in
         "earlycon=uart8250,mmio32,0xff1a0000" "earlyprintk"
       ];
     };
-    console.earlySetup = true; # hidpi + luks-open  # TODO : STILL NEEDED?
-    console.font = "ter-v32n";
-    console.packages = [ pkgs.terminus_font ];
 
     networking = {
       hostId = "ef66d544";
@@ -106,6 +107,5 @@ in
       pulseaudio.package = pkgs.pulseaudioFull;
       enableRedistributableFirmware = true;
     };
-    #services.fwupd.enable = true; #tpm2/trifecta(hk)/etc on aarch64 bad
   };
 }

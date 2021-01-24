@@ -45,13 +45,11 @@ in
         device = "tank2/root";
         fsType = "zfs";
       };
-
-      fileSystems."/nix" = {
+      "/nix" = {
         device = "tank2/nix2";
         fsType = "zfs";
       };
-
-      fileSystems."/boot" = {
+      "/boot" = {
         device = "/dev/disk/by-partlabel/newboot";
         fsType = "vfat";
       };

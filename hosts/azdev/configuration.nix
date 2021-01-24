@@ -17,7 +17,7 @@
     system.stateVersion = "21.03";
 
     nix.nixPath = [];
-    nix.gc.automatic = true;
+    nix.gc.automatic = false; # override for builder/devenv
     nix.nrBuildUsers = 128;
 
     documentation.enable = false;

@@ -120,6 +120,7 @@
       };
 
       packages = forAllSystems (system: fullPkgs_.${system}.colePackages);
+      pkgs = forAllSystems (system: fullPkgs_.${system});
 
       overlay = final: prev:
         let p = rec {
@@ -157,6 +158,7 @@
       nixosConfigurations = {
         azdev    = mkSystem fullPkgs_.x86_64-linux  "azdev";
         rpione   = mkSystem fullPkgs_.aarch64-linux "rpione";
+        rpitwo   = mkSystem fullPkgs_.aarch64-linux "rpitwo";
         slynux   = mkSystem fullPkgs_.x86_64-linux  "slynux";
         xeep     = mkSystem fullPkgs_.x86_64-linux  "xeep";
         pinebook = mkSystem fullPkgs_.aarch64-linux "pinebook";
