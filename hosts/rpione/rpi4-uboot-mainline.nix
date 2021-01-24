@@ -1,65 +1,35 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 let
-  moduleList = [
-    # cargo culted:
-    #"pcie_brcmstb" "bcm_phy_lib" "broadcom" "mdio_bcm_unimac" "genet"
-    "vc4" "bcm2835_dma" "i2c_bcm2835"
-
-    # try enable usb storage?
-    "xhci_pci" "usb_storage"
-  ];
+  configTxt = pkgs.writeText "config.txt" ''
+    enable_uart=1
+    arm_64bit=1
+    kernel=u-boot-rpi.bin
+    enable_gic=1
+    armstub=armstub8-gic.bin
+    disable_overscan=1
+    dtoverlay=disable-bt
+    #device_tree_address=0x1f0000
+  '';
+  fwdir = "${pkgs.raspberrypifw}/share/raspberrypi/boot";
 in {
-  imports = [
-    "${modulesPath}/profiles/base.nix"
-  ];
-
   config = {
     boot = {
-      loader.grub.enable = false;
-      loader.raspberryPi.enable = true;
-      loader.raspberryPi.version = 4;
-      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
-      loader.raspberryPi.uboot.enable = true;
-      loader.raspberryPi.firmwareConfig = ''
-        disable_overscan=1
-      '';
-      supportedFilesystems = [ "zfs" ];
-      initrd.availableKernelModules = moduleList;
-      kernelModules = moduleList;
-
-      kernelParams = [
-        #"cma=64M"
-        #"8250.nr_uarts=1"
-        #"earlycon=pl011,mmio32,0xfe201000"
-        #"console=ttyAMA0,115200n8"
-        #"console=tty1"
-        "console=ttyS0,115200n8" "console=ttyAMA0,115200n8" "console=tty0"
-      ];
-
-      consoleLogLevel = lib.mkDefault 7;
-    };
-
-    environment.systemPackages = with pkgs; [
-      raspberrypifw
-      raspberrypi-eeprom
-      libraspberrypi
-    ];
-
-    fileSystems = {
-      "/boot" = {
-        device = "/dev/disk/by-partlabel/boot";
-        fsType = "vfat";
-        options = [ "nofail" ];
+      loader.grub.enable = true;
+      loader.grub.configurationLimit = 1; # TODO: undo when this works!
+      loader.grub.devices = [ "nodev" ];
+      loader.grub.efiSupport = true;
+      loader.grub.efiInstallAsRemovable = true;
+      loader.grub.zfsSupport = true;
+      loader.grub.extraFiles = {
+        "config.txt" = configTxt;
+        "u-boot-rpi.bin" = "${pkgs.ubootRaspberryPi4_64bit}/u-boot.bin";
+        "armstub8-gic.bin" = "${pkgs.raspberrypi-armstubs}/armstub8-gic.bin";
+        "bcm2711-rpi-4-b.dtb" = "${fwdir}/bcm2711-rpi-4-b.dtb";
+        #"bcm2711-rpi-4-b.dtb" = "${pkgs.linuxPackages_latest.kernel}/dtbs/broadcom/bcm2711-rpi-4-b.dtb";
+        "bootcode.bin" = "${fwdir}/bootcode.bin";
+        "fixup4.dat" = "${fwdir}/fixup4.dat";
+        "start4.elf" = "${fwdir}/start4.elf";
       };
-      "/" = {
-        device = "tank/root";
-        fsType = "zfs";
-      };
-      "/nix" = {
-        device = "tank/nix";
-        fsType = "zfs";
-      };
-    };
   };
 }

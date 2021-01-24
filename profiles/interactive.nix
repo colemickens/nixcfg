@@ -53,6 +53,7 @@ in
         openssh autossh mosh sshuttle
         tig #git-absorb
         github-cli
+        git-lfs
         cvs mercurial subversion
         #mitmproxy
         nix-du pv

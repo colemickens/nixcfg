@@ -20,35 +20,41 @@ in
   ];
 
   config = {
-    environment.systemPackages = with pkgs; [
-      (
-        pkgs.writeScriptBin "dell-fix-power" ''
-          #!/usr/bin/env bash
-          oldval="$(sudo ${pkgs.msr-tools}/bin/rdmsr 0x1FC)"
-          newval="$(( 0xFFFFFFFE & 0x$oldval ))"
-          sudo ${pkgs.msr-tools}/bin/wrmsr -a 0x1FC "$val"
-        ''
-      )
-    ];
+    system.stateVersion = "21.03";
 
-    system.stateVersion = "20.09";
+    nix.nixPath = [];
+    nix.gc.automatic = true;
+    nix.maxJobs = 8;
 
-    services.timesyncd.enable = true;
+    documentation.enable = false;
+    documentation.doc.enable = false;
+    documentation.info.enable = false;
     documentation.nixos.enable = false;
 
-    fileSystems."/" = {
-      device = "tank2/root";
-      fsType = "zfs";
-    };
+    environment.systemPackages = with pkgs; [
+      (pkgs.writeScriptBin "dell-fix-power" ''
+        #!/usr/bin/env bash
+        oldval="$(sudo ${pkgs.msr-tools}/bin/rdmsr 0x1FC)"
+        newval="$(( 0xFFFFFFFE & 0x$oldval ))"
+        sudo ${pkgs.msr-tools}/bin/wrmsr -a 0x1FC "$newval"
+      '')
+    ];
 
-    fileSystems."/nix" = {
-      device = "tank2/nix2";
-      fsType = "zfs";
-    };
+    fileSystems = {
+      "/" = {
+        device = "tank2/root";
+        fsType = "zfs";
+      };
 
-    fileSystems."/boot" = {
-      device = "/dev/disk/by-partlabel/newboot";
-      fsType = "vfat";
+      fileSystems."/nix" = {
+        device = "tank2/nix2";
+        fsType = "zfs";
+      };
+
+      fileSystems."/boot" = {
+        device = "/dev/disk/by-partlabel/newboot";
+        fsType = "vfat";
+      };
     };
     swapDevices = [];
 
@@ -58,23 +64,13 @@ in
 
     boot = {
       tmpOnTmpfs = false;
-      #zfs.requestEncryptionCredentials = true;
+      cleanTmpDir = true;
+
       kernelPackages = pkgs.linuxPackages_latest;
       initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
       kernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
       kernelParams = [
-        # HIGHLY IRRESPONSIBLE
-        "noibrs"
-        "noibpb"
-        "nopti"
-        "nospectre_v2"
-        "nospectre_v1"
-        "l1tf=off"
-        "nospec_store_bypass_disable"
-        "no_stf_barrier"
-        "mds=off"
-        "mitigations=off"
-
+        "mitigations=off" # YOLO
         "i915.modeset=1" # nixos-hw = missing
         "i915.enable_guc=3" # nixos-hw = missing
         "i915.enable_gvt=0" # nixos-hw = missing
@@ -93,16 +89,9 @@ in
           fallbackToPassword = true;
         };
       };
-      # initrd.network.enable = true;
-      # initrd.network.ssh = {
-      #   enable = true;
-      #   authorizedKeys = import ../../data/sshkeys.nix;
-      # };
-      loader = {
-        timeout = 1;
-        systemd-boot.enable = true;
-        efi.canTouchEfiVariables = true;
-      };
+      loader.timeout = 1;
+      loader.systemd-boot.enable = true;
+      loader.efi.canTouchEfiVariables = true;
     };
     networking = {
       hostId = "ef66d560";
@@ -113,19 +102,22 @@ in
       wireless.iwd.enable = true;
       useNetworkd = true;
       useDHCP = false;
-      #usePredictableNames = false;
+
       interfaces."eth0".useDHCP = true;
       interfaces."enp56s0u2u3".useDHCP = true;
       interfaces."wlan0".useDHCP = true;
+
+      bridges."virbr0".interfaces = [ "enp56s0u2u3" ];
+      interfaces."virbr0".useDHCP = true;
+
+      search = [ "ts.r10e.tech" ];
     };
+    services.timesyncd.enable = true;
     services.resolved.enable = true;
-    networking.search = [ "ts.r10e.tech." ];
-    services.resolved.domains = [ "ts.r10e.tech." ];
+    services.resolved.domains = [ "ts.r10e.tech" ];
     systemd.network.enable = true;
 
-    nix.maxJobs = 8;
     nixpkgs.config.allowUnfree = true;
-
     hardware = {
       enableRedistributableFirmware = true;
       cpu.intel.updateMicrocode = true;

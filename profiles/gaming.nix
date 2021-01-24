@@ -8,6 +8,9 @@
       };
     };
     programs.steam.enable = true;
-    environment.systemPackages = with pkgs; [ steam-run-native ];
+    environment.systemPackages = with pkgs; [
+      lutris
+      steam-run-native
+    ];
   };
 }

@@ -127,12 +127,15 @@ function activate() {
   target="${3:-"cole@localhost"}"
   #spz="${4:-""}"
 
+  ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --profile /nix/var/nix/profiles/system "${bo}")";
+  ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${bo}" -c switch-to-configuration switch)";
+  
   #if [[ "${spz}" == "" ]]; then
   #  spz="$(ssh -A "${target}" "cat /run/current-system/configuration-name || echo")"
   #fi
   #ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --profile /nix/var/nix/profiles/system "${bo}")";
   #if [[ "${spz}" == "" || "${spz}" == "none" ]]; then
-    ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${bo}" -c switch-to-configuration switch)";
+  #  ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${bo}" -c switch-to-configuration switch)";
   #else
   #  ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${bo}" -c ${bo}/specialisation/${spz}/bin/switch-to-configuration switch)";
   #fi

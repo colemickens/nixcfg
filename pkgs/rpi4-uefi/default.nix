@@ -1,8 +1,8 @@
 { stdenv, runCommandNoCC, unzip }:
 
 let
-  version = "v1.21";
-  sha256 = "1cqhxy51jyry13nkbqxm8i0vhazd1vavlgfbfva8hhzqfnmiljav";
+  version = "v1.22";
+  sha256 = "0yklg00fmg82rg1plyz6wc3kdgss9xp85ilhmc61p6jgvn0s138q";
   src = builtins.fetchurl {
     url = "https://github.com/pftf/RPi4/releases/download/${version}/RPi4_UEFI_Firmware_${version}.zip";
     inherit sha256;
