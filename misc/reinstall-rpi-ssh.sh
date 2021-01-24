@@ -3,13 +3,12 @@ set -euo pipefail
 set -x
 
 p=$1
-#POOL="tank"
+
+BOOTLABEL="rpi2-boot"
 POOL="rpool"
 
 HOST=nixos@localhost
 PORT=22022
-
-BOOTLABEL="rpi2-boot"
 
 ssh -q ${HOST} -p${PORT} <<SSHSSH
   set -x
@@ -32,7 +31,7 @@ ssh -q ${HOST} -p${PORT} <<SSHSSH
 
   sudo rm -rf /mnt/boot/*
 
-  if ! sudo nixos-enter --root /mnt --command "echo 'nameserver 192.168.1.1' | sudo tee /etc/resolv.conf; \
+  if ! sudo nixos-enter --root /mnt --command "rm /etc/resolv.conf; echo 'nameserver 192.168.1.1' | sudo tee /etc/resolv.conf; \
     rm -rf /root/.cache
     nix-store \
       --option 'extra-binary-caches' 'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org' \

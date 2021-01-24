@@ -15,7 +15,7 @@
         disable_overscan=1
       '';
       loader.raspberryPi.uboot.enable = true;
-      loader.raspberryPi.uboot.configurationLimit = 1;
+      loader.raspberryPi.uboot.configurationLimit = 5;
     };
   };
 }

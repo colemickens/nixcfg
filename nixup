@@ -24,7 +24,7 @@ buildargs=(
 )
 
 srcdirs=(
-  "nixpkgs/master"  "nixpkgs/cmpkgs"  "home-manager/cmhm"
+  "nixpkgs/cmpkgs"  "home-manager/cmhm"  #"nixpkgs/master"
   "nixpkgs-wayland" "flake-firefox-nightly"
   "mobile-nixos"    "sops-nix"        "wip-pinebook-pro"
   "nixos-veloren"   "nixos-azure"
@@ -145,7 +145,7 @@ AARCH64="colemickens@aarch64.nixos.community"
 AZDEV="cole@100.68.232.46";     AZDEV="azdev.ts.r10e.tech"
 PINEBOOK="cole@100.89.55.100";  PINEBOOK="pinebook.ts.r10e.tech"
 RPIONE="cole@100.111.5.113";    RPIONE="cole@rpione.ts.r10e.tech"
-RPITWO="cole@192.168.1.3";      RPITWO="cole@rpitwo.ts.r10e.tech"
+RPITWO="cole@100.106.30.119";  #RPITWO="cole@rpitwo.ts.r10e.tech"
 SLYNUX="cole@100.79.123.116";   SLYNUX="cole@slynux.ts.r10e.tech"
 XEEP="cole@100.72.11.62";       XEEP="cole@xeep.ts.r10e.tech"
 # praise be to tailscale

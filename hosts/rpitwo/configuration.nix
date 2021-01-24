@@ -4,7 +4,7 @@ let
   hostname = "rpitwo";
 in {
   imports = [
-    ../rpione/configuration.nix
+    ../rpione/core.nix
   ];
   config = {
     networking.hostName = lib.mkForce hostname;
@@ -13,13 +13,27 @@ in {
       address = "192.168.1.3";
       prefixLength = 16;
     }];
+    networking.nameservers = [ "192.168.1.1" ];
+
+    fileSystems = lib.mkForce {
+      "/boot" = {
+        device = "/dev/disk/by-partlabel/rpi2-boot";
+        fsType = "vfat";
+        options = [ "nofail" ];
+      };
+      "/" = {
+        device = "rpool/root";
+        fsType = "zfs";
+      };
+      "/nix" = {
+        device = "rpool/nix";
+        fsType = "zfs";
+      };
+    };
 
     boot.loader.raspberryPi.firmwareConfig = ''
       dtoverlay=disable-wifi
       dtoverlay=disable-bt
     ''; # TODO: check this gets merged?
-
-    services.home-assistant.enable = lib.mkForce false;
-    services.unifi.enable = lib.mkForce false;
   };
 }

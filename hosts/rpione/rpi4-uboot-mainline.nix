@@ -16,7 +16,7 @@ in {
   config = {
     boot = {
       loader.grub.enable = true;
-      loader.grub.configurationLimit = 1; # TODO: undo when this works!
+      loader.grub.configurationLimit = 5;
       loader.grub.devices = [ "nodev" ];
       loader.grub.efiSupport = true;
       loader.grub.efiInstallAsRemovable = true;
