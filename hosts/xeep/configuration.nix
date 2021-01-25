@@ -7,11 +7,13 @@ in
     ../../mixins/common.nix
     ../../mixins/gfx-intel.nix
     ../../mixins/libvirt.nix
+    ../../mixins/obs.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
+    ../../mixins/v4l2loopback.nix
 
     ../../profiles/interactive.nix
-    ../../profiles/desktop-sway.nix
+    ../../profiles/desktop-sway-unstable.nix
 
     ../../profiles/gaming.nix
 

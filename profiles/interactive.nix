@@ -68,6 +68,7 @@ in
         fd
         wireguard-tools
         jj
+        pijul
         grex # regex
 
         sops age cryptsetup

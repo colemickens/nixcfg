@@ -27,7 +27,7 @@ srcdirs=(
   "nixpkgs/cmpkgs"  "home-manager/cmhm"  #"nixpkgs/master"
   "nixpkgs-wayland" "flake-firefox-nightly"
   "mobile-nixos"    "sops-nix"        "wip-pinebook-pro"
-  "nixos-veloren"   "nixos-azure"
+  "nixos-veloren"   #"nixos-azure"
 )
 evalargs=()
 

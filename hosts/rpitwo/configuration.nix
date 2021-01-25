@@ -5,6 +5,7 @@ let
 in {
   imports = [
     ../rpione/core.nix
+    ./../../mixins/buildkite-agent.nix
   ];
   config = {
     networking.hostName = lib.mkForce hostname;
@@ -15,6 +16,10 @@ in {
     }];
     networking.nameservers = [ "192.168.1.1" ];
 
+    # sudo mkfs.vfat /dev/disk/by-partlabel/rpi2-boot
+    # sudo zpool create -O mountpoint=none -R /mnt rpool /dev/disk/by-partlabel/rpi2-nixos
+    # sudo zfs create -o mountpoint=legacy rpool/root
+    # sudo zfs create -o mountpoint=legacy rpool/nix
     fileSystems = lib.mkForce {
       "/boot" = {
         device = "/dev/disk/by-partlabel/rpi2-boot";
@@ -32,8 +37,8 @@ in {
     };
 
     boot.loader.raspberryPi.firmwareConfig = ''
-      dtoverlay=disable-wifi
-      dtoverlay=disable-bt
-    ''; # TODO: check this gets merged?
+      #dtoverlay=disable-wifi
+      #dtoverlay=disable-bt
+    '';
   };
 }

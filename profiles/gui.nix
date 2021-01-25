@@ -3,7 +3,7 @@
 let
   firefoxFlake = inputs.firefox.packages.${pkgs.system};
   firefoxNightly = pkgs.writeShellScriptBin "firefox-nightly" ''
-    exec ${firefoxFlake.firefox-nightly-bin}/bin/firefox "''${@}"
+    exec ${firefoxFlake.firefox-nightly-bin}/bin/firefox -P nightly "''${@}"
   '';
 
   torbrowserPkg =
@@ -90,7 +90,7 @@ in
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
         # use nixos-unstable on x86_64-linux
         inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox
-        inputs.nixos-unstable.legacyPackages.${pkgs.system}.ungoogled-chromium
+        firefoxNightly
 
         ddccontrol i2c-tools
 
@@ -99,8 +99,7 @@ in
 
         # yucky non-free
         discord
-        pkgs.google-chrome-dev
-        pkgs.ripcord
+        ripcord
 
         # not supported on aarch64, likely its an appimage or something
         radicle-upstream

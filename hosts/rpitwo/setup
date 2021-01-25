@@ -1,4 +1,0 @@
-sudo mkfs.vfat /dev/disk/by-partlabel/rpi2-boot
-sudo zpool create -O mountpoint=none -R /mnt rpool /dev/disk/by-partlabel/rpi2-nixos
-sudo zfs create -o mountpoint=legacy rpool/root
-sudo zfs create -o mountpoint=legacy rpool/nix

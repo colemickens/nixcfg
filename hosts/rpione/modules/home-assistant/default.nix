@@ -4,7 +4,8 @@ let
   secrets = import ./secrets.nix;
   trusted_networks = [
     "192.168.1.0/24" # default chimera network
-    "172.27.66.0/24" # wireguard network
+    #"172.27.66.0/24" # wireguard network
+    "100.64.0.0/10"  # tailscale network
     #"192.168.69.0/24" # esphome network (but doesn't need to hit HA frontdoor)
   ];
 
