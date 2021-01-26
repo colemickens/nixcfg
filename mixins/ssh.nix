@@ -21,11 +21,6 @@
         #controlPath = "/home/cole/.ssh/master-%C"; # TODO: lolwut
         #controlPersist = "10m";
         matchBlocks = {
-          "aarch64" = {
-            hostname = "aarch64.nixos.community";
-            user = "colemickens";
-            port = 22;
-          };
           "*" = {
             # look, idk, I think doing this myself by hand will be best:
             #  if /run/user/1000/sshagent is missing, or a bad path,

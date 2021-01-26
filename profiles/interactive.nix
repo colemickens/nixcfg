@@ -17,6 +17,8 @@ in
     ../mixins/gopass/gopass.nix
     #../mixins/mega/mega.nix
     ../mixins/nushell.nix
+    ../mixins/sshd.nix
+    ../mixins/tailscale.nix
     ../mixins/xdg.nix
   ];
 

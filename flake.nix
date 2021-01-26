@@ -12,6 +12,10 @@
     master = { url = "github:nixos/nixpkgs/master"; }; # for nixFlakes
     stable = { url = "github:nixos/nixpkgs/nixos-20.09"; }; # for cachix
 
+    cross-pkgs = {
+      url = "github:Gaelan/nixpkgs/685f2f15f83445e2b8bda16f3812253a7fc6d3aa";
+    };
+
     nix.url = "github:nixos/nix/master";
     #nix.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -87,13 +91,9 @@
       pkgs_ = genAttrs (builtins.attrNames inputs) (inp: genAttrs supportedSystems (sys: pkgsFor inputs."${inp}" sys []));
       fullPkgs_ = genAttrs supportedSystems (sys:
         pkgsFor inputs.nixpkgs sys [ inputs.self.overlay inputs.nixpkgs-wayland.overlay ]);
-      mkSystem = pkgs_: hostname:
-        #pkgs_.lib.nixosSystem { ## <- to use this, I have to have a ref to the flake top, not *just* the imported-sys version
-        # also, this version suffix might be different...?
-        # TODO
-        # TODO: chek ver
-        import "${toString pkgs_.path}/nixos/lib/eval-config.nix" {
-          system = pkgs_.system;
+      mkSystem = pkgs: system: hostname:
+        pkgs.lib.nixosSystem {
+          system = system;
           modules = [(./. + "/hosts/${hostname}/configuration.nix")];
           specialArgs = { inherit inputs; };
         };
@@ -156,18 +156,22 @@
         }; in p // { colePackages = p; };
 
       nixosConfigurations = {
-        azdev    = mkSystem fullPkgs_.x86_64-linux  "azdev";
-        rpione   = mkSystem fullPkgs_.aarch64-linux "rpione";
-        rpitwo   = mkSystem fullPkgs_.aarch64-linux "rpitwo";
-        slynux   = mkSystem fullPkgs_.x86_64-linux  "slynux";
-        xeep     = mkSystem fullPkgs_.x86_64-linux  "xeep";
-        pinebook = mkSystem fullPkgs_.aarch64-linux "pinebook";
+        azdev    = mkSystem inputs.nixpkgs "x86_64-linux"  "azdev";
+        rpione   = mkSystem inputs.nixpkgs "aarch64-linux" "rpione";
+        rpitwo   = mkSystem inputs.nixpkgs "aarch64-linux" "rpitwo";
+        slynux   = mkSystem inputs.nixpkgs "x86_64-linux"  "slynux";
+        xeep     = mkSystem inputs.nixpkgs "x86_64-linux"  "xeep";
+        pinebook = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
 
         #pinephone     = mkSystem fullPkgs_.aarch64-linux "pinephone";
         #bluephone     = mkSystem fullPkgs_.aarch64-linux "bluephone";
 
         #demovm      = mkSystem fullPkgs_.x86_64-linux  "demovm";
         #testipfsvm  = mkSystem fullPkgs_.x86_64-linux  "testipfsvm";
+      };
+
+      nixosModules = {
+        other-arch-vm = import ./modules/other-arch-vm.nix;
       };
 
       toplevels = genAttrs

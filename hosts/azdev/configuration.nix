@@ -2,13 +2,14 @@
 
 {
   imports = [
+    # this make the azure go vroom
     inputs.nixos-azure.nixosModules.azure-image
 
-    ../../mixins/docker.nix
-    ../../mixins/tailscale.nix
-
-    ../../profiles/user.nix
+    # everything for a non-gui interactive session
     ../../profiles/interactive.nix
+
+    # specific persistent services to run in Azure
+    ./services.nix
   ];
 
   config = {
@@ -27,13 +28,17 @@
 
     # TODO: move to base azure image
     environment.systemPackages = with pkgs; [
-      cryptsetup
+      cryptsetup zfs
     ];
 
     fileSystems = {
       "/" = {
         fsType = "ext4";
         autoResize = true;
+      };
+      "/home2" = {
+        fsType = "zfs";
+        device = "azpool/home";
       };
       # "/nix" = {
       #   device = "/dev/disk/by-partlabel/nix";
@@ -52,6 +57,9 @@
     boot = {
       tmpOnTmpfs = true;
       cleanTmpDir = true;
+
+      initrd.supportedFilesystems = [ "zfs" ];
+      supportedFilesystems = [ "zfs" ];
 
       growPartition = true;
       kernelPackages = pkgs.linuxPackages_latest;

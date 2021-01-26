@@ -5,9 +5,12 @@ let
 in {
   imports = [
     ../rpione/core.nix
-    ./../../mixins/buildkite-agent.nix
+    ./services.nix
   ];
+
   config = {
+    # these just override some things from rpione
+
     networking.hostName = lib.mkForce hostname;
     networking.hostId = lib.mkForce "d00db00f";
     networking.interfaces."eth0".ipv4.addresses = lib.mkForce [{
@@ -37,8 +40,8 @@ in {
     };
 
     boot.loader.raspberryPi.firmwareConfig = ''
-      #dtoverlay=disable-wifi
-      #dtoverlay=disable-bt
+      dtoverlay=disable-wifi
+      dtoverlay=disable-bt
     '';
   };
 }

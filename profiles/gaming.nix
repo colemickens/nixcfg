@@ -11,7 +11,9 @@
     environment.systemPackages = with pkgs; [
       lutris
       steam-run-native
-      wine
+      #wine
+      wineWowPackages.staging
+      winetricks
     ];
   };
 }

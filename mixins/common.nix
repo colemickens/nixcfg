@@ -6,7 +6,7 @@ with lib;
   imports = [
     inputs.sops-nix.nixosModules.sops
     ../secrets
-  ];
+  ] ++ (builtins.attrValues inputs.self.nixosModules);
 
   config = {
     i18n.defaultLocale = "en_US.UTF-8";
