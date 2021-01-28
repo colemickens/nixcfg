@@ -99,6 +99,7 @@
           specialArgs = { inherit inputs; };
         };
     in rec {
+      x = builtins.trace inputs.self.sourceInfo inputs.nixpkgs.sourceInfo;
       devShell = forAllSystems (system:
         pkgs_.nixpkgs.${system}.mkShell {
           name = "nixcfg-devshell";

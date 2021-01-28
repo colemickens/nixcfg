@@ -16,6 +16,8 @@
     virtualisation.azure.image.diskSize = 30000;
 
     system.stateVersion = "21.03";
+    #system.nixos.label = "${config.system.nixos.version}-${config.system.configurationRevision}";
+    #system.configurationRevision = "adssdf";
 
     nix.nixPath = [];
     nix.gc.automatic = false; # override for builder/devenv

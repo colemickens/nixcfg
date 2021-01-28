@@ -10,6 +10,7 @@ with lib;
 
   config = {
     i18n.defaultLocale = "en_US.UTF-8";
+    system.configurationRevision = lib.mkIf (inputs.self ? rev) inputs.self.rev;
 
     boot = {
       cleanTmpDir = true;

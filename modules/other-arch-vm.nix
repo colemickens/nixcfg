@@ -214,7 +214,7 @@ in
           script = ''
             set -euo pipefail
 
-            export PATH=${lib.makeBinPath [ pkgs.qemu_kvm pkgs.utillinux pkgs.e2fsprogs ]}:$PATH
+            export PATH=${lib.makeBinPath [ pkgs.qemu pkgs.qemu_kvm pkgs.utillinux pkgs.e2fsprogs ]}:$PATH
 
             : ''${STATEDIR:=/var/lib/build-vm-${name}}
             : ''${TMPDIR:=/tmp}
@@ -235,6 +235,9 @@ in
               serial="chardev:char0"
             fi
 
+              #-machine gic-version=3 \
+              #-device virtio-rng-pci \
+
             ${armMap."${cfg.system}"} \
               -kernel ${vmConfig.system.build.kernel}/${kernelTarget} \
               -initrd ${vmConfig.system.build.initialRamdisk}/initrd \
@@ -243,9 +246,8 @@ in
               ${lib.optionalString cfg.kvm "-enable-kvm"} \
               -machine ${cfg.machine} \
               ${lib.optionalString (cfg.cpu != "") "-cpu ${cfg.cpu}"} \
-              -nographic -machine gic-version=3 \
-              -device virtio-rng-pci \
-              -drive if=none,id=hd0,file=$TMPDIR/scratch.raw,format=raw,werror=report,cache.direct=on,cache=unsafe,aio=native \
+              -nographic \
+              -drive if=none,id=hd0,file=$TMPDIR/scratch.raw,format=raw,werror=report,cache=unsafe \
               -device virtio-blk-pci,drive=hd0,serial=scratch \
               -fsdev local,id=state,path=$STATEDIR,security_model=none \
               -device virtio-9p-pci,fsdev=state,mount_tag=state \
