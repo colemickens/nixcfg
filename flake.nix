@@ -13,7 +13,8 @@
     stable = { url = "github:nixos/nixpkgs/nixos-20.09"; }; # for cachix
 
     cross-pkgs = {
-      url = "github:Gaelan/nixpkgs/685f2f15f83445e2b8bda16f3812253a7fc6d3aa";
+      #url = "github:Gaelan/nixpkgs/685f2f15f83445e2b8bda16f3812253a7fc6d3aa";
+      url = "github:colemickens/nixpkgs/crosspkgs";
     };
 
     nix.url = "github:nixos/nix/master";

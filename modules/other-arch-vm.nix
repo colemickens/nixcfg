@@ -200,7 +200,7 @@ in
           buildVMCommonConfig builderConfig cfg.config
         ]; };
         vmConfig = vmNixos.config;
-        kernelTarget = vmNixos.pkgs.stdenv.hostPlatform.platform.kernelTarget;
+        kernelTarget = vmNixos.pkgs.stdenv.hostPlatform.linux-kernel.target;
         closureInfoRelative = lib.removePrefix "${builtins.storeDir}/" vmConfig.system.build.closureInfo;
         armMap = {
           "armv6l-linux" = "qemu-system-arm";

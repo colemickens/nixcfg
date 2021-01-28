@@ -36,7 +36,7 @@
         fsType = "ext4";
         autoResize = true;
       };
-      "/home2" = {
+      "/home" = {
         fsType = "zfs";
         device = "azpool/home";
       };
