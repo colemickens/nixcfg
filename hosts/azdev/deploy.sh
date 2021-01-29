@@ -3,8 +3,8 @@ set -x
 set -euo pipefail
 
 export AZURE_LOCATION="westus2"
-#export AZURE_VM_SIZE="Standard_F72s_v2" export AZURE_VM_OS_DISK_SIZE="1024"
-export AZURE_VM_SIZE="Standard_F8s_v2"; export AZURE_VM_OS_DISK_SIZE="128"
+export AZURE_VM_SIZE="Standard_F72s_v2" export AZURE_VM_OS_DISK_SIZE="1024"
+#export AZURE_VM_SIZE="Standard_F8s_v2"; export AZURE_VM_OS_DISK_SIZE="128"
 export AZURE_VM_OS_DISK_SIZE="100"
 
 # uncomment to use a pre-existing image

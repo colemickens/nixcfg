@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let arm6vm = {
   system = "armv6l-linux";
@@ -20,7 +20,8 @@ let arm6vm = {
     config.nixpkgs.pkgs = import "${inputs.cross-pkgs}" {
       system = "x86_64-linux";
       crossSystem =
-        (import "${inputs.nixpkgs}/lib").systems.examples.raspberryPi;
+        #(import "${inputs.nixpkgs}/lib").systems.examples.raspberryPi;
+        lib.systems.examples.raspberryPi; ##  ^^???
     };
   };
 }; in {
