@@ -1,4 +1,4 @@
-{ pkgs, modulesPath, inputs, config, ... }:
+{ pkgs, lib, modulesPath, inputs, config, ... }:
 let
   hostname = "rpizero1";
 in
@@ -9,8 +9,6 @@ in
   ];
 
   # TODO: check in on cross-compiling
-  # https://github.com/illegalprime/nixos-on-arm/blob/master/images/rpi0-otg-ether/default.nix
-
   config = {
     system.stateVersion = "21.03";
 
@@ -32,7 +30,6 @@ in
       module = "ether";
     };
 
-    # ZFS
     fileSystems = {
       "/boot" = {
         device = "/dev/disk/by-partlabel/FIRMWARE";
@@ -51,6 +48,7 @@ in
 
       kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
 
+      loader.grub.enable = false;
       loader.raspberryPi = {
         enable = true;
         uboot.enable = true;
@@ -66,23 +64,36 @@ in
       wireless.iwd.enable = true;
       useNetworkd = true;
       useDHCP = false;
-      # TODO: how to do dhcpd from networkd?
-      interfaces."eth0".ipv4.addresses = [{
-        address = "10.0.3.1";
-        prefixLength = 24;
-      }];
-      interfaces."wlan0".useDHCP = true;
-      #defaultGateway = "192.168.1.1";
-      nameservers = [ "1.1.1.1" ];
-      #search = [ "ts.r10e.tech" ];
+      search = [ "ts.r10e.tech" ];
     };
     services.resolved.enable = true;
     services.resolved.domains = [ "ts.r10e.tech" ];
     systemd.network.enable = true;
+    systemd.network.networks = {
+      "01-eth0" = {
+        name = "eth0";
+        networkConfig = {
+          DHCPServer = true;
+          Address = "10.0.3.1";
+        };
+        dhcpServerConfig = {
+          PoolOffset = 100;
+          PoolSize = 2;
+        };
+      };
+      "01-wlan0" = {
+        name = "wlan0";
+        networkConfig = {
+          DHCP = "yes";
+        };
+      };
+    };
 
     nixpkgs.config.allowUnfree = true;
     hardware = {
-      enableRedistributableFirmware = true;
+      firmware = with pkgs; [
+        raspberrypiWirelessFirmware
+      ];
     };
   };
 }
