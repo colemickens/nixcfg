@@ -46,7 +46,7 @@ in
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
+      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_rpi1;
 
       loader.grub.enable = false;
       loader.raspberryPi = {
