@@ -73,7 +73,6 @@ in
       initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
       initrd.kernelModules = [ "nvme" ];
       consoleLogLevel = pkgs.lib.mkDefault 7;
-      supportedFilesystems = [ "zfs" ];
 
       kernelParams = [
         "cma=32M"
