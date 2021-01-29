@@ -1,3 +1,5 @@
+# https://bitbucket.org/thefloweringash/alex-config/src/master/build-vm.nix
+
 { config, lib, pkgs, inputs, ... }:
 
 let
