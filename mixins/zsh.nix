@@ -36,12 +36,12 @@
           bindkey "^[[1;5C" forward-word
           bindkey "^[[1;5D" backward-word
 
-          bindkey '\ec' fzy-cd-widget
-          bindkey '^T'  fzy-file-widget
-          bindkey '^R'  fzy-history-widget
-          bindkey '^P'  fzy-proc-widget
+          # bindkey '\ec' fzy-cd-widget
+          # bindkey '^T'  fzy-file-widget
+          # bindkey '^R'  fzy-history-widget
+          # bindkey '^P'  fzy-proc-widget
 
-          zstyle :fzy:tmux    enabled      yes
+          # zstyle :fzy:tmux    enabled      yes
 
           # autoload -U compinit && compinit
         '';
@@ -62,10 +62,20 @@
             src = pkgs.zsh-fast-syntax-highlighting;
             file = "share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh";
           }
+          # {
+          #   name = "zsh-fzy";
+          #   src = pkgs.zsh-fzy;
+          #   file = "share/zsh/plugins/zsh-fzy/zsh-fzy.plugin.zsh";
+          # }
           {
-            name = "zsh-fzy";
-            src = pkgs.zsh-fzy;
-            file = "share/zsh/plugins/zsh-fzy/zsh-fzy.plugin.zsh";
+            name = "zsh-skim-completion";
+            src = pkgs.skim;
+            file = "share/skim/completion.zsh";
+          }
+          {
+            name = "zsh-skim-key-bindings";
+            src = pkgs.skim;
+            file = "share/skim/key-bindings.zsh";
           }
           # nix-zsh-completions <- doesn't support flakes (yet) anyway: https://github.com/spwhitt/nix-zsh-completions/issues/32
           # zsh-completions

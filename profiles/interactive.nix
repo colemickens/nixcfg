@@ -17,6 +17,7 @@ in
     ../mixins/gopass/gopass.nix
     #../mixins/mega/mega.nix
     ../mixins/nushell.nix
+    ../mixins/skim.nix
     ../mixins/sshd.nix
     ../mixins/tailscale.nix
     ../mixins/xdg.nix
@@ -49,7 +50,7 @@ in
         screen minicom
         asciinema
         wget curl rsync
-        ripgrep jq fzy skim
+        ripgrep jq fzy
         wget curl stow ncdu tree
         git-crypt gopass gnupg passrs ripasso-cursive
         openssh autossh mosh sshuttle
