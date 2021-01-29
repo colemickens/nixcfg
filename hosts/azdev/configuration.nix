@@ -14,10 +14,21 @@
 
   config = {
     virtualisation.azure.image.diskSize = 30000;
-
     system.stateVersion = "21.03";
-    #system.nixos.label = "${config.system.nixos.version}-${config.system.configurationRevision}";
-    #system.configurationRevision = "adssdf";
+
+    systemd.tmpfiles.rules = [
+      "d '/run/state/ssh' - root - - -"
+      "d '/var/lib/tailscale' - root - - -"
+      "d '/run/state/tailscale' - root - - -"
+    ];
+
+    services.openssh = {
+      enable = true;
+      hostKeys = [
+        { path = "/run/state/ssh/ssh_host_ed25519_key"; type = "ed25519"; }
+        { path = "/run/state/ssh/ssh_host_rsa_key";     type = "rsa"; }
+      ];
+    };
 
     nix.nixPath = [];
     nix.gc.automatic = false; # override for builder/devenv
@@ -41,6 +52,15 @@
       "/home" = {
         fsType = "zfs";
         device = "azpool/home";
+      };
+      "/var/lib/tailscale" = {
+        fsType = "none";
+        options = [ "bind" ];
+        device = "/run/state/tailscale";
+      };
+      "/run/state" = {
+        fsType = "zfs";
+        device = "azpool/state";
       };
       # "/nix" = {
       #   device = "/dev/disk/by-partlabel/nix";

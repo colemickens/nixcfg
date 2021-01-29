@@ -30,7 +30,7 @@ let arm6vm = {
 
   config = {
     services.buildVMs = {
-      "armv6l-cross" = arm6vm;
+      #"armv6l-cross" = arm6vm;
     };
   };
 }
