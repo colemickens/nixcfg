@@ -19,11 +19,6 @@
         # - tab-completion isn't color-highlighted
         # - can rev search + tab-completion use the same tool/path?
 
-
-        envExtra = ''
-          # commands added to .zshenv
-        '';
-
         initExtra = ''
           # added to .zshrc
           # executed in login+interactive+ssh (I think)
