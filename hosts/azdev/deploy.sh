@@ -12,7 +12,7 @@ export AZURE_VM_OS_DISK_SIZE="100"
 # uncomment to use a pre-existing image
 # instead of building and uploading a new one
 
-image_id="/subscriptions/aff271ee-e9be-4441-b9bb-42f5af4cbaeb/resourceGroups/azstorejan27/providers/Microsoft.Compute/images/azure-image-21.03.20210128.3596154.vhd"
+image_id="/subscriptions/aff271ee-e9be-4441-b9bb-42f5af4cbaeb/resourceGroups/azdev2020nov/providers/Microsoft.Compute/images/azdev-21.03.20210129.711d6c9-b6807db8.vhd"
 
 data_disk_id="/subscriptions/aff271ee-e9be-4441-b9bb-42f5af4cbaeb/resourceGroups/azdev2020data/providers/Microsoft.Compute/disks/datadisk"
 # function create_disk() {
@@ -43,8 +43,7 @@ function deploy() {
   # upload the VHD
   export AZURE_GROUP="azdev2020nov"
   if [[ "${image_id:-""}" == "" ]]; then
-    image_id="$(set -euo pipefail; \
-      nix run "${upstream}#upload-vhd" -- /tmp/azdev)"
+    image_id="$(nix shell ~/code/nixos-azure#azutil --command upload-vhd /tmp/azdev)"
     echo "image_id=$image_id"
   fi
 
