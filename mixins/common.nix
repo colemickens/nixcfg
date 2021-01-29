@@ -10,7 +10,13 @@ with lib;
 
   config = {
     i18n.defaultLocale = "en_US.UTF-8";
-    system.configurationRevision = lib.mkIf (inputs.self ? rev) inputs.self.rev;
+
+    system.configurationRevision =
+      if inputs.self ? rev
+      then inputs.self.rev
+      else throw "Refusing to build from a dirty Git tree!";
+
+    system.nixos.label = "${config.system.nixos.version}-${config.system.configurationRevision}";
 
     boot = {
       cleanTmpDir = true;
