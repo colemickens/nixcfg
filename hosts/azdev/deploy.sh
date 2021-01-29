@@ -3,10 +3,8 @@ set -x
 set -euo pipefail
 
 export AZURE_LOCATION="westus2"
-export AZURE_VM_SIZE="Standard_D64s_v3"
-export AZURE_VM_SIZE="Standard_F64s_v2"
-export AZURE_VM_SIZE="Standard_F72s_v2"
-export AZURE_VM_SIZE="Standard_F8s_v2"
+#export AZURE_VM_SIZE="Standard_F72s_v2" export AZURE_VM_OS_DISK_SIZE="1024"
+export AZURE_VM_SIZE="Standard_F8s_v2"; export AZURE_VM_OS_DISK_SIZE="128"
 export AZURE_VM_OS_DISK_SIZE="100"
 
 # uncomment to use a pre-existing image
@@ -37,12 +35,12 @@ function deploy() {
   #upstream="github:colemickens/nixos-azure"
   upstream="/home/cole/code/nixos-azure"
 
-  # build the VHD
-  nix build "../..#images.azdev" --out-link /tmp/azdev
-
   # upload the VHD
   export AZURE_GROUP="azdev2020nov"
   if [[ "${image_id:-""}" == "" ]]; then
+    # build the VHD
+    nix build "../..#images.azdev" --out-link /tmp/azdev
+
     image_id="$(nix shell ~/code/nixos-azure#azutil --command upload-vhd /tmp/azdev)"
     echo "image_id=$image_id"
   fi
@@ -62,7 +60,7 @@ function deploy() {
     --admin-username "azureuser" \
     --location "${AZURE_LOCATION}" \
     --ssh-key-values "$(ssh-add -L | head -1)" \
-    --os-disk-size-gb "128" \
+    --os-disk-size-gb "${AZURE_VM_OS_DISK_SIZE}" \
     --public-ip-address-dns-name "${deploy}" \
     --ephemeral-os-disk true \
     --accelerated-networking
