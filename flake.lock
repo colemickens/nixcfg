@@ -105,13 +105,13 @@
         "type": "github"
       }
     },
-    "cross-pkgs": {
+    "crosspkgs": {
       "locked": {
-        "lastModified": 1611901189,
-        "narHash": "sha256-Lyz45oqkTV+nkHWic51M1A1T1LIholQ+MWHBDIhsgm8=",
+        "lastModified": 1611901266,
+        "narHash": "sha256-6SBHJciiz8CspoVaroF7D+1XMtUOquDq4IePnSbpUG0=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "3df109089f6ac134ca44196be856c8b05dd7c598",
+        "rev": "c2c140c47f5272b27b8b07782a654119107b3c41",
         "type": "github"
       },
       "original": {
@@ -661,7 +661,7 @@
       "inputs": {
         "chromium": "chromium",
         "construct": "construct",
-        "cross-pkgs": "cross-pkgs",
+        "crosspkgs": "crosspkgs",
         "deploy-rs": "deploy-rs",
         "fenix": "fenix",
         "firefox": "firefox",

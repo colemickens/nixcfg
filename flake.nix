@@ -12,7 +12,7 @@
     master = { url = "github:nixos/nixpkgs/master"; }; # for nixFlakes
     stable = { url = "github:nixos/nixpkgs/nixos-20.09"; }; # for cachix
 
-    cross-pkgs = {
+    crosspkgs = {
       #url = "github:Gaelan/nixpkgs/685f2f15f83445e2b8bda16f3812253a7fc6d3aa";
       url = "github:colemickens/nixpkgs/crosspkgs";
     };
@@ -165,8 +165,8 @@
         xeep     = mkSystem inputs.nixpkgs "x86_64-linux"  "xeep";
         pinebook = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
 
-        rpizero1 = mkSystem inputs.cross-pkgs "x86_64-linux" "rpizero1";
-        rpizero2 = mkSystem inputs.cross-pkgs "x86_64-linux" "rpizero2";
+        rpizero1 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
+        rpizero2 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
         #pinephone     = mkSystem fullPkgs_.aarch64-linux "pinephone";
         #bluephone     = mkSystem fullPkgs_.aarch64-linux "bluephone";
 

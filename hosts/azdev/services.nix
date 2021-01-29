@@ -17,7 +17,7 @@ let arm6vm = {
     # to one that might work for crossSystem build:
     config.boot.kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_rpi1;
     config.boot.initrd.availableKernelModules = pkgs.lib.mkForce [ "virtio_net" "virtio_mmio" "virtio_blk" "virtio_scsi" "9p" "9pnet_virtio" ];
-    config.nixpkgs.pkgs = import "${inputs.cross-pkgs}" {
+    config.nixpkgs.pkgs = import "${inputs.crosspkgs}" {
       system = "x86_64-linux";
       crossSystem =
         #(import "${inputs.nixpkgs}/lib").systems.examples.raspberryPi;
