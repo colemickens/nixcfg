@@ -45,10 +45,10 @@ in
      ];
 
     # rpizero stuffs
-    boot.otg = {
-      enable = true;
-      module = "ether";
-    };
+    # boot.otg = {
+    #   enable = true;
+    #   module = "ether";
+    # };
 
     # fileSystems = {
     #   "/boot" = {
