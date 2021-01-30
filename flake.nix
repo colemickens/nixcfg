@@ -197,6 +197,8 @@
         awsone = inputs.self.nixosConfigurations.azdev.config.system.build.amazonImage;
         newimg = inputs.self.nixosConfigurations.rpitwoefi.config.system.build.newimg;
 
+        rpizero1 = inputs.self.nixosConfigurations.rpizero1.config.system.build.sdImage;
+
         pinebook_bundle = pkgs_.nixpkgs.aarch64-linux.runCommandNoCC "pinebook-bundle" {} ''
           mkdir $out
           ln -s "${inputs.self.nixosConfigurations.pinebook.config.system.build.toplevel}" $out/toplevel

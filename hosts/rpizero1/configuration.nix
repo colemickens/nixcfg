@@ -6,6 +6,7 @@ in
   imports = [
     ../../mixins/common.nix
     ../../profiles/user.nix
+    ./sd-image-raspberrypi.nix
   ];
 
   # TODO: check in on cross-compiling
@@ -45,17 +46,17 @@ in
       module = "ether";
     };
 
-    fileSystems = {
-      "/boot" = {
-        device = "/dev/disk/by-partlabel/FIRMWARE";
-        fsType = "vfat";
-        options = [ "nofail" ];
-      };
-      "/" = {
-        device = "/dev/disk/by-partlabel/NIXOS";
-        fsType = "ext4";
-      };
-    };
+    # fileSystems = {
+    #   "/boot" = {
+    #     device = "/dev/disk/by-partlabel/FIRMWARE";
+    #     fsType = "vfat";
+    #     options = [ "nofail" ];
+    #   };
+    #   "/" = {
+    #     device = "/dev/disk/by-partlabel/NIXOS";
+    #     fsType = "ext4";
+    #   };
+    # };
 
     boot = {
       tmpOnTmpfs = false;
@@ -76,6 +77,7 @@ in
       firewall.enable = true;
       firewall.allowedTCPPorts = [ 22 ];
       networkmanager.enable = false;
+      wireless.enable = lib.mkForce false;
       wireless.iwd.enable = true;
       useNetworkd = true;
       useDHCP = false;

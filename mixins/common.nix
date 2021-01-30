@@ -4,8 +4,8 @@ with lib;
 
 {
   imports = [
-    inputs.sops-nix.nixosModules.sops
-    ../secrets
+    #inputs.sops-nix.nixosModules.sops
+    #../secrets
   ] ++ (builtins.attrValues inputs.self.nixosModules);
 
   config = {
@@ -16,7 +16,7 @@ with lib;
       then inputs.self.rev
       else throw "Refusing to build from a dirty Git tree!";
 
-    system.nixos.label = "${config.networking.hostName}-${config.system.nixos.version}-${pkgs.lib.substring 0 8 config.system.configurationRevision}";
+    system.nixos.label = "${config.system.nixos.version}-${pkgs.lib.substring 0 8 config.system.configurationRevision}";
 
     boot = {
       cleanTmpDir = true;
