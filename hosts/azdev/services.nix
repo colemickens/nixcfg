@@ -3,7 +3,7 @@
 let arm6vm = {
   system = "armv6l-linux";
   cpu = ""; # leave to default behavior of the machine
-  machine = "raspi0";
+  machine = "arm1176";
   #mem = "8g";
   mem = "512M";
   smp = 1;
@@ -31,7 +31,7 @@ let arm6vm = {
 
   config = {
     services.buildVMs = {
-      #"armv6l-cross" = arm6vm;
+      "armv6l-cross" = arm6vm;
     };
   };
 }

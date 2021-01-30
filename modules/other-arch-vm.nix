@@ -133,7 +133,7 @@ let
     systemd.timers.nix-gc.timerConfig.RandomizedDelaySec = "1800";
   };
 
-  mkBuildVM = system: configuration: (import "${inputs.cross-pkgs}/nixos") {
+  mkBuildVM = system: configuration: (import "${inputs.crosspkgs}/nixos") {
     inherit system;
     inherit configuration;
   };
