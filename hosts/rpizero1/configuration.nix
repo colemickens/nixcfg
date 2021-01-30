@@ -24,6 +24,21 @@ in
     documentation.info.enable = false;
     documentation.nixos.enable = false;
 
+    security.polkit.enable = false;
+    services.udisks2.enable = false;
+    boot.enableContainers = false;
+    programs.command-not-found.enable = false;
+    environment.noXlibs = true;
+
+    nix.package = lib.mkForce pkgs.nix;
+
+    boot.initrd.availableKernelModules = lib.mkForce [ 
+      "mmc_block"
+      "usbhid"
+      "hid_generic"
+      "hid_microsoft"
+     ];
+
     # rpizero stuffs
     boot.otg = {
       enable = true;
@@ -46,7 +61,7 @@ in
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_rpi1;
+      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_rpi0;
 
       loader.grub.enable = false;
       loader.raspberryPi = {
