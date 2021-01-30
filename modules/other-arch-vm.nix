@@ -164,11 +164,13 @@ in
 
           smp = lib.mkOption {
             type = lib.types.int;
+            default = -1;
             example = 16;
           };
 
           mem = lib.mkOption {
             type = lib.types.str;
+            default = "";
             example = "8g";
           };
 
@@ -244,17 +246,15 @@ in
               -kernel ${vmConfig.system.build.kernel}/${kernelTarget} \
               -initrd ${vmConfig.system.build.initialRamdisk}/initrd \
               -append "init=${vmConfig.system.build.toplevel}/init ${toString vmConfig.boot.kernelParams} closureInfo=${closureInfoRelative}" \
-              -m ${cfg.mem} -smp ${toString cfg.smp} \
               ${lib.optionalString cfg.kvm "-enable-kvm"} \
-              -machine ${cfg.machine} \
+              ${lib.optionalString (cfg.mem != "") "-m` ${cfg.mem}"} \
+              ${lib.optionalString (cfg.smp != -1) "-smp ${cfg.smp}"} \
+              ${lib.optionalString (cfg.machine != "") "-machine ${cfg.machine}"} \
               ${lib.optionalString (cfg.cpu != "") "-cpu ${cfg.cpu}"} \
               -nographic \
               -drive if=none,id=hd0,file=$TMPDIR/scratch.raw,format=raw,werror=report,cache=unsafe \
-              -device virtio-blk-pci,drive=hd0,serial=scratch \
               -fsdev local,id=state,path=$STATEDIR,security_model=none \
-              -device virtio-9p-pci,fsdev=state,mount_tag=state \
               -fsdev local,id=host-store,path=${builtins.storeDir},security_model=none,readonly \
-              -device virtio-9p-pci,fsdev=host-store,mount_tag=host-store \
               -net nic,netdev=user.0,model=virtio \
               -netdev user,id=user.0${
                 lib.optionalString (cfg.sshListenPort != null) ",hostfwd=tcp:0.0.0.0:${toString cfg.sshListenPort}-:22"
