@@ -98,7 +98,7 @@ function build() {
 
   __ "REMOTE: copy ${drv} => /nix/store"
   set -x
-  ssh_nixUnstable_shell2 "${remote}" nix "${nixargs[@]}" copy --from file://${t} --derivation ${drv}
+  ssh_nixUnstable_shell2 "${remote}" nix "${nixargs[@]}" copy --from file://${t} --no-check-sigs --derivation ${drv}
   set +x
 
   __ "REMOTE: build ${drv} => ${out}"
