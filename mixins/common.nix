@@ -4,8 +4,8 @@ with lib;
 
 {
   imports = [
-    inputs.sops-nix.nixosModules.sops
-    ../secrets
+    #inputs.sops-nix.nixosModules.sops
+    #../secrets
   ] ++ (builtins.attrValues inputs.self.nixosModules);
 
   config = {
