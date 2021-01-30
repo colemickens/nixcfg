@@ -6,6 +6,10 @@ in
   imports = [
     ../../mixins/common.nix
     ../../profiles/user.nix
+
+    ../../mixins/sshd.nix
+    ../../mixins/tailscale.nix
+
     ./sd-image-raspberrypi.nix
   ];
 
