@@ -103,7 +103,7 @@ function build() {
 
   __ "REMOTE: build ${drv} => ${out}"
   #ssh_nixUnstable_shell "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --keep-going "${drv}"
-  ssh_nixUnstable_shell2 "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --no-out-link --keep-going "${drv}"
+  ssh_nixUnstable_shell2 "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --no-link --keep-going "${drv}"
   #ssh_niche_shell "${remote}" niche build -u "${niche_cache}" -- -L "${nixargs[@]}"  "${buildargs[@]}" --keep-going "${drv}"
 
   __ "REMOTE: push ${out} to cachix"
