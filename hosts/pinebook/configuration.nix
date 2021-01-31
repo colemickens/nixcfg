@@ -77,8 +77,7 @@ in
       kernelParams = [
         "cma=32M"
         "mitigations=off"
-        "console=ttyS2,1500000n8"
-        "earlycon=uart8250,mmio32,0xff1a0000" "earlyprintk"
+        "console=ttyS2,1500000n8" "console=tty0"
       ];
     };
 
