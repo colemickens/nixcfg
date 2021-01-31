@@ -28,7 +28,7 @@
         XDG_CURRENT_DESKTOP = "sway"; # todo: maybe move to sway config so we can have this enabled with gnome enabled?
       };
       home.packages = with pkgs; [
-        drm_info
+        #drm_info
         grim
         qt5.qtwayland
         slurp
