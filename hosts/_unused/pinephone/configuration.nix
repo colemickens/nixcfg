@@ -19,7 +19,6 @@ in
       nixpkgs.overlays = [ inputs.self.overlay ];
 
       ### BEGIN HACKY COPY
-      
   };
 }
 

@@ -58,6 +58,7 @@ in
         freerdp
         virt-viewer
         #vlc
+        imv
 
         # misc utils for desktop
         brightnessctl
