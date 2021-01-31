@@ -1,6 +1,6 @@
 { pkgs, modulesPath, inputs, config, ... }:
 let
-  hostname = "rpione";
+  hostname = "rpicore";
 in
 {
   imports = [
@@ -31,34 +31,6 @@ in
       raspberrypi-eeprom
       libraspberrypi
     ];
-
-    # ZFS
-    fileSystems = {
-      "/boot" = {
-        device = "/dev/disk/by-partlabel/boot";
-        fsType = "vfat";
-        options = [ "nofail" ];
-      };
-      "/" = {
-        device = "tank/root";
-        fsType = "zfs";
-      };
-      "/nix" = {
-        device = "tank/nix";
-        fsType = "zfs";
-      };
-      # TODO: add datasets for unifi and home-assistant and then add backup jobs
-      # TODO: this requires migration before switching to this config
-      #    --- plus actually figuring out the backups to make it worth the efforts
-      # "/var/lib/hass" = {
-      #   device = "tank/hass";
-      #   fsType = "zfs";
-      # };
-      # "/var/lib/unifi" = {
-      #   device = "tank/unifi";
-      #   fsType = "zfs";
-      # };
-    };
 
     # TODO: mainline kernel shenanigans:
     # boot.kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;

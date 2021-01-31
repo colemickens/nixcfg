@@ -4,7 +4,7 @@ let
   hostname = "rpifour2";
 in {
   imports = [
-    ../rpione/core.nix
+    ../rpifour1/core.nix
     ./services.nix
   ];
 
@@ -19,21 +19,21 @@ in {
     }];
     networking.nameservers = [ "192.168.1.1" ];
 
-    # sudo mkfs.vfat /dev/disk/by-partlabel/rpi2-boot
-    # sudo zpool create -O mountpoint=none -R /mnt rpool /dev/disk/by-partlabel/rpi2-nixos
-    # sudo zfs create -o mountpoint=legacy rpool/root
-    # sudo zfs create -o mountpoint=legacy rpool/nix
     fileSystems = lib.mkForce {
       "/boot" = {
+        # sudo mkfs.vfat /dev/disk/by-partlabel/rpi2-boot
         device = "/dev/disk/by-partlabel/rpi2-boot";
         fsType = "vfat";
         options = [ "nofail" ];
       };
+      # sudo zpool create -O mountpoint=none -R /mnt rpool /dev/disk/by-partlabel/rpi2-nixos
       "/" = {
+        # sudo zfs create -o mountpoint=legacy rpool/root
         device = "rpool/root";
         fsType = "zfs";
       };
       "/nix" = {
+        # sudo zfs create -o mountpoint=legacy rpool/nix
         device = "rpool/nix";
         fsType = "zfs";
       };

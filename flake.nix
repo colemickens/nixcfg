@@ -159,19 +159,16 @@
 
       nixosConfigurations = {
         azdev    = mkSystem inputs.nixpkgs "x86_64-linux"  "azdev";
-        rpione   = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour1";
-        rpitwo   = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour2";
         rpifour1 = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour1";
         rpifour2 = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour2";
         slynux   = mkSystem inputs.nixpkgs "x86_64-linux"  "slynux";
         xeep     = mkSystem inputs.nixpkgs "x86_64-linux"  "xeep";
         pinebook = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
-
         rpizero1 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
         rpizero2 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
+
         #pinephone     = mkSystem fullPkgs_.aarch64-linux "pinephone";
         #bluephone     = mkSystem fullPkgs_.aarch64-linux "bluephone";
-
         #demovm      = mkSystem fullPkgs_.x86_64-linux  "demovm";
         #testipfsvm  = mkSystem fullPkgs_.x86_64-linux  "testipfsvm";
       };
