@@ -1,7 +1,7 @@
 { pkgs, lib, modulesPath, inputs, ... }:
 
 let
-  hostname = "rpitwo";
+  hostname = "rpifour2";
 in {
   imports = [
     ../rpione/core.nix
