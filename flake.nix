@@ -30,7 +30,8 @@
     construct.inputs.nixpkgs.follows = "nixpkgs";
 
     #sops-nix.url = "github:Mic92/sops-nix/master";
-    sops-nix.url = "github:colemickens/sops-nix/wip";
+    #sops-nix.url = "github:colemickens/sops-nix/master";
+    sops-nix.url = "github:mic92/sops-nix/23fae8a8b15b07c11f8c4c7f95ae0ce191d0c86a";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     deploy-rs.url = "github:colemickens/deploy-rs";
