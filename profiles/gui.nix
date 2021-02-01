@@ -87,6 +87,7 @@ in
         spice-gtk
 
         # browsers
+        ungoogled-chromium
       ]
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
         # use nixos-unstable on x86_64-linux
