@@ -2,6 +2,9 @@
 
 let
   firefoxFlake = inputs.firefox.packages.${pkgs.system};
+  firefoxBin = pkgs.writeShellScriptBin "firefox-bin" ''
+    exec ${pkgs.firefox-bin}/bin/firefox -p"''${@}"
+  '';
   firefoxNightly = pkgs.writeShellScriptBin "firefox-nightly" ''
     exec ${firefoxFlake.firefox-nightly-bin}/bin/firefox -p"''${@}"
   '';
@@ -90,8 +93,8 @@ in
         ungoogled-chromium
       ]
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
-        # use nixos-unstable on x86_64-linux
-        inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox
+        firefox
+        firefoxBin
         firefoxNightly
 
         ddccontrol i2c-tools
