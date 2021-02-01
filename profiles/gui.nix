@@ -95,9 +95,7 @@ in
         firefoxNightly
 
         ddccontrol i2c-tools
-
         scrcpy
-        imv
 
         # yucky non-free
         discord
