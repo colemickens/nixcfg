@@ -1,7 +1,7 @@
 {
   repo_git = "https://github.com/martinvonz/jj";
   branch = "main";
-  rev = "49d386931d68dc3e5c9724c379335e35973b218c";
-  sha256 = "sha256-f80BUHxq+/LHL1aU+ycQwtJniy4PnulArL+Ru2anSLM=";
-  cargoSha256 = "sha256-noxuHTTKuPG6YjbWjnw52Q3Jscb9GpVfD+VFqUptSrI=";
+  rev = "4ecbd893789aa3ecc96aa2fab275685c115388b0";
+  sha256 = "sha256-LVvybuD2629g5L/sGEiIxbzQJD/0hsFu6SqLnMGjuqE=";
+  cargoSha256 = "sha256-w5djQgRdcoP9CQzRt22v5EB0xAj1yOihKpX1G/TJcOc=";
 }
