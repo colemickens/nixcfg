@@ -3,10 +3,10 @@
 let
   firefoxFlake = inputs.firefox.packages.${pkgs.system};
   firefoxBin = pkgs.writeShellScriptBin "firefox-bin" ''
-    exec ${pkgs.firefox-bin}/bin/firefox -p"''${@}"
+    exec ${pkgs.firefox-bin}/bin/firefox -p "''${@}"
   '';
   firefoxNightly = pkgs.writeShellScriptBin "firefox-nightly" ''
-    exec ${firefoxFlake.firefox-nightly-bin}/bin/firefox -p"''${@}"
+    exec ${firefoxFlake.firefox-nightly-bin}/bin/firefox -p "''${@}"
   '';
 
   torbrowserPkg =
