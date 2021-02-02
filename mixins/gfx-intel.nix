@@ -2,6 +2,9 @@
 
 {
   config = {
+    environment.systemPackages = with pkgs; [
+      libva-utils
+    ];
     hardware = {
       opengl = {
         extraPackages = []
