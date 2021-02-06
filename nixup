@@ -41,6 +41,14 @@ function update() {
 
   __ "updating all inputs"
   cd "${DIR}"; nix "${nixargs[@]}" flake update --recreate-lock-file --no-registries
+  echo
+  echo
+  echo
+  echo "look into --commit-lock-file and --recreate-lock-file"
+  echo
+  echo
+  echo
+  echo 30;
   git -C "${DIR}" commit flake.lock flake.nix -m "flake.lock: update all inputs"
 
   __ "updating our own packages"
