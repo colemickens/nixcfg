@@ -3,7 +3,40 @@
 let
   rpione_serial = "156b6214";
   rpitwo_serial = "e43b854b";
-  rpitwo = inputs.self.nixosConfigurations.rpitwonet;
+  rpitwo = ({ config, lib, pkgs, ... }: {
+    imports = [
+      "${pkgs.path}/nixos/modules/profiles/minimal.nix"
+      ../profiles/interactive.nix
+    ];
+    config = {
+      fileSystems."/" = {
+        device = "10.40.0.1:/nfs/client1";
+        fsType = "nfs";
+        options = [ "x-systemd-device-timeout=4" "vers=4.1" "proto=tcp" "_netdev" ];
+      };
+      boot.tmpOnTmpfs = true;
+      services.udisks2.enable = false;
+      networking.wireless.enable = false;
+      boot.kernelPackages = pkgs.linuxPackages_rpi4;
+      boot.initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
+      boot.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
+      nixpkgs.overlays = [ (self: super: {
+        grub2 = super.callPackage ({runCommand, ...}: runCommand "grub-dummy" {} "mkdir $out") {};
+      }) ];
+      boot.blacklistedKernelModules = [
+        "bcm2835_v4l2" "bcm2835_mmal_vchiq" "bcm2835_codec" "vc_sm_cma"
+      ];
+      environment.systemPackages = with pkgs; [
+        raspberrypi-tools htop
+      ];
+      systemd.sockets."nix-daemon".enable = false;
+      security.polkit.enable = false;
+      boot.loader.grub.enable = false;
+      services.openssh.enable = true;
+      boot.consoleLogLevel = lib.mkDefault 7;
+      boot.loader.generic-extlinux-compatible.enable = false;
+    };
+  });
 
   /*
   BOOT_ORDER fields
@@ -22,10 +55,10 @@ let
       Boot mode 0x0 will retry the SD boot if the SD card detect pin indicates that the card has been inserted or replaced.
       The default boot order is 0xf41 which means continuously try SD then USB mass storage.
   */
-  #bootOrder="0xf412"; # network, sd, usbMSD, restart
-  bootOrder="0xf41"; # sd, usbMSD, restart
+  bootOrder="0xf241"; # network, sd, usbMSD, restart
+  #bootOrder="0xf41"; # sd, usbMSD, restart
 
-  configtxt = pkgs.writeText "config.txt" ''
+  eepromcfg = pkgs.writeText "eepromcfg.txt" ''
     [all]
     BOOT_UART=0
     WAKE_ON_GPIO=1
@@ -37,37 +70,15 @@ let
     DISABLE_HDMI=0
     BOOT_ORDER=${bootOrder}
     TFTP_PREFIX=0
-
-    [pi4]
-    arm_64bit=1
-    kernel=u-boot-rpi4.bin
-    enable_gic=1
-    armstub=armstub8-gic.bin
   '';
 
-  uefi_dir_with_update = pkgs.runCommandNoCC "build-tftp-rpitwo" {} ''
-    (
-      set -x
-      mkdir -p $out/
+  configTxt = pkgs.writeText "config.txt" ''
+    avoid_warnings=1
+    kernel=zImage
+  '';
 
-      cp -r "${pkgs.rpi4-uefi}/boot"/. $out/
-
-      # TODO Move some of this stuff to a "rpi-eeprom-sane" package
-      # TODO "raspberrypi-eeprom{,-sane,-tools}"
-      cp ${pkgs.raspberrypi-eeprom}/stable/vl805-latest.bin $out/vl805.bin
-      sha256sum $out/vl805.bin | cut -d' ' -f1 > $out/vl805.sig
-
-      cp ${pkgs.raspberrypi-eeprom}/stable/pieeprom-latest.bin $out/pieeprom.orig.bin
-      ${pkgs.raspberrypi-eeprom}/bin/rpi-eeprom-config \
-        --out $out/pieeprom.upd \
-        --config ${configtxt} \
-        $out/pieeprom.orig.bin
-      sha256sum $out/pieeprom.upd | cut -d' ' -f1 > $out/pieeprom.sig
-
-      # TODO: do the same with the vl805.bin firmware?
-      # TODO: auto-script to make sure our own firmware is updated?
-      # TODO: this can take out an entire cluster if a bad update were pushed
-    )
+  cmdline = pkgs.writeText "cmdline.txt" ''
+    root=/dev/nfs nfsroot=10.40.0.1:/nfs/client1,vers=4.1,proto=tcp rw ip=dhcp rootwait elevator=deadline init=${nixos.config.system.build.toplevel}/init isolcpus=3
   '';
 
   tftp_parent_dir = pkgs.runCommandNoCC "build-uefi" {} ''
