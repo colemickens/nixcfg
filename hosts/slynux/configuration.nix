@@ -36,31 +36,25 @@ in
 
     documentation.nixos.enable = false;
 
-    fileSystems."/" = {
-      device = "tank3/root";
-      fsType = "zfs";
-    };
+    fileSystems = {
+      "/boot" = {
+        device = "/dev/disk/by-partlabel/boot";
+        fsType = "vfat";
+      };
 
-    fileSystems."/nix" = {
-      device = "tank3/nix";
-      fsType = "zfs";
+      "/" = {
+        device = "slynuxreborn/root";
+        fsType = "zfs";
+      };
+      "/home" = {
+        device = "slynuxreborn/data/home";
+        fsType = "zfs";
+      };
+      "/nix" = {
+        device = "slynuxreborn/nix";
+        fsType = "zfs";
+      };
     };
-
-    fileSystems."/persist" = {
-      device = "tank3/persist";
-      fsType = "zfs";
-    };
-
-    fileSystems."/semivolatile" = {
-      device = "tank3/semivolatile";
-      fsType = "zfs";
-    };
-
-    fileSystems."/boot" = {
-      device = "/dev/disk/by-partlabel/boot";
-      fsType = "vfat";
-    };
-
 
     swapDevices = [];
 
