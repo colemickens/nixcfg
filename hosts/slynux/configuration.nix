@@ -38,7 +38,7 @@ in
 
     fileSystems = {
       "/boot" = {
-        device = "/dev/disk/by-partlabel/boot";
+        device = "/dev/disk/by-partlabel/slynuxreborn_boot";
         fsType = "vfat";
       };
 
@@ -47,7 +47,7 @@ in
         fsType = "zfs";
       };
       "/home" = {
-        device = "slynuxreborn/data/home";
+        device = "slynuxreborn/home";
         fsType = "zfs";
       };
       "/nix" = {
@@ -112,7 +112,7 @@ in
       initrd.luks.devices = {
         root = {
           name = "root";
-          device = "/dev/disk/by-partlabel/luks3";
+          device = "/dev/disk/by-partlabel/slynuxreborn_luks";
           preLVM = true;
           allowDiscards = true;
 
