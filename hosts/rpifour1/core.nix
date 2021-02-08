@@ -46,6 +46,9 @@ in
         "xhci_pci" "nvme" "usb_storage" "sd_mod" "sdhci_pci"
       ];
       kernelModules = config.boot.initrd.availableKernelModules;
+      
+      initrd.supportedFilesystems = [ "zfs" ];
+      supportedFilesystems = [ "zfs" ];
     };
 
     networking = {
