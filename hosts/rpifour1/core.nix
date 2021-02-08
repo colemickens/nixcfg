@@ -32,18 +32,18 @@ in
       libraspberrypi
     ];
 
-    # TODO: mainline kernel shenanigans:
-    # boot.kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
     # ^ usb doesn't f**king work
     boot = {
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_rpi4;
+      #kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_rpi4;
+      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
+
       initrd.availableKernelModules = [
         "pcie_brcmstb" "bcm_phy_lib" "broadcom" "mdio_bcm_unimac" "genet"
         "vc4" "bcm2835_dma" "i2c_bcm2835"
-        "xhci_pci" "nvme" "usb_storage" "sd_mod" "sdhci_pci"
+        "xhci_pci" "nvme" "usb_storage" "sd_mod" "sdhci_pci" "uas"
       ];
       kernelModules = config.boot.initrd.availableKernelModules;
       
