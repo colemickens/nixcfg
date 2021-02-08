@@ -105,9 +105,12 @@
   # Context format when root: user@host. The first part white, the rest grey.
   typeset -g POWERLEVEL9K_CONTEXT_ROOT_TEMPLATE="%F{$white}%n%f%F{$grey}@%m%f"
   # Context format when not root: user@host. The whole thing grey.
-  typeset -g POWERLEVEL9K_CONTEXT_TEMPLATE="%F{$grey}%n@%m%f"
+  typeset -g POWERLEVEL9K_CONTEXT_TEMPLATE="%F{$grey}%n@%f%F{${__COLE_HOST_COLOR:-"${grey}"}}%m%f"
   # Don't show context unless root or in SSH.
   typeset -g POWERLEVEL9K_CONTEXT_{DEFAULT,SUDO}_CONTENT_EXPANSION=
+
+  # TODO: let's include a color-coded icon that corresponds to the hostname
+  #   -> the same color that will then be used for the tmux bar as well
 
   # Show previous command duration only if it's >= 5s.
   typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=5
