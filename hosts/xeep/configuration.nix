@@ -5,18 +5,15 @@ in
 {
   imports = [
     ../../mixins/common.nix
-    ../../mixins/gfx-intel.nix
-    ../../mixins/libvirt.nix
-    ../../mixins/obs.nix
+    #../../mixins/gfx-intel.nix
+    #../../mixins/libvirt.nix
+    #../../mixins/obs.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
-    ../../mixins/v4l2loopback.nix
+    #../../mixins/v4l2loopback.nix
 
     ../../profiles/interactive.nix
-    ../../profiles/desktop-sway-unstable.nix
-
-    ../../profiles/gaming.nix
-
+    
     # xps 13 9370 specific:
     inputs.hardware.nixosModules.dell-xps-13-9370
   ];
