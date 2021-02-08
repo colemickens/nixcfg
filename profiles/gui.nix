@@ -88,11 +88,10 @@ in
         gnome3.file-roller
         gnome3.gnome-tweaks
         spice-gtk
-
-        # browsers
-        ungoogled-chromium
       ]
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
+        # browsers
+        ungoogled-chromium
         firefox
         firefoxBin
         firefoxNightly
@@ -109,7 +108,7 @@ in
       ] ++ lib.optionals (pkgs.system == "aarch64-linux") [
         # use stable on aarch64-linux
         inputs.stable.legacyPackages.${pkgs.system}.firefox
-        inputs.stable.legacyPackages.${pkgs.system}.chromium
+        inputs.stable.legacyPackages.${pkgs.system}.ungoogled-chromium
       ];
     };
   };
