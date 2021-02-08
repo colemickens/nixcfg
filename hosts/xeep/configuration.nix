@@ -105,6 +105,7 @@ in
 
       interfaces."eth0".useDHCP = true;
       interfaces."enp56s0u2u3".useDHCP = true;
+      interfaces."enp56s0u1u3".useDHCP = true;
       interfaces."wlan0".useDHCP = true;
 
       bridges."virbr0".interfaces = [ "eth0" ];
