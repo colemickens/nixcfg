@@ -89,6 +89,15 @@ in
           fallbackToPassword = true;
         };
       };
+      initrd.network = {
+        enable = true;
+        ssh = {
+          enable = true;
+          port = 22;
+          authorizedKeys = import ../../data/sshkeys.nix;
+          hostKeys = [ "/etc/secrets/initrd/ssh_host_rsa_key" ];
+        };
+      };
       loader.timeout = 1;
       loader.systemd-boot.enable = true;
       loader.efi.canTouchEfiVariables = true;
