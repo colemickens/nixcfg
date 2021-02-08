@@ -40,6 +40,11 @@ in
     ];
 
     fileSystems = {
+      "/boot" = {
+        device = "/dev/disk/by-partlabel/newboot";
+        fsType = "vfat";
+      };
+
       "/" = {
         device = "tank2/root";
         fsType = "zfs";
@@ -47,10 +52,6 @@ in
       "/nix" = {
         device = "tank2/nix2";
         fsType = "zfs";
-      };
-      "/boot" = {
-        device = "/dev/disk/by-partlabel/newboot";
-        fsType = "vfat";
       };
     };
     swapDevices = [];
