@@ -32,12 +32,10 @@ in
       libraspberrypi
     ];
 
-    # ^ usb doesn't f**king work
     boot = {
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      #kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_rpi4;
       kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
 
       initrd.availableKernelModules = [

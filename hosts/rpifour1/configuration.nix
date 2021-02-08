@@ -5,10 +5,7 @@ in
 {
   imports = [
     ./core.nix
-
     ./modules/home-assistant
-    #./modules/wireguard
-
     ./modules/nginx.nix
     ./modules/postgres.nix
 
