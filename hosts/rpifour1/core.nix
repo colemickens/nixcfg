@@ -67,6 +67,7 @@ in
     };
     services.resolved.enable = true;
     services.resolved.domains = [ "ts.r10e.tech" ];
+    services.timesyncd.enable = true;
     systemd.network.enable = true;
 
     nixpkgs.config.allowUnfree = true;
