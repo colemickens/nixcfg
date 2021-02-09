@@ -8,10 +8,10 @@ in
     ./modules/home-assistant
     ./modules/nginx.nix
     ./modules/postgres.nix
+    ./modules/srht-cronjobs.nix
+    ./modules/unifi.nix
 
     ../../mixins/avahi-publish.nix
-    ../../mixins/srht-cronjobs.nix
-    ../../mixins/unifi.nix
   ];
 
   config = {
@@ -39,13 +39,10 @@ in
         fsType = "zfs";
       };
       "/var/lib/hass" = {
-          # sudo zfs create -o mountpoint=legacy tank/var/hass
+        # sudo zfs create -o mountpoint=legacy tank/var/hass
         device = "tank/var/hass";
         fsType = "zfs";
       };
-      # TODO: add datasets for unifi and home-assistant and then add backup jobs
-      # TODO: this requires migration before switching to this config
-      #    --- plus actually figuring out the backups to make it worth the efforts
     };
   };
 }

@@ -1,8 +1,7 @@
 { config, pkgs, lib, modulesPath, inputs, ... }:
 
 let
-  rpione_serial = "156b6214";
-  rpitwo_serial = "e43b854b";
+  rpifour2_serial = "e43b854b";
   rpitwo = ({ config, lib, pkgs, ... }: {
     imports = [
       "${pkgs.path}/nixos/modules/profiles/minimal.nix"
@@ -29,7 +28,7 @@ let
       environment.systemPackages = with pkgs; [
         raspberrypi-tools htop
       ];
-      systemd.sockets."nix-daemon".enable = false;
+      #systemd.sockets."nix-daemon".enable = false; #??
       security.polkit.enable = false;
       boot.loader.grub.enable = false;
       services.openssh.enable = true;

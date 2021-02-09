@@ -9,10 +9,6 @@ in
 
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
-
-    ./rpi4-uboot-loader-mainline.nix
-    #./rpi4-uboot-mainline.nix
-    #./rpi4-uefi-mainline.nix
   ];
 
   config = {
@@ -33,6 +29,12 @@ in
     ];
 
     boot = {
+      loader.grub.enable = false;
+      loader.raspberryPi.enable = true;
+      loader.raspberryPi.version = 4;
+      loader.raspberryPi.uboot.enable = true;
+      loader.raspberryPi.uboot.configurationLimit = 5;
+
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
@@ -41,7 +43,8 @@ in
       initrd.availableKernelModules = [
         "pcie_brcmstb" "bcm_phy_lib" "broadcom" "mdio_bcm_unimac" "genet"
         "vc4" "bcm2835_dma" "i2c_bcm2835"
-        "xhci_pci" "nvme" "usb_storage" "sd_mod" "sdhci_pci" "uas"
+        "xhci_pci" "nvme" "usb_storage" "sd_mod" "sdhci_pci"
+        "uas" # necessary for my UAS-enabled NVME-USB adapter
       ];
       kernelModules = config.boot.initrd.availableKernelModules;
       
