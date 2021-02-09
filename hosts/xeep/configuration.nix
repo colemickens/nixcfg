@@ -1,16 +1,12 @@
-{ pkgs, inputs, ... }:
+{ config, pkgs, inputs, ... }:
 let
   hostname = "xeep";
 in
 {
   imports = [
     ../../mixins/common.nix
-    #../../mixins/gfx-intel.nix
-    #../../mixins/libvirt.nix
-    #../../mixins/obs.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
-    #../../mixins/v4l2loopback.nix
 
     ../../profiles/interactive.nix
     
@@ -65,8 +61,14 @@ in
       cleanTmpDir = true;
 
       kernelPackages = pkgs.linuxPackages_latest;
-      initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
-      kernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" "intel_agp" "i915" ];
+      initrd.availableKernelModules = [
+        "xhci_pci" "xhci_hcd" # usb
+        "nvme" "usb_storage" "sd_mod" # nvme / external usb storage
+        "rtsx_pci_sdmmc" # sdcard
+        "intel_agp" "i915" # intel integrated graphics
+        "usbnet" "r8152" # usb ethernet adapter
+      ];
+      kernelModules = config.boot.initrd.availableKernelModules;
       kernelParams = [
         "mitigations=off" # YOLO
         "i915.modeset=1" # nixos-hw = missing
@@ -115,8 +117,8 @@ in
       interfaces."enp56s0u1u3".useDHCP = true;
       interfaces."wlan0".useDHCP = true;
 
-      bridges."virbr0".interfaces = [ "eth0" ];
-      interfaces."virbr0".useDHCP = true;
+      #bridges."virbr0".interfaces = [ "eth0" ];
+      #interfaces."virbr0".useDHCP = true;
 
       search = [ "ts.r10e.tech" ];
     };
