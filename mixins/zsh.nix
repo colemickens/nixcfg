@@ -1,5 +1,11 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
+let
+  colors = {
+    "xeep" = "";
+    "slynux" = "";
+  };
+  promptColor = if colors."${config.networking.hostname}" then  colors."${config.networking.hostname}" else "";
 {
   config = {
     environment.pathsToLink = [ "/share/zsh" ];
@@ -20,6 +26,7 @@
         # - can rev search + tab-completion use the same tool/path?
 
         initExtra = ''
+          export __COLE_HOST_COLOR="${promptColor}"
           # added to .zshrc
           # executed in login+interactive+ssh (I think)
           bindkey -e
