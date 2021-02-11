@@ -28,7 +28,8 @@ let
         "bcm2835_v4l2" "bcm2835_mmal_vchiq" "bcm2835_codec" "vc_sm_cma"
       ];
       environment.systemPackages = with pkgs; [
-        raspberrypi-tools htop
+        libraspberrypi
+        htop
       ];
       #systemd.sockets."nix-daemon".enable = false; #??
       security.polkit.enable = false;
