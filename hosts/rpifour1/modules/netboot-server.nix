@@ -64,6 +64,8 @@ let
   configTxt = pkgs.writeText "config.txt" ''
     avoid_warnings=1
     arm_64bit=1
+    kernel=vmlinuz
+    initrd=initrd
   '';
 
   cmdline = pkgs.writeText "cmdline.txt" ''
@@ -71,12 +73,13 @@ let
   '';
 
   tftp_parent_dir = pkgs.runCommandNoCC "build-tftp-dir" {} ''
-    mkdir -p $out/${rpifour2_serial}
+    dest="$out/${rpifour2_serial}
+    mkdir -p "$dest"
 
     # create the eeprom.bin and update files (this code is somewhere...)
 
-    cp ${rpifour2_system.config.system.build.toplevel}/kernel $out/vmlinuz
-    cp ${rpifour2_system.config.system.build.toplevel}/initrd $out/initrd
+    cp ${rpifour2_system.config.system.build.toplevel}/kernel "$dest/vmlinuz"
+    cp ${rpifour2_system.config.system.build.toplevel}/initrd "$dest/initrd"
   '';
 in
 {
