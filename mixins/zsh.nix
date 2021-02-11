@@ -1,11 +1,12 @@
 { pkgs, config, ... }:
 
 let
-  colors = {
-    "xeep" = "";
-    "slynux" = "";
-  };
-  promptColor = if colors."${config.networking.hostName}" then  colors."${config.networking.hostName}" else "";
+  #colors = {
+  #  "xeep" = "";
+  #  "slynux" = "";
+  #};
+  #promptColor = if colors."${config.networking.hostName}" then  colors."${config.networking.hostName}" else "";
+  promptColor = "";
 in {
   config = {
     environment.pathsToLink = [ "/share/zsh" ];
