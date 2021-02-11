@@ -70,11 +70,13 @@ let
     root=/dev/nfs nfsroot=${nfsServer}:${nfsPath},vers=4.1,proto=tcp rw ip=dhcp rootwait elevator=deadline init=${rpifour2_system.config.system.build.toplevel}/init isolcpus=3
   '';
 
-  tftp_parent_dir = pkgs.runCommandNoCC "build-uefi" {} ''
+  tftp_parent_dir = pkgs.runCommandNoCC "build-tftp-dir" {} ''
     mkdir -p $out/${rpifour2_serial}
 
-    cp ${rpifour2_system.config.system.build.toplevel}/kernel > $out/vmlinuz
-    cp ${rpifour2_system.config.system.build.toplevel}/kernel > $out/initrd
+    # create the eeprom.bin and update files (this code is somewhere...)
+
+    cp ${rpifour2_system.config.system.build.toplevel}/kernel $out/vmlinuz
+    cp ${rpifour2_system.config.system.build.toplevel}/initrd $out/initrd
   '';
 in
 {
