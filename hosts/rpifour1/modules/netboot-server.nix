@@ -46,13 +46,13 @@ let
   };
 
   # BOOT_ORDER fields::  0x0-NONE, 0x1-SD CARD, 0x2-NETWORK, 0x3-USB device boot, 0x4-USB MSD Boot, 0xf-RESTART(loop)
-  bootOrder="0xf241"; # network, sd, usbMSD, restart
+  bootOrder="0xf142";
   eepromcfg = pkgs.writeText "eepromcfg.txt" ''
     [all]
     BOOT_UART=0
     WAKE_ON_GPIO=1
     POWER_OFF_ON_HALT=0
-    DHCP_TIMEOUT=45000
+    DHCP_TIMEOUT=20000
     DHCP_REQ_TIMEOUT=4000
     TFTP_FILE_TIMEOUT=30000
     ENABLE_SELF_UPDATE=1
@@ -76,8 +76,18 @@ let
     dest="$out/${rpifour2_serial}"
     mkdir -p "$dest"
 
-    # create the eeprom.bin and update files (this code is somewhere...)
+    # PREPARE "vl805.{bin,sig}"
+    cp ${pkgs.raspberrypi-eeprom}/stable/vl805-latest.bin $dest/vl805.bin
+    sha256sum $dest/vl805.bin | cut -d' ' -f1 > $dest/vl805.sig
 
+    # PREPARE "pieeprom.{upd,sig}"
+    ${pkgs.raspberrypi-eeprom}/bin/rpi-eeprom-config \
+      --out "$dest/pieeprom.upd" \
+      --config ${configtxt} \
+      ${pkgs.raspberrypi-eeprom}/stable/pieeprom-latest.bin
+    sha256sum $dest/pieeprom.upd | cut -d' ' -f1 > $dest/pieeprom.sig
+
+    # LINUX KERNEL + INITRD
     cp ${rpifour2_system.config.system.build.toplevel}/kernel "$dest/vmlinuz"
     cp ${rpifour2_system.config.system.build.toplevel}/initrd "$dest/initrd"
   '';

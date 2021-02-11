@@ -26,6 +26,8 @@ in
       raspberrypifw
       raspberrypi-eeprom
       libraspberrypi
+      # sudo rpi-eeprom-self-update
+      #()
     ];
 
     boot = {
