@@ -73,7 +73,7 @@ let
   '';
 
   tftp_parent_dir = pkgs.runCommandNoCC "build-tftp-dir" {} ''
-    dest="$out/${rpifour2_serial}
+    dest="$out/${rpifour2_serial}"
     mkdir -p "$dest"
 
     # create the eeprom.bin and update files (this code is somewhere...)
