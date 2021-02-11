@@ -5,7 +5,7 @@ let
     "xeep" = "";
     "slynux" = "";
   };
-  promptColor = if colors."${config.networking.hostname}" then  colors."${config.networking.hostname}" else "";
+  promptColor = if colors."${config.networking.hostName}" then  colors."${config.networking.hostName}" else "";
 in {
   config = {
     environment.pathsToLink = [ "/share/zsh" ];
