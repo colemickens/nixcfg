@@ -3,7 +3,7 @@
 let
   nfsServer = "192.168.1.2";
   nfsPath = "/nfs/rpifour2";
-  rpifour2_serial = "e43b854b";
+  rpifour2_serial = "10000000156b6214";
   rpifour2_config = ({ config, lib, pkgs, modulesPath, inputs, ... }: {
     imports = [
       "${modulesPath}/installer/netboot/netboot.nix"
@@ -73,6 +73,11 @@ let
   '';
 
   tftp_parent_dir = pkgs.runCommandNoCC "build-tftp-dir" {} ''
+    mkdir $out
+    ln -s "${boot_dir}" "$out/${rpifour2_serial}"
+  '';
+
+  boot_dir  = pkgs.runCommandNoCC "build-tftp-dir" {} ''
     dest="$out/${rpifour2_serial}"
     mkdir -p "$dest"
 

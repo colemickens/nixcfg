@@ -2,8 +2,8 @@
 
 let
   hostname = "rpitwo";
-    bootOrder="0xf41"; # sd, usbMSD, restart
 
+  bootOrder="0xf41"; # sd, usbMSD, restart
   configtxt = pkgs.writeText "config.txt" ''
     [all]
     BOOT_UART=0
@@ -39,7 +39,7 @@ let
       cp ${pkgs.raspberrypi-eeprom}/stable/pieeprom-latest.bin $out/pieeprom.orig.bin
       ${pkgs.raspberrypi-eeprom}/bin/rpi-eeprom-config \
         --out $out/pieeprom.upd \
-        --config ${configtxt} \
+        --config ${eepromconfigtxt} \
         $out/pieeprom.orig.bin
       sha256sum $out/pieeprom.upd | cut -d' ' -f1 > $out/pieeprom.sig
 
