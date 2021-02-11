@@ -1,4 +1,4 @@
-{ pkgs, lib, config, inputs, isFlakes, ... }:
+{ pkgs, lib, config, inputs, ... }:
 
 let
 #   crtFilePath = "/home/cole/.mitmproxy/mitmproxy-ca-cert.pem";
