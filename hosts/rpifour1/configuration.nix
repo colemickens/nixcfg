@@ -6,8 +6,9 @@ in
   imports = [
     ./core.nix
     ./modules/home-assistant
-    ./modules/nginx.nix
-    ./modules/postgres.nix
+    ./modules/netboot-server.nix
+    #./modules/nginx.nix
+    #./modules/postgres.nix
     ./modules/srht-cronjobs.nix
     ./modules/unifi.nix
 

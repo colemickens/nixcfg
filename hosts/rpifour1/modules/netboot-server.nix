@@ -1,22 +1,24 @@
 { config, pkgs, lib, modulesPath, inputs, ... }:
 
 let
+  nfsServer = "192.168.1.2";
+  nfsPath = "/nfs/rpifour2";
   rpifour2_serial = "e43b854b";
-  rpitwo = ({ config, lib, pkgs, ... }: {
+  rpifour2_config = ({ config, lib, pkgs, modulesPath, inputs, ... }: {
     imports = [
-      "${pkgs.path}/nixos/modules/profiles/minimal.nix"
-      ../profiles/interactive.nix
+      "${modulesPath}/installer/netboot/netboot.nix"
+      ../../../profiles/interactive.nix
     ];
     config = {
-      fileSystems."/" = {
-        device = "10.40.0.1:/nfs/client1";
+      fileSystems."/" = lib.mkForce {
+        device = "${nfsServer}:${nfsPath}";
         fsType = "nfs";
         options = [ "x-systemd-device-timeout=4" "vers=4.1" "proto=tcp" "_netdev" ];
       };
       boot.tmpOnTmpfs = true;
       services.udisks2.enable = false;
       networking.wireless.enable = false;
-      boot.kernelPackages = pkgs.linuxPackages_rpi4;
+      boot.kernelPackages = pkgs.linuxPackages_latest;
       boot.initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
       boot.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
       nixpkgs.overlays = [ (self: super: {
@@ -36,27 +38,14 @@ let
       boot.loader.generic-extlinux-compatible.enable = false;
     };
   });
+  rpifour2_system = import "${modulesPath}/../lib/eval-config.nix" {
+    modules = [ rpifour2_config ];
+    system = "aarch64-linux";
+    specialArgs = { inherit inputs; };
+  };
 
-  /*
-  BOOT_ORDER fields
-  The BOOT_ORDER property defines the sequence for the different boot modes. It is read right to left and up to 8 digits may be defined.
-
-      0x0 - NONE (stop with error pattern)
-      0x1 - SD CARD
-      0x2 - NETWORK
-      0x3 - USB device boot - Reserved - Compute Module only.
-      0x4 - USB mass storage boot (since 2020-09-03)
-      0xf - RESTART (loop) - start again with the first boot order field. (since 2020-09-03)
-
-  Default: 0xf41 (0x1 in versions prior to 2020-09-03)
-  Version: 2020-04-16
-
-      Boot mode 0x0 will retry the SD boot if the SD card detect pin indicates that the card has been inserted or replaced.
-      The default boot order is 0xf41 which means continuously try SD then USB mass storage.
-  */
+  # BOOT_ORDER fields::  0x0-NONE, 0x1-SD CARD, 0x2-NETWORK, 0x3-USB device boot, 0x4-USB MSD Boot, 0xf-RESTART(loop)
   bootOrder="0xf241"; # network, sd, usbMSD, restart
-  #bootOrder="0xf41"; # sd, usbMSD, restart
-
   eepromcfg = pkgs.writeText "eepromcfg.txt" ''
     [all]
     BOOT_UART=0
@@ -73,53 +62,23 @@ let
 
   configTxt = pkgs.writeText "config.txt" ''
     avoid_warnings=1
-    kernel=zImage
+    arm_64bit=1
   '';
 
   cmdline = pkgs.writeText "cmdline.txt" ''
-    root=/dev/nfs nfsroot=10.40.0.1:/nfs/client1,vers=4.1,proto=tcp rw ip=dhcp rootwait elevator=deadline init=${nixos.config.system.build.toplevel}/init isolcpus=3
+    root=/dev/nfs nfsroot=${nfsServer}:${nfsPath},vers=4.1,proto=tcp rw ip=dhcp rootwait elevator=deadline init=${rpifour2_system.config.system.build.toplevel}/init isolcpus=3
   '';
 
   tftp_parent_dir = pkgs.runCommandNoCC "build-uefi" {} ''
-    mkdir -p $out
+    mkdir -p $out/${rpifour2_serial}
 
-    #cp -a "''${pkgs.ipxe}/bin-aarch64-efi/ipxe.efi" $out/ipxe.efi
-
-    # copy u-boot stuff to boot dir
-    # name it and write config.txt
-
-    # copy grub.efi to boot dir
-    # load entries from http server
-
-    ln -s ${uefi_dir_with_update}/ $out/${rpione_serial}
-    ln -s ${uefi_dir_with_update}/ $out/${rpitwo_serial}
+    cp ${rpifour2_system.config.system.build.toplevel}/kernel > $out/vmlinuz
+    cp ${rpifour2_system.config.system.build.toplevel}/kernel > $out/initrd
   '';
-
-  boot_dir = pkgs.runCommandNoCC "build-bootdir" {} ''
-    (
-      set -x
-      mkdir -p $out
-      cat ${rpitwo.config.system.build.toplevel}/kernel > $out/linux.efi
-      #cat {rpitwo.config.system.build.netbootRamdisk}/initrd >> $out/linux.efi
-    )
-  '';
-
-  nixos = import "${modulesPath}/../lib/eval-config.nix" {
-    modules = [ (import ../rpitwonet/configuration.nix) ];
-    system = "aarch64-linux";
-  };
-  build = nixos.config.system.build;
 in
 {
   config = {
     services = {
-      nginx = {
-        enable = true;
-        virtualHosts."grubboot" = {
-          listen = [ { addr = "0.0.0.0"; port = 9000; } ];
-          root = "${boot_dir}";
-        };
-      };
       atftpd = {
         enable = true;
         extraOptions = [ "--verbose=7" ];
