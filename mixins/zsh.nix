@@ -6,7 +6,7 @@ let
     "slynux" = "";
   };
   promptColor = if colors."${config.networking.hostname}" then  colors."${config.networking.hostname}" else "";
-{
+in {
   config = {
     environment.pathsToLink = [ "/share/zsh" ];
 
