@@ -81,6 +81,15 @@ let
   boot_dir  = pkgs.runCommandNoCC "build-tftp-dir" {} ''
     mkdir -p "$out"
 
+    ## COPY FIRMWARE FILES IN
+    cp -r "${pkgs.raspberrypifw}/share/raspberrypi/boot/"/. $out/
+
+    ## CONFIG.TXT
+    cp "${configtxt}" $out/
+
+    ## CMDLIND.TXT
+    cp "${cmdline}" $out/
+
     # PREPARE "vl805.{bin,sig}"
     cp ${pkgs.raspberrypi-eeprom}/stable/vl805-latest.bin $out/vl805.bin
     sha256sum $out/vl805.bin | cut -d' ' -f1 > $out/vl805.sig
@@ -90,9 +99,6 @@ let
     ## ???? RECOVERY.BIN??
     # TODO
     # TODO
-
-    ## COPY FIRMWARE FILES IN
-    cp -r "${pkgs.raspberrypifw}/share/raspberrypi/boot/"/. $out/
 
     # PREPARE "pieeprom.{upd,sig}"
     ${pkgs.raspberrypi-eeprom}/bin/rpi-eeprom-config \
