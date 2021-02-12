@@ -85,9 +85,9 @@ let
     cp -r "${pkgs.raspberrypifw}/share/raspberrypi/boot/"/. $out/
 
     ## CONFIG.TXT
-    cp "${configtxt}" $out/
+    cp "${configTxt}" $out/
 
-    ## CMDLIND.TXT
+    ## CMDLINE.TXT
     cp "${cmdline}" $out/
 
     # PREPARE "vl805.{bin,sig}"
