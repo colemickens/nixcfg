@@ -1,10 +1,6 @@
 { config, pkgs, lib, modulesPath, inputs, ... }:
 
 let
-  nfsServerPath = "/exports/rpifour2";
-
-  nfsServer = "192.168.1.2";
-  nfsPath = "/rpifour2";
   rpifour2_serial = "156b6214";
   rpifour2_mac = "dc-a6-32-59-d6-f8";
   rpifour2_config = ({ config, lib, pkgs, modulesPath, inputs, ... }: {
@@ -15,7 +11,7 @@ let
     ];
     config = {
       fileSystems."/" = lib.mkForce {
-        device = "${nfsServer}:${nfsPath}";
+        device = "192.168.1.2:/rpifour2";
         fsType = "nfs";
         options = [ "x-systemd-device-timeout=4" "vers=4.1" "proto=tcp" "_netdev" ];
       };
@@ -151,7 +147,7 @@ in
         device = "/nix/store";
         options = [ "bind" ];
       };
-      "/exports/rpifour2" = {
+      "/export/rpifour2" = {
         device = "/var/lib/nfs/rpifour2";
         options = [ "bind" ];
       };
@@ -175,9 +171,9 @@ in
     services.nfs.server = {
       enable = true;
       exports = ''
-        /exports/rpifour2      192.168.1.0/24(rw,sync)
+        /export/rpifour2      192.168.1.0/24(ro,sync)
       '';
-      #/exports/rpifour2     192.168.1.3(rw,fsid=0,no_subtree_check)
+      #/export/rpifour2     192.168.1.3(rw,fsid=0,no_subtree_check)
     };
   };
 }
