@@ -114,6 +114,10 @@ function build() {
   ssh_nixUnstable_shell2 "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --no-link --keep-going "${drv}"
   #ssh_niche_shell "${remote}" niche build -u "${niche_cache}" -- -L "${nixargs[@]}"  "${buildargs[@]}" --keep-going "${drv}"
 
+  if [[ "${target}" == "${remote}" ]]; then
+    echo -e "${out}"; return 0
+  fi
+
   __ "REMOTE: push ${out} to cachix"
   rm -rf ~/.config/nix
   ssh_nixUnstable_shell2 "${remote}" rm -rf .cache/nix
