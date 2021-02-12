@@ -8,6 +8,7 @@ let
   rpifour2_config = ({ config, lib, pkgs, modulesPath, inputs, ... }: {
     imports = [
       "${modulesPath}/installer/netboot/netboot.nix"
+      ../../../mixins/common.nix
       ../../../profiles/interactive.nix
     ];
     config = {
@@ -16,6 +17,12 @@ let
         fsType = "nfs";
         options = [ "x-systemd-device-timeout=4" "vers=4.1" "proto=tcp" "_netdev" ];
       };
+
+      documentation.enable = false;
+      documentation.doc.enable = false;
+      documentation.info.enable = false;
+      documentation.nixos.enable = false;
+
       boot.tmpOnTmpfs = true;
       services.udisks2.enable = false;
       networking.wireless.enable = false;
@@ -81,24 +88,9 @@ let
   boot_dir  = pkgs.runCommandNoCC "build-tftp-dir" {} ''
     mkdir -p "$out"
 
-    ## COPY FIRMWARE FILES IN
-    cp -r "${pkgs.raspberrypifw}/share/raspberrypi/boot/"/. $out/
-
-    ## CONFIG.TXT
-    cp "${configTxt}" $out/
-
-    ## CMDLINE.TXT
-    cp "${cmdline}" $out/
-
     # PREPARE "vl805.{bin,sig}"
     cp ${pkgs.raspberrypi-eeprom}/stable/vl805-latest.bin $out/vl805.bin
     sha256sum $out/vl805.bin | cut -d' ' -f1 > $out/vl805.sig
-
-    # TODO
-    # TODO
-    ## ???? RECOVERY.BIN??
-    # TODO
-    # TODO
 
     # PREPARE "pieeprom.{upd,sig}"
     ${pkgs.raspberrypi-eeprom}/bin/rpi-eeprom-config \
@@ -106,6 +98,19 @@ let
       --config ${eepromcfg} \
       ${pkgs.raspberrypi-eeprom}/stable/pieeprom-latest.bin
     sha256sum $out/pieeprom.upd | cut -d' ' -f1 > $out/pieeprom.sig
+
+    ## FIRMWARE
+    cp -r "${pkgs.raspberrypifw}/share/raspberrypi/boot/"/. $out/
+
+    ###################
+    # TODO: ARM STUBS
+    ###################
+
+    ## CONFIG.TXT
+    cp "${configTxt}" $out/
+
+    ## CMDLINE.TXT
+    cp "${cmdline}" $out/
 
     # LINUX KERNEL + INITRD
     cp ${rpifour2_system.config.system.build.toplevel}/kernel "$out/vmlinuz"
