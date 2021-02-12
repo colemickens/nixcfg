@@ -80,7 +80,15 @@ let
   earlycon = "earlycon=pl011,mmio32,0xfe201000";
   console = "earlycon=pl011,mmio32,0xfe201000";
   cmdline = pkgs.writeText "cmdline.txt" ''
-    ${lib.optional earlycon} ${lib.optional console} root=/dev/nfs nfsroot=${nfsServer}:${nfsPath},vers=4.1,proto=tcp rw ip=dhcp rootwait elevator=deadline init=${rpifour2_system.config.system.build.toplevel}/init isolcpus=3
+    ${lib.optionalString (earlycon!="") earlycon}
+    ${lib.optionalString (console!="") console}
+    root=/dev/nfs
+    nfsroot=${nfsServer}:${nfsPath},vers=4.1,proto=tcp rw
+    ip=dhcp
+    rootwait
+    elevator=deadline
+    init=${rpifour2_system.config.system.build.toplevel}/init
+    isolcpus=3
   '';
 
   tftp_parent_dir = pkgs.runCommandNoCC "build-tftp-dir" {} ''
