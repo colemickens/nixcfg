@@ -75,6 +75,7 @@ let
     arm_64bit=1
     kernel=vmlinuz
     initrd=initrd
+    dtb=bcm2711-rpi-4-b.dtb
   '';
 
   cmdline = pkgs.writeText "cmdline.txt" ''
@@ -115,6 +116,16 @@ let
     # LINUX KERNEL + INITRD
     cp ${rpifour2_system.config.system.build.toplevel}/kernel "$out/vmlinuz"
     cp ${rpifour2_system.config.system.build.toplevel}/initrd "$out/initrd"
+
+    # PURGE EXISTING DTBS
+    rm $out/*.dtb
+
+    # LINUX MAINLINE DTBS
+    for dtb in ${rpifour2_system.config.system.build.toplevel}/dtbs/{broadcom,}/bcm*.dtb; do
+      dst="$target/$(basename $dtb)"
+      copyForced $dtb "$dst"
+      filesCopied[$dst]=1
+    done
   '';
 in
 {
