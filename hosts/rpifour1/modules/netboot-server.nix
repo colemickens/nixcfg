@@ -79,23 +79,31 @@ let
   '';
 
   boot_dir  = pkgs.runCommandNoCC "build-tftp-dir" {} ''
-    dest="$out/${rpifour2_serial}"
-    mkdir -p "$dest"
+    mkdir -p "$out"
 
     # PREPARE "vl805.{bin,sig}"
-    cp ${pkgs.raspberrypi-eeprom}/stable/vl805-latest.bin $dest/vl805.bin
-    sha256sum $dest/vl805.bin | cut -d' ' -f1 > $dest/vl805.sig
+    cp ${pkgs.raspberrypi-eeprom}/stable/vl805-latest.bin $out/vl805.bin
+    sha256sum $out/vl805.bin | cut -d' ' -f1 > $out/vl805.sig
+
+    # TODO
+    # TODO
+    # TODO
+    ## ???? RECOVERY.BIN??
+    # TODO
+    # TODO
+    # TODO
+    # TODO
 
     # PREPARE "pieeprom.{upd,sig}"
     ${pkgs.raspberrypi-eeprom}/bin/rpi-eeprom-config \
-      --out "$dest/pieeprom.upd" \
+      --out "$out/pieeprom.upd" \
       --config ${eepromcfg} \
       ${pkgs.raspberrypi-eeprom}/stable/pieeprom-latest.bin
-    sha256sum $dest/pieeprom.upd | cut -d' ' -f1 > $dest/pieeprom.sig
+    sha256sum $out/pieeprom.upd | cut -d' ' -f1 > $out/pieeprom.sig
 
     # LINUX KERNEL + INITRD
-    cp ${rpifour2_system.config.system.build.toplevel}/kernel "$dest/vmlinuz"
-    cp ${rpifour2_system.config.system.build.toplevel}/initrd "$dest/initrd"
+    cp ${rpifour2_system.config.system.build.toplevel}/kernel "$out/vmlinuz"
+    cp ${rpifour2_system.config.system.build.toplevel}/initrd "$out/initrd"
   '';
 in
 {
