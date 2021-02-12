@@ -66,7 +66,7 @@ in
         "uas" # necessary for my UAS-enabled NVME-USB adapter
       ];
       kernelModules = config.boot.initrd.availableKernelModules;
-      
+
       initrd.supportedFilesystems = [ "zfs" ];
       supportedFilesystems = [ "zfs" ];
     };
