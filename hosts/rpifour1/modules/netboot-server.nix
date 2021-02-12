@@ -102,9 +102,8 @@ let
     ## FIRMWARE
     cp -r "${pkgs.raspberrypifw}/share/raspberrypi/boot/"/. $out/
 
-    ###################
-    # TODO: ARM STUBS
-    ###################
+    # ARM STUBS 8 (TODO, diff ones for 32 bit mode?)
+    cp "${pkgs.raspberrypi-armstubs}/armstub8-gic.bin" $out/armstub8-gic.bin
 
     ## CONFIG.TXT
     cp "${configTxt}" $out/config.txt
