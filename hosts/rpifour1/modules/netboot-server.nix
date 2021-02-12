@@ -147,11 +147,11 @@ in
         device = "tank/var/rpifour2";
         fsType = "zfs";
       };
-      fileSystems."/var/lib/nfs/rpifour2/nix" = {
+      "/var/lib/nfs/rpifour2/nix" = {
         device = "/nix/store";
         options = [ "bind" ];
       };
-      fileSystems."/exports/rpifour2" = {
+      "/exports/rpifour2" = {
         device = "/var/lib/nfs/rpifour2";
         options = [ "bind" ];
       };
