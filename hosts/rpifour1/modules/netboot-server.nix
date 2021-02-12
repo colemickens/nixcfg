@@ -69,6 +69,7 @@ let
 
   configTxt = pkgs.writeText "config.txt" ''
     enable_uart=1
+    dtoverlay=disable-bt
     avoid_warnings=1
     arm_64bit=1
     kernel=vmlinuz
@@ -80,7 +81,7 @@ let
   #console = "console=ttyS0,115200";
   console = "";
   cmdline = pkgs.writeText "cmdline.txt" ''
-    ${lib.optionalString (earlycon!="") earlycon} ${lib.optionalString (console!="") console} root=/dev/nfs nfsroot=192.168.1.2:/rpifour2,vers=4.1,proto=tcp ro ip=dhcp rootwait elevator=deadline init=${rpifour2_system.config.system.build.toplevel}/init isolcpus=3
+    ${lib.optionalString (earlycon!="") earlycon} ${lib.optionalString (console!="") console} root=/dev/nfs nfsroot=192.168.1.2:/rpifour2,vers=4.1,proto=tcp ro ip=dhcp rootwait elevator=deadline init=${rpifour2_system.config.system.build.toplevel}/init isolcpus=3 nfsrootdebug
   '';
 
   tftp_parent_dir = pkgs.runCommandNoCC "build-tftp-dir" {} ''
