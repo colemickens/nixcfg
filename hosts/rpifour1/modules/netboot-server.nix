@@ -70,6 +70,7 @@ let
   '';
 
   configTxt = pkgs.writeText "config.txt" ''
+    enable_uart=1
     avoid_warnings=1
     arm_64bit=1
     kernel=vmlinuz
@@ -78,7 +79,7 @@ let
   '';
 
   earlycon = "earlycon=pl011,mmio32,0xfe201000";
-  console = "earlycon=pl011,mmio32,0xfe201000";
+  console = "console=ttyS0,115200";
   cmdline = pkgs.writeText "cmdline.txt" ''
     ${lib.optionalString (earlycon!="") earlycon}
     ${lib.optionalString (console!="") console}
