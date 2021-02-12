@@ -107,10 +107,10 @@ let
     ###################
 
     ## CONFIG.TXT
-    cp "${configTxt}" $out/
+    cp "${configTxt}" $out/config.txt
 
     ## CMDLINE.TXT
-    cp "${cmdline}" $out/
+    cp "${cmdline}" $out/cmdline.txt
 
     # LINUX KERNEL + INITRD
     cp ${rpifour2_system.config.system.build.toplevel}/kernel "$out/vmlinuz"
