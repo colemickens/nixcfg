@@ -88,7 +88,7 @@ let
     # PREPARE "pieeprom.{upd,sig}"
     ${pkgs.raspberrypi-eeprom}/bin/rpi-eeprom-config \
       --out "$dest/pieeprom.upd" \
-      --config ${configtxt} \
+      --config ${eepromcfg} \
       ${pkgs.raspberrypi-eeprom}/stable/pieeprom-latest.bin
     sha256sum $dest/pieeprom.upd | cut -d' ' -f1 > $dest/pieeprom.sig
 
