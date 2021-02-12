@@ -87,12 +87,12 @@ let
 
     # TODO
     # TODO
-    # TODO
     ## ???? RECOVERY.BIN??
     # TODO
     # TODO
-    # TODO
-    # TODO
+
+    ## COPY FIRMWARE FILES IN
+    cp -r "${pkgs.raspberrypifw}/share/raspberrypi/boot/"/. $out/
 
     # PREPARE "pieeprom.{upd,sig}"
     ${pkgs.raspberrypi-eeprom}/bin/rpi-eeprom-config \
