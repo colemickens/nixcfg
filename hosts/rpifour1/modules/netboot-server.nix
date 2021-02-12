@@ -26,6 +26,7 @@ let
       networking.wireless.enable = false;
       boot.kernelPackages = pkgs.linuxPackages_latest;
       boot.initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
+      boot.initrd.kernelModules = ["nfs"];
       boot.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
       nixpkgs.overlays = [ (self: super: {
         grub2 = super.callPackage ({runCommand, ...}: runCommand "grub-dummy" {} "mkdir $out") {};
