@@ -79,15 +79,7 @@ let
   earlycon = "earlycon=uart8250,mmio32,0xfe215040";
   console = "console=ttyS0,115200";
   cmdline = pkgs.writeText "cmdline.txt" ''
-    ${lib.optionalString (earlycon!="") earlycon}
-    ${lib.optionalString (console!="") console}
-    root=/dev/nfs
-    nfsroot=${nfsServer}:${nfsPath},vers=4.1,proto=tcp rw
-    ip=dhcp
-    rootwait
-    elevator=deadline
-    init=${rpifour2_system.config.system.build.toplevel}/init
-    isolcpus=3
+    ${lib.optionalString (earlycon!="") earlycon} ${lib.optionalString (console!="") console} root=/dev/nfs nfsroot=192.168.1.2:/rpifour2,vers=4.1,proto=tcp ro ip=dhcp rootwait elevator=deadline init=${rpifour2_system.config.system.build.toplevel}/init isolcpus=3
   '';
 
   tftp_parent_dir = pkgs.runCommandNoCC "build-tftp-dir" {} ''
@@ -173,7 +165,6 @@ in
       exports = ''
         /export/rpifour2      192.168.1.0/24(ro,sync)
       '';
-      #/export/rpifour2     192.168.1.3(rw,fsid=0,no_subtree_check)
     };
   };
 }
