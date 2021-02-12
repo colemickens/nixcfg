@@ -78,7 +78,7 @@ let
     dtb=bcm2711-rpi-4-b.dtb
   '';
 
-  earlycon = "earlycon=pl011,mmio32,0xfe201000";
+  earlycon = "earlycon=uart8250,mmio32,0xfe215040";
   console = "console=ttyS0,115200";
   cmdline = pkgs.writeText "cmdline.txt" ''
     ${lib.optionalString (earlycon!="") earlycon}
