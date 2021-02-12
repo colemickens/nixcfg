@@ -1,8 +1,10 @@
 { config, pkgs, lib, modulesPath, inputs, ... }:
 
 let
+  nfsServerPath = "/exports/rpifour2";
+
   nfsServer = "192.168.1.2";
-  nfsPath = "/nfs/rpifour2";
+  nfsPath = "/rpifour2";
   rpifour2_serial = "156b6214";
   rpifour2_mac = "dc-a6-32-59-d6-f8";
   rpifour2_config = ({ config, lib, pkgs, modulesPath, inputs, ... }: {
@@ -139,14 +141,43 @@ let
 in
 {
   config = {
-    services = {
-      atftpd = {
-        enable = true;
-        extraOptions = [ "--verbose=7" ];
-        root = "${tftp_parent_dir}";
+    filesystems = {
+      "/var/lib/nfs/rpifour2" = {
+        # sudo zfs create -o mountpoint=legacy tank/var/rpifour2
+        device = "tank/var/rpifour2";
+        fsType = "zfs";
+      };
+      fileSystems."/var/lib/nfs/rpifour2/nix" = {
+        device = "/nix/store";
+        options = [ "bind" ];
+      };
+      fileSystems."/exports/rpifour2" = {
+        device = "/var/lib/nfs/rpifour2";
+        options = [ "bind" ];
       };
     };
-    networking.firewall.allowedUDPPorts = [ 67 69 4011 ];
-    networking.firewall.allowedTCPPorts = [ 80 443 9000 ];
+    networking.firewall = {
+      allowedUDPPorts = [
+        67 69 4011
+        111 2049 # nfs
+      ];
+      allowedTCPPorts = [
+        80 443
+        9000
+        111 2049 # nfs
+      ];
+    };
+    services.atftpd = {
+      enable = true;
+      extraOptions = [ "--verbose=7" ];
+      root = "${tftp_parent_dir}";
+    };
+    services.nfs.server = {
+      enable = true;
+      exports = ''
+        /exports/rpifour2      192.168.1.0/24(rw,sync)
+      '';
+      #/exports/rpifour2     192.168.1.3(rw,fsid=0,no_subtree_check)
+    };
   };
 }

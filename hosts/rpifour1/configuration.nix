@@ -44,6 +44,8 @@ in
         device = "tank/var/hass";
         fsType = "zfs";
       };
+
+      # see in netboot-server for the /var/lib/nfs/rpifour2 mount
     };
   };
 }
