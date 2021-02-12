@@ -123,8 +123,7 @@ let
     # LINUX MAINLINE DTBS
     for dtb in ${rpifour2_system.config.system.build.toplevel}/dtbs/{broadcom,}/bcm*.dtb; do
       dst="$target/$(basename $dtb)"
-      cp $dtb "$dst"
-      filesCopied[$dst]=1
+      cp $dtb "$out/"
     done
   '';
 in
