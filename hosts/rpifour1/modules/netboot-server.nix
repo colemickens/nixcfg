@@ -13,7 +13,7 @@ let
       fileSystems."/" = lib.mkForce {
         device = "192.168.1.2:/rpifour2";
         fsType = "nfs";
-        options = [ "x-systemd-device-timeout=4" "vers=4.1" "proto=tcp" "_netdev" ];
+        options = [ "x-systemd-device-timeout=20s" "vers=4.1" "proto=tcp" "_netdev" ];
       };
 
       documentation.enable = false;
