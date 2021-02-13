@@ -18,6 +18,7 @@ in
     #../../profiles/desktop-plasma.nix
     
     # xps 13 9370 specific:
+    ../../mixins/gfx-intel.nix
     inputs.hardware.nixosModules.dell-xps-13-9370
   ];
 
