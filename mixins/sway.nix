@@ -163,7 +163,9 @@ in
             #};
             "${out_laptop}" = { disable = ""; }; # disable laptop display for a bit
             "${out_alien}" = {
-              mode = "3440x1440@120Hz";
+              #mode = "3440x1440@120Hz";
+              #mode = "3440x1440Hz";
+              # don't force alienware to be a certain refresh rate (it depends what adapter is used :/)
               subpixel = "rgb";
               scale = "1.0";
               adaptive_sync = "on";
