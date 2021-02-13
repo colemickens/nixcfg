@@ -5,10 +5,15 @@ in
 {
   imports = [
     ../../mixins/common.nix
+    ../../mixins/docker.nix
     ../../mixins/sshd.nix
+    ../../mixins/libvirt.nix
     ../../mixins/tailscale.nix
 
     ../../profiles/interactive.nix
+    
+    ../../profiles/desktop-sway.nix
+    #../../profiles/desktop-plasma.nix
     
     # xps 13 9370 specific:
     inputs.hardware.nixosModules.dell-xps-13-9370
