@@ -166,7 +166,7 @@ in
     services.nfs.server = {
       enable = true;
       exports = ''
-        /export/rpifour2      192.168.1.0/24(ro,sync)
+        /export/rpifour2      192.168.1.0/24(ro,nohide,insecure,no_subtree_check)
       '';
     };
   };
