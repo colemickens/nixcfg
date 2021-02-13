@@ -6,31 +6,13 @@ in
 {
   imports = [
     ../../mixins/common.nix
-
-    ../../mixins/chromecast.nix
-    #../../mixins/debug-xdg.nix
-    ../../mixins/docker.nix
-    #../../mixins/ipfs.nix
-    #../../mixins/jellyfin.nix
-    ../../mixins/libvirt.nix
-    #../../mixins/meli.nix
-    ../../mixins/obs.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
-    ../../mixins/v4l2loopback.nix
 
     ../../profiles/interactive.nix
-    #../../profiles/specialisations.nix
-    ../../profiles/desktop-sway.nix
-
-    # ./hs.nix
   ];
 
   config = {
-    # TODO move to devenv
-    programs.adb.enable = true;
-    services.udev.packages = with pkgs; [ libsigrok ];
-
     system.stateVersion = "20.03"; # Did you read the comment?
     services.timesyncd.enable = true;
 
