@@ -27,6 +27,9 @@ let
       boot.kernelPackages = pkgs.linuxPackages_latest;
       boot.initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
       boot.initrd.kernelModules = ["nfs"];
+
+      boot.initrd.networking.enable = true;
+      
       boot.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
       nixpkgs.overlays = [ (self: super: {
         grub2 = super.callPackage ({runCommand, ...}: runCommand "grub-dummy" {} "mkdir $out") {};
@@ -167,7 +170,7 @@ in
       enable = true;
       exports = ''
         /export             192.168.1.0/24(fsid=0,rw,sync,no_subtree_check)
-        /export/rpifour2    192.168.1.0/24(ro,nohide,no_root_squash,insecure,no_subtree_check)
+        /export/rpifour2    b192.168.1.0/24(ro,nohide,no_root_squash,insecure,no_subtree_check)
       '';
     };
   };
