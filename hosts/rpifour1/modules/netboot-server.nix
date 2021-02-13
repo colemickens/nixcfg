@@ -89,7 +89,7 @@ let
   '';
 
   cmdline = pkgs.writeText "cmdline.txt" ''
-    init=${rpifour2_system.system.build.toplevel}/init initrd=initrd ${toString rpifour2_system.boot.kernelParams}
+    init=${rpifour2_system.config.system.build.toplevel}/init initrd=initrd ${toString rpifour2_system.config.boot.kernelParams}
   '';
 
   tftp_parent_dir = pkgs.runCommandNoCC "build-tftp-dir" {} ''
