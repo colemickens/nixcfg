@@ -28,8 +28,8 @@ let
       boot.initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
       boot.initrd.kernelModules = ["nfs"];
 
-      boot.initrd.networking.enable = true;
-      
+      boot.initrd.network.enable = true;
+
       boot.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
       nixpkgs.overlays = [ (self: super: {
         grub2 = super.callPackage ({runCommand, ...}: runCommand "grub-dummy" {} "mkdir $out") {};
