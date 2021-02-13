@@ -174,10 +174,10 @@ function azdev()    { activate ".#toplevels.azdev"    "${AZDEV}"   "${AZDEV}";  
 function pinebook() { activate ".#toplevels.pinebook" "${AARCH64}" "${PINEBOOK}"; }
 function rpifour1() { activate ".#toplevels.rpifour1" "${RPIFOUR1}" "${RPIFOUR1}";   }
 function rpifour2() { activate ".#toplevels.rpifour2" "${AARCH64}" "${RPIFOUR2}";   }
-function slynux()   { activate ".#toplevels.slynux"   "${AZDEV}"   "${SLYNUX}";   }
-function xeep()     { activate ".#toplevels.xeep"     "${AZDEV}"   "${XEEP}";     }
-function rpizero1() { activate ".#toplevels.rpizero1" "${AZDEV}"   "${RPIZERO1}";   }
-function rpizero2() { activate ".#toplevels.rpizero2" "${AZDEV}"   "${RPIZERO2}";   }
+function slynux()   { activate ".#toplevels.slynux"   "${SLYNUX}"   "${SLYNUX}";   }
+function xeep()     { activate ".#toplevels.xeep"     "${SLYNUX}"   "${XEEP}";     }
+function rpizero1() { activate ".#toplevels.rpizero1" "${SLYNUX}"   "${RPIZERO1}";   }
+function rpizero2() { activate ".#toplevels.rpizero2" "${SLYNUX}"   "${RPIZERO2}";   }
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 
