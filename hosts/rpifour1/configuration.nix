@@ -18,6 +18,11 @@ in
   config = {
     networking.hostName = lib.mkForce hostname;
 
+    environment.systemPackages = with pkgs; [
+      minicom
+      screen
+    ];
+
     # ZFS
     fileSystems = {
       "/boot" = {
