@@ -88,11 +88,11 @@ let
   earlycon = "earlycon=uart8250,mmio32,0xfe215040";
   #console = "console=ttyS0,115200";
   console = "";
-  cmdline2 = pkgs.writeText "cmdline.txt" ''
+  cmdline = pkgs.writeText "cmdline.txt" ''
     ${lib.optionalString (earlycon!="") earlycon} ${lib.optionalString (console!="") console} root=/dev/nfs nfsroot=192.168.1.2:/rpifour2,vers=4.1,proto=tcp ro ip=dhcp rootwait elevator=deadline init=${rpifour2_system.config.system.build.toplevel}/init isolcpus=3 nfsrootdebug
   '';
 
-  cmdline = pkgs.writeText "cmdline.txt" ''
+  cmdline2 = pkgs.writeText "cmdline.txt" ''
     init=${rpifour2_system.config.system.build.toplevel}/init initrd=initrd ${toString rpifour2_system.config.boot.kernelParams}
   '';
 
