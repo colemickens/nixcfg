@@ -59,7 +59,7 @@ in
 
       kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
 
-      blacklistedKernelModules = [ "sdhci" ]; # sdhci on 5.10.x is really loud and seemingly broken
+      blacklistedKernelModules = [ "sdhci" "sdhci-pci" ]; # sdhci on 5.10.x is really loud and seemingly broken
 
       initrd.availableKernelModules = [
         "pcie_brcmstb" "bcm_phy_lib" "broadcom" "mdio_bcm_unimac" "genet"
