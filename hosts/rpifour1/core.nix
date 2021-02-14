@@ -59,10 +59,12 @@ in
 
       kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
 
+      blacklistedKernelModules = [ "sdhci" ]; # sdhci on 5.10.x is really loud and seemingly broken
+
       initrd.availableKernelModules = [
         "pcie_brcmstb" "bcm_phy_lib" "broadcom" "mdio_bcm_unimac" "genet"
         "vc4" "bcm2835_dma" "i2c_bcm2835"
-        "xhci_pci" "nvme" "usb_storage" "sd_mod" "sdhci_pci"
+        "xhci_pci" "nvme" "usb_storage" "sd_mod"
         "uas" # necessary for my UAS-enabled NVME-USB adapter
       ];
       kernelModules = config.boot.initrd.availableKernelModules;
