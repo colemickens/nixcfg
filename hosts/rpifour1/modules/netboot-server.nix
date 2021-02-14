@@ -77,6 +77,7 @@ let
   configTxt = pkgs.writeText "config.txt" ''
     enable_uart=1
     dtoverlay=disable-bt
+    dtoverlay=disable-wifi
     avoid_warnings=1
     arm_64bit=1
     kernel=vmlinuz

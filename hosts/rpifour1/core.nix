@@ -51,6 +51,10 @@ in
       loader.grub.enable = false;
       loader.raspberryPi.enable = true;
       loader.raspberryPi.version = 4;
+      loader.raspberryPi.firmwareConfig = ''
+        dtoverlay=disable-wifi
+        dtoverlay=disable-bt
+      '';
       loader.raspberryPi.uboot.enable = true;
       loader.raspberryPi.uboot.configurationLimit = 5;
 
