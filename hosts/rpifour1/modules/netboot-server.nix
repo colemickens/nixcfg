@@ -29,6 +29,7 @@ let
       boot.initrd.kernelModules = [
         "nfs" "genet" "broadcom"
       ];
+      networking.hostName = "rpifour2";
       networking.useDHCP = true;
 
       boot.initrd.network.enable = true;
