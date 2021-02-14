@@ -59,7 +59,8 @@ in
 
       kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
 
-      blacklistedKernelModules = [ "sdhci" "sdhci-pci" ]; # sdhci on 5.10.x is really loud and seemingly broken
+      # note, the annoying SD card messages when booting from not SD:
+      # https://github.com/raspberrypi/linux/issues/3657
 
       initrd.availableKernelModules = [
         "pcie_brcmstb" "bcm_phy_lib" "broadcom" "mdio_bcm_unimac" "genet"

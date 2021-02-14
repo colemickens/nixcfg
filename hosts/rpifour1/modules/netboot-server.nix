@@ -26,7 +26,9 @@ let
       networking.wireless.enable = false;
       boot.kernelPackages = pkgs.linuxPackages_latest;
       boot.initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
-      boot.initrd.kernelModules = ["nfs" "genet"];
+      boot.initrd.kernelModules = [
+        "nfs" "bcmgenet"
+      ];
 
       boot.initrd.network.enable = true;
 
