@@ -27,8 +27,9 @@ let
       boot.kernelPackages = pkgs.linuxPackages_latest;
       boot.initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
       boot.initrd.kernelModules = [
-        "nfs" "bcmgenet"
+        "nfs" "genet"
       ];
+      networking.useDHCP = true;
 
       boot.initrd.network.enable = true;
 
