@@ -28,7 +28,7 @@ let
       boot.initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
       boot.initrd.kernelModules = [
         "nfs" "genet" "broadcom"
-        "pcieport" "xhci_pci"
+        "xhci_pci"
       ];
       networking.hostName = "rpifour2";
       networking.useDHCP = true;
