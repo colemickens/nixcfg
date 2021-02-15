@@ -85,7 +85,7 @@ let
     arm_64bit=1
     kernel=vmlinuz
     initrd=initrd
-    dtb=bcm2711-rpi-4-b.dtb
+    #dtb=bcm2711-rpi-4-b.dtb
   '';
 
   earlycon = "earlycon=uart8250,mmio32,0xfe215040";
