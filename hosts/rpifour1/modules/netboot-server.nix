@@ -30,6 +30,7 @@ let
         "nfs" "genet" "broadcom"
         "xhci_pci" "libphy" "bcm_phy_lib"
       ];
+      boot.kernelModules = config.boot.initrd.kernelModules;
       networking.hostName = "rpifour2";
       networking.useDHCP = true;
 
