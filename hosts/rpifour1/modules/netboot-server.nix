@@ -131,7 +131,7 @@ let
 
     # LINUX KERNEL + INITRD
     cp ${rpifour2_system.config.system.build.toplevel}/kernel "$out/vmlinuz"
-    cp ${rpifour2_system.config.system.build.toplevel}/initrd "$out/initrd"
+    cp ${rpifour2_system.config.system.build.netbootRamdisk}/initrd "$out/initrd"
 
     # PURGE EXISTING DTBS
     rm $out/*.dtb
