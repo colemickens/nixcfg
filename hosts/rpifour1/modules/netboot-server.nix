@@ -24,7 +24,7 @@ let
       boot.tmpOnTmpfs = true;
       services.udisks2.enable = false;
       networking.wireless.enable = false;
-      boot.kernelPackages = pkgs.linuxPackages_5_10;
+      boot.kernelPackages = pkgs.linuxPackages_latest;
       boot.initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
       boot.initrd.kernelModules = [
         "nfs" "genet" "broadcom"
