@@ -79,6 +79,7 @@ let
 
   configTxt = pkgs.writeText "config.txt" ''
     enable_uart=1
+    uart_2ndstage=1
     dtoverlay=disable-bt
     dtoverlay=disable-wifi
     avoid_warnings=1
