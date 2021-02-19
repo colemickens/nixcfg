@@ -159,12 +159,5 @@ function rpizero2() { activate ".#toplevels.rpizero2"  "${BUILD_HOST:-"${SLYNUX}
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 
 if [[ ! -z "${cmd:-""}" ]]; then
-  if [[ "${cmd}" == _* ]]; then
-    update
-    spz="${cmd#"_"}"
-    activate ".#toplevels.$(hostname)" "cole@localhost" "cole@localhost" "${spz}"
-    exit 0
-  fi
-
   "${cmd}" "${@}"
 fi
