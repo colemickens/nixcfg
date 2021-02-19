@@ -26,33 +26,31 @@ let
       documentation.info.enable = false;
       documentation.nixos.enable = false;
 
-      boot.tmpOnTmpfs = true;
+      boot = {
+        tmpOnTmpfs = true;
+        kernelPackages = pkgs.linuxPackages_latest;
+        initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
+        initrd.kernelModules = [
+          "nfs" "genet" "broadcom"
+          "xhci_pci" "libphy" "bcm_phy_lib"
+        ];
+        kernelModules = config.boot.initrd.kernelModules;
+        initrd.network.enable = true;
+        supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
+      };
       services.udisks2.enable = false;
       networking.wireless.enable = false;
-      boot.kernelPackages = pkgs.linuxPackages_latest;
-      boot.initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
-      boot.initrd.kernelModules = [
-        "nfs" "genet" "broadcom"
-        "xhci_pci" "libphy" "bcm_phy_lib"
-      ];
-      boot.kernelModules = config.boot.initrd.kernelModules;
       networking.hostName = "rpifour2";
-      networking.useDHCP = true;
-
-      boot.initrd.network.enable = true;
-
-      boot.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
+      useNetworkd = true;
+      useDHCP = false;
+      interfaces."eth0".ipv4.addresses = [{
+        address = "192.168.1.3";
+        prefixLength = 16;
+      }];
       nixpkgs.overlays = [ (self: super: {
         grub2 = super.callPackage ({runCommand, ...}: runCommand "grub-dummy" {} "mkdir $out") {};
       }) ];
-      boot.blacklistedKernelModules = [
-        "bcm2835_v4l2" "bcm2835_mmal_vchiq" "bcm2835_codec" "vc_sm_cma"
-      ];
-      environment.systemPackages = with pkgs; [
-        libraspberrypi
-        htop
-      ];
-      #systemd.sockets."nix-daemon".enable = false; #??
+      environment.systemPackages = with pkgs; [ libraspberrypi htop ];
       security.polkit.enable = false;
       boot.loader.grub.enable = false;
       services.openssh.enable = true;
