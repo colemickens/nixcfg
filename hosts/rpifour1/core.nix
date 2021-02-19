@@ -98,6 +98,11 @@ in
     services.resolved.enable = true;
     services.resolved.domains = [ "ts.r10e.tech" ];
     services.timesyncd.enable = true;
+    #services.timesynd.extraOptions = ''
+    #  # TODO ? seems like this should already be firing every 34 minutes at worst? not sure why rpifour1 is losing time?
+    #  maybe set timezone
+    #'';
+    time.timeZone = "America/Los_Angeles";
     systemd.network.enable = true;
 
     nixpkgs.config.allowUnfree = true;
