@@ -39,14 +39,16 @@ let
         supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
       };
       services.udisks2.enable = false;
-      networking.wireless.enable = false;
-      networking.hostName = "rpifour2";
-      useNetworkd = true;
-      useDHCP = false;
-      interfaces."eth0".ipv4.addresses = [{
-        address = "192.168.1.3";
-        prefixLength = 16;
-      }];
+      networking = {
+        wireless.enable = false;
+        hostName = "rpifour2";
+        useNetworkd = true;
+        useDHCP = false;
+        interfaces."eth0".ipv4.addresses = [{
+          address = "192.168.1.3";
+          prefixLength = 16;
+        }];
+      };
       nixpkgs.overlays = [ (self: super: {
         grub2 = super.callPackage ({runCommand, ...}: runCommand "grub-dummy" {} "mkdir $out") {};
       }) ];
