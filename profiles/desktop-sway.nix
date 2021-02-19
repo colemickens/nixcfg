@@ -26,6 +26,9 @@
 
         XDG_SESSION_TYPE = "wayland";
         XDG_CURRENT_DESKTOP = "sway"; # todo: maybe move to sway config so we can have this enabled with gnome enabled?
+
+        WLR_DRM_NO_MODIFIERS = "1";
+        WLR_DRM_NO_ATOMIC = "1";
       };
       home.packages = with pkgs; [
         #drm_info
