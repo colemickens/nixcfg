@@ -99,7 +99,7 @@ let
   earlycon = "";
   console = "";
   cmdline = pkgs.writeText "cmdline.txt" ''
-    ${lib.optionalString (earlycon!="") earlycon} ${lib.optionalString (console!="") console} ip=dhcp ro rootwait elevator=deadline init=${rpifour2_system.config.system.build.toplevel}/init isolcpus=3
+    ${lib.optionalString (earlycon!="") earlycon} ${lib.optionalString (console!="") console} ip=dhcp ro elevator=deadline init=${rpifour2_system.config.system.build.toplevel}/init isolcpus=3
   '';
 
   cmdline2 = pkgs.writeText "cmdline.txt" ''
