@@ -180,7 +180,7 @@ in
     services.nfs.server = {
       enable = true;
       exports = ''
-        /export             192.168.1.0/24(fsid=0,rw,sync,no_subtree_check)
+        /export             192.168.1.0/24(fsid=0,ro)
         /export/rpifour2    192.168.1.0/24(ro,nohide,no_root_squash,insecure,no_subtree_check)
       '';
     };
