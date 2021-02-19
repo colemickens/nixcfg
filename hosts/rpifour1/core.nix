@@ -26,6 +26,7 @@ in
       raspberrypifw
       raspberrypi-eeprom
       libraspberrypi
+      picocom
       # # sudo rpi-eeprom-self-update
       # (pkgs.runCommandNoCC "rpi-eeprom-selfupdate" {} ''
       #   (
