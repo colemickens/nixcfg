@@ -165,11 +165,13 @@ in
       allowedUDPPorts = [
         67 69 4011
         111 2049 # nfs
+        4002 # nfs mountd
       ];
       allowedTCPPorts = [
         80 443
         9000
         111 2049 # nfs
+        4002 # nfs mountd
       ];
     };
     services.atftpd = {
@@ -179,6 +181,7 @@ in
     };
     services.nfs.server = {
       enable = true;
+      mountdPort = 4002;
       extraNfsdConfig = ''
         udp=y
       '';
