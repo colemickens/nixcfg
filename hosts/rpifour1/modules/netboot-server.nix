@@ -96,13 +96,15 @@ let
   #console = "console=ttyS0,115200";
   earlycon = "";
   console = "";
-  cmdline = pkgs.writeText "cmdline.txt" ''
+  cmdline1 = pkgs.writeText "cmdline.txt" ''
     ${lib.optionalString (earlycon!="") earlycon} ${lib.optionalString (console!="") console} ip=dhcp ro elevator=deadline init=${rpifour2_system.config.system.build.toplevel}/init isolcpus=3
   '';
 
   cmdline2 = pkgs.writeText "cmdline.txt" ''
-    init=${rpifour2_system.config.system.build.toplevel}/init initrd=initrd ${toString rpifour2_system.config.boot.kernelParams}
+    systemConfig=${rpifour2_system.config.system.build.toplevel} init=${rpifour2_system.config.system.build.toplevel}/init ${toString rpifour2_system.config.boot.kernelParams}
   '';
+
+  cmdline = cmdline2;
 
   tftp_parent_dir = pkgs.runCommandNoCC "build-tftp-dir" {} ''
     mkdir $out
