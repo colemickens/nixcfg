@@ -172,8 +172,8 @@ function nix() { command nix "${nixargs[@]}" "${@}"; }
 
 function azdev()    { activate ".#toplevels.azdev"    "${AZDEV}"   "${AZDEV}";    }
 function pinebook() { activate ".#toplevels.pinebook" "${AARCH64}" "${PINEBOOK}"; }
-function rpifour1() { activate ".#toplevels.rpifour1" "${RPIFOUR1}" "${RPIFOUR1}";   }
-function rpifour2() { activate ".#toplevels.rpifour2" "${AARCH64}" "${RPIFOUR2}";   }
+function rpifour1() { activate ".#toplevels.rpifour1" "${RPIFOUR1}" "${AARCH64}";   }
+#function rpifour2() { activate ".#toplevels.rpifour2" "${AARCH64}" "${RPIFOUR2}";   }
 function slynux()   { activate ".#toplevels.slynux"   "${SLYNUX}"   "${SLYNUX}";   }
 function xeep()     { activate ".#toplevels.xeep"     "${SLYNUX}"   "${XEEP}";     }
 function rpizero1() { activate ".#toplevels.rpizero1" "${SLYNUX}"   "${RPIZERO1}";   }
