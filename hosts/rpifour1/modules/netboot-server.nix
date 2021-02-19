@@ -31,7 +31,7 @@ let
         kernelPackages = pkgs.linuxPackages_latest;
         initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
         initrd.kernelModules = [
-          "nfs" "genet" "broadcom"
+          "nfs" "nfs3" "genet" "broadcom"
           "xhci_pci" "libphy" "bcm_phy_lib"
         ];
         kernelModules = config.boot.initrd.kernelModules;
