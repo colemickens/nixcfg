@@ -89,7 +89,7 @@ let
     dtb=bcm2711-rpi-4-b.dtb
   '';
 
-  earlycon = "earlycon=uart8250,mmio32,0xfe215040";
+  #earlycon = "earlycon=uart8250,mmio32,0xfe215040";
   #console = "console=ttyS0,115200";
   console = "";
   cmdline = pkgs.writeText "cmdline.txt" ''
@@ -140,7 +140,6 @@ let
 
     # LINUX MAINLINE DTBS
     for dtb in ${rpifour2_system.config.system.build.toplevel}/dtbs/{broadcom,}/bcm*.dtb; do
-      dst="$target/$(basename $dtb)"
       cp $dtb "$out/"
     done
   '';
