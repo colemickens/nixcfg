@@ -148,13 +148,13 @@ RPIZERO2="cole@100.111.5.113";    RPIZERO2="cole@rpizero2.ts.r10e.tech"
 function a64() { build "$1" "${AARCH64}" "${AARCH64}"; }
 function nix() { command nix "${nixargs[@]}" "${@}"; }
 
-function azdev()    { activate ".#toplevels.azdev"     "${BUILD_HOST:-"${AZDEV}"}"    "${AZDEV}";    }
-function pinebook() { activate ".#toplevels.pinebook"  "${BUILD_HOST:-"${AARCH64}"}" "${PINEBOOK}";  }
-function rpifour1() { activate ".#toplevels.rpifour1"  "${BUILD_HOST:-"${AARCH64}"}" "${RPIFOUR1}";  }
-function slynux()   { activate ".#toplevels.slynux"    "${BUILD_HOST:-"${SLYNUX}"}"   "${SLYNUX}";   }
-function xeep()     { activate ".#toplevels.xeep"      "${BUILD_HOST:-"${SLYNUX}"}"     "${XEEP}";   }
-function rpizero1() { activate ".#toplevels.rpizero1"  "${BUILD_HOST:-"${SLYNUX}"}" "${RPIZERO1}";   }
-function rpizero2() { activate ".#toplevels.rpizero2"  "${BUILD_HOST:-"${SLYNUX}"}" "${RPIZERO2}";   }
+function azdev()    { activate ".#toplevels.azdev"     "${BUILD_HOST:-"${AZDEV}"}"     "${AZDEV}";    }
+function pinebook() { activate ".#toplevels.pinebook"  "${BUILD_HOST:-"${AARCH64}"}"   "${PINEBOOK}";  }
+function rpifour1() { activate ".#toplevels.rpifour1"  "${BUILD_HOST:-"${RPIFOUR1}"}"  "${RPIFOUR1}";  }
+function slynux()   { activate ".#toplevels.slynux"    "${BUILD_HOST:-"${SLYNUX}"}"    "${SLYNUX}";   }
+function xeep()     { activate ".#toplevels.xeep"      "${BUILD_HOST:-"${SLYNUX}"}"    "${XEEP}";   }
+function rpizero1() { activate ".#toplevels.rpizero1"  "${BUILD_HOST:-"${SLYNUX}"}"    "${RPIZERO1}";   }
+function rpizero2() { activate ".#toplevels.rpizero2"  "${BUILD_HOST:-"${SLYNUX}"}"    "${RPIZERO2}";   }
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 
