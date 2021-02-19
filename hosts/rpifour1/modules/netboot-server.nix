@@ -24,7 +24,7 @@ let
       boot.tmpOnTmpfs = true;
       services.udisks2.enable = false;
       networking.wireless.enable = false;
-      boot.kernelPackages = pkgs.linuxPackages_latest;
+      boot.kernelPackages = pkgs.linuxPackages_5_10;
       boot.initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
       boot.initrd.kernelModules = [
         "nfs" "genet" "broadcom"
@@ -85,7 +85,7 @@ let
     arm_64bit=1
     kernel=vmlinuz
     initrd=initrd
-    #dtb=bcm2711-rpi-4-b.dtb
+    dtb=bcm2711-rpi-4-b.dtb
   '';
 
   earlycon = "earlycon=uart8250,mmio32,0xfe215040";
