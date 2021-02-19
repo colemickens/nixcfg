@@ -14,10 +14,10 @@ let
         device = "192.168.1.2:/export/rpifour2";
         fsType = "nfs";
         options = [
-          "x-systemd-device-timeout=20s"
+          #"x-systemd-device-timeout=20s"
           # "vers=4.1" "proto=tcp"
           "vers=3"
-          "_netdev"
+          #"_netdev"
         ];
       };
 
