@@ -24,7 +24,7 @@ let
       boot.tmpOnTmpfs = true;
       services.udisks2.enable = false;
       networking.wireless.enable = false;
-      boot.kernelPackages = pkgs.linuxPackages_latest;
+      boot.kernelPackages = pkgs.linuxPackages_5_10;
       boot.initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
       boot.initrd.kernelModules = [
         "nfs" "genet" "broadcom"
@@ -135,13 +135,13 @@ let
     cp ${rpifour2_system.config.system.build.toplevel}/initrd "$out/initrd"
 
     # PURGE EXISTING DTBS
-    #rm $out/*.dtb
+    rm $out/*.dtb
 
     # LINUX MAINLINE DTBS
-    #for dtb in ${rpifour2_system.config.system.build.toplevel}/dtbs/{broadcom,}/bcm*.dtb; do
-    #  dst="$target/$(basename $dtb)"
-    #  cp $dtb "$out/"
-    #done
+    for dtb in ${rpifour2_system.config.system.build.toplevel}/dtbs/{broadcom,}/bcm*.dtb; do
+      dst="$target/$(basename $dtb)"
+      cp $dtb "$out/"
+    done
   '';
 in
 {
