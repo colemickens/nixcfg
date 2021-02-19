@@ -99,11 +99,11 @@ let
   earlycon = "";
   console = "";
   cmdline1 = pkgs.writeText "cmdline.txt" ''
-    ${lib.optionalString (earlycon!="") earlycon} ${lib.optionalString (console!="") console} ip=dhcp ro elevator=deadline init=${rpifour2_system.config.system.build.toplevel}/init isolcpus=3
+    ${lib.optionalString (earlycon!="") earlycon} ${lib.optionalString (console!="") console} ip=dhcp elevator=deadline init=${rpifour2_system.config.system.build.toplevel}/init isolcpus=3
   '';
 
   cmdline2 = pkgs.writeText "cmdline.txt" ''
-    systemConfig=${rpifour2_system.config.system.build.toplevel} init=${rpifour2_system.config.system.build.toplevel}/init ${toString rpifour2_system.config.boot.kernelParams}
+    systemConfig=${rpifour2_system.config.system.build.toplevel} init=${rpifour2_system.config.system.build.toplevel}/init ${toString rpifour2_system.config.boot.kernelParams} nfsrootdebug root=/dev/nfs nfsroot=192.168.1.2:/export/rpifour2,ro,vers=3
   '';
 
   cmdline = cmdline2;
