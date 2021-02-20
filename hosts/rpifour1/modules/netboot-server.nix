@@ -11,7 +11,7 @@ let
     ];
     config = {
       fileSystems."/" = lib.mkForce {
-        device = "192.168.1.2:/rpifour2";
+        device = "192.168.1.2:/export/rpifour2";
         fsType = "nfs";
         options = [
           "x-systemd-device-timeout=20s"
