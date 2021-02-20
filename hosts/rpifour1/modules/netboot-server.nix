@@ -43,11 +43,11 @@ let
         wireless.enable = false;
         hostName = "rpifour2";
         useNetworkd = true;
-        useDHCP = false;
-        interfaces."eth0".ipv4.addresses = [{
-          address = "192.168.1.3";
-          prefixLength = 16;
-        }];
+        useDHCP = true;
+        # interfaces."eth0".ipv4.addresses = [{
+        #   address = "192.168.1.3";
+        #   prefixLength = 16;
+        # }];
       };
       nixpkgs.overlays = [ (self: super: {
         grub2 = super.callPackage ({runCommand, ...}: runCommand "grub-dummy" {} "mkdir $out") {};
