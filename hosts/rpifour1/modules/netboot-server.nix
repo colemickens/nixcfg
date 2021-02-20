@@ -42,7 +42,7 @@ let
       networking = {
         wireless.enable = false;
         hostName = "rpifour2";
-        useNetworkd = true;
+        #useNetworkd = true;
         useDHCP = true;
         # interfaces."eth0".ipv4.addresses = [{
         #   address = "192.168.1.3";
