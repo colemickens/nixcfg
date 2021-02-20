@@ -16,7 +16,7 @@ let
           fsType = "nfs";
           options = [
             "x-systemd-device-timeout=20s"
-            "nfsvers=3" "proto=tcp" "nolock" # so that it works in initrd with busybox's mount that only does nfs3
+            "nfsvers=3" "proto=tcp" "nolock" "rw" # so that it works in initrd with busybox's mount that only does nfs3
           ];
         };
         "/nix/.ro-store" = lib.mkForce {
@@ -24,7 +24,7 @@ let
           fsType = "nfs";
           options = [
             "x-systemd-device-timeout=20s"
-            "nfsvers=3" "proto=tcp" "nolock" # so that it works in initrd with busybox's mount that only does nfs3
+            "nfsvers=3" "proto=tcp" "nolock" "ro" # so that it works in initrd with busybox's mount that only does nfs3
           ];
           neededForBoot = true;
         };
@@ -211,7 +211,7 @@ in
       exports = ''
         /export             192.168.1.0/24(fsid=0,ro,insecure,no_subtree_check)
         /export/nix-store   192.168.1.0/24(ro,nohide,insecure,no_subtree_check)
-        /export/rpifour2    192.168.1.0/24(ro,nohide,insecure,no_subtree_check)
+        /export/rpifour2    192.168.1.0/24(rw,nohide,insecure,no_subtree_check)
       '';
     };
   };
