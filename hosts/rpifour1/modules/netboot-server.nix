@@ -90,7 +90,7 @@ let
     avoid_warnings=1
     arm_64bit=1
     kernel=vmlinuz
-    initramfs=initrd
+    initramfs initrd followkernel
     dtb=bcm2711-rpi-4-b.dtb
   '';
 
