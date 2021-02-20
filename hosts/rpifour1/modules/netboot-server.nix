@@ -32,7 +32,7 @@ let
         initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
         initrd.kernelModules = [
           "nfs" "genet" "broadcom"
-          "xhci_pci" "libphy" "bcm_phy_lib"
+          "xhci_pci" "libphy" "bcm_phy_lib" "broadcom_phy"
         ];
         kernelModules = config.boot.initrd.kernelModules;
         initrd.network.enable = true;
