@@ -14,7 +14,8 @@ in
 
     ../../profiles/interactive.nix
 
-    ../../profiles/desktop-sway.nix
+    #../../profiles/desktop-sway.nix
+    ../../profiles/desktop-sway-unstable.nix
     #../../profiles/desktop-plasma.nix
 
     # xps 13 9370 specific:
