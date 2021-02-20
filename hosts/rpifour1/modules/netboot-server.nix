@@ -90,7 +90,7 @@ let
     avoid_warnings=1
     arm_64bit=1
     kernel=vmlinuz
-    initrd=initrd
+    initramfs=initrd
     dtb=bcm2711-rpi-4-b.dtb
   '';
 
@@ -107,7 +107,7 @@ let
   '';
 
   cmdline3 = pkgs.writeText "cmdline.txt" ''
-    systemConfig=${rpifour2_system.config.system.build.toplevel} init=${rpifour2_system.config.system.build.toplevel}/init ${toString rpifour2_system.config.boot.kernelParams} initrd=/dev/initrd
+    systemConfig=${rpifour2_system.config.system.build.toplevel} init=${rpifour2_system.config.system.build.toplevel}/init ${toString rpifour2_system.config.boot.kernelParams}
   '';
 
   cmdline = cmdline3;
