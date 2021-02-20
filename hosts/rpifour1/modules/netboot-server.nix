@@ -15,7 +15,7 @@ let
         fsType = "nfs";
         options = [
           "x-systemd-device-timeout=20s"
-          "vers=3" "proto=udp" # so that it works in initrd with busybox's mount that only does nfs3
+          "nfsvers=3" "proto=udp" # so that it works in initrd with busybox's mount that only does nfs3
         ];
       };
 
