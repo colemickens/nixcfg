@@ -32,7 +32,7 @@ let
         initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
         initrd.kernelModules = [
           "nfs" "genet" "broadcom"
-          "xhci_pci" "libphy" "bcm_phy_lib" "broadcom_phy" "mdio_bcm_unimac"
+          "xhci_pci" "libphy" "bcm_phy_lib" "mdio_bcm_unimac"
         ];
         kernelModules = config.boot.initrd.kernelModules;
         initrd.network.enable = true;
