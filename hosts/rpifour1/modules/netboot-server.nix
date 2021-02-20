@@ -11,13 +11,11 @@ let
     ];
     config = {
       fileSystems."/" = lib.mkForce {
-        device = "192.168.1.2:/export/rpifour2";
+        device = "192.168.1.2:/rpifour2";
         fsType = "nfs";
         options = [
-          #"x-systemd-device-timeout=20s"
-          # "vers=4.1" "proto=tcp"
-          "vers=3"
-          #"_netdev"
+          "x-systemd-device-timeout=20s"
+          "vers=3" "proto=udp" # so that it works in initrd with busybox's mount that only does nfs3
         ];
       };
 
