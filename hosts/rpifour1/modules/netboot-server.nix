@@ -19,7 +19,7 @@ let
             "nfsvers=3" "proto=tcp" "nolock" # so that it works in initrd with busybox's mount that only does nfs3
           ];
         };
-        "/nix/.ro-store" = {
+        "/nix/.ro-store" = lib.mkForce {
           device = "192.168.1.2:/export/nix-store";
           fsType = "nfs";
           options = [
