@@ -10,13 +10,24 @@ let
       ../../../profiles/interactive.nix
     ];
     config = {
-      fileSystems."/" = lib.mkForce {
-        device = "192.168.1.2:/export/rpifour2";
-        fsType = "nfs";
-        options = [
-          "x-systemd-device-timeout=20s"
-          "nfsvers=3" "proto=tcp" "nolock" # so that it works in initrd with busybox's mount that only does nfs3
-        ];
+      fileSystems = {
+        "/" = lib.mkForce {
+          device = "192.168.1.2:/export/rpifour2";
+          fsType = "nfs";
+          options = [
+            "x-systemd-device-timeout=20s"
+            "nfsvers=3" "proto=tcp" "nolock" # so that it works in initrd with busybox's mount that only does nfs3
+          ];
+        };
+        "/nix/.ro-store" = {
+          device = "192.168.1.2:/export/nix-store";
+          fsType = "nfs";
+          options = [
+            "x-systemd-device-timeout=20s"
+            "nfsvers=3" "proto=tcp" "nolock" # so that it works in initrd with busybox's mount that only does nfs3
+          ];
+          neededForBoot = true;
+        };
       };
 
       documentation.enable = false;
@@ -162,12 +173,12 @@ in
         device = "tank/var/rpifour2";
         fsType = "zfs";
       };
-      "/var/lib/nfs/rpifour2/nix" = {
-        device = "/nix/store";
-        options = [ "bind" ];
-      };
       "/export/rpifour2" = {
         device = "/var/lib/nfs/rpifour2";
+        options = [ "bind" ];
+      };
+      "/export/nix-store" = {
+        device = "/nix/store";
         options = [ "bind" ];
       };
     };
@@ -199,6 +210,7 @@ in
       '';
       exports = ''
         /export             192.168.1.0/24(fsid=0,ro,insecure,no_subtree_check)
+        /export/nix-store   192.168.1.0/24(ro,nohide,insecure,no_subtree_check)
         /export/rpifour2    192.168.1.0/24(ro,nohide,insecure,no_subtree_check)
       '';
     };
