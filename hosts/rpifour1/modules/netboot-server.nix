@@ -103,7 +103,7 @@ let
   '';
 
   cmdline2 = pkgs.writeText "cmdline.txt" ''
-    systemConfig=${rpifour2_system.config.system.build.toplevel} init=${rpifour2_system.config.system.build.toplevel}/init ${toString rpifour2_system.config.boot.kernelParams} nfsrootdebug root=/dev/nfs nfsroot=192.168.1.2:/rpifour2,ro,vers=4.1
+    systemConfig=${rpifour2_system.config.system.build.toplevel} init=${rpifour2_system.config.system.build.toplevel}/init ${toString rpifour2_system.config.boot.kernelParams} nfsrootdebug root=/dev/nfs nfsroot=192.168.1.2:/rpifour2,ro,vers=4.1 rootwait
   '';
 
   cmdline = cmdline2;
