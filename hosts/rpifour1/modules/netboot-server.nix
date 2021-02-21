@@ -154,20 +154,13 @@ let
     uart_2ndstage=1
     dtoverlay=disable-bt
     dtoverlay=disable-wifi
-    dtoverlay=sd_poll_once
+    dtparam=sd_poll_once
     avoid_warnings=1
     kernel=vmlinuz
     initramfs initrd followkernel
     dtb=bcm2711-rpi-4-b.dtb
     core_freq=500
     ${lib.optionalString (netbootSystem=="aarch64-linux") "arm_64bit=1"}
-  '';
-
-  cmdline = cmdline3;
-
-  tftp_parent_dir = pkgs.runCommandNoCC "build-tftp-dir" {} ''
-    mkdir $out
-    ln -s "${boot_dir}" "$out/${rpifour2_serial}"
   '';
 
   boot_dir  = pkgs.runCommandNoCC "build-tftp-dir" {} ''
@@ -207,6 +200,11 @@ let
     for dtb in ${rpifour2_system.config.system.build.toplevel}/dtbs/{broadcom,}/bcm*.dtb; do
       cp $dtb "$out/"
     done
+  '';
+
+  tftp_parent_dir = pkgs.runCommandNoCC "build-tftp-dir" {} ''
+    mkdir $out
+    ln -s "${boot_dir}" "$out/${rpifour2_serial}"
   '';
 in
 {
