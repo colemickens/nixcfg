@@ -114,7 +114,7 @@ let
       systemd.timers."nix-db-import" = {
         wantedBy = [ "timers.target" ];
         partOf = [ "nix-db-import.service" ];
-        timerConfig.OnCalendar = "5 minute";
+        timerConfig.OnCalendar = "5 minutes";
       };
       systemd.services."nix-db-import" = {
         wantedBy = [ "multi-user.target" ]; 
@@ -242,7 +242,7 @@ in
     systemd.timers."nix-db-export" = {
       wantedBy = [ "timers.target" ];
       partOf = [ "nix-db-export.service" ];
-      timerConfig.OnCalendar = "1 minute";
+      timerConfig.OnCalendar = "3 minutes";
     };
     systemd.services."nix-db-export" = {
       wantedBy = [ "multi-user.target" ]; 
