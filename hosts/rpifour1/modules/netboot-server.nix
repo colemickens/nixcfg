@@ -3,6 +3,8 @@
 let
   rpifour2_serial = "156b6214";
   rpifour2_mac = "dc-a6-32-59-d6-f8";
+  #netbootSystem = "aarch64-linux"; # switch this to armv7l is seamless
+  netbootSystem = "armv7l-linux"; # switch this to armv7l is seamless
   rpifour2_config = ({ config, lib, pkgs, modulesPath, inputs, ... }: {
     imports = [
       "${modulesPath}/installer/netboot/netboot.nix"
@@ -101,7 +103,7 @@ let
   });
   rpifour2_system = import "${modulesPath}/../lib/eval-config.nix" {
     modules = [ rpifour2_config ];
-    system = "aarch64-linux";
+    system = netbootSystem;
     specialArgs = { inherit inputs; };
   };
 
@@ -127,10 +129,10 @@ let
     dtoverlay=disable-bt
     dtoverlay=disable-wifi
     avoid_warnings=1
-    arm_64bit=1
     kernel=vmlinuz
     initramfs initrd followkernel
     dtb=bcm2711-rpi-4-b.dtb
+    ${lib.optionalString (netbootSystem=="aarch64-linux") "arm_64bit=1"}
   '';
 
   #earlycon = "earlycon=uart8250,mmio32,0xfe215040";
