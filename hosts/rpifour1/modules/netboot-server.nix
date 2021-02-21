@@ -198,7 +198,7 @@ in
 {
   config = {
     fileSystems = {
-      "/var/lib/nfs/rpifour2" = {
+      "/var/lib/nfs-data/rpifour2" = {
         # sudo zfs create -o mountpoint=legacy tank/var/rpifour2
         device = "tank/var/rpifour2";
         fsType = "zfs";
