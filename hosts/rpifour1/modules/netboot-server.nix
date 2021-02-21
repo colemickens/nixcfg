@@ -3,8 +3,12 @@
 let
   rpifour2_serial = "156b6214";
   rpifour2_mac = "dc-a6-32-59-d6-f8";
-  netbootSystem = "aarch64-linux"; # switch this to armv7l is seamless
-  #netbootSystem = "armv7l-linux"; # switch this to armv7l is seamless
+
+  # control whether we boot armv7l (32bit) or aarch64 (64bit) (the config.txt is updated automatically)
+  netbootSystem = "aarch64-linux";
+  #netbootSystem = "armv7l-linux";
+  # except armv7l doesn't work yet...
+
   rpifour2_config = ({ config, lib, pkgs, modulesPath, inputs, ... }: {
     imports = [
       "${modulesPath}/installer/netboot/netboot.nix"
@@ -152,10 +156,10 @@ let
 
 
   earlycon = "";
-  #console = "";
+  console = "";
 
   #earlycon = "uart8250,mmio32,0xfe215040";
-  console = "ttyS0,115200";
+  #console = "ttyS0,115200";
 
   cmdline1 = pkgs.writeText "cmdline.txt" ''
     ${lib.optionalString (earlycon!="") earlycon} ${lib.optionalString (console!="") console} ip=dhcp elevator=deadline init=${rpifour2_system.config.system.build.toplevel}/init isolcpus=3
