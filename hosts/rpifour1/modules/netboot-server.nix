@@ -5,17 +5,17 @@ let
   rpifour2_mac = "dc-a6-32-59-d6-f8";
 
   # control whether we boot armv7l (32bit) or aarch64 (64bit) (the config.txt is updated automatically)
-  netbootSystem = "aarch64-linux";
-  #netbootSystem = "armv7l-linux";
+  #netbootSystem = "aarch64-linux";
+  netbootSystem = "armv7l-linux";
   # except armv7l doesn't work yet...
 
   rpifour2_config = ({ config, lib, pkgs, modulesPath, inputs, ... }: {
     imports = [
       "${modulesPath}/installer/netboot/netboot.nix"
-      #../../../mixins/common.nix
-      #../../../profiles/interactive.nix
-      ../../../profiles/user.nix
-      ../../../profiles/core.nix
+      ../../../mixins/common.nix
+      ../../../profiles/interactive.nix
+      #../../../profiles/user.nix
+      #../../../profiles/core.nix
     ];
     config = {
       fileSystems = {
@@ -86,7 +86,7 @@ let
           #"console=ttyS0,115200"
           #"console=serial0,115200"
         ];
-        kernelPatches = [{
+        kernelPatches = if pkgs.system == "armv7l-linux" then [] else [{
           name = "crashdump-config";
           patch = null;
           # we mostly do this as a (hopeful) workaround:
