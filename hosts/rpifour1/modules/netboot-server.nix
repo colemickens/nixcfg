@@ -66,19 +66,22 @@ let
         };
       };
 
+      # TODO???
+      #hardware.bluetooth.powerOnBoot = false; # attempt to disable BT?
+
       boot = {
         tmpOnTmpfs = true;
         kernelPackages = pkgs.linuxPackages_latest;
-        kernelPatches = [{
-          name = "crashdump-config";
-          patch = null;
-          # we mostly do this as a (hopeful) workaround:
-          # otherwise initrd-network tries to startup too early
-          # sometimes and interrupts genet's initialization process
-          # extraConfig = ''
-          #   CONFIG_BCMGENET=y
-          # '';
-        }];
+        # kernelPatches = [{
+        #   name = "crashdump-config";
+        #   patch = null;
+        #   # we mostly do this as a (hopeful) workaround:
+        #   # otherwise initrd-network tries to startup too early
+        #   # sometimes and interrupts genet's initialization process
+        #   extraConfig = ''
+        #     CONFIG_BCMGENET=y
+        #   '';
+        # }];
         initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
         initrd.kernelModules = [
           "nfs" "genet" "broadcom"
