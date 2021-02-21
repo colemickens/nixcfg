@@ -4,11 +4,9 @@ let
   rpifour2_serial = "156b6214";
   rpifour2_mac = "dc-a6-32-59-d6-f8";
 
-  # control whether we boot armv7l (32bit) or aarch64 (64bit) (the config.txt is updated automatically)
   #netbootSystem = "aarch64-linux";
   netbootSystem = "armv7l-linux";
-  # except armv7l doesn't work yet...
-  # --> currently probably just need a armv7l-linux to bootstrap from
+  isArm64Bit = (netbootSystem == "aarch64-linux");
 
   rpifour2_config = ({ config, lib, pkgs, modulesPath, inputs, ... }: {
     imports = [
@@ -170,7 +168,7 @@ let
     initramfs initrd followkernel
     dtb=bcm2711-rpi-4-b.dtb
     core_freq=500
-    ${lib.optionalString (netbootSystem=="aarch64-linux") "arm_64bit=1"}
+    ${lib.optionalString isArm64Bit "arm_64bit=1"}
   '';
 
   boot_dir  = pkgs.runCommandNoCC "build-tftp-dir" {} ''
