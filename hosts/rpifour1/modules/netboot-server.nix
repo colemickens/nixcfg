@@ -70,7 +70,7 @@ let
             #!${pkgs.bash}/bin/bash
             set -x
             set -euo pipefail
-            time ${pkgs.nix}/bin/nix-store --load-db < /dbexport/snapshot
+            time ${pkgs.nix}/bin/nix-store --load-db < /dbimport/snapshot
           '');
         };
       };
