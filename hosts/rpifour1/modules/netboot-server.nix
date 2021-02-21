@@ -4,8 +4,10 @@ let
   rpifour2_serial = "156b6214";
   rpifour2_mac = "dc-a6-32-59-d6-f8";
 
-  #netbootSystem = "aarch64-linux";
-  netbootSystem = "armv7l-linux";
+  useMainlineDtbs = true;
+
+  netbootSystem = "aarch64-linux";
+  #netbootSystem = "armv7l-linux";
   isArm64Bit = (netbootSystem == "aarch64-linux");
 
   rpifour2_evalconfig = if (netbootSystem == "aarch64-linux")
@@ -193,7 +195,7 @@ let
     ## FIRMWARE
     cp -r "${pkgs.raspberrypifw}/share/raspberrypi/boot/"/. $out/
 
-    # ARM STUBS 8 (TODO, diff ones for 32 bit mode?)
+    # ARM STUBS
     cp "${pkgs.raspberrypi-armstubs}/armstub8-gic.bin" $out/armstub8-gic.bin
 
     ## CONFIG.TXT
@@ -206,6 +208,7 @@ let
     cp ${rpifour2_system.config.system.build.toplevel}/kernel "$out/vmlinuz"
     cp ${rpifour2_system.config.system.build.toplevel}/initrd "$out/initrd"
 
+    ${lib.optionalString (useMainlineDtbs) ''
     # PURGE EXISTING DTBS
     rm $out/*.dtb
 
@@ -213,6 +216,7 @@ let
     for dtb in ${rpifour2_system.config.system.build.toplevel}/dtbs/{broadcom,}/bcm*.dtb; do
       cp $dtb "$out/"
     done
+    ''}
   '';
 
   tftp_parent_dir = pkgs.runCommandNoCC "build-tftp-dir" {} ''
