@@ -4,7 +4,7 @@ let
   neovimPkg = if (pkgs.system == "aarch64-linux" || pkgs.system == "x86_64-linux")
     then inputs.neovim-nightly.defaultPackage."${pkgs.system}"
     else pkgs.neovim;
-{
+in {
   config = {
     home-manager.users.cole = { pkgs, ... }: {
       programs.neovim = {
