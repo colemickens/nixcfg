@@ -21,6 +21,7 @@ let
       "${modulesPath}/installer/netboot/netboot.nix"
       ../../../mixins/common.nix
       ../../../mixins/sshd.nix
+      ../../../mixins/tailscale.nix
       ../../../profiles/user.nix
     ];
     config = {
