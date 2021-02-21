@@ -11,8 +11,8 @@ let
   rpifour2_config = ({ config, lib, pkgs, modulesPath, inputs, ... }: {
     imports = [
       "${modulesPath}/installer/netboot/netboot.nix"
-    ../../mixins/common.nix
-    ../../profiles/user.nix
+    ../../../mixins/common.nix
+    ../../../profiles/user.nix
     ];
     config = {
       fileSystems = {
