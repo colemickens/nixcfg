@@ -209,7 +209,7 @@ in
       serviceConfig = {
         Type = "simple";
         ExecStart = (pkgs.writeScript "dump-db.sh" ''
-          #! /usr/bin/env bash
+          #!${pkgs.bash}/bin/bash
           mkdir -p /nix/var/nix/db-export
           ${pkgs.nix}/bin/nix-store dump-db > /nix/var/nix/db-export/.snapshot.new
           mv /nix/var/nix/db-export/.snapshot.new /nix/var/nix/db-export/snapshot
