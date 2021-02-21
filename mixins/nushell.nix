@@ -4,7 +4,7 @@
   config = {
     home-manager.users.cole = { pkgs, ... }: {  
       programs.nushell = {
-        enable = true;
+        enable = (pkgs.system == "x86-64-linux" || pkgs.system == "aarch64-linux");
 
         settings = pkgs.lib.mkMerge [
           {
