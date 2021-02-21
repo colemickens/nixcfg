@@ -124,7 +124,7 @@ let
   bootOrder="0xf142";
   eepromcfg = pkgs.writeText "eepromcfg.txt" ''
     [all]
-    BOOT_UART=0
+    BOOT_UART=1
     WAKE_ON_GPIO=1
     POWER_OFF_ON_HALT=0
     DHCP_TIMEOUT=20000
@@ -150,10 +150,13 @@ let
     ${lib.optionalString (netbootSystem=="aarch64-linux") "arm_64bit=1"}
   '';
 
-  #earlycon = "earlycon=uart8250,mmio32,0xfe215040";
-  #console = "console=ttyS0,115200";
+
   earlycon = "";
-  console = "";
+  #console = "";
+
+  #earlycon = "uart8250,mmio32,0xfe215040";
+  console = "ttyS0,115200";
+
   cmdline1 = pkgs.writeText "cmdline.txt" ''
     ${lib.optionalString (earlycon!="") earlycon} ${lib.optionalString (console!="") console} ip=dhcp elevator=deadline init=${rpifour2_system.config.system.build.toplevel}/init isolcpus=3
   '';
@@ -163,7 +166,7 @@ let
   '';
 
   cmdline3 = pkgs.writeText "cmdline.txt" ''
-    systemConfig=${rpifour2_system.config.system.build.toplevel} init=${rpifour2_system.config.system.build.toplevel}/init ${toString rpifour2_system.config.boot.kernelParams} console=/dev/ttyS0
+    ${lib.optionalString (earlycon!="") "earlycon=${earlycon}"} ${lib.optionalString (console!="") "console=${console}"} systemConfig=${rpifour2_system.config.system.build.toplevel} init=${rpifour2_system.config.system.build.toplevel}/init ${toString rpifour2_system.config.boot.kernelParams}
   '';
 
   cmdline = cmdline3;
