@@ -206,10 +206,12 @@ in
       wantedBy = [ "multi-user.target" ]; 
       #after = [ "network.target" ];
       description = "Make regular exports of the nix database.";
+      # TODO: let systemd let this see /nix ?
       serviceConfig = {
         Type = "simple";
         ExecStart = (pkgs.writeScript "dump-db.sh" ''
           #!${pkgs.bash}/bin/bash
+          ls /nix
           mkdir -p /nix/var/nix/db-export
           ${pkgs.nix}/bin/nix-store dump-db > /nix/var/nix/db-export/.snapshot.new
           mv /nix/var/nix/db-export/.snapshot.new /nix/var/nix/db-export/snapshot
