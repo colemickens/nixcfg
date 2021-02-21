@@ -6,8 +6,8 @@ let
 
   useMainlineDtbs = false;
 
-  #netbootSystem = "aarch64-linux";
-  netbootSystem = "armv7l-linux";
+  netbootSystem = "aarch64-linux";
+  #netbootSystem = "armv7l-linux";
   isArm64Bit = (netbootSystem == "aarch64-linux");
 
   rpifour2_evalconfig = if (netbootSystem == "aarch64-linux")
