@@ -22,6 +22,7 @@ let
       ../../../mixins/common.nix
       ../../../mixins/sshd.nix
       ../../../mixins/tailscale.nix
+      ../../../profiles/core.nix
       ../../../profiles/user.nix
     ];
     config = {
