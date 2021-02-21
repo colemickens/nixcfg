@@ -128,6 +128,7 @@ let
     uart_2ndstage=1
     dtoverlay=disable-bt
     dtoverlay=disable-wifi
+    dtoverlay=sdtweak,poll_once
     avoid_warnings=1
     kernel=vmlinuz
     initramfs initrd followkernel
