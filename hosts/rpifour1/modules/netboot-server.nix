@@ -211,9 +211,8 @@ in
         Type = "simple";
         ExecStart = (pkgs.writeScript "dump-db.sh" ''
           #!${pkgs.bash}/bin/bash
-          ls /nix
           mkdir -p /nix/var/nix/db-export
-          ${pkgs.nix}/bin/nix-store dump-db > /nix/var/nix/db-export/.snapshot.new
+          ${pkgs.nix}/bin/nix-store --dump-db > /nix/var/nix/db-export/.snapshot.new
           mv /nix/var/nix/db-export/.snapshot.new /nix/var/nix/db-export/snapshot
         '');
       };
