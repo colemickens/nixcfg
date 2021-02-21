@@ -93,7 +93,7 @@ let
           # otherwise initrd-network tries to startup too early
           # sometimes and interrupts genet's initialization process
           extraConfig = ''
-            BCMGENET=y
+            CONFIG_BCMGENET=y
           '';
         }];
         initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
