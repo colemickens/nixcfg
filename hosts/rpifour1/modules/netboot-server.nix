@@ -5,8 +5,8 @@ let
   rpifour2_mac = "dc-a6-32-59-d6-f8";
 
   # control whether we boot armv7l (32bit) or aarch64 (64bit) (the config.txt is updated automatically)
-  #netbootSystem = "aarch64-linux";
-  netbootSystem = "armv7l-linux";
+  netbootSystem = "aarch64-linux";
+  #netbootSystem = "armv7l-linux";
   # except armv7l doesn't work yet...
   # --> currently probably just need a armv7l-linux to bootstrap from
 
@@ -14,9 +14,9 @@ let
     imports = [
       "${modulesPath}/installer/netboot/netboot.nix"
       ../../../mixins/common.nix
-      #../../../profiles/interactive.nix
-      ../../../profiles/user.nix
-      ../../../profiles/core.nix
+      ../../../profiles/interactive.nix
+      #../../../profiles/user.nix
+      #../../../profiles/core.nix
     ];
     config = {
       fileSystems = {
