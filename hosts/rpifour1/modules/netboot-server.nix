@@ -80,8 +80,8 @@ let
           # unsure what this does?
           #"earlycon=uart8250,mmio32,0xfe215040"
           # doesn't work (maybe because of the overlay not lining up):
-          #"console=ttyS0,115200"
-          "console=serial0,115200"
+          "console=ttyS0,115200"
+          #"console=serial0,115200"
         ];
         # kernelPatches = [{
         #   name = "crashdump-config";
