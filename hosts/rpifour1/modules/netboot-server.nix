@@ -221,7 +221,7 @@ in
         fsType = "zfs";
       };
       "/export/rpifour2" = {
-        device = "/var/lib/nfs/rpifour2";
+        device = "/var/lib/nfs-data/rpifour2";
         options = [ "bind" ];
       };
       "/export/nix-db-export" = {
