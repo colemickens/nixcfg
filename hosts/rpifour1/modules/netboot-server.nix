@@ -6,8 +6,8 @@ let
 
   useMainlineDtbs = false;
 
-  netbootSystem = "aarch64-linux";
-  #netbootSystem = "armv7l-linux";
+  #netbootSystem = "aarch64-linux";
+  netbootSystem = "armv7l-linux";
   isArm64Bit = (netbootSystem == "aarch64-linux");
 
   rpifour2_evalconfig = if (netbootSystem == "aarch64-linux")
@@ -84,14 +84,15 @@ let
       boot = {
         tmpOnTmpfs = true;
         kernelPackages = pkgs.linuxPackages_latest;
-        kernelParams = [
+        kernelParams = if useMainlineDtbs then [] else ["console=ttyS0,115200"];
+        #[
           # unsure what this does?
           #"earlycon=uart8250,mmio32,0xfe215040"
           # doesn't work (maybe because of the overlay not lining up):
           #"console=ttyAMA0,115200"
           #"console=ttyS0,115200"
           #"console=serial0,115200"
-        ];
+        #];
         kernelPatches = if pkgs.system == "armv7l-linux" then [] else [{
           name = "crashdump-config";
           patch = null;
