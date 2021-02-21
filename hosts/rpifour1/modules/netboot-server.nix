@@ -13,9 +13,9 @@ let
     imports = [
       "${modulesPath}/installer/netboot/netboot.nix"
       ../../../mixins/common.nix
-      ../../../profiles/interactive.nix
-      #../../../profiles/user.nix
-      #../../../profiles/core.nix
+      #../../../profiles/interactive.nix
+      ../../../profiles/user.nix
+      ../../../profiles/core.nix
     ];
     config = {
       fileSystems = {
