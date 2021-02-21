@@ -5,18 +5,16 @@ let
   rpifour2_mac = "dc-a6-32-59-d6-f8";
 
   # control whether we boot armv7l (32bit) or aarch64 (64bit) (the config.txt is updated automatically)
-  netbootSystem = "aarch64-linux";
-  #netbootSystem = "armv7l-linux";
+  #netbootSystem = "aarch64-linux";
+  netbootSystem = "armv7l-linux";
   # except armv7l doesn't work yet...
   # --> currently probably just need a armv7l-linux to bootstrap from
 
   rpifour2_config = ({ config, lib, pkgs, modulesPath, inputs, ... }: {
     imports = [
       "${modulesPath}/installer/netboot/netboot.nix"
-      ../../../mixins/common.nix
-      ../../../profiles/interactive.nix
-      #../../../profiles/user.nix
-      #../../../profiles/core.nix
+    ../../mixins/common.nix
+    ../../profiles/user.nix
     ];
     config = {
       fileSystems = {
@@ -66,11 +64,11 @@ let
         # TODO: let systemd let this see /nix ?
         serviceConfig = {
           Type = "simple";
-          ExecStart = (pkgs.writeScript "dump-db.sh" ''
+          ExecStart = (pkgs.writeScript "load-db.sh" ''
             #!${pkgs.bash}/bin/bash
             set -x
             set -euo pipefail
-            time ${pkgs.nix}/bin/nix-store --load-db < /dbimport/snapshot
+            time ${pkgs.nix}/bin/nix-store --load-db </dbimport/snapshot
           '');
         };
       };
