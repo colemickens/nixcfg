@@ -45,6 +45,25 @@ let
       documentation.info.enable = false;
       documentation.nixos.enable = false;
 
+      systemd.timers."nix-db-import" = {
+        wantedBy = [ "timers.target" ];
+        partOf = [ "nix-db-import.service" ];
+        timerConfig.OnCalendar = "5 minute";
+      };
+      systemd.services."nix-db-import" = {
+        wantedBy = [ "multi-user.target" ]; 
+        #after = [ "network.target" ];
+        description = "Make regular imports of the nix database.";
+        # TODO: let systemd let this see /nix ?
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = (pkgs.writeScript "dump-db.sh" ''
+            #!${pkgs.bash}/bin/bash
+            time ${pkgs.nix}/bin/nix-store --load-db < /dbexport/snapshot
+          '');
+        };
+      };
+
       boot = {
         tmpOnTmpfs = true;
         kernelPackages = pkgs.linuxPackages_latest;
@@ -212,7 +231,7 @@ in
         ExecStart = (pkgs.writeScript "dump-db.sh" ''
           #!${pkgs.bash}/bin/bash
           mkdir -p /nix/var/nix/db-export
-          ${pkgs.nix}/bin/nix-store --dump-db > /nix/var/nix/db-export/.snapshot.new
+          time ${pkgs.nix}/bin/nix-store --dump-db > /nix/var/nix/db-export/.snapshot.new
           mv /nix/var/nix/db-export/.snapshot.new /nix/var/nix/db-export/snapshot
         '');
       };
