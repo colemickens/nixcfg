@@ -8,6 +8,7 @@ let
   #netbootSystem = "aarch64-linux";
   netbootSystem = "armv7l-linux";
   # except armv7l doesn't work yet...
+  # --> currently probably just need a armv7l-linux to bootstrap from
 
   rpifour2_config = ({ config, lib, pkgs, modulesPath, inputs, ... }: {
     imports = [
@@ -67,6 +68,8 @@ let
           Type = "simple";
           ExecStart = (pkgs.writeScript "dump-db.sh" ''
             #!${pkgs.bash}/bin/bash
+            set -x
+            set -euo pipefail
             time ${pkgs.nix}/bin/nix-store --load-db < /dbexport/snapshot
           '');
         };
@@ -92,6 +95,11 @@ let
           # we mostly do this as a (hopeful) workaround:
           # otherwise initrd-network tries to startup too early
           # sometimes and interrupts genet's initialization process
+
+          # TODO:
+          # BROADCOM_PHYLIB
+          # ??
+
           extraConfig = ''
             BCMGENET y
           '';
@@ -246,6 +254,8 @@ in
         Type = "simple";
         ExecStart = (pkgs.writeScript "dump-db.sh" ''
           #!${pkgs.bash}/bin/bash
+          set -x
+          set -euo pipefail
           mkdir -p /nix/var/nix/db-export
           time ${pkgs.nix}/bin/nix-store --dump-db > /nix/var/nix/db-export/.snapshot.new
           mv /nix/var/nix/db-export/.snapshot.new /nix/var/nix/db-export/snapshot
