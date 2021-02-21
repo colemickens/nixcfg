@@ -4,7 +4,8 @@ let
   rpifour2_serial = "156b6214";
   rpifour2_mac = "dc-a6-32-59-d6-f8";
 
-  useMainlineDtbs = true;
+  useMainlineDtbs = true; # seems like false breaks things (whereas u-boot wants the foundation dtb, it seems)
+  # does u-boot do some DTB adaptation between foundation and kernel names by chance? (since it seemed like serial output on the rpifour1 was fine w/ u-boot)
 
   netbootSystem = "aarch64-linux";
   #netbootSystem = "armv7l-linux";
@@ -105,6 +106,7 @@ let
           # ??
 
           extraConfig = ''
+            PACKET y
             BCMGENET y
           '';
         }];
