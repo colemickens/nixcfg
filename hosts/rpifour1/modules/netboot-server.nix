@@ -69,6 +69,13 @@ let
       boot = {
         tmpOnTmpfs = true;
         kernelPackages = pkgs.linuxPackages_latest;
+        kernelPatches = [{
+          name = "crashdump-config";
+          patch = null;
+          extraConfig = ''
+            CONFIG_BCMGENET=y
+          '';
+        }];
         initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
         initrd.kernelModules = [
           "nfs" "genet" "broadcom"
