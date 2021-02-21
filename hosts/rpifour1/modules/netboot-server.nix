@@ -178,9 +178,31 @@ in
         device = "/var/lib/nfs/rpifour2";
         options = [ "bind" ];
       };
+      "/export/nix-db-export" = {
+        device = "/nix/var/nix/db-export";
+        options = [ "bind" ];
+      };
       "/export/nix-store" = {
         device = "/nix/store";
         options = [ "bind" ];
+      };
+    };
+    systemd.timers."nix-db-export" = {
+      wantedBy = [ "timers.target" ];
+      partOf = [ "nix-db-export.service" ];
+      timerConfig.OnCalendar = "1 minute";
+    };
+    systemd.services."nix-db-export" = {
+      wantedBy = [ "multi-user.target" ]; 
+      #after = [ "network.target" ];
+      description = "Make regular exports of the nix database.";
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = (pkgs.writeScript "dump-db.sh" ''
+          mkdir -p /nix/var/nix/db-export
+          ${pkgs.nix}/bin/nix-store dump-db > /nix/var/nix/db-export/.snapshot.new
+          mv /nix/var/nix/db-export/.snapshot.new /nix/var/nix/db-export/snapshot
+        '');
       };
     };
     networking.firewall = {
