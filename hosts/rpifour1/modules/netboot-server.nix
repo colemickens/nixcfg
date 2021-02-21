@@ -19,8 +19,9 @@ let
   rpifour2_config = ({ config, lib, pkgs, modulesPath, inputs, ... }: {
     imports = [
       "${modulesPath}/installer/netboot/netboot.nix"
-    ../../../mixins/common.nix
-    ../../../profiles/user.nix
+      ../../../mixins/common.nix
+      ../../../mixins/sshd.nix
+      ../../../profiles/user.nix
     ];
     config = {
       fileSystems = {
@@ -58,6 +59,56 @@ let
       documentation.info.enable = false;
       documentation.nixos.enable = false;
 
+      # TODO???
+      hardware.bluetooth.powerOnBoot = false; # attempt to disable BT?
+
+      boot = {
+        tmpOnTmpfs = true;
+        supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
+
+        loader.grub.enable = false;
+        loader.generic-extlinux-compatible.enable = false;
+
+        consoleLogLevel = lib.mkDefault 7;
+        kernelPackages = pkgs.linuxPackages_latest;
+        kernelParams = if useMainlineDtbs then [] else ["console=ttyS0,115200"];
+        kernelModules = config.boot.initrd.kernelModules;
+        kernelPatches = if pkgs.system == "armv7l-linux" then [] else [{
+          name = "crashdump-config";
+          patch = null;
+          extraConfig = ''
+            PACKET y
+            BCMGENET y
+          '';
+        }];
+
+        initrd.network.enable = true;
+        initrd.network.flushBeforeStage2 = false;
+        initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
+        initrd.kernelModules = [
+          "nfs" "genet" "broadcom"
+          "xhci_pci" "libphy" "bcm_phy_lib" "mdio_bcm_unimac"
+        ];
+      };
+      networking = {
+        wireless.enable = false;
+        hostName = "rpifour2";
+        useDHCP = true;
+      };
+      services.resolved.enable = true;
+      services.resolved.domains = [ "ts.r10e.tech" ];
+      services.timesyncd.enable = true;
+      time.timeZone = "America/Los_Angeles";
+      systemd.network.enable = true;
+
+      # nixpkgs.overlays = [ (self: super: {
+      #   grub2 = super.callPackage ({runCommand, ...}: runCommand "grub-dummy" {} "mkdir $out") {};
+      # }) ];
+
+      environment.systemPackages = with pkgs; [ libraspberrypi htop ];
+      services.udisks2.enable = false;
+      security.polkit.enable = false;
+
       systemd.timers."nix-db-import" = {
         wantedBy = [ "timers.target" ];
         partOf = [ "nix-db-import.service" ];
@@ -78,68 +129,6 @@ let
           '');
         };
       };
-
-      # TODO???
-      hardware.bluetooth.powerOnBoot = false; # attempt to disable BT?
-
-      boot = {
-        tmpOnTmpfs = true;
-        kernelPackages = pkgs.linuxPackages_latest;
-        kernelParams = if useMainlineDtbs then [] else ["console=ttyS0,115200"];
-        #[
-          # unsure what this does?
-          #"earlycon=uart8250,mmio32,0xfe215040"
-          # doesn't work (maybe because of the overlay not lining up):
-          #"console=ttyAMA0,115200"
-          #"console=ttyS0,115200"
-          #"console=serial0,115200"
-        #];
-        kernelPatches = if pkgs.system == "armv7l-linux" then [] else [{
-          name = "crashdump-config";
-          patch = null;
-          # we mostly do this as a (hopeful) workaround:
-          # otherwise initrd-network tries to startup too early
-          # sometimes and interrupts genet's initialization process
-
-          # TODO:
-          # BROADCOM_PHYLIB
-          # ??
-
-          extraConfig = ''
-            PACKET y
-            BCMGENET y
-          '';
-        }];
-        initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
-        initrd.kernelModules = [
-          "nfs" "genet" "broadcom"
-          "xhci_pci" "libphy" "bcm_phy_lib" "mdio_bcm_unimac"
-        ];
-        kernelModules = config.boot.initrd.kernelModules;
-        initrd.network.enable = true;
-        initrd.network.flushBeforeStage2 = false;
-        supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
-      };
-      services.udisks2.enable = false;
-      networking = {
-        wireless.enable = false;
-        hostName = "rpifour2";
-        #useNetworkd = true;
-        useDHCP = true;
-        # interfaces."eth0".ipv4.addresses = [{
-        #   address = "192.168.1.3";
-        #   prefixLength = 16;
-        # }];
-      };
-      nixpkgs.overlays = [ (self: super: {
-        grub2 = super.callPackage ({runCommand, ...}: runCommand "grub-dummy" {} "mkdir $out") {};
-      }) ];
-      environment.systemPackages = with pkgs; [ libraspberrypi htop ];
-      security.polkit.enable = false;
-      boot.loader.grub.enable = false;
-      services.openssh.enable = true;
-      boot.consoleLogLevel = lib.mkDefault 7;
-      boot.loader.generic-extlinux-compatible.enable = false;
     };
   });
   rpifour2_system = import "${modulesPath}/../lib/eval-config.nix" {
