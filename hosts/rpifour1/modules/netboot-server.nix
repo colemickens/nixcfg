@@ -3,6 +3,11 @@
 let
   rpifour2_serial = "156b6214";
   rpifour2_mac = "dc-a6-32-59-d6-f8";
+  rpifour2_pkgs = with pkgs; [
+    libraspberrypi
+    htop
+    ffmpeg
+  ];
 
   useMainlineDtbs = true; # seems like false breaks things (whereas u-boot wants the foundation dtb, it seems)
   # does u-boot do some DTB adaptation between foundation and kernel names by chance? (since it seemed like serial output on the rpifour1 was fine w/ u-boot)
@@ -107,7 +112,7 @@ let
       #   grub2 = super.callPackage ({runCommand, ...}: runCommand "grub-dummy" {} "mkdir $out") {};
       # }) ];
 
-      environment.systemPackages = with pkgs; [ libraspberrypi htop ];
+      environment.systemPackages = rpifour2_pkgs;
       services.udisks2.enable = false;
       security.polkit.enable = false;
 
