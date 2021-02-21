@@ -4,7 +4,7 @@ let
   rpifour2_serial = "156b6214";
   rpifour2_mac = "dc-a6-32-59-d6-f8";
 
-  useMainlineDtbs = false;
+  useMainlineDtbs = true;
 
   netbootSystem = "aarch64-linux";
   #netbootSystem = "armv7l-linux";
