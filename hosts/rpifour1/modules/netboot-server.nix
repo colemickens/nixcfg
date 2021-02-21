@@ -8,6 +8,11 @@ let
   netbootSystem = "armv7l-linux";
   isArm64Bit = (netbootSystem == "aarch64-linux");
 
+  rpifour2_evalconfig = if (netbootSystem == "aarch64-linux")
+    then "${modulesPath}/../lib/eval-config.nix"                # use whatever rpifour1 uses when we just follow it
+    else "${inputs.nixos-unstable}/nixos/lib/eval-config.nix";  # use nixos-unstable so we get cache hits on floweringash's armv7 cache
+  # we only need this ^ for bootstrapping, so this might be removed later
+
   rpifour2_config = ({ config, lib, pkgs, modulesPath, inputs, ... }: {
     imports = [
       "${modulesPath}/installer/netboot/netboot.nix"
