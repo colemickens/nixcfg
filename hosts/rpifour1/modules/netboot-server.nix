@@ -45,6 +45,7 @@ let
         ];
         kernelModules = config.boot.initrd.kernelModules;
         initrd.network.enable = true;
+        initrd.network.flushBeforeStage2 = false;
         supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
       };
       services.udisks2.enable = false;
