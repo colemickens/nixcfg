@@ -71,11 +71,17 @@ let
       };
 
       # TODO???
-      #hardware.bluetooth.powerOnBoot = false; # attempt to disable BT?
+      hardware.bluetooth.powerOnBoot = false; # attempt to disable BT?
 
       boot = {
         tmpOnTmpfs = true;
         kernelPackages = pkgs.linuxPackages_latest;
+        kernelParams = [
+          # unsure what this does?
+          #"earlycon=uart8250,mmio32,0xfe215040"
+          # doesn't work (maybe because of the overlay not lining up):
+          #"console=ttyS0,115200"
+        ];
         # kernelPatches = [{
         #   name = "crashdump-config";
         #   patch = null;
@@ -123,6 +129,9 @@ let
     system = netbootSystem;
     specialArgs = { inherit inputs; };
   };
+  rpifour2_cmdline = pkgs.writeText "cmdline.txt" ''
+    systemConfig=${rpifour2_system.config.system.build.toplevel} init=${rpifour2_system.config.system.build.toplevel}/init ${toString rpifour2_system.config.boot.kernelParams}
+  '';
 
   # BOOT_ORDER fields::  0x0-NONE, 0x1-SD CARD, 0x2-NETWORK, 0x3-USB device boot, 0x4-USB MSD Boot, 0xf-RESTART(loop)
   bootOrder="0xf142";
@@ -152,25 +161,6 @@ let
     dtb=bcm2711-rpi-4-b.dtb
     core_freq=500
     ${lib.optionalString (netbootSystem=="aarch64-linux") "arm_64bit=1"}
-  '';
-
-
-  earlycon = "";
-  console = "";
-
-  #earlycon = "uart8250,mmio32,0xfe215040";
-  #console = "ttyS0,115200";
-
-  cmdline1 = pkgs.writeText "cmdline.txt" ''
-    ${lib.optionalString (earlycon!="") earlycon} ${lib.optionalString (console!="") console} ip=dhcp elevator=deadline init=${rpifour2_system.config.system.build.toplevel}/init isolcpus=3
-  '';
-
-  cmdline2 = pkgs.writeText "cmdline.txt" ''
-    systemConfig=${rpifour2_system.config.system.build.toplevel} init=${rpifour2_system.config.system.build.toplevel}/init ${toString rpifour2_system.config.boot.kernelParams} nfsrootdebug root=/dev/nfs nfsroot=192.168.1.2:/rpifour2,ro,vers=4.1 rw rootwait ip=dhcp
-  '';
-
-  cmdline3 = pkgs.writeText "cmdline.txt" ''
-    ${lib.optionalString (earlycon!="") "earlycon=${earlycon}"} ${lib.optionalString (console!="") "console=${console}"} systemConfig=${rpifour2_system.config.system.build.toplevel} init=${rpifour2_system.config.system.build.toplevel}/init ${toString rpifour2_system.config.boot.kernelParams}
   '';
 
   cmdline = cmdline3;
@@ -204,7 +194,7 @@ let
     cp "${configTxt}" $out/config.txt
 
     ## CMDLINE.TXT
-    cp "${cmdline}" $out/cmdline.txt
+    cp "${rpifour2_cmdline}" $out/cmdline.txt
 
     # LINUX KERNEL + INITRD
     cp ${rpifour2_system.config.system.build.toplevel}/kernel "$out/vmlinuz"
