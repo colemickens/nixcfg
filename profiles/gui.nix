@@ -82,6 +82,8 @@ in
         cchat-gtk
         neochat
 
+        mplayer
+
         rkvm
 
         gnome3.nautilus
