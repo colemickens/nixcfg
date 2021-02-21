@@ -18,9 +18,19 @@ let
             "x-systemd-device-timeout=20s"
             "nfsvers=3" "proto=tcp" "nolock" "rw" # so that it works in initrd with busybox's mount that only does nfs3
           ];
+          neededForBoot = true;
         };
         "/nix/.ro-store" = lib.mkForce {
           device = "192.168.1.2:/export/nix-store";
+          fsType = "nfs";
+          options = [
+            "x-systemd-device-timeout=20s"
+            "nfsvers=3" "proto=tcp" "nolock" "ro" # so that it works in initrd with busybox's mount that only does nfs3
+          ];
+          neededForBoot = true;
+        };
+        "/dbimport" = lib.mkForce {
+          device = "192.168.1.2:/export/nix-db-export";
           fsType = "nfs";
           options = [
             "x-systemd-device-timeout=20s"
