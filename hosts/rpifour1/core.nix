@@ -55,6 +55,7 @@ in
       loader.raspberryPi.firmwareConfig = ''
         dtoverlay=disable-wifi
         dtoverlay=disable-bt
+        dtoverlay=sd_poll_once
       '';
       loader.raspberryPi.uboot.enable = true;
       loader.raspberryPi.uboot.configurationLimit = 5;

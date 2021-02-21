@@ -72,9 +72,12 @@ let
         kernelPatches = [{
           name = "crashdump-config";
           patch = null;
-          extraConfig = ''
-            CONFIG_BCMGENET=y
-          '';
+          # we mostly do this as a (hopeful) workaround:
+          # otherwise initrd-network tries to startup too early
+          # sometimes and interrupts genet's initialization process
+          # extraConfig = ''
+          #   CONFIG_BCMGENET=y
+          # '';
         }];
         initrd.supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
         initrd.kernelModules = [
@@ -157,7 +160,7 @@ let
   '';
 
   cmdline3 = pkgs.writeText "cmdline.txt" ''
-    systemConfig=${rpifour2_system.config.system.build.toplevel} init=${rpifour2_system.config.system.build.toplevel}/init ${toString rpifour2_system.config.boot.kernelParams}
+    systemConfig=${rpifour2_system.config.system.build.toplevel} init=${rpifour2_system.config.system.build.toplevel}/init ${toString rpifour2_system.config.boot.kernelParams} console=/dev/ttyS0
   '';
 
   cmdline = cmdline3;
