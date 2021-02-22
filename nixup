@@ -141,9 +141,9 @@ PINEBOOK="cole@100.89.55.100";  PINEBOOK="cole@pinebook.ts.r10e.tech"
 RPIFOUR1="cole@100.111.5.113";  RPIFOUR1="cole@rpifour1.ts.r10e.tech"
 SLYNUX="cole@100.79.123.116";   SLYNUX="cole@slynux.ts.r10e.tech"
 XEEP="cole@100.72.11.62";       XEEP="cole@xeep.ts.r10e.tech"
-RPIZERO1="cole@100.111.5.113";    RPIZERO1="cole@rpizero1.ts.r10e.tech"
-RPIZERO2="cole@100.111.5.113";    RPIZERO2="cole@rpizero2.ts.r10e.tech"
-JEFFHYPER="jeff@100.0.0.0";       JEFFHYPER="jeff@jeffhyper.ts.r10e.tech"
+RPIZERO1="cole@100.111.5.113";  RPIZERO1="cole@rpizero1.ts.r10e.tech"
+RPIZERO2="cole@100.111.5.113";  RPIZERO2="cole@rpizero2.ts.r10e.tech"
+JEFFHYPER="jeff@100.103.91.27"; JEFFHYPER="jeff@jeffhyper.ts.r10e.tech"
 
 function a64() { build "$1" "${AARCH64}" "${AARCH64}"; }
 function nix() { command nix "${nixargs[@]}" "${@}"; }
