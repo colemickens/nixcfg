@@ -167,6 +167,7 @@
         pinebook = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
         rpizero1 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
         rpizero2 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
+        jeffhyper= mkSystem inputs.nixpkgs "x86_64-linux"  "jeffhyper";
 
         #pinephone     = mkSystem fullPkgs_.aarch64-linux "pinephone";
         #bluephone     = mkSystem fullPkgs_.aarch64-linux "bluephone";

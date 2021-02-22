@@ -141,9 +141,9 @@ PINEBOOK="cole@100.89.55.100";  PINEBOOK="cole@pinebook.ts.r10e.tech"
 RPIFOUR1="cole@100.111.5.113";  RPIFOUR1="cole@rpifour1.ts.r10e.tech"
 SLYNUX="cole@100.79.123.116";   SLYNUX="cole@slynux.ts.r10e.tech"
 XEEP="cole@100.72.11.62";       XEEP="cole@xeep.ts.r10e.tech"
-
 RPIZERO1="cole@100.111.5.113";    RPIZERO1="cole@rpizero1.ts.r10e.tech"
 RPIZERO2="cole@100.111.5.113";    RPIZERO2="cole@rpizero2.ts.r10e.tech"
+JEFFHYPER="jeff@100.0.0.0";       JEFFHYPER="jeff@jeffhyper.ts.r10e.tech"
 
 function a64() { build "$1" "${AARCH64}" "${AARCH64}"; }
 function nix() { command nix "${nixargs[@]}" "${@}"; }
@@ -155,6 +155,7 @@ function slynux()   { activate ".#toplevels.slynux"    "${BUILD_HOST:-"${SLYNUX}
 function xeep()     { activate ".#toplevels.xeep"      "${BUILD_HOST:-"${SLYNUX}"}"    "${XEEP}";   }
 function rpizero1() { activate ".#toplevels.rpizero1"  "${BUILD_HOST:-"${SLYNUX}"}"    "${RPIZERO1}";   }
 function rpizero2() { activate ".#toplevels.rpizero2"  "${BUILD_HOST:-"${SLYNUX}"}"    "${RPIZERO2}";   }
+function jeffhyper() { activate ".#toplevels.jeffhyper"  "${BUILD_HOST:-"${SLYNUX}"}"    "${JEFFHYPER}";   }
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 
