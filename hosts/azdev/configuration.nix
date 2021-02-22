@@ -9,6 +9,8 @@
     ../../profiles/interactive.nix
     ../../mixins/loremipsum-media/rclone-mnt.nix
 
+    ../../mixins/plex.nix
+
     # specific persistent services to run in Azure
     #./services.nix
   ];
@@ -26,10 +28,6 @@
       "d '/run/state/plex' - root - - -"
       "d '/var/lib/plex' - root - - -"
     ];
-
-    # plex
-    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "plexmediaserver" ];
-    services.plex.enable = true;
 
     # sshd keys come from persistent location (/run/state is bound to zfs vol)
     services.openssh = {
