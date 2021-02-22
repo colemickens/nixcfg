@@ -4,7 +4,7 @@ set -x
 
 
 function d() {
-  mkdir -p encrypted; cd encrypted
+  mkdir -p unencrypted; cd encrypted
   for f in *; do
     sops \
       --input-type binary --output-type binary \
@@ -13,11 +13,18 @@ function d() {
 }
 
 function e() {
-  mkdir -p unencrypted; cd unencrypted
+  mkdir -p encrypted; cd unencrypted
   for f in *; do
     sops \
       --input-type binary --output-type binary \
       --verbose --output ../encrypted/$f -e $f
+  done
+}
+
+function import_keys() {
+  cd keys
+  for f in *.pub; do
+    gpg --import "${f}"
   done
 }
 
