@@ -1,7 +1,7 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, config, ... }:
 
 let
-  c = import ./common.nix { inherit pkgs; };
+  c = import ./common.nix { inherit pkgs config; };
   mkMount = target: {
     description = "RCloneGoogDrv Mount Thing";
     path = with pkgs; [ fuse bash ];
