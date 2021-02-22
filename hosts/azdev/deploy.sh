@@ -3,9 +3,8 @@ set -x
 set -euo pipefail
 
 export AZURE_LOCATION="westus2"
-export AZURE_VM_SIZE="Standard_F72s_v2" export AZURE_VM_OS_DISK_SIZE="1024"
-#export AZURE_VM_SIZE="Standard_F8s_v2"; export AZURE_VM_OS_DISK_SIZE="128"
-export AZURE_VM_OS_DISK_SIZE="100"
+#export AZURE_VM_SIZE="Standard_F72s_v2" export AZURE_VM_OS_DISK_SIZE="1024"; export AZURE_EPHEMERAL_DISK="true"
+export AZURE_VM_SIZE="Standard_F4s_v2"; export AZURE_VM_OS_DISK_SIZE="128"; export AZURE_EPHEMERAL_DISK="false"
 
 # uncomment to use a pre-existing image
 # instead of building and uploading a new one
@@ -62,7 +61,7 @@ function deploy() {
     --ssh-key-values "$(ssh-add -L | head -1)" \
     --os-disk-size-gb "${AZURE_VM_OS_DISK_SIZE}" \
     --public-ip-address-dns-name "${deploy}" \
-    --ephemeral-os-disk true \
+    --ephemeral-os-disk "${AZURE_EPHEMERAL_DISK}" \
     --accelerated-networking
 
   az vm show -g "${AZURE_GROUP}" -n "${AZURE_GROUP}"

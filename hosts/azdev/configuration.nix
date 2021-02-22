@@ -9,7 +9,7 @@
     ../../profiles/interactive.nix
 
     # specific persistent services to run in Azure
-    ./services.nix
+    #./services.nix
   ];
 
   config = {
@@ -21,6 +21,8 @@
       "d '/var/lib/tailscale' - root - - -"
       "d '/run/state/tailscale' - root - - -"
     ];
+
+    services.plex.enable = true;
 
     services.openssh = {
       enable = true;
@@ -57,6 +59,10 @@
         fsType = "none";
         options = [ "bind" ];
         device = "/run/state/tailscale";
+      };
+      "/var/lib/plex" = {
+        fsType = "zfs";
+        device = "azpool/plex";
       };
       "/run/state" = {
         fsType = "zfs";
