@@ -20,6 +20,19 @@ let
     wantedBy = [ "default.target" ];
   };
 in {
+  sops.secrets."rclone.conf" = {
+    owner = "cole";
+    group = "cole";
+  };
+  sops.secrets."rclone-reader-sa.json" = {
+    owner = "cole";
+    group = "cole";
+  };
+  sops.secrets."rclone-writer-sa.json" = {
+    owner = "cole";
+    group = "cole";
+  };
+
   systemd.services = {
     rclone_tvshows = mkMount "tvshows";
     rclone_movies  = mkMount "movies";

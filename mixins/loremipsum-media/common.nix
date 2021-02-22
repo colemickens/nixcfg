@@ -1,14 +1,7 @@
 { pkgs }:
 
 rec {
-  rcloneConfigFile = pkgs.substituteAll {
-    src = ./rclone.conf;
-    rclone_archives   = ./sa/rclone-archives.json;
-    rclone_backups    = ./sa/rclone-backups.json;
-    rclone_movies     = ./sa/rclone-movies.json;
-    rclone_tvshows    = ./sa/rclone-tvshows.json;
-    rclone_misc       = ./sa/rclone-misc.json;
-  };
+  rcloneConfigFile = sops.secrets."rclone.conf".path;
 
   rclone-lim = pkgs.writeScriptBin "rclone-lim" ''
     #!/usr/bin/env bash
