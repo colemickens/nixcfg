@@ -1,8 +1,8 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   config = {
-    nixpkgs.config.allowUnfree = true;
+    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "plexmediaserver" ];
     networking.firewall.allowedTCPPorts = [ 32400 ];
     services = {
       plex = {
