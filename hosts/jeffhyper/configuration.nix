@@ -107,6 +107,6 @@
       "$6$J7DyTD7T1AgB$2diShcxoHT06bPmZ4IdAn8LdWIW0TfOvry7ODBEVd/lj9D6Ziu1u/DXSl.mJknvdLABp5h8TDW14Ne8ut6QtO1";
     shell = "${pkgs.bash}/bin/bash";
     extraGroups = [ "wheel" ];
-    uid = 1000;
+    uid = 1001;
   };
 }
