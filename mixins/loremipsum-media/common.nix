@@ -1,7 +1,7 @@
-{ pkgs }:
+{ pkgs, config }:
 
 rec {
-  rcloneConfigFile = sops.secrets."rclone.conf".path;
+  rcloneConfigFile = config.sops.secrets."rclone.conf".path;
 
   rclone-lim = pkgs.writeScriptBin "rclone-lim" ''
     #!/usr/bin/env bash
