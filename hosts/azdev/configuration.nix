@@ -7,6 +7,7 @@
 
     # everything for a non-gui interactive session
     ../../profiles/interactive.nix
+    ../../mixins/loremipsum-media/rclone-mnt.nix
 
     # specific persistent services to run in Azure
     #./services.nix
@@ -22,8 +23,11 @@
       "d '/run/state/tailscale' - root - - -"
     ];
 
+    # plex
+    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "plexmediaserver" ];
     services.plex.enable = true;
 
+    # sshd keys come from persistent location (/run/state is bound to zfs vol)
     services.openssh = {
       enable = true;
       hostKeys = [
