@@ -21,16 +21,16 @@ let
   };
 in {
   sops.secrets."rclone.conf" = {
-    owner = "cole";
-    group = "cole";
+    owner = "rclone";
+    group = "rclone";
   };
   sops.secrets."rclone-reader-sa.json" = {
-    owner = "cole";
-    group = "cole";
+    owner = "rclone";
+    group = "rclone";
   };
   sops.secrets."rclone-writer-sa.json" = {
-    owner = "cole";
-    group = "cole";
+    owner = "rclone";
+    group = "rclone";
   };
 
   systemd.services = {
