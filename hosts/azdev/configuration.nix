@@ -19,8 +19,12 @@
 
     systemd.tmpfiles.rules = [
       "d '/run/state/ssh' - root - - -"
+
       "d '/var/lib/tailscale' - root - - -"
       "d '/run/state/tailscale' - root - - -"
+
+      "d '/run/state/plex' - root - - -"
+      "d '/var/lib/plex' - root - - -"
     ];
 
     # plex
@@ -65,8 +69,9 @@
         device = "/run/state/tailscale";
       };
       "/var/lib/plex" = {
-        fsType = "zfs";
-        device = "azpool/plex";
+        fsType = "none";
+        options = [ "bind" ];
+        device = "/run/state/plex";
       };
       "/run/state" = {
         fsType = "zfs";
