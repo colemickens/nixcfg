@@ -21,6 +21,11 @@ function e() {
   done
 }
 
+# import_host() {
+#   nix shell github:Mic92/sops-nix#ssh-to-gpg
+#   ssh ${fullhostname} "sudo cat /etc/ssh/ssh_host_rsa_key" | ssh-to-pgp -o keys/${hostname}.pub 2> "keys/${hostname}.fingerprint"
+# }
+
 function import_keys() {
   cd keys
   for f in *.pub; do
