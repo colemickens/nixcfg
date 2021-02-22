@@ -25,8 +25,8 @@
       "d '/var/lib/tailscale' - root - - -"
       "d '/run/state/tailscale' - root - - -"
 
-      "d '/run/state/plex' - root - - -"
-      "d '/var/lib/plex' - root - - -"
+      "d '/run/state/plex' - plex - - -"
+      "d '/var/lib/plex' - plex - - -"
     ];
 
     # sshd keys come from persistent location (/run/state is bound to zfs vol)
