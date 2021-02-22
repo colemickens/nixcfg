@@ -4,6 +4,8 @@
   imports = [
     ../../mixins/common.nix
     ../../mixins/tailscale.nix
+
+    ../../profiles/interactive.nix
   ];
 
   system.stateVersion = "21.03";
