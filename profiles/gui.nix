@@ -82,8 +82,6 @@ in
         cchat-gtk
         neochat
 
-        mplayer
-
         rkvm
 
         gnome3.nautilus
@@ -100,6 +98,7 @@ in
 
         ddccontrol i2c-tools
         scrcpy
+        mplayer
 
         # yucky non-free
         discord
