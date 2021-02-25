@@ -115,8 +115,6 @@ let
       # }) ];
 
       environment.systemPackages = rpifour2_pkgs;
-      services.udisks2.enable = false;
-      security.polkit.enable = false;
 
       systemd.timers."nix-db-import" = {
         wantedBy = [ "timers.target" ];
