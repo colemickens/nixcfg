@@ -160,8 +160,8 @@
           cpptoml = prev.callPackage ./pkgs/cpptoml {};
           wireplumber = prev.callPackage ./pkgs/wireplumber {};
 
-          olaris-server = prev.callPackage ./pkgs/olaris-server {};
-          olaris-react = prev.callPackage ./pkgs/olaris-react {};
+          # olaris-server = prev.callPackage ./pkgs/olaris-server {};
+          # olaris-react = prev.callPackage ./pkgs/olaris-react {};
         }; in p // { colePackages = p; };
 
       nixosConfigurations = {
