@@ -9,7 +9,7 @@
     ../../profiles/interactive.nix
     ../../mixins/loremipsum-media/rclone-mnt.nix
 
-    ../../mixins/plex.nix
+    ../../mixins/osiris.nix
 
     # specific persistent services to run in Azure
     #./services.nix

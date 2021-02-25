@@ -70,6 +70,9 @@
     neovim-nightly = { url = "github:nix-community/neovim-nightly-overlay"; };
     neovim-nightly.inputs.nixpkgs.follows = "nixpkgs";
 
+    envfs = { url = "github:Mic92/envfs"; };
+    envfs.inputs.nixpkgs.follows = "nixpkgs";
+
     rust-overlay.url = "github:oxalica/rust-overlay";
 
     wfvm = { type = "git"; url = "https://git.m-labs.hk/M-Labs/wfvm"; flake = false;};
@@ -156,6 +159,9 @@
 
           cpptoml = prev.callPackage ./pkgs/cpptoml {};
           wireplumber = prev.callPackage ./pkgs/wireplumber {};
+
+          olaris-server = prev.callPackage ./pkgs/olaris-server {};
+          olaris-react = prev.callPackage ./pkgs/olaris-react {};
         }; in p // { colePackages = p; };
 
       nixosConfigurations = {
