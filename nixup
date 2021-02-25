@@ -158,7 +158,7 @@ function rpizero2() { activate ".#toplevels.rpizero2"  "${BUILD_HOST:-"${SLYNUX}
 function jeffhyper() { activate ".#toplevels.jeffhyper"  "${BUILD_HOST:-"${SLYNUX}"}"    "${JEFFHYPER}";   }
 
 function x86() { build '.#bundles.x86_64-linux'  "${BUILD_HOST:-"${SLYNUX}"}" "${SLYNUX}"; }
-function a64() { build '.#bundles.aarch64-linux' "${BUILD_HOST:-"${SLYNUX}"}" "${SLYNUX}"; }
+function a64() { build '.#bundles.aarch64-linux' "${BUILD_HOST:-"${AARCH64}"}" "${AARCH64}"; }
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 
