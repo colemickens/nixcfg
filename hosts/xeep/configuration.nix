@@ -4,8 +4,8 @@ let
 in
 {
   imports = [
-    ../../mixins/chromecast.nix
-    ../../mixins/docker.nix
+    #../../mixins/chromecast.nix
+    #../../mixins/docker.nix
     ../../mixins/libvirt.nix
     #../../mixins/obs.nix
     ../../mixins/sshd.nix
