@@ -6,6 +6,9 @@ export AZURE_LOCATION="westus2"
 #export AZURE_VM_SIZE="Standard_F72s_v2" export AZURE_VM_OS_DISK_SIZE="1024"; export AZURE_EPHEMERAL_DISK="true"
 export AZURE_VM_SIZE="Standard_F4s_v2"; export AZURE_VM_OS_DISK_SIZE="128"; export AZURE_EPHEMERAL_DISK="false"
 
+### TODO: when the disk is not ephemeral, it is an HDD!!
+# we should deploy an SSD at least when a small VM
+
 # uncomment to use a pre-existing image
 # instead of building and uploading a new one
 
