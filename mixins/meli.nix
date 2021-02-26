@@ -51,7 +51,7 @@ in {
         };
       };*/
       programs.meli = {
-        enable = true;
+        enable = (pkgs.system == "x86_64-linux"); # meli is broken on aarch64 right now
         settings = {
           accounts = {
             "${dir}" = {
