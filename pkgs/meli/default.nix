@@ -55,6 +55,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://meli.delivery";
     license = licenses.gpl3;
     maintainers = with maintainers; [ _0x4A6F matthiasbeyer erictapen ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ]; # meli is broken on aarch64 right now
   };
 }
