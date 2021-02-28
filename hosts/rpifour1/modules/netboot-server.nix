@@ -83,11 +83,13 @@ let
         kernelParams = if useMainlineDtbs then [] else ["console=ttyS0,115200"];
         kernelModules = config.boot.initrd.kernelModules;
         kernelPatches = if pkgs.system == "armv7l-linux" then [] else [{
-          name = "crashdump-config";
+          name = "rpi4-net-config";
           patch = null;
           extraConfig = ''
-            PACKET y
             BCMGENET y
+            BROADCOM_PHY y
+            PACKET y
+            PHYLIB y
           '';
         }];
 
