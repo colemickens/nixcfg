@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, lib, config, inputs, ... }:
 let
   hostname = "pinebook";
 in
