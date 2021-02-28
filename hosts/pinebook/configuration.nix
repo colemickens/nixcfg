@@ -74,6 +74,8 @@ in
       initrd.kernelModules = [ "nvme" ];
       consoleLogLevel = pkgs.lib.mkDefault 7;
 
+      kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
+
       kernelParams = [
         "cma=32M"
         "mitigations=off"
