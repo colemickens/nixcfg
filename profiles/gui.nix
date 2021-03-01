@@ -73,7 +73,7 @@ in
         kitty
 
         # matrix clients
-        fractal
+        #fractal
         #nheko
         quaternion
         spectral
