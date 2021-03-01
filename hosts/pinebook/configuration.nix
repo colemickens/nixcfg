@@ -14,8 +14,6 @@ in
     ../../profiles/desktop-sway.nix
 
     inputs.wip-pinebook-pro.nixosModule
-    # TODO: ^ module isn't arch specific
-    # TODO: ^ boot options should be exposed too
   ];
 
   config = {
@@ -65,8 +63,6 @@ in
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      # kernelPackages is probably set by wip-pinebook-pro module
-
       loader.grub.enable = false;
       loader.generic-extlinux-compatible.enable = true;
 
@@ -74,7 +70,8 @@ in
       initrd.kernelModules = [ "nvme" ];
       consoleLogLevel = pkgs.lib.mkDefault 7;
 
-      kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
+      #block this, display still doesn't work in 5.11
+      #kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
 
       kernelParams = [
         "cma=32M"
