@@ -150,7 +150,7 @@ function nix() { command nix "${nixargs[@]}" "${@}"; }
 
 function azdev()    { activate ".#toplevels.azdev"     "${BUILD_HOST:-"${AZDEV}"}"     "${AZDEV}";    }
 function pinebook() { activate ".#toplevels.pinebook"  "${BUILD_HOST:-"${AARCH64}"}"   "${PINEBOOK}";  }
-function rpifour1() { activate ".#toplevels.rpifour1"  "${BUILD_HOST:-"${RPIFOUR1}"}"  "${RPIFOUR1}";  }
+function rpifour1() { activate ".#toplevels.rpifour1"  "${BUILD_HOST:-"${AARCH64}"}"   "${RPIFOUR1}";  }
 function slynux()   { activate ".#toplevels.slynux"    "${BUILD_HOST:-"${SLYNUX}"}"    "${SLYNUX}";   }
 function xeep()     { activate ".#toplevels.xeep"      "${BUILD_HOST:-"${SLYNUX}"}"    "${XEEP}";   }
 function rpizero1() { activate ".#toplevels.rpizero1"  "${BUILD_HOST:-"${SLYNUX}"}"    "${RPIZERO1}";   }
