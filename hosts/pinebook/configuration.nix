@@ -74,6 +74,8 @@ in
       kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
       kernelPatches = [{
         name = "pinebook-disable-dp";
+
+        # https://patchwork.kernel.org/project/linux-rockchip/patch/20200924063042.41545-1-jhp@endlessos.org/
         patch = ''
           diff --git a/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts b/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts
           index 06d48338c836..d624c595c533 100644
