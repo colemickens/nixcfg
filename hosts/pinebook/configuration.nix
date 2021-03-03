@@ -71,7 +71,25 @@ in
       consoleLogLevel = pkgs.lib.mkDefault 7;
 
       #block this, display still doesn't work in 5.11
-      #kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
+      kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
+      kernelPatches = [{
+        name = "pinebook-disable-dp";
+        patch = ''
+          diff --git a/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts b/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts
+          index 06d48338c836..d624c595c533 100644
+          --- a/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts
+          +++ b/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts
+          @@ -380,7 +380,7 @@  mains_charger: dc-charger {
+          };
+          
+          &cdn_dp {
+          -	status = "okay";
+          +	status = "disabled";
+          };
+          
+          &cpu_b0 {
+        '';
+      }];
 
       kernelParams = [
         "cma=32M"
