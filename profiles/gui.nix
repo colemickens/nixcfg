@@ -38,6 +38,10 @@ in
     hardware.opengl.enable = true;
     # see pipewire.nix for pulseaudio/pipewire stuffs
 
+    services.udev.extraRules = ''
+      SUBSYSTEM=="tty", ATTRS{idVendor}=="1050", ATTRS{idProduct}=="0407", RUN{program}="${pkgs.systemd}/bin/systemctl --user start pcscd.service"
+    '';
+
     services.pcscd.enable = true;
 
     home-manager.users.cole = { pkgs, ... }: {
