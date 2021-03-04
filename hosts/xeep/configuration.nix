@@ -4,19 +4,16 @@ let
 in
 {
   imports = [
-    #../../mixins/chromecast.nix
-    #../../mixins/docker.nix
+    ../../mixins/chromecast.nix
     ../../mixins/libvirt.nix
-    #../../mixins/obs.nix
+    ../../mixins/obs.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
-    #../../mixins/v4l2loopback.nix
+    ../../mixins/v4l2loopback.nix
 
     ../../profiles/interactive.nix
 
-    #../../profiles/desktop-sway.nix
     ../../profiles/desktop-sway-unstable.nix
-    #../../profiles/desktop-plasma.nix
 
     # xps 13 9370 specific:
     ../../mixins/gfx-intel.nix
