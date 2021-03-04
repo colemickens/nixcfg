@@ -121,13 +121,13 @@ in
       useNetworkd = true;
       useDHCP = false;
 
-      interfaces."eth0".useDHCP = true;
-      interfaces."enp56s0u2u3".useDHCP = true;
-      interfaces."enp56s0u1u3".useDHCP = true;
+      # interfaces."eth0".useDHCP = true;
+      # interfaces."enp56s0u2u3".useDHCP = true;
+      # interfaces."enp56s0u1u3".useDHCP = true;
       interfaces."wlan0".useDHCP = true;
 
-      #bridges."virbr0".interfaces = [ "eth0" ];
-      #interfaces."virbr0".useDHCP = true;
+      bridges."ethbr0".interfaces = [ "enp56s0u2u3" ];
+      interfaces."ethbr0".useDHCP = true;
 
       search = [ "ts.r10e.tech" ];
     };
