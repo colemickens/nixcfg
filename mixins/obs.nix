@@ -7,7 +7,7 @@
         enable = true;
         plugins = with pkgs; [
           obs-wlrobs
-          obs-v4l2sink
+          #obs-v4l2sink
         ];
       };
     };
