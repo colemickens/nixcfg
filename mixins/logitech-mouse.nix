@@ -2,7 +2,7 @@
 
 {
   config = {
-    services.libratbagd.enable = true;
+    services.ratbagd.enable = true;
 
     home-manager.users.cole = { pkgs, ... }: {
       home.packages = with pkgs; [

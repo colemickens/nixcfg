@@ -122,7 +122,7 @@ function build() {
   __ "TARGET: copy $out from cachix (on $target)"
   set -x
   #ssh_nixUnstable_shell2 "${target}" rm -rf .cache/nix
-  ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" --no-link -j0 "${out}" &>/dev/stderr
+  ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" --no-link -j0 "${out}"
 
   echo -e "${out}"; return 0
 }
