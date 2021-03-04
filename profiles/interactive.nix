@@ -70,7 +70,7 @@ in
         du-dust
         fd
         wireguard-tools
-        jj
+        #jj
         pijul
         grex # regex
 
