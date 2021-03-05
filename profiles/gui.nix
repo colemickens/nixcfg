@@ -92,9 +92,6 @@ in
         gnome3.file-roller
         gnome3.gnome-tweaks
         spice-gtk
-
-        ledger_agent # ??
-        ledger-live-desktop
       ]
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
         # browsers
