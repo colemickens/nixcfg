@@ -9,9 +9,8 @@ in
     ../../mixins/chromecast.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
-    ../../mixins/v4l2loopback.nix
 
-    ../../profiles/desktop-sway.nix
+    ../../profiles/desktop-sway-unstable.nix
 
     inputs.wip-pinebook-pro.nixosModule
   ];
