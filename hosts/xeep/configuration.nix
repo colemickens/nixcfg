@@ -11,7 +11,6 @@ in
     ../../mixins/obs.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
-    ../../mixins/v4l2loopback.nix
 
     ../../profiles/interactive.nix
 
