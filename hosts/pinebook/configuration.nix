@@ -78,6 +78,7 @@ in
           patch = ./pbp-disable-dp.patch; }
 
         { name = "pinebook-force-enable-battery";
+          patch = null;
           extraConfig = ''
             BATTERY_CW2015=y
           ''; }
