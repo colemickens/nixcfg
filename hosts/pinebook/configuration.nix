@@ -72,12 +72,18 @@ in
 
       #block this, display still doesn't work in 5.11
       kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
-      kernelPatches = [{
-        name = "pinebook-disable-dp";
+      kernelPatches = [
 
-        # https://patchwork.kernel.org/project/linux-rockchip/patch/20200924063042.41545-1-jhp@endlessos.org/
-        patch = ./pbp-disable-dp.patch;
-      }];
+        { name = "pinebook-disable-dp";
+          # https://patchwork.kernel.org/project/linux-rockchip/patch/20200924063042.41545-1-jhp@endlessos.org/
+          patch = ./pbp-disable-dp.patch; }
+
+        { name = "pinebook-force-enable-battery";
+          extraConfig = ''
+            BATTERY_CW2015=y
+          ''; }
+
+      ];
 
       kernelParams = [
         "cma=32M"
