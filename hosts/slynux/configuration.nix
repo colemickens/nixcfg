@@ -102,8 +102,8 @@ in
           # so that it doesn't work in Win10
           # see if its the cause of corruption
 
-          keyFile = "/dev/sdb";
-          keyFileSize = 4096;
+          #keyFile = "/dev/sdb";
+          #keyFileSize = 4096;
           fallbackToPassword = true;
         };
       };
