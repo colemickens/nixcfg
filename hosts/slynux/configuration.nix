@@ -6,6 +6,7 @@ in
 {
   imports = [
     ../../mixins/common.nix
+    ../../mixins/ledger.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
 
