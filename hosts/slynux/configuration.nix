@@ -10,6 +10,7 @@ in
     ../../mixins/tailscale.nix
 
     ../../profiles/interactive.nix
+    ../../profiles/desktop-sway-unstable.nix
   ];
 
   config = {
