@@ -40,7 +40,7 @@ function update() {
       "[[ ! -d "${HOME}/code/{.}" ]] || (git -C '${HOME}/code/{.}' pull --rebase && git -C '${HOME}/code/{.}' push origin HEAD -f)"
 
   __ "updating all inputs"
-  cd "${DIR}"; nix flake update --recreate-lock-file --no-registries --commit-lock-file
+  cd "${DIR}"; nix flake update --no-registries --commit-lock-file
 
   __ "updating our own packages"
   cd "${DIR}/pkgs" && ./update.sh
