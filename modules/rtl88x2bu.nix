@@ -1,9 +1,8 @@
 { config, lib, pkgs, ... }:
 let
-  #ver = "5.8.7.4";
-  #sha = "";
-  ver = "af47b17";
+  ver = "af47b17"; # branch (named "5.8.7.4") as of 2021-03-16
   sha = "sha256-Q2jJElKFMPRgHu/bitKpHZ7gsP3c0I4o0suFGoB2BLY=";
+
   pkg = pkgs.callPackage pkg_ { kernel = config.boot.kernelPackages.kernel; };
   pkg_ = (
     { stdenv, lib, fetchFromGitHub, kernel, kmod }:
@@ -19,14 +18,16 @@ let
         sha256 = sha;
       };
 
-      sourceRoot = ".";
-      hardeningDisable = [ "pic" "format" ];                                             # 1
-      nativeBuildInputs = kernel.moduleBuildDependencies;                       # 2
+      #sourceRoot = ".";
+      hardeningDisable = [ "pic" "format" ];
+      nativeBuildInputs = kernel.moduleBuildDependencies ++ (with pkgs; [
+        bc
+      ]);
 
       makeFlags = [
-        "KERNELRELEASE=${kernel.modDirVersion}"                                 # 3
-        "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"    # 4
-        "INSTALL_MOD_PATH=$(out)"                                               # 5
+        "KERNELRELEASE=${kernel.modDirVersion}"
+        "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+        "INSTALL_MOD_PATH=$(out)"
       ];
 
       meta = with lib; {
