@@ -1,18 +1,22 @@
 { config, lib, pkgs, ... }:
 let
+  #ver = "5.8.7.4";
+  #sha = "";
+  ver = "af47b17";
+  sha = "";
   pkg = pkgs.callPackage pkg_ { kernel = config.boot.kernelPackages.kernel; };
   pkg_ = (
     { stdenv, lib, fetchFromGitHub, kernel, kmod }:
 
     stdenv.mkDerivation rec {
       name = "88x2bu-${version}-${kernel.version}";
-      version = "5.8.7.4";
+      version = ver;
 
       src = fetchFromGitHub {
         owner = "morrownr";
         repo = "88x2bu";
-        rev = "v${version}";
-        sha256 = "1d9qpnmqa3pfwsrpjnxdz76ipk4w37bbxyrazchh4vslnfc88666";
+        rev = ver;
+        sha256 = sha;
       };
 
       sourceRoot = ".";
