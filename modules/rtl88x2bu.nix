@@ -3,7 +3,7 @@ let
   #ver = "5.8.7.4";
   #sha = "";
   ver = "af47b17";
-  sha = "";
+  sha = "sha256-Q2jJElKFMPRgHu/bitKpHZ7gsP3c0I4o0suFGoB2BLY=";
   pkg = pkgs.callPackage pkg_ { kernel = config.boot.kernelPackages.kernel; };
   pkg_ = (
     { stdenv, lib, fetchFromGitHub, kernel, kmod }:
