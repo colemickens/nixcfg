@@ -10,6 +10,8 @@ in
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
 
+    ../../modules/rtl88x2bu.nix
+
     ../../profiles/desktop-sway-unstable.nix
 
     inputs.wip-pinebook-pro.nixosModule
