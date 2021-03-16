@@ -79,11 +79,11 @@ in
           # https://patchwork.kernel.org/project/linux-rockchip/patch/20200924063042.41545-1-jhp@endlessos.org/
           patch = ./pbp-disable-dp.patch; }
 
-        { name = "pinebook-force-enable-battery";
-          patch = null;
-          extraConfig = ''
-            BATTERY_CW2015=y
-          ''; }
+        #{ name = "pinebook-force-enable-battery";
+        #  patch = null;
+        #  extraConfig = ''
+        #    BATTERY_CW2015=y
+        #  ''; }
 
       ];
 
