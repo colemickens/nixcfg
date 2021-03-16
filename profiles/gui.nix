@@ -113,7 +113,7 @@ in
       ] ++ lib.optionals (pkgs.system == "aarch64-linux") [
         # use stable on aarch64-linux
         inputs.stable.legacyPackages.${pkgs.system}.firefox
-        inputs.stable.legacyPackages.${pkgs.system}.ungoogled-chromium
+        #inputs.stable.legacyPackages.${pkgs.system}.ungoogled-chromium
       ];
     };
   };
