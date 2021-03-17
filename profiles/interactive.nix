@@ -75,7 +75,7 @@ in
         # more rust tools
         hexyl
         xh
-        dog
+        dogdns
 
         # random
         wireguard-tools
