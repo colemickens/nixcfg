@@ -69,17 +69,17 @@ in {
           #   name = "zsh-fzy";
           #   src = pkgs.zsh-fzy;
           #   file = "share/zsh/plugins/zsh-fzy/zsh-fzy.plugin.zsh";
+          # # }
+          # {
+          #   name = "zsh-skim-completion";
+          #   src = pkgs.skim;
+          #   file = "share/skim/completion.zsh";
           # }
-          {
-            name = "zsh-skim-completion";
-            src = pkgs.skim;
-            file = "share/skim/completion.zsh";
-          }
-          {
-            name = "zsh-skim-key-bindings";
-            src = pkgs.skim;
-            file = "share/skim/key-bindings.zsh";
-          }
+          # {
+          #   name = "zsh-skim-key-bindings";
+          #   src = pkgs.skim;
+          #   file = "share/skim/key-bindings.zsh";
+          # }
           # nix-zsh-completions <- doesn't support flakes (yet) anyway: https://github.com/spwhitt/nix-zsh-completions/issues/32
           # zsh-completions
         ];

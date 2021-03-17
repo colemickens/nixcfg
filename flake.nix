@@ -64,6 +64,9 @@
 
     hardware = { url = "github:nixos/nixos-hardware"; };
 
+    nix-bitcoin = { url = "github:fort-nix/nix-bitcoin"; flake = false; };
+    daedalus = { url = "github:input-output-hk/daedalus"; flake = false; };
+
     fenix = { url = "github:figsoda/fenix"; };
     fenix.inputs.nixpkgs.follows = "nixpkgs";
 

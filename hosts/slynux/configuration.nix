@@ -14,6 +14,11 @@ in
 
     ../../profiles/interactive.nix
     ../../profiles/desktop-sway-unstable.nix
+
+    ./hydra.nix
+
+    "${inputs.nix-bitcoin}/modules/nix-bitcoin.nix"
+    "${inputs.nix-bitcoin}/modules/btcpayserver.nix"
   ];
 
   config = {
@@ -21,6 +26,30 @@ in
     services.timesyncd.enable = true;
 
     documentation.nixos.enable = false;
+
+    ###########
+
+    services.btcpayserver.enable = true;
+    nix-bitcoin.security.hideProcessInformation = lib.mkForce false;
+
+    # impure...
+    # environment.systemPackages = [
+    #   (import "${inputs.daedalus}/default.nix" {
+    #     target = pkgs.system;
+    #   }).daedalus
+    # ];
+
+    # nginx revproxy for other stuff
+    networking.firewall.allowedTCPPorts = [ 80 443 ];
+    services.nginx = {
+      enable = true;
+      recommendedGzipSettings = true;
+      recommendedOptimisation = true;
+      recommendedProxySettings = true;
+      #recommendedTlsSettings = true;
+    };
+
+    ###########
 
     fileSystems = {
       "/boot" = {

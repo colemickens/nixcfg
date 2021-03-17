@@ -121,6 +121,22 @@
         "type": "github"
       }
     },
+    "daedalus": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1615887658,
+        "narHash": "sha256-FsvGwC+ox3iPXlbmqK0aRKRsyl27iJBYpPP7cCEen5Y=",
+        "owner": "input-output-hk",
+        "repo": "daedalus",
+        "rev": "5e09642ef41f6b5cafa5d1252407494a1eaf8b8c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "input-output-hk",
+        "repo": "daedalus",
+        "type": "github"
+      }
+    },
     "deploy-rs": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -524,6 +540,22 @@
         "type": "github"
       }
     },
+    "nix-bitcoin": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1615835027,
+        "narHash": "sha256-hEF8OuAt7qzzBfxkNc8B0hoGpq1+pXmKcR0HcF8LF54=",
+        "owner": "fort-nix",
+        "repo": "nix-bitcoin",
+        "rev": "4022f86b92da53dd929134b016ccf196f137dd3b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fort-nix",
+        "repo": "nix-bitcoin",
+        "type": "github"
+      }
+    },
     "nix-ipfs": {
       "inputs": {
         "lowdown-src": "lowdown-src",
@@ -683,6 +715,7 @@
         "chromium": "chromium",
         "construct": "construct",
         "crosspkgs": "crosspkgs",
+        "daedalus": "daedalus",
         "deploy-rs": "deploy-rs",
         "envfs": "envfs",
         "fenix": "fenix",
@@ -694,6 +727,7 @@
         "neovim-nightly": "neovim-nightly",
         "niche": "niche",
         "nix": "nix",
+        "nix-bitcoin": "nix-bitcoin",
         "nix-ipfs": "nix-ipfs",
         "nixos-azure": "nixos-azure",
         "nixos-unstable": "nixos-unstable",
