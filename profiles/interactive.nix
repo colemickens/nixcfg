@@ -16,11 +16,13 @@ in
     ../mixins/gh.nix
     ../mixins/gopass/gopass.nix
     #../mixins/mega/mega.nix
+    ../mixins/mcfly.nix
     ../mixins/nushell.nix
     ../mixins/skim.nix
     ../mixins/sshd.nix
     ../mixins/tailscale.nix
     ../mixins/xdg.nix
+    ../mixins/zoxide.nix
   ];
 
   config = {
@@ -69,10 +71,16 @@ in
         tealdeer
         du-dust
         fd
-        wireguard-tools
-        #jj
-        pijul
         grex # regex
+        # more rust tools
+        hexyl
+        xh
+        dog
+
+        # random
+        wireguard-tools
+        pijul
+        #jj
 
         sops age cryptsetup
 

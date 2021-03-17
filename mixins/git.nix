@@ -9,6 +9,13 @@
         signing.signByDefault = true;
         userEmail = "cole.mickens@gmail.com";
         userName = "Cole Mickens";
+
+        delta = {
+          enable = true;
+          options = {
+            features = "decorations side-by-side";
+          };
+        };
       };
     };
   };
