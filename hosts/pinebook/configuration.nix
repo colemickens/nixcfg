@@ -73,7 +73,6 @@ in
       initrd.kernelModules = [ "nvme" ];
       consoleLogLevel = pkgs.lib.mkDefault 7;
 
-      #block this, display still doesn't work in 5.11
       kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
       kernelPatches = [
 
