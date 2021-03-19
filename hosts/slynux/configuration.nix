@@ -30,7 +30,7 @@ in
     ###########
 
     services.btcpayserver.enable = true;
-    nix-bitcoin.security.hideProcessInformation = lib.mkForce false;
+    #nix-bitcoin.security.hideProcessInformation = lib.mkForce false;
 
     # impure...
     # environment.systemPackages = [

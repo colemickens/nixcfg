@@ -543,15 +543,16 @@
     "nix-bitcoin": {
       "flake": false,
       "locked": {
-        "lastModified": 1615835027,
-        "narHash": "sha256-hEF8OuAt7qzzBfxkNc8B0hoGpq1+pXmKcR0HcF8LF54=",
-        "owner": "fort-nix",
+        "lastModified": 1616093950,
+        "narHash": "sha256-gXGNxgSk3/E2EPdilPvarnwzNPLcO5L1oA1ZXb+vSgE=",
+        "owner": "erikarvstedt",
         "repo": "nix-bitcoin",
-        "rev": "4022f86b92da53dd929134b016ccf196f137dd3b",
+        "rev": "42df6692ff0dd602d03796b2cc0c96a512806302",
         "type": "github"
       },
       "original": {
-        "owner": "fort-nix",
+        "owner": "erikarvstedt",
+        "ref": "nixos-unstable",
         "repo": "nix-bitcoin",
         "type": "github"
       }
