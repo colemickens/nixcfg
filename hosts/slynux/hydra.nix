@@ -11,6 +11,8 @@
       # TODO: more? on-demand?
     ];
 
+    nix.package = lib.mkForce pkgs.nix;
+
     services.hydra = {
       enable = true;
       hydraURL = "http://hydra.${config.networking.hostName}.ts.r10e.tech"; # externally visible URL
