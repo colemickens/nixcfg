@@ -20,6 +20,8 @@ in
   config = {
     system.stateVersion = "21.03";
 
+    systemd.packages = with pkgs; [ usb-modeswitch ];
+
     nix.nixPath = [];
     nix.gc.automatic = true;
     nix.maxJobs = 2;
