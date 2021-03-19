@@ -17,8 +17,8 @@ in
 
     ./hydra.nix
 
-    "${inputs.nix-bitcoin}/modules/nix-bitcoin.nix"
-    "${inputs.nix-bitcoin}/modules/btcpayserver.nix"
+    #"${inputs.nix-bitcoin}/modules/nix-bitcoin.nix"
+    #"${inputs.nix-bitcoin}/modules/btcpayserver.nix"
   ];
 
   config = {
