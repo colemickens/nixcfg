@@ -18,8 +18,7 @@ in
   config = {
     system.stateVersion = "21.03";
 
-    systemd.packages = with pkgs; [ usb-modeswitch ];
-    services.udev.packages = with pkgs; [ usb-modeswitch-data ];
+    hardware.usbWwan.enable = true;
 
     nix.nixPath = [];
     nix.gc.automatic = true;
