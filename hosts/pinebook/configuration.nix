@@ -19,6 +19,7 @@ in
     system.stateVersion = "21.03";
 
     systemd.packages = with pkgs; [ usb-modeswitch ];
+    services.udev.packages = with pkgs; [ usb-modeswitch-data ];
 
     nix.nixPath = [];
     nix.gc.automatic = true;
