@@ -11,7 +11,7 @@
       # TODO: more? on-demand?
     ];
 
-    nix.package = lib.mkForce pkgs.nix;
+    #nix.package = lib.mkForce pkgs.nix;
 
     services.hydra = {
       enable = true;
