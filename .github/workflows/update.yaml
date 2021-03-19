@@ -15,10 +15,6 @@ jobs:
         install_url: https://github.com/numtide/nix-flakes-installer/releases/download/nix-2.4pre20201221_9fab14a/install
         extra_nix_config: |
           experimental-features = nix-command flakes
-    - name: change-branch
-      run: |
-        git checkout -b auto-update
-        git reset --hard origin/main
     - name: update-flake
       run: nix flake update --commit-lock-file --no-registries
     - name: update

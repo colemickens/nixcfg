@@ -34,6 +34,8 @@ evalargs=()
 function update() {
   set -euo pipefail
 
+  cd "${DIR}"; [[ -f ../nixpkgs-wayland/pkgs/update.sh ]] && cp ../nixpkgs-wayland/pkgs/update.sh ./pkgs/update.sh
+
   __ "updating all (local, override) inputs"
   printf '%s\n' "${srcdirs[@]}" | \
     parallel --jobs $(nproc) --halt soon,fail=1 --tag --progress -- \

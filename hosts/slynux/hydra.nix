@@ -2,6 +2,15 @@
 
 {
   config = {
+    nix.buildMachines = [
+      { hostName = "localhost";
+        system = "x86_64-linux";
+        supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark"];
+        maxJobs = 4;
+      }
+      # TODO: more? on-demand?
+    ];
+
     services.hydra = {
       enable = true;
       hydraURL = "http://hydra.${config.networking.hostName}.ts.r10e.tech"; # externally visible URL

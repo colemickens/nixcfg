@@ -250,5 +250,7 @@
           linux = import ./hosts/nixbox/linux.nix { inherit inputs; };
         };
       };
+
+      hydraJobs = bundles;
     };
 }
