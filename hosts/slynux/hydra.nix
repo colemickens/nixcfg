@@ -26,7 +26,7 @@
     services.nginx.virtualHosts."hydra.${config.networking.hostName}.ts.r10e.tech" = {
       locations = {
         "/" = {
-          proxyPass = "http://locxxxxlhost:3000/";
+          proxyPass = "http://127.0.0.1:3000/";
           proxyWebsockets = true;
         };
       };
