@@ -94,6 +94,7 @@ in
       useNetworkd = true;
       useDHCP = false;
       interfaces."wlan0".useDHCP = true;
+      interfaces."wlan1".useDHCP = true;
       interfaces."eth0".useDHCP = true;
       search = [ "ts.r10e.tech" ];
     };
