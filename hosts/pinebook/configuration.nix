@@ -10,8 +10,6 @@ in
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
 
-    ../../modules/rtl88x2bu.nix
-
     ../../profiles/desktop-sway-unstable.nix
 
     inputs.wip-pinebook-pro.nixosModule
@@ -74,19 +72,10 @@ in
       consoleLogLevel = pkgs.lib.mkDefault 7;
 
       kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
-      kernelPatches = [
-
-        { name = "pinebook-disable-dp";
-          # https://patchwork.kernel.org/project/linux-rockchip/patch/20200924063042.41545-1-jhp@endlessos.org/
-          patch = ./pbp-disable-dp.patch; }
-
-        #{ name = "pinebook-force-enable-battery";
-        #  patch = null;
-        #  extraConfig = ''
-        #    BATTERY_CW2015=y
-        #  ''; }
-
-      ];
+      kernelPatches = [{
+        name = "pinebook-disable-dp";
+        patch = ./pbp-disable-dp.patch; # https://patchwork.kernel.org/project/linux-rockchip/patch/20200924063042.41545-1-jhp@endlessos.org/
+      }];
 
       kernelParams = [
         "cma=32M"
