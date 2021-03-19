@@ -29,7 +29,7 @@ in
 
     ###########
 
-    services.btcpayserver.enable = true;
+    #services.btcpayserver.enable = true;
     #nix-bitcoin.security.hideProcessInformation = lib.mkForce false;
 
     # impure...
