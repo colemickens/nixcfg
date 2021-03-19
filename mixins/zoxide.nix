@@ -4,7 +4,7 @@
   config = {
     home-manager.users.cole = { pkgs, ... }: {
       programs.zoxide = {
-        enable = true;
+        enable = (pkgs.system != "aarch64-linux");
         enableBashIntegration = true;
         enableFishIntegration = true;
         enableZshIntegration = true;
