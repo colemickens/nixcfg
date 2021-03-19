@@ -17,6 +17,28 @@ let
   '';
   # TODO: build the fatx-enabled 2.6 kernel from scratch
 
+  ## FAT-X KERNEL
+  linux_24_fatx_pkg = { fetchurl, buildLinux, ... } @ args:
+    buildLinux (args // rec {
+      version = "2.4.22";
+      modDirVersion = version;
+
+      src = fetchurl {
+        url = "https://github.com/jsakkine-intel/linux-sgx/archive/v23.tar.gz";
+        sha256 = "11rwlwv7s071ia889dk1dgrxprxiwgi7djhg47vi56dj81jgib20";
+      };
+      kernelPatches = [];
+
+      extraConfig = ''
+        INTEL_SGX y
+      '';
+
+      extraMeta.branch = "2.4";
+    } // (args.argsOverride or {}));
+  linux_fatx = pkgs.linux_5_10;
+  #linux_fatx = pkgs.callPackage linux_24_fatx_pkg{};
+  kernelPackages = pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux_fatx);
+
   ## XBOXDUMPER (MKFS.FATX)
   xboxdumper = pkgs.stdenv.mkDerivation {
     name = "xboxdumper";
@@ -24,6 +46,14 @@ let
       url = "https://archive.org/download/xboxdumper.src.tar/xboxdumper.src.tar.bz2";
       sha256 = "1gklghq4038681mnjn8xjsjhjd7ixf287ayx18q1ywj7k4sgpcmv";
     };
+    makeFlags = [ "DESTDIR=$(out)" ];
+    postPatch = ''
+      sed -i 's/-static //g' Makefile
+      mkdir -p $out/sbin
+    '';
+    postInstall = ''
+      mv $out/sbin $out/bin
+    '';
   };
 
   ## NXDK
@@ -47,7 +77,9 @@ let
 
   ## PUT IT ALL TOGETHER
   runInLinuxVM = (import "${inputs.nixpkgs}/pkgs/build-support/vm/default.nix" {
+    #kernel = linux_fatx;
     kernel = fatxKernel;
+    rootModules = [];
     img = img;
     inherit pkgs;
     lib = pkgs.lib;
@@ -55,8 +87,8 @@ let
 
   image = runInLinuxVM (
     pkgs.stdenv.mkDerivation {
-      name = "extract-file";
-      buildInputs = with pkgs; [ util-linux ];
+      name = "build-xbox-image";
+      buildInputs = [ pkgs.util-linux ];
       buildCommand = ''
         set -e
 

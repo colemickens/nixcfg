@@ -243,5 +243,12 @@
           inherit inputs;
         };
       };
+
+      experiments = {
+        nixbox = {
+          dash = import ./hosts/nixbox/dashboard.nix { inherit inputs; };
+          linux = import ./hosts/nixbox/linux.nix { inherit inputs; };
+        };
+      };
     };
 }
