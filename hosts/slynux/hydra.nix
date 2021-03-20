@@ -8,7 +8,11 @@
         supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark"];
         maxJobs = 4;
       }
-      # TODO: more? on-demand?
+      { hostName = "localhost";
+        system = "aarch64-linux";
+        supportedFeatures = [ "big-parallel" ];
+        maxJobs = 4;
+      }
     ];
 
     #nix.package = lib.mkForce pkgs.nix;
