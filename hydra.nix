@@ -6,4 +6,4 @@ let
     src = ./.;
   });
 in
-  flake.defaultNix.bundles.x86_64-linux
+  flake.defaultNix.hydraJobs

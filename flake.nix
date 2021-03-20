@@ -252,6 +252,8 @@
         };
       };
 
-      hydraJobs = bundles;
+      hydraJobs = {
+        build = bundles;
+      };
     };
 }
