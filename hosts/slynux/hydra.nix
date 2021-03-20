@@ -1,5 +1,11 @@
 { config, pkgs, lib, inputs, modulesPath, ... }:
 
+# TODO: move this into a VM with stable nix
+# and the storage array
+
+# check storage array safe first
+# ... ?
+
 let
   hydraHostname = "hydra.${config.networking.hostName}.ts.r10e.tech";
   machinesConfig = [
@@ -14,6 +20,7 @@ let
     { hostName = "aarch64.nixos.community";
       sshHostKeyBase64 = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSU1VVHo1aTl1NUgyRkhOQW1aSnlvSmZJR3lVbS9IZkdoZnduYzE0MkwzZHMK";
       sshUser = "colemickens";
+      #sshKey = # it's just in the /var/lib/hydra/queue-runner/.ssh/id_rsa
       system = "aarch64-linux";
       systems = [ "aarch64-linux" ];
       mandatoryFeatures = [];
@@ -27,16 +34,6 @@ let
   machinesFile = pkgs.writeText "machines.txt" machinesFileText;
 in {
   config = {
-    # make sure we have hydra-queue-runner with ssh perms
-    # this is ... icky (we need yubikey for hydra to work?)
-    system.activationScripts.hydra-queue-runner = {
-      text = ''
-        mkdir -p /var/lib/hydra/queue-runner/.ssh
-        cp --remove-destination /home/cole/.ssh/config /var/lib/hydra/queue-runner/.ssh/config
-      '';
-      deps = [];
-    };
-
     services.hydra = {
       enable = true;
       hydraURL = "http://${hydraHostname}"; # externally visible URL
