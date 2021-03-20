@@ -17,14 +17,23 @@ let
       speedFactor = 1;
       maxJobs = 4;
     }
-    { hostName = "aarch64.nixos.community";
-      sshHostKeyBase64 = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSU1VVHo1aTl1NUgyRkhOQW1aSnlvSmZJR3lVbS9IZkdoZnduYzE0MkwzZHMK";
-      sshUser = "colemickens";
+    # TODO:
+    # 1. don't want to actually use aarch64 box for this
+    # 2. I think there's version skew issues regarding using
+    #    nixUnstable with hydra and aarch64.nixos using nixStable
+    { #hostName = "aarch64.nixos.community";
+      #sshHostKeyBase64 = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSU1VVHo1aTl1NUgyRkhOQW1aSnlvSmZJR3lVbS9IZkdoZnduYzE0MkwzZHMK";
+      #sshUser = "colemickens";
+
+      hostName = "rpifour.ts.r10e.tech";
+      sshHostKeyBase64 = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSU9vY01hQXYyZzFZSzZTQkZVWWw0YXpaMGRHUmlkMDdEOUNOOFRRMkNDQWEK%";
+      sshUser = "cole";
+
       #sshKey = # it's just in the /var/lib/hydra/queue-runner/.ssh/id_rsa
       system = "aarch64-linux";
       systems = [ "aarch64-linux" ];
       mandatoryFeatures = [];
-      supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark"];
+      supportedFeatures = ["kvm" "nixos-test" "benchmark"];
       speedFactor = 1;
       maxJobs = 4;
     }
