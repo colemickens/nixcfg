@@ -21,6 +21,12 @@
       buildMachinesFiles = [];
       # you will probably also want, otherwise *everything* will be built from scratch
       useSubstitutes = true;
+
+      package = pkgs.hydra.overrideAttrs(old: {
+        prePatch = ''
+          sed -i 's/evalSettings.restrictEval = true/evalSettings.restrictEval = false/' "$(find -name hydra-eval-jobs.cc)"
+        '' + old.prePatch;
+      });
     };
 
     services.nginx.virtualHosts."hydra.${config.networking.hostName}.ts.r10e.tech" = {
