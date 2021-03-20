@@ -5,12 +5,14 @@
     nix.buildMachines = [
       { hostName = "localhost";
         system = "x86_64-linux";
+        systems = [ "x86_64-linux" ];
         supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark"];
         maxJobs = 4;
       }
       { hostName = "aarch64.nixos.community";
         sshUser = "colemickens";
         system = "aarch64-linux";
+        systems = [ "aarch64-linux" ];
         supportedFeatures = [ "big-parallel" ];
         maxJobs = 4;
       }
