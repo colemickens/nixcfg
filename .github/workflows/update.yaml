@@ -17,6 +17,8 @@ jobs:
         extra_nix_config: |
           experimental-features = nix-command flakes
     - name: update-flake
+      run: git checkout -b create-pull-request
+    - name: update-flake
       run: nix flake update --commit-lock-file --no-registries
     - name: update
       run: |
