@@ -25,7 +25,8 @@ let
       maxJobs = 4;
     }
   ];
-  machinesFile = ((import ./hydra-machinestxt-builder.nix { inherit lib;}) machinesConfig);
+  builder = (import ./hydra-machinestxt-builder.nix { inherit lib; });
+  machinesFile = (builder machinesConfig);
 in {
   config = {
     # make sure we have hydra-queue-runner with ssh perms

@@ -1,7 +1,7 @@
 { lib }:
 with lib;
 
-{ buildMachines }:
+buildMachines:
 # copied from : https://github.com/NixOS/nixpkgs/blob/d600f006/nixos/modules/services/misc/nix-daemon.nix#L521
 concatMapStrings (machine:
     "${if machine.sshUser != null then "${machine.sshUser}@" else ""}${machine.hostName} "
