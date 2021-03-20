@@ -8,7 +8,7 @@
         supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark"];
         maxJobs = 4;
       }
-      { hostName = "localhost";
+      { hostName = "aarch64.nixos.community";
         system = "aarch64-linux";
         supportedFeatures = [ "big-parallel" ];
         maxJobs = 4;
