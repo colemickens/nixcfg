@@ -25,7 +25,7 @@ let
       #sshHostKeyBase64 = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSU1VVHo1aTl1NUgyRkhOQW1aSnlvSmZJR3lVbS9IZkdoZnduYzE0MkwzZHMK";
       #sshUser = "colemickens";
 
-      hostName = "rpifour.ts.r10e.tech";
+      hostName = "rpifour1.ts.r10e.tech";
       sshHostKeyBase64 = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSU9vY01hQXYyZzFZSzZTQkZVWWw0YXpaMGRHUmlkMDdEOUNOOFRRMkNDQWEK%";
       sshUser = "cole";
 
