@@ -13,6 +13,7 @@
         sshUser = "colemickens";
         system = "aarch64-linux";
         systems = [ "aarch64-linux" ];
+        sshKey = "/home/cole/.ssh/fuck_nix";
         supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark"];
         maxJobs = 4;
       }

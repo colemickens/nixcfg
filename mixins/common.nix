@@ -16,7 +16,7 @@ with lib;
       then inputs.self.rev
       else
         #throw "Refusing to build from a dirty Git tree!";
-        "unset";
+        "hydra";
 
     system.nixos.label = "${config.system.nixos.version}-${pkgs.lib.substring 0 8 config.system.configurationRevision}";
 
