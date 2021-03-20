@@ -26,9 +26,12 @@ let
       #sshUser = "colemickens";
 
       hostName = "rpifour1.ts.r10e.tech";
-      sshHostKeyBase64 = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSU9vY01hQXYyZzFZSzZTQkZVWWw0YXpaMGRHUmlkMDdEOUNOOFRRMkNDQWEK%";
       sshUser = "cole";
+      # ❯ echo "rpifour1.ts.r10e.tech ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOocMaAv2g1YK6SBFUYl4azZ0dGRid07D9CN8TQ2CCAa" | base64 -w0
+      #sshHostKeyBase64 = "cnBpZm91cjEudHMucjEwZS50ZWNoIHNzaC1lZDI1NTE5IEFBQUFDM056YUMxbFpESTFOVEU1QUFBQUlPb2NNYUF2MmcxWUs2U0JGVVlsNGF6WjBkR1JpZDA3RDlDTjhUUTJDQ0FhCg==";
 
+      # ❯ echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOocMaAv2g1YK6SBFUYl4azZ0dGRid07D9CN8TQ2CCAa" | base64 -w0
+      sshHostKeyBase64 = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSU9vY01hQXYyZzFZSzZTQkZVWWw0YXpaMGRHUmlkMDdEOUNOOFRRMkNDQWEK";
       #sshKey = # it's just in the /var/lib/hydra/queue-runner/.ssh/id_rsa
       system = "aarch64-linux";
       systems = [ "aarch64-linux" ];
