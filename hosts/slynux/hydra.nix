@@ -22,7 +22,7 @@
       # you will probably also want, otherwise *everything* will be built from scratch
       useSubstitutes = true;
 
-      package = pkgs.hydra.overrideAttrs(old: {
+      package = pkgs.hydra-unstable.overrideAttrs(old: {
         prePatch = ''
           sed -i 's/evalSettings.restrictEval = true/evalSettings.restrictEval = false/' "$(find -name hydra-eval-jobs.cc)"
         '' + old.prePatch;
