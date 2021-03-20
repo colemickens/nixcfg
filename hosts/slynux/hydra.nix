@@ -3,10 +3,29 @@
 let
   hydraHostname = "hydra.${config.networking.hostName}.ts.r10e.tech";
   aarch64_host_key = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSU1VVHo1aTl1NUgyRkhOQW1aSnlvSmZJR3lVbS9IZkdoZnduYzE0MkwzZHMK";
-  machinesFile = pkgs.writeText "machines.txt" ''
-    localhost x86_64-linux - 4 1 kvm,nixos-test,big-parallel,benchmark 
-    colemickens@aarch64.nixos.community aarch64-linux - 4 1 kvm,nixos-test,big-parallel,benchmark - ${aarch64_host_key}
-  '';
+  # machinesFile = pkgs.writeText "machines.txt" ''
+  #   localhost x86_64-linux - 4 1 kvm,nixos-test,big-parallel,benchmark 
+  #   colemickens@aarch64.nixos.community aarch64-linux - 4 1 kvm,nixos-test,big-parallel,benchmark - ${aarch64_host_key}
+  # '';
+
+  machinesConfig = [
+    { hostName = "localhost";
+      system = "x86_64-linux";
+      systems = [ "x86_64-linux" "i686-linux" ];
+      mandatoryFeatures = [];
+      supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark"];
+      maxJobs = 4;
+    }
+    { hostName = "aarch64.nixos.community";
+      sshUser = "colemickens";
+      system = "aarch64-linux";
+      systems = [ "aarch64-linux" ];
+      mandatoryFeatures = [];
+      supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark"];
+      maxJobs = 4;
+    }
+  ];
+  machinesFile = ((import ./hydra-machinestxt-builder.nix { inherit lib;}) machinesConfig);
 in {
   config = {
     # make sure we have hydra-queue-runner with ssh perms
