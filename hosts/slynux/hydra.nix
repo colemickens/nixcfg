@@ -9,6 +9,7 @@
         maxJobs = 4;
       }
       { hostName = "aarch64.nixos.community";
+        sshUser = "colemickens";
         system = "aarch64-linux";
         supportedFeatures = [ "big-parallel" ];
         maxJobs = 4;
