@@ -13,7 +13,7 @@
         sshUser = "colemickens";
         system = "aarch64-linux";
         systems = [ "aarch64-linux" ];
-        supportedFeatures = [ "big-parallel" ];
+        supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark"];
         maxJobs = 4;
       }
     ];
