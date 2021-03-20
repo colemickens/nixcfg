@@ -2,7 +2,7 @@ name: "Update"
 on:
   push:
   schedule:
-  - cron: "*/10 * * * *"
+    - cron: '*/10 * * * *'
 jobs:
   update:
     runs-on: ubuntu-latest
