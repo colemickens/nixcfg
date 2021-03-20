@@ -1,35 +1,22 @@
 { config, pkgs, lib, inputs, modulesPath, ... }:
 
-{
+let
+  hydraHostname = "hydra.${config.networking.hostName}.ts.r10e.tech";
+  aarch64_host_key="NDA5NiBTSEEyNTY6cFVEeDF1U3dBWHFYVm1IeDYzd3Q1aHZlYkRvQ1UrU01GYUoxeEI0SndyUSBhYXJjaDY0Lm5peG9zLmNvbW11bml0eSAoUlNBKQoyNTYgU0hBMjU2OmlQTlBGK3dkSmV6bjloejl0bjAyT05wd0FMZW10ZVR2cTVOejV4ZHNOYTggYWFyY2g2NC5uaXhvcy5jb21tdW5pdHkgKEVEMjU1MTkpCg==";
+  machinesFile = pkgs.writeText "machines.txt" ''
+    localhost x86_64-linux - 4 1 kvm,nixos-test,big-parallel,benchmark 
+    colemickens@aarch64.nixos.community aarch64-linux - 4 1 kvm,nixos-test,big-parallel,benchmark - ${aarch64_host_key}
+  '';
+in {
   config = {
-    nix.buildMachines = [
-      { hostName = "localhost";
-        system = "x86_64-linux";
-        systems = [ "x86_64-linux" "i686-linux" ];
-        supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark"];
-        maxJobs = 4;
-      }
-      { hostName = "aarch64.nixos.community";
-        sshUser = "colemickens";
-        system = "aarch64-linux";
-        systems = [ "aarch64-linux" ];
-        sshKey = "/home/cole/.ssh/fuck_nix";
-        supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark"];
-        maxJobs = 4;
-      }
-    ];
-
-    #nix.package = lib.mkForce pkgs.nix;
-
     services.hydra = {
       enable = true;
-      hydraURL = "http://hydra.${config.networking.hostName}.ts.r10e.tech"; # externally visible URL
-      notificationSender = "hydra@localhost"; # e-mail of hydra service
-      # a standalone hydra will require you to unset the buildMachinesFiles list to avoid using a nonexistant /etc/nix/machines
-      #buildMachinesFiles = [];
-      # you will probably also want, otherwise *everything* will be built from scratch
+      hydraURL = "http://${hydraHostname}"; # externally visible URL
+      notificationSender = "hydra@${hydraHostname}";
+      buildMachinesFiles = lib.mkForce [
+        machinesFile
+      ];
       useSubstitutes = true;
-
       package = pkgs.hydra-unstable.overrideAttrs(old: {
         prePatch = ''
           sed -i 's/evalSettings.restrictEval = true/evalSettings.restrictEval = false/' "$(find -name hydra-eval-jobs.cc)"
