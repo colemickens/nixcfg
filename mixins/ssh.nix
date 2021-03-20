@@ -9,6 +9,7 @@
         mkdir -p /root/.ssh
         ln -sf /home/cole/.ssh/config /root/.ssh/config
         ln -sf /home/cole/.ssh/known_hosts /root/.ssh/known_hosts
+        ln -sf /home/cole/.ssh/known_hosts /root/.ssh/known_hosts
       '';
       deps = [];
     };

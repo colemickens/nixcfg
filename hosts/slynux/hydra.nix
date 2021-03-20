@@ -9,6 +9,16 @@ let
   '';
 in {
   config = {
+    # make sure we have hydra-queue-runner with ssh perms
+    # this is ... icky (we need yubikey for hydra to work?)
+    system.activationScripts.hydra-queue-runner = {
+      text = ''
+        mkdir -p /var/lib/hydra/queue-runner/.ssh
+        ln -sf /home/cole/.ssh/config /var/lib/hydra/queue-runner/.ssh/config
+      '';
+      deps = [];
+    };
+
     services.hydra = {
       enable = true;
       hydraURL = "http://${hydraHostname}"; # externally visible URL
