@@ -151,7 +151,6 @@
           mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
           meli = prev.callPackage ./pkgs/meli {};
           #niche = prev.callPackage ./pkgs/niche {};
-          obs-v4l2sink = prev.libsForQt5.callPackage ./pkgs/obs-v4l2sink {};
           passrs = prev.callPackage ./pkgs/passrs {};
           rkvm = prev.callPackage ./pkgs/rkvm {};
 
