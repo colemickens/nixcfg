@@ -4,7 +4,9 @@ set -euo pipefail
 
 export AZURE_LOCATION="westus2"
 #export AZURE_VM_SIZE="Standard_F72s_v2" export AZURE_VM_OS_DISK_SIZE="1024"; export AZURE_EPHEMERAL_DISK="true"
-export AZURE_VM_SIZE="Standard_F4s_v2"; export AZURE_VM_OS_DISK_SIZE="128"; export AZURE_EPHEMERAL_DISK="false"
+export AZURE_VM_SIZE="Standard_D4as_v4"; export AZURE_VM_OS_DISK_SIZE="128"; export AZURE_EPHEMERAL_DISK="false"
+
+export AZURE_STORAGE_SKU="Premium_LRS"
 
 ### TODO: when the disk is not ephemeral, it is an HDD!!
 # we should deploy an SSD at least when a small VM
@@ -32,10 +34,7 @@ data_disk_id="/subscriptions/aff271ee-e9be-4441-b9bb-42f5af4cbaeb/resourceGroups
 #
 
 function deploy() {
-  (cd ../..; nix flake update --update-input nixos-azure)
-
-  #upstream="github:colemickens/nixos-azure"
-  upstream="/home/cole/code/nixos-azure"
+  (cd ../..; nix flake update)
 
   # upload the VHD
   export AZURE_GROUP="azdev2020nov"
@@ -63,6 +62,7 @@ function deploy() {
     --location "${AZURE_LOCATION}" \
     --ssh-key-values "$(ssh-add -L | head -1)" \
     --os-disk-size-gb "${AZURE_VM_OS_DISK_SIZE}" \
+    --storage-sku "${AZURE_STORAGE_SKU}" \
     --public-ip-address-dns-name "${deploy}" \
     --ephemeral-os-disk "${AZURE_EPHEMERAL_DISK}" \
     --accelerated-networking
