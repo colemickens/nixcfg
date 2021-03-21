@@ -18,25 +18,28 @@ let
   # TODO: build the fatx-enabled 2.6 kernel from scratch
 
   ## FAT-X KERNEL
-  linux_24_fatx_pkg = { fetchurl, buildLinux, ... } @ args:
+  xboxLinux26  = { fetchFromGitHub, fetchurl, fetchpatch, buildLinux, ... } @ args:
     buildLinux (args // rec {
-      version = "2.4.22";
+      version = "2.6.22";
       modDirVersion = version;
 
       src = fetchurl {
-        url = "https://github.com/jsakkine-intel/linux-sgx/archive/v23.tar.gz";
-        sha256 = "11rwlwv7s071ia889dk1dgrxprxiwgi7djhg47vi56dj81jgib20";
+        url = "mirror://kernel/linux/kernel/v2.6/linux-${version}.tar.xz";
+        sha256 = "sha256-F4kGyVW9R99hs11sIDYWMBR3lPG98Z0Wcvep6wnGUqU=";
       };
-      kernelPatches = [];
 
-      extraConfig = ''
-        INTEL_SGX y
-      '';
+      kernelPatches = [
+        {
+          name = "linux-2.6-xbox";
+          patch = ./linux-2.6.22.7-xbox.patch;
+        }
+      ];
 
-      extraMeta.branch = "2.4";
+      defconfig = "xbox_defconfig";
+
+      extraMeta.branch = "2.6";
     } // (args.argsOverride or {}));
-  linux_fatx = pkgs.linux_5_10;
-  #linux_fatx = pkgs.callPackage linux_24_fatx_pkg{};
+  linux_fatx = pkgs.callPackage xboxLinux26 {};
   kernelPackages = pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux_fatx);
 
   ## XBOXDUMPER (MKFS.FATX)
@@ -77,8 +80,8 @@ let
 
   ## PUT IT ALL TOGETHER
   runInLinuxVM = (import "${inputs.nixpkgs}/pkgs/build-support/vm/default.nix" {
-    #kernel = linux_fatx;
-    kernel = fatxKernel;
+    kernel = linux_fatx;
+    #kernel = fatxKernel;
     rootModules = [];
     img = img;
     inherit pkgs;

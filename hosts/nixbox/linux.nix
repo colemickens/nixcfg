@@ -2,14 +2,16 @@
 
 let
   linux26_xbox = {};
-  linux_xbox = { fetchurl, buildLinux, ... } @ args:
+  linux_xbox = { fetchFromGitHub, buildLinux, ... } @ args:
     buildLinux (args // rec {
       version = "5.4.0-rc3";
       modDirVersion = version;
 
-      src = fetchurl {
-        url = "https://github.com/jsakkine-intel/linux-sgx/archive/v23.tar.gz";
-        sha256 = "11rwlwv7s071ia889dk1dgrxprxiwgi7djhg47vi56dj81jgib20";
+      src = fetchFromGitHub {
+        owner = "XboxDev";
+        repo = "xbox-linux";
+        rev = "cc89bd62acde4130b24854711db18c6513678484"; #xbox-linux at March 21 2021
+        sha256 = "sha256-nfAbnPiYdVVvx0WSWcZWwKfqqLMWelydJj2FLEhjIzU=";
       };
       kernelPatches = [];
 
