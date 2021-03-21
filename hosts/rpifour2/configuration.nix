@@ -26,18 +26,14 @@ in {
         fsType = "vfat";
         options = [ "nofail" ];
       };
-      # sudo zpool create -O mountpoint=none -R /mnt rpool /dev/disk/by-partlabel/rpi2-nixos
       "/" = {
-        # sudo zfs create -o mountpoint=legacy rpool/root
-        device = "rpool/root";
-        fsType = "zfs";
-      };
-      "/nix" = {
-        # sudo zfs create -o mountpoint=legacy rpool/nix
-        device = "rpool/nix";
-        fsType = "zfs";
+        device = "/dev/disk/by-partlabel/rpi2-boot";
+        fsType = "ext4";
       };
     };
+
+    # TODO:
+    # swapDevices = [{ device = "/dev/disk/by-partlabel/rpi2-swap"; }];
 
     boot.loader.raspberryPi.firmwareConfig = ''
       dtoverlay=disable-wifi

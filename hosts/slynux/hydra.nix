@@ -19,8 +19,8 @@ let
   machinesFile = pkgs.writeText "machines.txt" machinesFileText;
 in {
   config = {
-    # ugh
-    nix.package = lib.mkForce pkgs.nix;
+    # ugh -- also, doesn't appear to even be related to why aarch64 is failing?
+    #nix.package = lib.mkForce pkgs.nix;
 
     services.hydra = {
       enable = true;

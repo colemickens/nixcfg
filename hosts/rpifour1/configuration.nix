@@ -6,7 +6,7 @@ in
   imports = [
     ./core.nix
     ./modules/home-assistant
-    ./modules/netboot-server.nix
+    #./modules/netboot-server.nix
     #./modules/nginx.nix
     #./modules/postgres.nix
     ./modules/srht-cronjobs.nix
@@ -17,6 +17,8 @@ in
 
   config = {
     networking.hostName = lib.mkForce hostname;
+
+    nix.package = lib.mkForce pkgs.nix;
 
     environment.systemPackages = with pkgs; [
       minicom
