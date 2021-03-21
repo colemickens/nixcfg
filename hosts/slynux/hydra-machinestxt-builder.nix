@@ -11,7 +11,7 @@ let
           then "${machine.sshUser}@${machine.hostName}"
           else machine.hostName;
       # (2) comma-separated list of platform identifiers
-      sys = if machine.system != null then machine.system else concatStringsSep "," machine.systems;
+      sys = concatStringsSep "," machine.systems;
       # (3) ssh identity file
       ident = if machine ? sshKey && machine.sshKey != null then machine.sshKey else "-";
       # (4) maximum number of jobs

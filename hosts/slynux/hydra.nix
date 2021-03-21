@@ -11,7 +11,6 @@ let
   machinesConfig = [
     {
       hostName = "localhost";
-      system = "x86_64-linux";
       systems = [ "x86_64-linux" "i686-linux" ];
       mandatoryFeatures = [];
       supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark"];
@@ -39,7 +38,6 @@ let
       sshUser = "cole";
       # ❯ echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOocMaAv2g1YK6SBFUYl4azZ0dGRid07D9CN8TQ2CCAa" | base64 -w0
       sshHostKeyBase64 = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSU9vY01hQXYyZzFZSzZTQkZVWWw0YXpaMGRHUmlkMDdEOUNOOFRRMkNDQWEK";
-      system = "aarch64-linux";
       systems = [ "aarch64-linux" ];
       mandatoryFeatures = [];
       supportedFeatures = [];
