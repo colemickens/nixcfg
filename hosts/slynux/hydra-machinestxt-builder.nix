@@ -7,26 +7,30 @@ with lib;
 # 1. upstream this
 # 2. upstream the hostkey change
 
-buildMachines: machine:
-  let
-    machine = if machine ? sshUser && machine.sshUser != null
-        then "${machine.sshUser}@${machine.hostName}"
-        else machine.hostName;
-    # (2) comma-separated list of platform identifiers
-    systems = if machine.system != null then machine.system else concatStringsSep "," machine.systems;
-    # (3) ssh identity file
-    sshIdentityFile = if machine ? sshKey && machine.sshKey != null then machine.sshKey else "-";
-    # (4) maximum number of nix builds
-    maxBuilds = if machine ? maxBuilds then machine.maxBuilds else "-";
-    # (5) speed factor
-    speedFactor = if machine ? speedFactor then toString machine.speedFactor else "-";
-    # (6) comma-separated list of supported features
-    supportedFeatures = if machine ? supportedFeatures && supportedFeatures != [] && supportedFeatures != null
-      then concatStringsSep "," (machine.mandatoryFeatures ++ machine.supportedFeatures) else "-";
-    # (7) comma-separated list of mandatory features
-    mandatoryFeatures = if machine ? mandatoryFeatures && mandatoryFeatures != [] && mandatoryFeatures != null
-      then concatStringsSep "," machine.mandatoryFeatures else "-";
-    # (8) base64 encoded ssh host key
-    sshHostKeyBase64 = if machine ? sshHostKeyBase64 then machine.sshHostKeyBase64 else "-";
-  in
-    "${machine} ${systems} ${sshIdentityFile} ${maxBuilds} ${speedFactor} ${supportedFeatures} ${mandatoryFeautures} ${sshHostKeyBase64}"
+let
+  renderMachineLine = machine:
+    let
+      host = if machine ? sshUser && machine.sshUser != null
+          then "${machine.sshUser}@${machine.hostName}"
+          else machine.hostName;
+      # (2) comma-separated list of platform identifiers
+      sys = if machine.system != null then machine.system else concatStringsSep "," machine.systems;
+      # (3) ssh identity file
+      ident = if machine ? sshKey && machine.sshKey != null then machine.sshKey else "-";
+      # (4) maximum number of nix builds
+      mb = if machine ? maxBuilds then machine.maxBuilds else "-";
+      # (5) speed factor
+      sf = if machine ? speedFactor then toString machine.speedFactor else "-";
+      # (6) comma-separated list of supported features
+      sfeatures = if machine ? supportedFeatures && machine.supportedFeatures != [] && machine.supportedFeatures != null
+        then concatStringsSep "," (machine.mandatoryFeatures ++ machine.supportedFeatures) else "-";
+      # (7) comma-separated list of mandatory features
+      mfeatures = if machine ? mandatoryFeatures && machine.mandatoryFeatures != [] && machine.mandatoryFeatures != null
+        then concatStringsSep "," machine.mandatoryFeatures else "-";
+      # (8) base64 encoded ssh host key
+      sshHostKeyBase64 = if machine ? sshHostKeyBase64 then machine.sshHostKeyBase64 else "-";
+    in
+      "${host} ${sys} ${ident} ${mb} ${sf} ${sfeatures} ${mfeatures} ${sshHostKeyBase64}";
+in
+machines:
+  concatMapStrings renderMachineLine machines
