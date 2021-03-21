@@ -10,6 +10,7 @@
     ../../mixins/loremipsum-media/rclone-mnt.nix
 
     #../../mixins/olaris.nix
+    ./hydra/hydra.nix
 
     # specific persistent services to run in Azure
     #./services.nix
@@ -18,6 +19,16 @@
   config = {
     virtualisation.azure.image.diskSize = 30000;
     system.stateVersion = "21.03";
+
+     # nginx revproxy for other stuff
+    networking.firewall.allowedTCPPorts = [ 80 443 ];
+    services.nginx = {
+      enable = true;
+      recommendedGzipSettings = true;
+      recommendedOptimisation = true;
+      recommendedProxySettings = true;
+      #recommendedTlsSettings = true;
+    };
 
     systemd.tmpfiles.rules = [
       "d '/run/state/ssh' - root - - -"
