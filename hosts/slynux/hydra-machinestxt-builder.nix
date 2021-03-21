@@ -18,7 +18,7 @@ let
       # (3) ssh identity file
       ident = if machine ? sshKey && machine.sshKey != null then machine.sshKey else "-";
       # (4) maximum number of nix builds
-      mb = if machine ? maxBuilds then machine.maxBuilds else "-";
+      mb = if machine ? maxBuilds then machine.maxBuilds else "0";
       # (5) speed factor
       sf = if machine ? speedFactor then toString machine.speedFactor else "-";
       # (6) comma-separated list of supported features
