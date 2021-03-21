@@ -15,7 +15,7 @@ let
       # (3) ssh identity file
       ident = if machine ? sshKey && machine.sshKey != null then machine.sshKey else "-";
       # (4) maximum number of jobs
-      mj = if machine ? maxJobs then machine.maxJobs else "auto";
+      mj = if machine ? maxJobs then toString machine.maxJobs else "auto";
       # (5) speed factor
       sf = if machine ? speedFactor then toString machine.speedFactor else "1";
       # (6) comma-separated list of supported features
