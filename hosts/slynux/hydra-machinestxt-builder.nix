@@ -30,7 +30,7 @@ let
       # (8) base64 encoded ssh host key
       sshHostKeyBase64 = if machine ? sshHostKeyBase64 then machine.sshHostKeyBase64 else "-";
     in
-      "${host} ${sys} ${ident} ${mb} ${sf} ${sfeatures} ${mfeatures} ${sshHostKeyBase64}";
+      "${host} ${sys} ${ident} ${mb} ${sf} ${sfeatures} ${mfeatures} ${sshHostKeyBase64}\n";
 in
 machines:
   concatMapStrings renderMachineLine machines
