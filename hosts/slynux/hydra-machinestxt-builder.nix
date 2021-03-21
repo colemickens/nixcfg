@@ -17,10 +17,10 @@ let
       sys = if machine.system != null then machine.system else concatStringsSep "," machine.systems;
       # (3) ssh identity file
       ident = if machine ? sshKey && machine.sshKey != null then machine.sshKey else "-";
-      # (4) maximum number of nix builds
-      mb = if machine ? maxBuilds then machine.maxBuilds else "0";
+      # (4) maximum number of jobs
+      mj = if machine ? maxBuilds then machine.maxBuilds else "auto";
       # (5) speed factor
-      sf = if machine ? speedFactor then toString machine.speedFactor else "-";
+      sf = if machine ? speedFactor then toString machine.speedFactor else "1";
       # (6) comma-separated list of supported features
       sfeatures = if machine ? supportedFeatures && machine.supportedFeatures != [] && machine.supportedFeatures != null
         then concatStringsSep "," (machine.mandatoryFeatures ++ machine.supportedFeatures) else "-";
@@ -30,7 +30,7 @@ let
       # (8) base64 encoded ssh host key
       sshHostKeyBase64 = if machine ? sshHostKeyBase64 then machine.sshHostKeyBase64 else "-";
     in
-      "${host} ${sys} ${ident} ${mb} ${sf} ${sfeatures} ${mfeatures} ${sshHostKeyBase64}\n";
+      "${host} ${sys} ${ident} ${mj} ${sf} ${sfeatures} ${mfeatures} ${sshHostKeyBase64}\n";
 in
 machines:
   concatMapStrings renderMachineLine machines
