@@ -7,7 +7,6 @@ in
   imports = [
     ../../mixins/common.nix
     ../../mixins/ledger.nix
-    ../../mixins/libvirt.nix
     ../../mixins/obs.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix

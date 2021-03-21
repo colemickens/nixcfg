@@ -6,7 +6,6 @@ in
   imports = [
     ../../mixins/chromecast.nix
     ../../mixins/ledger.nix
-    ../../mixins/libvirt.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/obs.nix
     ../../mixins/sshd.nix
