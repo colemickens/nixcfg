@@ -17,7 +17,7 @@ concatMapStrings (machine:
     + " "
     + concatStringsSep "," machine.mandatoryFeatures
     + (if (machine ? sshHostKeyBase64)
-        then " " + concatStringsSep "," machine.sshHostKeyBase64
+        then (" " + machine.sshHostKeyBase64)
         else "")
     + "\n"
     ) buildMachines
