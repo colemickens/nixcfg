@@ -20,7 +20,7 @@ let
       sf = if machine ? speedFactor then toString machine.speedFactor else "1";
       # (6) comma-separated list of supported features
       sfeatures = if machine ? supportedFeatures && machine.supportedFeatures != [] && machine.supportedFeatures != null
-        then concatStringsSep "," (machine.mandatoryFeatures ++ machine.supportedFeatures) else "-";
+        then concatStringsSep "," ((if machine ? mandatoryFeatures then machine.mandatoryFeatures else []) ++ machine.supportedFeatures) else "-";
       # (7) comma-separated list of mandatory features
       mfeatures = if machine ? mandatoryFeatures && machine.mandatoryFeatures != [] && machine.mandatoryFeatures != null
         then concatStringsSep "," machine.mandatoryFeatures else "-";
