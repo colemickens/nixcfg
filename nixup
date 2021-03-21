@@ -133,8 +133,9 @@ function activate() {
   set -euo pipefail
   bo="$(set -euo pipefail; build "${@}")"
   target="${3:-"cole@localhost"}"
-  ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --profile /nix/var/nix/profiles/system "${bo}")";
-  ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${bo}" -c switch-to-configuration switch)";
+  #ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --profile /nix/var/nix/profiles/system "${bo}")";
+  #ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${bo}" -c switch-to-configuration switch)";
+  sudo "${bo}/bin/switch-to-configuration" switch
 }
 
 AARCH64="colemickens@aarch64.nixos.community"

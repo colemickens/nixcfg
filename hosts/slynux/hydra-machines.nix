@@ -26,6 +26,6 @@
     mandatoryFeatures = [];
     supportedFeatures = [];
     speedFactor = 1;
-    maxJobs = 4;
+    maxJobs = 1;
   };
 }
