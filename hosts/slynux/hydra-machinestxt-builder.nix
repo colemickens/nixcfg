@@ -2,10 +2,7 @@
 with lib;
 
 # modified from https://github.com/NixOS/nixpkgs/blob/d600f006/nixos/modules/services/misc/nix-daemon.nix#L521
-
-# TODO:
-# 1. upstream this
-# 2. upstream the hostkey change
+# TODO: upstream this?
 
 let
   renderMachineLine = machine:
@@ -18,7 +15,7 @@ let
       # (3) ssh identity file
       ident = if machine ? sshKey && machine.sshKey != null then machine.sshKey else "-";
       # (4) maximum number of jobs
-      mj = if machine ? maxBuilds then machine.maxBuilds else "auto";
+      mj = if machine ? maxJobs then machine.maxJobs else "auto";
       # (5) speed factor
       sf = if machine ? speedFactor then toString machine.speedFactor else "1";
       # (6) comma-separated list of supported features
