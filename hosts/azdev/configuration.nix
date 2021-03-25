@@ -10,7 +10,8 @@
     ../../mixins/loremipsum-media/rclone-mnt.nix
 
     #../../mixins/olaris.nix
-    ./hydra/hydra.nix
+    # I think hydra is killing our pi that we need for stuff for now, so disable for a few days
+    #./hydra/hydra.nix
 
     # specific persistent services to run in Azure
     #./services.nix
