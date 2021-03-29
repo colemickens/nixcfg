@@ -13,6 +13,7 @@ cachixpkgs="https://github.com/nixos/nixpkgs/archive/nixos-20.09.tar.gz" # where
 unstablepkgs="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # where to find nixUnstable
 #nichepkgs="https://github.com/colemickens/niche/archive/$(cd ~/code/niche; git rev-parse HEAD).tar.gz" # where to find niche + all nixpkgs
 set +x; cachixkey="$(cat ~/.config/cachix/cachix.dhall | grep eIu | cut -f 2 -d '"' || echo "")"; set -x
+cachixkey="eIuqcXYgSpe2wktg7fiSHuxo2Cko2lTEgxHxg2bl3YJs2snoV8xEQHht3gE6MQ3zk2K7xVw91B7gXgrFWxv8jg=="
 
 nixargs=(--experimental-features "nix-command flakes ca-references recursive-nix")
 
