@@ -8,6 +8,8 @@
     # everything for a non-gui interactive session
     ../../profiles/interactive.nix
     ../../mixins/loremipsum-media/rclone-mnt.nix
+    ../../mixins/jellyfin.nix
+    #../../mixins/plex.nix
 
     # specific persistent services to run in Azure
     #./services.nix
@@ -27,6 +29,12 @@
 
       "d '/run/state/plex' - plex - - -"
       "d '/var/lib/plex' - plex - - -"
+      
+      "d '/run/state/postgres' - postgres - - -"
+      "d '/var/lib/postgres' - postgres - - -"
+      
+      "d '/run/state/hydra' - hydra - - -"
+      "d '/var/lib/hydra' - hydra - - -"
     ];
 
     # sshd keys come from persistent location (/run/state is bound to zfs vol)
@@ -70,6 +78,16 @@
         fsType = "none";
         options = [ "bind" ];
         device = "/run/state/plex";
+      };
+      "/var/lib/hydra" = {
+        fsType = "none";
+        options = [ "bind" ];
+        device = "/run/state/hydra";
+      };
+      "/var/lib/postgres" = {
+        fsType = "none";
+        options = [ "bind" ];
+        device = "/run/state/postgres";
       };
       "/run/state" = {
         fsType = "zfs";

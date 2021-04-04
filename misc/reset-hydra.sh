@@ -21,6 +21,6 @@ sudo systemctl restart hydra-send-stats
 
 sleep 1
 
-sudo -u hydra -- hydra-create-user alice --full-name 'Alice Q. User' \
-    --email-address 'alice@example.org' --password foobar --role admin
+sudo -u hydra -- hydra-create-user 'cole' --full-name 'cole' \
+    --email-address 'cole.mickens@gmail.com' --password cole --role admin
 
