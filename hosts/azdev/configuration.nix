@@ -8,7 +8,7 @@
     # everything for a non-gui interactive session
     ../../profiles/interactive.nix
     ../../mixins/loremipsum-media/rclone-mnt.nix
-    ../../mixins/jellyfin.nix
+    #../../mixins/jellyfin.nix
     #../../mixins/plex.nix
 
     # specific persistent services to run in Azure
@@ -20,6 +20,16 @@
   config = {
     virtualisation.azure.image.diskSize = 30000;
     system.stateVersion = "21.03";
+
+    # azdev/jellyfin specific
+    services.nginx.virtualHosts."jellyfin.${config.networking.hostName}.ts.r10e.tech" = {
+      locations = {
+        "/" = {
+          proxyPass = "http://127.0.0.1:8096/";
+          proxyWebsockets = true;
+        };
+      };
+    };
 
     systemd.tmpfiles.rules = [
       "d '/run/state/ssh' - root - - -"
