@@ -11,7 +11,9 @@
     ../../mixins/common.nix
 
     ../../profiles/user.nix
+    ../../profiles/desktop-sway.nix
 
+    ../../mixins/libvirt.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
   ];

@@ -7,6 +7,7 @@ in
     ../../mixins/common.nix
 
     ../../mixins/chromecast.nix
+    ../../mixins/libvirt.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
 
