@@ -1,118 +1,101 @@
-{ pkgs, lib, config, inputs, ... }:
-let
-  hostname = "porty";
-in
+# Edit this configuration file to define what should be installed on
+# your system.  Help is available in the configuration.nix(5) man page
+# and in the NixOS manual (accessible by running ‘nixos-help’).
+
+{ config, pkgs, ... }:
+
 {
-  imports = [
-    ../../mixins/common.nix
-
-    ../../mixins/sshd.nix
-    ../../mixins/tailscale.nix
-  ];
-  
-  # now in here we want to include specialisations for each machine as necessary:
-  # grub -> nixos (sub-specialisations)
-  # grub -> isos -> (tails, ubuntu, etc)
-  # "the ultimate portable image"
-
-  config = {
-    system.stateVersion = "21.03";
-
-    hardware.usbWwan.enable = true;
-
-    nix.nixPath = [];
-    nix.gc.automatic = true;
-    nix.maxJobs = 2;
-
-    documentation.enable = false;
-    documentation.doc.enable = false;
-    documentation.info.enable = false;
-    documentation.nixos.enable = false;
-
-    environment.systemPackages = with pkgs; [
-      drm-howto
-      virt-viewer
-      (pkgs.writeScriptBin "pinebook-fix-sound" ''
-        export NIX_PATH="nixpkgs=${toString inputs.nixpkgs}"
-        ${toString inputs.wip-pinebook-pro}/sound/reset-sound.rb
-      '')
+  imports =
+    [ # Include the results of the hardware scan.
+      ./hardware-configuration.nix
     ];
 
-    # ignore unfortunately placed power key
-    # TODO: 3s-press or fn-power for shutdown
-    services.logind.extraConfig = ''
-      HandlePowerKey=ignore
-    '';
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
-    fileSystems = {
-      "/" =     {
-        device = "/dev/disk/by-partlabel/nixos";
-        fsType = "ext4";
-      };
-      "/boot" = {
-        device = "/dev/disk/by-partlabel/boot";
-        fsType = "vfat";
-      };
-    };
-    swapDevices = [];
+  # networking.hostName = "nixos"; # Define your hostname.
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-    console.earlySetup = true; # hidpi + luks-open  # TODO : STILL NEEDED?
-    console.font = "ter-v32n";
-    console.packages = [ pkgs.terminus_font ];
+  # Set your time zone.
+  # time.timeZone = "Europe/Amsterdam";
 
-    boot = {
-      tmpOnTmpfs = false;
-      cleanTmpDir = true;
+  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
+  # Per-interface useDHCP will be mandatory in the future, so this generated config
+  # replicates the default behaviour.
+  networking.useDHCP = false;
+  networking.interfaces.eth0.useDHCP = true;
 
-      loader.grub.enable = true;
-      loader.grub.efiSupport = true;
-      loader.grub.useOSProber = false;
-      # extraEntries => isos
+  # Configure network proxy if necessary
+  # networking.proxy.default = "http://user:password@proxy:port/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-      loader.generic-extlinux-compatible.enable = true;
+  # Select internationalisation properties.
+  # i18n.defaultLocale = "en_US.UTF-8";
+  # console = {
+  #   font = "Lat2-Terminus16";
+  #   keyMap = "us";
+  # };
 
-      initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
-      initrd.kernelModules = [ "nvme" ];
-      consoleLogLevel = pkgs.lib.mkDefault 7;
+  # Enable the X11 windowing system.
+  # services.xserver.enable = true;
 
-      kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
-      kernelPatches = [{
-        name = "pinebook-disable-dp";
-        patch = ./pbp-disable-dp.patch; # https://patchwork.kernel.org/project/linux-rockchip/patch/20200924063042.41545-1-jhp@endlessos.org/
-      }];
 
-      kernelParams = [
-        "cma=32M"
-        "mitigations=off"
-        "console=ttyS2,1500000n8" "console=tty0"
-      ];
-    };
+  
 
-    networking = {
-      hostId = "ef66d544";
-      hostName = hostname;
-      firewall.enable = true;
-      firewall.allowedTCPPorts = [ 5900 22 ];
-      networkmanager.enable = false;
-      wireless.iwd.enable = true;
-      useNetworkd = true;
-      useDHCP = false;
-      interfaces."wlan0".useDHCP = true;
-      interfaces."wlan1".useDHCP = true;
-      interfaces."wlan2".useDHCP = true;
-      interfaces."eth0".useDHCP = true;
-      search = [ "ts.r10e.tech" ];
-    };
-    services.timesyncd.enable = true;
-    services.resolved.enable = true;
-    services.resolved.domains = [ "ts.r10e.tech" ];
-    systemd.network.enable = true;
+  # Configure keymap in X11
+  # services.xserver.layout = "us";
+  # services.xserver.xkbOptions = "eurosign:e";
 
-    nixpkgs.config.allowUnfree = true;
-    hardware = {
-      bluetooth.enable = true;
-      pulseaudio.package = pkgs.pulseaudioFull;
-      enableRedistributableFirmware = true;
-    };
-  };
+  # Enable CUPS to print documents.
+  # services.printing.enable = true;
+
+  # Enable sound.
+  # sound.enable = true;
+  # hardware.pulseaudio.enable = true;
+
+  # Enable touchpad support (enabled default in most desktopManager).
+  # services.xserver.libinput.enable = true;
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # users.users.jane = {
+  #   isNormalUser = true;
+  #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+  # };
+
+  # List packages installed in system profile. To search, run:
+  # $ nix search wget
+  # environment.systemPackages = with pkgs; [
+  #   wget vim
+  #   firefox
+  # ];
+
+  # Some programs need SUID wrappers, can be configured further or are
+  # started in user sessions.
+  # programs.mtr.enable = true;
+  # programs.gnupg.agent = {
+  #   enable = true;
+  #   enableSSHSupport = true;
+  # };
+
+  # List services that you want to enable:
+
+  # Enable the OpenSSH daemon.
+  # services.openssh.enable = true;
+
+  # Open ports in the firewall.
+  # networking.firewall.allowedTCPPorts = [ ... ];
+  # networking.firewall.allowedUDPPorts = [ ... ];
+  # Or disable the firewall altogether.
+  # networking.firewall.enable = false;
+
+  # This value determines the NixOS release from which the default
+  # settings for stateful data, like file locations and database versions
+  # on your system were taken. It‘s perfectly fine and recommended to leave
+  # this value at the release version of the first install of this system.
+  # Before changing this value read the documentation for this option
+  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  system.stateVersion = "20.09"; # Did you read the comment?
+
 }
+

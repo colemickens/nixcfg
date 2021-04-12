@@ -1,0 +1,118 @@
+{ pkgs, lib, config, inputs, ... }:
+let
+  hostname = "porty";
+in
+{
+  imports = [
+    ../../mixins/common.nix
+
+    ../../mixins/sshd.nix
+    ../../mixins/tailscale.nix
+  ];
+  
+  # now in here we want to include specialisations for each machine as necessary:
+  # grub -> nixos (sub-specialisations)
+  # grub -> isos -> (tails, ubuntu, etc)
+  # "the ultimate portable image"
+
+  config = {
+    system.stateVersion = "21.03";
+
+    hardware.usbWwan.enable = true;
+
+    nix.nixPath = [];
+    nix.gc.automatic = true;
+    nix.maxJobs = 2;
+
+    documentation.enable = false;
+    documentation.doc.enable = false;
+    documentation.info.enable = false;
+    documentation.nixos.enable = false;
+
+    environment.systemPackages = with pkgs; [
+      drm-howto
+      virt-viewer
+      (pkgs.writeScriptBin "pinebook-fix-sound" ''
+        export NIX_PATH="nixpkgs=${toString inputs.nixpkgs}"
+        ${toString inputs.wip-pinebook-pro}/sound/reset-sound.rb
+      '')
+    ];
+
+    # ignore unfortunately placed power key
+    # TODO: 3s-press or fn-power for shutdown
+    services.logind.extraConfig = ''
+      HandlePowerKey=ignore
+    '';
+
+    fileSystems = {
+      "/" =     {
+        device = "/dev/disk/by-partlabel/nixos";
+        fsType = "ext4";
+      };
+      "/boot" = {
+        device = "/dev/disk/by-partlabel/boot";
+        fsType = "vfat";
+      };
+    };
+    swapDevices = [];
+
+    console.earlySetup = true; # hidpi + luks-open  # TODO : STILL NEEDED?
+    console.font = "ter-v32n";
+    console.packages = [ pkgs.terminus_font ];
+
+    boot = {
+      tmpOnTmpfs = false;
+      cleanTmpDir = true;
+
+      loader.grub.enable = true;
+      loader.grub.efiSupport = true;
+      loader.grub.useOSProber = false;
+      # extraEntries => isos
+
+      loader.generic-extlinux-compatible.enable = true;
+
+      initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+      initrd.kernelModules = [ "nvme" ];
+      consoleLogLevel = pkgs.lib.mkDefault 7;
+
+      kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
+      kernelPatches = [{
+        name = "pinebook-disable-dp";
+        patch = ./pbp-disable-dp.patch; # https://patchwork.kernel.org/project/linux-rockchip/patch/20200924063042.41545-1-jhp@endlessos.org/
+      }];
+
+      kernelParams = [
+        "cma=32M"
+        "mitigations=off"
+        "console=ttyS2,1500000n8" "console=tty0"
+      ];
+    };
+
+    networking = {
+      hostId = "ef66d544";
+      hostName = hostname;
+      firewall.enable = true;
+      firewall.allowedTCPPorts = [ 5900 22 ];
+      networkmanager.enable = false;
+      wireless.iwd.enable = true;
+      useNetworkd = true;
+      useDHCP = false;
+      interfaces."wlan0".useDHCP = true;
+      interfaces."wlan1".useDHCP = true;
+      interfaces."wlan2".useDHCP = true;
+      interfaces."eth0".useDHCP = true;
+      search = [ "ts.r10e.tech" ];
+    };
+    services.timesyncd.enable = true;
+    services.resolved.enable = true;
+    services.resolved.domains = [ "ts.r10e.tech" ];
+    systemd.network.enable = true;
+
+    nixpkgs.config.allowUnfree = true;
+    hardware = {
+      bluetooth.enable = true;
+      pulseaudio.package = pkgs.pulseaudioFull;
+      enableRedistributableFirmware = true;
+    };
+  };
+}
