@@ -7,8 +7,14 @@
   imports = [ ];
 
   boot.initrd.availableKernelModules = [ "sd_mod" "sr_mod" ];
-  boot.initrd.kernelModules = [ "hv_vmbus" "hv_storsvc" "hyperv_keyboard" "hid_hyperv" ];
+  boot.initrd.kernelModules = [
+    "hv_vmbus"
+    #"hv_storsvc"
+    "hyperv_keyboard"
+    "hid_hyperv"
+  ];
   boot.kernelModules = [ ];
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
