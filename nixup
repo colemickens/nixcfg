@@ -154,6 +154,7 @@ PORTY="cole@100.68.13.41";      #PORTY="cole@porty.ts.r10e.tech"
 
 function a64() { build "$1" "${AARCH64}" "${AARCH64}"; }
 function nix() { command nix "${nixargs[@]}" "${@}"; }
+function nb() { command nix "${nixargs[@]}" build "${buildargs[@]}" "${@}"; }
 
 function azdev()     { activate ".#toplevels.azdev"       "${BUILD_HOST:-"${AZDEV}"}"   "${AZDEV}";    }
 function pinebook()  { activate ".#toplevels.pinebook"    "${BUILD_HOST:-"${AARCH64}"}" "${PINEBOOK}";  }
