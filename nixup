@@ -87,11 +87,10 @@ function build() {
   out="$(set -euo pipefail; nix "${nixargs[@]}" path-info "${drv}" --json | jq -r '.[0].path')"
 
   if [[ ! -z "${target:-""}" ]]; then
-    #__ "TARGET: try to realize ${out} on ${target}"
-    #if ssh_nixUnstable_shell2 "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" --no-link -j0 "${out}" &>/dev/stderr; then
-    #  echo -e "${out}"; return 0
-    #fi
-    true
+    __ "TARGET: try to realize ${out} on ${target}"
+    if ssh_nixUnstable_shell2 "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" --no-link -j0 "${out}" &>/dev/stderr; then
+      echo -e "${out}"; return 0
+    fi
   fi
 
   __ "LOCAL: rsync ${drv} to ${remote}"
@@ -135,9 +134,9 @@ function activate() {
   set -euo pipefail
   bo="$(set -euo pipefail; build "${@}")"
   target="${3:-"cole@localhost"}"
-  #ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --profile /nix/var/nix/profiles/system "${bo}")";
-  #ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${bo}" -c switch-to-configuration switch)";
-  ssh -A "${target}" "$(printf '\"%s\" ' sudo "${bo}/bin/switch-to-configuration" switch)";
+  ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --profile /nix/var/nix/profiles/system "${bo}")";
+  ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${bo}" -c switch-to-configuration switch)";
+  #ssh -A "${target}" "$(printf '\"%s\" ' sudo "${bo}/bin/switch-to-configuration" switch)";
 }
 
 AARCH64="colemickens@aarch64.nixos.community"

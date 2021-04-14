@@ -17,6 +17,7 @@
     "nvme"
     "usb_storage"
     "sd_mod"
+    "ehci_pci"
   ];
   boot.kernelModules = [ ];
   boot.kernelPackages = pkgs.linuxPackages_latest;
