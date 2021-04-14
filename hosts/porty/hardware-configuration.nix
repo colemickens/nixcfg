@@ -18,6 +18,7 @@
     "usb_storage"
     "sd_mod"
     "ehci_pci"
+    "uas"
   ];
   boot.kernelModules = [ ];
   boot.kernelPackages = pkgs.linuxPackages_latest;
