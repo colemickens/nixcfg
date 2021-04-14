@@ -10,6 +10,7 @@
     ../../mixins/loremipsum-media/rclone-mnt.nix
     #../../mixins/jellyfin.nix
     #../../mixins/plex.nix
+    #../../mixins/xmrig.nix
 
     # specific persistent services to run in Azure
     #./services.nix

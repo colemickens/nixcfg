@@ -125,7 +125,7 @@ function build() {
   __ "TARGET: copy $out from cachix (on $target)"
   set -x
   #ssh_nixUnstable_shell2 "${target}" rm -rf .cache/nix
-  ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build -vvv "${buildargs[@]}" --no-link -j0 "${out}"
+  ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build -v "${buildargs[@]}" --no-link -j0 "${out}"
 
   echo -e "${out}"; return 0
 }
@@ -149,20 +149,21 @@ RPIZERO1="cole@100.111.5.113";  RPIZERO1="cole@rpizero1.ts.r10e.tech"
 RPIZERO2="cole@100.111.5.113";  RPIZERO2="cole@rpizero2.ts.r10e.tech"
 JEFFHYPER="jeff@100.103.91.27"; JEFFHYPER="jeff@jeffhyper.ts.r10e.tech"
 PEGLEG="cole@100.93.245.22";    PEGLEG="cole@pegleg.ts.r10e.tech"
-PORTY="cole@1.2.3.4";     PORTY="cole@porty.ts.r10e.tech"
+PORTY="cole@100.68.13.41";      #PORTY="cole@porty.ts.r10e.tech"
 
 function a64() { build "$1" "${AARCH64}" "${AARCH64}"; }
 function nix() { command nix "${nixargs[@]}" "${@}"; }
 
-function azdev()    { activate ".#toplevels.azdev"     "${BUILD_HOST:-"${AZDEV}"}"     "${AZDEV}";    }
-function pinebook() { activate ".#toplevels.pinebook"  "${BUILD_HOST:-"${AARCH64}"}"   "${PINEBOOK}";  }
-function rpifour1() { activate ".#toplevels.rpifour1"  "${BUILD_HOST:-"${AARCH64}"}"   "${RPIFOUR1}";  }
-function slynux()   { activate ".#toplevels.slynux"    "${BUILD_HOST:-"${SLYNUX}"}"    "${SLYNUX}";   }
-function xeep()     { activate ".#toplevels.xeep"      "${BUILD_HOST:-"${SLYNUX}"}"    "${XEEP}";   }
-function rpizero1() { activate ".#toplevels.rpizero1"  "${BUILD_HOST:-"${SLYNUX}"}"    "${RPIZERO1}";   }
-function rpizero2() { activate ".#toplevels.rpizero2"  "${BUILD_HOST:-"${SLYNUX}"}"    "${RPIZERO2}";   }
-function jeffhyper() { activate ".#toplevels.jeffhyper"  "${BUILD_HOST:-"${AZDEV}"}"   "${JEFFHYPER}";   }
-function porty() { activate ".#toplevels.porty"  "${BUILD_HOST:-"${PORTY}"}"           "${PORTY}";   }
+function azdev()     { activate ".#toplevels.azdev"       "${BUILD_HOST:-"${AZDEV}"}"   "${AZDEV}";    }
+function pinebook()  { activate ".#toplevels.pinebook"    "${BUILD_HOST:-"${AARCH64}"}" "${PINEBOOK}";  }
+function rpifour1()  { activate ".#toplevels.rpifour1"    "${BUILD_HOST:-"${AARCH64}"}" "${RPIFOUR1}";  }
+function slynux()    { activate ".#toplevels.slynux"      "${BUILD_HOST:-"${AZDEV}"}"   "${SLYNUX}";   }
+function xeep()      { activate ".#toplevels.xeep"        "${BUILD_HOST:-"${AZDEV}"}"   "${XEEP}";   }
+function rpizero1()  { activate ".#toplevels.rpizero1"    "${BUILD_HOST:-"${AZDEV}"}"   "${RPIZERO1}";   }
+function rpizero2()  { activate ".#toplevels.rpizero2"    "${BUILD_HOST:-"${AZDEV}"}"   "${RPIZERO2}";   }
+function jeffhyper() { activate ".#toplevels.jeffhyper"   "${BUILD_HOST:-"${AZDEV}"}"   "${JEFFHYPER}";   }
+function pegleg()    { activate ".#toplevels.pegleg"      "${BUILD_HOST:-"${AZDEV}"}"   "${PEGLEG}";   }
+function porty()     { activate ".#toplevels.porty"       "${BUILD_HOST:-"${AZDEV}"}"   "${PORTY}";   }
 
 function x86() { build '.#bundles.x86_64-linux'  "${BUILD_HOST:-"${SLYNUX}"}" ""; }
 function a64() { build '.#bundles.aarch64-linux' "${BUILD_HOST:-"${AARCH64}"}" ""; }

@@ -177,6 +177,7 @@
         #rpizero1  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
         #rpizero2  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
         jeffhyper = mkSystem inputs.nixpkgs "x86_64-linux"  "jeffhyper";
+        pegleg = mkSystem inputs.nixpkgs "x86_64-linux"  "pegleg";
         porty = mkSystem inputs.nixpkgs "x86_64-linux"  "porty";
 
         #pinephone     = mkSystem fullPkgs_.aarch64-linux "pinephone";
