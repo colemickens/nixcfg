@@ -87,10 +87,11 @@ function build() {
   out="$(set -euo pipefail; nix "${nixargs[@]}" path-info "${drv}" --json | jq -r '.[0].path')"
 
   if [[ ! -z "${target:-""}" ]]; then
-    __ "TARGET: try to realize ${out} on ${target}"
-    if ssh_nixUnstable_shell2 "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" --no-link -j0 "${out}" &>/dev/stderr; then
-      echo -e "${out}"; return 0
-    fi
+    #__ "TARGET: try to realize ${out} on ${target}"
+    #if ssh_nixUnstable_shell2 "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" --no-link -j0 "${out}" &>/dev/stderr; then
+    #  echo -e "${out}"; return 0
+    #fi
+    true
   fi
 
   __ "LOCAL: rsync ${drv} to ${remote}"

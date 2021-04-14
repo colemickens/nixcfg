@@ -12,6 +12,11 @@
     #"hv_storsvc"
     "hyperv_keyboard"
     "hid_hyperv"
+
+    "xhci_pci"
+    "nvme"
+    "usb_storage"
+    "sd_mod"
   ];
   boot.kernelModules = [ ];
   boot.kernelPackages = pkgs.linuxPackages_latest;
