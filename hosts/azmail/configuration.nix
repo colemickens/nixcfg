@@ -1,15 +1,14 @@
 { pkgs, lib, config, modulesPath, inputs, ... }:
 
 let
-  pwdFile = "/foo/bar";
+  pwdFile = pkgs.writeText "pw" ''
+    $2y$05$68Wq0An4zQATKCNoeRIhuOekG8Z09MdeZyrrlz8rkQqUHc8dT8SK6
+  '';
 in
 {
 
   # TODO:
-  # - setup PIP and script it
-  # - set up data disk
   # - finish dns records
-  # - fix PW hash
   # - setup email syncing
 
   imports = [
@@ -87,18 +86,18 @@ in
         fsType = "ext4";
         autoResize = true;
       };
-      # "/var/vmail" = {
-      #   fsType = "zfs";
-      #   device = "azmail/vmail";
-      # }; 
-      # "/var/dkim" = {
-      #   fsType = "zfs";
-      #   device = "azmail/dkim";
-      # };
-      # "/run/state" = {
-      #   fsType = "zfs";
-      #   device = "azpool/state";
-      # };
+      "/var/vmail" = {
+        fsType = "zfs";
+        device = "azmail/vmail";
+      }; 
+      "/var/dkim" = {
+        fsType = "zfs";
+        device = "azmail/dkim";
+      };
+      "/run/state" = {
+        fsType = "zfs";
+        device = "azmail/state";
+      };
     };
 
     boot = {
