@@ -4,6 +4,14 @@ let
   pwdFile = "/foo/bar";
 in
 {
+
+  # TODO:
+  # - setup PIP and script it
+  # - set up data disk
+  # - finish dns records
+  # - fix PW hash
+  # - setup email syncing
+
   imports = [
     # this make the azure go vroom
     inputs.nixos-azure.nixosModules.azure-image
