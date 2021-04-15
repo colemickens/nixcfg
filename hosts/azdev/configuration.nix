@@ -7,7 +7,7 @@
 
     # everything for a non-gui interactive session
     ../../profiles/interactive.nix
-    ../../mixins/loremipsum-media/rclone-mnt.nix
+    #../../mixins/loremipsum-media/rclone-mnt.nix
     #../../mixins/jellyfin.nix
     #../../mixins/plex.nix
     #../../mixins/xmrig.nix

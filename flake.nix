@@ -80,6 +80,9 @@
     # rust-overlay.url = "github:oxalica/rust-overlay";
 
     wfvm = { type = "git"; url = "https://git.m-labs.hk/M-Labs/wfvm"; flake = false;};
+
+    nixos-mailserver = { url = "gitlab:simple-nixos-mailserver/nixos-mailserver"; };
+    nixos-mailserver.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs:
@@ -169,6 +172,7 @@
 
       nixosConfigurations = {
         azdev     = mkSystem inputs.nixpkgs "x86_64-linux"  "azdev";
+        azmail    = mkSystem inputs.nixpkgs "x86_64-linux"  "azmail";
         rpifour1  = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour1";
         #rpifour2  (is a netboot device managed under rpifour1)
         slynux    = mkSystem inputs.nixpkgs "x86_64-linux"  "slynux";
@@ -206,7 +210,8 @@
       images = {
         # azure vhd for azdev machine (a custom Azure image using `nixos-azure` module)
         azdev = inputs.self.nixosConfigurations.azdev.config.system.build.azureImage;
-        awsone = inputs.self.nixosConfigurations.azdev.config.system.build.amazonImage;
+        azmail = inputs.self.nixosConfigurations.azmail.config.system.build.azureImage;
+        awsone = inputs.self.nixosConfigurations.awsone.config.system.build.amazonImage;
         newimg = inputs.self.nixosConfigurations.rpitwoefi.config.system.build.newimg;
 
         rpizero1 = inputs.self.nixosConfigurations.rpizero1.config.system.build.sdImage;

@@ -149,7 +149,7 @@ RPIZERO1="cole@100.111.5.113";  RPIZERO1="cole@rpizero1.ts.r10e.tech"
 RPIZERO2="cole@100.111.5.113";  RPIZERO2="cole@rpizero2.ts.r10e.tech"
 JEFFHYPER="jeff@100.103.91.27"; JEFFHYPER="jeff@jeffhyper.ts.r10e.tech"
 PEGLEG="cole@100.93.245.22";    PEGLEG="cole@pegleg.ts.r10e.tech"
-PORTY="cole@100.68.13.41";      #PORTY="cole@porty.ts.r10e.tech"
+PORTY="cole@100.68.13.41";      PORTY="cole@porty.ts.r10e.tech"
 
 function a64() { build "$1" "${AARCH64}" "${AARCH64}"; }
 function nix() { command nix "${nixargs[@]}" "${@}"; }
