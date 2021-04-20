@@ -211,8 +211,7 @@
         {
           devshell = inputs.self.devShell.${system}.inputDerivation;
           selfPkgs = filterPkgs pkgs_.nixpkgs.${system} inputs.self.packages;
-          hosts = (builtins.map (host: host.config.system.build.toplevel)
-            (filterHosts pkgs_.nixpkgs.${system} inputs.self.nixosConfigurations));
+          hosts = filterHosts pkgs_.nixpkgs.${system} inputs.self.nixosConfigurations;
         });
 
       images = {
