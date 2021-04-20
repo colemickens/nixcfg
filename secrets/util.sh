@@ -22,7 +22,7 @@ function e() {
 }
 
 # import_host() {
-#   nix shell github:Mic92/sops-nix#ssh-to-gpg
+#   nix shell github:Mic92/sops-nix#ssh-to-pgp
 #   ssh ${fullhostname} "sudo cat /etc/ssh/ssh_host_rsa_key" | ssh-to-pgp -o keys/${hostname}.pub 2> "keys/${hostname}.fingerprint"
 # }
 
