@@ -24,7 +24,7 @@ if ! az image show -g "${IMAGE_GROUP}" -n "${IMAGE_NAME}" &>/dev/null; then
   # build the VHD
   nix build "${DISK_ATTR}" --out-link /tmp/${MACHINE_NAME}
 
-  image_id="$(nix shell ~/code/nixos-azure#azutil --command upload-vhd /tmp/azmail)"
+  image_id="$(nix shell ~/code/nixos-azure#azutil --command upload-vhd /tmp/${MACHINE_NAME})"
 fi
 
 image_id="$(az image show -g "${IMAGE_GROUP}" -n "${IMAGE_NAME}" -o tsv --query '[id]')"
@@ -54,7 +54,7 @@ if [[ "${AZURE_NSG:-""}" != "" ]]; then
   args=("${args[@]}" "--nsg" "${AZURE_NSG}")
 fi
 
-if [[ "${AZURE_ACCEL_NIC}" == "true" ]]; then
+if [[ "${AZURE_ACCEL_NIC:-}" == "true" ]]; then
   args=("${args[@]}" "--accelerated-networking")
 fi
 

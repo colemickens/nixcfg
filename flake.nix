@@ -156,6 +156,7 @@
           #niche = prev.callPackage ./pkgs/niche {};
           passrs = prev.callPackage ./pkgs/passrs {};
           rkvm = prev.callPackage ./pkgs/rkvm {};
+          zellij = prev.callPackage ./pkgs/zellij {};
 
           libquotient = prev.libsForQt5.callPackage ./pkgs/quaternion/libquotient.nix {};
           quaternion = prev.libsForQt5.callPackage ./pkgs/quaternion {};
@@ -177,10 +178,10 @@
         #rpifour2  (is a netboot device managed under rpifour1)
         #slynux    = mkSystem inputs.nixpkgs "x86_64-linux"  "slynux";
         #xeep      = mkSystem inputs.nixpkgs "x86_64-linux"  "xeep";
-        #pinebook  = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
+        pinebook  = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
         #rpizero1  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
         #rpizero2  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
-        #jeffhyper = mkSystem inputs.nixpkgs "x86_64-linux"  "jeffhyper";
+        jeffhyper = mkSystem inputs.nixpkgs "x86_64-linux"  "jeffhyper";
         #pegleg = mkSystem inputs.nixpkgs "x86_64-linux"  "pegleg";
         porty = mkSystem inputs.nixpkgs "x86_64-linux"  "porty";
 

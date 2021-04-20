@@ -41,8 +41,8 @@
       "d '/run/state/plex' - plex - - -"
       "d '/var/lib/plex' - plex - - -"
       
-      "d '/run/state/postgres' - postgres - - -"
-      "d '/var/lib/postgres' - postgres - - -"
+      "d '/run/state/postgresql' - postgres - - -"
+      "d '/var/lib/postgresql' - postgres - - -"
       
       "d '/run/state/hydra' - hydra - - -"
       "d '/var/lib/hydra' - hydra - - -"
@@ -95,7 +95,7 @@
         options = [ "bind" ];
         device = "/run/state/hydra";
       };
-      "/var/lib/postgres" = {
+      "/var/lib/postgresql" = {
         fsType = "none";
         options = [ "bind" ];
         device = "/run/state/postgres";

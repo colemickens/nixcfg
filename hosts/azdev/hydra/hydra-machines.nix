@@ -11,8 +11,7 @@
     hostName = "aarch64.nixos.community";
     sshHostKeyBase64 = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSU1VVHo1aTl1NUgyRkhOQW1aSnlvSmZJR3lVbS9IZkdoZnduYzE0MkwzZHMK";
     sshUser = "colemickens";
-    sshKey = "/var/lib/hydra/queue-runner/.ssh/id_rsa"; # TODO: link from sops
-    #sshKey = "/run/secrets/hydra_queue_runner_id_rsa";
+    sshKey = "/run/secrets/hydra_queue_runner_id_rsa";
     systems = [ "aarch64-linux" ];
     supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark"];
     speedFactor = 1;

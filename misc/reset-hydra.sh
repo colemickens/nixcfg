@@ -7,10 +7,8 @@ sudo systemctl stop postgresql
 
 sleep 1
 
-sudo rm -rf /var/lib/postgresql
-sudo rm -rf /var/lib/hydra
-
-sleep 1
+sudo find /var/lib/postgresql/ -mindepth 1 -delete
+sudo find /var/lib/hydra -mindepth 1 -delete
 
 sudo systemctl restart postgresql
 sudo systemctl restart hydra-init

@@ -19,28 +19,22 @@ let
   machinesFile = pkgs.writeText "machines.txt" machinesFileText;
 in {
   config = {
-    # ugh -- also, doesn't appear to even be related to why aarch64 is failing?
-    #nix.package = lib.mkForce pkgs.nix;
-
     # hydra setup docs:
     # - create project:
-    #   - git checkout (https://github.com/colemickens/nixcfg#main)
-    #  - create jobset
+    #   - git checkout ("https://github.com/colemickens/nixcfg main")
+    #  - add jobset
     #    - legacy -> "hydra.nix" in "[input]"
-    #      inputs -> "[input]" -> "https://git/cole/nixcfg main"
+    #      inputs -> "[input]" -> "https://github.com/colemickens/nixcfg main"
 
     sops.secrets."hydra_queue_runner_id_rsa" = {
       owner = "hydra-queue-runner";
       group = "hydra";
-      mode = "0700";
-      path = "/var/lib/hydra/queue-runner/.ssh/id_rsa";
     };
     sops.secrets."hydra_queue_runner_id_rsa.pub" = {
       owner = "hydra-queue-runner";
       group = "hydra";
-      mode = "0700";
-      path = "/var/lib/hydra/queue-runner/.ssh/id_rsa.pub";
     };
+    users.users."hydra-queue-runner".extraGroups = [ "keys" ];
 
     services.hydra = {
       enable = true;
