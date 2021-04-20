@@ -31,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     description = "";
     homepage = "https://github.com/cole-h/passrs";
     license = licenses.mit;
-    maintainers = [ maintainers.coleh ];
+    maintainers = [ maintainers.cole-h ];
   };
 }
