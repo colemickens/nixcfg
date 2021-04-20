@@ -94,7 +94,7 @@
       filterPkg_ = system: (name: pkg: builtins.elem "${system}" (pkg.meta.platforms or [ "x86_64-linux" "aarch64-linux" ]));
       # TODO: we probably want to skip broken?
       filterPkgs = pkgs: pkgSet: builtins.attrValues ((pkgs.lib.filterAttrs (filterPkg_ pkgs.system) pkgSet.${pkgs.system}));
-      filterHosts = pkgs: cfgs: (builtins.filterAttrs (n: v: pkgs.system == v.config.nixpkgs.system) cfgs);
+      filterHosts = pkgs: cfgs: (pkgs.lib.filterAttrs (n: v: pkgs.system == v.config.nixpkgs.system) cfgs);
       pkgsFor = pkgs: system: overlays:
         import pkgs {
           inherit system overlays;
