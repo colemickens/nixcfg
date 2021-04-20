@@ -94,7 +94,7 @@
       filterPkg_ = system: (name: pkg: builtins.elem "${system}" (pkg.meta.platforms or [ "x86_64-linux" "aarch64-linux" ]));
       # TODO: we probably want to skip broken?
       filterPkgs = pkgs: pkgSet: builtins.attrValues ((pkgs.lib.filterAttrs (filterPkg_ pkgs.system) pkgSet.${pkgs.system}));
-      filterHosts = pkgs: cfgs: (builtins.filter (c: pkgs.system == c.config.nixpkgs.system) (builtins.attrValues cfgs));
+      filterHosts = pkgs: cfgs: (builtins.filterAttrs (n: v: pkgs.system == v.config.nixpkgs.system) cfgs);
       pkgsFor = pkgs: system: overlays:
         import pkgs {
           inherit system overlays;
@@ -175,13 +175,13 @@
         azmail    = mkSystem inputs.nixpkgs "x86_64-linux"  "azmail";
         rpifour1  = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour1";
         #rpifour2  (is a netboot device managed under rpifour1)
-        slynux    = mkSystem inputs.nixpkgs "x86_64-linux"  "slynux";
-        xeep      = mkSystem inputs.nixpkgs "x86_64-linux"  "xeep";
-        pinebook  = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
+        #slynux    = mkSystem inputs.nixpkgs "x86_64-linux"  "slynux";
+        #xeep      = mkSystem inputs.nixpkgs "x86_64-linux"  "xeep";
+        #pinebook  = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
         #rpizero1  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
         #rpizero2  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
-        jeffhyper = mkSystem inputs.nixpkgs "x86_64-linux"  "jeffhyper";
-        pegleg = mkSystem inputs.nixpkgs "x86_64-linux"  "pegleg";
+        #jeffhyper = mkSystem inputs.nixpkgs "x86_64-linux"  "jeffhyper";
+        #pegleg = mkSystem inputs.nixpkgs "x86_64-linux"  "pegleg";
         porty = mkSystem inputs.nixpkgs "x86_64-linux"  "porty";
 
         #pinephone     = mkSystem fullPkgs_.aarch64-linux "pinephone";
@@ -199,13 +199,21 @@
         (builtins.attrNames inputs.self.outputs.nixosConfigurations)
         (attr: nixosConfigurations.${attr}.config.system.build.toplevel);
 
-      bundles = forAllSystems (system:
-        pkgs_.nixpkgs.${system}.linkFarmFromDrvs "${system}-outputs" ([]
-          ++ [ inputs.self.devShell.${system}.inputDerivation ]
-          ++ (filterPkgs pkgs_.nixpkgs.${system} inputs.self.packages)
-          ++ (builtins.map (host: host.config.system.build.toplevel)
-                (filterHosts pkgs_.nixpkgs.${system} inputs.self.nixosConfigurations))
-         ));
+      # bundles = forAllSystems (system:
+      #   pkgs_.nixpkgs.${system}.linkFarmFromDrvs "${system}-outputs" ([]
+      #     ++ [ inputs.self.devShell.${system}.inputDerivation ]
+      #     ++ (filterPkgs pkgs_.nixpkgs.${system} inputs.self.packages)
+      #     ++ (builtins.map (host: host.config.system.build.toplevel)
+      #           (filterHosts pkgs_.nixpkgs.${system} inputs.self.nixosConfigurations))
+      #    ));
+
+      hydraJobs = forAllSystems (system:
+        {
+          devshell = inputs.self.devShell.${system}.inputDerivation;
+          selfPkgs = filterPkgs pkgs_.nixpkgs.${system} inputs.self.packages;
+          hosts = (builtins.map (host: host.config.system.build.toplevel)
+            (filterHosts pkgs_.nixpkgs.${system} inputs.self.nixosConfigurations));
+        });
 
       images = {
         # azure vhd for azdev machine (a custom Azure image using `nixos-azure` module)
@@ -256,10 +264,6 @@
           dash = import ./hosts/nixbox/dashboard.nix { inherit inputs; };
           linux = import ./hosts/nixbox/linux.nix { inherit inputs; };
         };
-      };
-
-      hydraJobs = {
-        build = bundles;
       };
     };
 }
