@@ -14,7 +14,8 @@ pkgs.stdenv.mkDerivation {
 
   nativeBuildInputs = with pkgs; [
     # rust
-    latest.rustChannels.beta.rust
+    #latest.rustChannels.beta.rust
+    latest.rustChannels.nightly.rust
     #rust-analyzer
 
     # deps

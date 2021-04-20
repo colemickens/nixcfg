@@ -16,3 +16,5 @@ export AZURE_STORAGE_SKU="Premium_LRS"
 export AZURE_PUBLIC_IP="/subscriptions/aff271ee-e9be-4441-b9bb-42f5af4cbaeb/resourceGroups/azmaildata/providers/Microsoft.Network/publicIPAddresses/azmailpublicip"
 
 ../azdev/deploy-common.sh
+
+./fix-firewall.sh

@@ -8,7 +8,9 @@ set -euo pipefail
 # export AZURE_STORAGE_SKU="Premium_LRS"
 
 # create pip:
-#   az network public-ip create -n "azmailpublicip" -g "azmaildata" -l "westus2"
+#   az network public-ip create \
+#     --static-ip \
+#     -n "azmailpublicip" -g "azmaildata" -l "westus2"
 
 # create disk:
 #   az group create -n 'azdev2020data' -l "${AZURE_LOCATION}"

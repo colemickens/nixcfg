@@ -1,6 +1,7 @@
 { pkgs, lib, config, modulesPath, inputs, ... }:
 
 let
+  # nix shell ~/code/nixcfg#pkgs.x86_64-linux.apacheHttpd -c htpasswd -nbB "" "super secret password" | cut -d: -f2 > /tmp/pwd
   pwdFile = pkgs.writeText "pw" ''
     $2y$05$68Wq0An4zQATKCNoeRIhuOekG8Z09MdeZyrrlz8rkQqUHc8dT8SK6
   '';
@@ -93,6 +94,10 @@ in
       "/var/dkim" = {
         fsType = "zfs";
         device = "azmail/dkim";
+      };
+      "/var/lib/acme" = {
+        fsType = "zfs";
+        device = "azmail/acme";
       };
       "/run/state" = {
         fsType = "zfs";
