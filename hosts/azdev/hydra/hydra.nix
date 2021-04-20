@@ -29,6 +29,19 @@ in {
     #    - legacy -> "hydra.nix" in "[input]"
     #      inputs -> "[input]" -> "https://git/cole/nixcfg main"
 
+    sops.secrets."hydra_queue_runner_id_rsa" = {
+      owner = "hydra-queue-runner";
+      group = "hydra";
+      mode = "0700";
+      path = "/var/lib/hydra/queue-runner/.ssh/id_rsa";
+    };
+    sops.secrets."hydra_queue_runner_id_rsa.pub" = {
+      owner = "hydra-queue-runner";
+      group = "hydra";
+      mode = "0700";
+      path = "/var/lib/hydra/queue-runner/.ssh/id_rsa.pub";
+    };
+
     services.hydra = {
       enable = true;
       hydraURL = "http://${hydraHostname}"; # externally visible URL

@@ -18,8 +18,6 @@ in
   config = {
     networking.hostName = lib.mkForce hostname;
 
-    nix.package = lib.mkForce pkgs.nix;
-
     environment.systemPackages = with pkgs; [
       minicom
       screen

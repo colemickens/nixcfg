@@ -1,8 +1,9 @@
 export AZURE_LOCATION="westus2"
-export DATA_DISK_ID=/subscriptions/aff271ee-e9be-4441-b9bb-42f5af4cbaeb/resourceGroups/azdev2020data/providers/Microsoft.Compute/disks/datadisk
+export DATA_DISK_ID="/subscriptions/aff271ee-e9be-4441-b9bb-42f5af4cbaeb/resourceGroups/azdev2020data/providers/Microsoft.Compute/disks/datadisk"
 export DISK_ATTR="../..#images.azdev"
-export IMAGE_GROUP="azdev2020nov"
-export IMAGE_NAME="azdev-21.03.20210129.711d6c9-b6807db8.vhd"
+export IMAGE_GROUP="azdev2020img"
+export IMAGE_NAME="azdevimg.vhd"
+
 export MACHINE_GROUP="azdev2020vm1"
 export MACHINE_NAME="azdev2020vm1"
 
