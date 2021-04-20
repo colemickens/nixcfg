@@ -6,4 +6,4 @@ let
     src = ./.;
   });
 in
-  flake.defaultNix.hydraJobs
+  flake.defaultNix

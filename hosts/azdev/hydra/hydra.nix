@@ -22,6 +22,13 @@ in {
     # ugh -- also, doesn't appear to even be related to why aarch64 is failing?
     #nix.package = lib.mkForce pkgs.nix;
 
+    # hydra setup docs:
+    # - create project:
+    #   - git checkout (https://github.com/colemickens/nixcfg#main)
+    #  - create jobset
+    #    - legacy -> "hydra.nix" in "[input]"
+    #      inputs -> "[input]" -> "https://git/cole/nixcfg main"
+
     services.hydra = {
       enable = true;
       hydraURL = "http://${hydraHostname}"; # externally visible URL

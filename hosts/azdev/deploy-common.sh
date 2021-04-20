@@ -50,6 +50,10 @@ if [[ "${AZURE_PUBLIC_IP:-""}" != "" ]]; then
   args=("${args[@]}" "--public-ip-address" "${AZURE_PUBLIC_IP}")
 fi
 
+if [[ "${AZURE_NSG:-""}" != "" ]]; then
+  args=("${args[@]}" "--nsg" "${AZURE_NSG}")
+fi
+
 if [[ "${AZURE_ACCEL_NIC}" == "true" ]]; then
   args=("${args[@]}" "--accelerated-networking")
 fi
