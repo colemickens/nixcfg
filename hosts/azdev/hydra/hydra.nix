@@ -1,10 +1,15 @@
 { config, pkgs, lib, inputs, modulesPath, ... }:
 
-# TODO: move this into a VM with stable nix
-# and the storage array
+# hydra setup docs:
+# - create project:
+#   - git checkout ("https://github.com/colemickens/nixcfg main")
+#  - add jobset
+#    - legacy -> "hydra.nix" in "[input]"
+#      inputs -> "[input]" -> "https://github.com/colemickens/nixcfg main"
 
-# check storage array safe first
-# ... ?
+# make sure aarch64 has our key:
+# or... just send a PR to add this key, I guess
+#   sudo ssh-copy-id -i /run/secrets/hydra_queue_runner_id_rsa colemickens@aarch64.nixos.community
 
 let
   hydraHostname = "hydra.${config.networking.hostName}.ts.r10e.tech";
@@ -19,13 +24,6 @@ let
   machinesFile = pkgs.writeText "machines.txt" machinesFileText;
 in {
   config = {
-    # hydra setup docs:
-    # - create project:
-    #   - git checkout ("https://github.com/colemickens/nixcfg main")
-    #  - add jobset
-    #    - legacy -> "hydra.nix" in "[input]"
-    #      inputs -> "[input]" -> "https://github.com/colemickens/nixcfg main"
-
     sops.secrets."hydra_queue_runner_id_rsa" = {
       owner = "hydra-queue-runner";
       group = "hydra";
