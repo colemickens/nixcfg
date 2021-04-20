@@ -7,8 +7,7 @@
 #    - legacy -> "hydra.nix" in "[input]"
 #      inputs -> "[input]" -> "https://github.com/colemickens/nixcfg main"
 
-# make sure aarch64 has our key:
-# or... just send a PR to add this key, I guess
+# make sure aarch64 has our key (it should be added permanently now, though):
 #   sudo ssh-copy-id -i /run/secrets/hydra_queue_runner_id_rsa colemickens@aarch64.nixos.community
 
 let
