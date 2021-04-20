@@ -117,7 +117,7 @@
           nativeBuildInputs = []
           #++ ([ inputs.nix.defaultPackage.${system} ]) # TODO: drop nix input?
           ++ (with pkgs_.stable.${system}; [ cachix ])
-          ++ (with inputs.niche.packages.${system}; [ niche ])
+          # ++ (with inputs.niche.packages.${system}; [ niche ])
           ++ (with pkgs_.nixpkgs.${system}; [
             nixUnstable
             bash cacert curl git jq parallel mercurial
