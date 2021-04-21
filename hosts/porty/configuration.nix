@@ -11,7 +11,7 @@
     ../../mixins/common.nix
 
     ../../profiles/user.nix
-    ../../profiles/desktop-sway.nix
+    ../../profiles/desktop-sway-unstable.nix
 
     ../../mixins/libvirt.nix
     ../../mixins/sshd.nix

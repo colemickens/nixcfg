@@ -65,6 +65,7 @@ in
         dnsutils
         usbutils
         yubico-piv-tool
+        zellij
 
         # https://zaiste.net/posts/shell-commands-rust/
         bat
