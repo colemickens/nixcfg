@@ -22,6 +22,9 @@ let
   machinesFileText = (builder machinesConfig);
   machinesFile = pkgs.writeText "machines.txt" machinesFileText;
 in {
+  # this pull in the entire hydra overlay:
+  imports = [ inputs.hydra.nixosModules.hydra ];
+
   config = {
     sops.secrets."hydra_queue_runner_id_rsa" = {
       owner = "hydra-queue-runner";

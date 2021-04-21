@@ -61,7 +61,8 @@ in
         git-lfs
         cvs mercurial subversion
         #mitmproxy
-        nix-du pv
+        #nix-du
+        pv
         dnsutils
         usbutils
         yubico-piv-tool

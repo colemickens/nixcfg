@@ -83,6 +83,9 @@
 
     nixos-mailserver = { url = "gitlab:simple-nixos-mailserver/nixos-mailserver"; };
     nixos-mailserver.inputs.nixpkgs.follows = "nixpkgs";
+
+    hydra = { url = "github:NixOS/hydra"; };
+    #hydra.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs:
