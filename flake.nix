@@ -86,6 +86,8 @@
 
     hydra = { url = "github:NixOS/hydra"; };
     #hydra.inputs.nixpkgs.follows = "nixpkgs";
+
+    hydra-configs = { url = "github:cleverca22/hydra-configs"; flake = false; };
   };
 
   outputs = inputs:
@@ -210,6 +212,29 @@
       #     ++ (builtins.map (host: host.config.system.build.toplevel)
       #           (filterHosts pkgs_.nixpkgs.${system} inputs.self.nixosConfigurations))
       #    ));
+
+      hydraSpecs = 
+        let
+          hl = import "${inputs.hydra-configs}/lib.nix";
+          defaults = hl.globalDefaults // {
+            nixexprinput = "nixcfg";
+            nixexprpath = "hydra-jobs.nix";
+            checkinterval = 3600;
+            keepnr = 3;
+          };
+        in
+          {
+            jobsets = hl.makeSpec {
+              nixcfg-main = defaults // {
+                description = "nixcfg-main";
+                inputs.nixcfg = hl.mkFetchGithub "https://github.com/colemickens/nixcfg main";
+              };
+              nixcfg-auto-update = defaults // {
+                description = "nixcfg-auto-update";
+                inputs.nixcfg = hl.mkFetchGithub "https://github.com/colemickens/nixcfg auto-update";
+              };
+            };
+          };
 
       hydraJobs = forAllSystems (system:
         {
