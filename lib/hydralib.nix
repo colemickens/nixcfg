@@ -10,7 +10,7 @@ rec {
   };
 
   flakeJob = flakeRef: jobsetDefaults // {
-    flakeref = flakeRef;
+    flake = flakeRef;
   };
 
   makeSpec = contents: builtins.derivation {
