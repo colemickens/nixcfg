@@ -233,6 +233,18 @@
                 description = "nixcfg-auto-update";
                 inputs.nixcfg = hl.mkFetchGithub "https://github.com/colemickens/nixcfg auto-update";
               };
+              flakes_nixcfg-main = {
+                description = "flakes_nixcfg-main";
+                type = "1"; flakref = "github:colemickens/nixcfg/main";
+                checkinterval = 10;
+                keepnr = 3;
+              };
+              flakes_nixcfg-auto-update = {
+                description = "flakes_nixcfg-auto-update";
+                type = "1"; flakref = "github:colemickens/nixcfg/auto-update";
+                checkinterval = 10;
+                keepnr = 3;
+              };
             };
           };
 

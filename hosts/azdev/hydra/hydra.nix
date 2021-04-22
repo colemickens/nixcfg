@@ -38,7 +38,7 @@ in {
 
     #networking.firewall.allowedTCPPorts = [ 3000 ];
 
-    services.hydra = {
+    services.hydra-dev = {
       enable = true;
       hydraURL = "http://${hydraHostname}"; # externally visible URL
       notificationSender = "hydra@${hydraHostname}";
