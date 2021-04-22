@@ -235,13 +235,13 @@
               };
               flakes_nixcfg-main = {
                 description = "flakes_nixcfg-main";
-                type = "1"; flakref = "github:colemickens/nixcfg/main";
+                type = "1"; nixexprinput = "github:colemickens/nixcfg/main";
                 checkinterval = 10;
                 keepnr = 3;
               };
               flakes_nixcfg-auto-update = {
                 description = "flakes_nixcfg-auto-update";
-                type = "1"; flakref = "github:colemickens/nixcfg/auto-update";
+                type = "1"; nixexprinput = "github:colemickens/nixcfg/auto-update";
                 checkinterval = 10;
                 keepnr = 3;
               };
