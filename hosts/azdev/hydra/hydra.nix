@@ -36,7 +36,7 @@ in {
     };
     users.users."hydra-queue-runner".extraGroups = [ "keys" ];
 
-    networking.firewall.allowedTCPPorts = [ 3000 ];
+    #networking.firewall.allowedTCPPorts = [ 3000 ];
 
     services.hydra = {
       enable = true;

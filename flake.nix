@@ -219,7 +219,7 @@
           defaults = hl.globalDefaults // {
             nixexprinput = "nixcfg";
             nixexprpath = "hydra-jobs.nix";
-            checkinterval = 3600;
+            checkinterval = 10;
             keepnr = 3;
           };
         in

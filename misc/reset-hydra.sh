@@ -35,3 +35,4 @@ sleep 2
 
 sudo systemctl restart hydra-evaluator
 sudo systemctl restart hydra-queue-runner
+sudo systemctl restart hydra-notify
