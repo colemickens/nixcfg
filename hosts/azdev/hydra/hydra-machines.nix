@@ -15,7 +15,7 @@
     systems = [ "aarch64-linux" ];
     supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark"];
     speedFactor = 1;
-    maxJobs = 4;
+    maxJobs = 8;
   };
   rpifour1 = {
     hostName = "rpifour1.ts.r10e.tech";
