@@ -6,6 +6,7 @@ rec {
     schedulingshares = 100;
     checkinterval = 15;
     emailoverride = "";
+    type = 1;
   };
 
   flakeJob = flakeRef: jobsetDefaults // {
