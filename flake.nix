@@ -86,8 +86,6 @@
 
     hydra = { url = "github:NixOS/hydra"; };
     #hydra.inputs.nixpkgs.follows = "nixpkgs";
-
-    hydra-configs = { url = "github:cleverca22/hydra-configs"; flake = false; };
   };
 
   outputs = inputs:
@@ -114,6 +112,8 @@
           modules = [(./. + "/hosts/${hostname}/configuration.nix")];
           specialArgs = { inherit inputs; };
         };
+
+      hydralib = import ./lib/hydralib.nix;
     in rec {
       x = builtins.trace inputs.self.sourceInfo inputs.nixpkgs.sourceInfo;
       devShell = forAllSystems (system:
@@ -215,38 +215,13 @@
 
       hydraSpecs = 
         let
-          hl = import "${inputs.hydra-configs}/lib.nix";
-          defaults = hl.globalDefaults // {
-            nixexprinput = "nixcfg";
-            nixexprpath = "hydra-jobs.nix";
-            checkinterval = 10;
-            keepnr = 3;
+          nfj = b: hydralib.flakeJob "github:colemickens/nixcfg/${b}";
+        in {
+          jobsets = hydralib.makeSpec {
+            nixcfg-main        = nfj "main";
+            nixcfg-auto-update = nfj "auto-update";
           };
-        in
-          {
-            jobsets = hl.makeSpec {
-              nixcfg-main = defaults // {
-                description = "nixcfg-main";
-                inputs.nixcfg = hl.mkFetchGithub "https://github.com/colemickens/nixcfg main";
-              };
-              nixcfg-auto-update = defaults // {
-                description = "nixcfg-auto-update";
-                inputs.nixcfg = hl.mkFetchGithub "https://github.com/colemickens/nixcfg auto-update";
-              };
-              flakes_nixcfg-main = {
-                description = "flakes_nixcfg-main";
-                type = "1"; nixexprinput = "github:colemickens/nixcfg/main";
-                checkinterval = 10;
-                keepnr = 3;
-              };
-              flakes_nixcfg-auto-update = {
-                description = "flakes_nixcfg-auto-update";
-                type = "1"; nixexprinput = "github:colemickens/nixcfg/auto-update";
-                checkinterval = 10;
-                keepnr = 3;
-              };
-            };
-          };
+        };
 
       hydraJobs = forAllSystems (system:
         {

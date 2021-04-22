@@ -346,22 +346,6 @@
         "type": "github"
       }
     },
-    "hydra-configs": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1617500020,
-        "narHash": "sha256-4p6wURavK16eMaiRD66zGNFAiGPQXWZDXu9MG3BTX18=",
-        "owner": "cleverca22",
-        "repo": "hydra-configs",
-        "rev": "751c17ab49da2a4d6edaa834f4e7ef0c6cb8bd0d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "cleverca22",
-        "repo": "hydra-configs",
-        "type": "github"
-      }
-    },
     "lowdown-src": {
       "flake": false,
       "locked": {
@@ -759,7 +743,6 @@
         "hardware": "hardware",
         "home-manager": "home-manager",
         "hydra": "hydra",
-        "hydra-configs": "hydra-configs",
         "master": "master",
         "mobile-nixos": "mobile-nixos",
         "neovim-nightly": "neovim-nightly",
