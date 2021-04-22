@@ -37,4 +37,4 @@ sudo systemctl restart hydra-evaluator
 sudo systemctl restart hydra-queue-runner
 sudo systemctl restart hydra-notify
 
-sudo -u postgres psql alter user hydra with encrypted password 'hydra';
+sudo -u postgres psql -c "alter user hydra with encrypted password 'hydra'";
