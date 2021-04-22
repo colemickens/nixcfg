@@ -23,7 +23,10 @@ let
   machinesFile = pkgs.writeText "machines.txt" machinesFileText;
 in {
   # this pull in the entire hydra overlay:
-  imports = [ inputs.hydra.nixosModules.hydra ];
+  imports = [
+    inputs.hydra.nixosModules.hydra
+    ./auto.nix # auto-setup admin/jobs
+  ];
 
   config = {
     sops.secrets."hydra_queue_runner_id_rsa" = {
@@ -35,27 +38,6 @@ in {
       group = "hydra";
     };
     users.users."hydra-queue-runner".extraGroups = [ "keys" ];
-
-    #networking.firewall.allowedTCPPorts = [ 3000 ];
-
-    services.hydra-autoproj = {
-      admins = {
-        username = "cole";
-        password = "cole";
-        email = "cole@hydra";
-      };
-      projects = {
-        foo = {
-          displayName = "friendlyFoo";
-          # TODO: can this itself be a flake ref? I thought so?
-          # enabled = "1"; # default
-          # visible = "1"; # default
-          # decltype = "git";
-          # declvalue = "https://github.com/colemickens/nixcfg main";
-          # declfile = "spec.json";
-        };
-      };
-    };
 
     services.hydra-dev = {
       enable = true;

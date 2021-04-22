@@ -28,16 +28,17 @@ let
     JSON="${newProject p}"
     ${pkgs.curl}/bin/curl -b /tmp/cookie -c /tmp/cookie -d "${JSON}" -X 'PUT' -H 'Content-Type: application/json' --referer 'http://localhost:3000/' http://localhost:3000/project/${projectName}
   '';
-in
-{
+
   options = {
     # option for autoAdmin
     # option for autoProjects
     # option for the endpoint
   };
+
   config = {
     systemd.services."hydra-autoproj" = {
       # todo: auto start after hydra
-    }
+    };
   };
-}
+in
+{ inherit options config; }
