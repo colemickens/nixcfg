@@ -205,14 +205,6 @@
         (builtins.attrNames inputs.self.outputs.nixosConfigurations)
         (attr: nixosConfigurations.${attr}.config.system.build.toplevel);
 
-      # bundles = forAllSystems (system:
-      #   pkgs_.nixpkgs.${system}.linkFarmFromDrvs "${system}-outputs" ([]
-      #     ++ [ inputs.self.devShell.${system}.inputDerivation ]
-      #     ++ (filterPkgs pkgs_.nixpkgs.${system} inputs.self.packages)
-      #     ++ (builtins.map (host: host.config.system.build.toplevel)
-      #           (filterHosts pkgs_.nixpkgs.${system} inputs.self.nixosConfigurations))
-      #    ));
-
       hydraSpecs = 
         let
           nfj = b: hydralib.flakeJob "github:colemickens/nixcfg/${b}";
@@ -223,7 +215,8 @@
           };
         };
 
-      hydraJobs = forAllSystems (system:
+      # TODO : clamped to x86_64 - undo!
+      hydraJobs = genAttrs [ "x86_64-linux" ] (system:
         {
           devshell = inputs.self.devShell.${system}.inputDerivation;
           selfPkgs = filterPkgs pkgs_.nixpkgs.${system} inputs.self.packages;
