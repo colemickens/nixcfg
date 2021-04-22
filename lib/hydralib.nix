@@ -13,7 +13,7 @@ rec {
 
   makeSpec = contents: builtins.derivation {
     name = "spec.json";
-    system = "x86_64-linux"; # ??????
+    system = "x86_64-linux";
     preferLocalBuild = true;
     allowSubstitutes = false;
     builder = "/bin/sh";
