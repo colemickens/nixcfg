@@ -1,9 +1,9 @@
 { config, pkgs, lib, inputs, modulesPath, ... }:
 
-let hydraAuto = pkgs.writeShellScript "hydra-auto.sh" ''
-  
-'';
-in {
+{
+  imports = [
+    inputs.self.nixosModules.hydra-auto
+  ];
   config = {
     services.hydra-autoproj = {
       admins = {

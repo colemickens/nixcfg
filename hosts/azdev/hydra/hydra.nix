@@ -25,7 +25,7 @@ in {
   # this pull in the entire hydra overlay:
   imports = [
     inputs.hydra.nixosModules.hydra
-    # ./auto.nix # auto-setup admin/jobs
+    #./auto.nix # auto-setup admin/jobs
   ];
 
   config = {

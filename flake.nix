@@ -198,6 +198,7 @@
       };
 
       nixosModules = {
+        hydra-auto = import ./modules/hydra-auto.nix;
         otg = import ./modules/otg.nix;
         other-arch-vm = import ./modules/other-arch-vm.nix;
       };
