@@ -98,7 +98,7 @@
       "/var/lib/postgresql" = {
         fsType = "none";
         options = [ "bind" ];
-        device = "/run/state/postgres";
+        device = "/run/state/postgresql";
       };
       "/run/state" = {
         fsType = "zfs";

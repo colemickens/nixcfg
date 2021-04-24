@@ -2,10 +2,10 @@
 
 {
   imports = [
-    inputs.self.nixosModules.hydra-auto
+    # inputs.self.nixosModules.hydra-auto
   ];
-  config = {
-    services.hydra-autoproj = {
+  config = if true then {} else {
+    services.hydra-auto = {
       admins = {
         username = "cole";
         password = "cole";

@@ -20,14 +20,14 @@ set -euo pipefail
 #(cd ../..; nix flake update)
 
 # upload the VHD
-if ! az image show -g "${IMAGE_GROUP}" -n "${IMAGE_NAME}" &>/dev/null; then
+if ! az image show -g "${AZURE_IMAGE_GROUP}" -n "${AZURE_IMAGE_NAME}" &>/dev/null; then
   # build the VHD
-  nix build "${DISK_ATTR}" --out-link /tmp/${MACHINE_NAME}
+  nix build "${AZURE_DISK_ATTR}" --out-link /tmp/${AZURE_MACHINE_NAME}
 
-  image_id="$(nix shell ~/code/nixos-azure#azutil --command upload-vhd /tmp/${MACHINE_NAME})"
+  image_id="$(nix shell ~/code/nixos-azure#azutil --command upload-vhd /tmp/${AZURE_MACHINE_NAME})"
 fi
 
-image_id="$(az image show -g "${IMAGE_GROUP}" -n "${IMAGE_NAME}" -o tsv --query '[id]')"
+image_id="$(az image show -g "${AZURE_IMAGE_GROUP}" -n "${AZURE_IMAGE_NAME}" -o tsv --query '[id]')"
 
 if [[ "${AZURE_IMAGE_ONLY:-""}" == "true" ]]; then
   exit 0
@@ -46,22 +46,15 @@ args=(
   --admin-username "azureuser"
   --location "${AZURE_LOCATION}"
   --ssh-key-values "${AZURE_SSH}"
-  --os-disk-size-gb "${AZURE_VM_OS_DISK_SIZE}"
-  --storage-sku "${AZURE_STORAGE_SKU}"
   --public-ip-address-dns-name "${MACHINE_NAME}"
-  --ephemeral-os-disk "${AZURE_EPHEMERAL_DISK}"
 )
 
-if [[ "${AZURE_PUBLIC_IP:-""}" != "" ]]; then
-  args=("${args[@]}" "--public-ip-address" "${AZURE_PUBLIC_IP}")
-fi
+[[ "${AZURE_PUBLIC_IP:-""}" != "" ]]       && args=("${args[@]}" "--public-ip-address" "${AZURE_PUBLIC_IP}")
+[[ "${AZURE_NSG:-""}" != "" ]]             && args=("${args[@]}" "--nsg" "${AZURE_NSG}")
+[[ "${AZURE_ACCEL_NIC:-""}" == "true" ]]   && args=("${args[@]}" "--accelerated-networking")
 
-if [[ "${AZURE_NSG:-""}" != "" ]]; then
-  args=("${args[@]}" "--nsg" "${AZURE_NSG}")
-fi
-
-if [[ "${AZURE_ACCEL_NIC:-}" == "true" ]]; then
-  args=("${args[@]}" "--accelerated-networking")
-fi
+[[ "${AZURE_STORAGE_SKU:-""}" != "" ]]        && args=("${args[@]}" "--storage-sku" "${AZURE_STORAGE_SKU}")
+[[ "${AZURE_VM_OS_DISK_SIZE:-""}" != "" ]]    && args=("${args[@]}" "--os-disk-size-gb" "${AZURE_VM_OS_DISK_SIZE}")
+[[ "${AZURE_EPHEMERAL_DISK:-""}" == "true" ]] && args=("${args[@]}" "--ephemeral-os-disk")
 
 az vm create "${args[@]}"
