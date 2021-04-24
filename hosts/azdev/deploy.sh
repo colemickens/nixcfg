@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
 export AZURE_LOCATION="westus2"
 export DATA_DISK_ID="/subscriptions/aff271ee-e9be-4441-b9bb-42f5af4cbaeb/resourceGroups/azdev2020data/providers/Microsoft.Compute/disks/datadisk"
 export AZURE_DISK_ATTR="../..#images.azdev"

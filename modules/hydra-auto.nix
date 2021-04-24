@@ -1,12 +1,11 @@
 { config, lib, pkgs }:
 
-# TODO: This is like 30% half-fleshed out, never run/tested, etc, needs a lot of love (or for hydra to be replaced)
+# TODO: This is like 30% half-fleshed out, never run/tested, etc, needs a lot of love
 
 let
   cfg = config.hydra-auto;
 
   initScript = pkgs.writeShellScript "hydra-auto.sh" ''
-
     # for each in ${cfg.admins}
     sudo -u hydra -- ${pkgs.hydra-dev}/bin/hydra-create-user \
       "${username}" --full-name "${username}" \
