@@ -4,8 +4,8 @@ export AZURE_DISK_ATTR="../..#images.azdev"
 export AZURE_IMAGE_GROUP="azdev2020img"
 export AZURE_IMAGE_NAME="azdevimg.vhd"
 
-export AZURE_MACHINE_GROUP="azdev2020vm1"
-export AZURE_MACHINE_NAME="azdev2020vm1"
+export AZURE_MACHINE_GROUP="azdev"
+export AZURE_MACHINE_NAME="azdev"
 
 if [[ "${1}" == "small" ]]; then
   export AZURE_VM_SIZE="Standard_D4as_v4"
