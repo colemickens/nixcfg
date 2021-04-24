@@ -9,7 +9,7 @@
   inputs = {
     nixpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; }; # for my regular nixpkgs
     nixos-unstable = { url = "github:nixos/nixpkgs/nixos-unstable"; };
-    master = { url = "github:nixos/nixpkgs/master"; }; # for nixFlakes
+    #master = { url = "github:nixos/nixpkgs/master"; }; # for nixFlakes
     stable = { url = "github:nixos/nixpkgs/nixos-20.09"; }; # for cachix
 
     crosspkgs = {

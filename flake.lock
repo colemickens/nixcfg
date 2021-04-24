@@ -379,22 +379,6 @@
         "type": "github"
       }
     },
-    "master": {
-      "locked": {
-        "lastModified": 1619296666,
-        "narHash": "sha256-AEVICEYARkAAZYSZuHRz6u+sZIJky/upwRw6fNMuBBs=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "ea5759474ac28cb06dcdc239d71db48fe433f100",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "master",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "mobile-nixos": {
       "locked": {
         "lastModified": 1603945621,
@@ -761,7 +745,6 @@
         "hardware": "hardware",
         "home-manager": "home-manager",
         "hydra": "hydra",
-        "master": "master",
         "mobile-nixos": "mobile-nixos",
         "neovim-nightly": "neovim-nightly",
         "niche": "niche",
