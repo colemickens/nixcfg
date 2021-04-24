@@ -205,6 +205,7 @@
         (builtins.attrNames inputs.self.outputs.nixosConfigurations)
         (attr: nixosConfigurations.${attr}.config.system.build.toplevel);
 
+
       hydraSpecs = 
         let
           nfj = b: hydralib.flakeJob "github:colemickens/nixcfg/${b}";
