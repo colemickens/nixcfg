@@ -23,7 +23,7 @@ sleep 1
 U=cole
 sudo -u hydra -- hydra-create-user "${U}" --full-name "${U}" --email-address "${U}@hydra" --password "${U}" --role admin
 
-sleep 2
+sleep 10
 
 LOGIN="{\"username\":\"cole\", \"password\": \"cole\"}"
 curl -b /tmp/cookie -c /tmp/cookie -d "${LOGIN}" -X 'POST' -H 'Content-Type: application/json' --referer 'http://localhost:3000/' http://localhost:3000/login
