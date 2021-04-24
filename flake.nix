@@ -161,6 +161,7 @@
           #niche = prev.callPackage ./pkgs/niche {};
           passrs = prev.callPackage ./pkgs/passrs {};
           rkvm = prev.callPackage ./pkgs/rkvm {};
+          shreddit = prev.python3Packages.callPackage ./pkgs/shreddit {};
           zellij = prev.callPackage ./pkgs/zellij {};
 
           libquotient = prev.libsForQt5.callPackage ./pkgs/quaternion/libquotient.nix {};

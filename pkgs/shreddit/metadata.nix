@@ -1,7 +1,6 @@
 {
-  repo_git = "https://github.com/htrefil/rkvm";
+  repo_git = "https://github.com/x89/Shreddit";
   branch = "master";
-  rev = "bf133665eb446d9f128d02e4440cc67bce50f666";
-  sha256 = "sha256-naWoLo3pPETkYuW4HATkrfjGcEHSGAAXixgp1HOlIcg=";
-  cargoSha256 = "sha256-md3Pu8JMKFTumgASnu2GSRlWQkqoslGwV1BWl2nQ0Zw=";
+  rev = "f4a5b67cebecdde4a679ba98c86ae5592f6919ca";
+  sha256 = "sha256-nwrqDGiY1Ykm0KClG6BbXlUao3YGvNlKhsWIGfNmWsg=";
 }
