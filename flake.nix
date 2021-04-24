@@ -206,7 +206,6 @@
         (builtins.attrNames inputs.self.outputs.nixosConfigurations)
         (attr: nixosConfigurations.${attr}.config.system.build.toplevel);
 
-
       hydraSpecs = 
         let
           nfj = b: hydralib.flakeJob "github:colemickens/nixcfg/${b}";
@@ -218,7 +217,7 @@
         };
 
       # TODO : clamped to x86_64 - undo!
-      hydraJobs = genAttrs [ "x86_64-linux" ] (system:
+      hydraJobs = genAttrs [ "aarch64-linux" "x86_64-linux" ] (system:
         {
           devshell = inputs.self.devShell.${system}.inputDerivation;
           selfPkgs = filterPkgs pkgs_.nixpkgs.${system} inputs.self.packages;
