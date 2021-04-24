@@ -14,9 +14,18 @@ let
 
     # for each in ${cfg.projects}
     LOGIN="{\"username\":\"cole\", \"password\": \"cole\"}"
-    ${pkgs.curl}/bin/curl -b /tmp/cookie -c /tmp/cookie -d "${LOGIN}" -X 'POST' -H 'Content-Type: application/json' --referer 'http://localhost:3000/' http://localhost:3000/login
+    ${pkgs.curl}/bin/curl \
+      -b /tmp/cookie -c /tmp/cookie \
+      -d "${LOGIN}" -X 'POST' -H 'Content-Type: application/json' \
+      --referer 'http://localhost:3000/' \
+      http://localhost:3000/login
+
     JSON="${newProject p}"
-    ${pkgs.curl}/bin/curl -b /tmp/cookie -c /tmp/cookie -d "${JSON}" -X 'PUT' -H 'Content-Type: application/json' --referer 'http://localhost:3000/' http://localhost:3000/project/${projectName}
+    ${pkgs.curl}/bin/curl \
+      -b /tmp/cookie -c /tmp/cookie \
+      -d "${JSON}" -X 'PUT' -H 'Content-Type: application/json' \
+      --referer 'http://localhost:3000/' \
+      http://localhost:3000/project/${projectName}
   '';
 
   options = {
