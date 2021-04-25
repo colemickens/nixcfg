@@ -26,6 +26,11 @@
   boot.loader.efi.canTouchEfiVariables = false;
   boot.supportedFilesystems = [ "zfs" ];
 
+  documentation.enable = false;
+  documentation.doc.enable = false;
+  documentation.info.enable = false;
+  documentation.nixos.enable = false;
+
   environment.systemPackages = with pkgs; [ hdparm ];
 
   networking.hostName = "porty"; # Define your hostname.

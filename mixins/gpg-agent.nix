@@ -8,6 +8,11 @@
         #SSH_AUTH_SOCK = "/run/user/1000/gnupg/S.gpg-agent.ssh";
       #};
 
+      programs.gpg = {
+        enable = true;
+        package = pkgs.gnupg23;
+      };
+
       services.gpg-agent = {
         # this has the SAME problem as above^, or rather is the same thing!
         #enableSshSupport = true;

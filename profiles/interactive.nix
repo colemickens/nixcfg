@@ -41,7 +41,9 @@ in
       };
       programs = {
         git.package = pkgs.gitAndTools.gitFull;
-        gpg.enable = true;
+        # gpg-agent enables this now:
+        #gpg.enable = true;
+        #gpg.package = pkgs.gnupg23;
       };
       home.packages = with pkgs; [
         colePackages.customCommands
