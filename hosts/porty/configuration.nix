@@ -18,18 +18,6 @@
     ../../mixins/tailscale.nix
   ];
 
-  nixpkgs.overlays = [(final: prev: {
-    gnupg = prev.gnupg.overrideAttrs(old: {
-      # override source so we can use the beta
-      src = prev.fetchFromGitHub {
-        owner = "gpg";
-        repo = "gnupg";
-        rev = "gnupg-2.3.1";
-        sha256 = prev.lib.fakeSha256;
-      };
-    });
-  })];
-
   # Use the systemd-boot EFI boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.devices = [ "nodev" ];
@@ -68,7 +56,7 @@
   # services.xserver.enable = true;
 
 
-  
+
 
   # Configure keymap in X11
   # services.xserver.layout = "us";
