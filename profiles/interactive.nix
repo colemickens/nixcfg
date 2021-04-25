@@ -41,9 +41,6 @@ in
       };
       programs = {
         git.package = pkgs.gitAndTools.gitFull;
-        # gpg-agent enables this now:
-        #gpg.enable = true;
-        #gpg.package = pkgs.gnupg23;
       };
       home.packages = with pkgs; [
         colePackages.customCommands
@@ -56,7 +53,7 @@ in
         wget curl rsync
         ripgrep jq fzy
         wget curl stow ncdu tree
-        git-crypt gopass gnupg passrs ripasso-cursive
+        git-crypt gopass passrs ripasso-cursive
         openssh autossh mosh sshuttle
         tig #git-absorb
         github-cli

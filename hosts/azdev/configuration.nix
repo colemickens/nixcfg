@@ -14,7 +14,7 @@
 
     # specific persistent services to run in Azure
     #./services.nix
-    ./hydra/hydra.nix
+    #./hydra/hydra.nix
     ./nginx.nix
   ];
 

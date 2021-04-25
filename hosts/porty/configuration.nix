@@ -18,36 +18,40 @@
     ../../mixins/tailscale.nix
   ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.devices = [ "nodev" ];
-  boot.loader.grub.efiSupport = true;
-  boot.loader.grub.efiInstallAsRemovable = true;
-  boot.loader.efi.canTouchEfiVariables = false;
-  boot.supportedFilesystems = [ "zfs" ];
+  config = {
+    programs.gpg.package = pkgs.gnupg23;
 
-  nix.nixPath = [];
+    # Use the systemd-boot EFI boot loader.
+    boot.loader.grub.enable = true;
+    boot.loader.grub.devices = [ "nodev" ];
+    boot.loader.grub.efiSupport = true;
+    boot.loader.grub.efiInstallAsRemovable = true;
+    boot.loader.efi.canTouchEfiVariables = false;
+    boot.supportedFilesystems = [ "zfs" ];
 
-  documentation.enable = false;
-  documentation.doc.enable = false;
-  documentation.info.enable = false;
-  documentation.nixos.enable = false;
+    nix.nixPath = [];
 
-  environment.systemPackages = with pkgs; [ hdparm ];
+    documentation.enable = false;
+    documentation.doc.enable = false;
+    documentation.info.enable = false;
+    documentation.nixos.enable = false;
 
-  networking.hostName = "porty"; # Define your hostname.
-  networking.hostId = "abbadaba";
-  
-  networking.useDHCP = false;
-  networking.interfaces.eth0.useDHCP = true;
+    environment.systemPackages = with pkgs; [ hdparm ];
 
-  # enable iwd?
-  
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "20.09"; # Did you read the comment?
+    networking.hostName = "porty"; # Define your hostname.
+    networking.hostId = "abbadaba";
+    
+    networking.useDHCP = false;
+    networking.interfaces.eth0.useDHCP = true;
+
+    # enable iwd?
+    
+    # This value determines the NixOS release from which the default
+    # settings for stateful data, like file locations and database versions
+    # on your system were taken. It‘s perfectly fine and recommended to leave
+    # this value at the release version of the first install of this system.
+    # Before changing this value read the documentation for this option
+    # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+    system.stateVersion = "20.09"; # Did you read the comment?
+  };
 }
