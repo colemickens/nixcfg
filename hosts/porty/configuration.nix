@@ -19,7 +19,9 @@
   ];
 
   config = {
-    programs.gpg.package = pkgs.gnupg23;
+    home-manager.users.cole = { pkgs, ... }: {
+      programs.gpg.package = pkgs.gnupg23;
+    };
 
     # Use the systemd-boot EFI boot loader.
     boot.loader.grub.enable = true;
@@ -28,6 +30,8 @@
     boot.loader.grub.efiInstallAsRemovable = true;
     boot.loader.efi.canTouchEfiVariables = false;
     boot.supportedFilesystems = [ "zfs" ];
+
+    boot.kernelParams = [ "mitigations=off" ];
 
     nix.nixPath = [];
 

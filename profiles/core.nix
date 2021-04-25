@@ -34,10 +34,10 @@ in
       news.display = "silent";
       programs = {
         home-manager.enable = true;
+        gpg.enable = true;
       };
       home.packages = with pkgs; [
         git-crypt
-        gnupg
       ];
     };
   };
