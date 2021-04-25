@@ -172,9 +172,9 @@ function x86() { build '.#bundles.x86_64-linux'  "${BUILD_HOST:-"${SLYNUX}"}" ""
 function a64() { build '.#bundles.aarch64-linux' "${BUILD_HOST:-"${AARCH64}"}" ""; }
 
 function remote() {
-  remote=$1
-  buildattr=$2
-  f=$RANDOM
+  remote="${1}"
+  buildattr="${2}"
+  f="cm-nix-$RANDOM"
 
   update
   rev="$(git rev-parse --short HEAD)"
@@ -187,6 +187,8 @@ function remote() {
     ssh -A "${3}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --profile /nix/var/nix/profiles/system "${out}")";
     ssh -A "${3}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch)";
   fi
+
+  ssh_nixUnstable_shell "$remote" rm -f "/tmp/$f"
 }
 function pinebook() {
   remote "${AARCH64}" "toplevels.pinebook" "${PINEBOOK}"
