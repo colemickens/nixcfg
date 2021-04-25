@@ -171,20 +171,23 @@ function porty()     { activate ".#toplevels.porty"       "${BUILD_HOST:-"${AZDE
 function x86() { build '.#bundles.x86_64-linux'  "${BUILD_HOST:-"${SLYNUX}"}" ""; }
 function a64() { build '.#bundles.aarch64-linux' "${BUILD_HOST:-"${AARCH64}"}" ""; }
 
-function bkr() {
+function remote() {
   remote=$1
   buildattr=$2
-  target=$3
   f=$RANDOM
+
   update
   rev="$(git rev-parse --short HEAD)"
   ssh_nixUnstable_shell "$remote" nix "${nixargs[@]}" build "${buildargs[@]}" "github:colemickens/nixcfg/${rev}#${buildattr}" --out-link "/tmp/$f"
   out="$(ssh_nixUnstable_shell "$remote" readlink -f "/tmp/$f")"
   ssh_cachix_push $remote $out
-  ssh_nixUnstable_shell2 "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" --no-link -j0 "${out}"
+
+  if [[ "${3:-}" != "" ]]; then
+    ssh_nixUnstable_shell2 "${3}" nix "${nixargs[@]}" build "${buildargs[@]}" --no-link -j0 "${out}"
+  fi
 }
-function pinebook()  {
-  bkr "${AARCH64}" "toplevels.pinebook" "${PINEBOOK}"
+function pinebook() {
+  remote "${AARCH64}" "toplevels.pinebook" "${PINEBOOK}"
 }
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
