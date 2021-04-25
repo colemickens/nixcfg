@@ -17,6 +17,10 @@ in
   ];
 
   config = {
+    home-manager.users.cole = { pkgs, ... }: {
+      programs.gpg.package = pkgs.gnupg23;
+    };
+
     system.stateVersion = "21.03";
 
     hardware.usbWwan.enable = true;
