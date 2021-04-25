@@ -178,7 +178,7 @@ function remote() {
   update
   rev="$(git rev-parse --short HEAD)"
   ssh_nixUnstable_shell "$target" nix "${nixargs[@]}" build "${buildargs[@]}" "github:colemickens/nixcfg/${rev}#${buildattr}" --out-link "/tmp/$f"
-  out="$(ssh_nixUnstable_shell "$target" "readlink -f /tmp/$f")"
+  out="$(ssh_nixUnstable_shell "$target" readlink -f "/tmp/$f")"
   ssh_cachix_push $target $out
 }
 
