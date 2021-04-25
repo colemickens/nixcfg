@@ -158,7 +158,7 @@ function nb() { command nix "${nixargs[@]}" build "${buildargs[@]}" "${@}"; }
 
 function azdev()     { activate ".#toplevels.azdev"       "${BUILD_HOST:-"${AZDEV}"}"   "${AZDEV}";    }
 function azmail()    { activate ".#toplevels.azmail"      "${BUILD_HOST:-"${AZDEV}"}"   "${AZMAIL}";    }
-function pinebook()  { activate ".#toplevels.pinebook"    "${BUILD_HOST:-"${AARCH64}"}" "${PINEBOOK}";  }
+#function pinebook()  { activate ".#toplevels.pinebook"    "${BUILD_HOST:-"${AARCH64}"}" "${PINEBOOK}";  }
 function rpifour1()  { activate ".#toplevels.rpifour1"    "${BUILD_HOST:-"${AARCH64}"}" "${RPIFOUR1}";  }
 function slynux()    { activate ".#toplevels.slynux"      "${BUILD_HOST:-"${AZDEV}"}"   "${SLYNUX}";   }
 function xeep()      { activate ".#toplevels.xeep"        "${BUILD_HOST:-"${AZDEV}"}"   "${XEEP}";   }
@@ -171,15 +171,20 @@ function porty()     { activate ".#toplevels.porty"       "${BUILD_HOST:-"${AZDE
 function x86() { build '.#bundles.x86_64-linux'  "${BUILD_HOST:-"${SLYNUX}"}" ""; }
 function a64() { build '.#bundles.aarch64-linux' "${BUILD_HOST:-"${AARCH64}"}" ""; }
 
-function remote() {
-  target=$1
+function bkr() {
+  remote=$1
   buildattr=$2
+  target=$3
   f=$RANDOM
   update
   rev="$(git rev-parse --short HEAD)"
-  ssh_nixUnstable_shell "$target" nix "${nixargs[@]}" build "${buildargs[@]}" "github:colemickens/nixcfg/${rev}#${buildattr}" --out-link "/tmp/$f"
-  out="$(ssh_nixUnstable_shell "$target" readlink -f "/tmp/$f")"
-  ssh_cachix_push $target $out
+  ssh_nixUnstable_shell "$remote" nix "${nixargs[@]}" build "${buildargs[@]}" "github:colemickens/nixcfg/${rev}#${buildattr}" --out-link "/tmp/$f"
+  out="$(ssh_nixUnstable_shell "$remote" readlink -f "/tmp/$f")"
+  ssh_cachix_push $remote $out
+  ssh_nixUnstable_shell2 "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" --no-link -j0 "${out}"
+}
+function pinebook()  {
+  bkr "${AARCH64}" "toplevels.pinebook" "${PINEBOOK}"
 }
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
