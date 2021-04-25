@@ -184,10 +184,9 @@ function remote() {
 
   if [[ "${3:-}" != "" ]]; then
     ssh_nixUnstable_shell2 "${3}" nix "${nixargs[@]}" build "${buildargs[@]}" --no-link -j0 "${out}"
+    ssh -A "${3}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --profile /nix/var/nix/profiles/system "${out}")";
+    ssh -A "${3}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch)";
   fi
-
-  ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --profile /nix/var/nix/profiles/system "${out}")";
-  ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch)";
 }
 function pinebook() {
   remote "${AARCH64}" "toplevels.pinebook" "${PINEBOOK}"
