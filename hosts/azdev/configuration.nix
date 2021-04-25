@@ -7,9 +7,9 @@
 
     # everything for a non-gui interactive session
     ../../profiles/interactive.nix
-    #../../mixins/loremipsum-media/rclone-mnt.nix
+    ../../mixins/loremipsum-media/rclone-mnt.nix
     #../../mixins/jellyfin.nix
-    #../../mixins/plex.nix
+    ../../mixins/plex.nix
     #../../mixins/xmrig.nix
 
     # specific persistent services to run in Azure
@@ -23,11 +23,21 @@
     system.stateVersion = "21.03";
 
     # azdev/jellyfin specific
+    services.nginx.recommendedProxySettings = true;
     services.nginx.virtualHosts."jellyfin.${config.networking.hostName}.ts.r10e.tech" = {
       locations = {
         "/" = {
           proxyPass = "http://127.0.0.1:8096/";
           proxyWebsockets = true;
+        };
+      };
+    };
+    services.nginx.virtualHosts."plex.${config.networking.hostName}.r10e.tech" = {
+      locations = {
+        "/" = {
+          proxyPass = "http://127.0.0.1:32400/";
+          proxyWebsockets = true;
+          #proxy_set_header = "Host $host";
         };
       };
     };
