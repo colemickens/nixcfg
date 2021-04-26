@@ -28,6 +28,6 @@ export AZURE_SSH="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC9YAN+P0umXeSP/Cgd5ZvoD5
 NIXOS_AZURE="/home/cole/code/nixos-azure"
 nix shell "${NIXOS_AZURE}#azutil" -c "deploy-vm"
 
-az network nsg rule create --resource-group "${AZURE_MACHINE_GROUP}" --nsg-name "azdevNSG" --name "allow_http"  --protocol tcp --priority 1010 --destination-port-range 80
-az network nsg rule create --resource-group "${AZURE_MACHINE_GROUP}" --nsg-name "azdevNSG" --name "allow_https"  --protocol tcp --priority 1011 --destination-port-range 443
+# plex mostly wants to talk to itself on 32400...
+# and I access nginx mostly just through tailscale esp since it's unauth'd
 az network nsg rule create --resource-group "${AZURE_MACHINE_GROUP}" --nsg-name "azdevNSG" --name "allow_plex"  --protocol tcp --priority 1012 --destination-port-range 32400

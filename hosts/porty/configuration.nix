@@ -11,7 +11,8 @@
     ../../mixins/common.nix
 
     ../../profiles/user.nix
-    ../../profiles/desktop-sway-unstable.nix
+    ../../profiles/interactive.nix
+    ../../profiles/specialisations.nix
 
     ../../mixins/libvirt.nix
     ../../mixins/sshd.nix
@@ -47,6 +48,12 @@
     
     networking.useDHCP = false;
     networking.interfaces.eth0.useDHCP = true;
+
+    hardware = {
+      enableRedistributableFirmware = true;
+      cpu.intel.updateMicrocode = true;
+      cpu.amd.updateMicrocode = true;
+    };
 
     # enable iwd?
     
