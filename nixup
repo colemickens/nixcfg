@@ -48,6 +48,12 @@ function update() {
   __ "updating our own packages"
   cd "${DIR}/pkgs" && ./update.sh
 
+  stash
+
+  cd "${DIR}"
+}
+
+function stash() {
   __ "stashing nixcfg"
   cd "${DIR}"; git add -A . && (git commit -m stash && git pull --rebase && git push origin HEAD -f || false) || true
 
@@ -166,7 +172,7 @@ function rpizero1()  { activate ".#toplevels.rpizero1"    "${BUILD_HOST:-"${AZDE
 function rpizero2()  { activate ".#toplevels.rpizero2"    "${BUILD_HOST:-"${AZDEV}"}"   "${RPIZERO2}";   }
 function jeffhyper() { activate ".#toplevels.jeffhyper"   "${BUILD_HOST:-"${AZDEV}"}"   "${JEFFHYPER}";   }
 function pegleg()    { activate ".#toplevels.pegleg"      "${BUILD_HOST:-"${AZDEV}"}"   "${PEGLEG}";   }
-function porty()     { activate ".#toplevels.porty"       "${BUILD_HOST:-"${AZDEV}"}"   "${PORTY}";   }
+#function porty()     { activate ".#toplevels.porty"       "${BUILD_HOST:-"${AZDEV}"}"   "${PORTY}";   }
 
 function x86() { build '.#bundles.x86_64-linux'  "${BUILD_HOST:-"${SLYNUX}"}" ""; }
 function a64() { build '.#bundles.aarch64-linux' "${BUILD_HOST:-"${AARCH64}"}" ""; }
@@ -176,7 +182,7 @@ function remote() {
   buildattr="${2}"
   f="cm-nix-$RANDOM"
 
-  update
+  stash
   rev="$(git rev-parse --short HEAD)"
   ssh_nixUnstable_shell "$remote" nix "${nixargs[@]}" build "${buildargs[@]}" "github:colemickens/nixcfg/${rev}#${buildattr}" --out-link "/tmp/$f"
   out="$(ssh_nixUnstable_shell "$remote" readlink -f "/tmp/$f")"

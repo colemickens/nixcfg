@@ -39,7 +39,8 @@ in
       SUBSYSTEM=="tty", ATTRS{idVendor}=="1050", ATTRS{idProduct}=="0407", RUN{program}="${pkgs.systemd}/bin/systemctl --user start pcscd.service"
     '';
 
-    services.pcscd.enable = true;
+    # TODO: disabling this while testig gnupg23
+    #services.pcscd.enable = true;
 
     home-manager.users.cole = { pkgs, ... }: {
       home.sessionVariables = {
