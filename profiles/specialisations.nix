@@ -19,7 +19,7 @@ let
         (./. + "/desktop-${desktopName}.nix")
       ];
       config = {
-        boot.loader.grub.configurationName = "${desktopName}";
+        boot.loader.grub.configurationName = "[nvidia] ${desktopName}";
         hardware.nvidia.modesetting.enable = true;
         # hardware.nvidia.powerManagement.enable = true; # TODO: test
         services.xserver = {
