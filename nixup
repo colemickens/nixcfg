@@ -193,6 +193,9 @@ function remote() {
 function pinebook() {
   remote "${AARCH64}" "toplevels.pinebook" "${PINEBOOK}"
 }
+function porty() {
+  remote "${AZDEV}" "toplevels.porty" "${PORTY}"
+}
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 

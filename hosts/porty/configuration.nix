@@ -4,7 +4,13 @@
 
 { config, pkgs, ... }:
 
-{
+let
+  tailsVer = "4.18";
+  tailsIso = builtins.fetchurl {
+    url = "https://tails.interpipe.net/tails/stable/tails-amd64-${tailsVer}/tails-amd64-${tailsVer}.iso";
+    sha256 = "0maj7hvgn7psxhx2nvn6aha89fc325g4b4bb4d4dpd1mlyv1wr1z";
+  };
+in {
   imports = [
     ./hardware-configuration.nix
 
@@ -31,6 +37,15 @@
     boot.loader.grub.efiInstallAsRemovable = true;
     boot.loader.efi.canTouchEfiVariables = false;
     boot.supportedFilesystems = [ "zfs" ];
+
+    boot.loader.grub.extraEntries = ''
+      menuentry "[[tails-${tailsVer}]] [Crypto] + [Living Will]" {
+        set isofile="${tailsIso}"
+        loopback loop (hd0,msdos1)$isofile
+        linux (loop)/live/vmlinuz boot=live config noswap nopersistent iso-scan/filename=$isofile nomodeset
+        initrd (loop)/live/initrd.img
+      }
+    '';
 
     boot.kernelParams = [ "mitigations=off" ];
 

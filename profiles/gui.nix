@@ -2,9 +2,6 @@
 
 let
   firefoxFlake = inputs.firefox.packages.${pkgs.system};
-  firefoxBin = pkgs.writeShellScriptBin "firefox-bin" ''
-    exec ${pkgs.firefox-bin}/bin/firefox -p "''${@}"
-  '';
   firefoxNightly = pkgs.writeShellScriptBin "firefox-nightly" ''
     exec ${firefoxFlake.firefox-nightly-bin}/bin/firefox -p "''${@}"
   '';
@@ -95,9 +92,8 @@ in
       ]
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
         # browsers
-        ungoogled-chromium
-        firefox
-        firefoxBin
+        inputs.stable.legacyPackages.${pkgs.system}.ungoogled-chromium
+        inputs.stable.legacyPackages.${pkgs.system}.firefox
         firefoxNightly
 
         ddccontrol i2c-tools
