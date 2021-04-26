@@ -14,6 +14,7 @@
 
     # specific persistent services to run in Azure
     #./services.nix
+    ./github-action-runner/runner.nix
     #./hydra/hydra.nix
     ./nginx.nix
   ];
