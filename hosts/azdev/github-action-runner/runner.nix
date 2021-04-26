@@ -3,8 +3,8 @@
 {
   config = {
     sops.secrets."gha-token" = {
-      owner = "cole";
-      group = "cole";
+      owner = "github-runner";
+      group = "github-runner";
       path = "/var/lib/github-runner/nixcfg/.token";
     };
 
