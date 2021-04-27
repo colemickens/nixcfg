@@ -8,6 +8,9 @@
 # debian's entire live-stuff is sketch af (nixos's is much simpler to read straight through)
 # and tails's fork is even more... something, so I'm not surprised it's not cooperating
 
+# TODO: yikes, this is pushing ISOs through cachix
+# TODO: better to make a setup script that does the actual acquisition into place
+# or not? idk think about this more
 
 # TODO: in `boot.loader.grub.extraPrepareConfig`:
 # - track the files we "copied"
