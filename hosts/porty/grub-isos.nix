@@ -1,23 +1,31 @@
 { config, pkgs, ... }:
 
+# status:
+# - ubuntu works
+# - tails doesn't
+
+# pretty sure tails is always a pita about loading any way other than what they expect
+# debian's entire live-stuff is sketch af (nixos's is much simpler to read straight through)
+# and tails's fork is even more... something, so I'm not surprised it's not cooperating
+
 let
   BOOT_FS_UUID = "879F-1940";
 
   isos = {
-    "tails-4.18" = {
+    "tails-4.18" = rec {
       iso = builtins.fetchurl {
         url = "https://tails.interpipe.net/tails/stable/tails-amd64-4.18/tails-amd64-4.18.iso";
         sha256 = "0maj7hvgn7psxhx2nvn6aha89fc325g4b4bb4d4dpd1mlyv1wr1z";
       };
-      linux = "(loop)/live/vmlinuz boot=live config iso-scan/filename=${tailsIso} findiso=${tailsIso} live-media=removable nopersistence noprompt timezone=Etc/UTC splash noautologin module=Tails slab_nomerge slub_debug=FZP mce=0 vsyscall=none page_poison=1 init_on_free=1 mds=full,nosmt toram";
+      linux = "(loop)/live/vmlinuz boot=live config iso-scan/filename=${iso} findiso=${iso} live-media=removable nopersistence noprompt timezone=Etc/UTC splash noautologin module=Tails slab_nomerge slub_debug=FZP mce=0 vsyscall=none page_poison=1 init_on_free=1 mds=full,nosmt toram";
       initrd = "(loop)/live/initrd.img";
     };
-    "ubuntu-21.04" = {
+    "ubuntu-21.04" = rec {
       iso = builtins.fetchurl {
         url = "https://mirror.pit.teraswitch.com/ubuntu-releases/21.04/ubuntu-21.04-desktop-amd64.iso";
         sha256 = "0maj7hvgn7psxhx2nvn6aha89fc325g4b4bb4d4dpd1mlyv1wwww";
       };
-      linux = "(loop)/casper/vmlinuz boot=casper iso-scan/filename=$isofile --";
+      linux = "(loop)/casper/vmlinuz boot=casper iso-scan/filename=${iso} --";
       initrd = "(loop)/casper/initrd";
     };
   };
