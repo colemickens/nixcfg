@@ -2,8 +2,6 @@
 
 {
   imports = [
-    ./grub-isos.nix
-
     ../../mixins/common.nix
 
     ../../profiles/user.nix
@@ -13,6 +11,8 @@
     ../../mixins/libvirt.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
+
+    #./grub-isos.nix
   ];
 
   config = {
@@ -36,7 +36,7 @@
 
     networking.hostName = "porty"; # Define your hostname.
     networking.hostId = "abbadaba";
-    
+
     networking.useDHCP = false;
     networking.interfaces.eth0.useDHCP = true;
 
@@ -78,7 +78,7 @@
     swapDevices = [ ];
 
     virtualisation.hypervGuest.enable = true;
-    
+
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
     # on your system were taken. It‘s perfectly fine and recommended to leave
