@@ -200,10 +200,12 @@ function pinebook() {
   remote "${AARCH64}" "toplevels.pinebook" "${PINEBOOK}"
 }
 function porty() {
-  #remote "${AZDEV}" "toplevels.porty" "${PORTY}"
-  stash
-  rev="$(git rev-parse --short HEAD)"
-  ssh cole@porty.ts.r10e.tech sudo nixos-rebuild switch --flake "github:colemickens/nixcfg/${rev}"
+  remote "${AZDEV}" "toplevels.porty" "${PORTY}"
+  exit 0
+
+  #stash
+  #rev="$(git rev-parse --short HEAD)"
+  #ssh cole@porty.ts.r10e.tech sudo nixos-rebuild switch --flake "github:colemickens/nixcfg/${rev}"
 }
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
