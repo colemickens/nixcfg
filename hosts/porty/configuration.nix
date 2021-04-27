@@ -43,11 +43,12 @@ in {
     # TODO: develop this into an entire module that will auto-pop and auto-prune iso
     # maybe some scripting or copy mappings from others to know where kernel/initrds are
     boot.loader.grub.extraPrepareConfig = ''
-      [[ ! -f "/boot/${tailsIsoName}" ]] && cp "${tailsIso}" "/boot/${tailsIsoName}"
+      mkdir -p /boot/iso
+      [[ ! -f "/boot/iso/${tailsIsoName}" ]] && cp "${tailsIso}" "/boot/iso/${tailsIsoName}"
     '';
     boot.loader.grub.extraEntries = ''
       menuentry "[[tails-${tailsVer}]] [Crypto] + [Living Will]" {
-        set isofile="/boot/${tailsIsoName}"
+        set isofile="/boot/iso/${tailsIsoName}"
         loopback loop (hd0,1)$isofile
         linux (loop)/live/vmlinuz boot=live config noswap nopersistent iso-scan/filename=$isofile nomodeset toram
         initrd (loop)/live/initrd.img
