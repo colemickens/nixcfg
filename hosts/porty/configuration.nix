@@ -1,13 +1,7 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, ... }:
 
 {
   imports = [
-    ./hardware-configuration.nix
-
     ./grub-isos.nix
 
     ../../mixins/common.nix
@@ -55,8 +49,39 @@
       cpu.intel.updateMicrocode = true;
       cpu.amd.updateMicrocode = true;
     };
+    boot.initrd.availableKernelModules = [ "sd_mod" "sr_mod" ];
+    boot.initrd.kernelModules = [
+      "hv_vmbus"
+      #"hv_storsvc"
+      "hyperv_keyboard"
+      "hid_hyperv"
 
-    # enable iwd?
+      "xhci_pci"
+      "nvme"
+      "usb_storage"
+      "sd_mod"
+      "ehci_pci"
+      "uas"
+    ];
+    boot.kernelModules = [ ];
+    boot.kernelPackages = pkgs.linuxPackages_latest;
+    boot.extraModulePackages = [ ];
+
+    fileSystems."/" =
+      { device = "/dev/disk/by-uuid/922d29e8-08af-4a8f-88d7-ad8aff978d4c";
+        fsType = "ext4";
+      };
+
+    boot.initrd.luks.devices."root".device = "/dev/disk/by-uuid/a1f97902-a36f-4523-a119-fbefb2ad9638";
+
+    fileSystems."/boot" =
+      { device = "/dev/disk/by-uuid/879F-1940";
+        fsType = "vfat";
+      };
+
+    swapDevices = [ ];
+
+    virtualisation.hypervGuest.enable = true;
     
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
