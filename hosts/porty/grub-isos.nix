@@ -15,7 +15,12 @@ let
     sha256 = "0maj7hvgn7psxhx2nvn6aha89fc325g4b4bb4d4dpd1mlyv1wwww";
   };
   #args = "boot=live config live-media=removable nopersistence noprompt timezone=Etc/UTC splash noautologin module=Tails slab_nomerge slub_debug=FZP mce=0 vsyscall=none page_poison=1 init_on_free=1 mds=full,nosmt  quiet toram";
-  args = "boot=live config findiso=${tailsIso} live-media=removable nopersistence noprompt timezone=Etc/UTC splash noautologin module=Tails slab_nomerge slub_debug=FZP mce=0 vsyscall=none page_poison=1 init_on_free=1 mds=full,nosmt toram";
+  
+  # untested
+  #args = "boot=live config findiso=${tailsIso} live-media=removable nopersistence noprompt timezone=Etc/UTC splash noautologin module=Tails slab_nomerge slub_debug=FZP mce=0 vsyscall=none page_poison=1 init_on_free=1 mds=full,nosmt toram";
+
+  # wip
+  args = "boot=live config iso-scan/filename=${tailsIso} findiso=${tailsIso} live-media=removable nopersistence noprompt timezone=Etc/UTC splash noautologin module=Tails slab_nomerge slub_debug=FZP mce=0 vsyscall=none page_poison=1 init_on_free=1 mds=full,nosmt toram";
 in {
   config = {
     # copy the iso(s) to the large /boot since / is encrypted!
