@@ -27,7 +27,7 @@ in {
 
     boot.loader.grub.extraEntries = ''
       menuentry "[[tails-${tailsVer}]] [Crypto] + [Living Will]" {
-        search --set=drive1 --fs-uuid=879F-1940
+        search --set=drive1 --fs-uuid 879F-1940
           set isofile="($drive1)/boot/${tailsIso}"
           loopback loop $isofile
           linux (loop)/live/vmlinuz boot=live config noswap nopersistent iso-scan/filename=$isofile nomodeset toram
