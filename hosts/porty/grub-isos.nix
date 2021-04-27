@@ -33,4 +33,5 @@ in {
         initrd (loop)/live/initrd.img
       }
     '';
+  };
 }
