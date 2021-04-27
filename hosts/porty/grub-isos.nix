@@ -40,13 +40,13 @@ let
   };
 in {
   config = {
-    boot.loader.grub.extraPrepareConfig = (pkgs.lib.concatStrings [ ''
+    boot.loader.grub.extraPrepareConfig = (pkgs.lib.concatStrings ([ ''
       mkdir -p /boot/nix/store
     ''] ++ (builtins.attrValues (builtins.mapAttrs (k: v: ''
       if [[ ! -f "/boot/${v.iso}" ]]; then
         cp "${v.iso}" "/boot/${v.iso}"
       fi
-    '') isos)));
+    '') isos))));
 
     # note, no /boot in the isofile name path since that's its mount point (prefix)
     # the linux ... line is basically entirely copied from the <tails-iso>/isolinux/live.cfg
