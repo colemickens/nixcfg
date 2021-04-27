@@ -1,7 +1,13 @@
 { config, pkgs, inputs, ... }:
 
 let
-  desktops = [ "elementary" "gnome" "plasma" "sway" "sway-unstable" ];
+  desktops = [
+    #"elementary"
+    "gnome"
+    #"plasma"
+    #"sway"
+    #"sway-unstable"
+  ];
 
   regularDesktop = desktopName: {
     configuration = ({config, pkgs, lib, inputs, ...}: {
