@@ -25,12 +25,13 @@ in {
       # delete any /boot/nix/store paths that we didn't copy, basically
     '';
 
+    # note, no /boot in the isofile name path since that's its mount point (prefix)
     boot.loader.grub.extraEntries = ''
       menuentry "[[tails-${tailsVer}]] [Crypto] + [Living Will]" {
         search --set=drive1 --fs-uuid 879F-1940
-          set isofile="($drive1)/boot/${tailsIso}"
+          set isofile="($drive1)/${tailsIso}"
           loopback loop $isofile
-          linux (loop)/live/vmlinuz boot=live config noswap nopersistent iso-scan/filename=$isofile nomodeset toram
+          linux (loop)/live/vmlinuz boot=live config live-media=removable nopersistence noprompt timezone=Etc/UTC splash noautologin module=Tails slab_nomerge slub_debug=FZP mce=0 vsyscall=none page_poison=1 init_on_free=1 mds=full,nosmt  quiet toram
           initrd (loop)/live/initrd.img
       }
     '';
