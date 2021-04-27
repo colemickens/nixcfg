@@ -22,12 +22,12 @@ in {
       if [[ ! -f "/boot/${tailsIso}" ]]; then
         cp "${tailsIso}" "/boot/${tailsIso}"
       fi
-      # delete any /nix/store paths that we didn't copy, basically
+      # delete any /boot/nix/store paths that we didn't copy, basically
     '';
 
     boot.loader.grub.extraEntries = ''
       menuentry "[[tails-${tailsVer}]] [Crypto] + [Living Will]" {
-        search --set=drive1 fs-uuid=879F-1940
+        search --set=drive1 --fs-uuid=879F-1940
           set isofile="($drive1)/boot/${tailsIso}"
           loopback loop $isofile
           linux (loop)/live/vmlinuz boot=live config noswap nopersistent iso-scan/filename=$isofile nomodeset toram
