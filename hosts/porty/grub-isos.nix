@@ -2,6 +2,7 @@
 
 let
   BOOT_FS_UUID = "879F-1940";
+
   isos = {
     "tails-4.18" = {
       iso = builtins.fetchurl {
@@ -26,35 +27,29 @@ in {
     # TODO: develop this into an entire module that will auto-pop and auto-prune iso
     # maybe some scripting or copy mappings from others to know where kernel/initrds are
     
-    boot.loader.grub.extraPrepareConfig = ''
+    boot.loader.grub.extraPrepareConfig = (pkgs.concatStrings [ ''
       mkdir -p /boot/nix/store
-
-      # FOR EACH...
-
-      if [[ ! -f "/boot/${tailsIso}" ]]; then
-        cp "${tailsIso}" "/boot/${tailsIso}"
+    ''] ++ (map (k: v: ''
+      if [[ ! -f "/boot/${v.iso}" ]]; then
+        cp "${v.iso}" "/boot/${v.iso}"
       fi
 
       # TODO:
       # track the files we "copied"
       # delete any /boot/nix/store paths that we didn't copy, basically
       # (this is used in other places for the bootloader files as well)
-    '';
+    '') isos));
 
     # note, no /boot in the isofile name path since that's its mount point (prefix)
     # the linux ... line is basically entirely copied from the <tails-iso>/isolinux/live.cfg
-    boot.loader.grub.extraEntries = ''
-
-      # FOR EACH...
-
-      menuentry "${key}" {
+    boot.loader.grub.extraEntries = (pkgs.concatStrings (map (k: v: ''
+      menuentry "${k}" {
         rmmod tpm
         search --set=drive1 --fs-uuid ${BOOT_FS_UUID}
-          set isofile="($drive1)/${value.iso}"
+          set isofile="($drive1)/${v.iso}"
           loopback loop $isofile
-          linux ${value.linux}
-          initrd ${value.initrd}
+          linux ${v.linux}
+          initrd ${v.initrd}
       }
-    '';
-  };
+    '') isos));
 }
