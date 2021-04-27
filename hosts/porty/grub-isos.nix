@@ -52,4 +52,5 @@ in {
           initrd ${v.initrd}
       }
     '') isos));
+  };
 }
