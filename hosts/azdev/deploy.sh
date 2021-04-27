@@ -19,6 +19,7 @@ if [[ "${1}" == "small" ]]; then
 elif [[ "${1}" == "large" ]]; then
   ## big size, boost, expensive, for intense dev seshs brah (ew, forgive me)
   export AZURE_VM_SIZE="Standard_D16as_v4"
+  export AZURE_VM_OS_DISK_SIZE="128"
   export AZURE_EPHEMERAL_DISK="true"
   export AZURE_ACCEL_NIC="true"
 fi

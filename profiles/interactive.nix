@@ -53,7 +53,9 @@ in
         wget curl rsync
         ripgrep jq fzy
         wget curl stow ncdu tree
-        git-crypt gopass passrs ripasso-cursive
+        git-crypt gopass
+        #passrs ripasso-cursive
+
         openssh autossh mosh sshuttle
         tig #git-absorb
         github-cli
