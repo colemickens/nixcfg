@@ -35,7 +35,7 @@ in {
     # TODO: develop this into an entire module that will auto-pop and auto-prune iso
     # maybe some scripting or copy mappings from others to know where kernel/initrds are
     
-    boot.loader.grub.extraPrepareConfig = (pkgs.concatStrings [ ''
+    boot.loader.grub.extraPrepareConfig = (pkgs.lib.concatStrings [ ''
       mkdir -p /boot/nix/store
     ''] ++ (map (k: v: ''
       if [[ ! -f "/boot/${v.iso}" ]]; then
@@ -50,7 +50,7 @@ in {
 
     # note, no /boot in the isofile name path since that's its mount point (prefix)
     # the linux ... line is basically entirely copied from the <tails-iso>/isolinux/live.cfg
-    boot.loader.grub.extraEntries = (pkgs.concatStrings (map (k: v: ''
+    boot.loader.grub.extraEntries = (pkgs.lib.concatStrings (map (k: v: ''
       menuentry "${k}" {
         rmmod tpm
         search --set=drive1 --fs-uuid ${BOOT_FS_UUID}
