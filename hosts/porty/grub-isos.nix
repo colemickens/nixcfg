@@ -8,6 +8,15 @@
 # debian's entire live-stuff is sketch af (nixos's is much simpler to read straight through)
 # and tails's fork is even more... something, so I'm not surprised it's not cooperating
 
+
+# TODO: in `boot.loader.grub.extraPrepareConfig`:
+# - track the files we "copied"
+# - delete any /boot/nix/store paths that we didn't copy, basically
+# (this is used in other places for the bootloader files as well)
+
+# TODO: add an optimization for if root is NOT encrypted (like in our case)
+# and we can skip the copy of iso to /boot/...
+
 let
   BOOT_FS_UUID = "879F-1940";
 
@@ -23,7 +32,7 @@ let
     "ubuntu-21.04" = rec {
       iso = builtins.fetchurl {
         url = "https://mirror.pit.teraswitch.com/ubuntu-releases/21.04/ubuntu-21.04-desktop-amd64.iso";
-        sha256 = "0maj7hvgn7psxhx2nvn6aha89fc325g4b4bb4d4dpd1mlyv1wwww";
+        sha256 = "126zxiiwk7ffgq7sdm8c6kff4qqizb4c3qx5rykp1m1lidsgp5gs";
       };
       linux = "(loop)/casper/vmlinuz boot=casper iso-scan/filename=${iso} --";
       initrd = "(loop)/casper/initrd";
@@ -31,26 +40,17 @@ let
   };
 in {
   config = {
-    # copy the iso(s) to the large /boot since / is encrypted!
-    # TODO: develop this into an entire module that will auto-pop and auto-prune iso
-    # maybe some scripting or copy mappings from others to know where kernel/initrds are
-    
     boot.loader.grub.extraPrepareConfig = (pkgs.lib.concatStrings [ ''
       mkdir -p /boot/nix/store
-    ''] ++ (map (k: v: ''
+    ''] ++ (builtins.mapAttrs (k: v: ''
       if [[ ! -f "/boot/${v.iso}" ]]; then
         cp "${v.iso}" "/boot/${v.iso}"
       fi
-
-      # TODO:
-      # track the files we "copied"
-      # delete any /boot/nix/store paths that we didn't copy, basically
-      # (this is used in other places for the bootloader files as well)
     '') isos));
 
     # note, no /boot in the isofile name path since that's its mount point (prefix)
     # the linux ... line is basically entirely copied from the <tails-iso>/isolinux/live.cfg
-    boot.loader.grub.extraEntries = (pkgs.lib.concatStrings (map (k: v: ''
+    boot.loader.grub.extraEntries = (pkgs.lib.concatStrings (builtins.attrValues (builtins.mapAttrs (k: v: ''
       menuentry "${k}" {
         rmmod tpm
         search --set=drive1 --fs-uuid ${BOOT_FS_UUID}
@@ -59,6 +59,6 @@ in {
           linux ${v.linux}
           initrd ${v.initrd}
       }
-    '') isos));
+    '') isos)));
   };
 }
