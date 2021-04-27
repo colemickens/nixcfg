@@ -9,6 +9,10 @@
       #};
 
       programs.gpg.enable = true;
+      programs.gpg.package = pkgs.gnupg23;
+      programs.gpg.scdaemonSettings = {
+        disable-ccid = true;
+      };
 
       services.gpg-agent = {
         # this has the SAME problem as above^, or rather is the same thing!

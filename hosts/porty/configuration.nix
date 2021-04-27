@@ -16,10 +16,6 @@
   ];
 
   config = {
-    home-manager.users.cole = { pkgs, ... }: {
-      programs.gpg.package = pkgs.gnupg23;
-    };
-
     # Use the systemd-boot EFI boot loader.
     boot.loader.grub.enable = true;
     boot.loader.grub.devices = [ "nodev" ];
