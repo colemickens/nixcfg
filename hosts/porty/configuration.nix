@@ -4,16 +4,11 @@
 
 { config, pkgs, ... }:
 
-let
-  tailsVer = "4.18";
-  tailsIsoName = "tails-amd64-${tailsVer}.iso";
-  tailsIso = builtins.fetchurl {
-    url = "https://tails.interpipe.net/tails/stable/tails-amd64-${tailsVer}/${tailsIsoName}";
-    sha256 = "0maj7hvgn7psxhx2nvn6aha89fc325g4b4bb4d4dpd1mlyv1wr1z";
-  };
-in {
+{
   imports = [
     ./hardware-configuration.nix
+
+    ./grub-isos.nix
 
     ../../mixins/common.nix
 
@@ -38,23 +33,6 @@ in {
     boot.loader.grub.efiInstallAsRemovable = true;
     boot.loader.efi.canTouchEfiVariables = false;
     boot.supportedFilesystems = [ "zfs" ];
-
-    # copy the iso(s) to the large /boot since / is encrypted!
-    # TODO: develop this into an entire module that will auto-pop and auto-prune iso
-    # maybe some scripting or copy mappings from others to know where kernel/initrds are
-    boot.loader.grub.extraPrepareConfig = ''
-      mkdir -p /boot/iso
-      [[ ! -f "/boot/iso/${tailsIsoName}" ]] && cp "${tailsIso}" "/boot/iso/${tailsIsoName}"
-    '';
-    boot.loader.grub.extraEntries = ''
-      menuentry "[[tails-${tailsVer}]] [Crypto] + [Living Will]" {
-        set isofile="/boot/iso/${tailsIsoName}"
-        loopback loop (hd0,1)$isofile
-        linux (loop)/live/vmlinuz boot=live config noswap nopersistent iso-scan/filename=$isofile nomodeset toram
-        initrd (loop)/live/initrd.img
-      }
-    '';
-
     boot.kernelParams = [ "mitigations=off" ];
 
     nix.nixPath = [];
