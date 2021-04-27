@@ -41,8 +41,8 @@ in {
     boot.loader.grub.extraEntries = ''
       menuentry "[[tails-${tailsVer}]] [Crypto] + [Living Will]" {
         set isofile="${tailsIso}"
-        loopback loop (hd0,msdos1)$isofile
-        linux (loop)/live/vmlinuz boot=live config noswap nopersistent iso-scan/filename=$isofile nomodeset
+        loopback loop (hd0,1)$isofile
+        linux (loop)/live/vmlinuz boot=live config noswap nopersistent iso-scan/filename=$isofile nomodeset toram
         initrd (loop)/live/initrd.img
       }
     '';
