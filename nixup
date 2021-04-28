@@ -167,7 +167,7 @@ function azmail()    { activate ".#toplevels.azmail"      "${BUILD_HOST:-"${AZDE
 #function pinebook()  { activate ".#toplevels.pinebook"    "${BUILD_HOST:-"${AARCH64}"}" "${PINEBOOK}";  }
 function rpifour1()  { activate ".#toplevels.rpifour1"    "${BUILD_HOST:-"${AARCH64}"}" "${RPIFOUR1}";  }
 function slynux()    { activate ".#toplevels.slynux"      "${BUILD_HOST:-"${AZDEV}"}"   "${SLYNUX}";   }
-function xeep()      { activate ".#toplevels.xeep"        "${BUILD_HOST:-"${AZDEV}"}"   "${XEEP}";   }
+#function xeep()      { activate ".#toplevels.xeep"        "${BUILD_HOST:-"${AZDEV}"}"   "${XEEP}";   }
 function rpizero1()  { activate ".#toplevels.rpizero1"    "${BUILD_HOST:-"${AZDEV}"}"   "${RPIZERO1}";   }
 function rpizero2()  { activate ".#toplevels.rpizero2"    "${BUILD_HOST:-"${AZDEV}"}"   "${RPIZERO2}";   }
 function jeffhyper() { activate ".#toplevels.jeffhyper"   "${BUILD_HOST:-"${AZDEV}"}"   "${JEFFHYPER}";   }
@@ -197,17 +197,10 @@ function remote() {
 
   ssh_nixUnstable_shell "$remote" rm -f "/tmp/$f"
 }
-function pinebook() {
-  remote "${AARCH64}" "toplevels.pinebook" "${PINEBOOK}"
-}
-function porty() {
-  remote "${AZDEV}" "toplevels.porty" "${PORTY}" "${@}"
-  exit 0
 
-  #stash
-  #rev="$(git rev-parse --short HEAD)"
-  #ssh cole@porty.ts.r10e.tech sudo nixos-rebuild switch --flake "github:colemickens/nixcfg/${rev}"
-}
+function pinebook() { remote "${AARCH64}" "toplevels.pinebook" "${PINEBOOK}"; }
+function pinebook() { remote "${AZDEV}" "toplevels.xeep" "${XEEP}"; }
+function porty() { remote "${AZDEV}" "toplevels.porty" "${PORTY}" "${@}"; }
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 
