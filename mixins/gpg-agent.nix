@@ -2,6 +2,12 @@
 
 {
   config = {
+    # try to enable gnupg's udev rules
+    # to allow it to do ccid stuffs
+    hardware.gnupg-ccid.enable = true;
+    services.udev.packages = [ pkgs.yubikey-personalization ];
+    #services.pcscd.enable = true;
+
     home-manager.users.cole = { pkgs, ... }: {
       # TODO: this needs to move to some sort of zsh init optiony thingy
       #home.sessionVariables = {
@@ -11,7 +17,7 @@
       programs.gpg.enable = true;
       programs.gpg.package = pkgs.gnupg23;
       programs.gpg.scdaemonSettings = {
-        disable-ccid = true;
+        #disable-ccid = true;
       };
 
       services.gpg-agent = {

@@ -14,28 +14,16 @@ let
       imports = [
         (./. + "/desktop-${desktopName}.nix")
       ];
-      config = {
-        boot.loader.grub.configurationName = "${desktopName}";
-      };
+      config.boot.loader.grub.configurationName = "${desktopName}";
     });
   };
   nvidiaDesktop = desktopName: {
     configuration = ({config, pkgs, lib, inputs, ...}: {
       imports = [
         (./. + "/desktop-${desktopName}.nix")
+        ../mixins/nvidia.nix
       ];
-      config = {
-        boot.loader.grub.configurationName = "[nvidia] ${desktopName}";
-        hardware.nvidia.modesetting.enable = true;
-        # hardware.nvidia.powerManagement.enable = true; # TODO: test
-        services.xserver = {
-          enable = true;
-          videoDriver = "nvidia";
-          # autoSuspend = false; # nvidia doesn't wake up, others seem to notice this too?
-          displayManager.gdm.nvidiaWayland =
-            (config.services.xserver.displayManager.gdm.enable == true);
-        };
-      };
+      config.boot.loader.grub.configurationName = "[nvidia] ${desktopName}";
     });
   };
 

@@ -5,8 +5,12 @@
     ../../mixins/common.nix
 
     ../../profiles/user.nix
-    ../../profiles/interactive.nix
-    ../../profiles/specialisations.nix
+    ../../profiles/gui.nix
+
+    #../../profiles/specialisations.nix
+    # or
+    ../../mixins/nvidia.nix
+    ../../profiles/desktop-gnome.nix
 
     ../../mixins/libvirt.nix
     ../../mixins/sshd.nix
