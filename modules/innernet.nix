@@ -9,7 +9,12 @@ in {
   };
 
   config = {
-    systemd.services.innernet-mynet = {
+
+    systemd.services.innernet-client-mynet = {
+      description = "innernet client";
+    };
+
+    systemd.services.innernet-server-mynet = {
       description = "innernet server for mynet";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" "nss-lookup.target" ];
@@ -21,5 +26,6 @@ in {
         ExecStart = "${unstable.innernet}/bin/innernet-server serve mynet";
       };
     };
+
   };
 }
