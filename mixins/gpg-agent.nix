@@ -4,7 +4,7 @@
   config = {
     # try to enable gnupg's udev rules
     # to allow it to do ccid stuffs
-    hardware.gnupg-ccid.enable = true;
+    hardware.gpgSmartcards.enable = true;
     services.udev.packages = [ pkgs.yubikey-personalization ];
     #services.pcscd.enable = true;
 
