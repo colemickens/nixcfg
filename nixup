@@ -190,7 +190,7 @@ function remote() {
   ssh_cachix_push $remote $out
 
   if [[ "${target:-}" != "" ]]; then
-    ssh -A "${target}" nix-store "${buildargs[@]}" -r -j0 "${out}"
+    ssh -A "${target}" nix-build "${buildargs[@]}" -r -j0 "${out}"
     ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --profile /nix/var/nix/profiles/system "${out}")";
     ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch)";
   fi
