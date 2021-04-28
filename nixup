@@ -199,7 +199,7 @@ function remote() {
 }
 
 function pinebook() { remote "${AARCH64}" "toplevels.pinebook" "${PINEBOOK}"; }
-function pinebook() { remote "${AZDEV}" "toplevels.xeep" "${XEEP}"; }
+function xeep() { remote "${AZDEV}" "toplevels.xeep" "${XEEP}"; }
 function porty() { remote "${AZDEV}" "toplevels.porty" "${PORTY}" "${@}"; }
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
