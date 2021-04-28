@@ -12,7 +12,9 @@
     ../../mixins/nvidia.nix
     ../../profiles/desktop-gnome.nix
 
+
     ../../mixins/libvirt.nix
+    ../../mixins/logitech-mouse.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
 

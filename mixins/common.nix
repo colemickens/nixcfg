@@ -6,6 +6,8 @@ with lib;
   imports = [
     inputs.sops-nix.nixosModules.sops
     ../secrets
+    
+    inputs.envfs.nixosModules.envfs
   ];
 
   config = {

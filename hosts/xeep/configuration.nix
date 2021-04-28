@@ -4,22 +4,16 @@ let
 in
 {
   imports = [
-    ../../mixins/chromecast.nix
-    ../../mixins/ledger.nix
     ../../mixins/logitech-mouse.nix
-    ../../mixins/obs.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
 
     ../../profiles/interactive.nix
-
     ../../profiles/desktop-sway-unstable.nix
 
     # xps 13 9370 specific:
     ../../mixins/gfx-intel.nix
     inputs.hardware.nixosModules.dell-xps-13-9370
-
-    inputs.envfs.nixosModules.envfs
   ];
 
   config = {
