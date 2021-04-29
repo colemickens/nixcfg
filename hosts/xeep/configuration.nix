@@ -11,7 +11,7 @@ in
     ../../mixins/loremipsum-media/rclone-cmd.nix
 
     ../../profiles/interactive.nix
-    ../../profiles/desktop-sway-unstable.nix
+    ../../profiles/desktop-sway.nix
 
     # xps 13 9370 specific:
     ../../mixins/gfx-intel.nix
@@ -115,14 +115,9 @@ in
       wireless.iwd.enable = true;
       useNetworkd = true;
       useDHCP = false;
-
-      # interfaces."eth0".useDHCP = true;
-      # interfaces."enp56s0u2u3".useDHCP = true;
-      # interfaces."enp56s0u1u3".useDHCP = true;
+      
       interfaces."wlan0".useDHCP = true;
-
-      bridges."ethbr0".interfaces = [ "enp56s0u2u3" ];
-      interfaces."ethbr0".useDHCP = true;
+      interfaces."enp56s0u1u3".useDHCP = true;
 
       search = [ "ts.r10e.tech" ];
     };
