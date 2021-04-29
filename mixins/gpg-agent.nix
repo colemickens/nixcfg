@@ -4,7 +4,7 @@
   config = {
     # try to enable gnupg's udev rules
     # to allow it to do ccid stuffs
-    hardware.gpgSmartcards.enable = true;
+    #hardware.gpgSmartcards.enable = true;
 
     # this allows gpg to see yubikey/openpgp with ccid (I think, no pcscd anyway)
     #services.udev.packages = [ pkgs.yubikey-personalization ];
