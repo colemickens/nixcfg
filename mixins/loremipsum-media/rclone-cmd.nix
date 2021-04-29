@@ -1,7 +1,7 @@
-{ lib, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
-  c = import ./common.nix { inherit pkgs; };
+  c = import ./common.nix { inherit pkgs config; };
 in {
   environment.systemPackages = with pkgs; [
     c.rclone-lim
