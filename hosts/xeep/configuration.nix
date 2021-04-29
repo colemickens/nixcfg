@@ -90,6 +90,9 @@ in
           device = "/dev/disk/by-partlabel/newluks";
           preLVM = true;
           allowDiscards = true;
+
+          keyFileSize = 4096;
+          keyFile = "/dev/disk/by-id/mmc-EB1QT_0xa5f25355";
           fallbackToPassword = true;
         };
       };
@@ -118,6 +121,7 @@ in
       
       interfaces."wlan0".useDHCP = true;
       interfaces."enp56s0u1u3".useDHCP = true;
+      interfaces."enp57s0u1u3".useDHCP = true;
 
       search = [ "ts.r10e.tech" ];
     };
