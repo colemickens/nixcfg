@@ -3,6 +3,11 @@
 rec {
   rcloneConfigFile = config.sops.secrets."rclone.conf".path;
 
+  sops.secrets."rclone.conf" = {
+    owner = "cole";
+    group = "cole";
+  };
+
   rclone-lim = pkgs.writeScriptBin "rclone-lim" ''
     #!/usr/bin/env bash
     ${pkgs.rclone}/bin/rclone --config "${rcloneConfigFile}" "''${@}"
