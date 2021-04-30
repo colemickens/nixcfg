@@ -29,7 +29,7 @@ let
     disableCcid = false;
     gnupgPkg = pkgs.gnupg22; # old gpg falls back to pc/sc automatically
   };
-  ecfg = config1;
+  ecfg = config3;
 in {
   config = {
     # okay yikes, since some of this is dependent on scdaemon
@@ -57,6 +57,10 @@ in {
 
     # we're using ledger->openpgp_xl as a smartcard
     hardware.ledger.enable = true;
+
+    services.udev.extraRules = ''
+
+    '';
 
     # this allows gpg to see yubikey/openpgp with ccid (I think, no pcscd anyway)
     services.udev.packages =
