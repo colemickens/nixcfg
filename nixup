@@ -55,7 +55,9 @@ function update() {
 
 function stash() {
   __ "stashing nixcfg"
-  cd "${DIR}"; git add -A . && (git commit -m stash && git pull --rebase && git push origin HEAD -f || false) || true
+  cd "${DIR}";
+  git add -A .
+  (git commit -m stash && git pull --rebase && git push origin HEAD -f || false) || true
 
   cd "${DIR}"
 }
