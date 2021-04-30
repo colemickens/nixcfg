@@ -55,6 +55,9 @@ in {
     # to allow it to do ccid stuffs
     hardware.gpgSmartcards.enable = ecfg.enableGpgRules;
 
+    # we're using ledger->openpgp_xl as a smartcard
+    hardware.ledger.enable = truel
+
     # this allows gpg to see yubikey/openpgp with ccid (I think, no pcscd anyway)
     services.udev.packages =
       if ecfg.enableYubikeyRules
