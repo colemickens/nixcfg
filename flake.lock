@@ -362,6 +362,21 @@
         "type": "github"
       }
     },
+    "import-cargo": {
+      "locked": {
+        "lastModified": 1594305518,
+        "narHash": "sha256-frtArgN42rSaEcEOYWg8sVPMUK+Zgch3c+wejcpX3DY=",
+        "owner": "edolstra",
+        "repo": "import-cargo",
+        "rev": "25d40be4a73d40a2572e0cc233b83253554f06c5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "edolstra",
+        "repo": "import-cargo",
+        "type": "github"
+      }
+    },
     "lowdown-src": {
       "flake": false,
       "locked": {
@@ -534,6 +549,26 @@
         "type": "github"
       }
     },
+    "nickel": {
+      "inputs": {
+        "import-cargo": "import-cargo",
+        "nixpkgs": "nixpkgs_2",
+        "nixpkgs-mozilla": "nixpkgs-mozilla"
+      },
+      "locked": {
+        "lastModified": 1618844603,
+        "narHash": "sha256-gUb4l8ZdwtAw64ZPiLGjiXN0UsudMx4vaqyRUQi6MuQ=",
+        "owner": "tweag",
+        "repo": "nickel",
+        "rev": "2dc1db85c9bc6e96d8c2a1e0a92abc6453c0c655",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tweag",
+        "repo": "nickel",
+        "type": "github"
+      }
+    },
     "nix": {
       "inputs": {
         "nixpkgs": "nixpkgs"
@@ -571,7 +606,7 @@
     "nix-ipfs": {
       "inputs": {
         "lowdown-src": "lowdown-src_2",
-        "nixpkgs": "nixpkgs_3"
+        "nixpkgs": "nixpkgs_5"
       },
       "locked": {
         "lastModified": 1602773364,
@@ -590,7 +625,7 @@
     "nix_2": {
       "inputs": {
         "lowdown-src": "lowdown-src",
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_4"
       },
       "locked": {
         "lastModified": 1619726352,
@@ -682,6 +717,25 @@
         "type": "indirect"
       }
     },
+    "nixpkgs-mozilla": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_3"
+      },
+      "locked": {
+        "lastModified": 1610699763,
+        "narHash": "sha256-Sf0A1KeMo461OEHQtoE8U7xLVBiLmwGwSZJiJDkq+38=",
+        "owner": "garbas",
+        "repo": "nixpkgs-mozilla",
+        "rev": "8305afa70d8b4ba45dae5b51e3b11122a44323cd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "garbas",
+        "ref": "flake",
+        "repo": "nixpkgs-mozilla",
+        "type": "github"
+      }
+    },
     "nixpkgs-wayland": {
       "inputs": {
         "cachix": "cachix_2",
@@ -705,6 +759,36 @@
     },
     "nixpkgs_2": {
       "locked": {
+        "lastModified": 1611219034,
+        "narHash": "sha256-bgp8G3LcpvKs22/z5Cj4XQkmZq05Aa0vaP1bKl7X0zM=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "f217c0ea7c148ddc0103347051555c7c252dcafb",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-unstable",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_3": {
+      "locked": {
+        "lastModified": 1610219734,
+        "narHash": "sha256-hCsGe2nDz+SX4uO+lj0qPVcSGZdt52R9Yk5MOYs4djw=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "257cbbcd3ab7bd96f5d24d50adc807de7c82e06d",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-unstable",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_4": {
+      "locked": {
         "lastModified": 1614309161,
         "narHash": "sha256-93kRxDPyEW9QIpxU71kCaV1r+hgOgP6/aVgC7vvO8IU=",
         "owner": "NixOS",
@@ -718,7 +802,7 @@
         "type": "indirect"
       }
     },
-    "nixpkgs_3": {
+    "nixpkgs_5": {
       "locked": {
         "lastModified": 1591633336,
         "narHash": "sha256-oVXv4xAnDJB03LvZGbC72vSVlIbbJr8tpjEW5o/Fdek=",
@@ -733,7 +817,7 @@
         "type": "indirect"
       }
     },
-    "nixpkgs_4": {
+    "nixpkgs_6": {
       "locked": {
         "lastModified": 1619740980,
         "narHash": "sha256-Qv9Q1aunLwXvZT5RkGIsM8ZrZ9ywHVxd0o6Y2E91CEE=",
@@ -765,13 +849,14 @@
         "mobile-nixos": "mobile-nixos",
         "neovim-nightly": "neovim-nightly",
         "niche": "niche",
+        "nickel": "nickel",
         "nix": "nix_2",
         "nix-bitcoin": "nix-bitcoin",
         "nix-ipfs": "nix-ipfs",
         "nixos-azure": "nixos-azure",
         "nixos-mailserver": "nixos-mailserver",
         "nixos-unstable": "nixos-unstable",
-        "nixpkgs": "nixpkgs_4",
+        "nixpkgs": "nixpkgs_6",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "sops-nix": "sops-nix",
         "stable": "stable",

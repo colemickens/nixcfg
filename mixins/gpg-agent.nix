@@ -58,9 +58,12 @@ in {
     # we're using ledger->openpgp_xl as a smartcard
     hardware.ledger.enable = true;
 
-    services.udev.extraRules = ''
-
-    '';
+    # TODO: Ledger Nano S/X require extra
+    # udev/ccid rules?
+    # see: "blue-app-openpgp-card.pdf" search: "0x2C97
+    #services.udev.extraRules = ''
+    #  #...
+    #'';
 
     # this allows gpg to see yubikey/openpgp with ccid (I think, no pcscd anyway)
     services.udev.packages =

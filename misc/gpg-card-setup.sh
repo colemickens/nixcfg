@@ -19,6 +19,11 @@ export GNUPGHOME="$(mktemp -d)"
 gpg-agent &
 gpid=$!
 
+
+gpg-connect-agent "SCD SETATTR KEY-ATTR --force 1 22 ed25519" /bye
+gpg-connect-agent "SCD SETATTR KEY-ATTR --force 2 18 cv25519" /bye
+gpg-connect-agent "SCD SETATTR KEY-ATTR --force 3 22 ed25519" /bye
+
 gpg-card "${gpgargs[@]}" \
   --force \
   --algo=BLAH?

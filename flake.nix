@@ -9,16 +9,13 @@
   inputs = {
     nixpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; }; # for my regular nixpkgs
     nixos-unstable = { url = "github:nixos/nixpkgs/nixos-unstable"; };
-    #master = { url = "github:nixos/nixpkgs/master"; }; # for nixFlakes
     stable = { url = "github:nixos/nixpkgs/nixos-20.09"; }; # for cachix
 
     crosspkgs = {
-      #url = "github:Gaelan/nixpkgs/685f2f15f83445e2b8bda16f3812253a7fc6d3aa";
       url = "github:colemickens/nixpkgs/crosspkgs";
     };
 
     nix.url = "github:nixos/nix/master";
-    #nix.inputs.nixpkgs.follows = "nixpkgs";
 
     niche.url = "github:colemickens/niche/master";
     niche.inputs.nixpkgs.follows = "nixpkgs";
@@ -47,6 +44,8 @@
     #nixos-veloren.inputs.nixpkgs.follows = "nixpkgs";
 
     mobile-nixos = { url = "github:colemickens/mobile-nixos/mobile-nixos-blueline"; };
+    # wait is the flakes pr not merged ? :(
+    # mobile-nixos = { url = "github:samueldr/mobile-nixos/mobile-nixos-blueline"; };
     mobile-nixos.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-ipfs = { url = "github:obsidiansystems/nix"; };
@@ -83,6 +82,8 @@
 
     nixos-mailserver = { url = "gitlab:simple-nixos-mailserver/nixos-mailserver"; };
     nixos-mailserver.inputs.nixpkgs.follows = "nixpkgs";
+
+    nickel = { url = "github:tweag/nickel"; };
 
     hydra = { url = "github:NixOS/hydra"; };
     #hydra.inputs.nixpkgs.follows = "nixpkgs";
@@ -125,6 +126,7 @@
           # ++ (with inputs.niche.packages.${system}; [ niche ])
           ++ (with pkgs_.nixpkgs.${system}; [
             nixUnstable
+            #inputs.nickel.packages.${system}.build
             bash cacert curl git jq parallel mercurial
             nettools openssh ripgrep rsync
             nix-build-uncached nix-prefetch-git
@@ -185,7 +187,7 @@
         #slynux    = mkSystem inputs.nixpkgs "x86_64-linux"  "slynux";
         xeep      = mkSystem inputs.nixpkgs "x86_64-linux"  "xeep";
         pinebook  = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
-        #rpizero1  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
+        rpizero1  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
         #rpizero2  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
         jeffhyper = mkSystem inputs.nixpkgs "x86_64-linux"  "jeffhyper";
         #pegleg = mkSystem inputs.nixpkgs "x86_64-linux"  "pegleg";
@@ -207,7 +209,7 @@
         (builtins.attrNames inputs.self.outputs.nixosConfigurations)
         (attr: nixosConfigurations.${attr}.config.system.build.toplevel);
 
-      hydraSpecs = 
+      hydraSpecs =
         let
           nfj = b: hydralib.flakeJob "github:colemickens/nixcfg/${b}";
         in {
