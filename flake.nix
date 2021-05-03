@@ -256,7 +256,7 @@
           pkgs_.nixpkgs.aarch64-linux.runCommandNoCC "pinephone-bundle" {} ''
             mkdir $out
             #ln -s "''${p.disk-image}" $out/disk-image;
-            #ln -s "${p.u-boot}" $out/uboot;
+            ln -s "${p.u-boot}" $out/uboot;
             #ln -s "''${p.boot-partition}" $out/boot-partition;
           '';
       };
