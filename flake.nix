@@ -257,7 +257,7 @@
             mkdir $out
             #ln -s "''${p.disk-image}" $out/disk-image;
             ln -s "${p.u-boot}" $out/uboot;
-            #ln -s "''${p.boot-partition}" $out/boot-partition;
+            ln -s "${p.boot-partition}" $out/boot-partition;
           '';
       };
       linuxVMs = {
