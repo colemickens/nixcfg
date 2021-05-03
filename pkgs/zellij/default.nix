@@ -1,5 +1,7 @@
 { stdenv, rustPlatform, fetchFromGitHub
-, pkg-config }:
+, pkg-config
+, xorg
+}:
 
 let
   metadata = import ./metadata.nix;
@@ -18,6 +20,9 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = metadata.cargoSha256;
 
   nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    xorg.libX11
+  ];
 
   # a bunch of tests fail:
   # test tests::integration::basic::cannot_split_terminals_horizontally_when_active_terminal_is_too_small ... FAILED
