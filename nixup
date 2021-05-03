@@ -226,6 +226,10 @@ function pinesd() {
   remote_cp "${AARCH64}" "images.pinephone_bundle" "${PINEPHONE}";
 }
 
+function aarch64() {
+  remote_cp "${AARCH64}" "bundles.aarch64"  "${AZDEV}";
+}
+
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 
 if [[ ! -z "${cmd:-""}" ]]; then
