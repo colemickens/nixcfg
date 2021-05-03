@@ -216,7 +216,7 @@ function remote_cp() {
 }
 
 function pinephone() { remote "${AARCH64}" "toplevels.pinephone" "${PINEPHONE}"; }
-function pinesd() { remote_cp "${AARCH64}" "nixosConfigurations.pinephone.config.system.build.sdImage" "${PINEPHONE}"; }
+function pinesd() { pinephone; remote_cp "${AARCH64}" "images.pinephone_bundle" "${PINEPHONE}"; }
 function pinebook()  { remote "${AARCH64}" "toplevels.pinebook"  "${PINEBOOK}"; }
 function xeep()      { remote "${AZDEV}"   "toplevels.xeep"      "${XEEP}"; }
 function porty()     { remote "${AZDEV}"   "toplevels.porty"     "${PORTY}" "${@}"; }
