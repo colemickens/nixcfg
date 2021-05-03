@@ -202,7 +202,21 @@ function remote() {
   ssh_nixUnstable_shell "$remote" rm -f "/tmp/$f"
 }
 
+function remote_cp() {
+  remote="${1}"; shift
+  buildattr="${1}"; shift
+  target="${1}"; shift
+  f="cm-nix-$RANDOM"
+
+  stash
+  rev="$(git rev-parse --short HEAD)"
+  ssh_nixUnstable_shell "$remote" nix "${nixargs[@]}" build "${buildargs[@]}" -L "github:colemickens/nixcfg/${rev}#${buildattr}" --out-link "/tmp/$f"
+  out="$(ssh_nixUnstable_shell "$remote" readlink -f "/tmp/$f")"
+  nix copy --from "ssh://${target}" "${out}"
+}
+
 function pinephone() { remote "${AARCH64}" "toplevels.pinephone" "${PINEPHONE}"; }
+function pinesd() { remote_cp "${AARCH64}" "nixosConfigurations.pinephone.config.system.build.sdImage" "${PINEPHONE}"; }
 function pinebook()  { remote "${AARCH64}" "toplevels.pinebook"  "${PINEBOOK}"; }
 function xeep()      { remote "${AZDEV}"   "toplevels.xeep"      "${XEEP}"; }
 function porty()     { remote "${AZDEV}"   "toplevels.porty"     "${PORTY}" "${@}"; }
