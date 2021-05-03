@@ -7,6 +7,11 @@ in
     (import "${inputs.mobile-nixos}/lib/configuration.nix" {
       device = "pine64-pinephone";
     })
+
+    ../../profiles/interactive.nix
+    
+    ../../mixins/ssh.nix
+    ../../mixins/tailscale.nix
   ];
 
   config = {

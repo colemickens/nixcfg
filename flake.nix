@@ -191,10 +191,10 @@
         rpizero1  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
         #rpizero2  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
         jeffhyper = mkSystem inputs.nixpkgs "x86_64-linux"  "jeffhyper";
-        #pegleg = mkSystem inputs.nixpkgs "x86_64-linux"  "pegleg";
         porty = mkSystem inputs.nixpkgs "x86_64-linux"  "porty";
 
-        #pinephone     = mkSystem fullPkgs_.aarch64-linux "pinephone";
+        pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
+
         #bluephone     = mkSystem fullPkgs_.aarch64-linux "bluephone";
         #demovm      = mkSystem fullPkgs_.x86_64-linux  "demovm";
         #testipfsvm  = mkSystem fullPkgs_.x86_64-linux  "testipfsvm";

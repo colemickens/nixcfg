@@ -160,6 +160,8 @@ JEFFHYPER="jeff@100.103.91.27"; JEFFHYPER="jeff@jeffhyper.ts.r10e.tech"
 PEGLEG="cole@100.93.245.22";    PEGLEG="cole@pegleg.ts.r10e.tech"
 PORTY="cole@100.68.13.41";      PORTY="cole@porty.ts.r10e.tech"
 
+PINEPHONE="cole@100.1.2.3"; PINEPHONE="cole@pinephone.ts.r10e.tech"
+
 function a64() { build "$1" "${AARCH64}" "${AARCH64}"; }
 function nix() { command nix "${nixargs[@]}" "${@}"; }
 function nb() { command nix "${nixargs[@]}" build "${buildargs[@]}" "${@}"; }
@@ -200,9 +202,10 @@ function remote() {
   ssh_nixUnstable_shell "$remote" rm -f "/tmp/$f"
 }
 
-function pinebook() { remote "${AARCH64}" "toplevels.pinebook" "${PINEBOOK}"; }
-function xeep() { remote "${AZDEV}" "toplevels.xeep" "${XEEP}"; }
-function porty() { remote "${AZDEV}" "toplevels.porty" "${PORTY}" "${@}"; }
+function pinephone() { remote "${AARCH64}" "toplevels.pinephone" "${PINEPHONE}"; }
+function pinebook()  { remote "${AARCH64}" "toplevels.pinebook"  "${PINEBOOK}"; }
+function xeep()      { remote "${AZDEV}"   "toplevels.xeep"      "${XEEP}"; }
+function porty()     { remote "${AZDEV}"   "toplevels.porty"     "${PORTY}" "${@}"; }
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 
