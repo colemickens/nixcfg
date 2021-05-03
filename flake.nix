@@ -252,15 +252,12 @@
           in
             dev.config.system.build.android-bootimg;
 
-        pinephone_bundle =
-          let
-            dev = mkSystem "aarch64-linux" inputs.nixpkgs "pinephone";
-          in
-            pkgs_.nixpkgs.aarch64-linux.runCommandNoCC "pinephone-bundle" {} ''
+        pinephone_bundle = let p = nixosConfigurations.pinephone; in
+          pkgs_.nixpkgs.aarch64-linux.runCommandNoCC "pinephone-bundle" {} ''
             mkdir $out
-            ln -s "${dev.config.system.build.disk-image}" $out/disk-image;
-            ln -s "${dev.config.system.build.u-boot}" $out/uboot;
-            ln -s "${dev.config.system.build.boot-partition}" $out/boot-partition;
+            ln -s "${p.build.disk-image}" $out/disk-image;
+            ln -s "${p.build.u-boot}" $out/uboot;
+            ln -s "${p.build.boot-partition}" $out/boot-partition;
           '';
       };
       linuxVMs = {
