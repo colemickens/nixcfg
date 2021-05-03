@@ -411,17 +411,18 @@
       }
     },
     "mobile-nixos": {
+      "flake": false,
       "locked": {
-        "lastModified": 1603945621,
-        "narHash": "sha256-oPEk86ul5/fnZHnFtsmZz8wFhjI2k+zKUc6qzh0k9Pg=",
-        "owner": "colemickens",
+        "lastModified": 1619826518,
+        "narHash": "sha256-zz8chjO/kM0ShDaEZ+5kEHILUJawlkM3qEnHMhQ0n5k=",
+        "owner": "nixos",
         "repo": "mobile-nixos",
-        "rev": "1b0b225fea86844c270cd3d3784607b38f2dcd4d",
+        "rev": "c926887717431389e3aa386e678e948b792700f6",
         "type": "github"
       },
       "original": {
-        "owner": "colemickens",
-        "ref": "mobile-nixos-blueline",
+        "owner": "nixos",
+        "ref": "master",
         "repo": "mobile-nixos",
         "type": "github"
       }
