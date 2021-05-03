@@ -11,6 +11,7 @@ in
     #./modules/postgres.nix
     ./modules/srht-cronjobs.nix
     ./modules/unifi.nix
+    ./modules/vault.nix
 
     ../../mixins/avahi-publish.nix
   ];

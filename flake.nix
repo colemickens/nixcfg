@@ -55,6 +55,7 @@
 
     wip-pinebook-pro = { url = "github:colemickens/wip-pinebook-pro"; };
     wip-pinebook-pro.inputs.nixpkgs.follows = "nixpkgs";
+    #wip-pinebook-pro = { url = "github:samueldr/wip-pinebook-pro"; flake = false; };
 
     nixpkgs-wayland  = { url = "github:colemickens/nixpkgs-wayland"; };
     # these are kind of weird, they don't really apply
