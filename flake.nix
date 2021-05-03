@@ -240,12 +240,14 @@
         rpizero1 = inputs.self.nixosConfigurations.rpizero1.config.system.build.sdImage;
         rpizero2 = inputs.self.nixosConfigurations.rpizero2.config.system.build.sdImage;
 
-        pinebook_bundle = pkgs_.nixpkgs.aarch64-linux.runCommandNoCC "pinebook-bundle" {} ''
-          mkdir $out
-          ln -s "${inputs.self.nixosConfigurations.pinebook.config.system.build.toplevel}" $out/toplevel
-          ln -s "${inputs.wip-pinebook-pro.packages.aarch64-linux.uBootPinebookPro}" $out/uboot
-          ln -s "${inputs.wip-pinebook-pro.packages.aarch64-linux.pinebookpro-keyboard-updater}" $out/kbfw
-        '';
+        pinebook_bundle = let wpp = inputs.wip-pinebook-pro.packages.aarch64-linux; in
+          pkgs_.nixpkgs.aarch64-linux.runCommandNoCC "pinebook-bundle" {} ''
+            mkdir $out
+            ln -s "${toplevels.pinebook.toplevel}" $out/toplevel
+            ln -s "${wpp.uBootPinebookPro}" $out/uboot
+            ln -s "${wpp.pinebookpro-keyboard-updater}" $out/kbfw
+          '';
+
         bluephone_bootimg =
           let
             dev = inputs.self.nixosConfigurations.bluephone;
