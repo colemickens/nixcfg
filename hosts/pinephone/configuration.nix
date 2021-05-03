@@ -20,6 +20,8 @@ in
       # https://aur.archlinux.org/packages/squeekboard/
       # https://github.com/efernau/rot8
 
+      networking.hostName = "pinephone";
+
       nixpkgs.config.allowUnfree = true;
       nixpkgs.overlays = [ inputs.self.overlay ];
 
