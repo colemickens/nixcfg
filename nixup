@@ -212,7 +212,7 @@ function remote_cp() {
   rev="$(git rev-parse --short HEAD)"
   ssh_nixUnstable_shell "$remote" nix "${nixargs[@]}" build "${buildargs[@]}" -L "github:colemickens/nixcfg/${rev}#${buildattr}" --out-link "/tmp/$f"
   out="$(ssh_nixUnstable_shell "$remote" readlink -f "/tmp/$f")"
-  nix copy --from "ssh://${remote}" "${out}"
+  nix copy --no-check-sigs --from "ssh://${remote}" "${out}"
 }
 
 function pinebook()  { remote "${AARCH64}" "toplevels.pinebook"  "${PINEBOOK}"; }
