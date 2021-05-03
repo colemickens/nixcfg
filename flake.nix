@@ -255,8 +255,16 @@
         pinephone_bundle = let p = nixosConfigurations.pinephone.config.system.build; in
           pkgs_.nixpkgs.aarch64-linux.runCommandNoCC "pinephone-bundle" {} ''
             mkdir $out
-            ln -s "${p.disk-image}" $out/disk-image;
+
+            # uboot
             ln -s "${p.u-boot}" $out/uboot;
+
+            # full image
+            # inf recursion with mobile-nixos/master :(
+            #ln -s "''${p.disk-image}" $out/disk-image;
+
+            # boot partition
+            # inf recursion with mobile-nixos/master :(
             #ln -s "''${p.boot-partition}" $out/boot-partition;
           '';
       };
