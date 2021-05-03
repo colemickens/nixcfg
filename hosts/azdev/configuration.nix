@@ -46,21 +46,22 @@
       };
     };
 
-    systemd.tmpfiles.rules = [
+    systemd.tmpfiles.rules = ([
+    ]) ++ (lib.optionals config.services.sshd.enable [
       "d '/run/state/ssh' - root - - -"
-
+    ]) ++ (lib.optionals config.services.tailscale.enable [
       "d '/var/lib/tailscale' - root - - -"
       "d '/run/state/tailscale' - root - - -"
-
+    ]) ++ (lib.optionals config.services.postgresql.enable [
       "d '/run/state/plex' - plex - - -"
       "d '/var/lib/plex' - plex - - -"
-      
+    ]) ++ (lib.optionals config.services.postgresql.enable [
       "d '/run/state/postgresql' - postgres - - -"
       "d '/var/lib/postgresql' - postgres - - -"
-      
+    ]) ++ (lib.optionals config.services.hydra.enable [
       "d '/run/state/hydra' - hydra - - -"
       "d '/var/lib/hydra' - hydra - - -"
-    ];
+    ]);
 
     # sshd keys come from persistent location (/run/state is bound to zfs vol)
     services.openssh = {
