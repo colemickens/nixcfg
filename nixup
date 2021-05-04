@@ -4,19 +4,16 @@ set -euo pipefail
 set -x
 
 function __() { printf "\n\n%s\n" "${1}" >/dev/stderr; }
+function ts() { echo -e "cole@${1}.ts.r10.tech"; }
 unset NIX_PATH
 cd "${DIR}"
 
 cache="colemickens"
-niche_cache="https://azdev2020nov.blob.core.windows.net/nixcache"
 cachixpkgs="https://github.com/nixos/nixpkgs/archive/nixos-20.09.tar.gz" # where to find pkgs.cachix
 unstablepkgs="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # where to find nixUnstable
-#nichepkgs="https://github.com/colemickens/niche/archive/$(cd ~/code/niche; git rev-parse HEAD).tar.gz" # where to find niche + all nixpkgs
 set +x; cachixkey="$(cat ~/.config/cachix/cachix.dhall | grep eIu | cut -f 2 -d '"' || echo "")"; set -x
-cachixkey="eIuqcXYgSpe2wktg7fiSHuxo2Cko2lTEgxHxg2bl3YJs2snoV8xEQHht3gE6MQ3zk2K7xVw91B7gXgrFWxv8jg=="
 
-nixargs=(--experimental-features "nix-command flakes ca-references recursive-nix")
-
+nixargs=(--experimental-features "nix-command flakes ca-references ca-derivations recursive-nix")
 buildargs=(
   --option 'extra-binary-caches' 'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://arm.cachix.org https://thefloweringash-armv7.cachix.org'
   --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= arm.cachix.org-1:5BZ2kjoL1q6nWhlnrbAl+G7ThY7+HaBRD9PZzqZkbnM= thefloweringash-armv7.cachix.org-1:v+5yzBD2odFKeXbmC+OPWVqx4WVoIVO6UXgnSAWFtso='
@@ -30,7 +27,6 @@ srcdirs=(
   "mobile-nixos"    "sops-nix"        "wip-pinebook-pro"
   "nixos-veloren"   #"nixos-azure"
 )
-evalargs=()
 
 function update() {
   set -euo pipefail
@@ -83,109 +79,28 @@ function ssh_niche_shell() {
   ssh "${r}" -- "nix-shell -I nixpkgs=${nichepkgs} -p niche -p gnupg -p nixUnstable --command 'NICHE_DEBUG=1 $(printf '\"%s\" ' "${@}")'"
 }
 
-function build() {
-  set -euo pipefail
-  thing="${1}"; shift
-  remote="${1}"; shift
-  target="${1:-""}"; shift
-  set +x
-
-  __ "LOCAL: evaluate drv ${thing}"
-  drv="$(set -euo pipefail; nix "${nixargs[@]}" eval "${evalargs[@]}" --raw "${thing}.drvPath" | tr -d '"')"
-  out="$(set -euo pipefail; nix "${nixargs[@]}" path-info "${drv}" --json | jq -r '.[0].path')"
-
-  if [[ ! -z "${target:-""}" ]]; then
-    __ "TARGET: try to realize ${out} on ${target}"
-    if ssh_nixUnstable_shell2 "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" --no-link -j0 "${out}" &>/dev/stderr; then
-      echo -e "${out}"; return 0
-    fi
-  fi
-
-  __ "LOCAL: rsync ${drv} to ${remote}"
-  local t="/tmp/.nixup"
-  nix "${nixargs[@]}" copy --to "file://${t}" --derivation "${drv}"
-  rsync -ah --info=progress2 "${t}/" "${remote}:${t}" &>/dev/stderr
-
-  __ "REMOTE: copy ${drv} => /nix/store"
-  set -x
-  ssh_nixUnstable_shell "${remote}" nix "${nixargs[@]}" copy --from file://${t} --no-check-sigs --derivation ${drv}
-  set +x
-
-  __ "REMOTE: build ${drv} => ${out}"
-  ssh_nixUnstable_shell "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --no-link --keep-going "${drv}"
-  #ssh_nixUnstable_shell2 "${remote}" nix "${nixargs[@]}" build -L "${buildargs[@]}" --no-link --keep-going "${drv}"
-  #ssh_niche_shell "${remote}" niche build -u "${niche_cache}" -- -L "${nixargs[@]}"  "${buildargs[@]}" --keep-going "${drv}"
-
-  if [[ "${target}" == "${remote}" ]]; then
-    echo -e "${out}"; return 0
-  fi
-
-  __ "REMOTE: push ${out} to cachix"
-  #rm -rf ~/.cache/nix
-  #ssh_nixUnstable_shell2 "${remote}" rm -rf .cache/nix
-  ssh_cachix_push "${remote}" "${out}"
-
-  __ "LOCAL: exit if no target for build"
-  if [[ -z "${target:-""}" ]]; then
-    echo -e "${out}"; return 0
-  fi
-
-  __ "TARGET: copy $out from cachix (on $target)"
-  set -x
-  #ssh_nixUnstable_shell2 "${target}" rm -rf .cache/nix
-  ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build -v "${buildargs[@]}" --no-link -j0 "${out}"
-
-  echo -e "${out}"; return 0
-}
-
-function activate() {
-  set -euo pipefail
-  bo="$(set -euo pipefail; build "${@}")"
-  target="${3:-"cole@localhost"}"
-  ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --profile /nix/var/nix/profiles/system "${bo}")";
-  ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${bo}" -c switch-to-configuration switch)";
-  #ssh -A "${target}" "$(printf '\"%s\" ' sudo "${bo}/bin/switch-to-configuration" switch)";
-}
-
-AARCH64="colemickens@aarch64.nixos.community"
-AZDEV="cole@100.68.232.46";     AZDEV="cole@azdev.ts.r10e.tech"
-AZMAIL="cole@100.89.63.78"
-PINEBOOK="cole@100.89.55.100";  PINEBOOK="cole@pinebook.ts.r10e.tech"
-RPIFOUR1="cole@100.111.5.113";  RPIFOUR1="cole@rpifour1.ts.r10e.tech"
-SLYNUX="cole@100.79.123.116";   SLYNUX="cole@slynux.ts.r10e.tech"
-XEEP="cole@100.72.11.62";       XEEP="cole@xeep.ts.r10e.tech"
-RPIZERO1="cole@100.111.5.113";  RPIZERO1="cole@rpizero1.ts.r10e.tech"
-RPIZERO2="cole@100.111.5.113";  RPIZERO2="cole@rpizero2.ts.r10e.tech"
-JEFFHYPER="jeff@100.103.91.27"; JEFFHYPER="jeff@jeffhyper.ts.r10e.tech"
-PEGLEG="cole@100.93.245.22";    PEGLEG="cole@pegleg.ts.r10e.tech"
-PORTY="cole@100.68.13.41";      PORTY="cole@porty.ts.r10e.tech"
-
-PINEPHONE="cole@100.1.2.3"; PINEPHONE="cole@pinephone.ts.r10e.tech"
-
-function a64() { build "$1" "${AARCH64}" "${AARCH64}"; }
+function a64() { build "$1" "${a64com}" "${a64com}"; }
 function nix() { command nix "${nixargs[@]}" "${@}"; }
 function nb() { command nix "${nixargs[@]}" build "${buildargs[@]}" "${@}"; }
-
-# function azdev()     { activate ".#toplevels.azdev"       "${BUILD_HOST:-"${AZDEV}"}"   "${AZDEV}";    }
-# function azmail()    { activate ".#toplevels.azmail"      "${BUILD_HOST:-"${AZDEV}"}"   "${AZMAIL}";    }
-# #function pinebook()  { activate ".#toplevels.pinebook"    "${BUILD_HOST:-"${AARCH64}"}" "${PINEBOOK}";  }
-# function rpifour1()  { activate ".#toplevels.rpifour1"    "${BUILD_HOST:-"${AARCH64}"}" "${RPIFOUR1}";  }
-# function slynux()    { activate ".#toplevels.slynux"      "${BUILD_HOST:-"${AZDEV}"}"   "${SLYNUX}";   }
-# #function xeep()      { activate ".#toplevels.xeep"        "${BUILD_HOST:-"${AZDEV}"}"   "${XEEP}";   }
-# function rpizero1()  { activate ".#toplevels.rpizero1"    "${BUILD_HOST:-"${AZDEV}"}"   "${RPIZERO1}";   }
-# function rpizero2()  { activate ".#toplevels.rpizero2"    "${BUILD_HOST:-"${AZDEV}"}"   "${RPIZERO2}";   }
-# function jeffhyper() { activate ".#toplevels.jeffhyper"   "${BUILD_HOST:-"${AZDEV}"}"   "${JEFFHYPER}";   }
-# function pegleg()    { activate ".#toplevels.pegleg"      "${BUILD_HOST:-"${AZDEV}"}"   "${PEGLEG}";   }
-# #function porty()     { activate ".#toplevels.porty"       "${BUILD_HOST:-"${AZDEV}"}"   "${PORTY}";   }
 
 function remote() {
   remote="${1}"; buildattr="${2}"; target="${3}"; f="cm-nix-$RANDOM"
   stash
   rev="$(git rev-parse --short HEAD)"
-  ssh_nixUnstable_shell "$remote" nix "${nixargs[@]}" build "${buildargs[@]}" -L "github:colemickens/nixcfg/${rev}#${buildattr}" --out-link "/tmp/$f"
+  thing="github:colemickens/nixcfg/${rev}#${buildattr}"
+  ssh_nixUnstable_shell "$remote" nix "${nixargs[@]}" build "${buildargs[@]}" -L "${thing}" --out-link "/tmp/$f"
   out="$(ssh_nixUnstable_shell "$remote" readlink -f "/tmp/$f")"
-  ssh_cachix_push $remote $out
-  if [[ "${target:-}" != "skip" ]]; then
+  
+  # target=copy   => copy back
+  # target=cachix => upload cachix, done
+  # target=skip   => do nothing
+  # target=*      => push to cachix, download on target, and activate
+  if [[ "${target}" == "copy" ]]; then
+    nix copy --no-check-sigs --from "ssh://${remote}" "${out}"
+  elif [[ "${target}" == "cachix" ]]; then
+    ssh_cachix_push $remote $out
+  elif [[ "${target:-}" != "skip" ]]; then
+    ssh_cachix_push $remote $out
     ssh_nixUnstable_shell2 "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -L --no-link -j0 "${out}"
     ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --profile /nix/var/nix/profiles/system "${out}")";
     ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch)";
@@ -193,30 +108,17 @@ function remote() {
   ssh_nixUnstable_shell "$remote" rm -f "/tmp/$f"
 }
 
-# skip cachix, pull back directly
-function remote_cp() {
-  remote="${1}"; buildattr="${2}"; target="${3}"; f="cm-nix-$RANDOM"
-  stash
-  rev="$(git rev-parse --short HEAD)"
-  ssh_nixUnstable_shell "$remote" nix "${nixargs[@]}" build "${buildargs[@]}" -L "github:colemickens/nixcfg/${rev}#${buildattr}" --out-link "/tmp/$f"
-  out="$(ssh_nixUnstable_shell "$remote" readlink -f "/tmp/$f")"
-  nix copy --no-check-sigs --from "ssh://${remote}" "${out}"
-  echo -e "${out}"
-}
+a64com="colemickens@aarch64.nixos.community"
 
-function rpifour1()  { remote "${AARCH64}" "toplevels.rpifour1"  "${RPIFOUR1}"; }
-function pinebook()  { remote "${AARCH64}" "toplevels.pinebook"  "${PINEBOOK}"; }
-function xeep()      { remote "${AZDEV}"   "toplevels.xeep"      "${XEEP}"; }
-function porty()     { remote "${AZDEV}"   "toplevels.porty"     "${PORTY}" "${@}"; }
+function rpifour1()  { remote "${a64com}"   "toplevels.rpifour1"  "$(ts rpifour1)"; }
+function pinebook()  { remote "${a64com}"   "toplevels.pinebook"  "$(ts pinebook)"; }
+function xeep()      { remote "$(ts azdev)" "toplevels.xeep"      "$(ts xeep)"; }
 
-function pinephone() { remote "${AARCH64}" "toplevels.pinephone" "${PINEPHONE}"; }
-function pinesd() {
-  pinephone || true
-  remote_cp "${AARCH64}" "images.pinephone_bundle" "${PINEPHONE}";
-}
+function pinephone() { remote "${a64com}" "toplevels.pinephone"      "$(ts pinephone)"; }
+function pinesd()    { remote "${a64com}" "images.pinephone_bundle"  "copy"; }
 
-function x86_64() { remote "${AZDEV}" "bundles.x86_64-linux" "skip"; }
-function aarch64() { remote "${AARCH64}" "bundles.aarch64-linux" "skip"; }
+function x86_64()  { remote "$(ts azdev)"  "bundles.x86_64-linux"   "cachix"; }
+function aarch64() { remote "${a64com}"    "bundles.aarch64-linux"  "cachix"; }
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 
