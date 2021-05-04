@@ -3,5 +3,5 @@
   branch = "main";
   rev = "03bb32083ba18a76aa0ef1d9a152ef895b84feb5";
   sha256 = "sha256-uyHZ7LIeXjScnrZoYta/68DuOkzS3mDJa5qruKHBPjA=";
-  vendorSha256 = "sha256-uyHZ7LIeXjScnrZoYta/68DuOkzS3mDJa5qruKHBPjA=";
+  vendorSha256 = "sha256-D2WSZytvacUVCzPYQ7XH72ddPR7MkHkPUDPDRf7G8EY=";
 }
