@@ -166,48 +166,36 @@ function a64() { build "$1" "${AARCH64}" "${AARCH64}"; }
 function nix() { command nix "${nixargs[@]}" "${@}"; }
 function nb() { command nix "${nixargs[@]}" build "${buildargs[@]}" "${@}"; }
 
-function azdev()     { activate ".#toplevels.azdev"       "${BUILD_HOST:-"${AZDEV}"}"   "${AZDEV}";    }
-function azmail()    { activate ".#toplevels.azmail"      "${BUILD_HOST:-"${AZDEV}"}"   "${AZMAIL}";    }
-#function pinebook()  { activate ".#toplevels.pinebook"    "${BUILD_HOST:-"${AARCH64}"}" "${PINEBOOK}";  }
-function rpifour1()  { activate ".#toplevels.rpifour1"    "${BUILD_HOST:-"${AARCH64}"}" "${RPIFOUR1}";  }
-function slynux()    { activate ".#toplevels.slynux"      "${BUILD_HOST:-"${AZDEV}"}"   "${SLYNUX}";   }
-#function xeep()      { activate ".#toplevels.xeep"        "${BUILD_HOST:-"${AZDEV}"}"   "${XEEP}";   }
-function rpizero1()  { activate ".#toplevels.rpizero1"    "${BUILD_HOST:-"${AZDEV}"}"   "${RPIZERO1}";   }
-function rpizero2()  { activate ".#toplevels.rpizero2"    "${BUILD_HOST:-"${AZDEV}"}"   "${RPIZERO2}";   }
-function jeffhyper() { activate ".#toplevels.jeffhyper"   "${BUILD_HOST:-"${AZDEV}"}"   "${JEFFHYPER}";   }
-function pegleg()    { activate ".#toplevels.pegleg"      "${BUILD_HOST:-"${AZDEV}"}"   "${PEGLEG}";   }
-#function porty()     { activate ".#toplevels.porty"       "${BUILD_HOST:-"${AZDEV}"}"   "${PORTY}";   }
-
-function x86() { build '.#bundles.x86_64-linux'  "${BUILD_HOST:-"${SLYNUX}"}" ""; }
-function a64() { build '.#bundles.aarch64-linux' "${BUILD_HOST:-"${AARCH64}"}" ""; }
+# function azdev()     { activate ".#toplevels.azdev"       "${BUILD_HOST:-"${AZDEV}"}"   "${AZDEV}";    }
+# function azmail()    { activate ".#toplevels.azmail"      "${BUILD_HOST:-"${AZDEV}"}"   "${AZMAIL}";    }
+# #function pinebook()  { activate ".#toplevels.pinebook"    "${BUILD_HOST:-"${AARCH64}"}" "${PINEBOOK}";  }
+# function rpifour1()  { activate ".#toplevels.rpifour1"    "${BUILD_HOST:-"${AARCH64}"}" "${RPIFOUR1}";  }
+# function slynux()    { activate ".#toplevels.slynux"      "${BUILD_HOST:-"${AZDEV}"}"   "${SLYNUX}";   }
+# #function xeep()      { activate ".#toplevels.xeep"        "${BUILD_HOST:-"${AZDEV}"}"   "${XEEP}";   }
+# function rpizero1()  { activate ".#toplevels.rpizero1"    "${BUILD_HOST:-"${AZDEV}"}"   "${RPIZERO1}";   }
+# function rpizero2()  { activate ".#toplevels.rpizero2"    "${BUILD_HOST:-"${AZDEV}"}"   "${RPIZERO2}";   }
+# function jeffhyper() { activate ".#toplevels.jeffhyper"   "${BUILD_HOST:-"${AZDEV}"}"   "${JEFFHYPER}";   }
+# function pegleg()    { activate ".#toplevels.pegleg"      "${BUILD_HOST:-"${AZDEV}"}"   "${PEGLEG}";   }
+# #function porty()     { activate ".#toplevels.porty"       "${BUILD_HOST:-"${AZDEV}"}"   "${PORTY}";   }
 
 function remote() {
-  remote="${1}"; shift
-  buildattr="${1}"; shift
-  target="${1}"; shift
-  f="cm-nix-$RANDOM"
-
+  remote="${1}"; buildattr="${2}"; target="${3}"; f="cm-nix-$RANDOM"
   stash
   rev="$(git rev-parse --short HEAD)"
   ssh_nixUnstable_shell "$remote" nix "${nixargs[@]}" build "${buildargs[@]}" -L "github:colemickens/nixcfg/${rev}#${buildattr}" --out-link "/tmp/$f"
   out="$(ssh_nixUnstable_shell "$remote" readlink -f "/tmp/$f")"
   ssh_cachix_push $remote $out
-
-  if [[ "${target:-}" != "" ]]; then
+  if [[ "${target:-}" != "skip" ]]; then
     ssh_nixUnstable_shell2 "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -L --no-link -j0 "${out}"
     ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --profile /nix/var/nix/profiles/system "${out}")";
     ssh -A "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch)";
   fi
-
   ssh_nixUnstable_shell "$remote" rm -f "/tmp/$f"
 }
 
+# skip cachix, pull back directly
 function remote_cp() {
-  remote="${1}"; shift
-  buildattr="${1}"; shift
-  target="${1}"; shift
-  f="cm-nix-$RANDOM"
-
+  remote="${1}"; buildattr="${2}"; target="${3}"; f="cm-nix-$RANDOM"
   stash
   rev="$(git rev-parse --short HEAD)"
   ssh_nixUnstable_shell "$remote" nix "${nixargs[@]}" build "${buildargs[@]}" -L "github:colemickens/nixcfg/${rev}#${buildattr}" --out-link "/tmp/$f"
@@ -216,6 +204,7 @@ function remote_cp() {
   echo -e "${out}"
 }
 
+function rpifour1()  { remote "${AARCH64}" "toplevels.rpifour1"  "${RPIFOUR1}"; }
 function pinebook()  { remote "${AARCH64}" "toplevels.pinebook"  "${PINEBOOK}"; }
 function xeep()      { remote "${AZDEV}"   "toplevels.xeep"      "${XEEP}"; }
 function porty()     { remote "${AZDEV}"   "toplevels.porty"     "${PORTY}" "${@}"; }
@@ -226,9 +215,8 @@ function pinesd() {
   remote_cp "${AARCH64}" "images.pinephone_bundle" "${PINEPHONE}";
 }
 
-function aarch64() {
-  remote_cp "${AARCH64}" "bundles.aarch64-linux" "${AZDEV}";
-}
+function x86_64() { remote "${AZDEV}" "bundles.x86_64-linux" "skip"; }
+function aarch64() { remote "${AARCH64}" "bundles.aarch64-linux" "skip"; }
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 
