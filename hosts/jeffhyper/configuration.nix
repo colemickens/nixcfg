@@ -11,6 +11,11 @@
   system.stateVersion = "21.03";
   virtualisation.hypervGuest.enable = true;
 
+  documentation.enable = false;
+  documentation.doc.enable = false;
+  documentation.info.enable = false;
+  documentation.nixos.enable = false;
+
   nix.nixPath = [];
   nix.gc.automatic = true;
   nix.maxJobs = lib.mkDefault 1;
