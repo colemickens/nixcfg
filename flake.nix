@@ -15,7 +15,8 @@
       url = "github:colemickens/nixpkgs/crosspkgs";
     };
 
-    nix.url = "github:nixos/nix/master";
+    # We're back to using nixUnstable so we shouldn't need this:
+    #nix.url = "github:nixos/nix/master";
 
     niche.url = "github:colemickens/niche/master";
     niche.inputs.nixpkgs.follows = "nixpkgs";
