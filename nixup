@@ -4,7 +4,7 @@ set -euo pipefail
 set -x
 
 function __() { printf "\n\n%s\n" "${1}" >/dev/stderr; }
-function ts() { echo -e "cole@${1}.ts.r10.tech"; }
+function ts() { echo -e "cole@${1}.ts.r10e.tech"; }
 unset NIX_PATH
 cd "${DIR}"
 
