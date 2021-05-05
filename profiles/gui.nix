@@ -46,6 +46,7 @@ in
       };
       home.packages = with pkgs; [
         colePackages.customGuiCommands
+        glxinfo
 
         # misc
         evince
