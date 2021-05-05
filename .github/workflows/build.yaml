@@ -4,11 +4,16 @@ on:
   schedule:
     - cron: '*/10 * * * *'
 jobs:
-  strategy:
-    matrix:
-      target: [ "bundles.x86_64-linux" "bundles.aarch64-linux" ]
   build:
-    runs-on: ubuntu-latest
+    runs-on: [ ubuntu-latest, ${{matrix.jobs.os}} ]
+    strategy:
+      matrix:
+        jobs: [
+          { "os": "arm64", "arch": "aarch64-linux", "target": "toplevels.rpifour1" }
+          { "os": "arm64", "arch": "aarch64-linux", "target": "toplevels.pinebook" }
+          { "os": "x86",   "arch": "x86_64-linux" , "target": "toplevels.xeep" }
+          { "os": "x86",   "arch": "x86_64-linux" , "target": "toplevels.azdev" }
+        ]
     steps:
     - uses: actions/checkout@v2
       with:
