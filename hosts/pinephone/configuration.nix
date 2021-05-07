@@ -4,15 +4,17 @@ let
 in
 {
   imports = [
-    (import "${inputs.mobile-nixos}/lib/configuration.nix" {
-      device = "pine64-pinephone";
-    })
+    # (import "${inputs.mobile-nixos}/lib/configuration.nix" {
+    #   device = "pine64-pinephone";
+    # })
+
+    "${inputs.mobile-nixos}/devices/pine64-pinephone/default.nix"
 
     ../../profiles/interactive.nix
     
     ../../mixins/ssh.nix
     ../../mixins/tailscale.nix
-  ];
+  ] ++ (import "${inputs.mobile-nixos}/modules/module-list.nix");
 
   config = {
       # https://github.com/Dejvino/pinephone-sway-poc
