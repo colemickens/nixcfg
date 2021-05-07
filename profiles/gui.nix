@@ -89,7 +89,7 @@ in
         # browsers
         inputs.stable.legacyPackages.${pkgs.system}.ungoogled-chromium
         inputs.stable.legacyPackages.${pkgs.system}.firefox
-        inputs.stable.legacyPackages.${pkgs.system}.tor-browser
+        inputs.stable.legacyPackages.${pkgs.system}.torbrowser
         firefoxNightly
 
         ddccontrol i2c-tools
