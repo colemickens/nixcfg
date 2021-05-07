@@ -187,17 +187,19 @@
       nixosConfigurations = {
         azdev     = mkSystem inputs.nixpkgs "x86_64-linux"  "azdev";
         azmail    = mkSystem inputs.nixpkgs "x86_64-linux"  "azmail";
-        rpifour1  = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour1";
         #rpifour2  (is a netboot device managed under rpifour1)
         #slynux    = mkSystem inputs.nixpkgs "x86_64-linux"  "slynux";
         xeep      = mkSystem inputs.nixpkgs "x86_64-linux"  "xeep";
         pinebook  = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
-        rpizero1  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
         #rpizero2  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
         jeffhyper = mkSystem inputs.nixpkgs "x86_64-linux"  "jeffhyper";
         porty = mkSystem inputs.nixpkgs "x86_64-linux"  "porty";
 
         pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
+
+        # embedded devices:
+        rpifour1  = mkSystem inputs.nixpkgs   "aarch64-linux" "rpifour1";
+        rpizero1  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
 
         #bluephone     = mkSystem fullPkgs_.aarch64-linux "bluephone";
         #demovm      = mkSystem fullPkgs_.x86_64-linux  "demovm";

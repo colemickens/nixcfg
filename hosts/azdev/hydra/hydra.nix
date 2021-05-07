@@ -21,11 +21,15 @@ let
   builder = (import ./hydra-machine-txt-builder.nix { inherit lib; });
   machinesFileText = (builder machinesConfig);
   machinesFile = pkgs.writeText "machines.txt" machinesFileText;
+
+  ndhSocket = "/var/run/ndh.sock";
 in {
   # this pull in the entire hydra overlay:
   imports = [
     inputs.hydra.nixosModules.hydra
     ./auto.nix
+
+    # ./separate-nix.nix
   ];
 
   config = {
