@@ -22,7 +22,7 @@ in
           colors = rec {
             primary.foreground = colors.foreground;
             primary.background = colors.background;
-            
+
             normal = {
               black   = colors.black;
               red     = colors.red;

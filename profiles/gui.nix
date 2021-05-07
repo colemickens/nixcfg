@@ -25,7 +25,7 @@ in
     ../mixins/pipewire.nix
     ../mixins/qt.nix
     ../mixins/spotify.nix
-    ../mixins/termite.nix
+    #../mixins/termite.nix
   ];
   # TODO: xdg-user-dirs fixup
 
@@ -64,7 +64,7 @@ in
         pulsemixer
 
         # terminals
-        alacritty
+        #alacritty
         #cool-retro-term
         kitty
 
