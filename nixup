@@ -82,7 +82,11 @@ function ssh_niche_shell() {
 function a64() { build "$1" "${a64com}" "${a64com}"; }
 function nix() { command nix "${nixargs[@]}" "${@}"; }
 function nb() { command nix "${nixargs[@]}" build "${buildargs[@]}" "${@}"; }
-function cache() { readlink -f $1 | command cachix push "${cache}"; }
+function cache() {
+  t=$(mktemp -d)
+  nb --out-link $t
+  readlink -f $t | cachix push "${cache}"
+}
 
 function remote() {
   remote="${1}"; buildattr="${2}"; target="${3}"; f="cm-nix-$RANDOM"

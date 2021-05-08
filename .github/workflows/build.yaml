@@ -32,5 +32,10 @@ jobs:
         git config --global user.email 'cole.mickens+colebot@gmail.com'
     - name: build
       run: |
-        ./nixup nb -L ".#${{ matrix.jobs.target }}"
-        ./nixup cache ./result
+        nix develop -c ./nixup nb -L \
+          --out-link "/tmp/${{matrix.jobs.target}}_OUT" \
+            ".#${{ matrix.jobs.target }}"
+    - name: build
+      run: |
+        readlink -f /tmp/${{matrix.jobs.target}}_OUT \
+          | nix develop -c cachix push colemickens

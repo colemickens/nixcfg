@@ -17,17 +17,15 @@ jobs:
           experimental-features = nix-command flakes
     - name: git-setup
       run: |
-        nix-shell -I 'nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz' -p git --command "git config --global user.name 'Cole Botkens'"
-        nix-shell -I 'nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz' -p git --command "git config --global user.email 'cole.mickens+colebot@gmail.com'"
-        git checkout -b auto-update
+        git config --global user.name 'Cole Botkens'
+        git config --global user.email 'cole.mickens+colebot@gmail.com'
     - name: update-flake
       run: |
-        nix-shell -I 'nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz' \
-          -p nixUnstable --command \
-            "nix --experimental-features 'nix-command flakes' flake update --commit-lock-file --no-registries"
+        git checkout -b auto-update
+        nix flake update --commit-lock-file --no-registries
     - name: update
       run: |
-        nix-shell --pure --command "JOB_ID=\"GHA-${GITHUB_WORKFLOW}-${GITHUB_RUN_ID}-${GITHUB_RUN_NUMBER}\" ./nixup update"
+        nix run update
     - name: push
       run: |
         git push origin HEAD -f
