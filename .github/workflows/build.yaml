@@ -14,8 +14,8 @@ jobs:
         #- { "os": "arm64", "arch": "aarch64-linux", "target": "toplevels.rpifour1" }
         #- { "os": "arm64", "arch": "aarch64-linux", "target": "toplevels.pinebook" }
         - { "os": "x86",   "arch": "x86_64-linux" , "target": "toplevels.xeep" }
-        - { "os": "x86",   "arch": "x86_64-linux" , "target": "toplevels.azdev" }
-        - { "os": "x86",   "arch": "x86_64-linux" , "target": "toplevels.porty" }
+        #- { "os": "x86",   "arch": "x86_64-linux" , "target": "toplevels.azdev" }
+        #- { "os": "x86",   "arch": "x86_64-linux" , "target": "toplevels.porty" }
     steps:
     - uses: actions/checkout@v2
       with:
