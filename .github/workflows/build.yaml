@@ -5,7 +5,7 @@ on:
     - cron: '*/10 * * * *'
 jobs:
   build:
-    runs-on: [ ubuntu-latest, ${{matrix.jobs.os}} ]
+    runs-on: [ ubuntu-latest ]
     strategy:
       matrix:
         jobs:
