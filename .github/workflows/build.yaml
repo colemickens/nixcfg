@@ -32,6 +32,6 @@ jobs:
     - name: build
       run: |
         nix develop -c ./nixup nb -L ".#${{ matrix.jobs.target }}"
-    - name: build
+    - name: cache
       run: |
         readlink -f ./result | nix develop -c cachix push colemickens
