@@ -31,10 +31,12 @@ jobs:
         git config --global user.email 'cole.mickens+colebot@gmail.com'
     - name: build
       run: |
-        # nix develop -c ./nixup nb -L ".#${{ matrix.jobs.target }}"  
-        set -x
-        nix-build default.nix -A "${target}"
-        nix-build default.nix --out-link ./result -A "${target}"
+        set -xeuo pipefail
+        # flakes
+        # nix develop -c ./nixup nb -L ".#${{ matrix.jobs.target }}"
+        # stable
+        nix-build default.nix -A "${{ matrix.jobs.target }}"
+        nix-build default.nix --out-link ./result -A "${{ matrix.jobs.target }}"
         readlink -f ./result
         ls -al ./result
     - name: cache
