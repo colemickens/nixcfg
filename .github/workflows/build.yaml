@@ -41,4 +41,6 @@ jobs:
       run: |
         # readlink -f ./result | nix develop -c cachix push colemickens
         nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-20.09.tar.gz -p cachix --run "true"
+        set -x
+        echo "now upload"
         readlink -f ./result | nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-20.09.tar.gz -p cachix --run 'cachix push colemickens'
