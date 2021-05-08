@@ -19,13 +19,8 @@ jobs:
       run: |
         git config --global user.name 'Cole Botkens'
         git config --global user.email 'cole.mickens+colebot@gmail.com'
-    - name: update-flake
-      run: |
-        git checkout -b auto-update
-        nix flake update --commit-lock-file --no-registries
     - name: update
-      run: |
-        nix run update
+        nix develop -c ./nixup update
     - name: push
       run: |
         git push origin HEAD -f
