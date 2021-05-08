@@ -32,5 +32,5 @@ jobs:
         nix-shell -I 'nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz' -p git --command "git config --global user.email 'cole.mickens+colebot@gmail.com'"
     - name: build
       run: |
-        ./nixup nb ".#${matrix.jobs.target}" --keep-going
+        ./nixup nb ".#${{ matrix.jobs.target }}" --keep-going
         readlink -f ./result | cachix push colemickens
