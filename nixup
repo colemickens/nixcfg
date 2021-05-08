@@ -88,6 +88,12 @@ function cache() {
   readlink -f $t | cachix push "${cache}"
 }
 
+# for use from CI
+# "nix build flakes"
+# "nix-build legacy"
+function nbf() { command nix "${nixargs[@]}" build -L "${buildargs[@]}" ".#${@}"; }
+function nbl() { command nix-build "${buildargs[@]}" "${@}"; }
+
 function remote() {
   remote="${1}"; buildattr="${2}"; target="${3}"; f="cm-nix-$RANDOM"
   stash
