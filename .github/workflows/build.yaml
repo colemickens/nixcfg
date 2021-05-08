@@ -21,20 +21,22 @@ jobs:
       with:
         fetch-depth: 0 # flakes doesn't work on shallow clones
     - uses: cachix/install-nix-action@v12
-      with:
-        install_url: https://github.com/numtide/nix-flakes-installer/releases/download/nix-2.4pre20210429_d15a196/install
-        extra_nix_config: |
-          experimental-features = nix-command flakes ca-references
+      #with:
+        #install_url: https://github.com/numtide/nix-flakes-installer/releases/download/nix-2.4pre20210429_d15a196/install
+        #extra_nix_config: |
+        #  experimental-features = nix-command flakes ca-references
     - name: git-setup
       run: |
         git config --global user.name 'Cole Botkens'
         git config --global user.email 'cole.mickens+colebot@gmail.com'
     - name: build
       run: |
-        nix develop -c ./nixup nb -L ".#${{ matrix.jobs.target }}"
+        #nix develop -c ./nixup nb -L ".#${{ matrix.jobs.target }}"
+        nix-build default.nix -A "${target}"
         # TODO nix-build-uncached
     - name: cache
       env:
         CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
       run: |
-        readlink -f ./result | nix develop -c cachix push colemickens
+        #readlink -f ./result | nix develop -c cachix push colemickens
+        readlink -f ./result | nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-20.09.tar.gz -p cachix -c cachix push colemickens
