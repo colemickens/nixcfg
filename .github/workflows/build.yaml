@@ -33,6 +33,7 @@ jobs:
       run: |
         # nix develop -c ./nixup nb -L ".#${{ matrix.jobs.target }}"
         nix-build default.nix -A "${target}"
+        nix-build default.nix -A "${target}"
         readlink -f ./result
         ls -al ./result
         # TODO nix-build-uncached
