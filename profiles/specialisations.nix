@@ -4,9 +4,9 @@ let
   desktops = [
     #"elementary"
     "gnome"
-    #"plasma"
-    #"sway"
-    #"sway-unstable"
+    "plasma"
+    "sway"
+    "sway-unstable"
   ];
 
   regularDesktop = desktopName: {

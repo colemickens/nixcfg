@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, lib, inputs, ... }:
 let
   hostname = "xeep";
 in
@@ -11,7 +11,9 @@ in
     ../../mixins/loremipsum-media/rclone-cmd.nix
 
     ../../profiles/interactive.nix
-    ../../profiles/desktop-sway.nix
+    #../../profiles/desktop-sway.nix
+    ../../profiles/desktop-sway-unstable.nix
+    #../../profiles/desktop-gnome.nix
 
     # xps 13 9370 specific:
     ../../mixins/gfx-intel.nix
@@ -58,6 +60,8 @@ in
       };
     };
     swapDevices = [];
+
+    services.tlp.enable = lib.mkForce false;
 
     console.earlySetup = true; # hidpi + luks-open  # TODO : STILL NEEDED?
     console.font = "ter-v32n";
@@ -121,7 +125,7 @@ in
       wireless.iwd.enable = true;
       useNetworkd = true;
       useDHCP = false;
-      
+
       interfaces."wlan0".useDHCP = true;
       interfaces."enp56s0u1u3".useDHCP = true;
       interfaces."enp57s0u1u3".useDHCP = true;

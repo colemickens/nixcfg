@@ -1,6 +1,5 @@
 name: "Update"
 on:
-  push:
   schedule:
     - cron: '*/10 * * * *'
 jobs:

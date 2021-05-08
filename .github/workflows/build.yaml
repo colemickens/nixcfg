@@ -1,4 +1,4 @@
-name: "build"
+name: "Build"
 on:
   push:
   schedule:
@@ -24,12 +24,6 @@ jobs:
         install_url: https://github.com/numtide/nix-flakes-installer/releases/download/nix-2.4pre20201221_9fab14a/install
         extra_nix_config: |
           experimental-features = nix-command flakes ca-derivations ca-references
-    # - name: get-secrets
-    #   run: |
-    #     # use `vault` to get access to (or we might just have to copy) the key for aarch64.nixos.community
     - name: build
       run: |
-        nix-build \
-          --option \
-          --option \
-            default.nix -A ${{ matrix.target }}
+        nix-shell --pure --command "JOB_ID=\"GHA-${GITHUB_WORKFLOW}-${GITHUB_RUN_ID}-${GITHUB_RUN_NUMBER}\" ./nixup update"
