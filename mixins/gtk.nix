@@ -7,7 +7,7 @@
         enable = true;
         #preferDark = true;
         font = { name = "Noto Sans 11"; package = pkgs.noto-fonts; };
-        iconTheme = { name = "Numix"; package = pkgs.numix-icon-theme; };
+        iconTheme = { name = "Numix Circle"; package = pkgs.numix-icon-theme; };
 
         cursorTheme = { name = "capitaine-cursors-white"; package = pkgs.capitaine-cursors; };
         #cursorTheme = { name = "capitaine-cursors"; package = pkgs.capitaine-cursors; };

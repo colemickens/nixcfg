@@ -12,9 +12,9 @@ let
   #terminal = "${pkgs.termite}/bin/termite";
   terminal = "${pkgs.alacritty}/bin/alacritty";
   #terminal = "${pkgs.kitty}/bin/kitty";
-  browser = "${pkgs.firefox-bin}/bin/firefox";
+  #browser = "${pkgs.firefox-bin}/bin/firefox";
   #browser = "${inputs.firefox.firefox-nightly-bin}/bin/firefox";
-  #browser = "firefox";
+  browser = "firefox-nightly";
 
   # PASS
   gp = "${pkgs.gopass}/bin/gopass";
