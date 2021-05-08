@@ -28,7 +28,7 @@ jobs:
 
         # stable
         np="https://github.com/$(jq -r '.nodes.nixpkgs.locked.owner' flake.lock)/$(jq -r '.nodes.nixpkgs.locked.repo' flake.lock)/archive/$(jq -r '.nodes.nixpkgs.locked.rev' flake.lock).tar.gz"
-        nix-shell -I nixpkgs=${np} --run "./nixup update"
+        nix-shell --pure -I nixpkgs=${np} --run "./nixup update"
     - name: push
       run: |
         git push origin HEAD -f

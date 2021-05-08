@@ -38,7 +38,7 @@ jobs:
 
         # stable
         np="https://github.com/$(jq -r '.nodes.nixpkgs.locked.owner' flake.lock)/$(jq -r '.nodes.nixpkgs.locked.repo' flake.lock)/archive/$(jq -r '.nodes.nixpkgs.locked.rev' flake.lock).tar.gz"
-        nix-shell -I nixpkgs=${np} --run "./nixup nbl ${{matrix.jobs.target}}"
+        nix-shell --pure -I nixpkgs=${np} --run "./nixup nbl ${{matrix.jobs.target}}"
     - name: cache
       env:
         CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
@@ -50,4 +50,4 @@ jobs:
 
         # stable
         np="https://github.com/$(jq -r '.nodes.cachix.locked.owner' flake.lock)/$(jq -r '.nodes.cachix.locked.repo' flake.lock)/archive/$(jq -r '.nodes.cachix.locked.rev' flake.lock).tar.gz"
-        readlink -f ./result | nix-shell -I nixpkgs=${np} -p cachix --run 'cachix push colemickens'
+        readlink -f ./result | nix-shell --pure -I nixpkgs=${np} -p cachix --run 'cachix push colemickens'
