@@ -28,4 +28,5 @@ jobs:
           experimental-features = nix-command flakes ca-derivations ca-references
     - name: build
       run: |
-        nix-shell --pure --command "JOB_ID=\"GHA-${GITHUB_WORKFLOW}-${GITHUB_RUN_ID}-${GITHUB_RUN_NUMBER}\" ./nixup update"
+        nix build ".#${matrix.jobs.target}" --keep-going
+        readlink -f ./result | cachix push colemickens
