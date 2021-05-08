@@ -40,4 +40,5 @@ jobs:
         CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
       run: |
         # readlink -f ./result | nix develop -c cachix push colemickens
+        nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-20.09.tar.gz -p cachix --run "true"
         readlink -f ./result | nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-20.09.tar.gz -p cachix --run 'cachix push colemickens'
