@@ -26,6 +26,10 @@ jobs:
         install_url: https://github.com/numtide/nix-flakes-installer/releases/download/nix-2.4pre20201221_9fab14a/install
         extra_nix_config: |
           experimental-features = nix-command flakes ca-derivations ca-references
+    - name: git-setup
+      run: |
+        nix-shell -I 'nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz' -p git --command "git config --global user.name 'Cole Botkens'"
+        nix-shell -I 'nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz' -p git --command "git config --global user.email 'cole.mickens+colebot@gmail.com'"
     - name: build
       run: |
         nix build ".#${matrix.jobs.target}" --keep-going
