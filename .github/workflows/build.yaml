@@ -49,4 +49,5 @@ jobs:
         # readlink -f ./result | nix develop -c cachix push colemickens
 
         # stable
-        readlink -f ./result | nix-shell -I nixpkgs=https://github.com/nixos/nixpkgs/archive/nixos-20.09.tar.gz -p cachix --run 'cachix push colemickens'
+        np="https://github.com/$(jq -r '.nodes.cachix.locked.owner' flake.lock)/$(jq -r '.nodes.cachix.locked.repo' flake.lock)/archive/$(jq -r '.nodes.cachix.locked.rev' flake.lock).tar.gz"
+        readlink -f ./result | nix-shell -I nixpkgs=${np} -p cachix --run 'cachix push colemickens'

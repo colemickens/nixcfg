@@ -91,8 +91,8 @@ function cache() {
 # for use from CI
 # "nix build flakes"
 # "nix-build legacy"
-function nbf() { command nix "${nixargs[@]}" build -L "${buildargs[@]}" ".#${@}"; }
-function nbl() { command nix-build "${buildargs[@]}" "${@}"; }
+function nbf() { target="${1}"; shift; command nix "${nixargs[@]}" build -L "${buildargs[@]}" ".#${target}" "${@}"; }
+function nbl() { target="${1}"; shift; command nix-build "${buildargs[@]}" -A "${target}" "${@}"; }
 
 function remote() {
   remote="${1}"; buildattr="${2}"; target="${3}"; f="cm-nix-$RANDOM"
