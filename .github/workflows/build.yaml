@@ -31,12 +31,12 @@ jobs:
         git config --global user.email 'cole.mickens+colebot@gmail.com'
     - name: build
       run: |
-        # nix develop -c ./nixup nb -L ".#${{ matrix.jobs.target }}"
+        # nix develop -c ./nixup nb -L ".#${{ matrix.jobs.target }}"  
+        set -x
         nix-build default.nix -A "${target}"
-        nix-build default.nix -A "${target}"
+        nix-build default.nix --out-link ./result -A "${target}"
         readlink -f ./result
         ls -al ./result
-        # TODO nix-build-uncached
     - name: cache
       env:
         CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
