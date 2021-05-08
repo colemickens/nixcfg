@@ -33,5 +33,7 @@ jobs:
       run: |
         nix develop -c ./nixup nb -L ".#${{ matrix.jobs.target }}"
     - name: cache
+      env:
+        CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
       run: |
         readlink -f ./result | nix develop -c cachix push colemickens
