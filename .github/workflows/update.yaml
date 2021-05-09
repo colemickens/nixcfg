@@ -20,15 +20,46 @@ jobs:
         git config --global user.name 'Cole Botkens'
         git config --global user.email 'cole.mickens+colebot@gmail.com'
     - name: update
+      env:
+        CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
+      run: |
+        set -xeuo pipefail
+
+        git checkout -b auto-update
+
+        # flakes
+        #nix develop --ignore-environment --keep CACHIX_SIGNING_KEY -c ./nixup update
+
+        # stable
+        np="https://github.com/$(jq -r '.nodes.nixpkgs.locked.owner' flake.lock)/$(jq -r '.nodes.nixpkgs.locked.repo' flake.lock)/archive/$(jq -r '.nodes.nixpkgs.locked.rev' flake.lock).tar.gz"
+        nix-shell -I nixpkgs=${np} --run "./nixup update"
+    - name: push
+      run: |
+        git push origin HEAD -f
+    - name: build
+      run: |
+        set -xeuo pipefail
+        target="bundles.x86_64-linux"
+
+        # flakes
+        # nix develop -c ./nixup nbf "${target}"
+
+        # stable
+        np="https://github.com/$(jq -r '.nodes.nixpkgs.locked.owner' flake.lock)/$(jq -r '.nodes.nixpkgs.locked.repo' flake.lock)/archive/$(jq -r '.nodes.nixpkgs.locked.rev' flake.lock).tar.gz"
+        nix-shell -I nixpkgs=${np} --run "./nixup nbl ${target}"
+    - name: cache
+      env:
+        CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
       run: |
         set -xeuo pipefail
 
         # flakes
-        #nix develop -c ./nixup update
+        # readlink -f ./result | nix develop -c cachix push colemickens
 
         # stable
-        np="https://github.com/$(jq -r '.nodes.nixpkgs.locked.owner' flake.lock)/$(jq -r '.nodes.nixpkgs.locked.repo' flake.lock)/archive/$(jq -r '.nodes.nixpkgs.locked.rev' flake.lock).tar.gz"
-        nix-shell --pure -I nixpkgs=${np} --run "./nixup update"
-    - name: push
+        np="https://github.com/$(jq -r '.nodes.cachix.locked.owner' flake.lock)/$(jq -r '.nodes.cachix.locked.repo' flake.lock)/archive/$(jq -r '.nodes.cachix.locked.rev' flake.lock).tar.gz"
+        readlink -f ./result | nix-shell -I nixpkgs=${np} -p cachix --run 'cachix push colemickens'
+    - name: push-good
       run: |
+        git checkout -b auto-update-good
         git push origin HEAD -f
