@@ -15,10 +15,10 @@ jobs:
       #   install_url: https://github.com/numtide/nix-flakes-installer/releases/download/nix-2.4pre20210429_d15a196/install
       #   extra_nix_config: |
       #     experimental-features = nix-command flakes ca-references
-    - uses: cachix/cachix-action@v10
-      with:
-        name: colemickens
-        signingKey: '${{ secrets.cachix_key_colemickens }}'
+    # - uses: cachix/cachix-action@v10
+    #   with:
+    #     name: colemickens
+    #     signingKey: '${{ secrets.cachix_key_colemickens }}'
     - name: git-setup
       run: |
         git config --global user.name 'Cole Botkens'
@@ -40,30 +40,24 @@ jobs:
     - name: push
       run: |
         git push origin HEAD -f
-    - name: build
-      run: |
-        set -xeuo pipefail
-        target="bundles.x86_64-linux"
+    # - name: build
+    #   run: |
+    #     set -xeuo pipefail
+    #     target="bundles.x86_64-linux"
 
-        # flakes
-        # nix develop -c ./nixup nbf "${target}"
+    #     # flakes
+    #     # nix develop -c ./nixup nbf "${target}"
 
-        # stable
-        np="https://github.com/$(jq -r '.nodes.nixpkgs.locked.owner' flake.lock)/$(jq -r '.nodes.nixpkgs.locked.repo' flake.lock)/archive/$(jq -r '.nodes.nixpkgs.locked.rev' flake.lock).tar.gz"
-        nix-shell -I nixpkgs=${np} --run "./nixup nbl ${target}"
-    - name: cache
-      env:
-        CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
-      run: |
-        set -xeuo pipefail
-
-        # flakes
-        # readlink -f ./result | nix develop -c cachix push colemickens
-
-        # stable
-        np="https://github.com/$(jq -r '.nodes.cachix.locked.owner' flake.lock)/$(jq -r '.nodes.cachix.locked.repo' flake.lock)/archive/$(jq -r '.nodes.cachix.locked.rev' flake.lock).tar.gz"
-        readlink -f ./result | nix-shell -I nixpkgs=${np} -p cachix --run 'cachix push colemickens'
-    - name: push-good
-      run: |
-        git checkout -b auto-update-good
-        git push origin HEAD -f
+    #     # stable
+    #     np="https://github.com/$(jq -r '.nodes.nixpkgs.locked.owner' flake.lock)/$(jq -r '.nodes.nixpkgs.locked.repo' flake.lock)/archive/$(jq -r '.nodes.nixpkgs.locked.rev' flake.lock).tar.gz"
+    #     nix-shell -I nixpkgs=${np} --run "./nixup nbl ${target}"
+    # - name: cache
+    #   env:
+    #         - uses: cachix/cachix-action@v10
+    #   with:
+    #     name: colemickens
+    #     signingKey: '${{ secrets.cachix_key_colemickens }}'
+    # - name: push-good
+    #   run: |
+    #     git checkout -b auto-update-good
+    #     git push origin HEAD -f

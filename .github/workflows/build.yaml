@@ -5,8 +5,9 @@ on:
       - main
       - auto-update
   workflow_run:
-    - workflows: [ "Update" ]
-      types: [ "completed" ]
+    workflows: [ "Update" ]
+    branches: [ "auto-update"]
+    types: [ "completed" ]
   schedule:
     - cron: '0 */3 * * *'
 jobs:
