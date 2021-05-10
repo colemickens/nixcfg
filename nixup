@@ -93,6 +93,7 @@ function cache() {
 # "nix-build legacy"
 function nbf() { target="${1}"; shift; command nix "${nixargs[@]}" build -L "${buildargs[@]}" ".#${target}" "${@}"; }
 function nbl() { target="${1}"; shift; command nix-build "${buildargs[@]}" -A "${target}" "${@}"; }
+function nbu() { target="${1}"; shift; command nix-build-uncached "${buildargs[@]}" -A "${target}" "${@}"; }
 
 function remote() {
   remote="${1}"; buildattr="${2}"; target="${3}"; f="cm-nix-$RANDOM"

@@ -1,15 +1,8 @@
 name: "Build"
 on:
   push:
-    branches:
-      - main
-      - auto-update
-  workflow_run:
-    workflows: [ "Update" ]
-    branches: [ "auto-update"]
-    types: [ "completed" ]
   schedule:
-    - cron: '0 */3 * * *'
+    - cron: '*/10 * * * *'
 jobs:
   build:
     runs-on:
@@ -20,13 +13,17 @@ jobs:
         jobs:
         #- { "os": "arm64", "arch": "aarch64-linux", "target": "toplevels.rpifour1" }
         #- { "os": "arm64", "arch": "aarch64-linux", "target": "toplevels.pinebook" }
-        - { "os": "x86",   "arch": "x86_64-linux" , "target": "toplevels.xeep" }
-        - { "os": "x86",   "arch": "x86_64-linux" , "target": "toplevels.azdev" }
-        - { "os": "x86",   "arch": "x86_64-linux" , "target": "toplevels.porty" }
+        - { "branch": "main",         "target": "toplevels.xeep"}
+        - { "branch": "main",         "target": "toplevels.azdev" }
+        - { "branch": "main",         "target": "toplevels.porty" }
+        - { "branch": "auto-update",  "target": "toplevels.xeep"}
+        - { "branch": "auto-update",  "target": "toplevels.azdev" }
+        - { "branch": "auto-update",  "target": "toplevels.porty" }
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0 # flakes doesn't work on shallow clones
+        ref: ${{ matrix.jobs.branch }}
     - uses: cachix/install-nix-action@v12
       #with:
         #install_url: https://github.com/numtide/nix-flakes-installer/releases/download/nix-2.4pre20210429_d15a196/install
@@ -46,7 +43,7 @@ jobs:
         target="${{ matrix.jobs.target }}"
 
         # flakes
-        # nix develop -c ./nixup nbf "${target}"
+        # nix develop -c ./nixup nbu "${target}"
 
         # stable
         np="https://github.com/$(jq -r '.nodes.nixpkgs.locked.owner' flake.lock)/$(jq -r '.nodes.nixpkgs.locked.repo' flake.lock)/archive/$(jq -r '.nodes.nixpkgs.locked.rev' flake.lock).tar.gz"

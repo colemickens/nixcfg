@@ -13,14 +13,12 @@ with lib;
   config = {
     i18n.defaultLocale = "en_US.UTF-8";
 
-    system.configurationRevision =
-      if inputs.self ? rev
-      then inputs.self.rev
-      else
-        #throw "Refusing to build from a dirty Git tree!";
-        "hydra_";
-
-    system.nixos.label = "${config.system.nixos.version}-${pkgs.lib.substring 0 8 config.system.configurationRevision}";
+    # system.configurationRevision =
+    #   if inputs.self ? rev
+    #   then inputs.self.rev
+    #   else
+    #     #throw "Refusing to build from a dirty Git tree!";
+    #     "hydra_";
 
     boot = {
       cleanTmpDir = true;
