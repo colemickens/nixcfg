@@ -194,6 +194,7 @@
         #rpizero2  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
         jeffhyper = mkSystem inputs.nixpkgs "x86_64-linux"  "jeffhyper";
         porty = mkSystem inputs.nixpkgs "x86_64-linux"  "porty";
+        raisin = mkSystem inputs.nixpkgs "x86_64-linux"  "raisin";
 
         pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
 
