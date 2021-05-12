@@ -4,6 +4,8 @@ let
 in
 {
   imports = [
+    ../../mixins/common.nix
+
     ../../mixins/logitech-mouse.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
@@ -38,6 +40,10 @@ in
         device = "raisintank/nix";
         fsType = "zfs";
       };
+      "/home" = {
+        device = "raisintank/home";
+        fsType = "zfs";
+      };
     };
     swapDevices = [];
 
@@ -50,6 +56,13 @@ in
       cleanTmpDir = true;
 
       kernelPackages = pkgs.linuxPackages_latest;
+      initrd.availableKernelModules = [
+        "xhci_pci" "xhci_hcd" # usb
+        "nvme" "usb_storage" "sd_mod" # nvme / external usb storage
+        "rtsx_pci_sdmmc" # sdcard
+        "intel_agp" "i915" # intel integrated graphics
+        "usbnet" "r8152" # usb ethernet adapter
+      ];
       kernelParams = [
         "mitigations=off" # YOLO
       ];
