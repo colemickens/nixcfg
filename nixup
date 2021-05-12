@@ -122,9 +122,10 @@ function remote() {
 
 a64com="colemickens@aarch64.nixos.community"
 
-function rpifour1()  { remote "${a64com}"   "toplevels.rpifour1"  "$(ts rpifour1)"; }
-function pinebook()  { remote "${a64com}"   "toplevels.pinebook"  "$(ts pinebook)"; }
-function xeep()      { remote "$(ts azdev)" "toplevels.xeep"      "$(ts xeep)"; }
+function rpifour1()  { remote "${a64com}"    "toplevels.rpifour1"  "$(ts rpifour1)"; }
+function pinebook()  { remote "${a64com}"    "toplevels.pinebook"  "$(ts pinebook)"; }
+function xeep()      { remote "$(ts azdev)"  "toplevels.xeep"      "$(ts xeep)"; }
+function raisin()    { remote "$(ts raisin)" "toplevels.raisin"    "$(ts raisin)"; }
 
 function pinephone() { remote "${a64com}" "toplevels.pinephone"      "$(ts pinephone)"; }
 function pinesd()    { remote "${a64com}" "images.pinephone_bundle"  "copy"; }

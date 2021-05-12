@@ -10,8 +10,8 @@ in
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
 
-    #../../profiles/desktop-sway-unstable.nix
-    ../../profiles/desktop-gnome.nix
+    ../../profiles/desktop-sway-unstable.nix
+    #../../profiles/desktop-gnome.nix
   ];
 
   config = {
