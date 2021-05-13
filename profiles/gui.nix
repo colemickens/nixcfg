@@ -52,7 +52,19 @@ in
         evince
         gimp
         qemu
-        vscodium
+        # (pkgs.writeScriptBin "codium" ''
+        #   ${pkgs.vscodium}/bin/codium  --enable-features=UseOzonePlatform --ozone-platform=wayland "''${@}"
+        # '')
+        (pkgs.runCommandNoCC "codium"
+          { buildInputs = with pkgs; [ makeWrapper ]; }
+          ''
+            makeWrapper ${pkgs.vscodium}/bin/codium $out/bin/codium \
+              --add-flags "--enable-features=UseOzonePlatform" \
+              --add-flags "--ozone-platform=wayland"
+            
+            ln -sf ${pkgs.vscodium}/share $out/share
+          ''
+        )
         #vscode
         freerdp
         virt-viewer
@@ -74,9 +86,19 @@ in
         quaternion
         spectral
         mirage-im
-        element-desktop
         cchat-gtk
         neochat
+        #element-desktop
+        (pkgs.runCommandNoCC "element"
+          { buildInputs = with pkgs; [ makeWrapper ]; }
+          ''
+            makeWrapper ${pkgs.element-desktop}/bin/element-desktop $out/bin/element-desktop \
+              --add-flags "--enable-features=UseOzonePlatform" \
+              --add-flags "--ozone-platform=wayland"
+            
+            ln -sf ${pkgs.element-desktop}/share $out/share
+          ''
+        )
 
         rkvm
 

@@ -25,11 +25,13 @@ let
   # OUTPUTS
   out_laptop = "Sharp Corporation 0x148B 0x00000000";
   out_alien = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
+  out_raisin = "Unknown 0x1402 0x00000000";
 
   # INPUTS
   in_pine_touchpad = "9610:30:HAILUCK_CO.,LTD_USB_KEYBOARD_Touchpad";
   in_touchpad = "1739:30383:DELL07E6:00_06CB:76AF_Touchpad";
   in_logi = "1133:16505:Logitech_G_Pro";
+  in_raisin = "1739:52804:MSFT0001:00_06CB:CE44_Touchpad";
 
   i3statusConfig = import ./i3status-rust-config.nix { inherit pkgs; };
   i3statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ${i3statusConfig}";
@@ -151,6 +153,15 @@ in
               accel_profile = "adaptive";
               pointer_accel = ".5";
             };
+            "${in_raisin}" = {
+              click_method = "clickfinger";
+              tap = "enabled";
+              dwt = "enabled";
+              scroll_method = "two_finger";
+              natural_scroll = "enabled";
+              #accel_profile = "adaptive";
+              #pointer_accel = ".5";
+            };
             "${in_logi}" = {
               accel_profile = "adaptive";
               pointer_accel = ".1";
@@ -169,6 +180,12 @@ in
               # don't force alienware to be a certain refresh rate (it depends what adapter is used :/)
               subpixel = "rgb";
               scale = "1.0";
+              adaptive_sync = "on";
+            };
+            "${out_raisin}" = {
+              mode = "2880x1800@90Hz";
+              subpixel = "rgb";
+              scale = "1.8";
               adaptive_sync = "on";
             };
             "*" = {

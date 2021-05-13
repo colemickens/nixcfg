@@ -94,7 +94,7 @@ in
 
             #"idle_inhibitor" = { format = "{icon}"; };
             pulseaudio = {
-              format = "{desc}:{volume}%";
+              format = "vol {volume}%";
               on-click-middle = "${pkgs.sway}/bin/swaymsg exec \"${pkgs.alacritty}/bin/alacritty -e pulsemixer\"";
             };
             network = {
