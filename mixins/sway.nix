@@ -32,6 +32,7 @@ let
   in_touchpad = "1739:30383:DELL07E6:00_06CB:76AF_Touchpad";
   in_logi = "1133:16505:Logitech_G_Pro";
   in_raisin = "1739:52804:MSFT0001:00_06CB:CE44_Touchpad";
+  in_trackpoint_ii = "6127:24814:Lenovo_TrackPoint_Keyboard_II";
 
   i3statusConfig = import ./i3status-rust-config.nix { inherit pkgs; };
   i3statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ${i3statusConfig}";
@@ -166,13 +167,16 @@ in
               accel_profile = "adaptive";
               pointer_accel = ".1";
             };
+            "type:keyboard" = {
+              xkb_options = "shift:both_capslock,ctrl:nocaps"; 
+            };
           };
           output = {
             #"${out_laptop}" = {
             #  mode = "3480x2160@59.997002Hz";
             #  subpixel = "rgb";
             #  scale = "2.0";
-            #};
+            #};>
             "${out_laptop}" = { disable = ""; }; # disable laptop display for a bit
             "${out_alien}" = {
               #mode = "3440x1440@120Hz";
@@ -223,6 +227,11 @@ in
             "${modifier}+Shift+Down" = "move down";
             "${modifier}+Shift+Up" = "move up";
             "${modifier}+Shift+Right" = "move right";
+
+            "${modifier}+h" = "focus left";
+            "${modifier}+k" = "focus down";
+            "${modifier}+j" = "focus up";
+            "${modifier}+l" = "focus right";
 
             "${modifier}+Prior" = "workspace prev";
             "${modifier}+Next" = "workspace next";
