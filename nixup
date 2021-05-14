@@ -102,7 +102,7 @@ function remote() {
   thing="github:colemickens/nixcfg/${rev}#${buildattr}"
   ssh_nixUnstable_shell "$remote" nix "${nixargs[@]}" build "${buildargs[@]}" -L "${thing}" --out-link "/tmp/$f"
   out="$(ssh_nixUnstable_shell "$remote" readlink -f "/tmp/$f")"
-  
+
   # target=copy   => copy back
   # target=cachix => upload cachix, done
   # target=skip   => do nothing
@@ -137,4 +137,8 @@ if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 
 if [[ ! -z "${cmd:-""}" ]]; then
   "${cmd}" "${@}"
+else
+  git remote update
+  git rebase -i origin/auto-update
+  sudo nixos-rebuild switch --flake ~/code/nixcfg
 fi
