@@ -137,22 +137,6 @@
         "type": "github"
       }
     },
-    "daedalus": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1621016049,
-        "narHash": "sha256-NR+8tP5YYCZGX/6sJk3l7xRj3XI6avYHzqNy9ZtMyfQ=",
-        "owner": "input-output-hk",
-        "repo": "daedalus",
-        "rev": "e88dbbe8bb769cfccaa41cc226e302c4c50bce13",
-        "type": "github"
-      },
-      "original": {
-        "owner": "input-output-hk",
-        "repo": "daedalus",
-        "type": "github"
-      }
-    },
     "deploy-rs": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -708,11 +692,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1621035704,
-        "narHash": "sha256-mJRJtG38oq8OuUbiq9Ip4P1Ga6yPxZ3g8rrOa+N+dX4=",
+        "lastModified": 1621036412,
+        "narHash": "sha256-2nGxT2PqEoXfaHWQhjNAj+d9F9iGRc+vDYyRZzblBr4=",
         "owner": "colemickens",
         "repo": "nixpkgs-wayland",
-        "rev": "6a0711560539b29377ac5a28a6fdc746dfb6212a",
+        "rev": "02d3926d887ac46f37e388c35bcc10130a999290",
         "type": "github"
       },
       "original": {
@@ -787,7 +771,6 @@
         "chromium": "chromium",
         "construct": "construct",
         "crosspkgs": "crosspkgs",
-        "daedalus": "daedalus",
         "deploy-rs": "deploy-rs",
         "envfs": "envfs",
         "fenix": "fenix",
