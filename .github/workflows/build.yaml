@@ -5,6 +5,7 @@ on:
     - cron: '*/10 * * * *'
 jobs:
   build:
+    continue-on-error: true
     runs-on:
     - ubuntu-latest
 #    - ${{matrix.jobs.os}}
