@@ -68,7 +68,7 @@
 
     #nix-bitcoin = { url = "github:fort-nix/nix-bitcoin"; flake = false; };
     nix-bitcoin = { url = "github:erikarvstedt/nix-bitcoin/nixos-unstable"; flake = false; };
-    daedalus = { url = "github:input-output-hk/daedalus"; flake = false; };
+    #daedalus = { url = "github:input-output-hk/daedalus"; flake = false; };
 
     fenix = { url = "github:figsoda/fenix"; };
     fenix.inputs.nixpkgs.follows = "nixpkgs";
