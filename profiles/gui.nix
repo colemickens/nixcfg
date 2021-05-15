@@ -47,6 +47,8 @@ in
     hardware.opengl.enable = true;
     # see pipewire.nix for pulseaudio/pipewire stuffs
 
+    programs.light.enable = true;
+
     home-manager.users.cole = { pkgs, ... }: {
       home.sessionVariables = {
         BROWSER = "firefox";

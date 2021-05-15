@@ -109,6 +109,7 @@ in
             tray.spacing = 10;
             # battery
             clock.format = "{:%a %b %d %H:%M}";
+            battery.bat = "BAT0";
           };
         }];
       };

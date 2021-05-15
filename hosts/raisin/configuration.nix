@@ -104,6 +104,8 @@ in
     services.resolved.domains = [ "ts.r10e.tech" ];
     systemd.network.enable = true;
 
+    services.tlp.enable = true;
+
     nixpkgs.config.allowUnfree = true;
     hardware = {
       enableRedistributableFirmware = true;

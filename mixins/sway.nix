@@ -1,6 +1,17 @@
 { config, pkgs, inputs, ... }:
 
 let
+  bg_gruvbox_blue = builtins.fetchurl {
+    url = "https://raw.githubusercontent.com/lunik1/nixos-logo-gruvbox-wallpaper/master/png/gruvbox-dark-blue.png";
+    sha256 = "1jrmdhlcnmqkrdzylpq6kv9m3qsl317af3g66wf9lm3mz6xd6dzs";
+  };
+  bg_gruvbox_rainbow = builtins.fetchurl {
+    url = "https://raw.githubusercontent.com/lunik1/nixos-logo-gruvbox-wallpaper/master/png/gruvbox-dark-rainbow.png";
+    sha256 = "036gqhbf6s5ddgvfbgn6iqbzgizssyf7820m5815b2gd748jw8zc";
+  };
+  bgfile = bg_gruvbox_rainbow;
+  background = "${bgfile} fill #185373";
+
   swayfont = "Iosevka Bold 9";
   barfont = "Iosevka Bold 9"; # font matches waybar-config.css
   editor = "${pkgs.vscodium}/bin/codium";
@@ -193,7 +204,7 @@ in
               adaptive_sync = "on";
             };
             "*" = {
-              background = "#185373 solid_color";
+              background = background;
             };
           };
           bars = [{

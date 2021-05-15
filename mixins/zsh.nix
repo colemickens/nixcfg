@@ -30,7 +30,7 @@ in {
           export __COLE_HOST_COLOR="${promptColor}"
           # added to .zshrc
           # executed in login+interactive+ssh (I think)
-          bindkey -e
+          #bindkey -e
 
           # surely something else has these defaults?
           bindkey "^[[H"    beginning-of-line
