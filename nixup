@@ -53,7 +53,8 @@ function stash() {
   __ "stashing nixcfg"
   cd "${DIR}";
   git add -A .
-  (git commit -m stash && git pull --rebase && git push origin HEAD -f || false) || true
+  (git commit -m stash && git pull --rebase) || true
+  git push origin HEAD -f
 
   cd "${DIR}"
 }
@@ -138,7 +139,7 @@ if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 if [[ ! -z "${cmd:-""}" ]]; then
   "${cmd}" "${@}"
 else
-  git remote update
-  git rebase -i origin/auto-update
+  stash
+  nix flake update --commit-lock-file
   sudo nixos-rebuild switch --flake ~/code/nixcfg
 fi
