@@ -233,6 +233,11 @@ in
             "${modifier}+j" = "focus up";
             "${modifier}+l" = "focus right";
 
+            "${modifier}+Shift+h" = "move left";
+            "${modifier}+Shift+k" = "move down";
+            "${modifier}+Shift+j" = "move up";
+            "${modifier}+Shift+l" = "move right";
+
             "${modifier}+Prior" = "workspace prev";
             "${modifier}+Next" = "workspace next";
 

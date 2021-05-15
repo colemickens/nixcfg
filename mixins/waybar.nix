@@ -69,11 +69,11 @@ in
             [
               "idle_inhibitor"
               "tray"
-              "pulseaudio"
               "network"
               "cpu"
               "memory"
               "light"
+              "pulseaudio"
               "clock"
               "battery"
             ];
@@ -99,11 +99,11 @@ in
               on-click-middle = "${pkgs.sway}/bin/swaymsg exec \"${pkgs.alacritty}/bin/alacritty -e pulsemixer\"";
             };
             network = {
-              format-wifi = "{ifname} '{essid}' {signalStrength}% {bandwidthUpBits}/{bandwidthDownBits}";
-              format-ethernet = "{ifname} eth {bandwidthUpBits}/{bandwidthDownBits}";
+              format-wifi = "{essid} {signalStrength}% {bandwidthUpBits} {bandwidthDownBits}";
+              format-ethernet = "{ifname} eth {bandwidthUpBits} {bandwidthDownBits}";
             };
             cpu.interval = 2;
-            cpu.format = "cpu load({load}%) use({usage}%)";
+            cpu.format = "cpu {load}% {usage}%";
             memory.format = "mem {}%";
             #backlight.format = "light {percent}%";
             tray.spacing = 10;
