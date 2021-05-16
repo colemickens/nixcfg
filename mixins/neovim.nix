@@ -24,23 +24,25 @@ in {
           #lsp_extensions-nvim    # neovim 0.5
 
           #tabular  # format selection into tables?
-          gv-vim
-          lightline-vim
-          vim-better-whitespace
+          telescope-nvim      # "highly-customizable" fuzzy finder
+          gv-vim              # Git commit Viewer
+          lightline-vim       # status line
+          vim-better-whitespace # auto clean whitespace
           vim-commentary         # (un)comment things
           vim-crates
-          vim-fugitive
-          neovim-fuzzy  # fzf replacement
+          vim-fugitive        # more git tools
+          #neovim-fuzzy  # fzf replacement
           #skim # ???
           #skim-vim      # fzf replacement
           vim-multiple-cursors
           vim-nix
-          vim-signify
+          vim-signify  # ?
           vim-sleuth   # auto-detect ident settings from file
           vim-smoothie # smooth scroll
           vim-sneak    # fast nav within files
           vim-surround # quickly change what a block of text is surrounded by
           vim-vinegar  # netrw enhanced
+
 
           # themes
           gruvbox

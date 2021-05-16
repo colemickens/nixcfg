@@ -9,6 +9,7 @@ in
     ../../mixins/logitech-mouse.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
+    ../../mixins/tpm.nix
 
     ../../profiles/desktop-sway-unstable.nix
     #../../profiles/desktop-gnome.nix
@@ -96,6 +97,7 @@ in
       interfaces."enp3s0f4u1u3".useDHCP = true;
       interfaces."enp56s0u1u3".useDHCP = true;
       interfaces."enp57s0u1u3".useDHCP = true;
+      interfaces."enp3s0f3u1u3".useDHCP = true;
 
       search = [ "ts.r10e.tech" ];
     };

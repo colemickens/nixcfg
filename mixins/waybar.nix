@@ -26,10 +26,10 @@ let
 in
 {
   config = {
-    sops.secrets."srht-pat" = {
-      owner = "cole";
-      group = "cole";
-    };
+    # sops.secrets."srht-pat" = {
+    #   owner = "cole";
+    #   group = "cole";
+    # };
 
     home-manager.users.cole = { pkgs, ... }: {
       # systemd.user.services."srht-jobs-status" = {
@@ -72,7 +72,7 @@ in
               "network"
               "cpu"
               "memory"
-              "light"
+              "backlight"
               "pulseaudio"
               "clock"
               "battery"
@@ -93,10 +93,17 @@ in
             };
             "sway/mode" = { tooltip = false; };
 
-            #"idle_inhibitor" = { format = "{icon}"; };
+            idle_inhibitor = {
+              format = "{icon}";
+              format-icons = {
+                activated = "unlocked";
+                deactivated = "locking";
+              };
+            };
             pulseaudio = {
               format = "vol {volume}%";
-              on-click-middle = "${pkgs.sway}/bin/swaymsg exec \"${pkgs.alacritty}/bin/alacritty -e pulsemixer\"";
+              #on-click-middle = "${pkgs.sway}/bin/swaymsg exec \"${pkgs.alacritty}/bin/alacritty -e pulsemixer\"";
+              on-click-middle = "${pkgs.sway}/bin/swaymsg exec \"${pkgs.pavucontrol}/bin/pavucontrol\"";
             };
             network = {
               format-wifi = "{essid} {signalStrength}% {bandwidthUpBits} {bandwidthDownBits}";
@@ -105,11 +112,18 @@ in
             cpu.interval = 2;
             cpu.format = "cpu {load}% {usage}%";
             memory.format = "mem {}%";
-            #backlight.format = "light {percent}%";
+            backlight = {
+              format = "nit {percent}%";
+              on-scroll-up = "${pkgs.brightnessctl}/bin/brightnessctl set 2%+";
+              on-scroll-down = "${pkgs.brightnessctl}/bin/brightnessctl set 2%-";
+            };
             tray.spacing = 10;
             # battery
             clock.format = "{:%a %b %d %H:%M}";
-            battery.bat = "BAT0";
+            battery = {
+              format = "bat {}";
+              bat = "BAT0";
+            };
           };
         }];
       };

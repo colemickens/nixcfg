@@ -18,6 +18,7 @@
         "networkmanager" "kvm" "libvirtd" "docker" "transmission" "audio" "video" "sway" "sound"
         "pulse" "input" "render" "dialout" "keys" "ipfs" "plugdev"
         "scard"
+        "tss"
       ];
       uid = 1000;
       group = "cole";

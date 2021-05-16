@@ -1,6 +1,6 @@
 * {
     border: none;
-    border-radius: 0;
+    border-radius: 5;
     /* `otf-font-awesome` is required to be installed for icons */
     /* font matches sway-config.nix */
     font-family: "Iosevka";
@@ -53,8 +53,15 @@ window#waybar.chromium {
     border-bottom: 3px solid #ffffff;
 }
 
+#workspaces button.current_output {
+    border-bottom: 3px solid #64727D;
+}
+
 #workspaces button.focused {
     background-color: #64727D;
+}
+
+#workspaces button.focused.current_output {
     border-bottom: 3px solid #ffffff;
 }
 

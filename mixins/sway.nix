@@ -12,7 +12,12 @@ let
   bgfile = bg_gruvbox_rainbow;
   background = "${bgfile} fill #185373";
 
-  swayfont = "Iosevka Bold 9";
+  #swayfonts = ["Iosevka Bold 9"];
+  swayfonts = {
+    names = [ "Iosevka" "FontAwesome5Free" ];
+    style = "Heavy";
+    size = 9.0;
+  };
   barfont = "Iosevka Bold 9"; # font matches waybar-config.css
   editor = "${pkgs.vscodium}/bin/codium";
 
@@ -20,12 +25,7 @@ let
   drun = "${wofi} --show drun";
   nwggrid = "${pkgs.nwg-launchers}/bin/nwggrid";
 
-  #terminal = "${pkgs.termite}/bin/termite";
-  terminal = "${pkgs.alacritty}/bin/alacritty";
-  #terminal = "${pkgs.kitty}/bin/kitty";
-  #browser = "${pkgs.firefox-bin}/bin/firefox";
-  #browser = "${inputs.firefox.firefox-nightly-bin}/bin/firefox";
-  browser = "firefox-nightly";
+  terminal = "alacritty";
 
   # PASS
   gp = "${pkgs.gopass}/bin/gopass";
@@ -52,12 +52,14 @@ let
 
   # idle/lock
   # TODO: test and fix/ remove this message
-  swaylockcmd = "${pkgs.swaylock}/bin/swaylock -f -c '#000000'";
+  swaylockcmd = "${pkgs.swaylock}/bin/swaylock -f --font 'Iosevka' -i '${bgfile}' -s 'fill' -c '#000000'";
   idlecmd = ''${pkgs.swayidle}/bin/swayidle -w \
     before-sleep \"${swaylockcmd}\" \
     lock \"${swaylockcmd}\" \
+    timeout 10 \"${pkgs.brightnessctl}/bin/brightnessctl set 10%\" \
     timeout 500 \"${swaylockcmd}\" \
-    timeout 1000 \"${pkgs.systemd}/bin/systemctl suspend\"'';
+    timeout 1000 \"${pkgs.systemd}/bin/systemctl suspend\" \
+    resume 'swaymsg \"output * dpms on\"' '';
 
   # silly gtk/gnome wayland schenanigans
   # TODO: see if this is necessary if we get HM to do it? or our own systemd user units?
@@ -119,7 +121,7 @@ in
         config = rec {
           modifier = "Mod4";
           inherit terminal;
-          fonts = [ swayfont ];
+          fonts = swayfonts;
           focus.followMouse = "always";
           window.border = 4;
           window.titlebar = true;
@@ -144,7 +146,8 @@ in
             { always = true; command = "${pkgs.mako}/bin/mako"; }
 
             { always = true;  command = "pkill swayidle"; } # Disable swayidle for a bit
-            #{ command = "${idlecmd}"; always = true; }     # Disable swayidle for a bit
+            #{ always = true;  command = "swayidle -w timeout 600 'swaymsg \"output * dpms off\"' "; } # Disable swayidle for a bit
+            { command = "${idlecmd}"; always = true; }     # Disable swayidle for a bit
           ];
           input = {
             "${in_touchpad}" = {
@@ -215,11 +218,9 @@ in
           }];
           keybindings = {
             "${modifier}+Return" = "exec ${terminal}";
-            #"${modifier}+Shift+Return" = "exec ${browser}";
-            #"${modifier}+Shift+Backspace" = "exec ${editor}";
             "${modifier}+Shift+q" = "kill";
             "${modifier}+Shift+c" = "reload";
-            "${modifier}+Delete" = "${swaylockcmd}";
+            "${modifier}+Delete" = "exec ${swaylockcmd}";
 
             "${modifier}+Escape" = "exec ${nwggrid}";
             "${modifier}+F1" = "exec ${passShowCmd}";

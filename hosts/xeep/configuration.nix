@@ -5,6 +5,7 @@ in
 {
   imports = [
     ../../mixins/logitech-mouse.nix
+    ../../mixins/plex.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
 

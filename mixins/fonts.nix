@@ -17,6 +17,7 @@ in
         noto-fonts noto-fonts-cjk noto-fonts-emoji
         source-code-pro
         ttf_bitstream_vera
+        font-awesome
       ] ++ [ font.package ];
 
       fontconfig = {
