@@ -7,19 +7,18 @@ jobs:
   build:
     continue-on-error: true
     runs-on:
-    - ubuntu-latest
-#    - ${{matrix.jobs.os}}
+    - ${{matrix.jobs.runson}}
     strategy:
       matrix:
         jobs:
-        #- { "os": "arm64", "arch": "aarch64-linux", "target": "toplevels.rpifour1" }
-        #- { "os": "arm64", "arch": "aarch64-linux", "target": "toplevels.pinebook" }
-        - { "branch": "main",         "target": "toplevels.xeep"}
-        - { "branch": "main",         "target": "toplevels.azdev" }
-        - { "branch": "main",         "target": "toplevels.porty" }
-        - { "branch": "auto-update",  "target": "toplevels.xeep"}
-        - { "branch": "auto-update",  "target": "toplevels.azdev" }
-        - { "branch": "auto-update",  "target": "toplevels.porty" }
+        - { "branch": "main",         "target": "toplevels.xeep",       "runson": "ubuntu-latest" }
+        - { "branch": "main",         "target": "toplevels.azdev",      "runson": "ubuntu-latest" }
+        - { "branch": "main",         "target": "toplevels.porty",      "runson": "ubuntu-latest" }
+        - { "branch": "auto-update",  "target": "toplevels.xeep",       "runson": "ubuntu-latest" }
+        - { "branch": "auto-update",  "target": "toplevels.azdev",      "runson": "ubuntu-latest" }
+        - { "branch": "auto-update",  "target": "toplevels.porty",      "runson": "ubuntu-latest" }
+        - { "branch": "main",         "target": "bundles.x86_64-linux", "runson": "self-hosted" }
+        - { "branch": "auto-update",  "target": "bundles.x86_64-linux", "runson": "self-hosted" }
     steps:
     - uses: actions/checkout@v2
       with:
