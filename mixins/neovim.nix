@@ -24,6 +24,7 @@ in {
           #lsp_extensions-nvim    # neovim 0.5
 
           #tabular  # format selection into tables?
+          undotree
           telescope-nvim      # "highly-customizable" fuzzy finder
           gv-vim              # Git commit Viewer
           lightline-vim       # status line
@@ -45,14 +46,48 @@ in {
 
 
           # themes
-          gruvbox
+          #gruvbox
+          #gruvbox-community
+          gruvbox-nvim
+          #vim-gruvbox8
         ];
 
         # TODO: why are only some things 'packadd'ed below?
 
         extraConfig = ''
+          set number
+          set relativenumber
+          set nohlsearch
+          set hidden
+          set noerrorbells
+          set nowrap
+          set smartcase
+          set ignorecase
+          set noswapfile
+          set nobackup
+          " use with plugin undo-tree
+          set undodir=~/.cache/nvim/undo
+          set undofile
+          set incsearch
+          set termguicolors
+          set signcolumn=yes
+
+          set foldmethod=indent
+          set foldnestmax=5
+          set foldlevelstart=99
+          set foldcolumn=0
+          set mouse=a
+
+          set wildmenu
+          set wildmode=longest:full,full
+
+          set list
+          set listchars=tab:>-
+
+
           set background=dark
           colorscheme gruvbox
+
           set scrolloff=5
 
           " vim-better-whitespace
@@ -86,21 +121,7 @@ in {
             \ },
             \ }
 
-          set number
-          set rnu
-          set foldmethod=indent
-          set foldnestmax=5
-          set foldlevelstart=99
-          set foldcolumn=0
-          set mouse=a
-
-          set wildmenu
-          set wildmode=longest:full,full
-
-          set list
-          set listchars=tab:>-
-
-          "let mapleader=' '
+          let mapleader=' '
 
           autocmd FileType markdown setlocal conceallevel=0
 
