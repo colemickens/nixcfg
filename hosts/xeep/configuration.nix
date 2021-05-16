@@ -9,7 +9,7 @@ in
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
 
-    ../../mixins/loremipsum-media/rclone-cmd.nix
+    ../../mixins/loremipsum-media/rclone-mount.nix
 
     ../../profiles/interactive.nix
     #../../profiles/desktop-sway.nix
