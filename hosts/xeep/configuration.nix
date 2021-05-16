@@ -116,6 +116,7 @@ in
       loader.timeout = 1;
       loader.systemd-boot.enable = true;
       loader.efi.canTouchEfiVariables = true;
+      loader.systemd-boot.configurationLimit = 4;
     };
     networking = {
       hostId = "ef66d560";
