@@ -185,8 +185,8 @@
         }; in p // { colePackages = p; };
 
       nixosConfigurations = {
-        azdev     = mkSystem inputs.nixpkgs "x86_64-linux"  "azdev";
-        azmail    = mkSystem inputs.nixpkgs "x86_64-linux"  "azmail";
+        #azdev     = mkSystem inputs.nixpkgs "x86_64-linux"  "azdev";
+        #azmail    = mkSystem inputs.nixpkgs "x86_64-linux"  "azmail";
         #rpifour2  (is a netboot device managed under rpifour1)
         #slynux    = mkSystem inputs.nixpkgs "x86_64-linux"  "slynux";
         xeep      = mkSystem inputs.nixpkgs "x86_64-linux"  "xeep";
@@ -235,9 +235,9 @@
           hosts = (builtins.mapAttrs (n: v: v.config.system.build.toplevel)
             (filterHosts pkgs_.nixpkgs.${system} inputs.self.nixosConfigurations));
         });
-      
+
       bundles = genAttrs [ "aarch64-linux" "x86_64-linux" ] (system:
-        pkgs_.nixpkgs."${system}".linkFarmFromDrvs "${system}-outputs" ([] 
+        pkgs_.nixpkgs."${system}".linkFarmFromDrvs "${system}-outputs" ([]
           ++ [ inputs.self.devShell.${system}.inputDerivation ]
           ++ (filterPkgs_ pkgs_.nixpkgs.${system} inputs.self.packages)
           ++ (builtins.map (host: host.config.system.build.toplevel)
