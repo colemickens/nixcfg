@@ -75,7 +75,7 @@ in
             makeWrapper ${pkgs.vscodium}/bin/codium $out/bin/codium \
               --add-flags "--enable-features=UseOzonePlatform" \
               --add-flags "--ozone-platform=wayland"
-            
+
             ln -sf ${pkgs.vscodium}/share $out/share
           ''
         )
@@ -109,7 +109,7 @@ in
             makeWrapper ${pkgs.element-desktop}/bin/element-desktop $out/bin/element-desktop \
               --add-flags "--enable-features=UseOzonePlatform" \
               --add-flags "--ozone-platform=wayland"
-            
+
             ln -sf ${pkgs.element-desktop}/share $out/share
           ''
         )
@@ -123,7 +123,20 @@ in
       ]
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
         # browsers
-        inputs.stable.legacyPackages.${pkgs.system}.ungoogled-chromium
+        (let
+          #c = inputs.stable.legacyPackages.${pkgs.system}.ungoogled-chromium;
+          c = pkgs.ungoogled-chromium;
+        in pkgs.runCommandNoCC "wrap-chromium"
+          { buildInputs = with pkgs; [ makeWrapper ]; }
+          ''
+            makeWrapper ${c}/bin/chromium $out/bin/chromium \
+              --add-flags "--enable-features=UseOzonePlatform" \
+              --add-flags "--ozone-platform=wayland"
+
+            ln -sf ${c}/share $out/share
+          ''
+        )
+        #inputs.stable.legacyPackages.${pkgs.system}.ungoogled-chromium
         inputs.stable.legacyPackages.${pkgs.system}.torbrowser
         firefoxStable
         firefoxNightly
