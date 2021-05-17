@@ -27,6 +27,7 @@ in
     nix.nixPath = [];
     nix.gc.automatic = true;
     nix.maxJobs = 8;
+    nix.package = pkgs.nix;
 
     documentation.enable = false;
     documentation.doc.enable = false;
