@@ -21,6 +21,7 @@ in
     nix.nixPath = [];
     nix.gc.automatic = true;
     nix.maxJobs = 8;
+    nix.package = lib.mkForce pkgs.nix;
 
     documentation.enable = false;
     documentation.doc.enable = false;
@@ -66,6 +67,7 @@ in
       ];
       kernelParams = [
         "mitigations=off" # YOLO
+        "test1234"
       ];
       supportedFilesystems = [ "btrfs" "zfs" ];
       initrd.supportedFilesystems = [ "btrfs" "zfs" ];
