@@ -67,7 +67,6 @@ in
       ];
       kernelParams = [
         "mitigations=off" # YOLO
-        "test1234"
       ];
       supportedFilesystems = [ "btrfs" "zfs" ];
       initrd.supportedFilesystems = [ "btrfs" "zfs" ];

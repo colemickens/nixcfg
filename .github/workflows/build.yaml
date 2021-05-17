@@ -40,9 +40,12 @@ jobs:
         name: colemickens
         signingKey: '${{ secrets.cachix_key_colemickens }}'
     - name: git-setup
+      env:
+        CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
       run: |
         git config --global user.name 'Cole Botkens'
         git config --global user.email 'cole.mickens+colebot@gmail.com'
+        nix-shell --run "cachix watch-store colemickens &"
     - name: build
       run: |
         set -xeuo pipefail
