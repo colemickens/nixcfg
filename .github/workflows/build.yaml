@@ -49,5 +49,5 @@ jobs:
       run: |
         set -xeuo pipefail
         # readlink -f ./result | nix develop -c cachix push colemickens
-        readlink -f ./result | nix-shell -p cachix --run 'cachix push colemickens'
+        readlink -f ./result | nix-shell --run 'cachix push colemickens'
 
