@@ -46,16 +46,11 @@ jobs:
         git config --global user.name 'Cole Botkens'
         git config --global user.email 'cole.mickens+colebot@gmail.com'
         nix-shell --run "cachix watch-store colemickens &"
-    - name: build
-      run: |
-        set -xeuo pipefail
-        # nix develop -c ./nixup nbu "${{ matrix.jobs.target }}"
-        nix-shell --run "./nixup nbl ${{ matrix.jobs.target }}"
-    - name: cache
+    - name: build-and-cache
       env:
         CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
       run: |
         set -xeuo pipefail
-        # readlink -f ./result | nix develop -c cachix push colemickens
-        readlink -f ./result | nix-shell --run 'cachix push colemickens'
+        # nix develop -c ./nixup nbuc "${{ matrix.jobs.target }}"
+        nix-shell --run "./nixup nbuc ${{ matrix.jobs.target }}"
 

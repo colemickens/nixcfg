@@ -95,6 +95,15 @@ function cache() {
 function nbf() { target="${1}"; shift; command nix "${nixargs[@]}" build -L "${buildargs[@]}" ".#${target}" "${@}"; }
 function nbl() { target="${1}"; shift; command nix-build "${buildargs[@]}" -A "${target}" "${@}"; }
 function nbu() { target="${1}"; shift; command nix-build-uncached "${buildargs[@]}" -A "${target}" "${@}"; }
+function nbuc() {
+  target="${1}"; shift
+  o=/tmp/$RANDOM
+  command nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}")" "${buildargs[@]}" -A "${target}" --out-link ${o} "${@}";
+  if [[ -e ${o} ]]; then
+    readlink -f ${o} | cachix push ${cache}
+    rm ${o}
+  fi
+}
 
 function remote() {
   remote="${1}"; buildattr="${2}"; target="${3}"; f="cm-nix-$RANDOM"
