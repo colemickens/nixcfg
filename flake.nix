@@ -18,6 +18,9 @@
     # We're back to using nixUnstable so we shouldn't need this:
     #nix.url = "github:nixos/nix/master";
 
+    nixpkgs-kubernetes.url = "github:colemickens/nixpkgs-kubernetes/master";
+    nixpkgs-kubernetes.inputs.nixpkgs.follows = "nixpkgs";
+    
     niche.url = "github:colemickens/niche/master";
     niche.inputs.nixpkgs.follows = "nixpkgs";
 

@@ -241,13 +241,13 @@ in
             "${modifier}+Shift+Right" = "move right";
 
             "${modifier}+h" = "focus left";
-            "${modifier}+k" = "focus down";
-            "${modifier}+j" = "focus up";
+            "${modifier}+j" = "focus down";
+            "${modifier}+k" = "focus up";
             "${modifier}+l" = "focus right";
 
             "${modifier}+Shift+h" = "move left";
-            "${modifier}+Shift+k" = "move down";
-            "${modifier}+Shift+j" = "move up";
+            "${modifier}+Shift+j" = "move down";
+            "${modifier}+Shift+k" = "move up";
             "${modifier}+Shift+l" = "move right";
 
             "${modifier}+Prior" = "workspace prev";
