@@ -5,8 +5,11 @@ in
 {
   imports = [
     ../../mixins/logitech-mouse.nix
+    ../../mixins/plex.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
+
+    ../../mixins/loremipsum-media/rclone-mnt.nix
 
     ../../profiles/interactive.nix
     #../../profiles/desktop-sway.nix
