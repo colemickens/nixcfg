@@ -14,7 +14,7 @@ in
     ../../profiles/desktop-sway-unstable.nix
     #../../profiles/desktop-gnome.nix
 
-    inputs.nixpkgs-kubernetes.nixosModules.kata-containers
+    #inputs.nixpkgs-kubernetes.nixosModules.kata-containers
   ];
 
   config = {
@@ -30,7 +30,7 @@ in
     documentation.info.enable = false;
     documentation.nixos.enable = false;
 
-    virtualisation.kata-containers.enable = true;
+    # virtualisation.kata-containers.enable = true;
 
     fileSystems = {
       "/boot" = {
