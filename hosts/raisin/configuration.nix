@@ -18,7 +18,7 @@ in
   ];
 
   config = {
-    environment.systemPackages = with pkgs; [ efibootmgr ];
+    environment.systemPackages = with pkgs; [ efibootmgr p7zip cpio ];
     system.stateVersion = "21.03";
 
     nix.nixPath = [];

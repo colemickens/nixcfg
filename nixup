@@ -155,5 +155,5 @@ else
   #sudo nixos-rebuild switch --flake ~/code/nixcfg
   nix "${nixargs[@]}" build ".#toplevels.$(hostname)" --out-link /tmp/system
   readlink -f /tmp/system | cachix push colemickens
-  sudo ./result/bin/switch-to-configuration switch
+  sudo /tmp/system/bin/switch-to-configuration switch
 fi
