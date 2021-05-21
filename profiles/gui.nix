@@ -123,19 +123,19 @@ in
       ]
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
         # browsers
-        (let
-          c = inputs.nixos-unstable.legacyPackages.${pkgs.system}.ungoogled-chromium;
-          #c = pkgs.ungoogled-chromium;
-        in pkgs.runCommandNoCC "wrap-chromium"
-          { buildInputs = with pkgs; [ makeWrapper ]; }
-          ''
-            makeWrapper ${c}/bin/chromium $out/bin/chromium \
-              --add-flags "--enable-features=UseOzonePlatform" \
-              --add-flags "--ozone-platform=wayland"
+        #(let
+        #  c = inputs.nixos-unstable.legacyPackages.${pkgs.system}.ungoogled-chromium;
+        #  #c = pkgs.ungoogled-chromium;
+        #in pkgs.runCommandNoCC "wrap-chromium"
+        #  { buildInputs = with pkgs; [ makeWrapper ]; }
+        #  ''
+        #    makeWrapper ${c}/bin/chromium $out/bin/chromium \
+        #      --add-flags "--enable-features=UseOzonePlatform" \
+        #      --add-flags "--ozone-platform=wayland"
 
-            ln -sf ${c}/share $out/share
-          ''
-        )
+        #    ln -sf ${c}/share $out/share
+        #  ''
+        #)
         #inputs.stable.legacyPackages.${pkgs.system}.ungoogled-chromium
         inputs.stable.legacyPackages.${pkgs.system}.torbrowser
         firefoxStable
