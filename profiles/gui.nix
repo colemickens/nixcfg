@@ -124,8 +124,8 @@ in
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
         # browsers
         (let
-          #c = inputs.stable.legacyPackages.${pkgs.system}.ungoogled-chromium;
-          c = pkgs.ungoogled-chromium;
+          c = inputs.nixos-unstable.legacyPackages.${pkgs.system}.ungoogled-chromium;
+          #c = pkgs.ungoogled-chromium;
         in pkgs.runCommandNoCC "wrap-chromium"
           { buildInputs = with pkgs; [ makeWrapper ]; }
           ''
