@@ -18,6 +18,7 @@ in
   ];
 
   config = {
+    environment.systemPackages = with pkgs; [ efibootmgr ];
     system.stateVersion = "21.03";
 
     nix.nixPath = [];
