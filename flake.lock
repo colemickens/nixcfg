@@ -672,16 +672,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1621380163,
-        "narHash": "sha256-LxkgFk87B5tGHH9aOZyhG+/cDl4IjKKkQzKpF451hT8=",
+        "lastModified": 1621563803,
+        "narHash": "sha256-z/YuRI1A0Bv1os1+DvNuqIGeLam8FQlBM5nMqudFbIc=",
         "owner": "colemickens",
         "repo": "nixpkgs-kubernetes",
-        "rev": "91effec79c64388a7fc80135467db54a8698b61e",
+        "rev": "e2311121d94373a7bf02fa19fd851ca2d60cde2a",
         "type": "github"
       },
       "original": {
         "owner": "colemickens",
-        "ref": "master",
+        "ref": "main",
         "repo": "nixpkgs-kubernetes",
         "type": "github"
       }
