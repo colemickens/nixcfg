@@ -152,5 +152,8 @@ else
   stash
   nix flake update --commit-lock-file
   git push origin HEAD
-  sudo nixos-rebuild switch --flake ~/code/nixcfg
+  #sudo nixos-rebuild switch --flake ~/code/nixcfg
+  nix "${nixargs[@]}" build ".#toplevels.$(hostname)" --out-link /tmp/system
+  readlink -f /tmp/system | cachix push colemickens
+  sudo ./result/bin/switch-to-configuration switch
 fi
