@@ -55,6 +55,10 @@ in
     };
     swapDevices = [];
 
+    services.logind.extraConfig = ''
+      HandlePowerKey=hybrid-sleep
+    '';
+
     console.earlySetup = true; # hidpi + luks-open  # TODO : STILL NEEDED?
     console.font = "ter-v32n";
     console.packages = [ pkgs.terminus_font ];
