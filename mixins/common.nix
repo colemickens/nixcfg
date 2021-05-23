@@ -7,7 +7,7 @@ with lib;
     inputs.sops-nix.nixosModules.sops
     ../secrets
     
-    inputs.envfs.nixosModules.envfs
+    #inputs.envfs.nixosModules.envfs
   ];
 
   config = {

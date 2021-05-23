@@ -25,7 +25,7 @@ in
     nix.nixPath = [];
     nix.gc.automatic = true;
     nix.maxJobs = 8;
-    nix.package = lib.mkForce pkgs.nix;
+    #nix.package = lib.mkForce pkgs.nix;
 
     documentation.enable = false;
     documentation.doc.enable = false;
@@ -33,6 +33,16 @@ in
     documentation.nixos.enable = false;
 
     virtualisation.kata-containers.enable = true;
+    # virtualisation.containerd.enable = true;
+    # virtualisation.containerd.configFile =
+    #   pkgs.writeText "containerd.conf" ''
+    #     subreaper = true
+    #     oom_score = -999
+
+    #     [debug]
+    #       level = "debug"
+    #   '';
+    # systemd.services.containerd.path = with pkgs; [ zfs ];
 
     fileSystems = {
       "/boot" = {
