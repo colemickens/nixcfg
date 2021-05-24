@@ -7,38 +7,28 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-    - name: checkout
-      uses: actions/checkout@v2
-    - name: install nix
-      uses: cachix/install-nix-action@v13
-      with:
-        #install_url: https://github.com/numtide/nix-flakes-installer/releases/download/nix-2.4pre20210429_d15a196/install
-        install_url: "https://nixos-nix-install-tests.cachix.org/serve/dznj18ywp62vghk98m5vclfqmszjnbph/install"
-        install_options: "--tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve"
-        extra_nix_config: |
-          experimental-features = nix-command flakes ca-references
+    - uses: actions/checkout@v2
+    - uses: cachix/install-nix-action@v13
+    - name: prepare
+      run: |
+        .github/exec nix-build --version
     - name: setup git
       run: |
-        git config --global user.name 'Cole Botkens'
-        git config --global user.email 'cole.mickens+colebot@gmail.com'
+        .github/exec git config --global user.name 'Cole Botkens'
+        .github/exec git config --global user.email 'cole.mickens+colebot@gmail.com'
     - name: force-update auto-update
       env:
         CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
       run: |
         set -xeuo pipefail
-        git checkout -b auto-update
-        nix develop --ignore-environment \
-          --keep CACHIX_SIGNING_KEY \
-          --keep HOME \
-          -c ./nixup update
-        git push origin HEAD -f
+        export CI_JOB_ID="${GITHUB_RUN_ID}_${GITHUB_RUN_NUMBER}"
+        .github/exec git checkout -b auto-update
+        .github/exec ./nixup update
+        .github/exec git push origin HEAD -f
     - name: try-update auto-update-ready
       run: |
         set -xeuo pipefail
-        git checkout -b auto-update-ready
-        set +e
-        nix develop --ignore-environment \
-          --keep CACHIX_SIGNING_KEY \
-          --keep HOME \
-          -c ./nixup nbu_check 'required' \
-        && git push origin HEAD -f
+        .github/exec git checkout -b auto-update-ready
+        .github/exec ./nixup nbu_check 'req.bld' \
+          && .github/exec git push origin HEAD -f \
+            || true

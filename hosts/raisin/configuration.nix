@@ -124,7 +124,7 @@ in
     };
     services.timesyncd.enable = true;
     services.resolved.enable = true;
-    services.resolved.domains = [ "ts.r10e.tech" ];
+    services.resolved.domains = [ "ts.r10e.tech" "test.r10e.tech" ];
     systemd.network.enable = true;
 
     services.tlp.enable = true;

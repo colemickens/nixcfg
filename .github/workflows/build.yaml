@@ -27,30 +27,19 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        fetch-depth: 0 # flakes doesn't work on shallow clones
         ref: ${{ matrix.jobs.branch }}
-    - uses: cachix/install-nix-action@v12
-      # with:
-      #   install_url: https://github.com/numtide/nix-flakes-installer/releases/download/nix-2.4pre20210429_d15a196/install
-      #   extra_nix_config: |
-      #     experimental-features = nix-command flakes ca-references
-    - uses: cachix/cachix-action@v10
-      if: ${{ matrix.jobs.runson != 'self-hosted' }}
-      with:
-        name: colemickens
-        signingKey: '${{ secrets.cachix_key_colemickens }}'
+    - uses: cachix/install-nix-action@v13
+    - name: prepare
+      run: .github/exec nix-build --version
     - name: git-setup
-      env:
-        CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
       run: |
-        git config --global user.name 'Cole Botkens'
-        git config --global user.email 'cole.mickens+colebot@gmail.com'
-        nix-shell --run "cachix watch-store colemickens &"
+        .github/exec git config --global user.name 'Cole Botkens'
+        .github/exec git config --global user.email 'cole.mickens+colebot@gmail.com'
     - name: build-and-cache
       env:
         CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
       run: |
         set -xeuo pipefail
-        # nix develop -c ./nixup nbuc "${{ matrix.jobs.target }}"
-        nix-shell --run "./nixup nbuc ${{ matrix.jobs.target }}"
-
+        export CI_JOB_ID="${GITHUB_RUN_ID}_${GITHUB_RUN_NUMBER}"
+        .github/exec bash -c "cachix watch-store colemickens &"
+        .github/exec ./nixup nbu_cache "${{ matrix.jobs.target }}"

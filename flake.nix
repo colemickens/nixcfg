@@ -240,7 +240,9 @@
         });
 
       # these are required to build for the GHA job to auto advance the "ready" branch
-      required = pkgs_.nixpkgs.x86_64-linux.linkFarmFromDrvs "required" [
+      # TODO: wtf??????????????????????
+      # any other toplevel attribute breaks nix-shell? jfc
+      req.bld = pkgs_.nixpkgs.x86_64-linux.linkFarmFromDrvs "required" [
         toplevels.raisin
         #toplevels.rpifour1
       ];

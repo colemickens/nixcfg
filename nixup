@@ -29,6 +29,22 @@ srcdirs=(
   "nixos-veloren"   #"nixos-azure"
 )
 
+# <ci>
+function build() { command nix-build "${buildargs[@]}" -A "${1}" "${@:2}"; }
+function nbu_cache() {
+  out="$(mktemp -d)"; trap "rm -rf ${out}" RETURN;
+  command nix-build-uncached -build-flags "$(printf '\"%s\" ' "${buildargs[@]}" "${nixargs[@]}" "--out-link" "${out}/result")" -A "${1}"
+  if find ${out} | grep result; then
+    nix "${nixargs[@]}" path-info --json -r ${out}/result* > ${out}/path-info.json
+    jq -r 'map(select(.ca == null and .signatures == null)) | map(.path) | .[]' < "${out}/path-info.json" > "${out}/paths"
+    cachix push "${cache}" < "${out}/paths"
+  fi
+}
+function nbu_check() {
+  command nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0")" -A "${1}"
+}
+## </ci>
+
 function update() {
   set -euo pipefail
 
@@ -38,13 +54,12 @@ function update() {
     parallel --jobs $(nproc) --halt soon,fail=1 --tag --progress -- \
       "[[ ! -d "${HOME}/code/{.}" ]] || (git -C '${HOME}/code/{.}' pull --rebase && git -C '${HOME}/code/{.}' push origin HEAD -f)"
 
-  cd "${DIR}"; nix flake update --no-registries --commit-lock-file
+  cd "${DIR}"; nix "${nixargs[@]}" flake update --no-registries --commit-lock-file
   cd "${DIR}/pkgs" && ./update.sh
 
   stash
   cd "${DIR}"
 }
-
 function stash() {
   __ "stashing nixcfg"
   cd "${DIR}";
@@ -73,36 +88,6 @@ function ssh_niche_shell() {
   ssh "${r}" -- "nix-shell -I nixpkgs=${nichepkgs} -p niche -p gnupg -p nixUnstable --command 'NICHE_DEBUG=1 $(printf '\"%s\" ' "${@}")'"
 }
 
-function a64() { build "$1" "${a64com}" "${a64com}"; }
-function nix() { command nix "${nixargs[@]}" "${@}"; }
-function nb() { command nix "${nixargs[@]}" build "${buildargs[@]}" "${@}"; }
-function cache() {
-  t=$(mktemp -d)
-  nb --out-link $t
-  readlink -f $t | cachix push "${cache}"
-}
-
-# for use from CI
-# "nix build flakes"
-# "nix-build legacy"
-function nbf() { target="${1}"; shift; command nix "${nixargs[@]}" build -L "${buildargs[@]}" ".#${target}" "${@}"; }
-function nbl() { target="${1}"; shift; command nix-build "${buildargs[@]}" -A "${target}" "${@}"; }
-function nbu() { target="${1}"; shift; command nix-build-uncached "${buildargs[@]}" -A "${target}" "${@}"; }
-function nbuc() {
-  target="${1}"; shift
-  o=/tmp/$RANDOM
-  command nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}")" "${buildargs[@]}" -A "${target}" --out-link ${o} "${@}";
-  if [[ -e ${o} ]]; then
-    readlink -f ${o} | cachix push ${cache}
-    rm ${o}
-  fi
-}
-function nbu_check() {
-  target="${1}"; shift
-  o=/tmp/$RANDOM
-  command nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0")" -A "${target}" --out-link ${o} "${@}";
-}
-
 function remote() {
   remote="${1}"; buildattr="${2}"; target="${3}"; f="cm-nix-$RANDOM"
   stash
@@ -119,14 +104,17 @@ function remote() {
   if [[ "${target}" == "copy" ]]; then
     nix copy --no-check-sigs --from "ssh://${remote}" "${out}"
   elif [[ "${target}" == "cachix" ]]; then
-    ssh_cachix_push $remote $out
+    ssh_cachix_push "${remote}" "${out}"
+  elif [[ "${target}" == "cachixcp" ]]; then
+    ssh_cachix_push "${remote}" "${out}"
+    nix-store "${nixargs[@]}" -r "${out}"
   elif [[ "${target:-}" != "skip" ]]; then
-    ssh_cachix_push $remote $out
+    ssh_cachix_push "${remote}" "${out}"
     ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -L --no-link -j0 "${out}"
     ssh_nixUnstable_shell "${target}" sudo nix "${nixargs[@]}" build --profile /nix/var/nix/profiles/system "${out}";
     ssh_nixUnstable_shell "${target}" sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch;
   fi
-  ssh_nixUnstable_shell "$remote" rm -f "/tmp/$f"
+  ssh_nixUnstable_shell "${remote}" rm -f "/tmp/$f"
 }
 
 a64com="colemickens@aarch64.nixos.community"
@@ -149,10 +137,7 @@ if [[ ! -z "${cmd:-""}" ]]; then
   "${cmd}" "${@}"
 else
   stash
-  nix flake update --commit-lock-file
-  git push origin HEAD
-  #sudo nixos-rebuild switch --flake ~/code/nixcfg
-  nix "${nixargs[@]}" build ".#toplevels.$(hostname)" --out-link /tmp/system
-  readlink -f /tmp/system | cachix push colemickens
-  sudo /tmp/system/bin/switch-to-configuration switch
+  git rebase -i origin/auto-update-ready
+  sudo nixos-rebuild switch --flake ~/code/nixcfg
+  readlink -f /run/current-system | cachix push colemickens
 fi
