@@ -6,6 +6,7 @@ set -x
 function __() { printf "\n\n%s\n" "${1}" >/dev/stderr; }
 function ts() { echo -e "cole@${1}.ts.r10e.tech"; }
 unset NIX_PATH
+HOME="${HOME:-"/tmp"}"
 cd "${DIR}"
 
 cache="colemickens"
@@ -33,19 +34,14 @@ function update() {
 
   cd "${DIR}"; [[ -f ../nixpkgs-wayland/pkgs/update.sh ]] && cp ../nixpkgs-wayland/pkgs/update.sh ./pkgs/update.sh
 
-  __ "updating all (local, override) inputs"
   printf '%s\n' "${srcdirs[@]}" | \
     parallel --jobs $(nproc) --halt soon,fail=1 --tag --progress -- \
       "[[ ! -d "${HOME}/code/{.}" ]] || (git -C '${HOME}/code/{.}' pull --rebase && git -C '${HOME}/code/{.}' push origin HEAD -f)"
 
-  __ "updating all inputs"
   cd "${DIR}"; nix flake update --no-registries --commit-lock-file
-
-  __ "updating our own packages"
   cd "${DIR}/pkgs" && ./update.sh
 
   stash
-
   cd "${DIR}"
 }
 
@@ -54,9 +50,6 @@ function stash() {
   cd "${DIR}";
   git add -A .
   (git commit -m stash && git pull --rebase) || true
-  git push origin HEAD -f
-
-  cd "${DIR}"
 }
 
 # this includes the actual `cachix push` command, just send it a path
@@ -104,10 +97,16 @@ function nbuc() {
     rm ${o}
   fi
 }
+function nbu_check() {
+  target="${1}"; shift
+  o=/tmp/$RANDOM
+  command nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0")" -A "${target}" --out-link ${o} "${@}";
+}
 
 function remote() {
   remote="${1}"; buildattr="${2}"; target="${3}"; f="cm-nix-$RANDOM"
   stash
+  git push origin HEAD -f
   rev="$(git rev-parse --short HEAD)"
   thing="github:colemickens/nixcfg/${rev}#${buildattr}"
   ssh_nixUnstable_shell "$remote" nix "${nixargs[@]}" build "${buildargs[@]}" -L "${thing}" --out-link "/tmp/$f"

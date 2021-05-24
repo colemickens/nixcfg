@@ -239,6 +239,12 @@
             (filterHosts pkgs_.nixpkgs.${system} inputs.self.nixosConfigurations));
         });
 
+      # these are required to build for the GHA job to auto advance the "ready" branch
+      required = pkgs_.nixpkgs.x86_64-linux.linkFarmFromDrvs "required" [
+        toplevels.raisin
+        #toplevels.rpifour1
+      ];
+
       bundles = genAttrs [ "aarch64-linux" "x86_64-linux" ] (system:
         pkgs_.nixpkgs."${system}".linkFarmFromDrvs "${system}-outputs" ([]
           ++ [ inputs.self.devShell.${system}.inputDerivation ]

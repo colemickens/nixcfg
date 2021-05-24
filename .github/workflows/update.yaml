@@ -7,57 +7,38 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: install nix
+      uses: cachix/install-nix-action@v13
       with:
-        fetch-depth: 0 # flakes doesn't work on shallow clones
-    - uses: cachix/install-nix-action@v12
-      # with:
-      #   install_url: https://github.com/numtide/nix-flakes-installer/releases/download/nix-2.4pre20210429_d15a196/install
-      #   extra_nix_config: |
-      #     experimental-features = nix-command flakes ca-references
-    # - uses: cachix/cachix-action@v10
-    #   with:
-    #     name: colemickens
-    #     signingKey: '${{ secrets.cachix_key_colemickens }}'
-    - name: git-setup
+        #install_url: https://github.com/numtide/nix-flakes-installer/releases/download/nix-2.4pre20210429_d15a196/install
+        install_url: "https://nixos-nix-install-tests.cachix.org/serve/dznj18ywp62vghk98m5vclfqmszjnbph/install"
+        install_options: "--tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve"
+        extra_nix_config: |
+          experimental-features = nix-command flakes ca-references
+    - name: setup git
       run: |
         git config --global user.name 'Cole Botkens'
         git config --global user.email 'cole.mickens+colebot@gmail.com'
-    - name: update
+    - name: force-update auto-update
       env:
         CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
       run: |
         set -xeuo pipefail
-
         git checkout -b auto-update
-
-        # flakes
-        #nix develop --ignore-environment --keep CACHIX_SIGNING_KEY -c ./nixup update
-
-        # stable
-        np="https://github.com/$(jq -r '.nodes.nixpkgs.locked.owner' flake.lock)/$(jq -r '.nodes.nixpkgs.locked.repo' flake.lock)/archive/$(jq -r '.nodes.nixpkgs.locked.rev' flake.lock).tar.gz"
-        nix-shell -I nixpkgs=${np} --run "./nixup update"
-    - name: push
-      run: |
+        nix develop --ignore-environment \
+          --keep CACHIX_SIGNING_KEY \
+          --keep HOME \
+          -c ./nixup update
         git push origin HEAD -f
-    # - name: build
-    #   run: |
-    #     set -xeuo pipefail
-    #     target="bundles.x86_64-linux"
-
-    #     # flakes
-    #     # nix develop -c ./nixup nbf "${target}"
-
-    #     # stable
-    #     np="https://github.com/$(jq -r '.nodes.nixpkgs.locked.owner' flake.lock)/$(jq -r '.nodes.nixpkgs.locked.repo' flake.lock)/archive/$(jq -r '.nodes.nixpkgs.locked.rev' flake.lock).tar.gz"
-    #     nix-shell -I nixpkgs=${np} --run "./nixup nbl ${target}"
-    # - name: cache
-    #   env:
-    #         - uses: cachix/cachix-action@v10
-    #   with:
-    #     name: colemickens
-    #     signingKey: '${{ secrets.cachix_key_colemickens }}'
-    # - name: push-good
-    #   run: |
-    #     git checkout -b auto-update-good
-    #     git push origin HEAD -f
+    - name: try-update auto-update-ready
+      run: |
+        set -xeuo pipefail
+        git checkout -b auto-update-ready
+        set +e
+        nix develop --ignore-environment \
+          --keep CACHIX_SIGNING_KEY \
+          --keep HOME \
+          -c ./nixup nbu_check 'required' \
+        && git push origin HEAD -f
