@@ -32,16 +32,29 @@ srcdirs=(
 # <ci>
 function build() { command nix-build "${buildargs[@]}" -A "${1}" "${@:2}"; }
 function nbu_cache() {
+  # establish an out directory to track build results, clean it up after we leave
   out="$(mktemp -d)"; trap "rm -rf ${out}" RETURN;
-  command nix-build-uncached -build-flags "$(printf '\"%s\" ' "${buildargs[@]}" "${nixargs[@]}" "--out-link" "${out}/result")" -A "${1}"
+
+  echo; echo "::group::build"
+  command nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "--out-link" "${out}/result")" -A "${1}" -v "${buildargs[@]}" "--out-link" "${out}/result"
+  echo; echo "::endgroup"
+
+  echo; echo "::group::cache"
   if find ${out} | grep result; then
     nix "${nixargs[@]}" path-info --json -r ${out}/result* > ${out}/path-info.json
     jq -r 'map(select(.ca == null and .signatures == null)) | map(.path) | .[]' < "${out}/path-info.json" > "${out}/paths"
+    echo "cache path upload count: $(wc -l "${out}/paths")"
     cachix push "${cache}" < "${out}/paths"
+    cat "${out}/paths" | cachix push "${cache}"
   fi
+  echo; echo "::endgroup"
+
+  echo; echo "::group::list-paths"
+  cat "${out}/paths"
+  echo; echo "::endgroup"
 }
 function nbu_check() {
-  command nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0")" -A "${1}"
+  command nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0")" -A "${1}" "${buildargs[@]}"
 }
 ## </ci>
 
