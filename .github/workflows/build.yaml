@@ -41,10 +41,15 @@ jobs:
       run: |
         .github/exec git config --global user.name 'Cole Botkens'
         .github/exec git config --global user.email 'cole.mickens+colebot@gmail.com'
-    - name: build-and-cache
+    - name: build
+      run: |
+        set -xeuo pipefail
+        export CI_JOB_ID="${GITHUB_RUN_ID}_${GITHUB_RUN_NUMBER}"
+        .github/exec ./nixup ci_nbu "${{ matrix.jobs.target }}"
+    - name: cache
       env:
         CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
       run: |
         set -xeuo pipefail
         export CI_JOB_ID="${GITHUB_RUN_ID}_${GITHUB_RUN_NUMBER}"
-        .github/exec ./nixup nbu_cache "${{ matrix.jobs.target }}"
+        .github/exec ./nixup ci_cache "${{ matrix.jobs.target }}"
