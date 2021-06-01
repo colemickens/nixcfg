@@ -30,36 +30,6 @@ srcdirs=(
 )
 
 # <ci>
-function build() { command nix-build "${buildargs[@]}" -A "${1}" "${@:2}"; }
-function nbu_cache() {
-  # establish an out directory to track build results, clean it up after we leave
-  out="$(mktemp -d)"; trap "rm -rf ${out}" RETURN;
-
-  echo; echo "::group::build"
-  command nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "--out-link" "${out}/result")" -A "${1}" -v "${buildargs[@]}" "--out-link" "${out}/result"
-  echo; echo "::endgroup"
-
-  echo; echo "::group::cache"
-  if find ${out} | grep result; then
-    echo; echo "attempt to push: ${out}/result*"
-    nix "${nixargs[@]}" path-info --json -r ${out}/result* > ${out}/path-info.json
-    jq -r 'map(select(.ca == null and .signatures == null)) | map(.path) | .[]' < "${out}/path-info.json" > "${out}/paths"
-    jq -r '.[] | map(.path) | .[]' < "${out}/path-info.json" > "${out}/paths2"
-    cachix push "${cache}" < "${out}/paths2"
-    cat "${out}/paths2" | cachix push "${cache}"
-  fi
-  echo; echo "::endgroup"
-
-  echo "cache path upload count: $(wc -l "${out}/paths")"
-
-  echo; echo "::group::list-paths"
-  cat "${out}/paths"
-  echo; echo "::endgroup"
-  
-  echo; echo "::group::list-paths2"
-  cat "${out}/paths2"
-  echo; echo "::endgroup"
-}
 function sanitize_name() {
   name="${1}"
   name="${name//$'-'/$'_'}"
@@ -75,21 +45,18 @@ function ci_nbu() {
 function ci_cache() {
   out="/tmp/$(sanitize_name "${1}")"
   
-  if find ${out} | grep -v result; then
+  if ! (find ${out} | grep result); then
     return
   fi
 
-  nix "${nixargs[@]}" path-info --json -r ${out}/result* > ${out}/path-info.json
+  nix "${nixargs[@]}" path-info --json -r ${out}/result* \
+    > "${out}-path-info.json"
+
   jq -r 'map(select(.ca == null and .signatures == null)) | map(.path) | .[]' \
-    < "${out}/path-info.json" \
-    > "${out}/paths"
+    < "${out}-path-info.json" \
+    > "${out}-paths"
 
-  echo; echo
-  echo "cache path upload count: $(wc -l "${out}/paths")"
-  jq "${out}/paths"
-  echo; echo
-
-  cachix push "${cache}" < "${out}/paths"
+  cachix push "${cache}" < "${out}-paths"
 }
 
 function nbu_check() {

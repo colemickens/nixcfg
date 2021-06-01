@@ -88,7 +88,7 @@ in
       search = [ "ts.r10e.tech" ];
     };
     services.resolved.enable = true;
-    services.resolved.domains = [ "ts.r10e.tech" ];
+    services.resolved.domains = [ "ts.r10e.tech" "test2.r10e.tech" ];
     systemd.network.enable = true;
     systemd.network.networks = {
       "01-eth0" = {

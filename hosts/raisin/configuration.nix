@@ -25,7 +25,7 @@ in
     nix.nixPath = [];
     nix.gc.automatic = true;
     nix.maxJobs = 8;
-    #nix.package = lib.mkForce pkgs.nix;
+    nix.package = lib.mkForce pkgs.nix;
 
     documentation.enable = false;
     documentation.doc.enable = false;
