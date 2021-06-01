@@ -65,6 +65,7 @@ function sanitize_name() {
   name="${name//$'-'/$'_'}"
   name="${name//$'#'/$'_'}"
   name="${name//$'.'/$'_'}"
+  printf "%s" "${name}"
 }
 function ci_nbu() {
   out="/tmp/$(sanitize_name "${1}")"
@@ -75,13 +76,15 @@ function ci_cache() {
   out="/tmp/$(sanitize_name "${1}")"
   
   if find ${out} | grep result; then
-    echo; echo "attempt to push: ${out}/result*"
-    nix "${nixargs[@]}" path-info --json -r ${out}/result* > ${out}/path-info.json
-    jq -r 'map(select(.ca == null and .signatures == null)) | map(.path) | .[]' < "${out}/path-info.json" > "${out}/paths"
-    jq -r '.[] | map(.path) | .[]' < "${out}/path-info.json" > "${out}/paths2"
-    cachix push "${cache}" < "${out}/paths2"
-    cat "${out}/paths2" | cachix push "${cache}"
+    true
+  else
+    return
   fi
+
+  echo; echo "attempt to push: ${out}/result*"
+  nix "${nixargs[@]}" path-info --json -r ${out}/result* > ${out}/path-info.json
+  jq -r 'map(select(.ca == null and .signatures == null)) | map(.path) | .[]' < "${out}/path-info.json" > "${out}/paths"
+  jq -r '.[] | map(.path) | .[]' < "${out}/path-info.json" > "${out}/paths2"
   
   echo
   echo
@@ -94,6 +97,11 @@ function ci_cache() {
   echo
   echo "list paths 2"
   cat "${out}/paths2"
+  
+  echo
+  echo
+  echo
+  cachix push "${cache}" < "${out}/paths2"  
 }
 
 function nbu_check() {
