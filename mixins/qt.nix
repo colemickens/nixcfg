@@ -5,7 +5,11 @@
     home-manager.users.cole = { pkgs, ... }: {  
       qt = {
         enable = true;
+
+        #platformTheme = "gtk";
+
         platformTheme = "gnome";
+        style = "adwaita-dark";
       };
     };
   };
