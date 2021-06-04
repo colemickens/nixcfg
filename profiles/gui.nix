@@ -99,7 +99,7 @@ in
         nheko
         quaternion
         spectral
-        mirage-im
+        #mirage-im
         cchat-gtk
         neochat
         #element-desktop
