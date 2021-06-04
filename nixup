@@ -158,7 +158,7 @@ if [[ ! -z "${cmd:-""}" ]]; then
   "${cmd}" "${@}"
 else
   stash
-  git rebase -i origin/auto-update-ready
+  git rebase -i origin/auto-update-ready || true
   out="/tmp/${RANDOM}"
   nix-build -A "toplevels.$(hostname)" --out-link "${out}"
   readlink -f /run/current-system | cachix push colemickens
