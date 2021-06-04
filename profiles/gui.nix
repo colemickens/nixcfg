@@ -95,8 +95,8 @@ in
         kitty
 
         # matrix clients
-        #fractal
-        #nheko
+        fractal
+        nheko
         quaternion
         spectral
         mirage-im
