@@ -40,20 +40,20 @@ in {
   config = {
     # okay yikes, since some of this is dependent on scdaemon
     # conf and state, let's make sure we reset (kill) scdaemon each time
-    system.activationScripts.step-gpg-reset = {
-      text = ''
-        ${pkgs.procps}/bin/pkill -9 scdaemon || true
-      '';
-      deps = [];
-    };
-    system.userActivationScripts.step-gpg-reset = {
-      text = ''
-        ${pkgs.systemd}/bin/systemctl --user stop gpg-agent || true
-        ${pkgs.systemd}/bin/systemctl --user start gpg-agent || true
-        ${pkgs.procps}/bin/pkill -9 gpg-agent || true
-      '';
-      deps = [];
-    };
+    # system.activationScripts.step-gpg-reset = {
+    #   text = ''
+    #     ${pkgs.procps}/bin/pkill -9 scdaemon || true
+    #   '';
+    #   deps = [];
+    # };
+    # system.userActivationScripts.step-gpg-reset = {
+    #   text = ''
+    #     ${pkgs.systemd}/bin/systemctl --user stop gpg-agent || true
+    #     ${pkgs.systemd}/bin/systemctl --user start gpg-agent || true
+    #     ${pkgs.procps}/bin/pkill -9 gpg-agent || true
+    #   '';
+    #   deps = [];
+    # };
 
     ######################
 
