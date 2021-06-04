@@ -6,13 +6,13 @@
       qt = {
         enable = true;
 
-        #platformTheme = "gtk";
+        platformTheme = "gtk";
 
-        platformTheme = "gnome";
-        style = {
-          name = "adwaita-dark";
-          package = pkgs.adwaita-qt;
-        };
+        # platformTheme = "gnome";
+        # style = {
+        #   name = "adwaita-dark";
+        #   package = pkgs.adwaita-qt;
+        # };
       };
     };
   };
