@@ -9,7 +9,9 @@
         #platformTheme = "gtk";
 
         platformTheme = "gnome";
-        style = "adwaita-dark";
+        style = {
+          name = "adwaita-dark";
+        };
       };
     };
   };
