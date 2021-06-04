@@ -159,6 +159,9 @@ if [[ ! -z "${cmd:-""}" ]]; then
 else
   stash
   git rebase -i origin/auto-update-ready
-  sudo nixos-rebuild switch --flake ~/code/nixcfg
+  out="/tmp/${RANDOM}"
+  nix-build -A "toplevels.$(hostname)" --out-link "${out}"
   readlink -f /run/current-system | cachix push colemickens
+  sudo nix-env --set --profile "/nix/var/nix/profiles/system" "${out}"
+  sudo "${out}/bin/switch-to-configuration" switch
 fi
