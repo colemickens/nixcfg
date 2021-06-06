@@ -169,9 +169,9 @@
           mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
           meli = prev.callPackage ./pkgs/meli {};
           #niche = prev.callPackage ./pkgs/niche {};
-          # neochat = prev.libsForQt5.callPackage ./pkgs/neochat {
-          #   neochat = prev.neochat;
-          # };
+          neochat = prev.libsForQt5.callPackage ./pkgs/neochat {
+            neochat = prev.neochat;
+          };
           passrs = prev.callPackage ./pkgs/passrs {};
           rkvm = prev.callPackage ./pkgs/rkvm {};
           shreddit = prev.python3Packages.callPackage ./pkgs/shreddit {};
