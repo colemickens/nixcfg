@@ -72,9 +72,9 @@ in
               "network"
               "cpu"
               "memory"
-              "backlight"
               "pulseaudio"
               "clock"
+              "backlight"
               "battery"
             ];
 
