@@ -1,4 +1,5 @@
-args_@{ lib, fetchFromGitLab, neochat
+args_@{ lib, fetchFromGitLab
+, neochat
 , qqc2-desktop-style, ... }:
 
 let
