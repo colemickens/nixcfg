@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub
+{ stdenv, lib, rustPlatform, fetchFromGitHub
 , pkg-config
 , xorg
 }:
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   # test tests::integration::basic::cannot_split_terminals_horizontally_when_active_terminal_is_too_small ... FAILED
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "";
     homepage = "https://github.com/zellij-org/zellij";
     license = licenses.mit;

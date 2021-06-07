@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, makeWrapper
+{ stdenv, lib, fetchFromGitLab, makeWrapper
 , meson, ninja, pkgconfig
 , gtk3, pipewire, cpptoml
 , gobject-introspection
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "-Ddoc=disabled"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Session / policy manager implementation for PipeWire";
     homepage    = "https://gitlab.freedesktop.org/pipewire/wireplumber";
     license     = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, lib, fetchFromGitHub
 , cmake
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "cpptoml is a header-only library for parsing TOML";
     homepage    = "https://github.com/skystrife/cpptoml";
     license     = licenses.mit;

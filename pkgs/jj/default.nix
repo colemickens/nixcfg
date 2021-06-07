@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkgconfig gzip makeWrapper ];
   buildInputs = [ openssl dbus sqlite ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Jujube (an experimental VCS)";
     homepage = "https://github.com/martinvonz/jj";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitlab, olaris-react
+{ stdenv, lib, buildGoModule, fetchFromGitlab, olaris-react
 , pkg-config, makeDesktopItem
 , gtk3, libhandy, gspell
 , wrapGAppsHook
@@ -28,7 +28,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.com/olaris/olaris-server";
     description = "Olaris is an open-source, community driven, media manager and transcoding server.";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub
+{ stdenv, lib, rustPlatform, fetchFromGitHub
 , libgpgerror, libgit2, gpgme, gnupg }:
 
 let
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = metadata.cargoSha256;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "gets an xoauth2 token for use with gmail";
     homepage = "https://github.com/colemickens/get-xoauth2-token";
     license = licenses.mit;

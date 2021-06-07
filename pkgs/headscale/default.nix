@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub
+{ stdenv, lib, buildGoModule, fetchFromGitHub
 , pkg-config, makeDesktopItem
 , gtk3, libhandy, gspell
 , wrapGAppsHook
@@ -28,7 +28,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/headscale" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/juanfont/headscale";
     description = "An open source implementation of the Tailscale coordination server";
     license = licenses.bsd3;

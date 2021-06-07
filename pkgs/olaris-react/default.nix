@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitlab
+{ stdenv, lib, buildGoModule, fetchFromGitlab
 , pkg-config, makeDesktopItem
 , gtk3, libhandy, gspell
 , wrapGAppsHook
@@ -43,7 +43,7 @@ buildGoModule rec {
     substituteAllInPlace $out/share/applications/*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/diamondburned/cchat-gtk";
     description = "Gtk frontend for cchat";
     license = licenses.gpl3;

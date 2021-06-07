@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub
+{ stdenv, lib, rustPlatform, fetchFromGitHub
 , libgpgerror, libgit2, gpgme, gnupg }:
 
 let
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     echo "4B0D9BBAC5C8329C035B125CF6EF0D39C5F84192:6:" | gpg --import-ownertrust
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "";
     homepage = "https://github.com/cole-h/passrs";
     license = licenses.mit;

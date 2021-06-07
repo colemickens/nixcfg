@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitLab
+{ stdenv, lib, rustPlatform, fetchFromGitLab
 , pkgconfig
 , openssl
 }:
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Conduit is a simple, fast and reliable chat server powered by Matrix";
     homepage = "https://conduit.rs";
     license = licenses.asl20;

@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = metadata.cargoSha256;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "simple process viewer in rust";
     homepage = "https://nessuent.xyz/bb.html";
     license = licenses.gpl3;
