@@ -6,7 +6,6 @@ in
   imports = [
     ../../mixins/common.nix
 
-    ../../mixins/libvirt.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
