@@ -76,8 +76,9 @@ in
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      #kernelPackages = pkgs.linuxPackages_latest;
-      kernelPackages = pkgs.linuxPackages_5_11;
+      kernelPackages = pkgs.linuxPackages_latest;
+      zfs.enableUnstable = true;
+      
       initrd.availableKernelModules = [
         "xhci_pci" "xhci_hcd" # usb
         "nvme" "usb_storage" "sd_mod" # nvme / external usb storage
