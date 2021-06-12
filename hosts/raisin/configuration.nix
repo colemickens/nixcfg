@@ -10,6 +10,7 @@ in
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
     ../../mixins/tpm.nix
+    ../../mixins/yubikey.nix
 
     ../../profiles/desktop-sway-unstable.nix
     #../../profiles/desktop-gnome.nix
