@@ -8,7 +8,7 @@ in
 
     ../../mixins/logitech-mouse.nix
     ../../mixins/sshd.nix
-    ../../mixins/tailscale.nix
+    #../../mixins/tailscale.nix
     ../../mixins/tpm.nix
 
     ../../profiles/desktop-sway-unstable.nix
