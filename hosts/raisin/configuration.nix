@@ -10,7 +10,6 @@ in
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
     ../../mixins/tpm.nix
-    ../../mixins/yubikey.nix
 
     ../../profiles/desktop-sway-unstable.nix
     #../../profiles/desktop-gnome.nix
@@ -19,7 +18,10 @@ in
   ];
 
   config = {
-    environment.systemPackages = with pkgs; [ efibootmgr p7zip cpio ];
+    environment.systemPackages = with pkgs; [
+      efibootmgr p7zip cpio
+      yubikey-manager
+    ];
     system.stateVersion = "21.03";
 
     nix.nixPath = [];
