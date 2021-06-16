@@ -30,8 +30,8 @@ if [[ ! -f $KERNEL || ! -f $INITRD ]]; then
     file "${out}/live/initrd.img"
 
     # cpio the squashfs on the end of the initrd
-    echo 'filesystem.squashfs' \
-    | cpio -o -H newc -D "${out}/live" \
+    echo 'live/filesystem.squashfs' \
+    | cpio -o -H newc -D "${out}" \
         >> "${out}/live/initrd.img"
 
     # mv them into the cached location for future
@@ -48,11 +48,11 @@ CMDLINE=""
 CMDLINE="${CMDLINE} boot=live config"
 #CMDLINE="${CMDLINE} live-media=removable nopersistence noprompt"
 CMDLINE="${CMDLINE} live-media nopersistence noprompt"
-CMDLINE="${CMDLINE} timezone=Etc/UTC splash noautologin module=Tails"
+CMDLINE="${CMDLINE} timezone=Etc/UTC noautologin module=Tails"
 CMDLINE="${CMDLINE} slab_nomerge slub_debug=FZP mce=0 vsyscall=none page_poison=1"
 #CMDLINE="${CMDLINE} init_on_free=1 mds=full,nosmt quiet"
-CMDLINE="${CMDLINE} init_on_free=1 mds=full,nosmt"
-CMDLINE="${CMDLINE} plainroot root=/ toram"
+CMDLINE="${CMDLINE} init_on_free=1 mds=full,nosmt "
+CMDLINE="${CMDLINE} plainroot root=/live/filesystem.squashfs toram"
 
 # img
 # initrd=/live/initrd.img boot=live config
@@ -63,7 +63,7 @@ CMDLINE="${CMDLINE} plainroot root=/ toram"
 
 if [[ "${1:-""}" == "qemu" ]]; then
   qemu-system-x86_64 \
-    -m 4096m \
+    -m 8192m \
     -kernel "${KERNEL}" \
     -initrd "${INITRD}" \
     -append "${CMDLINE}"
