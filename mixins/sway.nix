@@ -148,6 +148,7 @@ in
             { always = true;  command = "pkill swayidle"; } # Disable swayidle for a bit
             #{ always = true;  command = "swayidle -w timeout 600 'swaymsg \"output * dpms off\"' "; } # Disable swayidle for a bit
             { command = "${idlecmd}"; always = true; }     # Disable swayidle for a bit
+            { command = "element-web"; }     # Disable swayidle for a bit
           ];
           input = {
             "${in_touchpad}" = {
@@ -182,7 +183,7 @@ in
               pointer_accel = ".1";
             };
             "type:keyboard" = {
-              xkb_options = "shift:both_capslock,ctrl:nocaps"; 
+              xkb_options = "shift:both_capslock,ctrl:nocaps";
             };
           };
           output = {
