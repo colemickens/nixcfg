@@ -1,10 +1,13 @@
 args_@{ lib, fetchFromGitLab
 , neochat
-, qqc2-desktop-style, sonnet, ... }:
+, qqc2-desktop-style, sonnet, kio, ... }:
 
 let
   metadata = import ./metadata.nix;
-  ignore = [ "neochat" "qqc2-desktop-style" "sonnet" ];
+  extraBuildInputs = [
+    "qqc2-desktop-style" "sonnet" "kio"
+  ];
+  ignore = [ "neochat" ] ++ extraBuildInputs;
   args = lib.filterAttrs (n: v: (!builtins.elem n ignore)) args_;
 in
 (neochat.override args).overrideAttrs(old: {
@@ -17,5 +20,5 @@ in
     inherit (metadata) rev sha256;
   };
 
-  buildInputs = old.buildInputs ++ [ qqc2-desktop-style sonnet ];
+  buildInputs = old.buildInputs ++ (map (n: args_.${n}) extraBuildInputs);
 })
