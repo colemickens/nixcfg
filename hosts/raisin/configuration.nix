@@ -7,6 +7,7 @@ in
     ../../mixins/common.nix
 
     ../../mixins/logitech-mouse.nix
+    ../../mixins/obs.nix
     ../../mixins/sshd.nix
     #../../mixins/tailscale.nix
     ../../mixins/tpm.nix
@@ -81,7 +82,7 @@ in
 
       kernelPackages = pkgs.linuxPackages_latest;
       zfs.enableUnstable = true;
-      
+
       initrd.availableKernelModules = [
         "xhci_pci" "xhci_hcd" # usb
         "nvme" "usb_storage" "sd_mod" # nvme / external usb storage
