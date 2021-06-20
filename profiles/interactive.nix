@@ -115,7 +115,7 @@ in
         buildkite-agent #buildkite
       ]
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
-        esphome
+        #esphome
       ] ++ lib.optionals (pkgs.system == "aarch64-linux") [
         #
       ]
