@@ -69,6 +69,8 @@ in
         yubico-piv-tool
         zellij
 
+        tokei
+
         # https://zaiste.net/posts/shell-commands-rust/
         bat
         tealdeer
