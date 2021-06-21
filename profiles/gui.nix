@@ -147,6 +147,8 @@ in
         scrcpy
         mplayer
         smplayer
+        alsaTools
+        alsaUtils
 
         # yucky non-free
         discord
