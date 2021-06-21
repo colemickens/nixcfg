@@ -146,6 +146,7 @@ in
         ddccontrol i2c-tools
         scrcpy
         mplayer
+        smplayer
 
         # yucky non-free
         discord
