@@ -1,9 +1,14 @@
 args_@{ lib, fetchFromGitLab
 , neochat
-, qqc2-desktop-style, sonnet, kio, ... }:
+, qqc2-desktop-style, sonnet, kio
+, extra-cmake-modules, pkg-config
+, ... }:
 
 let
   metadata = import ./metadata.nix;
+  extraNativeBuildInputs = [
+    "extra-cmake-modules" "pkg-config"
+  ];
   extraBuildInputs = [
     "qqc2-desktop-style" "sonnet" "kio"
   ];
@@ -21,4 +26,5 @@ in
   };
 
   buildInputs = old.buildInputs ++ (map (n: args_.${n}) extraBuildInputs);
+  nativeBuildInputs = old.nativeBuildInputs ++ (map (n: args_.${n}) extraNativeBuildInputs);
 })
