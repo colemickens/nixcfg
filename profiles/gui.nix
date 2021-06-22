@@ -90,8 +90,6 @@ in
         pulsemixer
 
         # terminals
-        #alacritty
-        #cool-retro-term
         kitty
 
         # matrix clients
@@ -116,7 +114,6 @@ in
 
         rkvm
         spotify-qt
-        spot
 
         gnome3.nautilus
         gnome3.file-roller

@@ -172,6 +172,7 @@
           neochat_ = prev.libsForQt5.callPackage ./pkgs/neochat {
             neochat = prev.neochat;
           };
+          neochat = neochat_;
           passrs = prev.callPackage ./pkgs/passrs {};
           rkvm = prev.callPackage ./pkgs/rkvm {};
           shreddit = prev.python3Packages.callPackage ./pkgs/shreddit {};
