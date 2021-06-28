@@ -93,6 +93,7 @@ in
         iotop which binutils.bintools
         parallel unzip xz zip
         gomuks #rumatui
+        oci-cli
 
         nix-prefetch  nixpkgs-review
 
