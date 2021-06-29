@@ -22,7 +22,6 @@ jobs:
       # then we ALWAYS have the new git rev to build (for some build output product, not sure which)
       run: |
         set -xeuo pipefail
-        .github/exec git checkout auto-update
         .github/exec git checkout -b auto-update-ready
         .github/exec git reset --hard origin/auto-update
         .github/exec ./nixup nbu_check 'req.bld' \
