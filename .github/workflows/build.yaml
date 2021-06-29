@@ -2,7 +2,7 @@ name: "Build"
 on:
   push:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '*/20 * * * *'
 jobs:
   build:
     continue-on-error: true
