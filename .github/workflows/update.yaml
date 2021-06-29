@@ -32,3 +32,6 @@ jobs:
         .github/exec ./nixup nbu_check 'req.bld' \
           && .github/exec git push origin HEAD -f \
             || true
+        echo "----"
+        echo "----"
+        .github/exec ./nixup nbu_check 'req.bld' 
