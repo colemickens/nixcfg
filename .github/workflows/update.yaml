@@ -16,6 +16,18 @@ jobs:
       run: |
         .github/exec git config --global user.name 'Cole Botkens'
         .github/exec git config --global user.email 'cole.mickens+colebot@gmail.com'
+    - name: try-update auto-update-ready
+      # note we must do this first
+      # if we update "auto-update" first,
+      # then we ALWAYS have the new git rev to build (for some build output product, not sure which)
+      run: |
+        set -xeuo pipefail
+        .github/exec git checkout auto-update
+        .github/exec git checkout -b auto-update-ready
+        .github/exec git reset --hard origin/auto-update
+        .github/exec ./nixup nbu_check 'req.bld' \
+          && .github/exec git push origin HEAD -f \
+            || true
     - name: force-update auto-update
       env:
         CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
@@ -25,13 +37,3 @@ jobs:
         .github/exec git checkout -b auto-update
         .github/exec ./nixup update
         .github/exec git push origin HEAD -f
-    - name: try-update auto-update-ready
-      run: |
-        set -xeuo pipefail
-        .github/exec git checkout -b auto-update-ready
-        .github/exec ./nixup nbu_check 'req.bld' \
-          && .github/exec git push origin HEAD -f \
-            || true
-        echo "----"
-        echo "----"
-        .github/exec ./nixup nbu_check 'req.bld' 
