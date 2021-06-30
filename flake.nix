@@ -176,7 +176,6 @@
           passrs = prev.callPackage ./pkgs/passrs {};
           rkvm = prev.callPackage ./pkgs/rkvm {};
           shreddit = prev.python3Packages.callPackage ./pkgs/shreddit {};
-          zellij = prev.callPackage ./pkgs/zellij {};
 
           libquotient = prev.libsForQt5.callPackage ./pkgs/quaternion/libquotient.nix {};
           quaternion = prev.libsForQt5.callPackage ./pkgs/quaternion {};
@@ -187,6 +186,9 @@
           cpptoml = prev.callPackage ./pkgs/cpptoml {};
           wireplumber = prev.callPackage ./pkgs/wireplumber {};
 
+          zellij = prev.callPackage ./pkgs/zellij {
+            zellij = prev.zellij;
+          };
           # olaris-server = prev.callPackage ./pkgs/olaris-server {};
           # olaris-react = prev.callPackage ./pkgs/olaris-react {};
         }; in p // { colePackages = p; };

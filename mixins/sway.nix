@@ -52,7 +52,7 @@ let
 
   # idle/lock
   # TODO: test and fix/ remove this message
-  swaylockcmd = "${pkgs.swaylock}/bin/swaylock -f --font 'Iosevka' -i '${bgfile}' -s 'fill' -c '#000000'";
+  swaylockcmd = "${pkgs.swaylock}/bin/swaylock --font 'Iosevka' -i '${bgfile}' -s 'fill' -c '#000000'";
   idlecmd = ''${pkgs.swayidle}/bin/swayidle -w \
     before-sleep \"${swaylockcmd}\" \
     lock \"${swaylockcmd}\" \
@@ -148,7 +148,7 @@ in
             { always = true;  command = "pkill swayidle"; } # Disable swayidle for a bit
             #{ always = true;  command = "swayidle -w timeout 600 'swaymsg \"output * dpms off\"' "; } # Disable swayidle for a bit
             { command = "${idlecmd}"; always = true; }     # Disable swayidle for a bit
-            { command = "element-web"; }     # Disable swayidle for a bit
+            { command = "element-desktop"; }     # Disable swayidle for a bit
           ];
           input = {
             "${in_touchpad}" = {

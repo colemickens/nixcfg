@@ -1,37 +1,32 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub
-, pkg-config
-, xorg
-}:
+args_@{ lib
+#, fetchFromGitLab
+, zellij
+# , qqc2-desktop-style, sonnet, kio
+# , extra-cmake-modules, pkg-config
+, ... }:
 
 let
   metadata = import ./metadata.nix;
-in
-rustPlatform.buildRustPackage rec {
-  pname = "zellij";
-  version = metadata.rev;
-
-  src = fetchFromGitHub {
-    owner = "zellij-org";
-    repo = pname;
-    rev = metadata.rev;
-    sha256 = metadata.sha256;
-  };
-
-  cargoSha256 = metadata.cargoSha256;
-
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    xorg.libX11
+  extraNativeBuildInputs = [
+    # "extra-cmake-modules" "pkg-config"
   ];
+  extraBuildInputs = [
+    # "qqc2-desktop-style" "sonnet" "kio"
+  ];
+  ignore = [ "zellij" ] ++ extraBuildInputs;
+  args = lib.filterAttrs (n: v: (!builtins.elem n ignore)) args_;
+in
+(zellij.override args).overrideAttrs(old: {
+  pname = "zellij";
+  version = "${metadata.rev}";
+  # src = fetchFromGitLab {
+  #   domain = "invent.kde.org";
+  #   owner = "network";
+  #   repo = "zellij";
+  #   inherit (metadata) rev sha256;
+  # };
+  src = /home/cole/code/zellij;
 
-  # a bunch of tests fail:
-  # test tests::integration::basic::cannot_split_terminals_horizontally_when_active_terminal_is_too_small ... FAILED
-  doCheck = false;
-
-  meta = with lib; {
-    description = "";
-    homepage = "https://github.com/zellij-org/zellij";
-    license = licenses.mit;
-    maintainers = [];
-  };
-}
+  buildInputs = old.buildInputs ++ (map (n: args_.${n}) extraBuildInputs);
+  nativeBuildInputs = old.nativeBuildInputs ++ (map (n: args_.${n}) extraNativeBuildInputs);
+})
