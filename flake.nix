@@ -189,7 +189,7 @@
           zellij_ = prev.callPackage ./pkgs/zellij {
             zellij = prev.zellij;
           };
-          zellij = zellij_;
+          #zellij = zellij_;
           # olaris-server = prev.callPackage ./pkgs/olaris-server {};
           # olaris-react = prev.callPackage ./pkgs/olaris-react {};
         }; in p // { colePackages = p; };
