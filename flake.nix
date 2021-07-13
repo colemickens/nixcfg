@@ -41,8 +41,8 @@
     firefox  = { url = "github:colemickens/flake-firefox-nightly"; };
     firefox.inputs.nixpkgs.follows = "nixpkgs";
 
-    chromium  = { url = "github:colemickens/flake-chromium"; };
-    chromium.inputs.nixpkgs.follows = "nixpkgs";
+    # chromium  = { url = "github:colemickens/flake-chromium"; };
+    # chromium.inputs.nixpkgs.follows = "nixpkgs";
 
     #nixos-veloren = { url = "github:colemickens/nixos-veloren"; };
     #nixos-veloren.inputs.nixpkgs.follows = "nixpkgs";
@@ -53,7 +53,7 @@
     # mobile-nixos = { url = "github:samueldr/mobile-nixos/mobile-nixos-blueline"; };
     #mobile-nixos.inputs.nixpkgs.follows = "nixpkgs";
 
-    nix-ipfs = { url = "github:obsidiansystems/nix"; };
+    # nix-ipfs = { url = "github:obsidiansystems/nix"; };
 
     nixos-azure = { url = "github:colemickens/nixos-azure/dev"; };
     nixos-azure.inputs.nixpkgs.follows = "nixpkgs";
@@ -76,8 +76,8 @@
     fenix = { url = "github:figsoda/fenix"; };
     fenix.inputs.nixpkgs.follows = "nixpkgs";
 
-    neovim-nightly = { url = "github:nix-community/neovim-nightly-overlay"; };
-    neovim-nightly.inputs.nixpkgs.follows = "nixpkgs";
+    # neovim-nightly = { url = "github:nix-community/neovim-nightly-overlay"; };
+    # neovim-nightly.inputs.nixpkgs.follows = "nixpkgs";
 
     envfs = { url = "github:Mic92/envfs"; };
     envfs.inputs.nixpkgs.follows = "nixpkgs";

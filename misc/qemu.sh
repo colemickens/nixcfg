@@ -12,7 +12,7 @@ if [[ "${1}" == "tails" ]]; then
   sudo qemu-system-x86_64 \
     -drive file=/dev/nvme0n1p5,if=virtio \
     -boot d -cdrom $ISO \
-    -m 1024 \
+    -m 4096 \
     -enable-kvm \
     -virtfs local,id=tmpvm,path=/tmp/vm,mount_tag=/tmp/vm,security_model=passthrough \
     -audiodev pa,id=snd0,server=/run/user/1000/pulse/native \
