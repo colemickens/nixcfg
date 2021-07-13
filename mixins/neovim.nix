@@ -4,7 +4,7 @@ let
   # neovimPkg = if (pkgs.system == "aarch64-linux" || pkgs.system == "x86_64-linux")
   #   then inputs.neovim-nightly.defaultPackage."${pkgs.system}"
   #   else pkgs.neovim;
-  neovimPkg = pkgs.neovim;
+  #neovimPkg = pkgs.neovim;
 in {
   config = {
     home-manager.users.cole = { pkgs, ... }: {
@@ -12,8 +12,6 @@ in {
         enable = true;
         viAlias = true;
         vimAlias = true;
-
-        package = neovimPkg;
 
         # TODO: how can I inherit `system` here?
         plugins = with pkgs.vimPlugins; [

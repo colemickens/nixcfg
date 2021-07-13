@@ -4,6 +4,7 @@ let
 in
 {
   imports = [
+    ../../mixins/android.nix
     ../../mixins/common.nix
 
     ../../mixins/logitech-mouse.nix
