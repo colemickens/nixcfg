@@ -1,5 +1,4 @@
 name: "Update"
-        -b auto-update-ready
 on:
   push:
   schedule:
