@@ -1,5 +1,5 @@
 args_@{ lib
-#, fetchFromGitLab
+, fetchFromGitHub
 , zellij
 # , qqc2-desktop-style, sonnet, kio
 # , extra-cmake-modules, pkg-config
@@ -13,19 +13,23 @@ let
   extraBuildInputs = [
     # "qqc2-desktop-style" "sonnet" "kio"
   ];
-  ignore = [ "zellij" ] ++ extraBuildInputs;
+  ignore = [ "zellij" "fetchFromGithub" ] ++ extraBuildInputs;
   args = lib.filterAttrs (n: v: (!builtins.elem n ignore)) args_;
+  newsrc = fetchFromGitHub {
+    owner = "zellij-org";
+    repo = "zellij";
+    inherit (metadata) rev sha256;
+  };
 in
 (zellij.override args).overrideAttrs(old: {
   pname = "zellij";
   version = "${metadata.rev}";
-  # src = fetchFromGitLab {
-  #   domain = "invent.kde.org";
-  #   owner = "network";
-  #   repo = "zellij";
-  #   inherit (metadata) rev sha256;
-  # };
-  src = /home/cole/code/zellij;
+  src = newsrc;
+  
+  cargoDeps = old.cargoDeps.overrideAttrs (lib.const {
+    src = newsrc;
+    outputHash = metadata.cargoSha256;
+  });
 
   buildInputs = old.buildInputs ++ (map (n: args_.${n}) extraBuildInputs);
   nativeBuildInputs = old.nativeBuildInputs ++ (map (n: args_.${n}) extraNativeBuildInputs);

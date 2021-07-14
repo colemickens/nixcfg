@@ -186,9 +186,12 @@
           cpptoml = prev.callPackage ./pkgs/cpptoml {};
           wireplumber = prev.callPackage ./pkgs/wireplumber {};
 
-          zellij_ = prev.callPackage ./pkgs/zellij {
+          #zellij = prev.callPackage ./pkgs/zellij {};
+
+          zellij = prev.callPackage ./pkgs/zellij {
             zellij = prev.zellij;
           };
+
           #zellij = zellij_;
           # olaris-server = prev.callPackage ./pkgs/olaris-server {};
           # olaris-react = prev.callPackage ./pkgs/olaris-react {};
