@@ -1,7 +1,7 @@
 {
   repo_git = "https://github.com/mirukana/mirage";
   branch = "master";
-  rev = "b07dfa1c01a2096fe70e34726a0dd4759711be34";
-  sha256 = "sha256-lOpdDBtsofmKBuAiohoOQ7xI4lAutfT4xuN59MVr70g=";
+  rev = "4cf3a69a92f614ee9f46b1a70f0304359a461323";
+  sha256 = "sha256-69fa8LN/mv4jmvaqgFQ7kuixLxSDepqBAJQXf0pCGWw=";
   revdate = "2020-09-01 17:38:30Z";
 }
