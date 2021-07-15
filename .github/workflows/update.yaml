@@ -38,5 +38,5 @@ jobs:
         .github/exec git checkout -b auto-update
         .github/exec git reset --hard main
         .github/exec ./nixup update
-        (cd pkgs; .github/exec ./update.sh)
+        (cd pkgs; ../.github/exec ./update.sh)
         .github/exec git push origin HEAD -f
