@@ -17,6 +17,7 @@ elif [[ "${1-:""}" != "" ]] && [[ "${1-:""}" != ":" ]]; then
     --run "$(printf '\"%s\" ' "${@}")"
   exit
 else
+  #cat <(printf "set -x\n set -euo pipefail\n") /dev/stdin | \
   cat /dev/stdin | \
     nix-shell --pure \
       --keep GITHUB_ACTION \
