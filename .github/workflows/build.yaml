@@ -1,39 +1,39 @@
-name: "Build"
-on:
-  push:
-  schedule:
-    - cron: '*/20 * * * *'
-jobs:
-  "build":
-    runs-on:
-    - ${{matrix.jobs.runson}}
-    concurrency: build-${{matrix.jobs.branch}}-${{matrix.jobs.target}}
-    strategy:
-      matrix:
-        jobs:
-        - { "branch": "main",         "target": "toplevels.jeffhyper",  "runson": "ubuntu-latest" }
-        - { "branch": "main",         "target": "toplevels.porty",      "runson": "ubuntu-latest" }
-        - { "branch": "main",         "target": "toplevels.raisin",     "runson": "ubuntu-latest" }
-        - { "branch": "main",         "target": "toplevels.rpizero1",   "runson": "ubuntu-latest" }
-        - { "branch": "main",         "target": "toplevels.xeep",       "runson": "ubuntu-latest" }
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        ref: ${{ matrix.jobs.branch }}
-    - uses: cachix/install-nix-action@v13
-      with:
-        #install_url: https://github.com/numtide/nix-flakes-installer/releases/download/nix-2.4pre20210429_d15a196/install
-        install_url: "https://nixos-nix-install-tests.cachix.org/serve/dznj18ywp62vghk98m5vclfqmszjnbph/install"
-        install_options: "--tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve"
-        extra_nix_config: |
-          experimental-features = nix-command flakes ca-references
-    - name: "init"
-      run: .github/exec __init
-    - name: build
-      run: |
-        .github/exec ./nixup ci_nbu "${{ matrix.jobs.target }}"
-    - name: cache
-      env:
-        CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
-      run: |
-        .github/exec ./nixup ci_cache "${{ matrix.jobs.target }}"
+# name: "Build"
+# on:
+#   push:
+#   schedule:
+#     - cron: '*/20 * * * *'
+# jobs:
+#   "build":
+#     runs-on:
+#     - ${{matrix.jobs.runson}}
+#     concurrency: build-${{matrix.jobs.branch}}-${{matrix.jobs.target}}
+#     strategy:
+#       matrix:
+#         jobs:
+#         - { "branch": "main",         "target": "toplevels.jeffhyper",  "runson": "ubuntu-latest" }
+#         - { "branch": "main",         "target": "toplevels.porty",      "runson": "ubuntu-latest" }
+#         - { "branch": "main",         "target": "toplevels.raisin",     "runson": "ubuntu-latest" }
+#         - { "branch": "main",         "target": "toplevels.rpizero1",   "runson": "ubuntu-latest" }
+#         - { "branch": "main",         "target": "toplevels.xeep",       "runson": "ubuntu-latest" }
+#     steps:
+#     - uses: actions/checkout@v2
+#       with:
+#         ref: ${{ matrix.jobs.branch }}
+#     - uses: cachix/install-nix-action@v13
+#       with:
+#         #install_url: https://github.com/numtide/nix-flakes-installer/releases/download/nix-2.4pre20210429_d15a196/install
+#         install_url: "https://nixos-nix-install-tests.cachix.org/serve/dznj18ywp62vghk98m5vclfqmszjnbph/install"
+#         install_options: "--tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve"
+#         extra_nix_config: |
+#           experimental-features = nix-command flakes ca-references
+#     - name: "init"
+#       run: .github/exec __init
+#     - name: build
+#       run: |
+#         .github/exec ./nixup ci_nbu "${{ matrix.jobs.target }}"
+#     - name: cache
+#       env:
+#         CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
+#       run: |
+#         .github/exec ./nixup ci_cache "${{ matrix.jobs.target }}"
