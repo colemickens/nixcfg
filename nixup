@@ -81,6 +81,11 @@ function update() {
   stash
   cd "${DIR}"
 }
+function update-pkgs() {
+  cd "${DIR}/pkgs"
+  ./update.sh
+  cd "${DIR}"
+}
 function stash() {
   __ "stashing nixcfg"
   cd "${DIR}";

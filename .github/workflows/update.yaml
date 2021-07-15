@@ -17,7 +17,7 @@ jobs:
         .github/exec git config --global user.name 'Cole Botkens'
         .github/exec git config --global user.email 'cole.mickens+colebot@gmail.com'
         .github/exec git remote update
-    - name: try-update auto-update-ready
+    - name: "(auto-update-ready): try advance"
       # note we must do this first
       # if we update "auto-update" first,
       # then we ALWAYS have the new git rev to build (for some build output product, not sure which)
@@ -29,7 +29,7 @@ jobs:
         .github/exec ./nixup nbu_check 'req.bld' \
           && .github/exec git push origin HEAD -f \
             || true
-    - name: force-update auto-update
+    - name: "(auto-update): update"
       env:
         CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
       run: |
@@ -38,5 +38,5 @@ jobs:
         .github/exec git checkout -b auto-update
         .github/exec git reset --hard main
         .github/exec ./nixup update
-        (cd pkgs; ../.github/exec ./update.sh)
+        .github/exec ./nixup update-pkgs
         .github/exec git push origin HEAD -f
