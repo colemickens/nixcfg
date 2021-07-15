@@ -4,11 +4,11 @@ on:
   schedule:
     - cron: '*/20 * * * *'
 jobs:
-  build:
+  "build":
     continue-on-error: true
     runs-on:
     - ${{matrix.jobs.runson}}
-    concurrency: ${{matrix.jobs.branch}}-${{matrix.jobs.target}}
+    concurrency: build-${{matrix.jobs.branch}}-${{matrix.jobs.target}}
     strategy:
       matrix:
         jobs:
@@ -35,12 +35,14 @@ jobs:
         install_options: "--tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve"
         extra_nix_config: |
           experimental-features = nix-command flakes ca-references
-    - name: prepare
-      run: .github/exec nix-build --version
-    - name: git-setup
+    - name: "(setup) pre-cache shell"
+      run: |
+        .github/exec nix-build --version
+    - name: "(setup) configure git"
       run: |
         .github/exec git config --global user.name 'Cole Botkens'
         .github/exec git config --global user.email 'cole.mickens+colebot@gmail.com'
+        .github/exec git remote update
     - name: build
       run: |
         set -xeuo pipefail
