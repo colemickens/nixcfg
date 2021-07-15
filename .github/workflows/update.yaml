@@ -27,7 +27,9 @@ jobs:
         .github/exec git checkout -b auto-update-ready
         .github/exec git branch --list --all
         .github/exec git reset --hard origin/auto-update
-        .github/exec ./nixup nbu_check 'req.bld' \
+        .github/exec true \
+          && .github/exec git rebase origin/main \
+          && .github/exec ./nixup nbu_check_req \
           && .github/exec git push origin HEAD -f \
             || true
     - name: "(auto-update): update"

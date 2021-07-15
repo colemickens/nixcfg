@@ -63,6 +63,15 @@ function ci_cache() {
 function nbu_check() {
   command nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0" --no-link)" -A "${1}" "${buildargs[@]}"
 }
+function nbu_check_req() {
+  command nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0" --no-link)" \
+    -A toplevels.jeffhyper \
+    -A toplevels.raisin \
+    -A toplevels.rpizero1 \
+    -A toplevels.xeep \
+    -A toplevels.porty \
+    "${buildargs[@]}"
+}
 ## </ci>
 
 function update() {
