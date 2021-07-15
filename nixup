@@ -78,14 +78,13 @@ function update() {
   set -euo pipefail
 
   cd "${DIR}"; [[ -f ../nixpkgs-wayland/pkgs/update.sh ]] && cp ../nixpkgs-wayland/pkgs/update.sh ./pkgs/update.sh
+  cd "${DIR}"; [[ -f ../nixpkgs-wayland/.github/exec ]] && cp ../nixpkgs-wayland/.github/exec .github/exec
 
   printf '%s\n' "${srcdirs[@]}" | \
     parallel --jobs $(nproc) --halt soon,fail=1 --tag --progress -- \
       "[[ ! -d "${HOME}/code/{.}" ]] || (git -C '${HOME}/code/{.}' pull --rebase && git -C '${HOME}/code/{.}' push origin HEAD -f)"
 
   cd "${DIR}"; nix "${nixargs[@]}" flake update --no-registries --commit-lock-file
-  
-  #cd "${DIR}/pkgs" && ./update.sh
 
   stash
   cd "${DIR}"

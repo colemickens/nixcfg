@@ -5,7 +5,6 @@ on:
     - cron: '*/20 * * * *'
 jobs:
   "build":
-    continue-on-error: true
     runs-on:
     - ${{matrix.jobs.runson}}
     concurrency: build-${{matrix.jobs.branch}}-${{matrix.jobs.target}}
@@ -17,13 +16,6 @@ jobs:
         - { "branch": "main",         "target": "toplevels.raisin",     "runson": "ubuntu-latest" }
         - { "branch": "main",         "target": "toplevels.rpizero1",   "runson": "ubuntu-latest" }
         - { "branch": "main",         "target": "toplevels.xeep",       "runson": "ubuntu-latest" }
-        - { "branch": "auto-update",  "target": "toplevels.jeffhyper",  "runson": "ubuntu-latest" }
-        - { "branch": "auto-update",  "target": "toplevels.porty",      "runson": "ubuntu-latest" }
-        - { "branch": "auto-update",  "target": "toplevels.raisin",     "runson": "ubuntu-latest" }
-        - { "branch": "auto-update",  "target": "toplevels.rpizero1",   "runson": "ubuntu-latest" }
-        - { "branch": "auto-update",  "target": "toplevels.xeep",       "runson": "ubuntu-latest" }
-        #- { "branch": "main",         "target": "bundles.x86_64-linux", "runson": "self-hosted" }
-        #- { "branch": "auto-update",  "target": "bundles.x86_64-linux", "runson": "self-hosted" }
     steps:
     - uses: actions/checkout@v2
       with:
@@ -35,23 +27,13 @@ jobs:
         install_options: "--tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve"
         extra_nix_config: |
           experimental-features = nix-command flakes ca-references
-    - name: "(setup) pre-cache shell"
-      run: |
-        .github/exec nix-build --version
-    - name: "(setup) configure git"
-      run: |
-        .github/exec git config --global user.name 'Cole Botkens'
-        .github/exec git config --global user.email 'cole.mickens+colebot@gmail.com'
-        .github/exec git remote update
+    - name: "init"
+      run: .github/exec __init
     - name: build
       run: |
-        set -xeuo pipefail
-        export CI_JOB_ID="${GITHUB_RUN_ID}_${GITHUB_RUN_NUMBER}"
         .github/exec ./nixup ci_nbu "${{ matrix.jobs.target }}"
     - name: cache
       env:
         CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
       run: |
-        set -xeuo pipefail
-        export CI_JOB_ID="${GITHUB_RUN_ID}_${GITHUB_RUN_NUMBER}"
         .github/exec ./nixup ci_cache "${{ matrix.jobs.target }}"

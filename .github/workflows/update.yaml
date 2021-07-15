@@ -10,36 +10,77 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: cachix/install-nix-action@v13
-    - name: (setup) pre-cache shell
+    - name: "init"
+      run: .github/exec __init
+    - name: "update"
+      env: { "CACHIX_SIGNING_KEY": "${{ secrets.cachix_key_colemickens }}" }
       run: |
-        .github/exec nix-build --version
-    - name: (setup) configure git
-      run: |
-        .github/exec git config --global user.name 'Cole Botkens'
-        .github/exec git config --global user.email 'cole.mickens+colebot@gmail.com'
-        .github/exec git remote update
-    - name: "(auto-update-ready): try advance"
-      # note we must do this first
-      # if we update "auto-update" first,
-      # then we ALWAYS have the new git rev to build (for some build output product, not sure which)
-      run: |
-        set -xeuo pipefail
-        .github/exec git checkout -b auto-update-ready
-        .github/exec git branch --list --all
-        .github/exec git reset --hard origin/auto-update
-        .github/exec true \
-          && .github/exec git rebase origin/main \
-          && .github/exec ./nixup nbu_check_req \
-          && .github/exec git push origin HEAD -f \
-            || true
-    - name: "(auto-update): update"
-      env:
-        CACHIX_SIGNING_KEY: "${{ secrets.cachix_key_colemickens }}"
-      run: |
-        set -xeuo pipefail
         export CI_JOB_ID="${GITHUB_RUN_ID}_${GITHUB_RUN_NUMBER}"
-        .github/exec git checkout -b auto-update
-        .github/exec git reset --hard main
-        .github/exec ./nixup update
-        .github/exec ./nixup update-pkgs
-        .github/exec git push origin HEAD -f
+        cat << EOF | .github/exec
+          git checkout -b auto-update
+          git reset --hard main 
+          ./nixup update
+          ./nixup update-pkgs
+          git push origin HEAD -f
+        EOF
+
+  "build":
+    needs: "update"
+    runs-on:
+    - ${{matrix.jobs.runson}}
+    concurrency: build-${{matrix.jobs.branch}}-${{matrix.jobs.target}}
+    strategy:
+      matrix:
+        jobs:
+        - { "branch": "auto-update",  "target": "toplevels.jeffhyper",  "runson": "ubuntu-latest" }
+        - { "branch": "auto-update",  "target": "toplevels.porty",      "runson": "ubuntu-latest" }
+        - { "branch": "auto-update",  "target": "toplevels.raisin",     "runson": "ubuntu-latest" }
+        - { "branch": "auto-update",  "target": "toplevels.rpizero1",   "runson": "ubuntu-latest" }
+        - { "branch": "auto-update",  "target": "toplevels.xeep",       "runson": "ubuntu-latest" }
+        #- { "branch": "main",         "target": "bundles.x86_64-linux", "runson": "self-hosted" }
+        #- { "branch": "auto-update",  "target": "bundles.x86_64-linux", "runson": "self-hosted" }
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ matrix.jobs.branch }}
+    - uses: cachix/install-nix-action@v13
+      with:
+        #install_url: https://github.com/numtide/nix-flakes-installer/releases/download/nix-2.4pre20210429_d15a196/install
+        install_url: "https://nixos-nix-install-tests.cachix.org/serve/dznj18ywp62vghk98m5vclfqmszjnbph/install"
+        install_options: "--tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve"
+        extra_nix_config: |
+          experimental-features = nix-command flakes ca-references
+    - name: "init"
+      run: .github/exec __init
+    - name: build
+      run: .github/exec ./nixup ci_nbu "${{ matrix.jobs.target }}"
+    - name: cache
+      env: { "CACHIX_SIGNING_KEY": "${{ secrets.cachix_key_colemickens }}" }
+      run: .github/exec ./nixup ci_cache "${{ matrix.jobs.target }}"
+
+  "publish":
+    needs: "build"
+    runs-on: ubuntu-latest
+    # note we must do this first
+    # if we update "auto-update" first,
+    # then we ALWAYS have the new git rev to build (for some build output product, not sure which)
+    
+    # also important: try to rebase auto-update on master
+    # if we edit nixup on master and then this runs, it will
+    # end up using the old nixup from the "old" auto-update branch
+
+    # also important that we allow this skip to be stepped so that
+    # 'auto-update' can always have a chance to properly
+    # re-update from where origin/main happens to have gotten to
+    steps:
+    - name: "publish"
+      run: |
+        cat << EOF | .github/exec
+          git checkout -b auto-update-ready
+          git reset --hard origin/auto-update
+          git rebase origin/main
+        EOF
+        cat << EOF | .github/exec
+          ./nixup nbu_check_req
+          git push origin HEAD -f
+        EOF || true
