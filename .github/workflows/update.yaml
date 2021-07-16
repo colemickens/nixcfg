@@ -73,6 +73,10 @@ jobs:
     # 'auto-update' can always have a chance to properly
     # re-update from where origin/main happens to have gotten to
     steps:
+    - uses: actions/checkout@v2
+    - uses: cachix/install-nix-action@v13
+    - name: "init"
+      run: .github/exec __init
     - name: "publish"
       run: |
         cat << EOF | .github/exec
