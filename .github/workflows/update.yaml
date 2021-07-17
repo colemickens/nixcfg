@@ -33,10 +33,10 @@ jobs:
       matrix:
         jobs:
         - { "branch": "auto-update",  "target": "toplevels.jeffhyper",  "runson": "ubuntu-latest" }
-        - { "branch": "auto-update",  "target": "toplevels.porty",      "runson": "ubuntu-latest" }
-        - { "branch": "auto-update",  "target": "toplevels.raisin",     "runson": "ubuntu-latest" }
-        - { "branch": "auto-update",  "target": "toplevels.rpizero1",   "runson": "ubuntu-latest" }
-        - { "branch": "auto-update",  "target": "toplevels.xeep",       "runson": "ubuntu-latest" }
+        # - { "branch": "auto-update",  "target": "toplevels.porty",      "runson": "ubuntu-latest" }
+        # - { "branch": "auto-update",  "target": "toplevels.raisin",     "runson": "ubuntu-latest" }
+        # - { "branch": "auto-update",  "target": "toplevels.rpizero1",   "runson": "ubuntu-latest" }
+        # - { "branch": "auto-update",  "target": "toplevels.xeep",       "runson": "ubuntu-latest" }
         #- { "branch": "main",         "target": "bundles.x86_64-linux", "runson": "self-hosted" }
         #- { "branch": "auto-update",  "target": "bundles.x86_64-linux", "runson": "self-hosted" }
     steps:
@@ -57,7 +57,14 @@ jobs:
     - name: cache
       env: { "CACHIX_SIGNING_KEY": "${{ secrets.cachix_key_colemickens }}" }
       run: .github/exec ./nixup ci_cache "${{ matrix.jobs.target }}"
-
+    - uses: actions/upload-artifact@v2
+      with:
+        name: path-info
+        path: /tmp/toplevels_jeffhyper-path-info.json
+    - uses: actions/upload-artifact@v2
+      with:
+        name: paths
+        path: /tmp/toplevels_jeffhyper-paths
   "publish":
     needs: "build"
     runs-on: ubuntu-latest
