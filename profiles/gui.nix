@@ -82,6 +82,7 @@ in
         #vscode
         freerdp
         virt-viewer
+        remmina
         #vlc
         imv
 
