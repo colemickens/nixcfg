@@ -67,7 +67,9 @@ in
         fsType = "zfs";
       };
     };
-    swapDevices = [];
+    swapDevices = [
+      "/dev/disk/by-partlabel/swap"
+    ];
 
     services.logind.extraConfig = ''
       HandlePowerKey=hybrid-sleep
