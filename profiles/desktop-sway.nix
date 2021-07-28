@@ -42,7 +42,7 @@
         wl-clipboard
         wl-gammactl
         wlvncc
-        wshowkeys
+        #wshowkeys # broken
         xwayland
       ];
     };
