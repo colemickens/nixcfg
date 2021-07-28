@@ -40,8 +40,9 @@
         wayvnc
         wf-recorder
         wl-clipboard
-        #wl-gammactl
-        #wlvncc
+        wl-gammactl
+        wlvncc
+        wshowkeys
         xwayland
       ];
     };
