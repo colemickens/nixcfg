@@ -27,8 +27,8 @@
         XDG_SESSION_TYPE = "wayland";
         XDG_CURRENT_DESKTOP = "sway";
 
-        WLR_DRM_NO_MODIFIERS = "1";
-        WLR_DRM_NO_ATOMIC = "1";
+        #WLR_DRM_NO_MODIFIERS = "1";
+        #WLR_DRM_NO_ATOMIC = "1";
       };
       home.packages = with pkgs; [
         #drm_info

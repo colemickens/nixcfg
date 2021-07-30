@@ -111,10 +111,7 @@ in
         # eh?
         cordless
         xdg_utils
-        lynis
         bb
-        buildkite-cli #buildkite
-        buildkite-agent #buildkite
       ]
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
         #esphome
