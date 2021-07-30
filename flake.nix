@@ -162,9 +162,9 @@
           get-xoauth2-token = prev.callPackage ./pkgs/get-xoauth2-token {};
           headscale = prev.callPackage ./pkgs/headscale {};
           jj = prev.callPackage ./pkgs/jj {
-            # rustPlatform = (prev.makeRustPlatform {
-            #   inherit (inputs.fenix.packages.${prev.system}.minimal) cargo rustc;
-            # });
+            rustPlatform = (prev.makeRustPlatform {
+              inherit (inputs.fenix.packages.${prev.system}.minimal) cargo rustc;
+            });
           };
           mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
           meli = prev.callPackage ./pkgs/meli {};
