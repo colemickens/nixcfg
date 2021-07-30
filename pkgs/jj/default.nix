@@ -13,7 +13,7 @@
 
 let metadata = import ./metadata.nix; in
 rustPlatform.buildRustPackage rec {
-  pname = "jujube";
+  pname = "jujutsu";
   version = metadata.rev;
 
   src = fetchFromGitHub {
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl dbus sqlite ];
 
   meta = with lib; {
-    description = "Jujube (an experimental VCS)";
+    description = "Jujutsu (an experimental VCS)";
     homepage = "https://github.com/martinvonz/jj";
     license = licenses.asl20;
     platforms = platforms.linux;
