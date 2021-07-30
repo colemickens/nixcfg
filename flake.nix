@@ -184,9 +184,7 @@
 
           cpptoml = prev.callPackage ./pkgs/cpptoml {};
           wireplumber = prev.callPackage ./pkgs/wireplumber {};
-
-          #zellij = prev.callPackage ./pkgs/zellij {};
-
+          
           zellij = prev.callPackage ./pkgs/zellij {
             zellij = prev.zellij;
           };
