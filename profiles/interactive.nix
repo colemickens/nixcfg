@@ -86,7 +86,7 @@ in
         # random
         wireguard-tools
         pijul
-        #jj
+        jj
 
         sops age cryptsetup
 
