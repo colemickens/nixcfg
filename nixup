@@ -44,7 +44,7 @@ function ci_nbu() {
 }
 function ci_cache() {
   out="/tmp/$(sanitize_name "${1}")"
-  
+
   if ! (find ${out} | grep result); then
     return
   fi
@@ -171,6 +171,8 @@ if [[ ! -z "${cmd:-""}" ]]; then
   "${cmd}" "${@}"
 else
   stash
+  update
+  update-pkgs
   git rebase -i origin/auto-update-ready || true
   out="/tmp/${RANDOM}"
   nix-build -A "toplevels.$(hostname)" --out-link "${out}"
