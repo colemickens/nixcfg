@@ -2,13 +2,12 @@
 
 let
   firefoxFlake = inputs.firefox.packages.${pkgs.system};
-  # firefoxNightly = pkgs.writeShellScriptBin "firefox-nightly" ''
-  #   exec "${firefoxFlake.firefox-nightly-bin}/bin/firefox"
-  # '';
+  firefoxNightly = pkgs.writeShellScriptBin "firefox-nightly" ''
+    exec "${firefoxFlake.firefox-nightly-bin}/bin/firefox"
+  '';
   firefoxStable = pkgs.writeShellScriptBin "firefox-stable" ''
      exec "${inputs.stable.legacyPackages.${pkgs.system}.firefox}/bin/firefox"
   '';
-  firefoxNightly = firefoxFlake.firefox-nightly-bin;
   #firefoxStable = inputs.stable.legacyPackages.${pkgs.system}.firefox
   # (pkgs.runCommandNoCC "element"
   #   { buildInputs = with pkgs; [ makeWrapper ]; }
