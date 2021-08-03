@@ -48,6 +48,14 @@ in
 
     programs.light.enable = true;
 
+    # home-manager/#2064
+    systemd.user.targets.tray = {
+      Unit = {
+        Description = "Home Manager System Tray";
+        Requires = [ "graphical-session-pre.target" ];
+      };
+    };
+
     home-manager.users.cole = { pkgs, ... }: {
       home.sessionVariables = {
         BROWSER = "firefox";
