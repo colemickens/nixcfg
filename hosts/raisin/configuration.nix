@@ -10,6 +10,7 @@ in
     ../../mixins/logitech-mouse.nix
     ../../mixins/obs.nix
     ../../mixins/sshd.nix
+    ../../mixins/syncthing.nix
     #../../mixins/tailscale.nix
     ../../mixins/tpm.nix
 
