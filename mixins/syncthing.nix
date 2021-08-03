@@ -5,7 +5,9 @@
     home-manager.users.cole = { pkgs, ... }: {
       services.syncthing = {
         enable = true;
-        tray = true;
+        tray = {
+          enable = true;
+        };
       };
     };
   };
