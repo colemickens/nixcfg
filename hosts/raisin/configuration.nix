@@ -11,7 +11,7 @@ in
     ../../mixins/obs.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
-    #../../mixins/tailscale.nix
+    ../../mixins/tailscale.nix
     ../../mixins/tpm.nix
 
     ../../profiles/desktop-sway-unstable.nix
