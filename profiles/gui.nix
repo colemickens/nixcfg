@@ -99,6 +99,7 @@ in
         pulsemixer
 
         meld
+        syncthing-gtk
 
         # terminals
         kitty
