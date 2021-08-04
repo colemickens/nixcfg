@@ -10,6 +10,7 @@ in
     #./modules/nginx.nix
     #./modules/postgres.nix
     ./modules/srht-cronjobs.nix
+    ./modules/tailscale.nix
     ./modules/unifi.nix
     ./modules/vault.nix
 
