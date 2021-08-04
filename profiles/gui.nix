@@ -98,6 +98,8 @@ in
         brightnessctl
         pulsemixer
 
+        meld
+
         # terminals
         kitty
 
