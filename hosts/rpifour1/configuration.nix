@@ -9,11 +9,11 @@ in
     #./modules/netboot-server.nix
     #./modules/nginx.nix
     #./modules/postgres.nix
-    ./modules/srht-cronjobs.nix
+    #./modules/srht-cronjobs.nix
     ./modules/unifi.nix
-    ./modules/vault.nix
+    #./modules/vault.nix
 
-    ../../mixins/avahi-publish.nix
+    #../../mixins/avahi-publish.nix
     ../../mixins/tailscale.nix
   ];
 
