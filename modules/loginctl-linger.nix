@@ -18,7 +18,6 @@ let
     (concatStrings (map (s: "${s}\n")
       (sort (a: b: a < b) lingeringUsers))); # this sorting is important for `comm` to work correctly
 
-  #updateLingering = pkgs.writeScript "update-lingering" ''
   updateLingering = ''
     if [ -e ${dataDir} ] ; then
       ls ${dataDir} | sort | comm -3 -1 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl disable-linger
