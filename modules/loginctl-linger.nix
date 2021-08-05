@@ -38,6 +38,6 @@ in
 
   config = {
     system.activationScripts.update-lingering =
-      stringAfter [ "users" ] updateLingering;
+      { text = updateLingering; deps = [ "users" ]; };
   };
 }
