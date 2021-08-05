@@ -8,6 +8,7 @@ in
     ../../mixins/plex.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
+    ../../mixins/syncthing.nix
 
     ../../mixins/loremipsum-media/rclone-mnt.nix
 
