@@ -17,6 +17,8 @@ in
     #../../profiles/desktop-sway-unstable.nix
     #../../profiles/desktop-gnome.nix
 
+    ../../modules/loginctl-linger.nix
+
     # xps 13 9370 specific:
     ../../mixins/gfx-intel.nix
     inputs.hardware.nixosModules.dell-xps-13-9370
@@ -62,6 +64,8 @@ in
     swapDevices = [];
 
     services.tlp.enable = lib.mkForce false;
+
+    users.users.cole.linger = true;
 
     console.earlySetup = true; # hidpi + luks-open  # TODO : STILL NEEDED?
     console.font = "ter-v32n";
