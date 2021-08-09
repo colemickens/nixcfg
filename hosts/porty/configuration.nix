@@ -13,8 +13,7 @@
     ../../modules/loginctl-linger.nix
 
     ../../mixins/nvidia.nix
-    ../../mixins/sway-eglstreams.nix
-    ../../profiles/desktop-sway-unstable.nix
+    ../../profiles/desktop-sway-unstable-egl.nix
 
 
     ../../mixins/libvirt.nix
