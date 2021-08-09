@@ -46,8 +46,7 @@ with lib;
         "https://nixpkgs-wayland.cachix.org"
       ];
       trustedUsers = [ "@wheel" "root" ];
-
-      package = pkgs.nixFlakes;
+      
       extraOptions =
         lib.optionalString (config.nix.package == pkgs.nixFlakes)
           "experimental-features = nix-command flakes ca-references recursive-nix";
