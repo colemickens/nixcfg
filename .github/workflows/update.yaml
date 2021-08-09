@@ -18,7 +18,9 @@ jobs:
         export CI_JOB_ID="${GITHUB_RUN_ID}_${GITHUB_RUN_NUMBER}"
         cat << EOF | .github/exec
           git checkout -b auto-update
-          git reset --hard main 
+          git reset --hard main
+          date > ./hosts/jeffhyper/version.txt
+          git commit hosts/jeffhyper/version.txt -m "version.txt"
           ./nixup update
           ./nixup update-pkgs
           git push origin HEAD -f
