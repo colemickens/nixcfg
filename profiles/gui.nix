@@ -6,16 +6,11 @@ let
     exec "${firefoxFlake.firefox-nightly-bin}/bin/firefox"
   '';
   firefoxStable = pkgs.writeShellScriptBin "firefox-stable" ''
-     exec "${inputs.stable.legacyPackages.${pkgs.system}.firefox}/bin/firefox"
+     exec "${inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox}/bin/firefox"
   '';
-  #firefoxStable = inputs.stable.legacyPackages.${pkgs.system}.firefox
-  # (pkgs.runCommandNoCC "element"
-  #   { buildInputs = with pkgs; [ makeWrapper ]; }
-  #   ''
-  #     ln -sf ${firefoxFlake.firefox-nightly-bin}/bin/firefox $out/bin/firefox-nightly
-  #     ln -sf ${firefoxFlake.firefox-nightly-bin}/share $out/share
-  #   ''
-  # )
+  firefoxBin = pkgs.writeShellScriptBin "firefox-bin" ''
+     exec "${inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox-bin}/bin/firefox"
+  '';
 
   torbrowserPkg =
     if pkgs.system == "aarch64-linux"
@@ -149,6 +144,7 @@ in
         #inputs.stable.legacyPackages.${pkgs.system}.ungoogled-chromium
         inputs.stable.legacyPackages.${pkgs.system}.torbrowser
         firefoxStable
+        firefoxBin
         firefoxNightly
 
         ddccontrol i2c-tools
