@@ -2,7 +2,7 @@
 
 {
   config = {
-    hardware.nvidia.modesetting.enable = true;
+    hardware.nvidia.modesetting.enable = false;
     hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
   
     # hardware.nvidia.powerManagement.enable = true; # TODO: test

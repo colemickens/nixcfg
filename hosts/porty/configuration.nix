@@ -17,6 +17,7 @@
     ../../mixins/libvirt.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/sshd.nix
+    ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
 
     #./grub-isos.nix
