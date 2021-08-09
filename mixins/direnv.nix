@@ -5,7 +5,10 @@
     home-manager.users.cole = { pkgs, ... }: {
       programs.direnv = {
         enable = true;
-        enableNixDirenvIntegration = true;
+        nix-direnv = {
+          enable = true;
+          enableFlakes = true;
+        };
         stdlib = ''
           # $HOME/.config/direnv/direnvrc
           : ''${XDG_CACHE_HOME:=$HOME/.cache}

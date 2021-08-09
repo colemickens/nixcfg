@@ -41,7 +41,8 @@ in
     documentation.info.enable = false;
     documentation.nixos.enable = false;
 
-    virtualisation.kata-containers.enable = true;
+    # virtualisation.kata-containers.enable = true;
+
     # virtualisation.containerd.enable = true;
     # virtualisation.containerd.configFile =
     #   pkgs.writeText "containerd.conf" ''

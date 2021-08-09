@@ -5,7 +5,9 @@
     home-manager.users.cole = { pkgs, ... }: {
       programs.htop = {
         enable = true;
-        showProgramPath = false;
+        settings = {
+          show_program_path = false;
+        };
       };
     };
   };
