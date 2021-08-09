@@ -10,7 +10,8 @@
     #../../profiles/specialisations.nix
     # or
     ../../mixins/nvidia.nix
-    ../../profiles/desktop-gnome.nix
+    ../../mixins/sway-eglstreams.nix
+    ../../profiles/desktop-sway-unstable.nix
 
 
     ../../mixins/libvirt.nix
