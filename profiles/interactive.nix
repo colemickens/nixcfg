@@ -112,7 +112,6 @@ in
         cordless
         xdg_utils
         bb
-        lsusb
         lspci
         lshw
       ]
