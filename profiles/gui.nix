@@ -92,6 +92,8 @@ in
         #vlc
         imv
 
+        thunderbird
+
         # misc utils for desktop
         brightnessctl
         pulsemixer
