@@ -8,8 +8,11 @@ let
   firefoxStable = pkgs.writeShellScriptBin "firefox-stable" ''
      exec "${inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox}/bin/firefox"
   '';
-  firefoxBin = pkgs.writeShellScriptBin "firefox-bin" ''
+  _firefoxBin = pkgs.writeShellScriptBin "firefox-bin" ''
      exec "${inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox-bin}/bin/firefox"
+  '';
+  firefoxBin = pkgs.writeShellScriptBin "firefox-bin" ''
+     exec "${pkgs.firefox-bin}/bin/firefox"
   '';
 
   torbrowserPkg =

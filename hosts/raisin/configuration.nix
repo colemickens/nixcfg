@@ -4,9 +4,12 @@ let
 in
 {
   imports = [
-    ../../mixins/android.nix
     ../../mixins/common.nix
 
+
+    ../../mixins/amd-ryzen.nix
+
+    ../../mixins/android.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/obs.nix
     ../../mixins/plex-mpv.nix
