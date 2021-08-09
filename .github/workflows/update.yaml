@@ -93,6 +93,8 @@ jobs:
           git rebase origin/main
         EOF
         cat << EOF | .github/exec
-          ./nixup nbu_check_req
+          git log -p
+          ./nixup nbu_check_req ||
+            nix-instantiate --eval -A toplevels.jeffhyper.outPath
           git push origin HEAD -f
         EOF || true
