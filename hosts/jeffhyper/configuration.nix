@@ -3,6 +3,7 @@
 {
   imports = [
     ../../mixins/common.nix
+    ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
 
     ../../profiles/interactive.nix
