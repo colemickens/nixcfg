@@ -9,6 +9,8 @@
 
     #../../profiles/specialisations.nix
     # or
+
+    ../../mixins/loginctl-linger.nix
     ../../mixins/nvidia.nix
     ../../mixins/sway-eglstreams.nix
     ../../profiles/desktop-sway-unstable.nix
@@ -24,6 +26,8 @@
   ];
 
   config = {
+    users.users.cole.linger = true;
+    
     # Use the systemd-boot EFI boot loader.
     boot.loader.grub.enable = true;
     boot.loader.grub.devices = [ "nodev" ];
