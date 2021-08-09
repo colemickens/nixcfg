@@ -54,11 +54,6 @@
     };
     boot.initrd.availableKernelModules = [ "sd_mod" "sr_mod" ];
     boot.initrd.kernelModules = [
-      "hv_vmbus"
-      #"hv_storsvc"
-      "hyperv_keyboard"
-      "hid_hyperv"
-
       "xhci_pci"
       "nvme"
       "usb_storage"
@@ -71,20 +66,18 @@
     boot.extraModulePackages = [ ];
 
     fileSystems."/" =
-      { device = "/dev/disk/by-uuid/922d29e8-08af-4a8f-88d7-ad8aff978d4c";
+      { device = "/dev/mapper/porty-root";
         fsType = "ext4";
       };
 
-    boot.initrd.luks.devices."root".device = "/dev/disk/by-uuid/a1f97902-a36f-4523-a119-fbefb2ad9638";
+    boot.initrd.luks.devices."porty-root".device = "/dev/disk/by-partlabel/porty-luks";
 
     fileSystems."/boot" =
-      { device = "/dev/disk/by-uuid/879F-1940";
+      { device = "/dev/disk/by-partlabel/porty-boot";
         fsType = "vfat";
       };
 
     swapDevices = [ ];
-
-    virtualisation.hypervGuest.enable = true;
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
@@ -92,6 +85,6 @@
     # this value at the release version of the first install of this system.
     # Before changing this value read the documentation for this option
     # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-    system.stateVersion = "20.09"; # Did you read the comment?
+    system.stateVersion = "21.05"; # Did you read the comment?
   };
 }
