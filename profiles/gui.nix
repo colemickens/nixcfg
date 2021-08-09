@@ -157,6 +157,8 @@ in
         alsaTools
         alsaUtils
 
+        syncthing-gtk
+
         # yucky non-free
         discord
         ripcord

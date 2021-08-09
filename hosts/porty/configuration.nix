@@ -13,11 +13,10 @@
     ../../modules/loginctl-linger.nix
 
     ../../mixins/nvidia.nix
-    #../../profiles/desktop-sway-unstable-egl.nix
-    ../../profiles/desktop-gnome.nix
+    ../../profiles/desktop-sway-unstable-egl.nix
+    #../../profiles/desktop-gnome.nix
 
 
-    ../../mixins/libvirt.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix

@@ -6,7 +6,7 @@ with lib;
   imports = [
     inputs.sops-nix.nixosModules.sops
     ../secrets
-    
+
     #inputs.envfs.nixosModules.envfs
   ];
 
@@ -46,9 +46,9 @@ with lib;
         "https://nixpkgs-wayland.cachix.org"
       ];
       trustedUsers = [ "@wheel" "root" ];
-      
+      package = pkgs.nixUnstable;
       extraOptions =
-        lib.optionalString (config.nix.package == pkgs.nixFlakes)
+        lib.optionalString (config.nix.package == pkgs.nixUnstable)
           "experimental-features = nix-command flakes ca-references recursive-nix";
     };
 
