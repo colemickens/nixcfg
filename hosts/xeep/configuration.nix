@@ -134,6 +134,7 @@ in
       interfaces."wlan0".useDHCP = true;
       interfaces."enp56s0u1u3".useDHCP = true;
       interfaces."enp57s0u1u3".useDHCP = true;
+      interfaces."enp57s0u1".useDHCP = true;
 
       search = [ "ts.r10e.tech" ];
     };
