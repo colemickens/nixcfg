@@ -134,11 +134,12 @@
           # ++ (with inputs.niche.packages.${system}; [ niche ])
           ++ (with pkgs_.nixpkgs.${system}; [
             #nixUnstable
-            inputs.nickel.packages.${system}.build
+            #inputs.nickel.packages.${system}.build
             bash cacert curl git jq parallel mercurial
             nettools openssh ripgrep rsync
             nix-build-uncached nix-prefetch-git
-            sops awsweeper packet-cli
+            sops
+            #awsweeper packet-cli
           ]);
         }
       );
