@@ -84,7 +84,8 @@ jobs:
     # re-update from where origin/main happens to have gotten to
     steps:
     - uses: actions/checkout@v2
-      ref: auto-update
+      with:
+        ref: auto-update
     - uses: cachix/install-nix-action@v13
     - name: "init"
       run: .github/exec __init
