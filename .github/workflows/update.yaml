@@ -74,7 +74,7 @@ jobs:
     # note we must do this first
     # if we update "auto-update" first,
     # then we ALWAYS have the new git rev to build (for some build output product, not sure which)
-    
+
     # also important: try to rebase auto-update on master
     # if we edit nixup on master and then this runs, it will
     # end up using the old nixup from the "old" auto-update branch
@@ -95,7 +95,7 @@ jobs:
           git rebase origin/main
         EOF
         cat << EOF | .github/exec
-          git log -p
+          git log -p HEAD^..HEAD
           ./nixup nbu_check_req ||
             nix-instantiate --eval -A toplevels.jeffhyper.outPath
           git push origin HEAD -f
