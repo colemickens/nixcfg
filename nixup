@@ -90,6 +90,10 @@ function update-pkgs() {
   ./update.sh
   cd "${DIR}"
 }
+function cache-shell () {
+  out="$(mktemp -d)"
+  nix build --out-link "${out}" ".#devShell.depdeExpr"
+}
 function stash() {
   __ "stashing nixcfg"
   cd "${DIR}";
