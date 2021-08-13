@@ -91,8 +91,9 @@ function update-pkgs() {
   cd "${DIR}"
 }
 function cache-shell () {
-  out="$(mktemp -d)"
-  nix build --out-link "${out}" ".#devShell.depdeExpr"
+  out="$(mktemp -d)/result"
+  nix build --out-link "${out}" ".#devShell.x86_64-linux.inputDerivation"
+  readlink -f "${out}" | cachix push colemickens
 }
 function stash() {
   __ "stashing nixcfg"
@@ -178,6 +179,7 @@ else
   out="/tmp/${RANDOM}"
   nix-build -A "toplevels.$(hostname)" --out-link "${out}"
   readlink -f /run/current-system | cachix push colemickens
+  cache-shell
   sudo nix-env --set --profile "/nix/var/nix/profiles/system" "${out}"
   sudo "${out}/bin/switch-to-configuration" switch
 fi
