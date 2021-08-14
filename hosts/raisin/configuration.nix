@@ -18,6 +18,8 @@ in
     ../../mixins/tailscale.nix
     ../../mixins/tpm.nix
 
+    ../../profiles/gaming.nix
+
     ../../profiles/desktop-sway-unstable.nix
     #../../profiles/desktop-gnome.nix
 
