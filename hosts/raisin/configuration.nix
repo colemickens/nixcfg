@@ -30,6 +30,7 @@ in
     environment.systemPackages = with pkgs; [
       efibootmgr p7zip cpio
       yubikey-manager
+      esphome
     ];
     system.stateVersion = "21.03";
 
@@ -135,6 +136,7 @@ in
       interfaces."enp56s0u1u3".useDHCP = true;
       interfaces."enp57s0u1u3".useDHCP = true;
       interfaces."enp3s0f3u1u3".useDHCP = true;
+      interfaces."enp3s0f4u1u2u3".useDHCP = true;
 
       search = [ "ts.r10e.tech" ];
     };

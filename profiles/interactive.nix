@@ -118,7 +118,7 @@ in
         efibootmgr
       ]
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
-        #esphome
+
       ] ++ lib.optionals (pkgs.system == "aarch64-linux") [
         #
       ]
