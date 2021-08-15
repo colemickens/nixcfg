@@ -91,9 +91,9 @@ function update-pkgs() {
   cd "${DIR}"
 }
 function cache-shell () {
-  out="$(mktemp -d)/result"
-  nix build --out-link "${out}" ".#devShell.x86_64-linux.inputDerivation"
-  readlink -f "${out}" | cachix push colemickens
+  outsh="$(mktemp -d)/result"
+  nix build --out-link "${outsh}" ".#devShell.x86_64-linux.inputDerivation"
+  readlink -f "${outsh}" | cachix push colemickens
 }
 function stash() {
   __ "stashing nixcfg"
