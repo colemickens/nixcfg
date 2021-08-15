@@ -7,6 +7,8 @@ with lib;
     inputs.sops-nix.nixosModules.sops
     ../secrets
 
+    ./common-tempfix.nix
+
     #inputs.envfs.nixosModules.envfs
   ];
 
