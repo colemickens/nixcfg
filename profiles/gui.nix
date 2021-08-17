@@ -109,7 +109,7 @@ in
         quaternion
         spectral
         #mirage-im
-        cchat-gtk
+        #cchat-gtk
         neochat
         #element-desktop
         (pkgs.runCommandNoCC "element"
