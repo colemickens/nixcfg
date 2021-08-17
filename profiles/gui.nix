@@ -148,10 +148,10 @@ in
         #)
         #inputs.stable.legacyPackages.${pkgs.system}.ungoogled-chromium
         inputs.stable.legacyPackages.${pkgs.system}.torbrowser
-        #firefoxStable
+        firefoxStable
         #firefoxBin
         #firefoxNightly
-        pkgs.firefox-bin
+        #pkgs.firefox-bin
 
         ddccontrol i2c-tools
         scrcpy
