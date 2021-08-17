@@ -5,9 +5,10 @@ let
   firefoxNightly = pkgs.writeShellScriptBin "firefox-nightly" ''
     exec "${firefoxFlake.firefox-nightly-bin}/bin/firefox"
   '';
-  firefoxStable = pkgs.writeShellScriptBin "firefox-stable" ''
-     exec "${inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox}/bin/firefox"
-  '';
+  # firefoxStable = pkgs.writeShellScriptBin "firefox-stable" ''
+  #    exec "${inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox}/bin/firefox"
+  # '';
+  firefoxStable = pkgs.firefox;
   _firefoxBin = pkgs.writeShellScriptBin "firefox-bin" ''
      exec "${inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox-bin}/bin/firefox"
   '';
