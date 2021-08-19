@@ -29,6 +29,7 @@ let
     '')
 
     (writeShellScriptBin "gpg-fix" ''
+      ln -sf /run/user/1000/gnupg/S.gpg-agent.ssh /run/user/1000/sshagent
       set -x
       sudo systemctl stop pcscd.service
       sudo systemctl stop pcscd.socket
