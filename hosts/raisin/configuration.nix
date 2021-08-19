@@ -150,6 +150,7 @@ in
 
     nixpkgs.config.allowUnfree = true;
     hardware = {
+      bluetooth.enable = true;
       enableRedistributableFirmware = true;
       cpu.amd.updateMicrocode = true;
     };
