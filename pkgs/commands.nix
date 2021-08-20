@@ -43,6 +43,13 @@ let
       sleep 1
       sudo systemctl start pcscd.service
       sleep 1
+      # check if key is known
+      KEYID="0x9758078DE5308308"
+      if ! gpg --list-keys $KEYID | grep $KEYID ; then
+        curl -L https://github.com/colemickens.gpg | gpg --import
+        (echo 5; echo y; echo save) |
+          gpg --command-fd 0 --no-tty --no-greeting -q --edit-key "$KEYID" trust
+      fi
       gpg --card-status
     '')
 
