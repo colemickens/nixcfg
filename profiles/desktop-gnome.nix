@@ -1,8 +1,5 @@
 { pkgs, lib, config, inputs, ... }:
 
-let 
-  useNvidiaWayland = false;
-in
 {
   imports = [
     ./gui.nix
@@ -12,13 +9,11 @@ in
 
     services.xserver.enable = true;
     services.xserver.displayManager.gdm.enable = true;
-    services.xserver.displayManager.gdm.wayland = useNvidiaWayland;
-    services.xserver.displayManager.gdm.nvidiaWayland = useNvidiaWayland;
     services.xserver.desktopManager.gnome.enable = true;
 
     home-manager.users.cole = { pkgs, ... }: {
       home.sessionVariables = {
-        MOZ_ENABLE_WAYLAND = "1";
+        #MOZ_ENABLE_WAYLAND = "1";
 
         #SDL_VIDEODRIVER = "wayland";
         #QT_QPA_PLATFORM = "wayland";

@@ -1,5 +1,8 @@
 { config, pkgs, lib, ... }:
 
+let 
+  useNvidiaWayland = false;
+in
 {
   config = {
     boot.blacklistedKernelModules = [ "nouveau" ];
@@ -11,6 +14,7 @@
     
     services.xserver = {
       videoDrivers = [ "nvidia" ];
+      displayManager.gdm.wayland = useNvidiaWayland;
       displayManager.gdm.nvidiaWayland = true;
     };
   };
