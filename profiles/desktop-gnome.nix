@@ -1,7 +1,7 @@
 { pkgs, lib, config, inputs, ... }:
 
 let 
-  useNvidiaWayland = true;
+  useNvidiaWayland = false;
 in
 {
   imports = [
@@ -9,11 +9,11 @@ in
   ];
   config = {
     nixpkgs.config.firefox.enableGnomeExtensions = true;
-    
+
     services.xserver.enable = true;
     services.xserver.displayManager.gdm.enable = true;
-    services.xserver.displayManager.gdm.wayland.enable = useNvidiaWayland;
-    services.xserver.displayManager.gdm.nvidiaWayland.enable = useNvidiaWayland;
+    services.xserver.displayManager.gdm.wayland = useNvidiaWayland;
+    services.xserver.displayManager.gdm.nvidiaWayland = useNvidiaWayland;
     services.xserver.desktopManager.gnome.enable = true;
 
     home-manager.users.cole = { pkgs, ... }: {
