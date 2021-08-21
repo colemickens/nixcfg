@@ -1,5 +1,8 @@
 { pkgs, lib, config, inputs, ... }:
 
+let 
+  useNvidiaWayland = true;
+in
 {
   imports = [
     ./gui.nix
@@ -9,6 +12,8 @@
     
     services.xserver.enable = true;
     services.xserver.displayManager.gdm.enable = true;
+    services.xserver.displayManager.gdm.wayland.enable = useNvidiaWayland;
+    services.xserver.displayManager.gdm.nvidiaWayland.enable = useNvidiaWayland;
     services.xserver.desktopManager.gnome.enable = true;
 
     home-manager.users.cole = { pkgs, ... }: {
