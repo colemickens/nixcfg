@@ -113,17 +113,17 @@ in
         #mirage-im
         #cchat-gtk
         neochat
-        #element-desktop
-        (pkgs.runCommandNoCC "element"
-          { buildInputs = with pkgs; [ makeWrapper ]; }
-          ''
-            makeWrapper ${pkgs.element-desktop}/bin/element-desktop $out/bin/element-desktop \
-              --add-flags "--enable-features=UseOzonePlatform" \
-              --add-flags "--ozone-platform=wayland"
+        element-desktop
+        # (pkgs.runCommandNoCC "element"
+        #   { buildInputs = with pkgs; [ makeWrapper ]; }
+        #   ''
+        #     makeWrapper ${pkgs.element-desktop}/bin/element-desktop $out/bin/element-desktop \
+        #       --add-flags "--enable-features=UseOzonePlatform" \
+        #       --add-flags "--ozone-platform=wayland"
 
-            ln -sf ${pkgs.element-desktop}/share $out/share
-          ''
-        )
+        #     ln -sf ${pkgs.element-desktop}/share $out/share
+        #   ''
+        # )
 
         rkvm
         spotify-qt
