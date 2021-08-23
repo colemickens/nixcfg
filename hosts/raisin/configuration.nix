@@ -10,6 +10,7 @@ in
     ../../mixins/amd-ryzen.nix
 
     ../../mixins/android.nix
+    ../../mixins/ledger.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/obs.nix
     ../../mixins/plex-mpv.nix
@@ -30,7 +31,7 @@ in
 
   config = {
     users.users.cole.linger = true;
-    
+
     environment.systemPackages = with pkgs; [
       efibootmgr p7zip cpio
       yubikey-manager
