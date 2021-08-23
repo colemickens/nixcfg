@@ -76,16 +76,17 @@ in
         # (pkgs.writeScriptBin "codium" ''
         #   ${pkgs.vscodium}/bin/codium  --enable-features=UseOzonePlatform --ozone-platform=wayland "''${@}"
         # '')
-        (pkgs.runCommandNoCC "codium"
-          { buildInputs = with pkgs; [ makeWrapper ]; }
-          ''
-            makeWrapper ${pkgs.vscodium}/bin/codium $out/bin/codium \
-              --add-flags "--enable-features=UseOzonePlatform" \
-              --add-flags "--ozone-platform=wayland"
+        #(pkgs.runCommandNoCC "codium"
+        #  { buildInputs = with pkgs; [ makeWrapper ]; }
+        #  ''
+        #    makeWrapper ${pkgs.vscodium}/bin/codium $out/bin/codium \
+        #      --add-flags "--enable-features=UseOzonePlatform" \
+        #      --add-flags "--ozone-platform=wayland"
 
-            ln -sf ${pkgs.vscodium}/share $out/share
-          ''
-        )
+        #    ln -sf ${pkgs.vscodium}/share $out/share
+        #  ''
+        #)
+        vscodium
         #vscode
         freerdp
         virt-viewer
