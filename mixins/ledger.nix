@@ -22,6 +22,8 @@
       home.packages = with pkgs; [
         ledger_agent
         ledger-live-desktop
+
+        monero-gui
       ];
     };
   };
