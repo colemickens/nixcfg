@@ -20,6 +20,8 @@ in
 
     ../../profiles/gaming.nix
 
+    ../../modules/loginctl-linger.nix
+
     ../../profiles/desktop-sway-unstable.nix
     #../../profiles/desktop-gnome.nix
 
@@ -27,6 +29,8 @@ in
   ];
 
   config = {
+    users.users.cole.linger = true;
+    
     environment.systemPackages = with pkgs; [
       efibootmgr p7zip cpio
       yubikey-manager
