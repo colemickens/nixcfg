@@ -11,6 +11,31 @@
     services.xserver.displayManager.gdm.enable = true;
     services.xserver.desktopManager.gnome.enable = true;
 
+    programs.seahorse.enable = false;
+    services.gnome.gnome-keyring.enable = false;
+
+    services.gnome.gnome-documents.enable = false;
+    services.gnome.gnome-disks.enable = true;
+    services.gnome.gnome-online-miners.enable = false;
+    services.gnome.gnome-online-accounts.enable = false;
+    services.gnome.tracker.enable = false;
+    services.gnome.sushi.enable = false;
+    services.gnome.rygel.enable = false;
+
+    services.gnome.core-os-services.enable = true;
+
+    programs.file-roller.enable = true;
+    programs.evince.enable = true;
+
+    services.gnome.evolution-data-server.enable = false;
+    programs.geary.enable = false;
+
+    environment.gnome3.excludePackages = [
+      pkgs.epiphany
+    ];
+
+    # TODO: nix2dconf!
+    
     home-manager.users.cole = { pkgs, ... }: {
       home.sessionVariables = {
         #MOZ_ENABLE_WAYLAND = "1";
