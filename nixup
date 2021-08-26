@@ -12,7 +12,7 @@ cd "${DIR}"
 cache="colemickens"
 cachixpkgs="https://github.com/nixos/nixpkgs/archive/nixos-20.09.tar.gz" # where to find pkgs.cachix
 unstablepkgs="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # where to find nixUnstable
-set +x; cachixkey="$(cat ~/.config/cachix/cachix.dhall | grep eIu | cut -f 2 -d '"' || echo "")"; set -x
+set +x; cachixkey="${CACHIX_SIGNING_KEY}"; set -x
 
 nixargs=(--experimental-features "nix-command flakes") #ca-references ca-derivations recursive-nix")
 buildargs=(
