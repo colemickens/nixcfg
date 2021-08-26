@@ -12,12 +12,13 @@
     services.xserver.desktopManager.gnome.enable = true;
 
     programs.seahorse.enable = false;
-    services.gnome.gnome-keyring.enable = false;
+    services.gnome.gnome-keyring.enable = lib.mkForce false;
 
-    services.gnome.gnome-documents.enable = false;
-    services.gnome.gnome-disks.enable = true;
-    services.gnome.gnome-online-miners.enable = false;
-    services.gnome.gnome-online-accounts.enable = false;
+    programs.gnome-documents.enable = false;
+
+    #services.gnome.gnome-disks.enable = true;
+    services.gnome.gnome-online-miners.enable = lib.mkForce false;
+    services.gnome.gnome-online-accounts.enable = lib.mkForce false;
     services.gnome.tracker.enable = false;
     services.gnome.sushi.enable = false;
     services.gnome.rygel.enable = false;
@@ -27,10 +28,10 @@
     programs.file-roller.enable = true;
     programs.evince.enable = true;
 
-    services.gnome.evolution-data-server.enable = false;
+    services.gnome.evolution-data-server.enable = lib.mkForce false;
     programs.geary.enable = false;
 
-    environment.gnome3.excludePackages = [
+    environment.gnome.excludePackages = [
       pkgs.epiphany
     ];
 
