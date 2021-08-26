@@ -7,6 +7,8 @@
     ../mixins/sway.nix
     ../mixins/waybar.nix
 
+    ../mixins/wayland-tweaks.nix
+
     ./gui.nix
   ];
   config = {

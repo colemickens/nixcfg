@@ -2,21 +2,13 @@
 
 let
   firefoxFlake = inputs.firefox.packages.${pkgs.system};
-  firefoxNightly = pkgs.writeShellScriptBin "firefox-nightly" ''
-    exec "${firefoxFlake.firefox-nightly-bin}/bin/firefox"
-  '';
-  # firefoxStable = pkgs.writeShellScriptBin "firefox-stable" ''
-  #    exec "${inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox}/bin/firefox"
-  # '';
-  firefoxStable = pkgs.firefox;
-  _firefoxBin = pkgs.writeShellScriptBin "firefox-bin" ''
-     exec "${inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox-bin}/bin/firefox"
-  '';
-  firefoxBin = pkgs.writeShellScriptBin "firefox-bin" ''
-     exec "${pkgs.firefox-bin}/bin/firefox"
-  '';
 
-  torbrowserPkg =
+  #_someFirefox = firefoxFlake.firefox-nightly-bin;
+  #_someFirefox = pkgs.firefox-bin;
+  _someFirefox = pkgs.firefox;
+  _someChromium = pkgs.ungoogled-chromium;
+
+  _torPackagePkg =
     if pkgs.system == "aarch64-linux"
     then pkgs.tor-browser-bundle-ports-bin
     else pkgs.tor-browser-bundle-bin;
@@ -35,9 +27,7 @@ in
     ../mixins/pipewire.nix
     ../mixins/qt.nix
     ../mixins/spotify.nix
-    #../mixins/termite.nix
   ];
-  # TODO: xdg-user-dirs fixup
 
   config = {
     nixpkgs.config.allowUnfree = true;
@@ -59,7 +49,7 @@ in
 
       home.sessionVariables = {
         BROWSER = "firefox";
-        TERMINAL = "termite";
+        TERMINAL = "alacritty";
         MOZ_USE_XINPUT2 = "1";
       };
       services = {
@@ -73,25 +63,10 @@ in
         evince
         gimp
         qemu
-        # (pkgs.writeScriptBin "codium" ''
-        #   ${pkgs.vscodium}/bin/codium  --enable-features=UseOzonePlatform --ozone-platform=wayland "''${@}"
-        # '')
-        #(pkgs.runCommandNoCC "codium"
-        #  { buildInputs = with pkgs; [ makeWrapper ]; }
-        #  ''
-        #    makeWrapper ${pkgs.vscodium}/bin/codium $out/bin/codium \
-        #      --add-flags "--enable-features=UseOzonePlatform" \
-        #      --add-flags "--ozone-platform=wayland"
-
-        #    ln -sf ${pkgs.vscodium}/share $out/share
-        #  ''
-        #)
         vscodium
-        #vscode
         freerdp
         virt-viewer
         remmina
-        #vlc
         imv
 
         thunderbird
@@ -114,16 +89,6 @@ in
         #cchat-gtk
         neochat
         element-desktop
-        # (pkgs.runCommandNoCC "element"
-        #   { buildInputs = with pkgs; [ makeWrapper ]; }
-        #   ''
-        #     makeWrapper ${pkgs.element-desktop}/bin/element-desktop $out/bin/element-desktop \
-        #       --add-flags "--enable-features=UseOzonePlatform" \
-        #       --add-flags "--ozone-platform=wayland"
-
-        #     ln -sf ${pkgs.element-desktop}/share $out/share
-        #   ''
-        # )
 
         rkvm
         spotify-qt
@@ -132,31 +97,16 @@ in
         gnome3.file-roller
         gnome3.gnome-tweaks
         spice-gtk
+
+        # browsers
+        _someChromium
+        _torPackage
+        _someFirefox
       ]
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
-        # browsers
-        #(let
-        #  c = inputs.nixos-unstable.legacyPackages.${pkgs.system}.ungoogled-chromium;
-        #  #c = pkgs.ungoogled-chromium;
-        #in pkgs.runCommandNoCC "wrap-chromium"
-        #  { buildInputs = with pkgs; [ makeWrapper ]; }
-        #  ''
-        #    makeWrapper ${c}/bin/chromium $out/bin/chromium \
-        #      --add-flags "--enable-features=UseOzonePlatform" \
-        #      --add-flags "--ozone-platform=wayland"
+        ddccontrol
+        i2c-tools
 
-        #    ln -sf ${c}/share $out/share
-        #  ''
-        #)
-        #inputs.stable.legacyPackages.${pkgs.system}.ungoogled-chromium
-        inputs.stable.legacyPackages.${pkgs.system}.torbrowser
-        firefoxStable
-        #firefoxBin
-        #firefoxNightly
-        #pkgs.firefox-bin
-
-        ddccontrol i2c-tools
-        scrcpy
         mplayer
         smplayer
         alsaTools
@@ -168,12 +118,13 @@ in
         discord
         ripcord
 
+        # android
+        scrcpy
+
         # not supported on aarch64, likely its an appimage or something
         radicle-upstream
       ] ++ lib.optionals (pkgs.system == "aarch64-linux") [
-        # use stable on aarch64-linux
-        inputs.stable.legacyPackages.${pkgs.system}.firefox
-        #inputs.stable.legacyPackages.${pkgs.system}.ungoogled-chromium
+        # not sure ?
       ];
     };
   };
