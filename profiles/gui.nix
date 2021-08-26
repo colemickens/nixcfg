@@ -8,7 +8,7 @@ let
   _someFirefox = pkgs.firefox;
   _someChromium = pkgs.ungoogled-chromium;
 
-  _torPackagePkg =
+  _torPackage =
     if pkgs.system == "aarch64-linux"
     then pkgs.tor-browser-bundle-ports-bin
     else pkgs.tor-browser-bundle-bin;

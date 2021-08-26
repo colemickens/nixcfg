@@ -6,8 +6,12 @@
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
 
+    ../../modules/loginctl-linger.nix
+
     ../../profiles/interactive.nix
   ];
+
+  users.users.cole.linger = true;
 
   environment.etc = {
     test_cole_version.source = ./version.txt;
