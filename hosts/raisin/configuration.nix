@@ -23,9 +23,6 @@ in
 
     ../../modules/loginctl-linger.nix
 
-    ../../profiles/desktop-sway-unstable.nix
-    #../../profiles/desktop-gnome.nix
-
     inputs.nixpkgs-kubernetes.nixosModules.kata-containers
   ];
 
