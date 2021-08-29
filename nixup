@@ -170,8 +170,7 @@ function sinkor()    {
   nix build ".#toplevels.sinkor" \
     --builders "ssh-ng://colemickens@aarch64.nixos.community aarch64-linux" \
     "${nixargs[@]}" "${buildargs[@]}" \
-    -j 0 \
-    --eval-store auto
+    -j 0 
 
   out="$(readlink -f result)"
   target="nixos@192.168.133.201"
