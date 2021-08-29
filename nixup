@@ -165,15 +165,11 @@ function porty()     { remote "$(ts raisin)" "toplevels.porty"     "$(ts porty)"
 function sinkor()    { remote "$(ts raisin)" "toplevels.sinkor"    "$(ts sinkor)"; }
 function install_sinkor()    {
   set -euo pipefail
-
   stash
   remote "${a64com}" "toplevels.sinkor" "cachix"
   out="$(nix eval --raw ".#toplevels.sinkor.outPath")"
   target="nixos@192.168.133.201"
-
-  SSH_AUTH_SOCK=/run/user/1000/sshagent \
-    ssh-copy-id "${target}"
-
+  SSH_AUTH_SOCK=/run/user/1000/sshagent  ssh-copy-id "${target}"
   # ssh "${target}" sudo cryptsetup luksOpen \
   #   "/dev/disk/by-uuid/5fc3b31f-05ad-4a35-ae52-8cb4864030a6" \
   #   "sinkor-zfs"
@@ -182,13 +178,8 @@ function install_sinkor()    {
   # ssh_nixUnstable_shell "${target}" sudo mount /dev/disk/by-partlabel/sinkor-boot /mnt/boot
   # ssh_nixUnstable_shell "${target}" sudo mount -t zfs sinkortank/nix /mnt/nix
   # ssh_nixUnstable_shell "${target}" sudo mount -t zfs sinkortank/persist /mnt/persist
-
-  ssh_nixUnstable_shell "${target}" \
-    sudo nix-store \
-      --store /mnt -r "${out}" \
-      "${nixargs[@]}" "${buildargs[@]}"
-
-  ssh_nixUnstable_shell "${target}" sudo nixos-install "${out}" --root "/mnt"
+  ssh_nixUnstable_shell "${target}" sudo nix-store --store /mnt -r "${out}" "${nixargs[@]}" "${buildargs[@]}"
+  ssh_nixUnstable_shell "${target}" sudo nixos-install --system "${out}" --root "/mnt" --no-root-passwd
 }
 
 function pinephone() { remote "${a64com}" "toplevels.pinephone"      "$(ts pinephone)"; }
