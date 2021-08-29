@@ -378,6 +378,7 @@
     "naersk": {
       "inputs": {
         "nixpkgs": [
+          "deploy-rs",
           "nixpkgs"
         ]
       },
@@ -692,11 +693,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1630215784,
-        "narHash": "sha256-HUqtPiTEMNsumKEAPDz7gaZH2PNBFrb+7AYq9AiSwfk=",
+        "lastModified": 1630238443,
+        "narHash": "sha256-7gT3D7B/Tr5XKahoQg6V1bgkdTNQYaBuzgbeIi4pUsg=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "d3f645a574cbe8d2350ce522d8f718f1814377e2",
+        "rev": "7c677f27e83c9bb1b6afaff5aa6342c4fef69f91",
         "type": "github"
       },
       "original": {
