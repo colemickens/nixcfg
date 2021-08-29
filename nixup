@@ -181,6 +181,7 @@ function sinkor()    {
   # ssh_nixUnstable_shell "${target}" sudo cryptsetup luksOpen \
   #   "/dev/disk/by-uuid/5fc3b31f-05ad-4a35-ae52-8cb4864030a6" \
   #   "sinkor-zfs"
+  ssh_nixUnstable_shell "${target}" sudo zpool import -a
   ssh_nixUnstable_shell "${target}" sudo mount -t zfs sinkortank/root /mnt
   ssh_nixUnstable_shell "${target}" sudo mount /dev/disk/by-partlabel/sinkor-boot /mnt/boot
   ssh_nixUnstable_shell "${target}" sudo mount -t zfs sinkortank/nix /mnt/nix
