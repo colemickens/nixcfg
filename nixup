@@ -168,9 +168,6 @@ function sinkor()    {
 
   remote "${a64com}" "toplevels.sinkor" "cachix"
   out="$(nix eval --raw ".#toplevels.sinkor.outPath")"
-  #nix-store -r "${out}" "${nixargs[@]}" "${buildargs[@]}" -j0
-
-  out="$(readlink -f result)"
   target="nixos@192.168.133.201"
 
   SSH_AUTH_SOCK=/run/user/1000/sshagent \
