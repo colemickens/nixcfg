@@ -168,7 +168,7 @@ function sinkor()    {
 
   remote "${a64com}" "toplevels.sinkor" "cachix"
   out="$(nix eval --raw ".#toplevels.sinkor.outPath")"
-  nix-store -r "${out}" "${nixargs[@]}" "${buildargs[@]}" -j0
+  #nix-store -r "${out}" "${nixargs[@]}" "${buildargs[@]}" -j0
 
   out="$(readlink -f result)"
   target="nixos@192.168.133.201"
@@ -185,7 +185,10 @@ function sinkor()    {
   # ssh_nixUnstable_shell "${target}" sudo mount -t zfs sinkortank/nix /mnt/nix
   # ssh_nixUnstable_shell "${target}" sudo mount -t zfs sinkortank/persist /mnt/persist
 
-  ssh_nixUnstable_shell "${target}" sudo nix-store --store /mnt "${nixargs[@]}" -r "${out}"
+  ssh_nixUnstable_shell "${target}" \
+    sudo nix-store \
+      --store /mnt -r "${out}" \
+      "${nixargs[@]}" "${buildargs[@]}"
 
   ssh_nixUnstable_shell "${target}" sudo nixos-install "${out}" --root "/mnt"
 }
