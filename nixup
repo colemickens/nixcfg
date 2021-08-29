@@ -162,10 +162,11 @@ function raisin()    { remote "$(ts raisin)" "toplevels.raisin"    "$(ts raisin)
 function jeffhyper() { remote "$(ts raisin)" "toplevels.jeffhyper" "$(ts jeffhyper)"; }
 function porty()     { remote "$(ts raisin)" "toplevels.porty"     "$(ts porty)"; }
 
-#function sinkor()    { remote "$(ts raisin)" "toplevels.sinkor"    "$(ts sinkor)"; }
-function sinkor()    {
+function sinkor()    { remote "$(ts raisin)" "toplevels.sinkor"    "$(ts sinkor)"; }
+function install_sinkor()    {
   set -euo pipefail
 
+  stash
   remote "${a64com}" "toplevels.sinkor" "cachix"
   out="$(nix eval --raw ".#toplevels.sinkor.outPath")"
   target="nixos@192.168.133.201"
