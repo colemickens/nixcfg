@@ -167,10 +167,10 @@ function sinkor()    {
 
   remote "${a64com}" "toplevels.sinkor" "cachix"
 
-  nix build ".#toplevels.sinkor" \
-    --builders "ssh-ng://colemickens@aarch64.nixos.community aarch64-linux" \
-    "${nixargs[@]}" \
-    --eval-store auto
+  # nix build ".#toplevels.sinkor" \
+  #   --builders "ssh-ng://colemickens@aarch64.nixos.community aarch64-linux" \
+  #   "${nixargs[@]}" \
+  #   --eval-store auto
 
   out="$(readlink -f result)"
   target="nixos@192.168.133.201"
