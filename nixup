@@ -165,6 +165,8 @@ function porty()     { remote "$(ts raisin)" "toplevels.porty"     "$(ts porty)"
 function sinkor()    {
   set -euo pipefail
 
+  remote "${a64com}" "toplevels.sinkor" "cachix"
+
   nix build ".#toplevels.sinkor" \
     --builders "ssh-ng://colemickens@aarch64.nixos.community aarch64-linux" \
     --eval-store auto
