@@ -170,6 +170,7 @@ function sinkor()    {
   nix build ".#toplevels.sinkor" \
     --builders "ssh-ng://colemickens@aarch64.nixos.community aarch64-linux" \
     "${nixargs[@]}" "${buildargs[@]}" \
+    -j 0 \
     --eval-store auto
 
   out="$(readlink -f result)"
@@ -178,7 +179,7 @@ function sinkor()    {
   SSH_AUTH_SOCK=/run/user/1000/sshagent \
     ssh-copy-id "${target}"
 
-  # ssh_nixUnstable_shell "${target}" sudo cryptsetup luksOpen \
+  # ssh "${target}" sudo cryptsetup luksOpen \
   #   "/dev/disk/by-uuid/5fc3b31f-05ad-4a35-ae52-8cb4864030a6" \
   #   "sinkor-zfs"
   # ssh_nixUnstable_shell "${target}" sudo zpool import -a
