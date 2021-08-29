@@ -150,6 +150,7 @@ function remote() {
     ssh_nixUnstable_shell "${target}" sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch;
   fi
   ssh_nixUnstable_shell "${remote}" rm -f "/tmp/$f"
+  printf "${out}"
 }
 
 a64com="colemickens@aarch64.nixos.community"
@@ -166,10 +167,8 @@ function sinkor()    {
   set -euo pipefail
 
   remote "${a64com}" "toplevels.sinkor" "cachix"
-
-  nix build ".#toplevels.sinkor" \
-    "${nixargs[@]}" "${buildargs[@]}" \
-    -j 0 
+  out="$(nix eval --raw ".#toplevels.sinkor.outPath")"
+  nix-store -r "${out}" "${nixargs[@]}" "${buildargs[@]}" -j0
 
   out="$(readlink -f result)"
   target="nixos@192.168.133.201"
