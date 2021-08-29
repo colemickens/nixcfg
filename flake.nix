@@ -202,6 +202,7 @@
         jeffhyper = mkSystem inputs.nixpkgs "x86_64-linux"  "jeffhyper";
         porty = mkSystem inputs.nixpkgs "x86_64-linux"  "porty";
         raisin = mkSystem inputs.nixpkgs "x86_64-linux"  "raisin";
+        sinkor = mkSystem inputs.nixpkgs "aarch64-linux"  "sinkor";
 
         pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
 

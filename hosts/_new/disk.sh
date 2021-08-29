@@ -51,8 +51,11 @@ function disk() {
   sudo zpool create -O mountpoint=none -R "/mnt" "${POOL}" "/dev/mapper/${DEVMAPPER_NAME}"
   sudo zfs create -o mountpoint=legacy -o compression=zstd -o xattr=sa -o acltype=posixacl -o atime=off "${POOL}/nix"
   sudo zfs create -o mountpoint=legacy -o compression=zstd -o xattr=sa -o acltype=posixacl "${POOL}/root"
-  sudo zfs create -o mountpoint=legacy -o compression=zstd -o xattr=sa -o acltype=posixacl "${POOL}/home"
+  sudo zfs create -o mountpoint=legacy -o compression=zstd -o xattr=sa -o acltype=posixacl "${POOL}/persist"
   sudo zpool set autotrim=on "${POOL}" # enable autotrim
+
+  # snapshot root at blank for "erase your darlings"
+  sudo zfs snapshot "${POOL}/root@blank"
 }
 
 function install() {

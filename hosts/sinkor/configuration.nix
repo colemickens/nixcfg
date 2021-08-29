@@ -11,6 +11,7 @@ in
     ../../mixins/common.nix
     ../../mixins/sshd.nix
 
+    ../../profiles/core.nix
     ../../profiles/user.nix
   ];
 
@@ -33,7 +34,7 @@ in
 
     boot = {
       # sinkor uses Tow-Boot so we can pretend this is a conventional UEFI machine
-      boot.loader.systemd-boot = {
+      loader.systemd-boot = {
         enable = true;
         configurationLimit = 5;
       };
@@ -73,27 +74,33 @@ in
 
     # TODO: declarative wifi for Mickens + MickPetrey wifi networks
 
-    # ZFS
+    # TODO: snapshot whatever was written from last run
+    # TODO: can we do that pre-emptively on shutdown instead?
+    boot.initrd.postDeviceCommands = lib.mkAfter ''
+      zfs rollback -r sinkortank/root@blank
+    '';
+
     fileSystems = {
+      # on the tow-boot SD card
       "/boot" = {
         device = "/dev/disk/by-partlabel/boot";
         fsType = "vfat";
         options = [ "nofail" ];
       };
+      
+      # on the spinning rust backup HDD
       "/" = {
         # TODO: should we snapshot and revert this on boot, like grahamc's darlings?
-        device = "tank/root";
+        device = "sinkortank/root";
         fsType = "zfs";
       };
       "/nix" = {
-        device = "tank/nix";
+        device = "sinkortank/nix";
         fsType = "zfs";
       };
-      # TODO: configure this to backup to rsync.net
-      # sudo zfs create -o mountpoint=none tank/var
-      "/home/cole/syncthing_data" = {
-        # sudo zfs create -o mountpoint=legacy tank/var/unifi
-        device = "tank/var/syncthing_data";
+      "/persist" = {
+        # TODO: future: backed up with zrepl to rsync.net?
+        device = "sinkortank/persist";
         fsType = "zfs";
       };
     };

@@ -18,7 +18,7 @@ in {
   };
 
   config = {
-    # adapted arom: https://tailscale.com/blog/nixos-minecraft/
+    # adapted from: https://tailscale.com/blog/nixos-minecraft/
 
     systemd.services.tailscale-autoconnect = {
       description = "Automatic connection to Tailscale";
