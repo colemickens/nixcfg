@@ -178,7 +178,7 @@ function sinkor()    {
   SSH_AUTH_SOCK=/run/user/1000/sshagent \
     ssh-copy-id "${target}"
 
-  ssh_nixUnstable_shell "${target}" nix-store --store /mnt "${nixargs[@]}" "${buildargs[@]}" -j0 "${out}"
+  ssh_nixUnstable_shell "${target}" nix-store --store /mnt "${nixargs[@]}" "${buildargs[@]}" -r "${out}"
   ssh_nixUnstable_shell "${target}" sudo cryptsetup luksOpen \
     "/dev/disk/by-uuid/5fc3b31f-05ad-4a35-ae52-8cb4864030a6" \
     "sinkor-zfs"  
