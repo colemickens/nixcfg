@@ -10,7 +10,7 @@
           hwdec = "vaapi";
           vo = "gpu";
           hwdec-codecs = "all";
-          gpu-context = "wayland";
+          # gpu-context = "wayland"; # (moved to mixins/wayland-tweaks.nix)
         };
       };
     };

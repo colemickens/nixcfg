@@ -8,6 +8,12 @@
 
     # setup env vars for:
     # - firefox env vars
+    home-manager.users.cole = { pkgs, ... }: {
+      programs.mpv = {
+        gpu-context = "wayland";
+      };
+    };
+
     nixpkgs.overlays = [
       (final: prev: {
         vscodium = (prev.runCommandNoCC "codium"

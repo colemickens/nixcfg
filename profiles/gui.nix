@@ -57,28 +57,33 @@ in
       };
       home.packages = with pkgs; [
         colePackages.customGuiCommands
-        glxinfo
 
         # misc
+        glxinfo
         evince
         gimp
         qemu
+        meld
         vscodium
         freerdp
-        virt-viewer
         remmina
         imv
-
+        syncthing-gtk
         thunderbird
+        mplayer
+        smplayer
+        rkvm
+        spotify-qt
+
+        virt-viewer
+        spice-gtk
 
         # misc utils for desktop
         brightnessctl
         pulsemixer
 
-        meld
-
-        # terminals
-        kitty
+        alsaTools
+        alsaUtils
 
         # matrix clients
         fractal
@@ -90,13 +95,9 @@ in
         neochat
         element-desktop
 
-        rkvm
-        spotify-qt
-
         gnome3.nautilus
         gnome3.file-roller
         gnome3.gnome-tweaks
-        spice-gtk
 
         # browsers
         _someChromium
@@ -106,13 +107,6 @@ in
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
         ddccontrol
         i2c-tools
-
-        mplayer
-        smplayer
-        alsaTools
-        alsaUtils
-
-        syncthing-gtk
 
         # yucky non-free
         discord
