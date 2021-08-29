@@ -39,8 +39,8 @@
           );
 
         ungoogled-chromium = (let
-          c = inputs.nixos-unstable.legacyPackages.${prev.system}.ungoogled-chromium;
-          #c = prev.ungoogled-chromium;
+          #c = inputs.nixos-unstable.legacyPackages.${prev.system}.ungoogled-chromium;
+          c = prev.ungoogled-chromium;
           in prev.runCommandNoCC "wrap-chromium"
             { buildInputs = with pkgs; [ makeWrapper ]; }
             ''

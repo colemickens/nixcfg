@@ -58,7 +58,13 @@ in
       home.packages = with pkgs; [
         colePackages.customGuiCommands
 
-        # misc
+        # gui cli
+        brightnessctl
+        pulsemixer
+        alsaTools
+        alsaUtils
+
+        # misc gui
         glxinfo
         evince
         gimp
@@ -78,20 +84,13 @@ in
         virt-viewer
         spice-gtk
 
-        # misc utils for desktop
-        brightnessctl
-        pulsemixer
-
-        alsaTools
-        alsaUtils
-
         # matrix clients
         fractal
         nheko
         quaternion
         spectral
-        #mirage-im
-        #cchat-gtk
+        mirage-im
+        cchat-gtk
         neochat
         element-desktop
 
