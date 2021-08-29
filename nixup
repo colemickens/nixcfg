@@ -156,12 +156,12 @@ a64com="colemickens@aarch64.nixos.community"
 
 function rpifour1()  { remote "${a64com}"    "toplevels.rpifour1"  "$(ts rpifour1)"; }
 function pinebook()  { remote "${a64com}"    "toplevels.pinebook"  "$(ts pinebook)"; }
-function xeep()      { remote "$(ts xeep)"  "toplevels.xeep"      "$(ts xeep)"; }
+function xeep()      { remote "$(ts xeep)"   "toplevels.xeep"      "$(ts xeep)"; }
 function raisin()    { remote "$(ts raisin)" "toplevels.raisin"    "$(ts raisin)"; }
-function jeffhyper() { remote "$(ts raisin)" "toplevels.jeffhyper"    "$(ts jeffhyper)"; }
-function porty() { remote "$(ts raisin)" "toplevels.porty"    "$(ts porty)"; }
-function sinkor() { remote "${a64com}" "toplevels.sinkor"    "192.168.1.1111"; }
-#function sinkor() { remote "$(ts raisin)" "toplevels.sinkor"    "$(ts sinkor)"; }
+function jeffhyper() { remote "$(ts raisin)" "toplevels.jeffhyper" "$(ts jeffhyper)"; }
+function porty()     { remote "$(ts raisin)" "toplevels.porty"     "$(ts porty)"; }
+function sinkor()    { remote "${a64com}"    "toplevels.sinkor"    "192.168.1.1111"; }
+#function sinkor()    { remote "$(ts raisin)" "toplevels.sinkor"    "$(ts sinkor)"; }
 
 function pinephone() { remote "${a64com}" "toplevels.pinephone"      "$(ts pinephone)"; }
 function pinesd()    { remote "${a64com}" "images.pinephone_bundle"  "copy"; }
