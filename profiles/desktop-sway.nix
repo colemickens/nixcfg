@@ -33,6 +33,9 @@
         #WLR_DRM_NO_ATOMIC = "1";
       };
       home.packages = with pkgs; [
+        pavucontrol
+        qjackctl
+
         #drm_info
         grim
         qt5.qtwayland

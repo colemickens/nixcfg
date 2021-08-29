@@ -49,6 +49,9 @@
         #XDG_SESSION_TYPE = "wayland";
       };
       home.packages = with pkgs; [
+        pavucontrol
+        qjackctl
+
         gnome3.gnome-tweaks
       ];
     };
