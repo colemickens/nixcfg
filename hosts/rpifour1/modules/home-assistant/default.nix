@@ -155,7 +155,10 @@ in {
           client_secret = "87f63124e3454" + "d369f971cfa90f903b0";
         };
         ssdp = { };
-        recorder = { };
+        recorder = {
+          purge_interval = 1;
+          purge_keep_days = 30;
+        };
         system_health = { };
         # weather = {
         #   platform = "openweathermap";
