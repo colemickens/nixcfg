@@ -80,10 +80,20 @@ in
       zfs rollback -r sinkortank/root@blank
     '';
 
+    boot.initrd.luks.devices = {
+      "sinkor-zfs" = {
+        name = "sinkor-zfs";
+        device = "/dev/disk/by-uuid/5fc3b31f-05ad-4a35-ae52-8cb4864030a6";
+        preLVM = true;
+        allowDiscards = true;
+        fallbackToPassword = true;
+      };
+    };
+
     fileSystems = {
       # on the tow-boot SD card
       "/boot" = {
-        device = "/dev/disk/by-partlabel/boot";
+        device = "/dev/disk/by-partlabel/sinkor-boot";
         fsType = "vfat";
         options = [ "nofail" ];
       };
