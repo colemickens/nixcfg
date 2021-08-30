@@ -180,7 +180,7 @@
           libquotient = prev.libsForQt5.callPackage ./pkgs/quaternion/libquotient.nix {};
           quaternion = prev.libsForQt5.callPackage ./pkgs/quaternion {};
 
-          raspberrypi-eeprom = prev.callPackage ./pkgs/raspberrypi-eeprom {};
+          #disabled: raspberrypi-eeprom = prev.callPackage ./pkgs/raspberrypi-eeprom {};
           rpi4-uefi = prev.callPackage ./pkgs/rpi4-uefi {};
 
           cpptoml = prev.callPackage ./pkgs/cpptoml {};
