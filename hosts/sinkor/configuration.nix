@@ -100,16 +100,13 @@ in
       };
     };
 
-    boot.initrd.network.enable = true;
-    boot.initrd.network.ssh = {
-      enable = true;
-      port = 22;
-      authorizedKeys = (import ../../data/sshkeys.nix);
-      hostKeys = [ "/ssh_host_key" ];
-    };
-    boot.initrd.secrets = {
-      "/ssh_host_key" = ./ssh_host_ed25519_key;
-    };
+    # boot.initrd.network.enable = true;
+    # boot.initrd.network.ssh = {
+    #   enable = true;
+    #   port = 22;
+    #   authorizedKeys = (import ../../data/sshkeys.nix);
+    #   hostKeys = [ ./ssh_host_ed25519_key ];
+    # };
 
     fileSystems = {
       # on the tow-boot SD card
