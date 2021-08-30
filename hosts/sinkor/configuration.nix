@@ -173,6 +173,7 @@ in
         # TODO: future: backed up with zrepl to rsync.net?
         device = "sinkortank/persist";
         fsType = "zfs";
+        neededForBoot = true; # for impermanence
       };
     };
   };
