@@ -37,17 +37,17 @@ in
       # Tow-Boot (so systemd-boot does the right thing too)
       loader.efi.canTouchEfiVariables = false;
 
-      loader.systemd-boot = {
-       enable = true;
-       configurationLimit = 5;
-      };
-      
-      # loader.grub = {
-      #  efiSupport = true;
-      #  efiInstallAsRemovable = true;
-      #  device = "nodev";
+      # loader.systemd-boot = {
+      #  enable = true;
       #  configurationLimit = 5;
       # };
+
+      loader.grub = {
+       efiSupport = true;
+       efiInstallAsRemovable = true;
+       device = "nodev";
+       configurationLimit = 5;
+      };
 
       tmpOnTmpfs = false;
       cleanTmpDir = true;
