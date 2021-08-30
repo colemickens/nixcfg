@@ -89,6 +89,7 @@ in
     # TODO: can we do that pre-emptively on shutdown instead?
     boot.initrd.postDeviceCommands = lib.mkAfter ''
       # echo zfs rollback -r sinkortank/root@blank
+      # test
     '';
 
     boot.initrd.luks.devices = {
