@@ -34,9 +34,14 @@ in
 
     boot = {
       # sinkor uses Tow-Boot so we can pretend this is a conventional UEFI machine
-      loader.systemd-boot = {
-        enable = true;
-        configurationLimit = 5;
+      #loader.systemd-boot = {
+      #  enable = true;
+      #  configurationLimit = 5;
+      #};
+      loader.grub = {
+       efiSupport = true;
+       device = "nodev";
+       configurationLimit = 5;
       };
 
       tmpOnTmpfs = false;
