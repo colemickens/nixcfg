@@ -13,9 +13,50 @@ in
 
     ../../profiles/core.nix
     ../../profiles/user.nix
+
+    inputs.impermanence.nixosModules.impermanence
   ];
 
   config = {
+    # impermance system-wide
+    environment.persistence."/persist" = {
+      directories = [
+        "/var/log"
+        # "/var/lib/bluetooth"
+        # "/var/lib/systemd/coredump"
+        # "/etc/NetworkManager/system-connections"
+      ];
+      files = [
+        # "/etc/machine-id"
+        # "/etc/nix/id_rsa"
+      ];
+    };
+    # impermance user-wide
+    home-manager.users.cole = { pkgs, ... }: {
+      imports = [
+        "${inputs.impermanence}/home-manager.nix"
+      ];
+      home.persistence."/persist/home/cole" = {
+        directories = [
+          "Syncthing"
+          # "Music"
+          # "Pictures"
+          # "Documents"
+          # "Videos"
+          # "VirtualBox VMs"
+          # ".gnupg"
+          # ".ssh"
+          # ".nixops"
+          # ".local/share/keyrings"
+          # ".local/share/direnv"
+        ];
+        files = [
+          # ".screenrc"
+        ];
+        allowOther = true;
+      };
+    };
+
     system.stateVersion = "21.03";
     users.users.cole.linger = true;
 
@@ -34,9 +75,11 @@ in
     ];
 
     boot = {
-      # Tow-Boot (so systemd-boot does the right thing too)
+      # Tow-Boot
       loader.efi.canTouchEfiVariables = false;
 
+      # idk, can't seem to get it to install to default location
+      # maybe because efibootmgr call (likely?) fails
       # loader.systemd-boot = {
       #  enable = true;
       #  configurationLimit = 5;

@@ -293,6 +293,22 @@
         "type": "github"
       }
     },
+    "impermanence": {
+      "locked": {
+        "lastModified": 1630260167,
+        "narHash": "sha256-k04IjGPYT5s8PS+JKO2rMne8NAhOz9nZGTChy5ZFenA=",
+        "owner": "nix-community",
+        "repo": "impermanence",
+        "rev": "0c3b4a1090272f602b410d9a106b62f6488bbd56",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "impermanence",
+        "rev": "0c3b4a1090272f602b410d9a106b62f6488bbd56",
+        "type": "github"
+      }
+    },
     "import-cargo": {
       "locked": {
         "lastModified": 1594305518,
@@ -717,6 +733,7 @@
         "hardware": "hardware",
         "home-manager": "home-manager",
         "hydra": "hydra",
+        "impermanence": "impermanence",
         "mobile-nixos": "mobile-nixos",
         "niche": "niche",
         "nickel": "nickel",
