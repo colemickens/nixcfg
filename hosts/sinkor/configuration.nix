@@ -38,17 +38,17 @@ in
       # TODO: when we left this last, systemd-boot was giving an error
       # however, grub ALSO gave that error... and then continued booting later?
       # TODO: try this again and see if sys-b proceeds too?
-      #loader.systemd-boot = {
-      #  enable = true;
-      #  configurationLimit = 5;
-      #};
-
-      loader.grub = {
-       efiSupport = true;
-       efiInstallAsRemovable = true;
-       device = "nodev";
+      loader.systemd-boot = {
+       enable = true;
        configurationLimit = 5;
       };
+
+      # loader.grub = {
+      #  efiSupport = true;
+      #  efiInstallAsRemovable = true;
+      #  device = "nodev";
+      #  configurationLimit = 5;
+      # };
 
       tmpOnTmpfs = false;
       cleanTmpDir = true;
@@ -88,7 +88,7 @@ in
     # TODO: snapshot whatever was written from last run
     # TODO: can we do that pre-emptively on shutdown instead?
     boot.initrd.postDeviceCommands = lib.mkAfter ''
-      zfs rollback -r sinkortank/root@blank
+      # echo zfs rollback -r sinkortank/root@blank
     '';
 
     boot.initrd.luks.devices = {
@@ -100,13 +100,13 @@ in
       };
     };
 
-    # boot.initrd.network.enable = true;
-    # boot.initrd.network.ssh = {
-    #   enable = true;
-    #   port = 22;
-    #   authorizedKeys = (import ../../data/sshkeys.nix);
-    #   hostKeys = [ ./ssh_host_ed25519_key ];
-    # };
+    boot.initrd.network.enable = true;
+    boot.initrd.network.ssh = {
+      enable = true;
+      port = 22;
+      authorizedKeys = (import ../../data/sshkeys.nix);
+      hostKeys = [ ./ssh_host_ed25519_key ];
+    };
 
     fileSystems = {
       # on the tow-boot SD card
