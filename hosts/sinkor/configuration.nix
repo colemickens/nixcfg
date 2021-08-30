@@ -30,6 +30,7 @@ in
     environment.systemPackages = with pkgs; [
       raspberrypifw
       raspberrypi-eeprom
+      efibootmgr
     ];
 
     boot = {
@@ -43,12 +44,12 @@ in
        configurationLimit = 5;
       };
 
-      # loader.grub = {
-      #  efiSupport = true;
-      #  efiInstallAsRemovable = true;
-      #  device = "nodev";
-      #  configurationLimit = 5;
-      # };
+      loader.grub = {
+       efiSupport = true;
+       efiInstallAsRemovable = true;
+       device = "nodev";
+       configurationLimit = 5;
+      };
 
       tmpOnTmpfs = false;
       cleanTmpDir = true;
