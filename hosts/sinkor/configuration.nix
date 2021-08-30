@@ -50,6 +50,7 @@ in
           # ".nixops"
           # ".local/share/keyrings"
           # ".local/share/direnv"
+          ".config/syncthing"
         ];
         files = [
           # ".screenrc"
