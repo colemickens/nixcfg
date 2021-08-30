@@ -34,22 +34,20 @@ in
     ];
 
     boot = {
-      # sinkor uses Tow-Boot so we can pretend this is a conventional UEFI machine
+      # Tow-Boot (so systemd-boot does the right thing too)
+      loader.efi.canTouchEfiVariables = false;
 
-      # TODO: when we left this last, systemd-boot was giving an error
-      # however, grub ALSO gave that error... and then continued booting later?
-      # TODO: try this again and see if sys-b proceeds too?
       loader.systemd-boot = {
        enable = true;
        configurationLimit = 5;
       };
-
-      loader.grub = {
-       efiSupport = true;
-       efiInstallAsRemovable = true;
-       device = "nodev";
-       configurationLimit = 5;
-      };
+      
+      # loader.grub = {
+      #  efiSupport = true;
+      #  efiInstallAsRemovable = true;
+      #  device = "nodev";
+      #  configurationLimit = 5;
+      # };
 
       tmpOnTmpfs = false;
       cleanTmpDir = true;
