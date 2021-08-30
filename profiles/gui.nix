@@ -80,6 +80,7 @@ in
         smplayer
         rkvm
         spotify-qt
+        nvui
 
         virt-viewer
         spice-gtk

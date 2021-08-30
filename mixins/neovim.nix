@@ -43,6 +43,8 @@ in {
           vim-surround # quickly change what a block of text is surrounded by
           vim-vinegar  # netrw enhanced
 
+          nvim-dap # ??
+
 
           # themes
           #gruvbox
