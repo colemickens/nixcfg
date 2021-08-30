@@ -85,7 +85,6 @@ in
         name = "sinkor-zfs";
         device = "/dev/disk/by-uuid/5fc3b31f-05ad-4a35-ae52-8cb4864030a6";
         preLVM = true;
-        allowDiscards = true;
         fallbackToPassword = true;
       };
     };
