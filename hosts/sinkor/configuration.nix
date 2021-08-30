@@ -32,6 +32,7 @@ in
       ];
     };
     # impermance user-wide
+    programs.fuse.userAllowOther = true;
     home-manager.users.cole = { pkgs, ... }: {
       imports = [
         "${inputs.impermanence}/home-manager.nix"
@@ -130,8 +131,8 @@ in
     # TODO: snapshot whatever was written from last run
     # TODO: can we do that pre-emptively on shutdown instead?
     boot.initrd.postDeviceCommands = lib.mkAfter ''
-      # echo zfs rollback -r sinkortank/root@blank
-      # test
+      echo zfs snapshot sinkortank/root@$(date '+%s')
+      echo zfs rollback -r sinkortank/root@blank
     '';
 
     boot.initrd.luks.devices = {
