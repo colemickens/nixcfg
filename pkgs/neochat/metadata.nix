@@ -1,6 +1,6 @@
 {
   repo_git = "https://github.com/KDE/neochat";
   branch = "master";
-  rev = "c9935804b08a5ca895e10ec69e79693a7664cb17";
-  sha256 = "sha256-/ICvmhBBPpSb8hQxCIt5labB+aXy4R+seufbTkYmmsI=";
+  rev = "1d5b7dee94407a0522a9ce6dcf4b231068b618fd";
+  sha256 = "sha256-wndrSnwyNmRk3o7EKCmpf7CD3aViX38PFVv9wCv+Vak=";
 }
