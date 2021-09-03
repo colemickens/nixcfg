@@ -7,6 +7,7 @@ in
   imports = [
     ./user.nix
     inputs.home-manager.nixosModules."home-manager"
+    ../mixins/common-hm.nix
 
     ../mixins/common.nix
 

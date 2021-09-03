@@ -19,6 +19,7 @@ in
     ../../mixins/tailscale.nix
     ../../mixins/tpm.nix
 
+    ../../profiles/desktop-sway-unstable.nix
     ../../profiles/gaming.nix
 
     ../../modules/loginctl-linger.nix

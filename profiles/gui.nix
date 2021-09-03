@@ -80,7 +80,7 @@ in
         smplayer
         rkvm
         spotify-qt
-        nvui
+        # nvui # https://github.com/NixOS/nixpkgs/issues/136229
 
         virt-viewer
         spice-gtk

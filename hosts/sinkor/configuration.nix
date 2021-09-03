@@ -13,7 +13,7 @@ in
 
     ../../profiles/core.nix
     ../../profiles/user.nix
-
+    
     inputs.impermanence.nixosModules.impermanence
   ];
 
@@ -33,6 +33,7 @@ in
     };
     # impermance user-wide
     programs.fuse.userAllowOther = true;
+
     home-manager.users.cole = { pkgs, ... }: {
       imports = [
         "${inputs.impermanence}/home-manager.nix"

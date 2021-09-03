@@ -9,7 +9,7 @@
     # setup env vars for:
     # - firefox env vars
     home-manager.users.cole = { pkgs, ... }: {
-      programs.mpv = {
+      programs.mpv.config = {
         gpu-context = "wayland";
       };
     };

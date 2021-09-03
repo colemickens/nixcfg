@@ -41,6 +41,8 @@
 
     nix.nixPath = [];
 
+    hardware.usbWwan.enable = true;
+
     documentation.enable = false;
     documentation.doc.enable = false;
     documentation.info.enable = false;
