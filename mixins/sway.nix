@@ -149,7 +149,7 @@ in
             { always = true;  command = "pkill swayidle"; } # Disable swayidle for a bit
             #{ always = true;  command = "swayidle -w timeout 600 'swaymsg \"output * dpms off\"' "; } # Disable swayidle for a bit
             { command = "${idlecmd}"; always = true; }     # Disable swayidle for a bit
-            { command = "element-desktop"; }
+            #{ command = "element-desktop"; }
             { command = "nwg-panel"; }
           ];
           input = {
