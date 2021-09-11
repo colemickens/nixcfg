@@ -394,7 +394,6 @@
     "naersk": {
       "inputs": {
         "nixpkgs": [
-          "deploy-rs",
           "nixpkgs"
         ]
       },
