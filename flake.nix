@@ -65,9 +65,7 @@
     wip-pinebook-pro.inputs.nixpkgs.follows = "nixpkgs";
     #wip-pinebook-pro = { url = "github:samueldr/wip-pinebook-pro"; flake = false; };
 
-    nixpkgs-wayland  = { url = "github:colemickens/nixpkgs-wayland"; };
-    # these are kind of weird, they don't really apply
-    # to me if I'm using just  `wayland#overlay`, afaict?
+    nixpkgs-wayland  = { url = "github:nix-community/nixpkgs-wayland/master"; };
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
 
     hardware = { url = "github:nixos/nixos-hardware"; };
