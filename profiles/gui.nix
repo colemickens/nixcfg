@@ -7,13 +7,13 @@ let
   #_someFirefox = pkgs.firefox-bin;
   #_someFirefox = pkgs.firefox;
   #_someChromium = pkgs.ungoogled-chromium;
-  _someFirefox = inputs.nixos-unstable.packages.${pkgs.system}.firefox;
-  _someChromium = inputs.nixos-unstable.packages.${pkgs.system}.ungoogle-chromium;
+  _someFirefox = inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox;
+  _someChromium = inputs.nixos-unstable.legacyPackages.${pkgs.system}.ungoogled-chromium;
 
   _torPackage =
     if pkgs.system == "aarch64-linux"
-    then pkgs.tor-browser-bundle-ports-bin
-    else pkgs.tor-browser-bundle-bin;
+    then inputs.nixos-unstable.legacyPackages.${pkgs.system}.tor-browser-bundle-ports-bin
+    else inputs.nixos-unstable.legacyPackages.${pkgs.system}.tor-browser-bundle-bin;
 in
 {
   imports = [
