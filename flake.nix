@@ -141,6 +141,8 @@
             nix-build-uncached nix-prefetch-git
             sops
             #awsweeper packet-cli
+
+            zellij # for devshell multiplexing
           ]);
         }
       );

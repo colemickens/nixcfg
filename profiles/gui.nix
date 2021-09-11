@@ -5,8 +5,10 @@ let
 
   #_someFirefox = firefoxFlake.firefox-nightly-bin;
   #_someFirefox = pkgs.firefox-bin;
-  _someFirefox = pkgs.firefox;
-  _someChromium = pkgs.ungoogled-chromium;
+  #_someFirefox = pkgs.firefox;
+  #_someChromium = pkgs.ungoogled-chromium;
+  _someFirefox = inputs.nixos-unstable.packages.${pkgs.system}.firefox;
+  _someChromium = inputs.nixos-unstable.packages.${pkgs.system}.ungoogle-chromium;
 
   _torPackage =
     if pkgs.system == "aarch64-linux"

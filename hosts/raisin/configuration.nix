@@ -24,7 +24,7 @@ in
 
     ../../modules/loginctl-linger.nix
 
-    inputs.nixpkgs-kubernetes.nixosModules.kata-containers
+    #inputs.nixpkgs-kubernetes.nixosModules.kata-containers
   ];
 
   config = {
