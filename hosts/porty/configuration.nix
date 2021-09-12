@@ -28,6 +28,10 @@
   ];
 
   config = {
+    environment.etc = {
+      test_cole_version.source = ./version.txt;
+    };
+    
     users.users.cole.linger = true;
 
     # Use the systemd-boot EFI boot loader.
@@ -71,7 +75,8 @@
       "uas"
     ];
     boot.kernelModules = [ ];
-    boot.kernelPackages = pkgs.linuxPackages_latest;
+    #boot.kernelPackages = pkgs.linuxPackages_latest;
+    boot.kernelPackages = pkgs.linuxPackages_5_13;
     boot.extraModulePackages = [ ];
 
     fileSystems."/" =

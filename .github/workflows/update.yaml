@@ -21,8 +21,8 @@ jobs:
         cat << EOF | .github/exec
           git checkout -b auto-update
           git reset --hard main
-          date > ./hosts/jeffhyper/version.txt
-          git commit hosts/jeffhyper/version.txt -m "version.txt"
+          date > ./hosts/porty/version.txt
+          git commit hosts/porty/version.txt -m "version.txt"
           ./nixup update
           ./nixup update-pkgs
           git push origin HEAD -f
@@ -36,7 +36,7 @@ jobs:
     strategy:
       matrix:
         jobs:
-        - { "branch": "auto-update",  "target": "toplevels.jeffhyper",  "runson": "ubuntu-latest" }
+        - { "branch": "auto-update",  "target": "toplevels.porty",  "runson": "ubuntu-latest" }
         # - { "branch": "auto-update",  "target": "toplevels.porty",      "runson": "ubuntu-latest" }
         # - { "branch": "auto-update",  "target": "toplevels.raisin",     "runson": "ubuntu-latest" }
         # - { "branch": "auto-update",  "target": "toplevels.rpizero1",   "runson": "ubuntu-latest" }
@@ -49,9 +49,9 @@ jobs:
         ref: auto-update
     - uses: cachix/install-nix-action@v13
       with:
-        #install_url: https://github.com/numtide/nix-flakes-installer/releases/download/nix-2.4pre20210429_d15a196/install
-        install_url: "https://nixos-nix-install-tests.cachix.org/serve/dznj18ywp62vghk98m5vclfqmszjnbph/install"
-        install_options: "--tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve"
+        install_url: 'https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.4pre20210823_af94b54/install'
+        #install_url: "https://nixos-nix-install-tests.cachix.org/serve/dznj18ywp62vghk98m5vclfqmszjnbph/install"
+        #install_options: "--tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve"
         extra_nix_config: |
           experimental-features = nix-command flakes ca-references
     - name: "init"

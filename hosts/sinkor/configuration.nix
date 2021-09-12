@@ -98,7 +98,8 @@ in
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
+      #kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
+      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_5_13;
 
       initrd.availableKernelModules = [
         "pcie_brcmstb" "bcm_phy_lib" "broadcom" "mdio_bcm_unimac" "genet"
