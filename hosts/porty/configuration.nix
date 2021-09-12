@@ -16,7 +16,7 @@
     #../../profiles/desktop-sway-unstable-egl.nix
     ../../profiles/desktop-gnome.nix
 
-    ../../profiles/gaming.nix
+    #../../profiles/gaming.nix
 
 
     ../../mixins/logitech-mouse.nix
