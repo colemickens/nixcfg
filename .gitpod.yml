@@ -5,7 +5,7 @@ tasks:
       cachix use colemickens
       cachix use nixpkgs-wayland
     command: |
-      time nix develop --command 'true'
+      time nix develop --command 'echo inside'
       time direnv allow
 vscode:
   extensions:
