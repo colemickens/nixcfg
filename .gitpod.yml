@@ -5,7 +5,8 @@ tasks:
       cachix use colemickens
       cachix use nixpkgs-wayland
     command: |
-      direnv allow
+      time nix develop --command 'true'
+      time direnv allow
 vscode:
   extensions:
     - bbenoist.Nix
