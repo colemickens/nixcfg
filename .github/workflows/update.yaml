@@ -57,6 +57,7 @@ jobs:
     - name: "init"
       run: .github/exec __init
     - name: build
+      env: { "CACHIX_SIGNING_KEY": "${{ secrets.cachix_key_colemickens }}" }
       run: .github/exec ./nixup ci_nbu "${{ matrix.jobs.target }}"
     - name: cache
       env: { "CACHIX_SIGNING_KEY": "${{ secrets.cachix_key_colemickens }}" }
