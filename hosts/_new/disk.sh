@@ -61,6 +61,7 @@ function disk() {
 }
 
 function install() {
+  set -x
   rev="${1}"
   echo -n "test" > "${TMPLUKSKEYFILE}"
 
