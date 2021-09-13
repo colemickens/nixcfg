@@ -28,8 +28,11 @@ in
         # "/etc/NetworkManager/system-connections"
       ];
       files = [
-        # "/etc/machine-id"
-        # "/etc/nix/id_rsa"
+        "/etc/machine-id"
+        "/etc/ssh/ssh_host_ed25519_key"
+        "/etc/ssh/ssh_host_ed25519_key.pub"
+        "/etc/ssh/ssh_host_rsa_key"
+        "/etc/ssh/ssh_host_rsa_key.pub"
       ];
     };
     # impermance user-wide
@@ -76,14 +79,9 @@ in
     documentation.info.enable = false;
     documentation.nixos.enable = false;
 
-    environment.systemPackages = with pkgs; [
-      raspberrypifw
-      raspberrypi-eeprom
-      efibootmgr
-    ];
-
     boot = {
       # TOW_BOOT + GRUB
+      # (works, but hangs for a long time between grub -> kernel booting)
       loader.efi.canTouchEfiVariables = false;
       loader.grub = {
         enable = true;
@@ -94,6 +92,7 @@ in
       };
 
       # TOW_BOOT + EXTLINUX
+      # (wrong console, no luks prompt, doesn't take my kb input)
       # loader.efi.canTouchEfiVariables = false;
       # loader.grub.enable = false;
       # loader.generic-extlinux-compatible.enable = true;
