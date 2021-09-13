@@ -6,14 +6,8 @@ in
   imports = [
     ./core.nix
     ./modules/home-assistant
-    #./modules/netboot-server.nix
-    #./modules/nginx.nix
-    #./modules/postgres.nix
-    #./modules/srht-cronjobs.nix
     ./modules/unifi.nix
-    #./modules/vault.nix
 
-    #../../mixins/avahi-publish.nix
     ../../mixins/tailscale.nix
   ];
 
