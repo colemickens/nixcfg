@@ -16,6 +16,7 @@ if [[ "${CACHIX_SIGNING_KEY:-}" != "" ]]; then
   cachixkey="${CACHIX_SIGNING_KEY}"
 elif gopass show -o 'websites/cachix.org/apikey/colemickens'; then
   cachixkey="getfromdhall"
+  false
 fi
 set -x
 
