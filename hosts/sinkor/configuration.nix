@@ -37,11 +37,9 @@ in
     };
     # impermance user-wide
     programs.fuse.userAllowOther = true;
-
     systemd.tmpfiles.rules = [
       "d /persist/home/cole 0750 cole cole - -"
     ];
-
     home-manager.users.cole = { pkgs, ... }: {
       imports = [
         "${inputs.impermanence}/home-manager.nix"
@@ -67,6 +65,12 @@ in
         allowOther = true;
       };
     };
+
+    environment.systemPackages = with pkgs; [
+      raspberrypifw
+      raspberrypi-eeprom
+      libraspberrypi
+    ];
 
     system.stateVersion = "21.05";
     users.users.cole.linger = true;
