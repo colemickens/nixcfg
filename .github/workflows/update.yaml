@@ -11,7 +11,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: main
-    - uses: cachix/install-nix-action@v13
+    - uses: cachix/install-nix-action@v14
     - name: "init"
       run: .github/exec __init
     - name: "update"
@@ -47,7 +47,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: auto-update
-    - uses: cachix/install-nix-action@v13
+    - uses: cachix/install-nix-action@v14
       with:
         install_url: 'https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.4pre20210823_af94b54/install'
         #install_url: "https://nixos-nix-install-tests.cachix.org/serve/dznj18ywp62vghk98m5vclfqmszjnbph/install"
@@ -89,7 +89,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: auto-update
-    - uses: cachix/install-nix-action@v13
+    - uses: cachix/install-nix-action@v14
     - name: "init"
       run: .github/exec __init
     - name: "publish"
