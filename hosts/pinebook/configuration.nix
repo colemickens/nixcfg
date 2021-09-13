@@ -94,7 +94,6 @@ in
       firewall.enable = true;
       firewall.allowedTCPPorts = [ 5900 22 ];
       networkmanager.enable = true;
-      useDHCP = true;
     };
     services.timesyncd.enable = true;
 
