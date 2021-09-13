@@ -22,6 +22,7 @@ in
     environment.persistence."/persist" = {
       directories = [
         "/var/log"
+        "/var/lib/tailscale"
         # "/var/lib/bluetooth"
         # "/var/lib/systemd/coredump"
         # "/etc/NetworkManager/system-connections"
@@ -138,8 +139,8 @@ in
     # TODO: snapshot whatever was written from last run
     # TODO: can we do that pre-emptively on shutdown instead?
     boot.initrd.postDeviceCommands = lib.mkAfter ''
-      echo zfs snapshot sinkortank/root@$(date '+%s')
-      echo zfs rollback -r sinkortank/root@blank
+      zfs snapshot sinkortank/root@$(date '+%s')
+      zfs rollback -r sinkortank/root@blank
     '';
 
     boot.initrd.luks.devices = {
