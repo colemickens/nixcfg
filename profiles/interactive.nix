@@ -9,6 +9,9 @@ in
   imports = [
     ./core.nix  # imports hm
 
+    inputs.sops-nix.nixosModules.sops
+    ../secrets
+
     ../mixins/gpg-agent.nix
 
     ../mixins/cachix.nix

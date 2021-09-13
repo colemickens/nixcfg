@@ -4,10 +4,7 @@ with lib;
 
 {
   imports = [
-    inputs.sops-nix.nixosModules.sops
-    ../secrets
-
-    ./common-tempfix.nix
+    #./common-tempfix.nix
 
     #inputs.envfs.nixosModules.envfs
   ];
