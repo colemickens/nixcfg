@@ -31,8 +31,6 @@ in
     documentation.nixos.enable = false;
 
     environment.systemPackages = with pkgs; [
-      drm-howto
-      virt-viewer
       (pkgs.writeScriptBin "pinebook-fix-sound" ''
         export NIX_PATH="nixpkgs=${toString inputs.nixpkgs}"
         ${toString inputs.wip-pinebook-pro}/sound/reset-sound.rb
@@ -65,24 +63,29 @@ in
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      loader.grub.enable = false;
-      loader.generic-extlinux-compatible.enable = true;
+      loader.grub.enable = true;
+      loader.grub.efiSupport = true;
+      loader.grub.device = "nodev";
+      loader.grub.efiInstallAsRemovable = true;
+      
+      # trying to enable tow-boot
+      # loader.generic-extlinux-compatible.enable = true;
 
       initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
       initrd.kernelModules = [ "nvme" ];
       consoleLogLevel = pkgs.lib.mkDefault 7;
 
-      kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
-      kernelPatches = [{
-        name = "pinebook-disable-dp";
-        patch = ./pbp-disable-dp.patch; # https://patchwork.kernel.org/project/linux-rockchip/patch/20200924063042.41545-1-jhp@endlessos.org/
-      }];
+      # kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
+      # kernelPatches = [{
+      #   name = "pinebook-disable-dp";
+      #   patch = ./pbp-disable-dp.patch; # https://patchwork.kernel.org/project/linux-rockchip/patch/20200924063042.41545-1-jhp@endlessos.org/
+      # }];
 
-      kernelParams = [
-        "cma=32M"
-        "mitigations=off"
-        "console=ttyS2,1500000n8" "console=tty0"
-      ];
+      # kernelParams = [
+      #   "cma=32M"
+      #   "mitigations=off"
+      #   "console=ttyS2,1500000n8" "console=tty0"
+      # ];
     };
 
     networking = {
@@ -90,20 +93,10 @@ in
       hostName = hostname;
       firewall.enable = true;
       firewall.allowedTCPPorts = [ 5900 22 ];
-      networkmanager.enable = false;
-      wireless.iwd.enable = true;
-      useNetworkd = true;
-      useDHCP = false;
-      interfaces."wlan0".useDHCP = true;
-      interfaces."wlan1".useDHCP = true;
-      interfaces."wlan2".useDHCP = true;
-      interfaces."eth0".useDHCP = true;
-      search = [ "ts.r10e.tech" ];
+      networkmanager.enable = true;
+      useDHCP = true;
     };
     services.timesyncd.enable = true;
-    services.resolved.enable = true;
-    services.resolved.domains = [ "ts.r10e.tech" ];
-    systemd.network.enable = true;
 
     nixpkgs.config.allowUnfree = true;
     hardware = {

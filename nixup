@@ -189,8 +189,9 @@ else
   update
   update-pkgs
   git rebase -i origin/auto-update-ready || true
-  out="/tmp/${RANDOM}"
-  nix-build -A "toplevels.$(hostname)" --out-link "${out}"
+  #out="/tmp/${RANDOM}"
+  #nix-build -A "toplevels.$(hostname)" --out-link "${out}"
+  out="/nix/store/jlyvw3mbxchw4nnin1ynsby9vvjvy4an-nixos-system-sinkor-21.11.20210913.37b9c24"
   readlink -f /run/current-system | cachix push colemickens
   cache-shell
   sudo nix-env --set --profile "/nix/var/nix/profiles/system" "${out}"
