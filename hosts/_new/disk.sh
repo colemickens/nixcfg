@@ -77,7 +77,7 @@ function install() {
   sudo cryptsetup luksOpen   --key-file "${TMPLUKSKEYFILE}" "${LUKSTARGET}" "${DEVMAPPER_NAME}"
   #sudo cryptsetup luksOpen "${LUKSTARGET}" "${DEVMAPPER_NAME}"
   
-  sudo zpool import "${POOL}"
+  sudo zpool import -f "${POOL}"
   
   sudo mkdir -p /mnt
   sudo mount -t zfs "${POOL}/root" /mnt

@@ -34,6 +34,10 @@ in
     # impermance user-wide
     programs.fuse.userAllowOther = true;
 
+    systemd.tmpfiles.rules = [
+      "d /persist/home/cole 0750 cole cole - -"
+    ];
+
     home-manager.users.cole = { pkgs, ... }: {
       imports = [
         "${inputs.impermanence}/home-manager.nix"
