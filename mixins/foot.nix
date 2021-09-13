@@ -4,9 +4,11 @@ let
   ts = import ./_common/termsettings.nix { inherit pkgs; };
   font = ts.fonts.default;
   colors = ts.colors.default;
-  # TODO: bold/bright setting
-  bold_bright = true;
 
+  # foot scales the font size?
+  fontSize = (builtins.floor (ts.fonts.default.size / 2));
+
+  # maybe we should store the colors without '#' and then add it in alacritty/kitty?
   c = color: builtins.substring 1 10000 color;
 in
 {
@@ -17,9 +19,9 @@ in
         settings = {
           main = {
             term = "xterm-256color";
-            font = "${font.name}:size=${toString font.size}";
+            font = "${font.name}:size=${toString fontSize}";
             notify = "${pkgs.libnotify}/bin/notify-send notify=notify-send -a \${app-id} \${app-id} \${title} \${body}";
-            bold-text-in-bright = bold_bright;
+            bold-text-in-bright = colors.bold_as_bright;
           };
 
           colors = rec {

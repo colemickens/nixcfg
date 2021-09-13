@@ -25,6 +25,9 @@ in
 
           dim_opacity = "0.8";
 
+          # lmao wat: https://github.com/kovidgoyal/kitty/pull/3234
+          # bold_is_bright
+
           foreground = colors.foreground;
           background = colors.background;
           color0  = colors.black;

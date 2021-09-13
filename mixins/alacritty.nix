@@ -18,7 +18,7 @@ in
             normal.family = "${font.name}";
             size = font.size;
           };
-          draw_bold_text_with_bright_colors = true;
+          draw_bold_text_with_bright_colors = colors.bold_as_bright;
           colors = rec {
             primary.foreground = colors.foreground;
             primary.background = colors.background;

@@ -25,7 +25,7 @@ let
   drun = "${wofi} --show drun";
   nwggrid = "${pkgs.nwg-launchers}/bin/nwggrid";
 
-  terminal = "alacritty";
+  terminal = "foot";
 
   # PASS
   gp = "${pkgs.gopass}/bin/gopass";

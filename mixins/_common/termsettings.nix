@@ -31,6 +31,8 @@
       foregroundBold = "#FFFFFF"; # termite-only
       background = "#0C0C0C";
 
+      bold_as_bright = true;
+
       black = "#0C0C0C";
       blue = "#0037DA";
       cyan = "#3A96DD";
@@ -55,6 +57,8 @@
       foreground = "#DCDFE4";
       foregroundBold = "#FFFFFF"; # termite-onnly
       background = "#282C34";
+
+      bold_as_bright = true;
       
       black = "#282C34";
       red = "#E06C75";
@@ -80,6 +84,8 @@
         foreground = "#cccccc";
         foregroundBold = "#FFFFFF"; # termite only
         background = "#0C0C0C";
+
+        bold_as_bright = true;
 
         black = "#000000";
         red = "#CC0000";
