@@ -14,9 +14,8 @@ unstablepkgs="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # 
 set +x
 if [[ "${CACHIX_SIGNING_KEY:-}" != "" ]]; then
   cachixkey="${CACHIX_SIGNING_KEY}"
-elif gopass show -o 'websites/cachix.org/apikey/colemickens'; then
-  cachixkey="getfromdhall"
-  false
+elif gopass show -o 'websites/cachix.org/apikey/colemickens' &>/dev/null; then
+  cachixkey="$(cat /run/secrets/cachix.dhall | dhall text binaryCaches | grep colemickens)"
 fi
 set -x
 
