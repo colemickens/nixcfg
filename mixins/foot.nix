@@ -6,6 +6,8 @@ let
   colors = ts.colors.default;
   # TODO: bold/bright setting
   bold_bright = true;
+
+  c = color: builtins.substring 1 10000 color;
 in
 {
   config = {
@@ -19,28 +21,28 @@ in
             notify = "${pkgs.libnotify}/bin/notify-send notify=notify-send -a \${app-id} \${app-id} \${title} \${body}";
             bold-text-in-bright = bold_bright;
           };
-          
-          colors = rec {
-            foreground = colors.foreground;
-            background = colors.background;
 
-            regular0   = colors.black;
-            regular1     = colors.red;
-            regular2   = colors.green;
-            regular3  = colors.yellow;
-            regular4    = colors.blue;
-            regular5 = colors.purple;
-            regular6    = colors.cyan;
-            regular7   = colors.white;
+          colors = rec {
+            foreground = c colors.foreground;
+            background = c colors.background;
+
+            regular0 = c colors.black;
+            regular1 = c colors.red;
+            regular2 = c colors.green;
+            regular3 = c colors.yellow;
+            regular4 = c colors.blue;
+            regular5 = c colors.purple;
+            regular6 = c colors.cyan;
+            regular7 = c colors.white;
           
-            bright0 = colors.brightBlack;
-            bright1 = colors.brightRed;
-            bright2 = colors.brightGreen;
-            bright3 = colors.brightYellow;
-            bright4 = colors.brightBlue;
-            bright5 = colors.brightPurple;
-            bright6 = colors.brightCyan;
-            bright7 = colors.brightWhite;
+            bright0 = c colors.brightBlack;
+            bright1 = c colors.brightRed;
+            bright2 = c colors.brightGreen;
+            bright3 = c colors.brightYellow;
+            bright4 = c colors.brightBlue;
+            bright5 = c colors.brightPurple;
+            bright6 = c colors.brightCyan;
+            bright7 = c colors.brightWhite;
           };
         };
       };
