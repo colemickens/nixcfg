@@ -3,14 +3,16 @@ set -x
 set -euo pipefail
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-POOL="raisintank"
+POOL="sinkortank"
 LUKSLABEL="luksroot"
 NIXOSLABEL="nixosroot"
 DEVMAPPER_NAME="${NIXOSLABEL}"
-BOOTLABEL="boot"
+BOOTTARGET="/dev/disk/by-id/mmc-SH64G_0x53d5953e-part2"
+BOOTLABEL="SINKORBOOT"
 SWAPLABEL="swap"
 WINLABEL="windows"
 DISK="/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S4J4NG0M603073J"
+LUKSTARGET="/dev/disk/by-id/usb-WD_My_Passport_260F_575837324441305052353944-0:0"
 
 TMPLUKSKEYFILE="/tmp/lukspw"; echo -e "password" > "${TMPLUKSKEYFILE}"
 
@@ -23,7 +25,7 @@ buildargs=(
 
 function disk() {
   sudo umount "/mnt/boot" || true
-  sudo umount "/mnt/home" || true
+  sudo umount "/mnt/persist" || true
   sudo umount "/mnt/nix" || true
   sudo umount "/mnt" || true
   sudo zpool destroy -f "${POOL}" || true
@@ -43,8 +45,8 @@ function disk() {
   sudo udevadm settle
 
   # LUKS
-  sudo cryptsetup luksFormat --batch-mode "/dev/disk/by-partlabel/${LUKSLABEL}" "${TMPLUKSKEYFILE}"
-  sudo cryptsetup luksOpen   --key-file "${TMPLUKSKEYFILE}" "/dev/disk/by-partlabel/${LUKSLABEL}" "${DEVMAPPER_NAME}"
+  sudo cryptsetup luksFormat --batch-mode "${LUKSTARGET}" "${TMPLUKSKEYFILE}"
+  sudo cryptsetup luksOpen   --key-file "${TMPLUKSKEYFILE}" "${LUKSTARGET}" "${DEVMAPPER_NAME}"
 
   # ROOT / zfs
   sudo mkdir -p "/mnt"
@@ -62,7 +64,7 @@ function install() {
   rev="${1}"
 
   # reset mounts
-  sudo umount /mnt/home || true
+  sudo umount /mnt/persist || true
   sudo umount /mnt/nix || true
   sudo umount /mnt/boot || true
   sudo umount /mnt || true
@@ -70,7 +72,8 @@ function install() {
   sudo cryptsetup luksClose "${DEVMAPPER_NAME}" || true
 
   # start
-  sudo cryptsetup luksOpen   --key-file "${TMPLUKSKEYFILE}" "/dev/disk/by-partlabel/${LUKSLABEL}" "${DEVMAPPER_NAME}"
+  #sudo cryptsetup luksOpen   --key-file "${TMPLUKSKEYFILE}" "${LUKSTARGET}" "${DEVMAPPER_NAME}"
+  sudo cryptsetup luksOpen "${LUKSTARGET}" "${DEVMAPPER_NAME}"
   
   sudo zpool import "${POOL}"
   
@@ -80,13 +83,13 @@ function install() {
   sudo mkdir -p /mnt/nix
   sudo mount -t zfs "${POOL}/nix" /mnt/nix
   
-  sudo mkdir -p /mnt/home
-  sudo mount -t zfs "${POOL}/home" /mnt/home
+  sudo mkdir -p /mnt/persist
+  sudo mount -t zfs "${POOL}/persist" /mnt/persist
 
   # BOOT
   sudo mkdir -p /mnt/boot
-  sudo mkfs.vfat -n ${BOOTLABEL} /dev/disk/by-partlabel/${BOOTLABEL}
-  sudo mount "/dev/disk/by-partlabel/${BOOTLABEL}" /mnt/boot
+  sudo mkfs.vfat -n ${BOOTLABEL} ${BOOTTARGET}
+  sudo mount "${BOOTTARGET}" /mnt/boot
 
   echo "*******************************"
   echo "install now:"
@@ -96,9 +99,9 @@ function install() {
 
   echo "*******************************"
   echo "fix up luks:"
-  sleep 3
-  sudo cryptsetup luksAddKey --key-file "${TMPLUKSKEYFILE}" "/dev/disk/by-partlabel/${LUKSLABEL}"
-  sudo cryptsetup luksRemoveKey "/dev/disk/by-partlabel/${LUKSLABEL}" "${TMPLUKSKEYFILE}"
+  # sleep 3
+  # sudo cryptsetup luksAddKey --key-file "${TMPLUKSKEYFILE}" "${LUKSTARGET}"
+  # sudo cryptsetup luksRemoveKey "${LUKSTARGET}" "${TMPLUKSKEYFILE}"
 }
 
 cmd="${1}"; shift
