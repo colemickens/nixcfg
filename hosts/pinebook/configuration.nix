@@ -17,7 +17,8 @@ in
   ];
 
   config = {
-    system.stateVersion = "21.03";
+    system.stateVersion = "21.05";
+    #nixpkgs.config.allowUnfree = true;
 
     hardware.usbWwan.enable = true;
 
