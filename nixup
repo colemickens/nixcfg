@@ -11,7 +11,14 @@ cd "${DIR}"
 cache="colemickens"
 cachixpkgs="https://github.com/nixos/nixpkgs/archive/nixos-21.05.tar.gz" # where to find pkgs.cachix
 unstablepkgs="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # where to find nixUnstable
-set +x; cachixkey="${CACHIX_SIGNING_KEY}"; set -x
+# set +x
+# if "${CACHIX_SIGNING_KEY:-}" != "" ]]; then
+#   cachixkey="${CACHIX_SIGNING_KEY}"
+# else if gopass show -o 'websites/cachix.org/apikey/colemickens'; then
+#   #sdhall-parse-from-/run/secrets/cachix.dhall
+#   cachixkey="getfromdhall"
+# fi
+# set -x
 
 nixargs=(--experimental-features "nix-command flakes") #ca-references ca-derivations recursive-nix")
 buildargs=(

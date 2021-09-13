@@ -140,6 +140,7 @@
             nettools openssh ripgrep rsync
             nix-build-uncached nix-prefetch-git
             sops
+            dhall
             #awsweeper packet-cli
 
             zellij # for devshell multiplexing
