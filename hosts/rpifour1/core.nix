@@ -22,12 +22,16 @@ in
     documentation.info.enable = false;
     documentation.nixos.enable = false;
 
-    # environment.systemPackages = with pkgs; [
-    #   raspberrypifw
-    #   raspberrypi-eeprom
-    #   libraspberrypi
-    #   picocom
-    #   # # sudo rpi-eeprom-self-update
+    environment.systemPackages = with pkgs; [
+      raspberrypifw
+      raspberrypi-eeprom
+      libraspberrypi
+
+      minicom
+      screen
+      ncdu
+    ];
+
     #   # (pkgs.runCommandNoCC "rpi-eeprom-selfupdate" {} ''
     #   #   (
     #   #     set -x
@@ -46,8 +50,7 @@ in
     #   #     sha256sum $out/pieeprom.upd | cut -d' ' -f1 > $out/pieeprom.sig
     #   #   )
     #   # '')
-    # ];
-
+    
     boot = {
       ############# TODO: replace with tow-boot when its not so damn slow with grub
       loader.grub.enable = false;

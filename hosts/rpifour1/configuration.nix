@@ -14,16 +14,6 @@ in
   config = {
     networking.hostName = lib.mkForce hostname;
 
-    environment.systemPackages = with pkgs; [
-      raspberrypifw
-      raspberrypi-eeprom
-      libraspberrypi
-
-      minicom
-      screen
-      ncdu
-    ];
-
     # ZFS
     fileSystems = {
       "/boot" = {
