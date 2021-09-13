@@ -152,9 +152,13 @@ in
         preLVM = true;
         
         #keyFileSize = 4096;
-        keyFile = "/boot/lukskey";
+        keyFile = "/lukskey";
         fallbackToPassword = true;
       };
+    };
+
+    boot.initrd.secrets = {
+      "/lukskey" = pkgs.writeText "lukskey" "test";
     };
 
     fileSystems = {
