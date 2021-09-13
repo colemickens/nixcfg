@@ -88,14 +88,14 @@ in
         spice-gtk
 
         # matrix clients
-        fractal
-        nheko
-        quaternion
-        spectral
-        mirage-im
-        cchat-gtk
-        neochat
-        element-desktop
+        # fractal
+        # nheko
+        # quaternion
+        # spectral
+        # mirage-im
+        # cchat-gtk
+        # neochat
+        # element-desktop
 
         gnome3.nautilus
         gnome3.file-roller

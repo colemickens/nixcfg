@@ -7,7 +7,7 @@
     ../mixins/sway.nix
     ../mixins/waybar.nix
 
-    ../mixins/wayland-tweaks.nix
+    #../mixins/wayland-tweaks.nix
 
     ./gui.nix
   ];

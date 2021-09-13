@@ -35,7 +35,7 @@ in
       yubikey-manager
       esphome
     ];
-    system.stateVersion = "21.03";
+    system.stateVersion = "21.05";
 
     nix.nixPath = [];
     nix.gc.automatic = true;

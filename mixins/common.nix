@@ -12,6 +12,10 @@ with lib;
   config = {
     i18n.defaultLocale = "en_US.UTF-8";
 
+    # TODO: system-owned GC root for nixcfg's nix-shell
+    # or maybe a service that manages gcroots like this?
+    # (nix-)direnv already does tho I think
+
     # system.configurationRevision =
     #   if inputs.self ? rev
     #   then inputs.self.rev

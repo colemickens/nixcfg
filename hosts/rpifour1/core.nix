@@ -88,7 +88,7 @@ in
       hostName = hostname;
       firewall.enable = true;
       firewall.allowedTCPPorts = [ 22 ];
-      networkmanager.enable = true;
+      networkmanager.enable = false;
       wireless.enable = false;
       wireless.iwd.enable = false;
       interfaces."eth0".ipv4.addresses = [{
