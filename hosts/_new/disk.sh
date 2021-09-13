@@ -14,7 +14,7 @@ WINLABEL="windows"
 DISK="/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S4J4NG0M603073J"
 LUKSTARGET="/dev/disk/by-id/usb-WD_My_Passport_260F_575837324441305052353944-0:0"
 
-TMPLUKSKEYFILE="/tmp/lukspw"; echo -e "password" > "${TMPLUKSKEYFILE}"
+TMPLUKSKEYFILE="/tmp/lukspw"; echo -n "test" > "${TMPLUKSKEYFILE}"
 
 buildargs=(
   --option 'extra-binary-caches' 'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://arm.cachix.org https://thefloweringash-armv7.cachix.org'
@@ -62,6 +62,7 @@ function disk() {
 
 function install() {
   rev="${1}"
+  echo -n "test" > "${TMPLUKSKEYFILE}"
 
   # reset mounts
   sudo umount /mnt/persist || true
@@ -72,8 +73,8 @@ function install() {
   sudo cryptsetup luksClose "${DEVMAPPER_NAME}" || true
 
   # start
-  #sudo cryptsetup luksOpen   --key-file "${TMPLUKSKEYFILE}" "${LUKSTARGET}" "${DEVMAPPER_NAME}"
-  sudo cryptsetup luksOpen "${LUKSTARGET}" "${DEVMAPPER_NAME}"
+  sudo cryptsetup luksOpen   --key-file "${TMPLUKSKEYFILE}" "${LUKSTARGET}" "${DEVMAPPER_NAME}"
+  #sudo cryptsetup luksOpen "${LUKSTARGET}" "${DEVMAPPER_NAME}"
   
   sudo zpool import "${POOL}"
   
