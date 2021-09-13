@@ -55,6 +55,8 @@ in
     };
     swapDevices = [];
 
+    console.earlySetup = true; # luks
+
     boot = {
       # we use Tow-Boot now:
       loader.grub.enable = false;
@@ -62,6 +64,17 @@ in
       
       tmpOnTmpfs = false;
       cleanTmpDir = true;
+
+      kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
+      kernelPatches = [{
+        name = "pinebook-disable-dp";
+        patch = ./pbp-disable-dp.patch;
+      }];
+      kernelParams = [
+        "cma=32M"
+        "mitigations=off"
+        "console=ttyS2,1500000n8" "console=tty0"
+      ]; 
 
       initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
       initrd.kernelModules = [ "nvme" ];
