@@ -17,7 +17,7 @@ in {
     };
   };
 
-  config = {
+  config = if cfg.enabled then {
     # adapted from: https://tailscale.com/blog/nixos-minecraft/
 
     systemd.services.tailscale-autoconnect = {
@@ -43,5 +43,5 @@ in {
         cat "${cfg.tokenFile}" | ${pkgs.tailscale}/bin/tailscale up -authkey -
       '';
     };
-  };
+  } else {};
 }
