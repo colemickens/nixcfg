@@ -160,9 +160,15 @@ in
     fileSystems = {
       # on the tow-boot SD card
       "/boot" = {
-        device = "/dev/disk/by-partlabel/sinkor-boot";
+        device = "/dev/disk/by-id/mmc-SH64G_0x53d5953e-part2";
         fsType = "vfat";
         options = [ "nofail" ];
+      };
+      # tow-boot firmware
+      "/firmware" = {
+        device = "/dev/disk/by-id/mmc-SH64G_0x53d5953e-part1";
+        fsType = "vfat";
+        options = [ "nofail" "ro" ];
       };
       
       # on the spinning rust backup HDD

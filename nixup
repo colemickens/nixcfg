@@ -4,7 +4,6 @@ set -euo pipefail
 set -x
 
 function __() { printf "\n\n%s\n" "${1}" >/dev/stderr; }
-function ts() { echo -e "cole@${1}.ts.r10e.tech"; }
 unset NIX_PATH
 HOME="${HOME:-"/tmp"}"
 cd "${DIR}"
@@ -155,14 +154,15 @@ function remote() {
 
 a64com="colemickens@aarch64.nixos.community"
 
+function ts() { echo -e "cole@${1}.ts.r10e.tech"; }
+function ts2() { tailscale status --json | jq -r ".Peer[] | select(.HostName==\"$1\") | .TailscaleIPs[1]"; }
 function rpifour1()  { remote "${a64com}"    "toplevels.rpifour1"  "$(ts rpifour1)"; }
 function pinebook()  { remote "${a64com}"    "toplevels.pinebook"  "$(ts pinebook)"; }
 function xeep()      { remote "$(ts xeep)"   "toplevels.xeep"      "$(ts xeep)"; }
 function raisin()    { remote "$(ts raisin)" "toplevels.raisin"    "$(ts raisin)"; }
 function jeffhyper() { remote "$(ts raisin)" "toplevels.jeffhyper" "$(ts jeffhyper)"; }
 function porty()     { remote "$(ts raisin)" "toplevels.porty"     "$(ts porty)"; }
-
-function sinkor()    { remote "${a64com}" "toplevels.sinkor"    "cole@192.168.133.202"; }
+function sinkor()    { remote "${a64com}"    "toplevels.sinkor"    "cole@$(ts2 sinkor)"; }
 function install_sinkor()    {
   set -euo pipefail
   stash
