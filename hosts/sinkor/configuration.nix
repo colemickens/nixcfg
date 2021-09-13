@@ -150,6 +150,9 @@ in
         name = "sinkor-zfs";
         device = "/dev/disk/by-id/usb-WD_My_Passport_260F_575837324441305052353944-0:0";
         preLVM = true;
+        
+        #keyFileSize = 4096;
+        keyFile = "/boot/lukskey";
         fallbackToPassword = true;
       };
     };
