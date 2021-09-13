@@ -96,7 +96,7 @@ function install() {
   echo "install now:"
   sleep 3
   sudo nix-store -r --store /mnt "${buildargs[@]}" "${1}"
-  sudo nixos-install --root /mnt --system "${1}" "${buildargs[@]}"
+  sudo nixos-install --root /mnt --system "${1}" --no-root-passwd "${buildargs[@]}" 
 
   echo "*******************************"
   echo "fix up luks:"
