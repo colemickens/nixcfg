@@ -12,7 +12,7 @@ in
   ];
 
   config = {
-    system.stateVersion = "21.03";
+    system.stateVersion = "21.05";
 
     nix.nixPath = [];
     nix.gc.automatic = true;
@@ -22,33 +22,34 @@ in
     documentation.info.enable = false;
     documentation.nixos.enable = false;
 
-    environment.systemPackages = with pkgs; [
-      raspberrypifw
-      raspberrypi-eeprom
-      libraspberrypi
-      picocom
-      # # sudo rpi-eeprom-self-update
-      # (pkgs.runCommandNoCC "rpi-eeprom-selfupdate" {} ''
-      #   (
-      #     set -x
-      #     mkdir -p $out/
+    # environment.systemPackages = with pkgs; [
+    #   raspberrypifw
+    #   raspberrypi-eeprom
+    #   libraspberrypi
+    #   picocom
+    #   # # sudo rpi-eeprom-self-update
+    #   # (pkgs.runCommandNoCC "rpi-eeprom-selfupdate" {} ''
+    #   #   (
+    #   #     set -x
+    #   #     mkdir -p $out/
 
-      #     # TODO Move some of this stuff to a "rpi-eeprom-sane" package
-      #     # TODO "raspberrypi-eeprom{,-sane,-tools}"
-      #     cp ${pkgs.raspberrypi-eeprom}/stable/vl805-latest.bin $out/vl805.bin
-      #     sha256sum $out/vl805.bin | cut -d' ' -f1 > $out/vl805.sig
+    #   #     # TODO Move some of this stuff to a "rpi-eeprom-sane" package
+    #   #     # TODO "raspberrypi-eeprom{,-sane,-tools}"
+    #   #     cp ${pkgs.raspberrypi-eeprom}/stable/vl805-latest.bin $out/vl805.bin
+    #   #     sha256sum $out/vl805.bin | cut -d' ' -f1 > $out/vl805.sig
 
-      #     cp ${pkgs.raspberrypi-eeprom}/stable/pieeprom-latest.bin $out/pieeprom.orig.bin
-      #     ${pkgs.raspberrypi-eeprom}/bin/rpi-eeprom-config \
-      #       --out $out/pieeprom.upd \
-      #       --config ${eepromconfigtxt} \
-      #       $out/pieeprom.orig.bin
-      #     sha256sum $out/pieeprom.upd | cut -d' ' -f1 > $out/pieeprom.sig
-      #   )
-      # '')
-    ];
+    #   #     cp ${pkgs.raspberrypi-eeprom}/stable/pieeprom-latest.bin $out/pieeprom.orig.bin
+    #   #     ${pkgs.raspberrypi-eeprom}/bin/rpi-eeprom-config \
+    #   #       --out $out/pieeprom.upd \
+    #   #       --config ${eepromconfigtxt} \
+    #   #       $out/pieeprom.orig.bin
+    #   #     sha256sum $out/pieeprom.upd | cut -d' ' -f1 > $out/pieeprom.sig
+    #   #   )
+    #   # '')
+    # ];
 
     boot = {
+      ############# TODO: replace with tow-boot when its not so damn slow with grub
       loader.grub.enable = false;
       loader.raspberryPi.enable = true;
       loader.raspberryPi.version = 4;
@@ -59,15 +60,13 @@ in
       '';
       loader.raspberryPi.uboot.enable = true;
       loader.raspberryPi.uboot.configurationLimit = 5;
+      #############3
 
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
       #kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
       kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_5_13;
-
-      # note, the annoying SD card messages when booting from not SD:
-      # https://github.com/raspberrypi/linux/issues/3657
 
       initrd.availableKernelModules = [
         "pcie_brcmstb" "bcm_phy_lib" "broadcom" "mdio_bcm_unimac" "genet"
@@ -86,27 +85,18 @@ in
       hostName = hostname;
       firewall.enable = true;
       firewall.allowedTCPPorts = [ 22 ];
-      networkmanager.enable = false;
-      wireless.iwd.enable = true;
-      useNetworkd = true;
-      useDHCP = false;
+      networkmanager.enable = true;
+      wireless.enable = false;
+      wireless.iwd.enable = false;
       interfaces."eth0".ipv4.addresses = [{
         address = "192.168.1.2";
         prefixLength = 16;
       }];
       defaultGateway = "192.168.1.1";
       nameservers = [ "192.168.1.1" ];
-      search = [ "ts.r10e.tech" ];
     };
-    services.resolved.enable = true;
-    services.resolved.domains = [ "ts.r10e.tech" ];
     services.timesyncd.enable = true;
-    #services.timesynd.extraOptions = ''
-    #  # TODO ? seems like this should already be firing every 34 minutes at worst? not sure why rpifour1 is losing time?
-    #  maybe set timezone
-    #'';
     time.timeZone = "America/Los_Angeles";
-    systemd.network.enable = true;
 
     nixpkgs.config.allowUnfree = true;
     hardware = {

@@ -11,7 +11,7 @@ in
     ../../mixins/common.nix
     ../../mixins/sshd.nix
 
-    ../../profiles/core.nix
+    ../../profiles/core.nix # we need core+linger for hm to power syncthing, I guess
     ../../profiles/user.nix
     
     inputs.impermanence.nixosModules.impermanence
@@ -51,7 +51,7 @@ in
           # "Videos"
           # "VirtualBox VMs"
           # ".gnupg"
-          # ".ssh"
+          ".ssh"
           # ".nixops"
           # ".local/share/keyrings"
           # ".local/share/direnv"
