@@ -106,6 +106,8 @@ in
         "vc4" "bcm2835_dma" "i2c_bcm2835"
         "xhci_pci" "nvme" "usb_storage" "sd_mod"
         "uas" # necessary for my UAS-enabled NVME-USB adapter
+
+        "xchacha20" "adiantum" "nhpoly1305"
       ];
       kernelModules = config.boot.initrd.availableKernelModules;
 

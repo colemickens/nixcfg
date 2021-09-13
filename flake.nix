@@ -61,7 +61,7 @@
     nixos-azure = { url = "github:colemickens/nixos-azure/dev"; };
     nixos-azure.inputs.nixpkgs.follows = "nixpkgs";
 
-    wip-pinebook-pro = { url = "github:colemickens/wip-pinebook-pro"; };
+    wip-pinebook-pro = { url = "github:colemickens/wip-pinebook-pro/master"; flake = false; };
     wip-pinebook-pro.inputs.nixpkgs.follows = "nixpkgs";
     #wip-pinebook-pro = { url = "github:samueldr/wip-pinebook-pro"; flake = false; };
 

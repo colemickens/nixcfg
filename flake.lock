@@ -219,21 +219,6 @@
         "type": "github"
       }
     },
-    "flake-utils": {
-      "locked": {
-        "lastModified": 1597053966,
-        "narHash": "sha256-f9lbPS/GJ1His8fsDqM6gfa8kSqREU4eKiMCS5hrKg4=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "ec20f52e2ff61e9c36c2b894b62fc1b4bd04c71b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
     "hardware": {
       "locked": {
         "lastModified": 1629975021,
@@ -885,12 +870,7 @@
       }
     },
     "wip-pinebook-pro": {
-      "inputs": {
-        "flake-utils": "flake-utils",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
+      "flake": false,
       "locked": {
         "lastModified": 1612067773,
         "narHash": "sha256-3vC16pGhwsDO8h69uBzu21xvNMZcN6ttNOaF61yS/E0=",
@@ -901,6 +881,7 @@
       },
       "original": {
         "owner": "colemickens",
+        "ref": "master",
         "repo": "wip-pinebook-pro",
         "type": "github"
       }
