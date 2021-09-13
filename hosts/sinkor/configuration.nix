@@ -34,11 +34,9 @@ in
     };
     # impermance user-wide
     programs.fuse.userAllowOther = true;
-
     systemd.tmpfiles.rules = [
       "d /persist/home/cole 0750 cole cole - -"
     ];
-
     home-manager.users.cole = { pkgs, ... }: {
       imports = [
         "${inputs.impermanence}/home-manager.nix"
@@ -64,6 +62,9 @@ in
         allowOther = true;
       };
     };
+    boot.initrd.postDeviceCommands = lib.mkAfter ''
+      zfs rollback -r sinkortank/root@blank
+    '';
 
     system.stateVersion = "21.05";
     users.users.cole.linger = true;
@@ -75,12 +76,6 @@ in
     documentation.doc.enable = false;
     documentation.info.enable = false;
     documentation.nixos.enable = false;
-
-    environment.systemPackages = with pkgs; [
-      raspberrypifw
-      raspberrypi-eeprom
-      efibootmgr
-    ];
 
     boot = {
       # TOW_BOOT + GRUB
@@ -134,15 +129,6 @@ in
       enableRedistributableFirmware = true;
     };
 
-    # TODO: declarative wifi for Mickens + MickPetrey wifi networks
-
-    # TODO: snapshot whatever was written from last run
-    # TODO: can we do that pre-emptively on shutdown instead?
-    boot.initrd.postDeviceCommands = lib.mkAfter ''
-      zfs snapshot sinkortank/root@$(date '+%s')
-      zfs rollback -r sinkortank/root@blank
-    '';
-
     boot.initrd.luks.devices = {
       "sinkor-zfs" = {
         name = "sinkor-zfs";
@@ -151,6 +137,8 @@ in
         fallbackToPassword = true;
       };
     };
+
+    # TODO: declarative wifi for Mickens + MickPetrey wifi networks
 
     fileSystems = {
       # on the tow-boot SD card
