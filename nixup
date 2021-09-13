@@ -145,7 +145,7 @@ function remote() {
   elif [[ "${target:-}" != "skip" ]]; then
     ssh_cachix_push "${remote}" "${out}"
     ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -L --no-link -j0 "${out}"
-    ssh_nixUnstable_shell "${target}" sudo nix "${nixargs[@]}" build --profile /nix/var/nix/profiles/system "${out}";
+    ssh_nixUnstable_shell "${target}" sudo nix "${nixargs[@]}" build --no-link --profile /nix/var/nix/profiles/system "${out}";
     ssh_nixUnstable_shell "${target}" sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch;
   fi
   ssh_nixUnstable_shell "${remote}" rm -f "/tmp/$f"
