@@ -60,7 +60,7 @@ in
       };
     };
 
-    system.stateVersion = "21.03";
+    system.stateVersion = "21.05";
     users.users.cole.linger = true;
 
     nix.nixPath = [];
@@ -141,7 +141,7 @@ in
     boot.initrd.luks.devices = {
       "sinkor-zfs" = {
         name = "sinkor-zfs";
-        device = "/dev/disk/by-uuid/5fc3b31f-05ad-4a35-ae52-8cb4864030a6";
+        device = "/dev/disk/by-id/usb-WD_My_Passport_260F_575837324441305052353944-0:0";
         preLVM = true;
         fallbackToPassword = true;
       };
