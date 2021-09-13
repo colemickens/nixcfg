@@ -7,6 +7,6 @@ cryptsetup \
   --cipher xchacha20,aes-adiantum-plain64 \
   --hash sha256 \
   --iter-time 5000 \
-  -–keysize 256 \
-  --pbkdf argon2i \
+  -–key-size 256 \
+  --pbkdf argon2id \
     luksFormat $TARGET
