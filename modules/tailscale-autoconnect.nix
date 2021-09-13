@@ -17,7 +17,7 @@ in {
     };
   };
 
-  config = if cfg.enabled then {
+  config = if cfg.enable then {
     # adapted from: https://tailscale.com/blog/nixos-minecraft/
 
     systemd.services.tailscale-autoconnect = {
