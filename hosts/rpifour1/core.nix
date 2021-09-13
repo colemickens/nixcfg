@@ -63,7 +63,8 @@ in
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
+      #kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
+      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_5_13;
 
       # note, the annoying SD card messages when booting from not SD:
       # https://github.com/raspberrypi/linux/issues/3657
