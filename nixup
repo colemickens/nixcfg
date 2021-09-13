@@ -160,12 +160,12 @@ function remote() {
 
 a64com="colemickens@aarch64.nixos.community"
 
-function rpifour1()  { remote "${a64com}"                       "toplevels.rpifour1"  "cole@$(tailscale ip --4 rpifour1)"; }
 function pinebook()  { remote "${a64com}"                       "toplevels.pinebook"  "cole@$(tailscale ip --4 pinebook)"; }
 function xeep()      { remote "cole@$(tailscale ip --4 xeep)"   "toplevels.xeep"      "cole@$(tailscale ip --4 xeep)"; }
 function raisin()    { remote "cole@$(tailscale ip --4 raisin)" "toplevels.raisin"    "cole@$(tailscale ip --4 raisin)"; }
 function jeffhyper() { remote "cole@$(tailscale ip --4 raisin)" "toplevels.jeffhyper" "cole@$(tailscale ip --4 jeffhyper)"; }
 function porty()     { remote "cole@$(tailscale ip --4 raisin)" "toplevels.porty"     "cole@$(tailscale ip --4 porty)"; }
+function rpifour1()  { remote "${a64com}"                       "toplevels.rpifour1"  "cole@$(tailscale ip --4 rpifour1)"; }
 function sinkor()    { remote "${a64com}"                       "toplevels.sinkor"    "cole@$(tailscale ip --4 sinkor)"; }
 function install_sinkor()    {
   set -euo pipefail

@@ -23,6 +23,7 @@ in
     ../mixins/alacritty.nix
     ../mixins/chromecast.nix
     ../mixins/fonts.nix
+    ../mixins/foot.nix
     ../mixins/gtk.nix
     ../mixins/kitty.nix
     ../mixins/mpv.nix
