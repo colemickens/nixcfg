@@ -13,7 +13,7 @@ in
 
     ../../profiles/desktop-sway-unstable.nix
 
-    inputs.wip-pinebook-pro.nixosModule
+    "${inputs.wip-pinebook-pro}/pinebook_pro.nix"
   ];
 
   config = {
