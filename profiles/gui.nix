@@ -79,7 +79,6 @@ in
         imv
         syncthing-gtk
         thunderbird
-        mplayer
         smplayer
         rkvm
         spotify-qt
@@ -108,6 +107,8 @@ in
       ]
       ++ _torPackages
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
+        mplayer # weird non-aarch64
+
         ddccontrol
         i2c-tools
 
