@@ -82,22 +82,26 @@ in
     ];
 
     boot = {
-      # Tow-Boot
+      # TOW_BOOT + GRUB
       loader.efi.canTouchEfiVariables = false;
+      loader.grub = {
+        enable = true;
+        efiSupport = true;
+        efiInstallAsRemovable = true;
+        device = "nodev";
+        configurationLimit = 5;
+      };
 
-      # idk, can't seem to get it to install to default location
-      # maybe because efibootmgr call (likely?) fails
-      # loader.systemd-boot = {
-      #  enable = true;
+      # TOW_BOOT + EXTLINUX
+      loader.efi.canTouchEfiVariables = false;
+      loader.grub.enable = false;
+      loader.generic
+      # loader.grub = {
+      #  efiSupport = true;
+      #  efiInstallAsRemovable = true;
+      #  device = "nodev";
       #  configurationLimit = 5;
       # };
-
-      loader.grub = {
-       efiSupport = true;
-       efiInstallAsRemovable = true;
-       device = "nodev";
-       configurationLimit = 5;
-      };
 
       tmpOnTmpfs = false;
       cleanTmpDir = true;
@@ -123,10 +127,10 @@ in
       hostId = "deadbead";
       hostName = hostname;
       firewall.enable = true;
-      networkmanager.enable = true;
+      networkmanager.enable = false;
       wireless.enable = false;
       wireless.iwd.enable = false;
-      useDHCP = false;
+      useDHCP = true;
     };
     time.timeZone = "America/Chicago";
 

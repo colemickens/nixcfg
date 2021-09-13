@@ -65,10 +65,8 @@ in
       cleanTmpDir = true;
 
       # we use Tow-Boot now:
-      loader.grub.enable = true;
-      loader.grub.efiSupport = true;
-      loader.grub.device = "nodev";
-      loader.grub.efiInstallAsRemovable = true;
+      loader.grub.enable = false;
+      loader.generic-extlinux-compatible.enable = true;
       
       initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
       initrd.kernelModules = [ "nvme" ];
@@ -82,6 +80,7 @@ in
       networkmanager.enable = true;
     };
     services.timesyncd.enable = true;
+    time.timeZone = "America/Los_Angeles";
 
     nixpkgs.config.allowUnfree = true;
     hardware = {
