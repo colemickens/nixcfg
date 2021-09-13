@@ -84,19 +84,19 @@ in
 
     boot = {
       # TOW_BOOT + GRUB
-      # loader.efi.canTouchEfiVariables = false;
-      # loader.grub = {
-      #   enable = true;
-      #   efiSupport = true;
-      #   efiInstallAsRemovable = true;
-      #   device = "nodev";
-      #   configurationLimit = 5;
-      # };
+      loader.efi.canTouchEfiVariables = false;
+      loader.grub = {
+        enable = true;
+        efiSupport = true;
+        efiInstallAsRemovable = true;
+        device = "nodev";
+        configurationLimit = 5;
+      };
 
       # TOW_BOOT + EXTLINUX
-      loader.efi.canTouchEfiVariables = false;
-      loader.grub.enable = false;
-      loader.generic-extlinux-compatible.enable = true;
+      # loader.efi.canTouchEfiVariables = false;
+      # loader.grub.enable = false;
+      # loader.generic-extlinux-compatible.enable = true;
 
       tmpOnTmpfs = false;
       cleanTmpDir = true;
