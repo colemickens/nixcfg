@@ -63,29 +63,14 @@ in
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
+      # we use Tow-Boot now:
       loader.grub.enable = true;
       loader.grub.efiSupport = true;
       loader.grub.device = "nodev";
       loader.grub.efiInstallAsRemovable = true;
       
-      # trying to enable tow-boot
-      # loader.generic-extlinux-compatible.enable = true;
-
       initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
       initrd.kernelModules = [ "nvme" ];
-      consoleLogLevel = pkgs.lib.mkDefault 7;
-
-      # kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
-      # kernelPatches = [{
-      #   name = "pinebook-disable-dp";
-      #   patch = ./pbp-disable-dp.patch; # https://patchwork.kernel.org/project/linux-rockchip/patch/20200924063042.41545-1-jhp@endlessos.org/
-      # }];
-
-      # kernelParams = [
-      #   "cma=32M"
-      #   "mitigations=off"
-      #   "console=ttyS2,1500000n8" "console=tty0"
-      # ];
     };
 
     networking = {

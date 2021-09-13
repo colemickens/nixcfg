@@ -10,10 +10,11 @@ let
   _someFirefox = inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox;
   _someChromium = inputs.nixos-unstable.legacyPackages.${pkgs.system}.ungoogled-chromium;
 
-  _torPackage =
+  _torPackages =
     if pkgs.system == "aarch64-linux"
-    then inputs.nixos-unstable.legacyPackages.${pkgs.system}.tor-browser-bundle-ports-bin
-    else inputs.nixos-unstable.legacyPackages.${pkgs.system}.tor-browser-bundle-bin;
+    #then [ inputs.nixos-unstable.legacyPackages.${pkgs.system}.tor-browser-bundle-ports-bin ]
+    then [ ]
+    else [ inputs.nixos-unstable.legacyPackages.${pkgs.system}.tor-browser-bundle-bin ];
 in
 {
   imports = [
@@ -103,9 +104,9 @@ in
 
         # browsers
         _someChromium
-        _torPackage
         _someFirefox
       ]
+      ++ _torPackages
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
         ddccontrol
         i2c-tools
