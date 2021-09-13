@@ -95,13 +95,7 @@ in
       # TOW_BOOT + EXTLINUX
       loader.efi.canTouchEfiVariables = false;
       loader.grub.enable = false;
-      loader.generic
-      # loader.grub = {
-      #  efiSupport = true;
-      #  efiInstallAsRemovable = true;
-      #  device = "nodev";
-      #  configurationLimit = 5;
-      # };
+      loader.generic-extlinux-compatible.enable = true;
 
       tmpOnTmpfs = false;
       cleanTmpDir = true;

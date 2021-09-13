@@ -18,7 +18,6 @@ in
 
   config = {
     system.stateVersion = "21.05";
-    #nixpkgs.config.allowUnfree = true;
 
     hardware.usbWwan.enable = true;
 
@@ -56,18 +55,14 @@ in
     };
     swapDevices = [];
 
-    console.earlySetup = true; # hidpi + luks-open  # TODO : STILL NEEDED?
-    console.font = "ter-v32n";
-    console.packages = [ pkgs.terminus_font ];
-
     boot = {
-      tmpOnTmpfs = false;
-      cleanTmpDir = true;
-
       # we use Tow-Boot now:
       loader.grub.enable = false;
       loader.generic-extlinux-compatible.enable = true;
       
+      tmpOnTmpfs = false;
+      cleanTmpDir = true;
+
       initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
       initrd.kernelModules = [ "nvme" ];
     };
