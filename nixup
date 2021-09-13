@@ -128,7 +128,7 @@ function remote() {
   git push origin HEAD -f
   rev="$(git rev-parse --short HEAD)"
   thing="github:colemickens/nixcfg/${rev}#${buildattr}"
-  ssh_nixUnstable_shell "$remote" nix "${nixargs[@]}" build "${buildargs[@]}" -L "${thing}" --out-link "/tmp/$f"
+  ssh_nixUnstable_shell "$remote" nix "${nixargs[@]}" build "${buildargs[@]}" -L "${thing}" --keep-going --out-link "/tmp/$f"
   out="$(ssh_nixUnstable_shell "$remote" readlink -f "/tmp/$f")"
 
   # target=copy   => copy back
