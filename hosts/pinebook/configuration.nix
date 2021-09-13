@@ -71,7 +71,7 @@ in
         patch = ./pbp-disable-dp.patch;
       }];
       kernelParams = [
-        "cma=32M"
+        # "cma=32M" # samueldr says so
         "mitigations=off"
         "console=ttyS2,1500000n8" "console=tty0"
       ]; 
