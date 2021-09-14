@@ -46,11 +46,18 @@ in
     fileSystems = {
       "/" =     {
         device = "/dev/disk/by-partlabel/nixos";
+        #device = "/dev/disk/by-id/mmc-DA4064_0xe0291213-part2";
         fsType = "ext4";
       };
       "/boot" = {
         device = "/dev/disk/by-partlabel/boot";
+        #device = "/dev/disk/by-id/mmc-DA4064_0xe0291213-part1";
         fsType = "vfat";
+      };
+      "/firmware" = {
+        device = "/dev/disk/by-id/mmc-EB1QT_0x095f55ab-part1";
+        fsType = "vfat";
+        options = [ "ro" "nofail" ];
       };
     };
     swapDevices = [];
