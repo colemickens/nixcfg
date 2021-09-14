@@ -17,7 +17,6 @@ in
     ../../mixins/sshd.nix
 
     ../../mixins/common.nix #?
-    ../../profiles/sway.nix
   ];
 
   config = {
