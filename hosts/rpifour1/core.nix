@@ -32,25 +32,6 @@ in
       ncdu
     ];
 
-    #   # (pkgs.runCommandNoCC "rpi-eeprom-selfupdate" {} ''
-    #   #   (
-    #   #     set -x
-    #   #     mkdir -p $out/
-
-    #   #     # TODO Move some of this stuff to a "rpi-eeprom-sane" package
-    #   #     # TODO "raspberrypi-eeprom{,-sane,-tools}"
-    #   #     cp ${pkgs.raspberrypi-eeprom}/stable/vl805-latest.bin $out/vl805.bin
-    #   #     sha256sum $out/vl805.bin | cut -d' ' -f1 > $out/vl805.sig
-
-    #   #     cp ${pkgs.raspberrypi-eeprom}/stable/pieeprom-latest.bin $out/pieeprom.orig.bin
-    #   #     ${pkgs.raspberrypi-eeprom}/bin/rpi-eeprom-config \
-    #   #       --out $out/pieeprom.upd \
-    #   #       --config ${eepromconfigtxt} \
-    #   #       $out/pieeprom.orig.bin
-    #   #     sha256sum $out/pieeprom.upd | cut -d' ' -f1 > $out/pieeprom.sig
-    #   #   )
-    #   # '')
-    
     boot = {
       ############# TODO: replace with tow-boot when its not so damn slow with grub
       loader.grub.enable = false;
@@ -74,7 +55,7 @@ in
       initrd.availableKernelModules = [
         "pcie_brcmstb" "bcm_phy_lib" "broadcom" "mdio_bcm_unimac" "genet"
         "vc4" "bcm2835_dma" "i2c_bcm2835"
-        "xhci_pci" "nvme" "usb_storage" "sd_mod"
+        "xhci_pci" "nvme" "usbhid" "usb_storage" "sd_mod"
         "uas" # necessary for my UAS-enabled NVME-USB adapter
       ];
       kernelModules = config.boot.initrd.availableKernelModules;
