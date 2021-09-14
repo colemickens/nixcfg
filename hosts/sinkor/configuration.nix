@@ -179,7 +179,7 @@ in
       "/firmware" = {
         device = "/dev/disk/by-id/mmc-SH64G_0x53d5953e-part1";
         fsType = "vfat";
-        options = [ "nofail" "ro" ];
+        options = [ "nofail" "ro" "nobootwait" ];
       };
       
       # on the spinning rust backup HDD
