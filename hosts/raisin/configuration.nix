@@ -121,6 +121,7 @@ in
       };
       loader.timeout = 1;
       loader.systemd-boot.enable = true;
+      loader.systemd-boot.configurationLimit = 5;
       loader.efi.canTouchEfiVariables = true;
     };
     networking = {
