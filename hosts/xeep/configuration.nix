@@ -130,7 +130,6 @@ in
       networkmanager.enable = true;
       wireless.enable = false;
       wireless.iwd.enable = false;
-      useDHCP = true;
     };
     services.timesyncd.enable = true;
 
