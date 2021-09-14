@@ -83,6 +83,15 @@ in
     documentation.info.enable = false;
     documentation.nixos.enable = false;
 
+    specialisation = {
+      linux_latest = {
+        inheritParentConfig = true;
+        configuration = {
+          boot.kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
+        };
+      };
+    };
+
     boot = {
       # TOW_BOOT + GRUB
       # (works, but hangs for a long time between grub -> kernel booting)
