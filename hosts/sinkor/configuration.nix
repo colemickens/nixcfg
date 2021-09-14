@@ -18,9 +18,6 @@ in
   ];
 
   config = {
-    # TEMP: disable:
-    # systemd.enableEmergencyMode = true;
-
     # impermance system-wide
     environment.persistence."/persist" = {
       directories = [
@@ -97,7 +94,7 @@ in
         device = "nodev";
         configurationLimit = 5;
       };
-      kernelParams = [ "printk" "console=ttyS0,115200n8" "console=tty1" ]; # some msgs come through? (errors, but not the stage1 messages, etc)
+      kernelParams = [ "console=ttyS0,115200n8" "console=tty1" ]; # some msgs come through? (errors, but not the stage1 messages, etc)
       # console doesn't work once linux starts booting?
       # but I think it did with extlinux, must be yet another difference?
 
@@ -110,9 +107,10 @@ in
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
+      #kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest
+      # uh... 5.14 doesn't see the HDD?????
       zfs.enableUnstable = true;
-      #kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_5_13;
+      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_5_13;
 
       initrd.availableKernelModules = [
         "pcie_brcmstb" "bcm_phy_lib" "broadcom" "mdio_bcm_unimac" "genet"
@@ -137,6 +135,7 @@ in
       wireless.iwd.enable = false;
       useDHCP = true;
     };
+    services.timesyncd.enable = true;
     time.timeZone = "America/Chicago";
 
     nixpkgs.config.allowUnfree = true;
