@@ -12,7 +12,8 @@ let
     inherit (pkgs) system;
     overlays = [ "${inputs.wip-pinebook-pro}/overlay.nix" ];
   });
-  pinebookpro-keyboard-updater = pbpPkgs.pinebookpro-keyboard-updater;
+  #pinebookpro-keyboard-updater = pbpPkgs.pinebookpro-keyboard-updater;
+  pinebookpro-keyboard-updater = pkgs.hello;
 in
 {
   imports = [
