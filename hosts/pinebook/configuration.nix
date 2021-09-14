@@ -7,6 +7,11 @@ let
     export PATH="${lib.makeBinPath [ pkgs.nix ]}:''$PATH}"
     ${toString inputs.wip-pinebook-pro}/sound/reset-sound.rb
   '');
+
+  pbpPkgs = (import inputs.nixos-unstable {
+    overlays = [ "${inputs.wip-pinebook-pro}/overlay.nix" ];
+  });
+  pinebookpro-keyboard-updater = pbpPkgs.pinebookpro-keyboard-updater;
 in
 {
   imports = [
@@ -42,6 +47,7 @@ in
     environment.systemPackages = with pkgs; [
       # TODO: run on boot (?)
       pinebook-fix-sound
+      pinebookpro-keyboard-updater
     ];
 
     systemd.services.pinebook-fix-sound = {
