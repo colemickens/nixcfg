@@ -24,6 +24,8 @@ in
             bold-text-in-bright = colors.bold_as_bright;
           };
 
+          dpi-aware = true;
+
           colors = rec {
             foreground = c colors.foreground;
             background = c colors.background;
