@@ -4,6 +4,7 @@ let
 
   pinebook-fix-sound = (pkgs.writeShellScriptBin "pinebook-fix-sound" ''
     export NIX_PATH="nixpkgs=${toString inputs.nixpkgs}"
+    export PATH="${makeBinPath [ pkgs.nix ]}:''$PATH}"
     ${toString inputs.wip-pinebook-pro}/sound/reset-sound.rb
   '');
 in
