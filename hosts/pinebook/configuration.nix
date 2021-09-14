@@ -8,12 +8,13 @@ let
     ${toString inputs.wip-pinebook-pro}/sound/reset-sound.rb
   '');
 
-  pbpPkgs = (import "${inputs.nixos-unstable}/default.nix" {
-    system = pkgs.system;
-    overlays = [ "${inputs.wip-pinebook-pro}/overlay.nix" ];
-  });
+  # pbpPkgs = (import "${inputs.nixos-unstable}/default.nix" {
+  #   system = pkgs.system;
+  #   overlays = [ "${inputs.wip-pinebook-pro}/overlay.nix" ];
+  # });
   #pinebookpro-keyboard-updater = pbpPkgs.pinebookpro-keyboard-updater;
   #pinebookpro-keyboard-updater = pkgs.hello;
+  pinebookpro-keyboard-updater = pkgs.callPackage "${inputs.wip-pinebook-pro}/keyboard-updater" {};
 in
 {
   imports = [
