@@ -79,6 +79,7 @@ in
       # we use Tow-Boot now:
       loader.grub.enable = false;
       loader.generic-extlinux-compatible.enable = true;
+      loader.generic-extlinux-compatible.configurationLimit = 3;
       
       tmpOnTmpfs = false;
       cleanTmpDir = true;
