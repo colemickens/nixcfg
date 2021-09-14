@@ -20,6 +20,8 @@ in
   ];
 
   config = {
+    mobile.boot.stage-1.kernel.provenance = "mainline";
+
     services.udev.packages = [ pkgs.libinput.out ];
 
   users.users.kiosk = {
