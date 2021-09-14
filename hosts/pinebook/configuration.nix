@@ -115,5 +115,6 @@ in
       pulseaudio.package = pkgs.pulseaudioFull;
       enableRedistributableFirmware = true;
     };
+    services.fwupd.enable = true;
   };
 }

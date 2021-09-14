@@ -32,6 +32,7 @@
     boot.loader.grub.devices = [ "nodev" ];
     boot.loader.grub.efiSupport = true;
     boot.loader.grub.efiInstallAsRemovable = true;
+    boot.loader.grub.configurationLimit = 5;
     boot.loader.efi.canTouchEfiVariables = false;
     boot.supportedFilesystems = [ "zfs" ];
     boot.kernelParams = [ "mitigations=off" ];
@@ -93,5 +94,7 @@
     # Before changing this value read the documentation for this option
     # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
     system.stateVersion = "21.05"; # Did you read the comment?
+
+    services.fwupd.enable = true;
   };
 }
