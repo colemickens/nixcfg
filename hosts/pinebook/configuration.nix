@@ -4,7 +4,7 @@ let
 
   pinebook-fix-sound = (pkgs.writeShellScriptBin "pinebook-fix-sound" ''
     export NIX_PATH="nixpkgs=${toString inputs.nixpkgs}"
-    export PATH="${makeBinPath [ pkgs.nix ]}:''$PATH}"
+    export PATH="${lib.makeBinPath [ pkgs.nix ]}:''$PATH}"
     ${toString inputs.wip-pinebook-pro}/sound/reset-sound.rb
   '');
 in
@@ -14,14 +14,18 @@ in
 
     ../../mixins/chromecast.nix
     ../../mixins/sshd.nix
+    ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
 
     ../../profiles/desktop-sway-unstable.nix
 
+    ../../modules/loginctl-linger.nix
     "${inputs.wip-pinebook-pro}/pinebook_pro.nix"
   ];
 
   config = {
+    users.users.cole.linger = true;
+
     system.stateVersion = "21.05";
 
     hardware.usbWwan.enable = true;
