@@ -22,9 +22,9 @@ in
             font = "${font.name}:size=${toString fontSize}";
             notify = "${pkgs.libnotify}/bin/notify-send notify=notify-send -a \${app-id} \${app-id} \${title} \${body}";
             bold-text-in-bright = colors.bold_as_bright;
-          };
 
-          dpi-aware = true;
+            dpi-aware = true;
+          };
 
           colors = rec {
             foreground = c colors.foreground;
