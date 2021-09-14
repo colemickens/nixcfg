@@ -178,6 +178,7 @@ function install_sinkor()    {
   ssh "${target}" /tmp/disk.sh install $out
 }
 function pinephone() { remote "${a64com}" "toplevels.pinephone"      "cole@$(tailscale ip --4 pinephone)"; }
+function bluephone() { remote "${a64com}" "toplevels.bluephone"      "cole@$(tailscale ip --4 bluephone)"; }
 function pinesd()    { remote "${a64com}" "images.pinephone_bundle"  "copy"; }
 
 function x86_64()  { remote "$(ts azdev)"  "bundles.x86_64-linux"   "cachix"; }

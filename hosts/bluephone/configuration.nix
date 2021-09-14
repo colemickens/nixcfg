@@ -9,6 +9,7 @@ in
 {
   imports = [
     (import "${inputs.mobile-nixos}/lib/configuration.nix" {
+      inherit pkgs;
       device = "google-blueline";
     })
 
