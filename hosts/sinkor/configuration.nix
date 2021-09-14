@@ -97,6 +97,9 @@ in
         device = "nodev";
         configurationLimit = 5;
       };
+      kernelParams = [ "console=ttyS0,115200" "console=tty1" ];
+      # console doesn't work once linux starts booting?
+      # but I think it did with extlinux, must be yet another difference?
 
       # TOW_BOOT + EXTLINUX
       # (wrong console, no luks prompt, doesn't take my kb input)
