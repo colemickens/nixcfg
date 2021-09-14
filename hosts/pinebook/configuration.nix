@@ -9,6 +9,7 @@ let
   '');
 
   pbpPkgs = (import inputs.nixos-unstable {
+    inherit (pkgs) system;
     overlays = [ "${inputs.wip-pinebook-pro}/overlay.nix" ];
   });
   pinebookpro-keyboard-updater = pbpPkgs.pinebookpro-keyboard-updater;
