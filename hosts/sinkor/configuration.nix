@@ -97,7 +97,7 @@ in
         device = "nodev";
         configurationLimit = 5;
       };
-      kernelParams = [ "console=ttyS0,115200n8" "console=tty1" ]; # some msgs come through? (errors, but not the stage1 messages, etc)
+      kernelParams = [ "printk" "console=ttyS0,115200n8" "console=tty1" ]; # some msgs come through? (errors, but not the stage1 messages, etc)
       # console doesn't work once linux starts booting?
       # but I think it did with extlinux, must be yet another difference?
 
