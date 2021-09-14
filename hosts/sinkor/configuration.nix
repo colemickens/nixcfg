@@ -19,7 +19,7 @@ in
 
   config = {
     # TEMP: disable:
-    systemd.enableEmergencyMode = true;
+    # systemd.enableEmergencyMode = true;
 
     # impermance system-wide
     environment.persistence."/persist" = {

@@ -27,6 +27,9 @@ in
   config = {
     users.users.cole.linger = true;
 
+    # TODO: move somewhere more common!
+    hardware.usbWwan.enable = true;
+
     environment.systemPackages = with pkgs; [
       efibootmgr p7zip cpio
       yubikey-manager
