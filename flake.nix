@@ -141,6 +141,7 @@
             nix-build-uncached nix-prefetch-git
             sops
             #awsweeper packet-cli
+            haskellPackages.dhall-json
 
             zellij # for devshell multiplexing
           ]);

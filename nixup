@@ -15,7 +15,7 @@ set +x
 if [[ "${CACHIX_SIGNING_KEY:-}" != "" ]]; then
   cachixkey="${CACHIX_SIGNING_KEY}"
 elif gopass show -o 'websites/cachix.org/apikey/colemickens' &>/dev/null; then
-  cachixkey="$(cat /run/secrets/cachix.dhall | dhall text binaryCaches | grep colemickens)"
+  cachixkey="$(cat /run/secrets/cachix.dhall| dhall-to-json | jq -r ".binaryCaches[] | select(.name == \"colemickens\") | .secretKey")"
 fi
 set -x
 
