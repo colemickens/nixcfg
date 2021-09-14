@@ -18,7 +18,7 @@
     # We're back to using nixUnstable so we shouldn't need this:
     nix.url = "github:nixos/nix/master";
 
-    impermanence.url = "github:nix-community/impermanence/0c3b4a1090272f602b410d9a106b62f6488bbd56";
+    impermanence.url = "github:nix-community/impermanence/5e8913aa1c311da17e3da5a4bf5c5a47152f6408";
     impermanence.inputs.nixpkgs.follows = "nixpkgs";
 
     nixpkgs-kubernetes.url = "github:colemickens/nixpkgs-kubernetes/main";
