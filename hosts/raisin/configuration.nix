@@ -6,9 +6,6 @@ in
   imports = [
     ../../mixins/common.nix
 
-
-    ../../mixins/amd-ryzen.nix
-
     ../../mixins/android.nix
     ../../mixins/ledger.nix
     ../../mixins/logitech-mouse.nix
