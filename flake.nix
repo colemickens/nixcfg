@@ -50,7 +50,7 @@
     #nixos-veloren = { url = "github:colemickens/nixos-veloren"; };
     #nixos-veloren.inputs.nixpkgs.follows = "nixpkgs";
 
-    mobile-nixos = { url = "github:nixos/mobile-nixos/master"; flake = false; };
+    mobile-nixos = { url = "github:colemickens/mobile-nixos/master"; flake = false; };
     #mobile-nixos = { url = "github:colemickens/mobile-nixos/mobile-nixos-blueline"; };
     # wait is the flakes pr not merged ? :(
     # mobile-nixos = { url = "github:samueldr/mobile-nixos/mobile-nixos-blueline"; };
