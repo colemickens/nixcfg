@@ -1,13 +1,17 @@
 { pkgs, lib, config, inputs, ... }:
 let
   hostname = "pinebook";
+
+  pinebook-fix-sound = (pkgs.writeScriptBin "pinebook-fix-sound" ''
+    export NIX_PATH="nixpkgs=${toString inputs.nixpkgs}"
+    ${toString inputs.wip-pinebook-pro}/sound/reset-sound.rb
+  '');
 in
 {
   imports = [
     ../../mixins/common.nix
 
     ../../mixins/chromecast.nix
-    ../../mixins/libvirt.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
 
@@ -31,11 +35,14 @@ in
     documentation.nixos.enable = false;
 
     environment.systemPackages = with pkgs; [
-      (pkgs.writeScriptBin "pinebook-fix-sound" ''
-        export NIX_PATH="nixpkgs=${toString inputs.nixpkgs}"
-        ${toString inputs.wip-pinebook-pro}/sound/reset-sound.rb
-      '')
+      # TODO: run on boot (?)
+      pinebook-fix-sound
     ];
+
+    systemd.services.pinebook-fix-sound = {
+      script = pinebook-fix-sound;
+      wantedBy = [ "multi-user.target" ];
+    };
 
     # ignore unfortunately placed power key
     # TODO: 3s-press or fn-power for shutdown

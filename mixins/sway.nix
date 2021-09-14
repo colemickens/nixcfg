@@ -12,7 +12,6 @@ let
   bgfile = bg_gruvbox_rainbow;
   background = "${bgfile} fill #185373";
 
-  #swayfonts = ["Iosevka Bold 9"];
   swayfonts = {
     names = [ "Iosevka" "FontAwesome5Free" ];
     style = "Heavy";
@@ -143,14 +142,11 @@ in
           startup = [
             { always = true; command = "${gsettingscmd}"; }
             { always = true; command = "${pkgs.xorg.xrdb}/bin/xrdb -l $HOME/.Xresources"; }
-            { always = true; command = "${pkgs.systemd}/bin/systemd-notify --ready || true"; }
             { always = true; command = "${pkgs.mako}/bin/mako"; }
+            { always = true; command = "${pkgs.systemd}/bin/systemd-notify --ready || true"; }
 
             { always = true;  command = "pkill swayidle"; } # Disable swayidle for a bit
-            #{ always = true;  command = "swayidle -w timeout 600 'swaymsg \"output * dpms off\"' "; } # Disable swayidle for a bit
-            { command = "${idlecmd}"; always = true; }     # Disable swayidle for a bit
-            #{ command = "element-desktop"; }
-            { command = "nwg-panel"; }
+            { always = true; command = "${idlecmd}"; }
           ];
           input = {
             "${in_touchpad}" = {
