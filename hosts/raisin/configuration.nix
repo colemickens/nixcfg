@@ -128,7 +128,8 @@ in
       hostName = hostname;
       firewall.enable = true;
       firewall.allowedTCPPorts = [ 22 ];
-      networkmanager.enable = false;
+      networkmanager.enable = true;
+      wireless.enable = false;
       wireless.iwd.enable = false;
       useNetworkd = false;
       useDHCP = false;
