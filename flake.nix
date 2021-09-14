@@ -213,7 +213,7 @@
         rpifour1  = mkSystem inputs.nixpkgs   "aarch64-linux" "rpifour1";
         rpizero1  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
 
-        #bluephone     = mkSystem fullPkgs_.aarch64-linux "bluephone";
+        bluephone     = mkSystem inputs.nixpkgs "aarch64-linux" "bluephone";
         #demovm      = mkSystem fullPkgs_.x86_64-linux  "demovm";
         #testipfsvm  = mkSystem fullPkgs_.x86_64-linux  "testipfsvm";
       };
