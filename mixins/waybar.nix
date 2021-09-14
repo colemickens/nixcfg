@@ -23,6 +23,7 @@ let
   #       -H "Content-Type: application/json" -X GET \
   #       "''${BUILD_HOST}/api/jobs" > "${jobpath}/data"
   #   ''] ++ suffix ));
+  batteryName = if config.networking.hostName != "pinebook" then "BAT0" else "cw2015-battery";
 in
 {
   config = {
@@ -122,7 +123,7 @@ in
             clock.format = "{:%a %b %d %H:%M}";
             battery = {
               format = "bat {}";
-              bat = "BAT0";
+              bat = "${batteryName}";
             };
           };
         }];
