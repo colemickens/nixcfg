@@ -42,7 +42,7 @@ in
     systemd.services.pinebook-fix-sound = {
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = pinebook-fix-sound;
+        ExecStart = "${pinebook-fix-sound}/bin/pinebook-fix-sound";
       };
       wantedBy = [ "multi-user.target" ];
     };
@@ -64,12 +64,7 @@ in
         #device = "/dev/disk/by-id/mmc-DA4064_0xe0291213-part1";
         fsType = "vfat";
       };
-      # idk, empty? weird, scary, get rid of it
-      # "/firmware" = {
-      #   device = "/dev/disk/by-id/mmc-EB1QT_0x095f55ab-part1";
-      #   fsType = "vfat";
-      #   options = [ "ro" "nofail" ];
-      # };
+      # firmware can't be mounted, tow-boot has a special setup for pbp's rockchip whatever
     };
     swapDevices = [];
 
