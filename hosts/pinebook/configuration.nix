@@ -2,7 +2,7 @@
 let
   hostname = "pinebook";
 
-  pinebook-fix-sound = (pkgs.writeScriptBin "pinebook-fix-sound" ''
+  pinebook-fix-sound = (pkgs.writeShellScriptBin "pinebook-fix-sound" ''
     export NIX_PATH="nixpkgs=${toString inputs.nixpkgs}"
     ${toString inputs.wip-pinebook-pro}/sound/reset-sound.rb
   '');
