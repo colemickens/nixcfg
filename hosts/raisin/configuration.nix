@@ -129,25 +129,25 @@ in
       firewall.enable = true;
       firewall.allowedTCPPorts = [ 22 ];
       networkmanager.enable = false;
-      wireless.iwd.enable = true;
-      useNetworkd = true;
+      wireless.iwd.enable = false;
+      useNetworkd = false;
       useDHCP = false;
 
-      interfaces."wlan0".useDHCP = true;
-      interfaces."w1p1s0".useDHCP = true;
-      interfaces."enp3s0f4u1u3".useDHCP = true;
-      interfaces."enp56s0u1u3".useDHCP = true;
-      interfaces."enp57s0u1u3".useDHCP = true;
-      interfaces."enp3s0f3u1u3".useDHCP = true;
-      interfaces."enp3s0f4u1u2u3".useDHCP = true;
-      interfaces."enp3s0f4u1u2".useDHCP = true;
+      # interfaces."wlan0".useDHCP = true;
+      # interfaces."w1p1s0".useDHCP = true;
+      # interfaces."enp3s0f4u1u3".useDHCP = true;
+      # interfaces."enp56s0u1u3".useDHCP = true;
+      # interfaces."enp57s0u1u3".useDHCP = true;
+      # interfaces."enp3s0f3u1u3".useDHCP = true;
+      # interfaces."enp3s0f4u1u2u3".useDHCP = true;
+      # interfaces."enp3s0f4u1u2".useDHCP = true;
 
-      search = [ "ts.r10e.tech" ];
+      # search = [ "ts.r10e.tech" ];
     };
     services.timesyncd.enable = true;
-    services.resolved.enable = true;
-    services.resolved.domains = [ "ts.r10e.tech" "test22.r10e.tech" ];
-    systemd.network.enable = true;
+    # services.resolved.enable = true;
+    # services.resolved.domains = [ "ts.r10e.tech" "test22.r10e.tech" ];
+    # systemd.network.enable = true;
 
     services.tlp.enable = true;
 
