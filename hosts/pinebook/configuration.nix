@@ -54,11 +54,12 @@ in
         #device = "/dev/disk/by-id/mmc-DA4064_0xe0291213-part1";
         fsType = "vfat";
       };
-      "/firmware" = {
-        device = "/dev/disk/by-id/mmc-EB1QT_0x095f55ab-part1";
-        fsType = "vfat";
-        options = [ "ro" "nofail" ];
-      };
+      # idk, empty? weird, scary, get rid of it
+      # "/firmware" = {
+      #   device = "/dev/disk/by-id/mmc-EB1QT_0x095f55ab-part1";
+      #   fsType = "vfat";
+      #   options = [ "ro" "nofail" ];
+      # };
     };
     swapDevices = [];
 
