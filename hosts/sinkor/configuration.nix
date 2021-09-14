@@ -18,6 +18,9 @@ in
   ];
 
   config = {
+    # TEMP: disable:
+    systemd.enableEmergencyMode = true;
+
     # impermance system-wide
     environment.persistence."/persist" = {
       directories = [
