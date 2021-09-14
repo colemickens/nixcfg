@@ -87,7 +87,7 @@ in
       linux_latest = {
         inheritParentConfig = true;
         configuration = {
-          boot.kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
+          boot.kernelPackages = lib.mkForce pkgs.lib.mkForce pkgs.linuxPackages_latest;
         };
       };
     };
