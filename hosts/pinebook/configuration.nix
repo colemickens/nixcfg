@@ -40,7 +40,10 @@ in
     ];
 
     systemd.services.pinebook-fix-sound = {
-      script = pinebook-fix-sound;
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = pinebook-fix-sound;
+      };
       wantedBy = [ "multi-user.target" ];
     };
 
