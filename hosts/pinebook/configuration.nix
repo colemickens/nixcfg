@@ -8,7 +8,7 @@ let
     ${toString inputs.wip-pinebook-pro}/sound/reset-sound.rb
   '');
 
-  pbpPkgs = (import inputs.nixos-unstable {
+  pbpPkgs = (import "${inputs.nixos-unstable}/default.nix" {
     system = pkgs.system;
     overlays = [ "${inputs.wip-pinebook-pro}/overlay.nix" ];
   });
