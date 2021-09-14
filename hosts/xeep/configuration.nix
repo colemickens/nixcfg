@@ -127,22 +127,12 @@ in
       hostName = hostname;
       firewall.enable = true;
       firewall.allowedTCPPorts = [ 22 ];
-      networkmanager.enable = false;
-      wireless.iwd.enable = true;
-      useNetworkd = true;
-      useDHCP = false;
-
-      interfaces."wlan0".useDHCP = true;
-      interfaces."enp56s0u1u3".useDHCP = true;
-      interfaces."enp57s0u1u3".useDHCP = true;
-      interfaces."enp57s0u1".useDHCP = true;
-
-      search = [ "ts.r10e.tech" ];
+      networkmanager.enable = true;
+      wireless.enable = false;
+      wireless.iwd.enable = false;
+      useDHCP = true;
     };
     services.timesyncd.enable = true;
-    services.resolved.enable = true;
-    services.resolved.domains = [ "ts.r10e.tech" ];
-    systemd.network.enable = true;
 
     nixpkgs.config.allowUnfree = true;
     hardware = {
