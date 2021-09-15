@@ -163,9 +163,9 @@ function remote() {
 }
 
 function tsip() {
-  if "${1}" == "$(hostname)";
+  if [[ "${1}" == "$(hostname)" ]];
   then printf "localhost";
-  else tailscale ip --4 ${1} | head -1;
+  else tailscale ip --4 ${1} | head -z -n1;
   fi
 }
 
