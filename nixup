@@ -189,6 +189,17 @@ function pinesd()    { remote "${a64com}" "images.pinephone_bundle"  "copy"; }
 function x86_64()  { remote "$(ts azdev)"  "bundles.x86_64-linux"   "cachix"; }
 function aarch64() { remote "${a64com}"    "bundles.aarch64-linux"  "cachix"; }
 
+function all() {
+  ./nixup xeep
+  #./nixup porty # tailscale / localhost issue?
+  ./nixup raisin
+  ./nixup jeffhyper
+  ./nixup rpifour1
+  #./nixup pinebook # lol water damage
+  #./nixup bluephone # not quite yet
+  #./nixup pinephone # not quite yet
+}
+
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 
 if [[ ! -z "${cmd:-""}" ]]; then
