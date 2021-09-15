@@ -5,8 +5,8 @@ in
 {
   imports = [
     ./core.nix
-    ./modules/home-assistant
-    ./modules/unifi.nix
+    #./modules/home-assistant
+    #./modules/unifi.nix
 
     ../../mixins/tailscale.nix
   ];
