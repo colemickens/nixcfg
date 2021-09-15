@@ -89,8 +89,7 @@ function update() {
 
   # TODO: maybe some sanity checking here and rollingback here?
   cd "${DIR}"; nix "${nixargs[@]}" flake update --no-registries --commit-lock-file
-  # pre cache the stupid nix-shell
-  nix "${nixargs[@]}" build --no-out-link '.#devShell.x86_64-linux.inputDerivation' &
+  cache-shell
 
   stash
   cd "${DIR}"
@@ -190,6 +189,7 @@ function x86_64()  { remote "$(ts azdev)"  "bundles.x86_64-linux"   "cachix"; }
 function aarch64() { remote "${a64com}"    "bundles.aarch64-linux"  "cachix"; }
 
 function all() {
+  ./nixup
   ./nixup xeep
   #./nixup porty # tailscale / localhost issue?
   ./nixup raisin
