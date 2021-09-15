@@ -83,14 +83,14 @@ in
     documentation.info.enable = false;
     documentation.nixos.enable = false;
 
-    # specialisation = {
-    #   linux_latest = {
-    #     inheritParentConfig = true;
-    #     configuration = {
-    #       boot.kernelPackages = lib.mkForce pkgs.lib.mkForce pkgs.linuxPackages_latest;
-    #     };
-    #   };
-    # };
+    specialisation = {
+      linux_latest = {
+        inheritParentConfig = true;
+        configuration = {
+          boot.kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
+        };
+      };
+    };
 
     boot = {
       # TOW_BOOT + GRUB
@@ -119,7 +119,7 @@ in
       #kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest
       # uh... 5.14 doesn't see the HDD?????
       zfs.enableUnstable = true;
-      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_5_13;
+      kernelPackages = pkgs.linuxPackages_5_13;
 
       initrd.availableKernelModules = [
         "pcie_brcmstb" "bcm_phy_lib" "broadcom" "mdio_bcm_unimac" "genet"
