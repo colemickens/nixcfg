@@ -162,6 +162,7 @@ function remote() {
   printf "${out}"
 }
 
+# TODO: remove after this ships: https://github.com/tailscale/tailscale/issues/2803
 function tsip() {
   if [[ "${1}" == "$(hostname)" ]];
   then printf "localhost";
