@@ -12,6 +12,9 @@ in
 
     ../../mixins/loremipsum-media/rclone-mnt.nix
 
+    ./modules/home-assistant
+    ./modules/unifi.nix
+
     ../../profiles/interactive.nix
     #../../profiles/desktop-sway.nix
     #../../profiles/desktop-sway-unstable.nix
