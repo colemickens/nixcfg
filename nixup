@@ -166,8 +166,8 @@ a64com="aarch64.nixos.community"
 function pinebook()  { remote "colemickens@${a64com}"      "toplevels.pinebook"  "$(tailscale ip --4 pinebook)"; }
 function xeep()      { remote "$(tailscale ip --4 xeep)"   "toplevels.xeep"      "$(tailscale ip --4 xeep)"; }
 function raisin()    { remote "$(tailscale ip --4 raisin)" "toplevels.raisin"    "$(tailscale ip --4 raisin)"; }
-function jeffhyper() { remote "$(tailscale ip --4 raisin)" "toplevels.jeffhyper" "$(tailscale ip --4 jeffhyper)"; }
-function porty()     { remote "$(tailscale ip --4 raisin)" "toplevels.porty"     "$(tailscale ip --4 porty)"; }
+function jeffhyper() { remote "$(tailscale ip --4 porty)"  "toplevels.jeffhyper" "$(tailscale ip --4 jeffhyper)"; }
+function porty()     { remote "$(tailscale ip --4 porty)"  "toplevels.porty"     "$(tailscale ip --4 porty)"; }
 function rpifour1()  { remote "colemickens@${a64com}"      "toplevels.rpifour1"  "$(tailscale ip --4 rpifour1)"; }
 function sinkor()    { remote "colemickens@${a64com}"      "toplevels.sinkor"    "$(tailscale ip --4 sinkor)"; }
 function install_sinkor()    {
@@ -187,9 +187,10 @@ function pinesd()    { remote "${a64com}" "images.pinephone_bundle"  "copy"; }
 function all() {
   ./nixup
   ./nixup xeep
-  #./nixup porty # tailscale / localhost issue?
+  ./nixup porty
   ./nixup raisin
-  ./nixup jeffhyper
+  #./nixup jeffhyper # retired
+  #./nixup sinkor # jfc, who knows, not yet working
   ./nixup rpifour1
   #./nixup pinebook # lol water damage
   #./nixup bluephone # not quite yet
