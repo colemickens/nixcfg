@@ -21,10 +21,12 @@ function e() {
   done
 }
 
-# import_host() {
-#   nix shell github:Mic92/sops-nix#ssh-to-pgp
-#   ssh ${fullhostname} "sudo cat /etc/ssh/ssh_host_rsa_key" | ssh-to-pgp -o keys/${hostname}.pub 2> "keys/${hostname}.fingerprint"
-# }
+import_host() {
+  name="$1"
+  addr="$2"
+  nix shell github:Mic92/sops-nix#ssh-to-pgp --command "bash" \
+    -c "ssh cole@${addr} \"sudo cat /etc/ssh/ssh_host_rsa_key\" | ssh-to-pgp -o keys/${name}.pub 2> \"keys/${name}.fingerprint\""
+}
 
 function import_keys() {
   cd keys
