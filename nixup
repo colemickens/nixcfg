@@ -162,14 +162,21 @@ function remote() {
   printf "${out}"
 }
 
-a64com="aarch64.nixos.community"
-function pinebook()  { remote "colemickens@${a64com}"      "toplevels.pinebook"  "$(tailscale ip --4 pinebook)"; }
-function xeep()      { remote "$(tailscale ip --4 xeep)"   "toplevels.xeep"      "$(tailscale ip --4 xeep)"; }
-function raisin()    { remote "$(tailscale ip --4 raisin)" "toplevels.raisin"    "$(tailscale ip --4 raisin)"; }
-function jeffhyper() { remote "$(tailscale ip --4 porty)"  "toplevels.jeffhyper" "$(tailscale ip --4 jeffhyper)"; }
-function porty()     { remote "$(tailscale ip --4 porty)"  "toplevels.porty"     "$(tailscale ip --4 porty)"; }
-function rpifour1()  { remote "colemickens@${a64com}"      "toplevels.rpifour1"  "$(tailscale ip --4 rpifour1)"; }
-function sinkor()    { remote "colemickens@${a64com}"      "toplevels.sinkor"    "$(tailscale ip --4 sinkor)"; }
+function tsip() {
+  if "${1}" == "$(hostname)";
+  then printf "localhost";
+  else tailscale ip --4 ${1} | head -1;
+  fi
+}
+
+a64com="colemickens@aarch64.nixos.community"
+function pinebook()  { remote "${a64com}"      "toplevels.pinebook"  "$(tsip pinebook)"; }
+function xeep()      { remote "$(tsip xeep)"   "toplevels.xeep"      "$(tsip xeep)"; }
+function raisin()    { remote "$(tsip raisin)" "toplevels.raisin"    "$(tsip raisin)"; }
+function jeffhyper() { remote "$(tsip porty)"  "toplevels.jeffhyper" "$(tsip jeffhyper)"; }
+function porty()     { remote "$(tsip porty)"  "toplevels.porty"     "$(tsip porty)"; }
+function rpifour1()  { remote "${a64com}"      "toplevels.rpifour1"  "$(tsip rpifour1)"; }
+function sinkor()    { remote "${a64com}"      "toplevels.sinkor"    "$(tsip sinkor)"; }
 function install_sinkor()    {
   set -euo pipefail
   stash
@@ -180,8 +187,8 @@ function install_sinkor()    {
   scp "hosts/_new/disk.sh" ${target}:/tmp/disk.sh
   ssh "${target}" /tmp/disk.sh install $out
 }
-function pinephone() { remote "${a64com}" "toplevels.pinephone"      "cole@$(tailscale ip --4 pinephone)"; }
-function bluephone() { remote "${a64com}" "toplevels.bluephone"      "cole@$(tailscale ip --4 bluephone)"; }
+function pinephone() { remote "${a64com}" "toplevels.pinephone"      "cole@$(tsip pinephone)"; }
+function bluephone() { remote "${a64com}" "toplevels.bluephone"      "cole@$(tsip bluephone)"; }
 function pinesd()    { remote "${a64com}" "images.pinephone_bundle"  "copy"; }
 
 function all() {
