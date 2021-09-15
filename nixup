@@ -87,7 +87,10 @@ function update() {
     parallel --jobs $(nproc) --halt soon,fail=1 --tag --progress -- \
       "[[ ! -d "${HOME}/code/{.}" ]] || (git -C '${HOME}/code/{.}' pull --rebase && git -C '${HOME}/code/{.}' push origin HEAD -f)"
 
+  # TODO: maybe some sanity checking here and rollingback here?
   cd "${DIR}"; nix "${nixargs[@]}" flake update --no-registries --commit-lock-file
+  # pre cache the stupid nix-shell
+  nix "${nixargs[@]}" build --no-out-link '.#devShell.x86_64-linux.inputDerivation' &
 
   stash
   cd "${DIR}"
