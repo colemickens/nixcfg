@@ -30,7 +30,7 @@ buildargs=(
 )
 
 srcdirs=(
-  "nixpkgs/cmpkgs"  "home-manager/cmhm"  #"nixpkgs/master"
+  "nixpkgs/cmpkgs"  "home-manager/cmhm"  "nixpkgs/master"
   "nixpkgs-wayland" "flake-firefox-nightly"
   "mobile-nixos"    "sops-nix"        "wip-pinebook-pro"
   "nixos-veloren"   #"nixos-azure"
@@ -163,13 +163,13 @@ function remote() {
 }
 
 a64com="aarch64.nixos.community"
-function pinebook()  { remote "colemickens@${a64com}"           "toplevels.pinebook"  "cole@$(tailscale ip --4 pinebook)"; }
-function xeep()      { remote "cole@$(tailscale ip --4 xeep)"   "toplevels.xeep"      "cole@$(tailscale ip --4 xeep)"; }
-function raisin()    { remote "cole@$(tailscale ip --4 raisin)" "toplevels.raisin"    "cole@$(tailscale ip --4 raisin)"; }
-function jeffhyper() { remote "cole@$(tailscale ip --4 raisin)" "toplevels.jeffhyper" "cole@$(tailscale ip --4 jeffhyper)"; }
-function porty()     { remote "cole@$(tailscale ip --4 raisin)" "toplevels.porty"     "cole@$(tailscale ip --4 porty)"; }
-function rpifour1()  { remote "colemickens@${a64com}"           "toplevels.rpifour1"  "cole@$(tailscale ip --4 rpifour1)"; }
-function sinkor()    { remote "colemickens@${a64com}"           "toplevels.sinkor"    "cole@$(tailscale ip --4 sinkor)"; }
+function pinebook()  { remote "colemickens@${a64com}"      "toplevels.pinebook"  "$(tailscale ip --4 pinebook)"; }
+function xeep()      { remote "$(tailscale ip --4 xeep)"   "toplevels.xeep"      "$(tailscale ip --4 xeep)"; }
+function raisin()    { remote "$(tailscale ip --4 raisin)" "toplevels.raisin"    "$(tailscale ip --4 raisin)"; }
+function jeffhyper() { remote "$(tailscale ip --4 raisin)" "toplevels.jeffhyper" "$(tailscale ip --4 jeffhyper)"; }
+function porty()     { remote "$(tailscale ip --4 raisin)" "toplevels.porty"     "$(tailscale ip --4 porty)"; }
+function rpifour1()  { remote "colemickens@${a64com}"      "toplevels.rpifour1"  "$(tailscale ip --4 rpifour1)"; }
+function sinkor()    { remote "colemickens@${a64com}"      "toplevels.sinkor"    "$(tailscale ip --4 sinkor)"; }
 function install_sinkor()    {
   set -euo pipefail
   stash
@@ -183,9 +183,6 @@ function install_sinkor()    {
 function pinephone() { remote "${a64com}" "toplevels.pinephone"      "cole@$(tailscale ip --4 pinephone)"; }
 function bluephone() { remote "${a64com}" "toplevels.bluephone"      "cole@$(tailscale ip --4 bluephone)"; }
 function pinesd()    { remote "${a64com}" "images.pinephone_bundle"  "copy"; }
-
-function x86_64()  { remote "$(ts azdev)"  "bundles.x86_64-linux"   "cachix"; }
-function aarch64() { remote "${a64com}"    "bundles.aarch64-linux"  "cachix"; }
 
 function all() {
   ./nixup
