@@ -1,0 +1,4 @@
+vacuum journalctl
+systemd-tmpfiles --clean
+
+for coredumps ^

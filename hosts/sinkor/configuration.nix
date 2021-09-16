@@ -41,6 +41,7 @@ in
       "d /persist/home/cole 0750 cole cole - -"
     ];
     home-manager.users.cole = { pkgs, ... }: {
+      systemd.user.startServices = "sd-switch";
       imports = [
         "${inputs.impermanence}/home-manager.nix"
       ];

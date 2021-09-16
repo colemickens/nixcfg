@@ -2,9 +2,25 @@
 
 let 
   useNvidiaWayland = false;
+  nvidiaPackage = config.boot.kernelPackages.nvidiaPackages.stable;
+  eglVendorDir = "${nvidiaPackage}/share/glvnd/egl_vendor.d/";
 in
 {
   config = {
+    environment.etc = {
+      "egl/egl_external_platform.d/nvidia_wayland.json".source 
+        = "${eglVendorDir}/nvidia_wayland.json";
+      "egl/egl_external_platform.d/nvidia.json".source 
+        = "${eglVendorDir}/nvidia.json";
+
+      # libglvnd needs it too?
+      # glvnd/egl_vendor.d/10_nvidia.json ?
+      # "egl/egl_external_platform.d/nvidia_wayland.json".source 
+      #   = "${eglVendorDir}/nvidia_wayland.json";
+      # "egl/egl_external_platform.d/nvidia.json".source 
+      #   = "${eglVendorDir}/nvidia.json";
+    };
+
     boot.blacklistedKernelModules = [ "nouveau" ];
 
     boot.initrd.kernelModules = [
@@ -15,7 +31,7 @@ in
     ];
 
     hardware.nvidia.modesetting.enable = true;
-    hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
+    hardware.nvidia.package = nvidiaPackage;
     hardware.nvidia.powerManagement.enable = false;
     
     services.xserver = {
