@@ -10,7 +10,6 @@
     ../../modules/loginctl-linger.nix
 
     ../../mixins/nvidia.nix
-    ../../profiles/desktop-gnome.nix
     ../../profiles/gaming.nix
 
 
