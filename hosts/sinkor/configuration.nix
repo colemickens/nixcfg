@@ -78,6 +78,7 @@ in
 
     nix.nixPath = [];
     nix.gc.automatic = true;
+    nix.gc.randomizedDelaySec = 1000; # just don't run right at boot (impermanence)
 
     documentation.enable = false;
     documentation.doc.enable = false;
