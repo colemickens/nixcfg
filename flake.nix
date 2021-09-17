@@ -264,7 +264,13 @@
                (filterHosts_ pkgs_.nixpkgs.${system} inputs.self.nixosConfigurations))
         ));
 
-      images = {
+      images = let
+        tow-boot = import inputs.tow-boot { pkgs = inputs.nixpkgs; };
+      in {
+        rpifour1_towboot = tow-boot.raspberryPi4.sharedImage;
+        sinkor_towboot = tow-boot.raspberryPi4.sharedImage;
+        pinebook_towboot = tow-boot.pinebook.sharedImage;
+
         # azure vhd for azdev machine (a custom Azure image using `nixos-azure` module)
         azdev = inputs.self.nixosConfigurations.azdev.config.system.build.azureImage;
         azmail = inputs.self.nixosConfigurations.azmail.config.system.build.azureImage;
