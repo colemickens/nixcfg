@@ -130,11 +130,11 @@
         pkgs_.nixpkgs.${system}.mkShell {
           name = "nixcfg-devshell";
           nativeBuildInputs = []
-          ++ ([ inputs.nix.defaultPackage.${system} ]) # TODO: drop nix input?
+          #++ ([ inputs.nix.defaultPackage.${system} ]) # TODO: drop nix input?
           ++ (with pkgs_.stable.${system}; [ cachix ])
           # ++ (with inputs.niche.packages.${system}; [ niche ])
           ++ (with pkgs_.nixpkgs.${system}; [
-            #nixUnstable
+            nixUnstable
             #inputs.nickel.packages.${system}.build
             bash cacert curl git jq parallel mercurial
             nettools openssh ripgrep rsync

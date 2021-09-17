@@ -17,6 +17,16 @@
           ];
         };
       };
+
+      plasma = {
+        inheritParentConfig = false;
+        configuration = {
+          imports = [
+            ./core.nix
+            ../../profiles/desktop-plasma.nix
+          ];
+        };
+      };
     };
   };
 }
