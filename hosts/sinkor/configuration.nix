@@ -127,8 +127,6 @@ in
         "vc4" "bcm2835_dma" "i2c_bcm2835"
         "xhci_pci" "nvme" "usbhid" "usb_storage" "sd_mod"
         "uas" # necessary for my UAS-enabled NVME-USB adapter
-
-        "xchacha20" "adiantum" "nhpoly1305"
       ];
       kernelModules = config.boot.initrd.availableKernelModules;
 
@@ -161,17 +159,20 @@ in
       zfs rollback -r sinkortank/root@blank
     '';
 
-    boot.initrd.luks.devices = {
-      "sinkor-zfs" = {
-        name = "sinkor-zfs";
-        device = "/dev/disk/by-id/usb-WD_My_Passport_260F_575837324441305052353944-0:0";
-        preLVM = true;
-        
-        #keyFileSize = 4096;
-        keyFile = "/lukskey";
-        header = "/dev/disk/by-id/mmc-SH64G_0x548598bb-part3";
-        fallbackToPassword = true;
+    boot.initrd.luks = {
+      devices = {
+        "sinkor-zfs" = {
+          name = "sinkor-zfs";
+          device = "/dev/disk/by-id/usb-WD_My_Passport_260F_575837324441305052353944-0:0";
+          preLVM = true;
+          
+          #keyFileSize = 4096;
+          keyFile = "/lukskey";
+          header = "/dev/disk/by-id/mmc-SH64G_0x548598bb-part3";
+          fallbackToPassword = true;
+        };
       };
+      cryptoModules = [ "xchacha12" "adiantum" "nhpoly1305" ];
     };
 
     boot.initrd.secrets = {
