@@ -85,14 +85,14 @@ in
     documentation.info.enable = false;
     documentation.nixos.enable = false;
 
-    specialisation = {
-      linux_latest = {
-        inheritParentConfig = true;
-        configuration = {
-          boot.kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
-        };
-      };
-    };
+    # specialisation = {
+    #   linux_latest = {
+    #     inheritParentConfig = true;
+    #     configuration = {
+    #       boot.kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
+    #     };
+    #   };
+    # };
 
     boot = {
       # TOW_BOOT + GRUB
@@ -118,15 +118,13 @@ in
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      #kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest
-      # uh... 5.14 doesn't see the HDD?????
       zfs.enableUnstable = true;
-      kernelPackages = pkgs.linuxPackages_5_13;
+      kernelPackages = pkgs.linuxPackages_5_14;
 
       initrd.availableKernelModules = [
         "pcie_brcmstb" "bcm_phy_lib" "broadcom" "mdio_bcm_unimac" "genet"
         "vc4" "bcm2835_dma" "i2c_bcm2835"
-        "reset_raspberrypi"
+        "reset_raspberrypi" # needed for USB reset, so that USB works in kernel 5.14
         "xhci_pci" "nvme" "usbhid" "usb_storage" "sd_mod"
         "uas" # necessary for my UAS-enabled NVME-USB adapter
 
