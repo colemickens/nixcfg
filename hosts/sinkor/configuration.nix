@@ -163,7 +163,7 @@ in
       devices = {
         "sinkor-zfs" = {
           name = "sinkor-zfs";
-          device = "/dev/disk/by-id/usb-WD_My_Passport_260F_575837324441305052353944-0:0";
+          device = "/dev/disk/by-id/usb-WD_Elements_25A3_5758333244353146395A5546-0:0";
           preLVM = true;
           
           #keyFileSize = 4096;
