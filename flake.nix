@@ -142,8 +142,6 @@
             sops
             #awsweeper packet-cli
             haskellPackages.dhall-json
-
-            zellij # for devshell multiplexing
           ]);
         }
       );
