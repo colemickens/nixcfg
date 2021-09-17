@@ -135,6 +135,7 @@ in
       wireless.iwd.enable = false;
     };
     services.timesyncd.enable = true;
+    time.timeZone = "America/Los_Angeles";
 
     nixpkgs.config.allowUnfree = true;
     hardware = {
