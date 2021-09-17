@@ -174,6 +174,8 @@ in
           fallbackToPassword = true;
         };
       };
+      # uhhh, this seemed to have fucked things up
+      # instead, add to kernelModules above (and tbf we did add more there, but I had a minimal set working earlier...?)
       #cryptoModules = [ "xchacha12" "adiantum" "nhpoly1305" ];
     };
 
