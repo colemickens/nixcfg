@@ -7,6 +7,8 @@
 # https://github.com/freebsd/freebsd-ports/blob/6f3fa82c71389a391d0be858721c65084581a1da/x11/nvidia-driver/Makefile#L211-L214
 # https://www.google.com/search?q=patch+libegl_nvidia.so+egl_external_platforms.d&client=firefox-b-1-d&ei=UEtDYYylDcbi-gS3tpiYCA&oq=patch+libegl_nvidia.so+egl_external_platforms.d&gs_lcp=Cgdnd3Mtd2l6EAM6BwghEAoQoAE6BQghEKsCOgUIIRCgAUoECEEYAVCpCViWOmCbO2gFcAB4AIABjQGIAY8VkgEEMjkuNJgBAKABAcABAQ&sclient=gws-wiz&ved=0ahUKEwiMjcOf0YPzAhVGsZ4KHTcbBoMQ4dUDCA0&uact=5
 
+# https://github.com/NixOS/nixpkgs/issues/75131#issuecomment-904671763
+
 # that way the config below would likely just not be necessary
 # if we can point it to the /run/opengl-drivers-32(??)/share/egl
 # properly...
