@@ -112,7 +112,7 @@ function install() {
   sleep 3
   sudo nix-store -r --store /mnt "${buildargs[@]}" "${1}"
   #sudo nixos-install --root /mnt --system "${1}" --no-root-passwd "${buildargs[@]}"
-  sudo nixos-enter -c "$(printf "%s " nixos-install --root /mnt --system "${1}" --no-root-passwd "${buildargs[@]}")"
+  sudo nixos-enter -c "$(printf '\"%s\" ' nixos-install --root /mnt --system "${1}" --no-root-passwd "${buildargs[@]}")"
 
   echo "*******************************"
   echo "fix up luks:"
