@@ -36,8 +36,8 @@ jobs:
     strategy:
       matrix:
         jobs:
-        - { "branch": "auto-update2",  "target": "toplevels.porty",   "runson": "ubuntu-latest" }
-        - { "branch": "auto-update2",  "target": "toplevels.raisin",  "runson": "ubuntu-latest" }
+        #- { "branch": "auto-update2",  "target": "toplevels.porty",   "runson": "ubuntu-latest" }
+        #- { "branch": "auto-update2",  "target": "toplevels.raisin",  "runson": "ubuntu-latest" }
         - { "branch": "auto-update2",  "target": "toplevels.xeep",    "runson": "ubuntu-latest" }
         # - { "branch": "auto-update",  "target": "toplevels.raisin",     "runson": "ubuntu-latest" }
         # - { "branch": "auto-update",  "target": "toplevels.rpizero1",   "runson": "ubuntu-latest" }
@@ -109,6 +109,6 @@ jobs:
         cat << EOF | .github/exec
           git log -p HEAD^..HEAD
           ./nixup nbu_check_req ||
-            nix-instantiate --eval -A toplevels.jeffhyper.outPath
+            nix-instantiate --eval -A toplevels.xeep.outPath
           git push origin HEAD -f
         EOF || true
