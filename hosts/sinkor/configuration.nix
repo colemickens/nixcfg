@@ -78,7 +78,7 @@ in
 
     nix.nixPath = [];
     nix.gc.automatic = true;
-    nix.gc.randomizedDelaySec = 1000; # just don't run right at boot (impermanence)
+    nix.gc.randomizedDelaySec = "600"; # just don't run right at boot (impermanence)
 
     documentation.enable = false;
     documentation.doc.enable = false;
@@ -176,9 +176,6 @@ in
           fallbackToPassword = true;
         };
       };
-      # uhhh, this seemed to have fucked things up
-      # instead, add to kernelModules above (and tbf we did add more there, but I had a minimal set working earlier...?)
-      #cryptoModules = [ "xchacha12" "adiantum" "nhpoly1305" ];
     };
 
     boot.initrd.secrets = {
