@@ -16,16 +16,16 @@
 
     nixpkgs.overlays = [
       (final: prev: {
-        # vscodium = (prev.runCommandNoCC "codium"
-        #   { buildInputs = with pkgs; [ makeWrapper ]; }
-        #   ''
-        #     makeWrapper ${prev.vscodium}/bin/codium $out/bin/codium \
-        #       --add-flags "--enable-features=UseOzonePlatform" \
-        #       --add-flags "--ozone-platform=wayland"
+        vscodium = (prev.runCommandNoCC "codium"
+          { buildInputs = with pkgs; [ makeWrapper ]; }
+          ''
+            makeWrapper ${prev.vscodium}/bin/codium $out/bin/codium \
+              --add-flags "--enable-features=UseOzonePlatform" \
+              --add-flags "--ozone-platform=wayland"
 
-        #     ln -sf ${prev.vscodium}/share $out/share
-        #   ''
-        #   );
+            ln -sf ${prev.vscodium}/share $out/share
+          ''
+          );
 
         # element-desktop = (prev.runCommandNoCC "element"
         #     { buildInputs = with prev; [ makeWrapper ]; }

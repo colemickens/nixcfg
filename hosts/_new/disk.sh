@@ -7,12 +7,14 @@ POOL="sinkortank"
 LUKSLABEL="luksroot"
 NIXOSLABEL="nixosroot"
 DEVMAPPER_NAME="${NIXOSLABEL}"
-BOOTTARGET="/dev/disk/by-id/mmc-SH64G_0x53d5953e-part2"
+BOOTTARGET="/dev/disk/by-id/mmc-SH64G_0x548598bb-part2"
 BOOTLABEL="SINKORBOOT"
 SWAPLABEL="swap"
 WINLABEL="windows"
-DISK="/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S4J4NG0M603073J"
-LUKSTARGET="/dev/disk/by-id/usb-WD_My_Passport_260F_575837324441305052353944-0:0"
+DISK="/dev/disk/by-id/usb-WD_Elements_25A3_5758333244353146395A5546-0:0"
+LUKSTARGET="/dev/disk/by-id/usb-WD_Elements_25A3_5758333244353146395A5546-0:0"
+
+DETACHED_LUKS_HEADER="/dev/disk/by-id/mmc-SH64G_0x548598bb-part3"
 
 TMPLUKSKEYFILE="/tmp/lukspw"; echo -n "test" > "${TMPLUKSKEYFILE}"
 
@@ -24,6 +26,8 @@ buildargs=(
 )
 
 function disk() {
+  echo -n "test" > "${TMPLUKSKEYFILE}"
+
   sudo umount "/mnt/boot" || true
   sudo umount "/mnt/persist" || true
   sudo umount "/mnt/nix" || true
@@ -31,22 +35,32 @@ function disk() {
   sudo zpool destroy -f "${POOL}" || true
   sudo cryptsetup luksClose "${DEVMAPPER_NAME}" || true
 
-  sudo wipefs -a "${DISK}"
-  sudo dd if=/dev/zero of="${DISK}" bs=512 count=10
+  ## DEVICE SPECICIC
+  #mmcblk1p2 = /boot
+  #mmcblk1p3 = luks2 header
+  ###################
 
-  sudo parted --script "${DISK}" \
-    mklabel gpt \
-    mkpart "${BOOTLABEL}" fat32      1MiB      1GiB \
-    set 1 esp on \
-    mkpart "${LUKSLABEL}" ext4       1GiB    1025GiB \
-    mkpart "${SWAPLABEL}" linux-swap 1025GiB 1041GiB \
-    mkpart "${WINLABEL}"             1041GiB   100%
+  # sudo wipefs -a "${DISK}"
+  # sudo dd if=/dev/zero of="${DISK}" bs=512 count=10
 
-  sudo udevadm settle
+  # sudo parted --script "${DISK}" \
+  #   mklabel gpt \
+  #   mkpart "${BOOTLABEL}" fat32      1MiB      1GiB \
+  #   set 1 esp on \
+  #   mkpart "${LUKSLABEL}" ext4       1GiB    1025GiB \
+  #   mkpart "${SWAPLABEL}" linux-swap 1025GiB 1041GiB \
+  #   mkpart "${WINLABEL}"             1041GiB   100%
+
+  # sudo udevadm settle
 
   # LUKS
-  sudo cryptsetup luksFormat --batch-mode "${LUKSTARGET}" "${TMPLUKSKEYFILE}"
-  sudo cryptsetup luksOpen   --key-file "${TMPLUKSKEYFILE}" "${LUKSTARGET}" "${DEVMAPPER_NAME}"
+  # sudo cryptsetup luksFormat --batch-mode "${LUKSTARGET}" "${TMPLUKSKEYFILE}"
+  # sudo cryptsetup luksOpen   --key-file "${TMPLUKSKEYFILE}" "${LUKSTARGET}" "${DEVMAPPER_NAME}"
+  sudo cryptsetup -v --type luks2 --cipher xchacha12,aes-adiantum-plain64 \
+      --header "${DETACHED_LUKS_HEADER}" \
+      --hash sha512 --iter-time 5000 --use-urandom \
+      --batch-mode luksFormat --key-size 256 --sector-size 4096 "${LUKSTARGET}" "${TMPLUKSKEYFILE}"
+  sudo cryptsetup luksOpen --header "${DETACHED_LUKS_HEADER}" --key-file "${TMPLUKSKEYFILE}" "${LUKSTARGET}" "${DEVMAPPER_NAME}"
 
   # ROOT / zfs
   sudo mkdir -p "/mnt"
@@ -62,7 +76,6 @@ function disk() {
 
 function install() {
   set -x
-  rev="${1}"
   echo -n "test" > "${TMPLUKSKEYFILE}"
 
   # reset mounts
@@ -90,7 +103,7 @@ function install() {
 
   # BOOT
   sudo mkdir -p /mnt/boot
-  sudo mkfs.vfat -n ${BOOTLABEL} ${BOOTTARGET}
+  sudo mkfs.fat -F32 -n ${BOOTLABEL} ${BOOTTARGET}
   sudo mount "${BOOTTARGET}" /mnt/boot
 
   echo "*******************************"
