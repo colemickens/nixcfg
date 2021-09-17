@@ -169,6 +169,7 @@ in
         
         #keyFileSize = 4096;
         keyFile = "/lukskey";
+        header = "/dev/disk/by-id/mmc-SH64G_0x548598bb-part3";
         fallbackToPassword = true;
       };
     };
@@ -180,13 +181,13 @@ in
     fileSystems = {
       # on the tow-boot SD card
       "/boot" = {
-        device = "/dev/disk/by-id/mmc-SH64G_0x53d5953e-part2";
+        device = "/dev/disk/by-id/mmc-SH64G_0x548598bb-part2";
         fsType = "vfat";
         options = [ "nofail" ];
       };
       # tow-boot firmware
       "/firmware" = {
-        device = "/dev/disk/by-id/mmc-SH64G_0x53d5953e-part1";
+        device = "/dev/disk/by-id/mmc-SH64G_0x548598bb-part1";
         fsType = "vfat";
         options = [ "nofail" "ro" "nobootwait" ];
       };

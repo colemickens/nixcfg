@@ -87,7 +87,8 @@ function install() {
   sudo cryptsetup luksClose "${DEVMAPPER_NAME}" || true
 
   # start
-  sudo cryptsetup luksOpen   --key-file "${TMPLUKSKEYFILE}" "${LUKSTARGET}" "${DEVMAPPER_NAME}"
+  #sudo cryptsetup luksOpen   --key-file "${TMPLUKSKEYFILE}" "${LUKSTARGET}" "${DEVMAPPER_NAME}"
+  sudo cryptsetup luksOpen --header "${DETACHED_LUKS_HEADER}" --key-file "${TMPLUKSKEYFILE}" "${LUKSTARGET}" "${DEVMAPPER_NAME}"
   #sudo cryptsetup luksOpen "${LUKSTARGET}" "${DEVMAPPER_NAME}"
   
   sudo zpool import -f "${POOL}"
