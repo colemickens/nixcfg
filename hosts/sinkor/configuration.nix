@@ -128,7 +128,7 @@ in
         "xhci_pci" "nvme" "usbhid" "usb_storage" "sd_mod"
         "uas" # necessary for my UAS-enabled NVME-USB adapter
 
-        "xchacha12" "adiantum" "nhpoly1305" "libpoly1305" "libchacha" "chacha_arm"
+        "xchacha12" "adiantum" "nhpoly1305" "libpoly1305" "libchacha"
       ];
       kernelModules = config.boot.initrd.availableKernelModules;
 
