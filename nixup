@@ -44,10 +44,16 @@ function sanitize_name() {
   name="${name//$'.'/$'_'}"
   printf "%s" "${name}"
 }
+function ci_nb_cache() {
+  out="/tmp/$(sanitize_name "${1}")"
+  rm -rf "${out}" && mkdir -p "${out}"
+  nix-build "${nixargs[@]}" "${buildargs[@]}" "--out-link" "${out}/result" -A "${1}"
+  readlink -f "${out}"/result* | cachix push colemickens
+}
 function ci_nbu() {
   out="/tmp/$(sanitize_name "${1}")"
   rm -rf "${out}" && mkdir -p "${out}"
-  nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "--out-link" "${out}/result")" -A "${1}" -v "${buildargs[@]}" "--out-link" "${out}/result"
+  nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "--out-link" "${out}/result")"
 }
 function ci_cache() {
   out="/tmp/$(sanitize_name "${1}")"
@@ -101,7 +107,7 @@ function update-pkgs() {
 }
 function cache-shell () {
   outsh="$(mktemp -d)/result"
-  nix build --out-link "${outsh}" ".#devShell.x86_64-linux.inputDerivation"
+  nix build "${nixargs[@]}" "${buildargs[@]}" --out-link "${outsh}" ".#devShell.x86_64-linux.inputDerivation"
   readlink -f "${outsh}" | cachix push colemickens
 }
 function stash() {

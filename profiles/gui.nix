@@ -102,6 +102,8 @@ in
         gnome3.file-roller
         gnome3.gnome-tweaks
 
+        easyeffects
+
         # browsers
         _someChromium
         _someFirefox
