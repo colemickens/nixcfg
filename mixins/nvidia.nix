@@ -53,8 +53,8 @@ in
 
   config = {
     environment.etc = {
-      "egl/egl_external_platform.d/10_nvidia_wayland.json" = nvidiaWaylandJson;
-      "glvnd/egl_vendor.d/10_nvidia.json" = nvidiaJson;
+      # "egl/egl_external_platform.d/10_nvidia_wayland.json" = nvidiaWaylandJson;
+      # "glvnd/egl_vendor.d/10_nvidia.json" = nvidiaJson;
     };
 
     boot.blacklistedKernelModules = [ "nouveau" ];

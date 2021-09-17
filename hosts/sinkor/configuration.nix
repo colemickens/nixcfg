@@ -103,7 +103,7 @@ in
         efiSupport = true;
         efiInstallAsRemovable = true;
         device = "nodev";
-        configurationLimit = 5;
+        configurationLimit = 20;
       };
       kernelParams = [ "console=ttyS0,115200n8" "console=tty1" ]; # some msgs come through? (errors, but not the stage1 messages, etc)
       # console doesn't work once linux starts booting?

@@ -12,8 +12,8 @@
         inheritParentConfig = false;
         configuration = {
           imports = [
-            ../../profiles/desktop-sway-unstable-egl.nix
             ./core.nix
+            ../../profiles/desktop-sway-unstable-egl.nix
           ];
         };
       };
