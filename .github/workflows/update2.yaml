@@ -104,6 +104,10 @@ jobs:
     - name: "publish"
       run: |
         cat << EOF | .github/exec
+          set -x
+          git log -n 5 --oneline origin/main
+          git log -n 5 --oneline origin/auto-update2
+          git log -n 5 --oneline origin/auto-update2-ready
           git checkout -b auto-update2-ready
           git reset --hard origin/auto-update2
           git rebase origin/main

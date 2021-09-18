@@ -40,9 +40,9 @@ let
       systemctl --user restart gpg-agent-ssh.socket
       export GPG_TTY=$(tty)
       gpg-connect-agent updatestartuptty /bye
-      sleep 1
+      sleep 0.1
       sudo systemctl start pcscd.service
-      sleep 1
+      sleep 0.1
       # check if key is known
       KEYID="0x9758078DE5308308"
       if ! gpg --list-keys $KEYID | grep $KEYID ; then
