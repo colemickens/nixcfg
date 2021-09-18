@@ -112,9 +112,6 @@ jobs:
           git rebase origin/main
         EOF
         cat << EOF | .github/exec
-          git log -p HEAD^..HEAD
-          git log -p HEAD^..HEAD
-          ./nixup nbu_check_req ||
-            nix-instantiate --eval -A toplevels.xeep.outPath
+          ./nixup ci_check
           git push origin HEAD -f
         EOF || true
