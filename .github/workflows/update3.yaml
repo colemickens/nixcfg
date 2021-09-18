@@ -37,6 +37,7 @@ jobs:
       # run: .github/exec ./nixup ci_nb_cache_all
       run: .github/exec ./nixup ci_nb_cache_x86_64
     - name: "publish"
+      env: { "CACHIX_SIGNING_KEY": "${{ secrets.cachix_key_colemickens }}" }
       run: |
         cat << EOF | .github/exec
           set -x
@@ -49,4 +50,4 @@ jobs:
         cat << EOF | .github/exec
           ./nixup ci_check
           git push origin HEAD -f
-        EOF || true
+        EOF
