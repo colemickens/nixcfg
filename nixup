@@ -151,7 +151,8 @@ function stash() {
   __ "stashing nixcfg"
   cd "${DIR}";
   git add -A .
-  (git commit -m stash && git pull --rebase) || true
+  git commit -m stash
+  git pull --rebase
 }
 
 # this includes the actual `cachix push` command, just send it a path
@@ -254,13 +255,8 @@ if [[ ! -z "${cmd:-""}" ]]; then
   "${cmd}" "${@}"
 else
   stash
-  update
-  update-pkgs
-  git rebase -i origin/auto-update-ready || true
-  out="/tmp/${RANDOM}"
-  nix-build -A "toplevels.$(hostname)" --out-link "${out}"
+  git rebase -i origin/auto-update3-ready || true
+  sudo nixos-rebuild switch --flake ~/code/nixcfg
   readlink -f /run/current-system | cachix push colemickens
-  cache-shell
-  sudo nix-env --set --profile "/nix/var/nix/profiles/system" "${out}"
-  sudo "${out}/bin/switch-to-configuration" switch
+  git push
 fi
