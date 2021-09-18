@@ -71,6 +71,7 @@ function ci_nb_cache() {
   fi
 
   nix-build "${nixargs[@]}" "${buildargs[@]}" "--out-link" "${out}/result" "${@}"
+  ls -al "${out}"
   readlink -f "${out}"/result* | cachix push colemickens
 }
 function ci_nb_cache_x86_64() { ci_nb_cache "${ci_x86_64_targets[@]}"; }
