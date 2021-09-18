@@ -86,6 +86,7 @@ in
         "rtsx_pci_sdmmc" # sdcard
         "intel_agp" "i915" # intel integrated graphics
         "usbnet" "r8152" # usb ethernet adapter
+        "msr"
       ];
       kernelModules = config.boot.initrd.availableKernelModules;
       kernelParams = [
