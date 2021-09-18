@@ -48,7 +48,8 @@ in
       home.packages = with pkgs; [
         colePackages.customCommands
 
-        inputs.stable.legacyPackages.${pkgs.system}.cachix
+        #inputs.stable.legacyPackages.${pkgs.system}.cachix
+        cachix
 
         #nixops
         screen minicom picocom
