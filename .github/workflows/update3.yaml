@@ -1,0 +1,52 @@
+name: "Update2"
+on:
+  push:
+#  schedule:
+#    - cron: '*/10 * * * *'
+
+# TODO: use a run-specific branch and a cleanup job?
+
+concurrency: update3
+jobs:
+  # TODO: add a job that spins up machines here
+  # and adds an easy way for them to be reached
+  # so that we basically get a mini-pool of builders
+  "update":
+    runs-on: ubuntu-latest
+    concurrency: update3-${{matrix.jobs.branch}}-${{matrix.jobs.target}}
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: main
+    - uses: cachix/install-nix-action@v14
+    - name: "init"
+      run: .github/exec __init
+    - name: "update"
+      env: { "CACHIX_SIGNING_KEY": "${{ secrets.cachix_key_colemickens }}" }
+      run: |
+        export CI_JOB_ID="${GITHUB_RUN_ID}_${GITHUB_RUN_NUMBER}"
+        cat << EOF | .github/exec
+          git checkout -b auto-update3
+          git reset --hard main
+          ./nixup update
+          ./nixup update-pkgs
+          git push origin HEAD -f
+        EOF
+    - name: build-n-cache
+      env: { "CACHIX_SIGNING_KEY": "${{ secrets.cachix_key_colemickens }}" }
+      # run: .github/exec ./nixup ci_nb_cache_all
+      run: .github/exec ./nixup ci_nb_cache_x86_64
+    - name: "publish"
+      run: |
+        cat << EOF | .github/exec
+          set -x
+          git log -n 5 --oneline origin/main
+          git log -n 5 --oneline origin/auto-update3
+          git checkout -b auto-update3-ready
+          git reset --hard origin/auto-update3
+          git rebase origin/main
+        EOF
+        cat << EOF | .github/exec
+          ./nixup ci_check
+          git push origin HEAD -f
+        EOF || true

@@ -1,0 +1,117 @@
+name: "Update2"
+on:
+  push:
+#  schedule:
+#    - cron: '*/10 * * * *'
+
+# TODO: use a run-specific branch and a cleanup job?
+
+concurrency: update2
+jobs:
+  "update":
+    runs-on: ubuntu-latest
+    concurrency: update2-${{matrix.jobs.branch}}-${{matrix.jobs.target}}
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: main
+    - uses: cachix/install-nix-action@v14
+    - name: "init"
+      run: .github/exec __init
+    - name: "update"
+      env: { "CACHIX_SIGNING_KEY": "${{ secrets.cachix_key_colemickens }}" }
+      run: |
+        export CI_JOB_ID="${GITHUB_RUN_ID}_${GITHUB_RUN_NUMBER}"
+        cat << EOF | .github/exec
+          git checkout -b auto-update2
+          git reset --hard main
+          ./nixup update
+          ./nixup update-pkgs
+          git push origin HEAD -f
+        EOF
+
+  "build":
+    needs: "update"
+    runs-on:
+    - ${{matrix.jobs.runson}}
+    concurrency: build2-${{matrix.jobs.branch}}-${{matrix.jobs.target}}
+    strategy:
+      matrix:
+        jobs:
+        #- { "branch": "auto-update2",  "target": "toplevels.porty",   "runson": "ubuntu-latest" }
+        #- { "branch": "auto-update2",  "target": "toplevels.raisin",  "runson": "ubuntu-latest" }
+        - { "branch": "auto-update2",  "target": "toplevels.xeep",    "runson": "ubuntu-latest" }
+        # - { "branch": "auto-update",  "target": "toplevels.raisin",     "runson": "ubuntu-latest" }
+        # - { "branch": "auto-update",  "target": "toplevels.rpizero1",   "runson": "ubuntu-latest" }
+        # - { "branch": "auto-update",  "target": "toplevels.xeep",       "runson": "ubuntu-latest" }
+        #- { "branch": "main",         "target": "bundles.x86_64-linux", "runson": "self-hosted" }
+        #- { "branch": "auto-update",  "target": "bundles.x86_64-linux", "runson": "self-hosted" }
+    steps:
+    # - name: Maximize build space
+    #   uses: easimon/maximize-build-space@master
+    #   with:
+    #     root-reserve-mb: 512
+    #     swap-size-mb: 1024
+    #     remove-dotnet: 'true'
+    - uses: actions/checkout@v2
+      with:
+        ref: auto-update2
+    - uses: cachix/install-nix-action@v14
+      with:
+        install_url: 'https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.4pre20210823_af94b54/install'
+        #install_url: "https://nixos-nix-install-tests.cachix.org/serve/dznj18ywp62vghk98m5vclfqmszjnbph/install"
+        #install_options: "--tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve"
+        extra_nix_config: |
+          experimental-features = nix-command flakes ca-references
+    - name: "init"
+      run: .github/exec __init
+    - name: build-n-cache
+      env: { "CACHIX_SIGNING_KEY": "${{ secrets.cachix_key_colemickens }}" }
+      run: .github/exec ./nixup ci_nb_cache
+    # - name: cache
+    #   env: { "CACHIX_SIGNING_KEY": "${{ secrets.cachix_key_colemickens }}" }
+    #   run: .github/exec ./nixup ci_cache "${{ matrix.jobs.target }}"
+    # - uses: actions/upload-artifact@v2
+    #   with:
+    #     name: path-info
+    #     path: /tmp/toplevels_jeffhyper-path-info.json
+    # - uses: actions/upload-artifact@v2
+    #   with:
+    #     name: paths
+    #     path: /tmp/toplevels_jeffhyper-paths
+
+  "publish":
+    needs: "build"
+    runs-on: ubuntu-latest
+    # note we must do this first
+    # if we update "auto-update" first,
+    # then we ALWAYS have the new git rev to build (for some build output product, not sure which)
+
+    # also important: try to rebase auto-update on master
+    # if we edit nixup on master and then this runs, it will
+    # end up using the old nixup from the "old" auto-update branch
+
+    # also important that we allow this skip to be stepped so that
+    # 'auto-update' can always have a chance to properly
+    # re-update from where origin/main happens to have gotten to
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: auto-update
+    - uses: cachix/install-nix-action@v14
+    - name: "init"
+      run: .github/exec __init
+    - name: "publish"
+      run: |
+        cat << EOF | .github/exec
+          set -x
+          git log -n 5 --oneline origin/main
+          git log -n 5 --oneline origin/auto-update2
+          git checkout -b auto-update2-ready
+          git reset --hard origin/auto-update2
+          git rebase origin/main
+        EOF
+        cat << EOF | .github/exec
+          ./nixup ci_check
+          git push origin HEAD -f
+        EOF || true
