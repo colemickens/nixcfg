@@ -60,6 +60,14 @@ function sanitize_name() {
 function ci_nb_cache() {
   out="/tmp/$(sanitize_name "${1}")"
   rm -rf "${out}" && mkdir -p "${out}"
+  
+  if nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0" --no-link)" \
+    "${ci_x86_64_targets[@]}" \
+    "${buildargs[@]}"; then
+    echo "******** nbu worked, exitting early"
+    return 0
+  fi
+
   nix-build "${nixargs[@]}" "${buildargs[@]}" "--out-link" "${out}/result" "${@}"
   readlink -f "${out}"/result* | cachix push colemickens
 }
