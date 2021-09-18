@@ -21,6 +21,19 @@ else
 fi
 set -x
 
+ci_x86_64_targets=(
+  "-A" "toplevels.xeep"
+  "-A" "toplevels.raisin"
+  "-A" "toplevels.porty"
+)
+ci_aarch64_targets=(
+  "-A" "toplevels.pinebook"
+  "-A" "toplevels.rpifour1"
+  "-A" "toplevels.sinkor"
+  # "-A" "toplevels.bluephone"
+  # "-A" "toplevels.pinephone"
+)
+
 nixargs=(--experimental-features "nix-command flakes") #ca-references ca-derivations recursive-nix")
 buildargs=(
   --option 'extra-substituters' 'https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://arm.cachix.org https://thefloweringash-armv7.cachix.org'
@@ -47,9 +60,12 @@ function sanitize_name() {
 function ci_nb_cache() {
   out="/tmp/$(sanitize_name "${1}")"
   rm -rf "${out}" && mkdir -p "${out}"
-  nix-build "${nixargs[@]}" "${buildargs[@]}" "--out-link" "${out}/result" -A "${1}"
+  nix-build "${nixargs[@]}" "${buildargs[@]}" "--out-link" "${out}/result" "${@}"
   readlink -f "${out}"/result* | cachix push colemickens
 }
+function ci_nb_cache_x86_64() { ci_nb_cache "${ci_x86_64_targets[@]}"; }
+function ci_nb_cache_aarch64() { ci_nb_cache "${ci_aarch64_targets[@]}"; }
+
 function ci_nbu() {
   out="/tmp/$(sanitize_name "${1}")"
   rm -rf "${out}" && mkdir -p "${out}"

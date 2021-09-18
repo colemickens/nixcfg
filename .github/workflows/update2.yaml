@@ -67,7 +67,7 @@ jobs:
       run: .github/exec __init
     - name: build-n-cache
       env: { "CACHIX_SIGNING_KEY": "${{ secrets.cachix_key_colemickens }}" }
-      run: .github/exec ./nixup ci_nb_cache "${{ matrix.jobs.target }}"
+      run: .github/exec ./nixup ci_nb_cache
     # - name: cache
     #   env: { "CACHIX_SIGNING_KEY": "${{ secrets.cachix_key_colemickens }}" }
     #   run: .github/exec ./nixup ci_cache "${{ matrix.jobs.target }}"
@@ -112,6 +112,7 @@ jobs:
           git rebase origin/main
         EOF
         cat << EOF | .github/exec
+          git log -p HEAD^..HEAD
           git log -p HEAD^..HEAD
           ./nixup nbu_check_req ||
             nix-instantiate --eval -A toplevels.xeep.outPath
