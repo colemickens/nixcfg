@@ -5,16 +5,17 @@ let
 
   #_someFirefox = firefoxFlake.firefox-nightly-bin;
   #_someFirefox = pkgs.firefox-bin;
-  #_someFirefox = pkgs.firefox;
-  #_someChromium = pkgs.ungoogled-chromium;
-  _someFirefox = inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox;
-  _someChromium = inputs.nixos-unstable.legacyPackages.${pkgs.system}.ungoogled-chromium;
+  _someFirefox = pkgs.firefox;
+  _someChromium = pkgs.ungoogled-chromium;
+  #_someFirefox = inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox;
+  #_someChromium = inputs.nixos-unstable.legacyPackages.${pkgs.system}.ungoogled-chromium;
 
   _torPackages =
     if pkgs.system == "aarch64-linux"
     #then [ inputs.nixos-unstable.legacyPackages.${pkgs.system}.tor-browser-bundle-ports-bin ]
     then [ ]
-    else [ inputs.nixos-unstable.legacyPackages.${pkgs.system}.tor-browser-bundle-bin ];
+    #else [ inputs.nixos-unstable.legacyPackages.${pkgs.system}.tor-browser-bundle-bin ];
+    else [ pkgs.tor-browser-bundle-bin ];
 in
 {
   imports = [

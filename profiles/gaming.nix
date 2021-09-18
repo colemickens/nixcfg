@@ -1,11 +1,12 @@
 { pkgs, lib, config, inputs, ... }:
 
 let
-  steamPkgs_ = inputs.nixos-unstable;
-  steamPkgs = import steamPkgs_ {
-    inherit (pkgs) system;
-    config.allowUnfree = true;
-  };
+  # steamPkgs_ = inputs.nixos-unstable;
+  # steamPkgs = import steamPkgs_ {
+  #   inherit (pkgs) system;
+  #   config.allowUnfree = true;
+  # };
+  steamPkgs = pkgs;
 in {
   config = {
     hardware = {
