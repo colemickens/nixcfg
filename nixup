@@ -65,6 +65,10 @@ function ci_nb_cache() {
 }
 function ci_nb_cache_x86_64() { ci_nb_cache "${ci_x86_64_targets[@]}"; }
 function ci_nb_cache_aarch64() { ci_nb_cache "${ci_aarch64_targets[@]}"; }
+function ci_nb_cache_all() {
+  echo "use remote builder"
+  exit -1
+}
 function ci_check() {
   command nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0" --no-link)" \
     "${ci_x86_64_targets[@]}" \
