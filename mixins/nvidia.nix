@@ -9,6 +9,8 @@
 
 # https://github.com/NixOS/nixpkgs/issues/75131#issuecomment-904671763
 
+# TODO: I don't know what in nixpkgs is already doing some of the /run/opengl-driver-32/ patching...
+
 # that way the config below would likely just not be necessary
 # if we can point it to the /run/opengl-drivers-32(??)/share/egl
 # properly...

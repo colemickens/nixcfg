@@ -42,31 +42,14 @@ in
       "usbhid"
       "hid_generic"
       "hid_microsoft"
-     ];
-
-    # rpizero stuffs
-    # boot.otg = {
-    #   enable = true;
-    #   module = "ether";
-    # };
-
-    # fileSystems = {
-    #   "/boot" = {
-    #     device = "/dev/disk/by-partlabel/FIRMWARE";
-    #     fsType = "vfat";
-    #     options = [ "nofail" ];
-    #   };
-    #   "/" = {
-    #     device = "/dev/disk/by-partlabel/NIXOS";
-    #     fsType = "ext4";
-    #   };
-    # };
+    ];
 
     boot = {
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_rpi0;
+      #kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_rpi0;
+      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
 
       loader.grub.enable = false;
       loader.raspberryPi = {
@@ -80,34 +63,8 @@ in
       hostName = hostname;
       firewall.enable = true;
       firewall.allowedTCPPorts = [ 22 ];
-      networkmanager.enable = false;
-      wireless.enable = lib.mkForce false;
-      wireless.iwd.enable = true;
-      useNetworkd = true;
-      useDHCP = false;
-      search = [ "ts.r10e.tech" ];
-    };
-    services.resolved.enable = true;
-    services.resolved.domains = [ "ts.r10e.tech" "test3.r10e.tech" ];
-    systemd.network.enable = true;
-    systemd.network.networks = {
-      "01-eth0" = {
-        name = "eth0";
-        networkConfig = {
-          DHCPServer = true;
-          Address = "10.0.3.1";
-        };
-        dhcpServerConfig = {
-          PoolOffset = 100;
-          PoolSize = 2;
-        };
-      };
-      "01-wlan0" = {
-        name = "wlan0";
-        networkConfig = {
-          DHCP = "yes";
-        };
-      };
+      networkmanager.enable = true;
+      useDHCP = true;
     };
 
     nixpkgs.config.allowUnfree = true;

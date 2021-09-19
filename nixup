@@ -219,6 +219,7 @@ function xeep()      { remote "$(tsip xeep)"   "toplevels.xeep"      "$(tsip xee
 function raisin()    { remote "$(tsip raisin)" "toplevels.raisin"    "$(tsip raisin)"; }
 function jeffhyper() { remote "$(tsip porty)"  "toplevels.jeffhyper" "$(tsip jeffhyper)"; }
 function porty()     { remote "$(tsip porty)"  "toplevels.porty"     "$(tsip porty)"; }
+function rpizero1()  { remote "$(tsip porty)"  "toplevels.rpizero1"  "192.168.145.120"; }
 function rpifour1()  { remote "${a64com}"      "toplevels.rpifour1"  "$(tsip rpifour1)"; }
 function sinkor()    { remote "${a64com}"      "toplevels.sinkor"    "$(tsip sinkor)"; }
 function install_sinkor()    {
