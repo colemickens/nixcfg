@@ -64,7 +64,6 @@ in
       firewall.enable = true;
       firewall.allowedTCPPorts = [ 22 ];
       networkmanager.enable = true;
-      useDHCP = true;
     };
 
     nixpkgs.config.allowUnfree = true;
