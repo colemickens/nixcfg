@@ -1,15 +1,14 @@
 name: prep
 description: prep
 author: cole
-# inputs:
-  # skipInit:
-  #   description: 'skip init (only useful for pre-caching the shell)'
-  #   required: false
-  #   default: 'false'
+inputs:
+  tailscaleAuthkey:
+    description: 'tailscale authkey'
+    required: true
 runs:
   using: composite
   steps:
-    - { "name": "Tailscale", "uses": "tailscale/github-action@v1", "with": { "authkey": "${{ secrets.TAILSCALE_AUTHKEY }}" } }
+    - { "name": "Tailscale", "uses": "tailscale/github-action@v1", "with": { "authkey": "${{ inputs.tailscaleAuthkey }}" } }
     - { "uses": "cachix/install-nix-action@v14", "with": {"install_url": "https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.4pre20210823_af94b54/install","extra_nix_config": "experimental-features = nix-command flakes ca-references\n" } }
     - name: shell-out
       shell: bash
