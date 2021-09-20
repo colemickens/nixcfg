@@ -5,6 +5,10 @@ inputs:
   tailscaleAuthkey:
     description: 'tailscale authkey'
     required: true
+  skipInit:
+    description: 'set to SKIP to skip init'
+    required: false
+    default: 'no'
 runs:
   using: composite
   steps:
@@ -29,10 +33,13 @@ runs:
         fi
     - name: "init"
       shell: bash
-      run: .github/exec __init
+      run: |
+        if [[ "${{ inputs.skipInit }}" != "SKIP" ]]; then
+          .github/exec __init
+        fi
     - name: save-shell
       shell: bash
-      run:
+      run: |
         if [[ ! -f ./.nixcache/${{ steps.shell-out.outputs.outpath }}-loaded ]]; then
           nix copy --no-check-sigs --to ./.nixcache/${{ steps.shell-out.outputs.outpath }} "${{ steps.shell-out.outputs.outpath }}"
         fi

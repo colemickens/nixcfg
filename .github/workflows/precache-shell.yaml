@@ -8,24 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - { "uses": "actions/checkout@v2", "with": { "ref": "main" } }
-    - { "name": "Tailscale", "uses": "tailscale/github-action@v1", "with": { "authkey": "${{ secrets.TAILSCALE_AUTHKEY }}" } }
-    - { "uses": "cachix/install-nix-action@v14", "with": {"install_url": "https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.4pre20210823_af94b54/install","extra_nix_config": "experimental-features = nix-command flakes ca-references\n" } }
-    - name: shell-out
-      id: shell-out
-      run: |
-        set -x
-        echo "hello"
-        outpath="$(nix eval --raw '.#devShellSrc')"
-        echo "::set-output name=outpath::$outpath"
-        echo "world"
-    - name: shell-cache
-      id: shell-cache
-      uses: actions/cache@v2
+    - name: prep
+      uses: ./.github/actions/prep
       with:
-        path: ./.nixcache
-        key: ${{ steps.shell-out.outputs.outpath }}
-    - name: init
-      if: steps.shell-cache.outputs.cache-hit != 'true'
-      run:
-        .github/exec __init
-        nix copy --no-check-sigs --to ./.nixcache "${{ steps.shell-out.outputs.outpath }}"
+        tailscaleAuthkey: "${{ secrets.TAILSCALE_AUTHKEY }}"
