@@ -1,12 +1,12 @@
-name: "Update2"
+name: "Update4"
 on:
   push:
 
-concurrency: update2
+concurrency: update4
 jobs:
   "update":
     runs-on: ubuntu-latest
-    concurrency: update2-${{matrix.jobs.branch}}-${{matrix.jobs.target}}
+    concurrency: update4-${{matrix.jobs.branch}}-${{matrix.jobs.target}}
     steps:
     - { "uses": "actions/checkout@v2", "with": { "ref": "main" } }
     - { "name": "Tailscale", "uses": "tailscale/github-action@v1", "with": { "authkey": "${{ secrets.TAILSCALE_AUTHKEY }}" } }
@@ -39,7 +39,7 @@ jobs:
       run: |
         cat << EOF | .github/exec
           set -x
-          git checkout -b auto-update2
+          git checkout -b auto-update4
           git reset --hard main
           ./nixup update
           ./nixup update-pkgs
@@ -54,11 +54,11 @@ jobs:
     strategy:
       matrix:
         jobs:
-        - { "branch": "auto-update2",  "target": "bundles.x86_64-linux",   "runson": "gha-x64" }
-        - { "branch": "auto-update2",  "target": "bundles.aarch64-linux",  "runson": "gha-arm64" }
-        - { "branch": "auto-update2",  "target": "bundles.x86_64-linux",   "runson": "Ubuntu-x64" }
+        - { "branch": "auto-update4",  "target": "bundles.x86_64-linux",   "runson": "gha-x64" }
+        - { "branch": "auto-update4",  "target": "bundles.aarch64-linux",  "runson": "gha-arm64" }
+        - { "branch": "auto-update4",  "target": "bundles.x86_64-linux",   "runson": "Ubuntu-x64" }
     steps:
-    - { "uses": "actions/checkout@v2", "with": { "ref": "auto-update2" } }
+    - { "uses": "actions/checkout@v2", "with": { "ref": "auto-update4" } }
     - { "name": "Tailscale", "uses": "tailscale/github-action@v1", "with": { "authkey": "${{ secrets.TAILSCALE_AUTHKEY }}" } }
     - { "uses": "cachix/install-nix-action@v14", "with": {"install_url": "https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.4pre20210823_af94b54/install","extra_nix_config": "experimental-features = nix-command flakes ca-references\n" } }
     - { "name": "init", "run": ".github/exec __init" }
@@ -70,7 +70,7 @@ jobs:
     needs: "build"
     runs-on: ubuntu-latest
     steps:
-    - { "uses": "actions/checkout@v2", "with": { "ref": "auto-update2" } }
+    - { "uses": "actions/checkout@v2", "with": { "ref": "auto-update4" } }
     - { "name": "Tailscale", "uses": "tailscale/github-action@v1", "with": { "authkey": "${{ secrets.TAILSCALE_AUTHKEY }}" } }
     - { "uses": "cachix/install-nix-action@v14", "with": {"install_url": "https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.4pre20210823_af94b54/install","extra_nix_config": "experimental-features = nix-command flakes ca-references\n" } }
     - { "name": "init", "run": ".github/exec __init" }
@@ -80,9 +80,9 @@ jobs:
         cat << EOF | .github/exec
           set -x
           git log -n 5 --oneline origin/main
-          git log -n 5 --oneline origin/auto-update2
-          git checkout -b auto-update2-ready
-          git reset --hard origin/auto-update2
+          git log -n 5 --oneline origin/auto-update4
+          git checkout -b auto-update4-ready
+          git reset --hard origin/auto-update4
           git rebase origin/main
         EOF
         cat << EOF | .github/exec
@@ -95,7 +95,7 @@ jobs:
   #   if: ${{ always() }}
   #   runs-on: ubuntu-latest
     # steps:
-    # - { "uses": "actions/checkout@v2", "with": { "ref": "auto-update2" } }
+    # - { "uses": "actions/checkout@v2", "with": { "ref": "auto-update4" } }
     # - { "name": "Tailscale", "uses": "tailscale/github-action@v1", "with": { "authkey": "${{ secrets.TAILSCALE_AUTHKEY }}" } }
     # - { "uses": "cachix/install-nix-action@v14", "with": {"install_url": "https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.4pre20210823_af94b54/install","extra_nix_config": "experimental-features = nix-command flakes ca-references\n" } }
   #     run: .github/exec __init
