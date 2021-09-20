@@ -17,7 +17,9 @@ jobs:
         authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
     - uses: cachix/install-nix-action@v14
     - name: "init"
-      run: .github/exec __init
+      run: |
+        set -x
+        .github/exec __init
     - name: "packet-create-instances"
       env: { "CACHIX_SIGNING_KEY": "${{ secrets.cachix_key_colemickens }}", "_GITHUB_TOKEN": "${{ secrets._github_token }}", "METAL_AUTH_TOKEN": "${{ secrets.metal_auth_token }}", "METAL_PROJECT_ID": "${{ secrets.metal_project_id }}" }
       run: .github/exec ./nixup packet-up
@@ -53,7 +55,6 @@ jobs:
         authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
     - uses: cachix/install-nix-action@v14
     - name: "init"
-      run: .github/exec __init
     - name: build-n-cache
       env: { "CACHIX_SIGNING_KEY": "${{ secrets.cachix_key_colemickens }}", "_GITHUB_TOKEN": "${{ secrets._github_token }}", "METAL_AUTH_TOKEN": "${{ secrets.metal_auth_token }}", "METAL_PROJECT_ID": "${{ secrets.metal_project_id }}" }
       run: .github/exec ./nixup ci_nb_cache ${{ matrix.jobs.target }}
