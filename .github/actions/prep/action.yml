@@ -20,19 +20,19 @@ runs:
     - name: shell-out
       id: shell-out
       shell: bash
-      run: echo "::set-output name=outpath::$(nix eval --raw '.#devShellSrc')"
+      run: echo "::set-output name=drvpath::$(nix eval --raw '.#devShellSrc.drvPath')"
     - name: shell-cache
       id: shell-cache
       uses: actions/cache@v2
       with:
-        path: ./.nixcache/${{ steps.shell-out.outputs.outpath }}
-        key: ${{ steps.shell-out.outputs.outpath }}
+        path: ./.nixcache/${{ steps.shell-out.outputs.drvpath }}
+        key: ${{ steps.shell-out.outputs.drvpath }}
     - name: load-shell
       shell: bash
       run: |
-        if [[ -d "./.nixcache/${{ steps.shell-out.outputs.outpath }}" ]]; then
-          nix copy --no-check-sigs --from ./.nixcache/${{ steps.shell-out.outputs.outpath }} "${{ steps.shell-out.outputs.outpath }}"
-          touch ./.nixcache/${{ steps.shell-out.outputs.outpath }}-loaded
+        if [[ -d "./.nixcache/${{ steps.shell-out.outputs.drvpath }}" ]]; then
+          nix copy --no-check-sigs --from ./.nixcache/${{ steps.shell-out.outputs.drvpath }} "${{ steps.shell-out.outputs.drvpath }}"
+          touch ./.nixcache/${{ steps.shell-out.outputs.drvpath }}-loaded
         fi
     - name: "init"
       shell: bash
@@ -42,8 +42,8 @@ runs:
       run: |
         set -x
         set +e
-        if [[ ! -f ./.nixcache/${{ steps.shell-out.outputs.outpath }}-loaded ]]; then
-          time nix build -L "${{ steps.shell-out.outputs.outpath }}"
-          nix copy --no-check-sigs --to ./.nixcache/${{ steps.shell-out.outputs.outpath }} "${{ steps.shell-out.outputs.outpath }}"
+        if [[ ! -f ./.nixcache/${{ steps.shell-out.outputs.drvpath }}-loaded ]]; then
+          time nix build -L "${{ steps.shell-out.outputs.drvpath }}"
+          nix copy --no-check-sigs --to ./.nixcache/${{ steps.shell-out.outputs.drvpath }} "${{ steps.shell-out.outputs.drvpath }}"
         fi
         sleep 3600
