@@ -31,6 +31,10 @@
     services.gnome.evolution-data-server.enable = lib.mkForce false;
     programs.geary.enable = false;
 
+    #  - You have set services.power-profiles-daemon.enable = true;
+    #    which conflicts with services.tlp.enable = true;
+    services.tlp.enable = lib.mkForce false;
+
     environment.gnome.excludePackages = [
       pkgs.epiphany
     ];

@@ -56,7 +56,7 @@ EOF
   set -x
 }
 function packet-curl() { curl -H "X-Auth-Token: ${METAL_AUTH_TOKEN}" "$@" 2>/dev/null; }
-function packet-spot() { packet-curl "https://api.packet.net/market/spot/prices" | jq ".spot_market_prices | keys[] as \$k | \"\(\$k) \(.[\$k][\"${1}\"].price)\"" | grep -v null }
+function packet-spot() { packet-curl "https://api.packet.net/market/spot/prices" | jq ".spot_market_prices | keys[] as \$k | \"\(\$k) \(.[\$k][\"${1}\"].price)\"" | grep -v null; }
 function packet-up() {
   packet-up-int "gha-x64" "c2.medium.x86"
   packet-up-int "gha-arm64" "c1.large.arm"
