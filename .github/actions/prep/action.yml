@@ -33,15 +33,15 @@ runs:
       id: shell-cache
       uses: actions/cache@v2
       with:
-        path: ./.nixcache/${{ steps.shell-out.outputs.drvPath }}
-        key: ${{ steps.shell-out.outputs.drvPath }}
+        path: ./.nixcache/${{ steps.shell-out.outputs.outPath }}
+        key: ${{ steps.shell-out.outputs.outPath }}
     - name: load-shell
       shell: bash
       run: |
         
-        if [[ -d "./.nixcache/${{ steps.shell-out.outputs.drvPath }}" ]]; then
-          time nix copy --no-check-sigs --from ./.nixcache/${{ steps.shell-out.outputs.drvPath }} "${{ steps.shell-out.outputs.outPath }}"
-          touch ./.nixcache/${{ steps.shell-out.outputs.drvPath }}-loaded
+        if [[ -d "./.nixcache/${{ steps.shell-out.outputs.outPath }}" ]]; then
+          time nix copy --no-check-sigs --from ./.nixcache/${{ steps.shell-out.outputs.outPath }} "${{ steps.shell-out.outputs.outPath }}"
+          touch ./.nixcache/${{ steps.shell-out.outputs.outPath }}-loaded
         fi
         echo -n "**TIME_END: "; date
     - name: "init"
@@ -51,7 +51,7 @@ runs:
       shell: bash
       run: |
         set -x
-        if [[ ! -f ./.nixcache/${{ steps.shell-out.outputs.drvPath }}-loaded ]]; then
+        if [[ ! -f ./.nixcache/${{ steps.shell-out.outputs.outPath }}-loaded ]]; then
           nix build -L "${{ steps.shell-out.outputs.drvPath }}"
-          nix copy --no-check-sigs --to ./.nixcache/${{ steps.shell-out.outputs.drvPath }} "${{ steps.shell-out.outputs.outPath }}"
+          nix copy --no-check-sigs --to ./.nixcache/${{ steps.shell-out.outputs.outPath }} "${{ steps.shell-out.outputs.outPath }}"
         fi

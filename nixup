@@ -55,17 +55,15 @@ su runner -c "env DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1 ./run.sh"
 EOF
   set -x
 }
-function packet-curl() {
-  curl -H "X-Auth-Token: ${METAL_AUTH_TOKEN}" "$@" 2>/dev/null
-}
-function packet-spot() {
-  type="${1}"
-  packet-curl "https://api.packet.net/market/spot/prices" \
-    | jq ".spot_market_prices | keys[] as \$k | \"\(\$k) \(.[\$k][\"${type}\"].price)\"" | grep -v null
-}
+function packet-curl() { curl -H "X-Auth-Token: ${METAL_AUTH_TOKEN}" "$@" 2>/dev/null; }
+function packet-spot() { packet-curl "https://api.packet.net/market/spot/prices" | jq ".spot_market_prices | keys[] as \$k | \"\(\$k) \(.[\$k][\"${1}\"].price)\"" | grep -v null }
 function packet-up() {
   packet-up-int "gha-x64" "c2.medium.x86"
   packet-up-int "gha-arm64" "c1.large.arm"
+}
+function packet-down() {
+  packet-down-int 'gha-x64'
+  packet-down-int 'gha-arm64'
 }
 function packet-up-int() {
   dev="${1}"
@@ -123,10 +121,6 @@ function packet-down-int() {
   if [[ "${runnerid:-""}" != "" ]]; then
     gh api -X DELETE "repos/cole-mickens/nixcfg/actions/runners/${runnerid}" | jq
   fi
-}
-function packet-down() {
-  packet-down-int 'gha-x64'
-  packet-down-int 'gha-arm64'
 }
 # </ci-packet>
 
