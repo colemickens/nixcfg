@@ -557,6 +557,22 @@
         "type": "github"
       }
     },
+    "nixos-unstable-small": {
+      "locked": {
+        "lastModified": 1632081137,
+        "narHash": "sha256-SFVU5ZGzPtfJWvdFj5UBgpzGrFwRZRY7IBOTqZsyLh0=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "39b0c5ecc5f2991470e5fba4bd83935d88ee0016",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable-small",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1624862269,
@@ -745,6 +761,7 @@
         "nixos-azure": "nixos-azure",
         "nixos-mailserver": "nixos-mailserver",
         "nixos-unstable": "nixos-unstable",
+        "nixos-unstable-small": "nixos-unstable-small",
         "nixpkgs": "nixpkgs_5",
         "nixpkgs-kubernetes": "nixpkgs-kubernetes",
         "nixpkgs-wayland": "nixpkgs-wayland",

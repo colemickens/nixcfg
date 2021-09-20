@@ -8,6 +8,7 @@
 
   inputs = {
     nixpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; }; # for my regular nixpkgs
+    nixos-unstable-small = { url = "github:nixos/nixpkgs/nixos-unstable-small"; };
     nixos-unstable = { url = "github:nixos/nixpkgs/nixos-unstable"; };
     stable = { url = "github:nixos/nixpkgs/nixos-21.05"; }; # for cachix
 
@@ -124,17 +125,26 @@
         };
 
       hydralib = import ./lib/hydralib.nix;
+
+      nixPackage = sys:
+        #pkgs_.nixpkgs.${sys}.nixUnstable; # normal nixUnstable
+        #pkgs_.nixos-unstable-small.${sys}.nixUnstable; # nixos-unstable-small's nixUnstable
+        #inputs.nix.defaultPackage.${sys}; # master
+        pkgs_.nixpkgs.${sys}.nixUnstable.override {
+          patches = [ ./pkgs/nix/unset-is-macho.patch ];
+        }; # oh god why
     in rec {
       x = builtins.trace inputs.self.sourceInfo inputs.nixpkgs.sourceInfo;
       devShell = forAllSystems (system:
         pkgs_.nixpkgs.${system}.mkShell {
           name = "nixcfg-devshell";
           nativeBuildInputs = []
-          #++ ([ inputs.nix.defaultPackage.${system} ]) # TODO: drop nix input?
+          #++ ([  ]) # TODO: drop nix input?
           #++ (with pkgs_.stable.${system}; [ cachix ])
           # ++ (with inputs.niche.packages.${system}; [ niche ])
           ++ (with pkgs_.nixpkgs.${system}; [
-            nixUnstable cachix
+            (nixPackage system)
+            cachix
             #inputs.nickel.packages.${system}.build
             bash cacert curl git jq parallel mercurial
             nettools openssh ripgrep rsync
@@ -155,6 +165,8 @@
 
       packages = forAllSystems (system: fullPkgs_.${system}.colePackages);
       pkgs = forAllSystems (system: fullPkgs_.${system});
+
+      preferredNix = forAllSystems (system: nixPackage system);
 
       overlay = final: prev:
         let p = rec {
