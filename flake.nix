@@ -159,6 +159,8 @@
         }
       );
 
+      commands = {};
+
       apps = {
         # buildkite-init # TODO: flesh this out
       };
