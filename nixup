@@ -11,16 +11,15 @@ cd "${DIR}"
 cache="colemickens"
 cachixpkgs="https://github.com/nixos/nixpkgs/archive/nixos-21.05.tar.gz" # where to find pkgs.cachix
 unstablepkgs="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # where to find nixUnstable
-#set +x
+set +x
 if [[ "${NIXUP_SECRETS:-""}" != "" ]]; then echo "${NIXUP_SECRETS}" > /tmp/nixup-secrets; fi
 source "/tmp/nixup-secrets" || source /run/secrets/nixup-secrets || true
 [[ -z "${CACHIX_SIGNING_KEY:-""}" ]] && echo "must set CACHIX_SIGNING_KEY" && exit -1
 [[ -z "${METAL_AUTH_TOKEN:-""}" ]] && echo "must set METAL_AUTH_TOKEN" && exit -1
 [[ -z "${METAL_PROJECT_ID:-""}" ]] && echo "must set METAL_PROJECT_ID" && exit -1
-[[ -z "${_GITHUB_TOKEN:-""}" ]] && echo "must set _GITHUB_TOKEN" && exit -1
-export GITHUB_TOKEN="${_GITHUB_TOKEN}"
+[[ -z "${GITHUB_TOKEN:-""}" ]] && echo "must set GITHUB_TOKEN" && exit -1
 export GH_CONFIG_DIR="/tmp/gh" # we don't want to use the user's GH
-#set -x
+set -x
 
 nixargs=(--experimental-features "nix-command flakes") #ca-references ca-derivations recursive-nix")
 buildargs=(
