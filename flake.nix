@@ -135,8 +135,10 @@
           name = "nixcfg-devshell";
           buildInputs = (with pkgs_.nixpkgs.${system}; [
             bash cacert jq curl parallel mercurial git
-            nettools openssh ripgrep rsync sops gh gawk
+            nettools openssh ripgrep rsync sops gh gawk gnused
             cachix nix-build-uncached nix-prefetch-git
+            # coreutils
+            # uutils-coreutils # ?
           ]) ++ [
             inputs.self.preferredNix.${system}
             fullPkgs_.${system}.metal-cli
