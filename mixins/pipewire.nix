@@ -3,7 +3,7 @@
 {
   security.rtkit.enable = true; # ?
 
-  nixpkgs.config.pulseaudio = true;
+  #nixpkgs.config.pulseaudio = true;
   #hardware.pulseaudio.enable = true; # we're trying pipewire
   hardware.pulseaudio.enable = pkgs.lib.mkForce false;
 
