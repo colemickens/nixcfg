@@ -57,6 +57,7 @@ in
         wget curl rsync
         ripgrep jq fzy
         wget curl stow ncdu tree
+        nix-tree
         #pdu
         git-crypt gopass
         #passrs ripasso-cursive
