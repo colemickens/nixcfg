@@ -12,12 +12,8 @@ cache="colemickens"
 cachixpkgs="https://github.com/nixos/nixpkgs/archive/nixos-21.05.tar.gz" # where to find pkgs.cachix
 unstablepkgs="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # where to find nixUnstable
 set +x
-if [[ -f "/run/secrets/nixup-secrets" ]]; then
-  _GITHUB_TOKEN="$(jq -r ._GITHUB_TOKEN </run/secrets/nixup-secrets)"
-  CACHIX_SIGNING_KEY="$(jq -r .CACHIX_SIGNING_KEY </run/secrets/nixup-secrets)"
-  METAL_AUTH_TOKEN="$(jq -r .METAL_AUTH_TOKEN </run/secrets/nixup-secrets)"
-  METAL_PROJECT_ID="$(jq -r .METAL_PROJECT_ID </run/secrets/nixup-secrets)"
-fi
+if [[ ! -z "${NIXUP_SECRETS:-""}" ]]; then echo "${NIXUP_SECERTS}" > /tmp/nixup-secrets; fi
+source "/tmp/nixup-secrets" || source /run/secrets/nixup-secrets || true
 [[ -z "${CACHIX_SIGNING_KEY:-""}" ]] && echo "must set CACHIX_SIGNING_KEY" && exit -1
 [[ -z "${METAL_AUTH_TOKEN:-""}" ]] && echo "must set METAL_AUTH_TOKEN" && exit -1
 [[ -z "${METAL_PROJECT_ID:-""}" ]] && echo "must set METAL_PROJECT_ID" && exit -1
