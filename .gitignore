@@ -6,3 +6,6 @@
 *.qcow
 *.qcow2
 *.zstd
+.nixcache
+.nixcache/
+.nixcache/*

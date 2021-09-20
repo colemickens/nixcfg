@@ -165,6 +165,9 @@
         # buildkite-init # TODO: flesh this out
       };
 
+      legacyPackages = forAllSystems (system: {
+        devShellSrc = inputs.self.devShell.${system}.inputDerivation;
+      });
       packages = forAllSystems (system: fullPkgs_.${system}.colePackages);
       pkgs = forAllSystems (system: fullPkgs_.${system});
 

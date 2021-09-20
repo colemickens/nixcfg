@@ -51,7 +51,7 @@ with lib;
       trustedUsers = [ "@wheel" "root" ];
       package = (inputs.self.preferredNix.${pkgs.system});
       extraOptions =
-        lib.optionalString (config.nix.package == pkgs.nixUnstable)
+        #lib.optionalString (config.nix.package == pkgs.nixUnstable)
           "experimental-features = nix-command flakes ca-references recursive-nix";
     };
 
