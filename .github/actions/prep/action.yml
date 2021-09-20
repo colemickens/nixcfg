@@ -46,4 +46,3 @@ runs:
           time nix build -L "${{ steps.shell-out.outputs.drvpath }}"
           nix copy --no-check-sigs --to ./.nixcache/${{ steps.shell-out.outputs.drvpath }} "${{ steps.shell-out.outputs.drvpath }}"
         fi
-        sleep 3600
