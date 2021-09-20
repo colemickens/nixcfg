@@ -6,6 +6,9 @@
       programs.tmux = {
         enable = true;
 
+        # what the fuck?
+        # terminal = "screen-256color";
+
         historyLimit = 100000;
         escapeTime = 0;
         keyMode = "vi";
