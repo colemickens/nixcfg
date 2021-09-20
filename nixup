@@ -9,8 +9,8 @@ HOME="${HOME:-"/tmp"}"
 cd "${DIR}"
 
 cache="colemickens"
-cachixpkgs="https://github.com/nixos/nixpkgs/archive/nixos-21.05.tar.gz" # where to find pkgs.cachix
-unstablepkgs="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # where to find nixUnstable
+cachixpkgs="https://github.com/nixos/nixpkgs/archive/$(jq -r '.nodes.stable.locked.rev' ./flake.lock).tar.gz" # where to find pkgs.cachix
+unstablepkgs="https://github.com/colemickens/nixpkgs/archive/$(jq -r '.nodes.nixpkgs.locked.rev' ./flake.lock).tar.gz" # where to find nixUnstable
 set +x
 if [[ "${NIXUP_SECRETS:-""}" != "" ]]; then echo "${NIXUP_SECRETS}" > /tmp/nixup-secrets; fi
 source "/tmp/nixup-secrets" || source /run/secrets/nixup-secrets || true
