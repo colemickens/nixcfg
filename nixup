@@ -46,10 +46,11 @@ function packet-script() {
 #!/bin/bash
 mkdir actions-runner && cd actions-runner
 case \$(uname -m) in aarch64) ARCH="arm64" ;; amd64|x86_64) ARCH="x64" ;; esac && export RUNNER_ARCH=\${ARCH}
-curl -O -L https://github.com/actions/runner/releases/download/v2.280.3/actions-runner-linux-\${RUNNER_ARCH}-2.280.3.tar.gz
-tar xzf ./actions-runner-linux-\${RUNNER_ARCH}-2.280.3.tar.gz
 useradd -m runner
-su runner -c "env DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1 ./config.sh --url https://github.com/cole-mickens/nixcfg --token ${RUNNER_TOKEN} --labels ${LABEL} --replace"
+cd /home/runner
+su runner -c "curl -O -L https://github.com/actions/runner/releases/download/v2.280.3/actions-runner-linux-\${RUNNER_ARCH}-2.280.3.tar.gz"
+su runner -c "tar xzf ./actions-runner-linux-\${RUNNER_ARCH}-2.280.3.tar.gz"
+su runner -c "env DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1 ./config.sh --unattended --url https://github.com/cole-mickens/nixcfg --token ${RUNNER_TOKEN} --labels ${LABEL} --replace"
 su runner -c "env DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1 ./run.sh"
 EOF
   set -x
