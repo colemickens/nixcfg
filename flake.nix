@@ -124,6 +124,7 @@
           specialArgs = { inherit inputs; };
         };
 
+      minimalMkShell = system: import ./lib/minimalMkShell.nix { pkgs = inputs.nixpkgs; system = system; };
       hydralib = import ./lib/hydralib.nix;
 
       nixPackage = sys:
@@ -135,25 +136,16 @@
     in rec {
       x = builtins.trace inputs.self.sourceInfo inputs.nixpkgs.sourceInfo;
       devShell = forAllSystems (system:
-        pkgs_.nixpkgs.${system}.mkShell {
+        mkMinimalShell system {
           name = "nixcfg-devshell";
-          nativeBuildInputs = []
-          #++ ([  ]) # TODO: drop nix input?
-          #++ (with pkgs_.stable.${system}; [ cachix ])
-          # ++ (with inputs.niche.packages.${system}; [ niche ])
-          ++ (with pkgs_.nixpkgs.${system}; [
-            (nixPackage system)
-            cachix
-            #inputs.nickel.packages.${system}.build
+          buildInputs = (with pkgs_.nixpkgs.${system}; [
+            (nixPackage system) cachix
             bash cacert curl jq parallel mercurial
-            # git
             gitMinimal
             nettools openssh ripgrep rsync
             nix-build-uncached nix-prefetch-git
             sops
-
-            # TODO: how to get a "shell" without stdenv? we don't need gcc and friends?
-
+            
             fullPkgs_.${system}.metal-cli
             gh # github cli for packet+gha stuff
           ]);
