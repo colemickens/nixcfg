@@ -16,10 +16,10 @@ jobs:
         set -x
         .github/exec __init
     - name: "packet-create-instances"
-      env: { "NIXUP_SECRETS": "${{ secrets.nixup_secrets }}" }
+      env: { "NIXUP_SECRETS": "${{ secrets.NIXUP_SECRETS }}" }
       run: .github/exec ./nixup packet-up
     - name: "update"
-      env: { "NIXUP_SECRETS": "${{ secrets.nixup_secrets }}" }
+      env: { "NIXUP_SECRETS": "${{ secrets.NIXUP_SECRETS }}" }
       run: |
         export CI_JOB_ID="${GITHUB_RUN_ID}_${GITHUB_RUN_NUMBER}"
         cat << EOF | .github/exec
@@ -52,7 +52,7 @@ jobs:
     - name: "init"
       run: .github/exec __init
     - name: build-n-cache
-      env: { "NIXUP_SECRETS": "${{ secrets.nixup_secrets }}" }
+      env: { "NIXUP_SECRETS": "${{ secrets.NIXUP_SECRETS }}" }
       run: .github/exec ./nixup ci_nb_cache ${{ matrix.jobs.target }}
 
   "publish":
@@ -65,7 +65,7 @@ jobs:
     - name: "init"
       run: .github/exec __init
     - name: "publish"
-      env: { "NIXUP_SECRETS": "${{ secrets.nixup_secrets }}" }
+      env: { "NIXUP_SECRETS": "${{ secrets.NIXUP_SECRETS }}" }
       run: |
         cat << EOF | .github/exec
           set -x
@@ -91,5 +91,5 @@ jobs:
   #     run: .github/exec __init
   #   - name: "packet-destroy-instances"
   #     if: ${{ always() }}
-  #     env: { "NIXUP_SECRETS": "${{ secrets.nixup_secrets }}" }
+  #    env: { "NIXUP_SECRETS": "${{ secrets.NIXUP_SECRETS }}" }
   #     run: .github/exec ./nixup packet-down
