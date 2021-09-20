@@ -130,9 +130,8 @@
         #pkgs_.nixpkgs.${sys}.nixUnstable; # normal nixUnstable
         #pkgs_.nixos-unstable-small.${sys}.nixUnstable; # nixos-unstable-small's nixUnstable
         #inputs.nix.defaultPackage.${sys}; # master
-        pkgs_.nixpkgs.${sys}.nixUnstable.override {
-          patches = [ ./pkgs/nix/unset-is-macho.patch ];
-        }; # oh god why
+        #pkgs_.nixpkgs.${sys}.nixUnstable; # give us our own overlayed one
+        fullPkgs_.${sys}.nixUnstable; # give us our own overlayed one
     in rec {
       x = builtins.trace inputs.self.sourceInfo inputs.nixpkgs.sourceInfo;
       devShell = forAllSystems (system:
@@ -146,12 +145,14 @@
             (nixPackage system)
             cachix
             #inputs.nickel.packages.${system}.build
-            bash cacert curl git jq parallel mercurial
+            bash cacert curl jq parallel mercurial
+            # git
+            gitMinimal
             nettools openssh ripgrep rsync
             nix-build-uncached nix-prefetch-git
             sops
-            #awsweeper packet-cli
-            haskellPackages.dhall-json
+
+            # TODO: how to get a "shell" without stdenv? we don't need gcc and friends?
 
             fullPkgs_.${system}.metal-cli
             gh # github cli for packet+gha stuff
@@ -212,6 +213,10 @@
 
           zellij = prev.callPackage ./pkgs/zellij {
             zellij = prev.zellij;
+          };
+
+          nixUnstable = prev.nixUnstable.override {
+            patches = [ ./pkgs/nix/unset-is-macho.patch ];
           };
         }; in p // { colePackages = p; };
 
