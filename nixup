@@ -64,7 +64,7 @@ function packet-spot() {
     | jq ".spot_market_prices | keys[] as \$k | \"\(\$k) \(.[\$k][\"${type}\"].price)\"" | grep -v null
 }
 function packet-up() {
-  #packet-up-int "gha-x64" "c2.medium.x86"
+  packet-up-int "gha-x64" "c2.medium.x86"
   packet-up-int "gha-arm64" "c1.large.arm"
 }
 function packet-up-int() {
