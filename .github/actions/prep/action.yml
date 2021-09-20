@@ -51,7 +51,6 @@ runs:
       shell: bash
       run: |
         set -x
-        set +e
         if [[ ! -f ./.nixcache/${{ steps.shell-out.outputs.drvPath }}-loaded ]]; then
           nix build -L "${{ steps.shell-out.outputs.drvPath }}"
           nix copy --no-check-sigs --to ./.nixcache/${{ steps.shell-out.outputs.drvPath }} "${{ steps.shell-out.outputs.outPath }}"
