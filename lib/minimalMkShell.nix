@@ -1,7 +1,8 @@
 { pkgs }:
 
 let
-  stdenvMinimal = pkgs.stdenvNoCC.override {
+  nixpkgs = pkgs;
+  stdenvMinimal = nixpkgs.stdenvNoCC.override {
     cc = null;
     preHook = "";
     allowedRequisites = null;

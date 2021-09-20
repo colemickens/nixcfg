@@ -124,7 +124,7 @@
           specialArgs = { inherit inputs; };
         };
 
-      minimalMkShell = system: import ./lib/minimalMkShell.nix { pkgs = inputs.nixpkgs; system = system; };
+      minimalMkShell = system: import ./lib/minimalMkShell.nix { pkgs = fullPkgs_.${system}; };
       hydralib = import ./lib/hydralib.nix;
 
       nixPackage = sys:
@@ -136,16 +136,14 @@
     in rec {
       x = builtins.trace inputs.self.sourceInfo inputs.nixpkgs.sourceInfo;
       devShell = forAllSystems (system:
-        mkMinimalShell system {
+        minimalMkShell system {
           name = "nixcfg-devshell";
           buildInputs = (with pkgs_.nixpkgs.${system}; [
             (nixPackage system) cachix
-            bash cacert curl jq parallel mercurial
-            gitMinimal
+            bash cacert jq curl mercurial git
             nettools openssh ripgrep rsync
             nix-build-uncached nix-prefetch-git
             sops
-            
             fullPkgs_.${system}.metal-cli
             gh # github cli for packet+gha stuff
           ]);
