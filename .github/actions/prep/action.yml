@@ -34,14 +34,15 @@ runs:
     - name: "init"
       shell: bash
       run: |
-        if [[ "${{ inputs.maybeSkipInit }}" != "SKIP" && -d ./.nixcache ]]; then
-          .github/exec __init
+        if [[ "${{ inputs.maybeSkipInit }}" == "SKIP" && -d ./.nixcache ]]; then
+          exit 0
         fi
+        .github/exec __init
     - name: save-shell
       shell: bash
       run: |
         set -x
         if [[ ! -d ./.nixcache/${{ steps.shell-out.outputs.outpath }}-loaded ]]; then
-          mkdir -p "./.nixcache/${{ steps.shell-out.outputs.outpath }}"
+          time nix build "${{ steps.shell-out.outputs.outpath }}"
           nix copy --no-check-sigs --to ./.nixcache/${{ steps.shell-out.outputs.outpath }} "${{ steps.shell-out.outputs.outpath }}"
         fi
