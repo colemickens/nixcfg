@@ -8,6 +8,12 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: "prep-test"
+      shell: bash
+      run: |
+        hostname
+        echo "${USER}"
+        echo "${HOME}"
     - { "name": "Tailscale", "uses": "tailscale/github-action@v1", "with": { "authkey": "${{ inputs.tailscaleAuthkey }}" } }
     - { "uses": "cachix/install-nix-action@v14", "with": {"install_url": "https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.4pre20210823_af94b54/install","extra_nix_config": "experimental-features = nix-command flakes ca-references\n" } }
     - name: enable sshd
@@ -20,7 +26,7 @@ runs:
       id: shell-out
       shell: bash
       run: |
-        echo -n "**TIME_START:"; date
+        echo -n "**TIME_START: "; date
         echo "::set-output name=drvpath::$(nix eval --raw '.#devShellSrc.drvPath')"
     - name: shell-cache
       id: shell-cache
@@ -36,7 +42,7 @@ runs:
           time nix copy --no-check-sigs --from ./.nixcache/${{ steps.shell-out.outputs.drvpath }} "${{ steps.shell-out.outputs.drvpath }}"
           touch ./.nixcache/${{ steps.shell-out.outputs.drvpath }}-loaded
         fi
-        echo -n "**TIME_END:"; date
+        echo -n "**TIME_END: "; date
     - name: "init"
       shell: bash
       run: time .github/exec __init
