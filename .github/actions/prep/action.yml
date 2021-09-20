@@ -41,5 +41,6 @@ runs:
       shell: bash
       run: |
         if [[ ! -f ./.nixcache/${{ steps.shell-out.outputs.outpath }}-loaded ]]; then
+          mkdir -p "./.nixcache/${{ steps.shell-out.outputs.outpath }}"
           nix copy --no-check-sigs --to ./.nixcache/${{ steps.shell-out.outputs.outpath }} "${{ steps.shell-out.outputs.outpath }}"
         fi
