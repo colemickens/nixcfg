@@ -134,7 +134,7 @@
         nativeBuildInputs = map (x: (x.bin or x.out or x))
           ((with pkgs_.nixpkgs.${system}; [
             bash curl cacert jq parallel mercurial git
-            nettools openssh ripgrep rsync sops gh gawk gnused
+            nettools openssh ripgrep rsync sops gh gawk gnused gnugrep
             cachix nix-build-uncached nix-prefetch-git
           ]) ++ [
             inputs.self.preferredNix.${system}
