@@ -129,26 +129,21 @@
 
       nixPackage = sys: fullPkgs_.${sys}.nixUnstable; # give us our own overlayed one
     in rec {
-      x = builtins.trace inputs.self.sourceInfo inputs.nixpkgs.sourceInfo;
-      devShell = forAllSystems (system:
-        minimalMkShell system {
-          name = "nixcfg-devshell";
-          buildInputs = (with pkgs_.nixpkgs.${system}; [
-            bash cacert jq curl parallel mercurial git
+      devShell = forAllSystems (system: minimalMkShell system {
+        name = "nixcfg-devshell";
+        nativeBuildInputs = map (x: (x.bin or x.out or x))
+          ((with pkgs_.nixpkgs.${system}; [
+            bash curl cacert jq parallel mercurial git
             nettools openssh ripgrep rsync sops gh gawk gnused
             cachix nix-build-uncached nix-prefetch-git
-            # coreutils
-            # uutils-coreutils # ?
           ]) ++ [
             inputs.self.preferredNix.${system}
             fullPkgs_.${system}.metal-cli
-          ];
-        }
-      );
+          ]);
+      });
 
       legacyPackages = forAllSystems (system: {
-        # ugh, this is annoying so we can instantiate the "currentSystem" dev shell easily
-        devShellSrc = inputs.self.devShell.${system}.inputDerivation;
+        devShellSrc = inputs.self.devShell.${system}.inputDerivation; # to `nix eval` the "currentSystem" devShell
       });
       packages = forAllSystems (system: fullPkgs_.${system}.colePackages);
       pkgs = forAllSystems (system: fullPkgs_.${system});
