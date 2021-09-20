@@ -12,7 +12,7 @@ cache="colemickens"
 cachixpkgs="https://github.com/nixos/nixpkgs/archive/nixos-21.05.tar.gz" # where to find pkgs.cachix
 unstablepkgs="https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # where to find nixUnstable
 #set +x
-if [[ "${NIXUP_SECRETS:-""}" != "" ]]; then echo "${NIXUP_SECERTS}" > /tmp/nixup-secrets; fi
+if [[ "${NIXUP_SECRETS:-""}" != "" ]]; then echo "${NIXUP_SECRETS}" > /tmp/nixup-secrets; fi
 source "/tmp/nixup-secrets" || source /run/secrets/nixup-secrets || true
 [[ -z "${CACHIX_SIGNING_KEY:-""}" ]] && echo "must set CACHIX_SIGNING_KEY" && exit -1
 [[ -z "${METAL_AUTH_TOKEN:-""}" ]] && echo "must set METAL_AUTH_TOKEN" && exit -1
