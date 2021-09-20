@@ -11,18 +11,15 @@ jobs:
     - { "uses": "actions/checkout@v2", "with": { "ref": "main" } }
     - { "name": "Tailscale", "uses": "tailscale/github-action@v1", "with": { "authkey": "${{ secrets.TAILSCALE_AUTHKEY }}" } }
     - { "uses": "cachix/install-nix-action@v14", "with": {"install_url": "https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.4pre20210823_af94b54/install","extra_nix_config": "experimental-features = nix-command flakes ca-references\n" } }
-    - name: "init"
-      run: |
-        set -x
-        .github/exec __init
+    - { "name": "init", "run": ".github/exec __init" }
     - name: "packet-create-instances"
       env: { "NIXUP_SECRETS": "${{ secrets.NIXUP_SECRETS }}" }
       run: .github/exec ./nixup packet-up
     - name: "update"
       env: { "NIXUP_SECRETS": "${{ secrets.NIXUP_SECRETS }}" }
       run: |
-        export CI_JOB_ID="${GITHUB_RUN_ID}_${GITHUB_RUN_NUMBER}"
         cat << EOF | .github/exec
+          set -x
           git checkout -b auto-update2
           git reset --hard main
           ./nixup update
@@ -44,13 +41,7 @@ jobs:
     - { "uses": "actions/checkout@v2", "with": { "ref": "auto-update2" } }
     - { "name": "Tailscale", "uses": "tailscale/github-action@v1", "with": { "authkey": "${{ secrets.TAILSCALE_AUTHKEY }}" } }
     - { "uses": "cachix/install-nix-action@v14", "with": {"install_url": "https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.4pre20210823_af94b54/install","extra_nix_config": "experimental-features = nix-command flakes ca-references\n" } }
-    - name: Tailscale
-      uses: tailscale/github-action@v1
-      with:
-        authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
-    - uses: cachix/install-nix-action@v14
-    - name: "init"
-      run: .github/exec __init
+    - { "name": "init", "run": ".github/exec __init" }
     - name: build-n-cache
       env: { "NIXUP_SECRETS": "${{ secrets.NIXUP_SECRETS }}" }
       run: .github/exec ./nixup ci_nb_cache ${{ matrix.jobs.target }}
@@ -62,8 +53,7 @@ jobs:
     - { "uses": "actions/checkout@v2", "with": { "ref": "auto-update2" } }
     - { "name": "Tailscale", "uses": "tailscale/github-action@v1", "with": { "authkey": "${{ secrets.TAILSCALE_AUTHKEY }}" } }
     - { "uses": "cachix/install-nix-action@v14", "with": {"install_url": "https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.4pre20210823_af94b54/install","extra_nix_config": "experimental-features = nix-command flakes ca-references\n" } }
-    - name: "init"
-      run: .github/exec __init
+    - { "name": "init", "run": ".github/exec __init" }
     - name: "publish"
       env: { "NIXUP_SECRETS": "${{ secrets.NIXUP_SECRETS }}" }
       run: |

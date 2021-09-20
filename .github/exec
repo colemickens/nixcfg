@@ -28,18 +28,14 @@ elif [[ "${1:-""}" == "__nix" ]]; then
   command nix "${nixargs[@]}" "${buildargs[@]}" "${@}"
 elif [[ "${1-:""}" != "" ]] && [[ "${1-:""}" != ":" ]]; then
   nix-shell --pure "${buildargs[@]}" \
-    --keep GITHUB_ACTION \
-    --keep CI_JOB_ID \
-    --keep CACHIX_SIGNING_KEY \
+    --keep NIXUP_SECRETS \
     --run "$(printf '\"%s\" ' "${@}")"
   exit
 else
   #cat <(printf "set -x\n set -euo pipefail\n") /dev/stdin | \
   cat /dev/stdin | \
     nix-shell --pure "${buildargs[@]}" \
-      --keep GITHUB_ACTION \
-      --keep CI_JOB_ID \
-      --keep CACHIX_SIGNING_KEY \
+      --keep NIXUP_SECRETS \
       --run "bash --noprofile --norc -eo pipefail </dev/stdin"
   exit
 fi
