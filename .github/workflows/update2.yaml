@@ -23,7 +23,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ./.nixcache
-        key: ${{ steps.shell-out.outpath }}
+        key: ${{ steps.shell-out.outputs.outpath }}
     - name: load-shell
       if: steps.nix-cache.outputs.cache-hit == 'true'
       run: nix copy --no-check-sigs --from ./.nixcache '.#devShellSrc'
