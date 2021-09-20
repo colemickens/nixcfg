@@ -127,23 +127,18 @@
       minimalMkShell = system: import ./lib/minimalMkShell.nix { pkgs = fullPkgs_.${system}; };
       hydralib = import ./lib/hydralib.nix;
 
-      nixPackage = sys:
-        #pkgs_.nixpkgs.${sys}.nixUnstable; # normal nixUnstable
-        #pkgs_.nixos-unstable-small.${sys}.nixUnstable; # nixos-unstable-small's nixUnstable
-        #inputs.nix.defaultPackage.${sys}; # master
-        #pkgs_.nixpkgs.${sys}.nixUnstable; # give us our own overlayed one
-        fullPkgs_.${sys}.nixUnstable; # give us our own overlayed one
+      nixPackage = sys: fullPkgs_.${sys}.nixUnstable; # give us our own overlayed one
     in rec {
       x = builtins.trace inputs.self.sourceInfo inputs.nixpkgs.sourceInfo;
       devShell = forAllSystems (system:
         minimalMkShell system {
           name = "nixcfg-devshell";
           buildInputs = (with pkgs_.nixpkgs.${system}; [
-            (nixPackage system) cachix
             bash cacert jq curl parallel mercurial git
-            nettools openssh ripgrep rsync
-            nix-build-uncached nix-prefetch-git sops gh
+            nettools openssh ripgrep rsync sops gh
+            cachix nix-build-uncached nix-prefetch-git
           ]) ++ [
+            inputs.self.preferredNix.${system}
             fullPkgs_.${system}.metal-cli
           ];
         }
