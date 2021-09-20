@@ -105,19 +105,19 @@ function packet-wait() {
   ssh-keyscan -H "${ip}" >> ~/.ssh/known_hosts
 
   # wait for runner
-  set +x; echo -n "waiting for "${dev}" runner."
+  set +x; echo "waiting for ${dev} runner."
   while true; do
     runnerid="$(gh api repos/cole-mickens/nixcfg/actions/runners | jq -r ".runners[] | select (.name == \"${dev}\").id")"
     if [[ "${runnerid:-""}" != "" ]]; then break; fi
-    echo -n "."; sleep 2
+    echo "waiting for ${dev} runner, waiting..."; sleep 10
   done; echo " done!"; set -x
 }
 function packet-down-int() {
   dev="${1}"
   id="$(metal device get --search "${dev}" --output json | jq -r '.[].id' || true)"
   if [[ "${id:-""}" != "" ]]; then
-    echo -n "deleting ${dev}: ${id}"; set +x
-    while ! metal device delete --force --id "${id}" &>/dev/null; do echo -n "."; sleep 3; done; set -x
+    echo "deleting ${dev}: ${id}, waiting..."; set +x
+    while ! metal device delete --force --id "${id}" &>/dev/null; do echo "deleting ${dev}: ${id}, waiting..."; sleep 10; done; set -x
   fi
   runnerid="$(gh api repos/cole-mickens/nixcfg/actions/runners | jq -r ".runners[] | select (.name == \"${dev}\").id")"
   if [[ "${runnerid:-""}" != "" ]]; then
