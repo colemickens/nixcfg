@@ -24,9 +24,6 @@ jobs:
       with:
         path: ./.nixcache
         key: ${{ steps.shell-out.outputs.outpath }}
-    - name: load-shell
-      if: steps.shell-cache.outputs.cache-hit == 'true'
-      run: nix copy --no-check-sigs --from ./.nixcache '.#devShellSrc'
     - name: init
       if: steps.shell-cache.outputs.cache-hit != 'true'
       run:
