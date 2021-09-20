@@ -227,7 +227,7 @@ function stash() {
 function ssh_cachix_push() {
   set -euo pipefail
   ssh "${1}" "nix-shell -I nixpkgs=${cachixpkgs} -p cachix --run \
-    'echo ${2} | env CACHIX_SIGNING_KEY=${cachixkey} cachix push ${cache} >/dev/stderr'" &>/dev/stderr
+    'echo ${2} | env CACHIX_SIGNING_KEY=${CACHIX_SIGNING_KEY} cachix push ${cache} >/dev/stderr'" &>/dev/stderr
 }
 # this just wraps the shell, give it the full command: ssh_nixUnstable_shell nix build ...
 function ssh_nixUnstable_shell() {
