@@ -140,23 +140,17 @@
           name = "nixcfg-devshell";
           buildInputs = (with pkgs_.nixpkgs.${system}; [
             (nixPackage system) cachix
-            bash cacert jq curl mercurial git
+            bash cacert jq curl parallel mercurial git
             nettools openssh ripgrep rsync
-            nix-build-uncached nix-prefetch-git
-            sops
+            nix-build-uncached nix-prefetch-git sops gh
+          ]) ++ [
             fullPkgs_.${system}.metal-cli
-            gh # github cli for packet+gha stuff
-          ]);
+          ];
         }
       );
 
-      commands = {};
-
-      apps = {
-        # buildkite-init # TODO: flesh this out
-      };
-
       legacyPackages = forAllSystems (system: {
+        # ugh, this is annoying so we can instantiate the "currentSystem" dev shell easily
         devShellSrc = inputs.self.devShell.${system}.inputDerivation;
       });
       packages = forAllSystems (system: fullPkgs_.${system}.colePackages);
