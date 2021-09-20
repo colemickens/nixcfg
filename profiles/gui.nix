@@ -89,7 +89,7 @@ in
         virt-viewer
         spice-gtk
 
-        tribler
+        # tribler # broken
 
         # matrix clients
         # fractal
