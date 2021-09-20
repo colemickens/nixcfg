@@ -14,7 +14,9 @@ jobs:
     - name: shell-out
       id: shell-out
       run: |
+        echo "hello"
         echo "::set-output name=outpath::$(nix eval --raw '.#devShellSrc')"
+        echo "world"
     - name: shell-cache
       uses: actions/cache@v2
       with:
