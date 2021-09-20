@@ -89,6 +89,8 @@ in
         virt-viewer
         spice-gtk
 
+        tribler
+
         # matrix clients
         # fractal
         # nheko

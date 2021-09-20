@@ -2,7 +2,7 @@
 
 {
   imports = [
-    "${modulesPath}/installer/cd-dvd/sd-image.nix"
+    "${modulesPath}/installer/sd-card/sd-image.nix"
   ];
 
   boot.loader.grub.enable = false;

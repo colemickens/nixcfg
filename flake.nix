@@ -142,6 +142,9 @@
             sops
             #awsweeper packet-cli
             haskellPackages.dhall-json
+
+            fullPkgs_.${system}.metal-cli
+            gh # github cli for packet+gha stuff
           ]);
         }
       );
@@ -178,6 +181,8 @@
           passrs = prev.callPackage ./pkgs/passrs {};
           rkvm = prev.callPackage ./pkgs/rkvm {};
           shreddit = prev.python3Packages.callPackage ./pkgs/shreddit {};
+
+          metal-cli = prev.callPackage ./pkgs/metal-cli {};
 
           libquotient = prev.libsForQt5.callPackage ./pkgs/quaternion/libquotient.nix {};
           quaternion = prev.libsForQt5.callPackage ./pkgs/quaternion {};

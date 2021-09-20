@@ -19,20 +19,12 @@ elif [[ -f "/run/secrets/cachix.dhall" ]] &>/dev/null; then
 else
   echo "set CACHIX_SIGNING_KEY" && exit -1
 fi
+[[ -z "${_GITHUB_TOKEN:-""}" ]] && echo "must set _GITHUB_TOKEN" && exit -1
+export GITHUB_TOKEN="${_GITHUB_TOKEN}"
+[[ -z "${METAL_AUTH_TOKEN:-""}" ]] && echo "must set METAL_AUTH_TOKEN" && exit -1
+[[ -z "${METAL_PROJECT_ID:-""}" ]] && echo "must set METAL_PROJECT_ID" && exit -1
+export GH_CONFIG_DIR="/tmp/gh" # we don't want to use the user's GH
 set -x
-
-ci_x86_64_targets=(
-  "-A" "toplevels.xeep"
-  "-A" "toplevels.raisin"
-  "-A" "toplevels.porty"
-)
-ci_aarch64_targets=(
-  "-A" "toplevels.pinebook"
-  "-A" "toplevels.rpifour1"
-  "-A" "toplevels.sinkor"
-  # "-A" "toplevels.bluephone"
-  # "-A" "toplevels.pinephone"
-)
 
 nixargs=(--experimental-features "nix-command flakes") #ca-references ca-derivations recursive-nix")
 buildargs=(
@@ -40,6 +32,7 @@ buildargs=(
   --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= arm.cachix.org-1:5BZ2kjoL1q6nWhlnrbAl+G7ThY7+HaBRD9PZzqZkbnM= thefloweringash-armv7.cachix.org-1:v+5yzBD2odFKeXbmC+OPWVqx4WVoIVO6UXgnSAWFtso='
   --option 'build-cores' '0'
   --option 'narinfo-cache-negative-ttl' '0'
+  --builders 'ssh-ng://cole@porty.ts.r10e.tech x86_64-linux - - - - big-parallel; ssh-ng://cole@orchard.ts.r10e.tech aarch64-linux'
 )
 
 srcdirs=(
@@ -48,6 +41,99 @@ srcdirs=(
   "mobile-nixos"    "sops-nix"        "wip-pinebook-pro"
   "nixos-veloren"   #"nixos-azure"
 )
+
+# <ci-packet>
+function packet-script() {
+  LABEL="$1"
+  RUNNER_TOKEN="${2}"
+  set +x
+  cat <<-EOF
+#!/bin/bash
+mkdir actions-runner && cd actions-runner
+case \$(uname -m) in aarch64) ARCH="arm64" ;; amd64|x86_64) ARCH="x64" ;; esac && export RUNNER_ARCH=\${ARCH}
+curl -O -L https://github.com/actions/runner/releases/download/v2.280.3/actions-runner-linux-\${RUNNER_ARCH}-2.280.3.tar.gz
+tar xzf ./actions-runner-linux-\${RUNNER_ARCH}-2.280.3.tar.gz
+export RUNNER_ALLOW_RUNASROOT=1
+export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+./config.sh --url https://github.com/cole-mickens/nixcfg --token ${RUNNER_TOKEN} --labels ${LABEL} --replace
+./run.sh
+EOF
+  set -x
+}
+function packet-curl() {
+  curl -H "X-Auth-Token: ${METAL_AUTH_TOKEN}" "$@" 2>/dev/null
+}
+function packet-spot() {
+  type="${1}"
+  packet-curl "https://api.packet.net/market/spot/prices" \
+    | jq ".spot_market_prices | keys[] as \$k | \"\(\$k) \(.[\$k][\"${type}\"].price)\"" | grep -v null
+}
+function packet-up() {
+  #packet-up-int "gha-x64" "c2.medium.x86"
+  packet-up-int "gha-arm64" "c1.large.arm"
+}
+function packet-up-int() {
+  dev="${1}"
+  plan="${2}"
+  # TODO: find best facility for price+size
+  token_x64="$(gh api -X POST /repos/cole-mickens/nixcfg/actions/runners/registration-token | jq -r .token)"
+  token_arm64="$(gh api -X POST /repos/cole-mickens/nixcfg/actions/runners/registration-token | jq -r .token)"
+
+  duration="1 hour";
+  termtime="$(TZ=UTC date --date="${duration}" --iso-8601=seconds)"
+
+  packet-down-int "${dev}"
+  facility="sjc1"
+  script="$(mktemp)"
+  packet-script "${dev}" "${token_x64}" > "${script}"
+  metal device create \
+    --hostname "${dev}" \
+    --plan "${plan}" \
+    --facility "${facility}" \
+    --operating-system "ubuntu_20_04" \
+    --spot-instance --spot-price-max "0.5" \
+    --termination-time="${termtime}" \
+    --userdata-file "${script}"
+
+  echo packet-wait "${dev}"
+}
+function packet-wait() {
+  dev="${1}"
+  set +x; echo -n "waiting for "${dev}" to finish provisioning."
+  while true; do
+    status="$(metal device get --output 'json' --search "${1}" | jq -r '.[0].state')"
+    if [[ "${status}" != "provisioning" && "${status}" != "queued" ]]; then break; fi
+    echo -n "."; sleep 2
+  done; echo " done!"; set -x
+  ip="$(metal device get --output 'json' --search "${1}" | jq -r '.[0].ip_addresses[] | select((.address_family==4) and (.public==true)).address')"
+  ssh-keygen -R "${ip}"
+  ssh-keyscan -H "${ip}" >> ~/.ssh/known_hosts
+
+  # wait for runner
+  set +x; echo -n "waiting for "${dev}" runner."
+  while true; do
+    runnerid="$(gh api repos/cole-mickens/nixcfg/actions/runners | jq -r ".runners[] | select (.name == \"${dev}\").id")"
+    if [[ "${runnerid:-""}" != "" ]]; then break; fi
+    echo -n "."; sleep 2
+  done; echo " done!"; set -x
+}
+function packet-down-int() {
+  dev="${1}"
+  id="$(metal device get --search "${dev}" --output json | jq -r '.[].id' || true)"
+  if [[ "${id:-""}" != "" ]]; then
+    echo -n "deleting ${dev}: ${id}"; set +x
+    while ! metal device delete --force --id "${id}" &>/dev/null; do echo -n "."; sleep 3; done; set -x
+  fi
+  runnerid="$(gh api repos/cole-mickens/nixcfg/actions/runners | jq -r ".runners[] | select (.name == \"${dev}\").id")"
+  if [[ "${runnerid:-""}" != "" ]]; then
+    gh api -X DELETE "repos/cole-mickens/nixcfg/actions/runners/${runnerid}" | jq
+  fi
+}
+function packet-down() {
+  packet-down-int 'gha-x64'
+  packet-down-int 'gha-arm64'
+}
+# </ci-packet>
 
 # <ci>
 function sanitize_name() {
@@ -73,12 +159,6 @@ function ci_nb_cache() {
   nix-build "${nixargs[@]}" "${buildargs[@]}" "--out-link" "${out}/result" "${@}"
   ls -al "${out}"
   readlink -f "${out}"/result* | cachix push colemickens
-}
-function ci_nb_cache_x86_64() { ci_nb_cache "${ci_x86_64_targets[@]}"; }
-function ci_nb_cache_aarch64() { ci_nb_cache "${ci_aarch64_targets[@]}"; }
-function ci_nb_cache_all() {
-  echo "use remote builder"
-  exit -1
 }
 function ci_check() {
   command nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0" --no-link)" \
