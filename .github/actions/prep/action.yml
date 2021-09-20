@@ -27,20 +27,21 @@ runs:
       shell: bash
       run: |
         echo -n "**TIME_START: "; date
-        echo "::set-output name=drvpath::$(nix eval --raw '.#devShellSrc.drvPath')"
+        echo "::set-output name=drvPath::$(nix eval --raw '.#devShellSrc.drvPath')"
+        echo "::set-output name=outPath::$(nix eval --raw '.#devShellSrc')"
     - name: shell-cache
       id: shell-cache
       uses: actions/cache@v2
       with:
-        path: ./.nixcache/${{ steps.shell-out.outputs.drvpath }}
-        key: ${{ steps.shell-out.outputs.drvpath }}
+        path: ./.nixcache/${{ steps.shell-out.outputs.drvPath }}
+        key: ${{ steps.shell-out.outputs.drvPath }}
     - name: load-shell
       shell: bash
       run: |
         
-        if [[ -d "./.nixcache/${{ steps.shell-out.outputs.drvpath }}" ]]; then
-          time nix copy --no-check-sigs --from ./.nixcache/${{ steps.shell-out.outputs.drvpath }} "${{ steps.shell-out.outputs.drvpath }}"
-          touch ./.nixcache/${{ steps.shell-out.outputs.drvpath }}-loaded
+        if [[ -d "./.nixcache/${{ steps.shell-out.outputs.drvPath }}" ]]; then
+          time nix copy --no-check-sigs --from ./.nixcache/${{ steps.shell-out.outputs.drvPath }} "${{ steps.shell-out.outputs.outPath }}"
+          touch ./.nixcache/${{ steps.shell-out.outputs.drvPath }}-loaded
         fi
         echo -n "**TIME_END: "; date
     - name: "init"
@@ -51,7 +52,7 @@ runs:
       run: |
         set -x
         set +e
-        if [[ ! -f ./.nixcache/${{ steps.shell-out.outputs.drvpath }}-loaded ]]; then
-          nix build -L "${{ steps.shell-out.outputs.drvpath }}"
-          nix copy --no-check-sigs --to ./.nixcache/${{ steps.shell-out.outputs.drvpath }} "${{ steps.shell-out.outputs.drvpath }}"
+        if [[ ! -f ./.nixcache/${{ steps.shell-out.outputs.drvPath }}-loaded ]]; then
+          nix build -L "${{ steps.shell-out.outputs.drvPath }}"
+          nix copy --no-check-sigs --to ./.nixcache/${{ steps.shell-out.outputs.drvPath }} "${{ steps.shell-out.outputs.outPath }}"
         fi
