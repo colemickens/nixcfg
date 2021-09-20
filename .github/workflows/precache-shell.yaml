@@ -6,7 +6,6 @@ concurrency: precache-shell
 jobs:
   "cache":
     runs-on: ubuntu-latest
-    concurrency: precache-shell
     steps:
     - { "uses": "actions/checkout@v2", "with": { "ref": "main" } }
     - { "name": "Tailscale", "uses": "tailscale/github-action@v1", "with": { "authkey": "${{ secrets.TAILSCALE_AUTHKEY }}" } }
