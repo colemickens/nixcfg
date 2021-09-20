@@ -5,8 +5,8 @@ inputs:
   tailscaleAuthkey:
     description: 'tailscale authkey'
     required: true
-  skipInit:
-    description: 'set to SKIP to skip init'
+  maybeSkipInit:
+    description: 'set to SKIP to maybe skip init'
     required: false
     default: 'no'
 runs:
@@ -34,7 +34,7 @@ runs:
     - name: "init"
       shell: bash
       run: |
-        if [[ "${{ inputs.skipInit }}" != "SKIP" ]]; then
+        if [[ "${{ inputs.maybeSkipInit }}" != "SKIP" && -d ./.nixcache ]]; then
           .github/exec __init
         fi
     - name: save-shell

@@ -12,3 +12,4 @@ jobs:
       uses: ./.github/actions/prep
       with:
         tailscaleAuthkey: "${{ secrets.TAILSCALE_AUTHKEY }}"
+        maybeSkipInit: true
