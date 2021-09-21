@@ -22,7 +22,7 @@ if [[ "${1:-""}" == "gha-init" ]]; then
 
   # activate secrets
   # TODO: should this just include the entire HM config?
-  mkdir ~/.config/sops/age/
+  mkdir -p ~/.config/sops/age/
   echo "${SOPS_AGE_KEY}" > ~/.config/sops/age/keys.txt
   sudo groupadd keys
   sudo gpasswd --add "${USER}" keys
