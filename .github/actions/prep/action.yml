@@ -14,36 +14,33 @@ runs:
       shell: bash
       run: |
         ./nixup gha-init
-    - name: shell-out
-      id: shell-out
+    - name: cache-key
+      id: cache-key
       shell: bash
       run: |
         echo -n "**TIME_START: "; date
         echo "::set-output name=drvPath::$(nix eval --raw '.#devShellSrc.drvPath')"
         echo "::set-output name=outPath::$(nix eval --raw '.#devShellSrc')"
-    - name: shell-cache
-      id: shell-cache
+    - name: cache-setup
       uses: actions/cache@v2
       with:
-        path: ./.nixcache/${{ steps.shell-out.outputs.outPath }}
-        key: ${{ steps.shell-out.outputs.outPath }}
-    - name: load-shell
+        path: ./.nixcache/${{ steps.cache-key.outputs.outPath }}
+        key: ${{ steps.cache-key.outputs.outPath }}
+    - name: maybe-load-shell
       shell: bash
       run: |
-        
-        if [[ -d "./.nixcache/${{ steps.shell-out.outputs.outPath }}" ]]; then
-          time nix copy --no-check-sigs --from ./.nixcache/${{ steps.shell-out.outputs.outPath }} "${{ steps.shell-out.outputs.outPath }}"
-          touch ./.nixcache/${{ steps.shell-out.outputs.outPath }}-loaded
+        if [[ -d "./.nixcache/${{ steps.cache-key.outputs.outPath }}" ]]; then
+          nix copy --no-check-sigs --from ./.nixcache/${{ steps.cache-key.outputs.outPath }} "${{ steps.cache-key.outputs.outPath }}"
+          touch ./.nixcache/${{ steps.cache-key.outputs.outPath }}-loaded
         fi
-        echo -n "**TIME_END: "; date
     - name: "init"
       shell: bash
-      run: time .github/exec __init
-    - name: save-shell
+      run: github/exec __init
+    - name: maybe-save-shell
       shell: bash
       run: |
         set -x
-        if [[ ! -f ./.nixcache/${{ steps.shell-out.outputs.outPath }}-loaded ]]; then
-          nix build -L "${{ steps.shell-out.outputs.drvPath }}"
-          nix copy --no-check-sigs --to ./.nixcache/${{ steps.shell-out.outputs.outPath }} "${{ steps.shell-out.outputs.outPath }}"
+        if [[ ! -f ./.nixcache/${{ steps.cache-key.outputs.outPath }}-loaded ]]; then
+          nix build -L "${{ steps.cache-key.outputs.drvPath }}"
+          nix copy --no-check-sigs --to ./.nixcache/${{ steps.cache-key.outputs.outPath }} "${{ steps.cache-key.outputs.outPath }}"
         fi
