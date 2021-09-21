@@ -36,3 +36,8 @@ sudo gpasswd --add "${USER}" keys
 
 wait "${nixpid}"
 sudo "${secrets_out}"/result
+
+source /run/secrets/nixup-secrets
+
+echo "::set-output name=TAILSCALE_AUTHKEY::${TAILSCALE_AUTHKEY}"
+
