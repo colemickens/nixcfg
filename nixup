@@ -38,6 +38,14 @@ srcdirs=(
   "nixos-veloren"   #"nixos-azure"
 )
 
+# <ci-gha-sops>
+function sops-init() {
+  secrets="$(mktemp -d)"
+  nix build --out-link "${secrets}/result" '.#secrets'
+  "${secrets}"/result
+}
+# </ci-gha-sops>
+
 # <ci-packet>
 function packet-script() {
   LABEL="$1"

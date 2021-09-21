@@ -6,6 +6,9 @@ let
     format = "binary";
   })) (builtins.readDir ./encrypted);
 in {
+  import = [
+    inputs.sops-nix.nixosModules.sops
+  ];
   config = {
     sops = {
       # externalAuthVars = {

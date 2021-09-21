@@ -8,12 +8,10 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: "prep-test"
+    - name: "sops-init"
       shell: bash
       run: |
-        hostname
-        echo "${USER}"
-        echo "${HOME}"
+        ./nixup sops-init
     - { "name": "Tailscale", "uses": "tailscale/github-action@v1", "with": { "authkey": "${{ inputs.tailscaleAuthkey }}" } }
     - { "uses": "cachix/install-nix-action@v14", "with": {"install_url": "https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.4pre20210823_af94b54/install","extra_nix_config": "experimental-features = nix-command flakes ca-references\n" } }
     - name: enable sshd
