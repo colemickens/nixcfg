@@ -4,7 +4,9 @@ let
   pkgs = import nixpkgs { inherit system; };
   fakeSystem = (nixpkgs.lib.nixosSystem {
     inherit system;
-    modules = [ ../secrets ];
+    modules = [
+      ../secrets
+    ];
     specialArgs = { inherit inputs; };
   });
 in
