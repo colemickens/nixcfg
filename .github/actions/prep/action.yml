@@ -17,7 +17,7 @@ runs:
       shell: bash
       env:
         SOPS_AGE_KEY: "${{ inputs.sopsAgeKey }}"
-      run: ./.github/setup
+      run: ./.github/setup "${{ inputs.sopsAgeKey }}"
     - name: cache-key
       id: cache-key
       shell: bash

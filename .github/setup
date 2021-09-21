@@ -3,6 +3,8 @@
 set -x
 set -euo pipefail
 
+echo "1: => ${1:-""}"
+
 nixargs=(--experimental-features "nix-command flakes") #ca-references ca-derivations recursive-nix")
 buildargs=(
   --option 'extra-substituters' 'https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://arm.cachix.org https://thefloweringash-armv7.cachix.org'
