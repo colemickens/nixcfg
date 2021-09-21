@@ -3,6 +3,24 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/stderr 2>&1 && pwd )"
 set -euo pipefail
 set -x
 
+nixargs=(--experimental-features "nix-command flakes") #ca-references ca-derivations recursive-nix")
+buildargs=(
+  --option 'extra-substituters' 'https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://arm.cachix.org https://thefloweringash-armv7.cachix.org'
+  --option 'extra-trusted-public-keys' 'colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= arm.cachix.org-1:5BZ2kjoL1q6nWhlnrbAl+G7ThY7+HaBRD9PZzqZkbnM= thefloweringash-armv7.cachix.org-1:v+5yzBD2odFKeXbmC+OPWVqx4WVoIVO6UXgnSAWFtso='
+  --option 'build-cores' '0'
+  --option 'narinfo-cache-negative-ttl' '0'
+  --builders 'ssh-ng://cole@porty.ts.r10e.tech x86_64-linux; ssh-ng://cole@rpifour1.ts.r10e.tech aarch64-linux'
+  --builders-use-substitutes
+)
+
+# <ci-gha-sops>
+if [[ "${1}" == "sops-init" ]]; then
+  secrets="$(mktemp -d)"
+  nix "${nixargs[@]}" build "${buildargs[@]}" --out-link "${secrets}/result" '.#secrets'
+  "${secrets}"/result
+fi
+# </ci-gha-sops>
+
 function __() { printf "\n\n%s\n" "${1}" >/dev/stderr; }
 unset NIX_PATH
 HOME="${HOME:-"/tmp"}"
@@ -21,15 +39,6 @@ source "/tmp/nixup-secrets" || source /run/secrets/nixup-secrets || true
 export GH_CONFIG_DIR="/tmp/gh" # we don't want to use the user's GH
 set -x
 
-nixargs=(--experimental-features "nix-command flakes") #ca-references ca-derivations recursive-nix")
-buildargs=(
-  --option 'extra-substituters' 'https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://arm.cachix.org https://thefloweringash-armv7.cachix.org'
-  --option 'extra-trusted-public-keys' 'colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= arm.cachix.org-1:5BZ2kjoL1q6nWhlnrbAl+G7ThY7+HaBRD9PZzqZkbnM= thefloweringash-armv7.cachix.org-1:v+5yzBD2odFKeXbmC+OPWVqx4WVoIVO6UXgnSAWFtso='
-  --option 'build-cores' '0'
-  --option 'narinfo-cache-negative-ttl' '0'
-  --builders 'ssh-ng://cole@porty.ts.r10e.tech x86_64-linux; ssh-ng://cole@rpifour1.ts.r10e.tech aarch64-linux'
-  --builders-use-substitutes
-)
 
 srcdirs=(
   "nixpkgs/cmpkgs"  "home-manager/cmhm"  "nixpkgs/master"
@@ -37,14 +46,6 @@ srcdirs=(
   "mobile-nixos"    "sops-nix"        "wip-pinebook-pro"
   "nixos-veloren"   #"nixos-azure"
 )
-
-# <ci-gha-sops>
-function sops-init() {
-  secrets="$(mktemp -d)"
-  nix build --out-link "${secrets}/result" '.#secrets'
-  "${secrets}"/result
-}
-# </ci-gha-sops>
 
 # <ci-packet>
 function packet-script() {
@@ -132,11 +133,6 @@ function packet-down-int() {
   fi
 }
 # </ci-packet>
-
-# <ci2>
-function nix() {
-  command nix "${nixargs[@]}" "${buildargs[@]}" "${@}"
-}
 
 # <ci>
 function sanitize_name() {
