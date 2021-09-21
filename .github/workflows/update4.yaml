@@ -13,6 +13,7 @@ jobs:
       uses: ./.github/actions/prep
       with:
         tailscaleAuthkey: "${{ secrets.TAILSCALE_AUTHKEY }}"
+        sopsAgeKey: "${{ secrets.SOPS_AGE_KEY }}"
     # - name: "packet-create-instances"
     #   env: { "NIXUP_SECRETS": "${{ secrets.NIXUP_SECRETS }}" }
     #   run: .github/exec ./nixup packet-up
