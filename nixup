@@ -14,7 +14,7 @@ buildargs=(
 )
 
 # <ci-gha>
-if [[ "${1}" == "gha-init" ]]; then
+if [[ "${1:-""}" == "gha-init" ]]; then
   # enable SSHD
   mkdir -p ~/.ssh
   chmod og-rw ~/
@@ -236,7 +236,12 @@ function stash() {
   __ "stashing nixcfg"
   cd "${DIR}";
   git add -A .
-  git commit -m stash && git pull --rebase || true
+  git commit -m stash
+  git rev-parse HEAD > /tmp/nixup-stash-before-rebase
+  git pull --rebase
+  git rev-parse HEAD > /tmp/nixup-stash-before-update-rebase
+  git rebase origin/auto-update4-ready
+  git push
 }
 
 # this includes the actual `cachix push` command, just send it a path
@@ -340,8 +345,4 @@ if [[ ! -z "${cmd:-""}" ]]; then
   "${cmd}" "${@}"
 else
   stash
-  git rebase origin/auto-update3-ready
-  git push
-  sudo nixos-rebuild switch --flake ~/code/nixcfg
-  readlink -f /run/current-system | cachix push colemickens
 fi
