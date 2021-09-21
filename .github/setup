@@ -3,8 +3,6 @@
 set -x
 set -euo pipefail
 
-echo "1: => ${1:-""}"
-
 nixargs=(--experimental-features "nix-command flakes") #ca-references ca-derivations recursive-nix")
 buildargs=(
   --option 'extra-substituters' 'https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://arm.cachix.org https://thefloweringash-armv7.cachix.org'
@@ -37,6 +35,9 @@ sudo gpasswd --add "${USER}" keys
 wait "${nixpid}"
 sudo "${secrets_out}"/result
 
+ls -al /run || true
+ls -al /run/secrets || true
+ls -al /run/secrets/nixup-secrets || true
 source /run/secrets/nixup-secrets
 
 echo "::set-output name=TAILSCALE_AUTHKEY::${TAILSCALE_AUTHKEY}"
