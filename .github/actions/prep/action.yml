@@ -5,6 +5,9 @@ inputs:
   tailscaleAuthkey:
     description: 'tailscale authkey'
     required: true
+  sopsAgeKey:
+    description: 'sops age key'
+    required: true
 runs:
   using: composite
   steps:
@@ -12,8 +15,9 @@ runs:
     - { "uses": "cachix/install-nix-action@v14", "with": {"install_url": "https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.4pre20210823_af94b54/install","extra_nix_config": "experimental-features = nix-command flakes ca-references\n" } }
     - name: "gha-init"
       shell: bash
-      run: |
-        ./nixup gha-init
+      env:
+        SOPS_AGE_KEY: "${{ inputs.sopsAgeKey }}"
+      run: ./.github/setup
     - name: cache-key
       id: cache-key
       shell: bash
