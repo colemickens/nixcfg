@@ -5,6 +5,7 @@ let
   fakeSystem = (nixpkgs.lib.nixosSystem {
     inherit system;
     modules = [ ../secrets ];
+    specialArgs = { inherit inputs; };
   });
 in
   pkgs.writeShellScript "setup-secrets" ''
