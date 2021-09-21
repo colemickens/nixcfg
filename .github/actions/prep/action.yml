@@ -18,7 +18,6 @@ runs:
       id: cache-key
       shell: bash
       run: |
-        echo -n "**TIME_START: "; date
         echo "::set-output name=drvPath::$(nix eval --raw '.#devShellSrc.drvPath')"
         echo "::set-output name=outPath::$(nix eval --raw '.#devShellSrc')"
     - name: cache-setup
@@ -26,17 +25,18 @@ runs:
       with:
         path: ./.nixcache/${{ steps.cache-key.outputs.outPath }}
         key: ${{ steps.cache-key.outputs.outPath }}
-    - name: maybe-load-shell
+    - name: cache-maybe-load-shell
       shell: bash
       run: |
+        set -x
         if [[ -d "./.nixcache/${{ steps.cache-key.outputs.outPath }}" ]]; then
           nix copy --no-check-sigs --from ./.nixcache/${{ steps.cache-key.outputs.outPath }} "${{ steps.cache-key.outputs.outPath }}"
           touch ./.nixcache/${{ steps.cache-key.outputs.outPath }}-loaded
         fi
     - name: "init"
       shell: bash
-      run: github/exec __init
-    - name: maybe-save-shell
+      run:  .github/exec __init
+    - name: cache-maybe-save-shell
       shell: bash
       run: |
         set -x
