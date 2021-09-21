@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
 
+set -x
+set -euo pipefail
 # this doesn't run in nix-shell
 # this runs very early on
+
+# background it!
+secrets_out="$(mktemp -d)"
+nix "${nixargs[@]}" build "${buildargs[@]}" --out-link "${secrets_out}/result" '.#secrets' &
+nixpid="$!"
 
 # enable SSHD
 mkdir -p ~/.ssh
@@ -14,6 +21,6 @@ mkdir -p ~/.config/sops/age/
 echo "${SOPS_AGE_KEY}" > ~/.config/sops/age/keys.txt
 sudo groupadd keys
 sudo gpasswd --add "${USER}" keys
-secrets="$(mktemp -d)"
-nix "${nixargs[@]}" build "${buildargs[@]}" --out-link "${secrets}/result" '.#secrets'
-sudo "${secrets}"/result
+
+wait "${nixpid}"
+sudo "${secrets_out}"/result
