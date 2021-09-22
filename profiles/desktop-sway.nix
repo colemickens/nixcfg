@@ -17,7 +17,16 @@
       # block auto-sway reload, Sway crashes...
       xdg.configFile."sway/config".onChange = lib.mkForce "";
 
+      services = {
+        udiskie = {
+          enable = true;
+          automount = false;
+          tray = "always";
+        };
+      };
+
       home.sessionVariables = {
+        
         MOZ_ENABLE_WAYLAND = "1";
 
         #WLR_DRM_NO_MODIFIERS = "1";

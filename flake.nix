@@ -101,7 +101,7 @@
     let
       nameValuePair = name: value: { inherit name value; };
       genAttrs = names: f: builtins.listToAttrs (map (n: nameValuePair n (f n)) names);
-      supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
+      supportedSystems = [ "x86_64-linux" "aarch64-linux" "armv6l-linux" ];
       forAllSystems = genAttrs supportedSystems;
       filterPkg_ = system: (pkg: builtins.elem "${system}" (pkg.meta.platforms or [ "x86_64-linux" "aarch64-linux" ]));
       # TODO: we probably want to skip broken?
@@ -127,7 +127,7 @@
       minimalMkShell = system: import ./lib/minimalMkShell.nix { pkgs = fullPkgs_.${system}; };
       hydralib = import ./lib/hydralib.nix;
 
-      nixPackage = sys: fullPkgs_.${sys}.nixUnstable; # give us our own overlayed one
+      nixPackage = sys: pkgs_.nixpkgs.${sys}.nixUnstable;
     in rec {
       devShell = forAllSystems (system: minimalMkShell system {
         name = "nixcfg-devshell";

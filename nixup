@@ -55,7 +55,7 @@ gpasswd --add runner root || true
 cd /home/runner
 su runner -c "curl -O -L https://github.com/actions/runner/releases/download/v2.280.3/actions-runner-linux-\${RUNNER_ARCH}-2.280.3.tar.gz"
 su runner -c "tar xzf ./actions-runner-linux-\${RUNNER_ARCH}-2.280.3.tar.gz"
-su runner -c "env DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1 ./config.sh --unattended --url https://github.com/cole-mickens/nixcfg --token ${RUNNER_TOKEN} --labels ${LABEL} --replace"
+su runner -c "env DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1 ./config.sh --unattended --url https://github.com/cole-mickens/nixcfg --token ${RUNNER_TOKEN} --labels ${LABEL} --ephemeral"
 su runner -c "env DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1 ./run.sh"
 EOF
   set -x
@@ -64,7 +64,7 @@ function packet-curl() { curl -H "X-Auth-Token: ${METAL_AUTH_TOKEN}" "$@" 2>/dev
 function packet-spot() { packet-curl "https://api.packet.net/market/spot/prices" | jq ".spot_market_prices | keys[] as \$k | \"\(\$k) \(.[\$k][\"${1}\"].price)\"" | grep -v null; }
 function packet-up() {
   packet-up-int "gha-x64" "c2.medium.x86"
-  packet-up-int "gha-arm64" "c1.large.arm"
+  packet-up-int "gha-arm64" "c2.large.arm"
 }
 function packet-down() {
   packet-down-int 'gha-x64'
@@ -88,7 +88,7 @@ function packet-up-int() {
     --hostname "${dev}" \
     --plan "${plan}" \
     --facility "${facility}" \
-    --operating-system "ubuntu_20_04" \
+    --operating-system "ubuntu_18_04" \
     --spot-instance --spot-price-max "0.5" \
     --termination-time="${termtime}" \
     --userdata-file "${script}"

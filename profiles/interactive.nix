@@ -9,7 +9,6 @@ in
   imports = [
     ./core.nix  # imports hm
 
-    inputs.sops-nix.nixosModules.sops
     ../secrets
 
     ../mixins/gpg-agent.nix
@@ -23,7 +22,7 @@ in
     ../mixins/nushell.nix
     ../mixins/skim.nix
     ../mixins/sshd.nix
-    #../mixins/tailscale.nix
+    ../mixins/tailscale.nix
     ../mixins/xdg.nix
     ../mixins/zoxide.nix
   ];

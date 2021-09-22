@@ -57,9 +57,7 @@ in
         TERMINAL = "alacritty";
         MOZ_USE_XINPUT2 = "1";
       };
-      services = {
-        udiskie.enable = true;
-      };
+
       home.packages = with pkgs; [
         colePackages.customGuiCommands
 
