@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.programs.zellij;
-  cfgfmt = pkgs.formats.yaml { };
+  cfgfmt = pkgs.formats.toml { };
 in {
   meta.maintainers = [ maintainers.colemickens ];
 
@@ -50,7 +50,7 @@ in {
   config = mkIf cfg.enable {
     home.packages = [ cfg.package ];
 
-    xdg.configFile."nu/config.toml" = mkIf (cfg.settings != { }) {
+    xdg.configFile."zellij/config.toml" = mkIf (cfg.settings != { }) {
       source = cfgfmt.generate "zellij-config" cfg.settings;
     };
   };

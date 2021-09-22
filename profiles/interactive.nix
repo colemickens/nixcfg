@@ -24,6 +24,7 @@ in
     ../mixins/sshd.nix
     ../mixins/tailscale.nix
     ../mixins/xdg.nix
+    ../mixins/zellij.nix
     ../mixins/zoxide.nix
   ];
 
