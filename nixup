@@ -225,7 +225,7 @@ function stash() {
   __ "stashing nixcfg"
   cd "${DIR}";
   git add -A .
-  git commit -m stash
+  git commit -m stash || true
   git rev-parse HEAD > /tmp/nixup-stash-before-rebase
   git pull --rebase
   git rev-parse HEAD > /tmp/nixup-stash-before-update-rebase
