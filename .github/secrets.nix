@@ -25,5 +25,9 @@ let
   });
 in
   pkgs.writeShellScript "setup-secrets" ''
+    sudo groupadd keys
+    sudo gpasswd --add "''${USER}" keys
+    mkdir -p ~/.config/sops/age/
+    printf "%s" "''${SOPS_AGE_KEY}" > ~/.config/sops/age/keys.txt
     ${fakeSystem.config.system.activationScripts.setup-secrets.text}
   ''
