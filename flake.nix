@@ -128,6 +128,8 @@
       hydralib = import ./lib/hydralib.nix;
 
       nixPackage = sys: pkgs_.nixpkgs.${sys}.nixUnstable;
+
+      #mkApp = {script}: { type = "app"; program = pkgs.writeShellScript "foo" script; };
     in rec {
       devShell = forAllSystems (system: minimalMkShell system {
         name = "nixcfg-devshell";
@@ -142,11 +144,16 @@
           ]);
       });
 
-      # apps = forAllSystems (system: {
-      #   # to `nix eval` the "currentSystem" in certain scenarios
-      #   devShellSrc = inputs.self.devShell.${system}.inputDerivation;
-      #   secrets = (import ./.github/secrets.nix { nixpkgs = inputs.nixpkgs; inherit inputs system; });
-      # });
+      apps = forAllSystems (system: {
+        # this is to have a minimal deriv to build/dl/run early on in CI jobs
+        # we want to have a chance to load the devShell from cache using the CI's cache mechanism
+        install-secrets = {
+          type = "app";
+          # ugh, dupe in/from legacyPackages so we can both easily build *and* run this, wtf nix cli
+          # maybe just map these in from legacyPackages? maybe not
+          program = legacyPackages."${system}".install-secrets;
+        };
+      });
 
       legacyPackages = forAllSystems (system: {
         # to `nix eval` the "currentSystem" in certain scenarios
