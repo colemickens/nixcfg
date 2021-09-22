@@ -12,10 +12,12 @@ buildargs=(
   --builders-use-substitutes
 )
 
+nix "${nixargs[@]}" --version
+
 # background it!
 secrets_out="$(mktemp -d)"
 nix "${nixargs[@]}" build "${buildargs[@]}" --out-link "${secrets_out}/result" '.#secrets' &
-#nixpid="$!"
+nixpid="$!"
 
 # enable SSHD
 mkdir -p ~/.ssh
@@ -33,9 +35,10 @@ sudo groupadd keys
 sudo gpasswd --add "${USER}" keys
 
 # instead of &/wait pid, just run the nix build again and wait for both
-# wait ${nixpid}
-nix "${nixargs[@]}" build "${buildargs[@]}" --out-link "${secrets_out}/result" '.#secrets'
-sudo "${secrets_out}"/result
+wait ${nixpid}
+# this caused some weird internal nix issue???????? wtf?
+#nix "${nixargs[@]}" build "${buildargs[@]}" --out-link "${secrets_out}/result" '.#secrets'
+sudo "${secrets_out}/result"
 
 set +x; source /run/secrets/nixup-secrets; set -x
 
