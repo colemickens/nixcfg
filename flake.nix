@@ -158,7 +158,7 @@
       legacyPackages = forAllSystems (system: {
         # to `nix eval` the "currentSystem" in certain scenarios
         devShellSrc = inputs.self.devShell.${system}.inputDerivation;
-        secrets = (import ./.github/secrets.nix { nixpkgs = inputs.nixpkgs; inherit inputs system; });
+        install-secrets = (import ./.github/secrets.nix { nixpkgs = inputs.nixpkgs; inherit inputs system; });
       });
       packages = forAllSystems (system: fullPkgs_.${system}.colePackages);
       pkgs = forAllSystems (system: fullPkgs_.${system});

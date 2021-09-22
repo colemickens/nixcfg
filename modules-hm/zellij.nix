@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.programs.zellij;
-  cfgfmt = pkgs.formats.toml { };
+  cfgfmt = pkgs.formats.yaml { };
 in {
   meta.maintainers = [ maintainers.colemickens ];
 
@@ -30,11 +30,8 @@ in {
       default = { };
       example = literalExample ''
         {
-          edit_mode = "vi";
-          startup = [ "alias la [] { ls -a }" "alias e [msg] { echo $msg }" ];
-          key_timeout = 10;
-          completion_mode = "circular";
-          no_auto_pivot = true;
+          default-mode = "normal";
+          simplified-ui = true;
         }
       '';
       description = ''
@@ -50,7 +47,7 @@ in {
   config = mkIf cfg.enable {
     home.packages = [ cfg.package ];
 
-    xdg.configFile."zellij/config.toml" = mkIf (cfg.settings != { }) {
+    xdg.configFile."zellij/config.yaml" = mkIf (cfg.settings != { }) {
       source = cfgfmt.generate "zellij-config" cfg.settings;
     };
   };

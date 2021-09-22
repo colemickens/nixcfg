@@ -55,7 +55,6 @@ in
 
         settings = {
           default-mode = "normal";
-          default-shell = "nu"; # TODO SET GLOBALLY?
           simplified-ui = true;
 
           themes = {
