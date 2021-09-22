@@ -37,8 +37,8 @@ jobs:
     strategy:
       matrix:
         jobs:
-        # - { "branch": "auto-update4",  "target": "bundles.x86_64-linux",   "runson": "gha-x64" }
-        # - { "branch": "auto-update4",  "target": "bundles.aarch64-linux",  "runson": "gha-arm64" }
+        - { "branch": "auto-update4",  "target": "bundles.x86_64-linux",   "runson": "gha-x64" }
+        - { "branch": "auto-update4",  "target": "bundles.aarch64-linux",  "runson": "gha-arm64" }
         - { "branch": "auto-update4",  "target": "bundles.x86_64-linux",   "runson": "ubuntu-20.04" }
         # - { "branch": "auto-update4",  "target": "bundles.aarch64-linux",   "runson": "ubuntu-20.04" }
     steps:

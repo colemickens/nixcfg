@@ -142,11 +142,11 @@
           ]);
       });
 
-      apps = forAllSystems (system: {
-        # to `nix eval` the "currentSystem" in certain scenarios
-        devShellSrc = inputs.self.devShell.${system}.inputDerivation;
-        secrets = (import ./.github/secrets.nix { nixpkgs = inputs.nixpkgs; inherit inputs system; });
-      });
+      # apps = forAllSystems (system: {
+      #   # to `nix eval` the "currentSystem" in certain scenarios
+      #   devShellSrc = inputs.self.devShell.${system}.inputDerivation;
+      #   secrets = (import ./.github/secrets.nix { nixpkgs = inputs.nixpkgs; inherit inputs system; });
+      # });
 
       legacyPackages = forAllSystems (system: {
         # to `nix eval` the "currentSystem" in certain scenarios
