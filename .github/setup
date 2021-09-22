@@ -40,7 +40,7 @@ wait ${nixpid}
 #nix "${nixargs[@]}" build "${buildargs[@]}" --out-link "${secrets_out}/result" '.#secrets'
 sudo "${secrets_out}/result"
 
-set +x; source /run/secrets/nixup-secrets; set -x
-
+set +x;
+source /run/secrets/nixup-secrets;
 echo "::set-output name=TAILSCALE_AUTHKEY::${TAILSCALE_AUTHKEY}"
-
+set -x
