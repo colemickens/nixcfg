@@ -151,7 +151,7 @@
           type = "app";
           # ugh, dupe in/from legacyPackages so we can both easily build *and* run this, wtf nix cli
           # maybe just map these in from legacyPackages? maybe not
-          program = legacyPackages."${system}".install-secrets;
+          program = legacyPackages."${system}".install-secrets.outPath;
         };
       });
 
