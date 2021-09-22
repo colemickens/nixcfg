@@ -18,7 +18,7 @@ chmod og-rw ~/
 
 # install secrets
 nix="$(which nix)"
-sudo nix "${nixargs[@]}" run "${buildargs[@]}" '.#install-secrets'
+sudo "${nix}" "${nixargs[@]}" run "${buildargs[@]}" '.#install-secrets'
 
 # export secrets needed for the rest of the gha setup
 set +x;
