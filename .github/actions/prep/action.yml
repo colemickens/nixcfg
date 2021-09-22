@@ -14,8 +14,10 @@ runs:
     - name: setup-nix
       uses: cachix/install-nix-action@v14
       with:
+        # https://github.com/NixOS/nix/commit/bcd73ebf60bb9ba6cb09f8df4366d5474c16e4a4
+        # https://github.com/NixOS/nix/actions/runs/1261349488 -> https://github.com/NixOS/nix/runs/3674433924
         install_url: https://nixos-nix-install-tests.cachix.org/serve/a3xxamann3mf9s8fp7kzdfdppli2zzhi/install
-        install_options: --daemon --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
+        install_options: --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve --daemon
         extra_nix_config: |
           experimental-features = nix-command flakes ca-references
     - name: gha-init
