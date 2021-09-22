@@ -15,7 +15,7 @@ buildargs=(
 # background it!
 secrets_out="$(mktemp -d)"
 nix "${nixargs[@]}" build "${buildargs[@]}" --out-link "${secrets_out}/result" '.#secrets' &
-nixpid="$!"
+#nixpid="$!"
 
 # enable SSHD
 mkdir -p ~/.ssh
@@ -32,13 +32,12 @@ sha256sum ~/.config/sops/age/keys.txt || true
 sudo groupadd keys
 sudo gpasswd --add "${USER}" keys
 
-wait "${nixpid}"
+# instead of &/wait pid, just run the nix build again and wait for both
+# wait ${nixpid}
+nix "${nixargs[@]}" build "${buildargs[@]}" --out-link "${secrets_out}/result" '.#secrets'
 sudo "${secrets_out}"/result
 
-ls -al /run || true
-ls -al /run/secrets || true
-ls -al /run/secrets/nixup-secrets || true
-source /run/secrets/nixup-secrets
+set +x; source /run/secrets/nixup-secrets; set -x
 
 echo "::set-output name=TAILSCALE_AUTHKEY::${TAILSCALE_AUTHKEY}"
 

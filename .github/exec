@@ -13,6 +13,7 @@ nixargs=(--experimental-features "nix-command flakes") #ca-references ca-derivat
 
 if [[ "${1:-""}" == "__init" ]]; then
   cat << EOF | "${0}"
+set -x
 git config --global user.name 'Cole Botkens'
 git config --global user.email 'cole.mickens+colebot@gmail.com'
 git remote update
