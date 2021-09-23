@@ -7,8 +7,6 @@ set -x
 # except that tails fucks with debian-live
 # it's kinda all garbage
 
-rm -rf ~/.cache/ktails
-
 # workdir
 out="$(mktemp -d)"
 img="$HOME/downloads/tails-amd64-4.19-img/tails-amd64-4.19.img"

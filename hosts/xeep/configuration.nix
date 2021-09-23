@@ -4,6 +4,7 @@ let
 in
 {
   imports = [
+    ../../mixins/docker.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/plex.nix
     ../../mixins/sshd.nix
@@ -130,7 +131,7 @@ in
       hostId = "ef66d560";
       hostName = hostname;
       firewall.enable = true;
-      firewall.allowedTCPPorts = [ 22 ];
+      firewall.allowedTCPPorts = [ 22 10554 ];
       networkmanager.enable = true;
       wireless.enable = false;
       wireless.iwd.enable = false;
