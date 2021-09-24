@@ -15,7 +15,7 @@
 
   #environment.etc."test_cole_version".source = ./version.txt;
 
-  system.stateVersion = "21.03";
+  system.stateVersion = "21.05";
   virtualisation.hypervGuest.enable = true;
 
   documentation.enable = false;
@@ -62,7 +62,8 @@
 
     # https://askubuntu.com/a/399960
     kernelParams = [ "video=hyperv_fb:800x600" ];
-    kernelPackages = pkgs.linuxPackages_latest;
+    #kernelPackages = pkgs.linuxPackages_latest;  # ZFS
+    kernelPackages = pkgs.linuxPackages_5_13;
 
     # https://github.com/NixOS/nix/issues/421
     kernel.sysctl."vm.overcommit_memory" = "1";
