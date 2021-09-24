@@ -25,6 +25,7 @@ let
   });
 in
   pkgs.writeShellScript "setup-secrets" ''
+    set -x
     sudo groupadd keys
     sudo gpasswd --add "''${USER}" keys
     mkdir -p ~/.config/sops/age/
