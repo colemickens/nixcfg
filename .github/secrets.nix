@@ -23,12 +23,21 @@ let
     ];
     specialArgs = { inherit inputs; };
   });
-in
-  pkgs.writeShellScript "setup-secrets" ''
+
+  setupSecretsInt = pkgs.writeShellScript "setup-secrets-internal" ''
+    ${fakeSystem.config.system.activationScripts.setup-secrets.text}
+  '';
+
+  setupSecrets = pkgs.writeShellScript "setup-secrets" ''
     set -x
     sudo groupadd keys
     sudo gpasswd --add "''${USER}" keys
     mkdir -p ~/.config/sops/age/
+    echo "writing SOPS_AGE_KEY"
+    set +x
     printf "%s" "''${SOPS_AGE_KEY}" > ~/.config/sops/age/keys.txt
-    ${fakeSystem.config.system.activationScripts.setup-secrets.text}
+    set -x
+    sudo ${setupSecretsInt}
   ''
+in
+  setupSecrets
