@@ -13,9 +13,7 @@
 
   users.users.cole.linger = true;
 
-  environment.etc = {
-    test_cole_version.source = ./version.txt;
-  };
+  #environment.etc."test_cole_version".source = ./version.txt;
 
   system.stateVersion = "21.03";
   virtualisation.hypervGuest.enable = true;
