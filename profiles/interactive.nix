@@ -30,6 +30,8 @@ in
 
   config = {
     # HM: ca.desrt.dconf error:
+    sops.secrets."nixup-secrets".owner = config.users.users.cole;
+
     services.dbus.packages = with pkgs; [ gnome3.dconf ];
     nix.extraOptions = ''
       keep-outputs = true

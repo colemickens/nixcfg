@@ -229,7 +229,7 @@ function stash() {
   git rev-parse HEAD > /tmp/nixup-stash-before-rebase
   git pull --rebase
   git rev-parse HEAD > /tmp/nixup-stash-before-update-rebase
-  git rebase origin/auto-update4-ready
+  git rev-parse origin/auto-update4-ready && git rebase origin/auto-update4-ready
   git push
 }
 
