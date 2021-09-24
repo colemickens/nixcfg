@@ -38,6 +38,6 @@ let
     printf "%s" "''${SOPS_AGE_KEY}" > ~/.config/sops/age/keys.txt
     set -x
     sudo ${setupSecretsInt}
-  ''
+  '';
 in
   setupSecrets

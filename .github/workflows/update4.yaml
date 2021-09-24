@@ -12,13 +12,10 @@ jobs:
     - name: prep
       uses: ./.github/actions/prep
       with:
-        tailscaleAuthkey: "${{ secrets.TAILSCALE_AUTHKEY }}"
         sopsAgeKey: "${{ secrets.SOPS_AGE_KEY }}"
     - name: "packet-create-instances"
-      env: { "NIXUP_SECRETS": "${{ secrets.NIXUP_SECRETS }}" }
       run: .github/exec ./nixup packet-up
     - name: "update"
-      env: { "NIXUP_SECRETS": "${{ secrets.NIXUP_SECRETS }}" }
       run: |
         cat << EOF | .github/exec
           set -x
@@ -46,9 +43,8 @@ jobs:
     - name: prep
       uses: ./.github/actions/prep
       with:
-        tailscaleAuthkey: "${{ secrets.TAILSCALE_AUTHKEY }}"
+        sopsAgeKey: "${{ secrets.SOPS_AGE_KEY }}"
     - name: build-n-cache
-      env: { "NIXUP_SECRETS": "${{ secrets.NIXUP_SECRETS }}" }
       run: .github/exec ./nixup ci_nb_cache ${{ matrix.jobs.target }}
 
   "publish":
@@ -59,9 +55,8 @@ jobs:
     - name: prep
       uses: ./.github/actions/prep
       with:
-        tailscaleAuthkey: "${{ secrets.TAILSCALE_AUTHKEY }}"
+        sopsAgeKey: "${{ secrets.SOPS_AGE_KEY }}"
     - name: "publish"
-      env: { "NIXUP_SECRETS": "${{ secrets.NIXUP_SECRETS }}" }
       run: |
         cat << EOF | .github/exec
           set -x
@@ -81,10 +76,10 @@ jobs:
   #   if: ${{ always() }}
   #   runs-on: ubuntu-latest
     # steps:
-    # - { "uses": "actions/checkout@v2", "with": { "ref": "auto-update4" } }
-    # - { "name": "Tailscale", "uses": "tailscale/github-action@v1", "with": { "authkey": "${{ secrets.TAILSCALE_AUTHKEY }}" } }
-    # - { "uses": "cachix/install-nix-action@v14", "with": {"install_url": "https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.4pre20210823_af94b54/install","extra_nix_config": "experimental-features = nix-command flakes ca-references\n" } }
-  #     run: .github/exec __init
+    # - name: prep
+    #   uses: ./.github/actions/prep
+    #   with:
+    #     sopsAgeKey: "${{ secrets.SOPS_AGE_KEY }}"
   #   - name: "packet-destroy-instances"
   #     if: ${{ always() }}
   #    env: { "NIXUP_SECRETS": "${{ secrets.NIXUP_SECRETS }}" }
