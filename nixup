@@ -296,7 +296,7 @@ a64com="colemickens@aarch64.nixos.community"
 function pinebook()  { remote "${a64com}"      "toplevels.pinebook"  "$(tsip pinebook)"; }
 function xeep()      { remote "$(tsip xeep)"   "toplevels.xeep"      "$(tsip xeep)"; }
 function raisin()    { remote "$(tsip raisin)" "toplevels.raisin"    "$(tsip raisin)"; }
-function jeffhyper() { remote "$(tsip porty)"  "toplevels.jeffhyper" "$(tsip jeffhyper)"; }
+function jeffhyper() { remote "$(tsip xeep)"  "toplevels.jeffhyper" "$(tsip jeffhyper)"; }
 function porty()     { remote "$(tsip porty)"  "toplevels.porty"     "$(tsip porty)"; }
 function rpizero1()  { remote "$(tsip porty)"  "toplevels.rpizero1"  "192.168.145.120"; }
 function rpifour1()  { remote "${a64com}"      "toplevels.rpifour1"  "$(tsip rpifour1)"; }
