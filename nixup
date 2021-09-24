@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/stderr 2>&1 && pwd )"
 set -euo pipefail
-set -x
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/stderr 2>&1 && pwd )"
+set +x; source /run/secrets/nixup-secrets; set -x
 
 nixargs=(--experimental-features "nix-command flakes") #ca-references ca-derivations recursive-nix")
 buildargs=(
@@ -9,37 +9,14 @@ buildargs=(
   --option 'extra-trusted-public-keys' 'colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= arm.cachix.org-1:5BZ2kjoL1q6nWhlnrbAl+G7ThY7+HaBRD9PZzqZkbnM= thefloweringash-armv7.cachix.org-1:v+5yzBD2odFKeXbmC+OPWVqx4WVoIVO6UXgnSAWFtso='
   --option 'build-cores' '0'
   --option 'narinfo-cache-negative-ttl' '0'
-  --builders 'ssh-ng://cole@porty.ts.r10e.tech x86_64-linux /run/secrets/hydra_queue_runner_id_rsa; ssh-ng://cole@rpifour1.ts.r10e.tech aarch64-linux /run/secrets/hydra_queue_runner_id_rsa'
+  --builders '\
+    ssh-ng://cole@porty.ts.r10e.tech x86_64-linux /run/secrets/hydra_queue_runner_id_rsa; \
+    ssh-ng://cole@rpifour1.ts.r10e.tech aarch64-linux /run/secrets/hydra_queue_runner_id_rsa;'
   --builders-use-substitutes
 )
-
-function __() { printf "\n\n%s\n" "${1}" >/dev/stderr; }
-unset NIX_PATH
-HOME="${HOME:-"/tmp"}"
-cd "${DIR}"
-
 cache="colemickens"
-cachixpkgs="https://github.com/nixos/nixpkgs/archive/$(jq -r '.nodes.stable.locked.rev' ./flake.lock).tar.gz" # where to find pkgs.cachix
-unstablepkgs="https://github.com/colemickens/nixpkgs/archive/$(jq -r '.nodes.nixpkgs.locked.rev' ./flake.lock).tar.gz" # where to find nixUnstable
-set +x
-if [[ "${NIXUP_SECRETS:-""}" != "" ]]; then echo "${NIXUP_SECRETS}" > /tmp/nixup-secrets; fi
-source "/tmp/nixup-secrets" || source /run/secrets/nixup-secrets || true
-[[ -z "${CACHIX_SIGNING_KEY:-""}" ]] && echo "must set CACHIX_SIGNING_KEY" && exit -1
-[[ -z "${METAL_AUTH_TOKEN:-""}" ]] && echo "must set METAL_AUTH_TOKEN" && exit -1
-[[ -z "${METAL_PROJECT_ID:-""}" ]] && echo "must set METAL_PROJECT_ID" && exit -1
-[[ -z "${GITHUB_TOKEN:-""}" ]] && echo "must set GITHUB_TOKEN" && exit -1
-export GH_CONFIG_DIR="/tmp/gh" # we don't want to use the user's GH
-set -x
 
-
-srcdirs=(
-  "nixpkgs/cmpkgs"  "home-manager/cmhm"  "nixpkgs/master"
-  "nixpkgs-wayland" "flake-firefox-nightly"
-  "mobile-nixos"    "sops-nix"        "wip-pinebook-pro"
-  "nixos-veloren"   #"nixos-azure"
-)
-
-# <ci-packet>
+## <ci-packet> #################################################
 function packet-script() {
   LABEL="$1"
   RUNNER_TOKEN="${2}"
@@ -127,211 +104,138 @@ function packet-down-int() {
     gh api -X DELETE "repos/cole-mickens/nixcfg/actions/runners/${runnerid}" | jq
   fi
 }
-# </ci-packet>
+## </ci-packet> #################################################
 
-# <ci>
-function sanitize_name() {
-  name="${1}"
-  name="${name//$'-'/$'_'}"
-  name="${name//$'#'/$'_'}"
-  name="${name//$'.'/$'_'}"
-  printf "%s" "${name}"
-}
+## <ci> #################################################
+function _nix() { nix "${nixargs[@]}" "${@}"; }
+function _nix_build() { nix "${nixargs[@]}" build "${buildargs[@]}" "${@}"; }
 function ci_nb_cache() {
-  out="/tmp/$(sanitize_name "${1}")"
-  rm -rf "${out}" && mkdir -p "${out}"
+  out="$(mktemp -d)"; rm -rf "${out}" && mkdir -p "${out}"
   
-  if nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0" --no-link)" \
-    "${ci_x86_64_targets[@]}" \
-    "${buildargs[@]}"; then
-    echo "******** nbu worked, exitting early"
-    return 0
-  else
-    echo "******** nbu did not work, exitting early"
+  if nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0" --no-link)" "${buildargs[@]}" "${@}";
+  then echo "******** nbu worked, exitting early"; return 0
+  else echo "******** nbu did not work..."
   fi
 
-  nix-build "${nixargs[@]}" "${buildargs[@]}" "--out-link" "${out}/result" "${@}"
+  nix "${nixargs[@]}" build "${buildargs[@]}" "--out-link" "${out}/result" "${@}"
   ls -al "${out}"
   readlink -f "${out}"/result* | cachix push colemickens
 }
 function ci_check() {
   command nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0" --no-link)" \
-    "${ci_x86_64_targets[@]}" \
-    "${buildargs[@]}"
+    "${buildargs[@]}" "${@}"
 }
-
-
-function ci_nbu() {
-  out="/tmp/$(sanitize_name "${1}")"
-  rm -rf "${out}" && mkdir -p "${out}"
-  nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "--out-link" "${out}/result")" "${buildargs[@]}"
+function up() {
+  BASE_BRANCH="${BASE_BRANCH:-"origin/auto-simple-ready"}"
+  pushd "${DIR}"
+  git remote update
+  git rev-parse "${BASE_BRANCH}" && git rebase "${BASE_BRANCH}" || true
+  popd
 }
-function ci_cache() {
-  out="/tmp/$(sanitize_name "${1}")"
-
-  if ! (find ${out} | grep result); then
-    return
-  fi
-
-  nix "${nixargs[@]}" path-info --json -r ${out}/result* \
-    > "${out}-path-info.json"
-
-  jq -r 'map(select(.ca == null and .signatures == null)) | map(.path) | .[]' \
-    < "${out}-path-info.json" \
-    > "${out}-paths"
-
-  cachix push "${cache}" < "${out}-paths"
-
-  find "${out}" | grep result | cachix push "${cache}"
-}
-function nbu_check() {
-  command nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0" --no-link)" -A "${1}" "${buildargs[@]}"
-}
-function nbu_check_req() {
-  command nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0" --no-link)" \
-    -A toplevels.xeep \
-    "${buildargs[@]}"
-}
-## </ci>
-
-function update() {
+function fullup() {
   set -euo pipefail
-
-  cd "${DIR}"; [[ -f ../nixpkgs-wayland/pkgs/update.sh ]] && cp ../nixpkgs-wayland/pkgs/update.sh ./pkgs/update.sh
-  cd "${DIR}"; [[ -f ../nixpkgs-wayland/.github/exec ]] && cp ../nixpkgs-wayland/.github/exec .github/exec
-
+  srcdirs=( "nixpkgs/cmpkgs"  "home-manager/cmhm"  "nixpkgs/master" "nixpkgs-wayland" "flake-firefox-nightly" )
   printf '%s\n' "${srcdirs[@]}" | \
     parallel --jobs $(nproc) --halt soon,fail=1 --tag --progress -- \
       "[[ ! -d "${HOME}/code/{.}" ]] || (git -C '${HOME}/code/{.}' pull --rebase && git -C '${HOME}/code/{.}' push origin HEAD -f)"
-
-  # TODO: maybe some sanity checking here and rollingback here?
-  cd "${DIR}"; nix "${nixargs[@]}" flake update --no-registries --commit-lock-file
-  cache-shell
-
-  stash
-  cd "${DIR}"
-}
-function update-pkgs() {
-  cd "${DIR}/pkgs"
+  pushd "${DIR}"
+  [[ -f ../nixpkgs-wayland/pkgs/update.sh ]] && cp ../nixpkgs-wayland/pkgs/update.sh ./pkgs/update.sh
+  [[ -f ../nixpkgs-wayland/.github/exec ]] && cp ../nixpkgs-wayland/.github/exec .github/exec
+  nix "${nixargs[@]}" flake update --no-registries --commit-lock-file
+  popd
+  pushd "${DIR}/pkgs"
   ./update.sh
-  cd "${DIR}"
-}
-function cache-shell () {
+  popd
+  # cache-shell
   outsh="$(mktemp -d)/result"
   nix build "${nixargs[@]}" "${buildargs[@]}" --out-link "${outsh}" ".#devShell.x86_64-linux.inputDerivation"
   readlink -f "${outsh}" | cachix push colemickens
 }
-function stash() {
-  __ "stashing nixcfg"
-  cd "${DIR}";
-  git add -A .
-  git commit -m stash || true
-  git rev-parse HEAD > /tmp/nixup-stash-before-rebase
-  git pull --rebase
-  git rev-parse HEAD > /tmp/nixup-stash-before-update-rebase
-  git rev-parse origin/auto-update4-ready && git rebase origin/auto-update4-ready
-  git push
-}
+## </ci> #################################################
 
+## <remote> #################################################
+#export cachixpkgs="https://github.com/nixos/nixpkgs/archive/$(jq -r '.nodes.stable.locked.rev' ./flake.lock).tar.gz"
+#export unstablepkgs="https://github.com/colemickens/nixpkgs/archive/$(jq -r '.nodes.nixpkgs.locked.rev' ./flake.lock).tar.gz"
 # this includes the actual `cachix push` command, just send it a path
-function ssh_cachix_push() {
-  set -euo pipefail
-  ssh "${1}" "nix-shell -I nixpkgs=${cachixpkgs} -p cachix --run \
-    'echo ${2} | env CACHIX_SIGNING_KEY=${CACHIX_SIGNING_KEY} cachix push ${cache} >/dev/stderr'" &>/dev/stderr
-}
-# this just wraps the shell, give it the full command: ssh_nixUnstable_shell nix build ...
-function ssh_nixUnstable_shell() {
-  local r="${1}"; shift;
-  ssh "${r}" -- "nix-shell -I nixpkgs=${unstablepkgs} -p nixUnstable --run '$(printf '\"%s\" ' "${@}")'"
-}
-function ssh_nixUnstable_shell2() {
-  local r="${1}"; shift;
-  ssh "${r}" -- "$(printf '\"%s\" ' "${@}")"
-}
-# this just wraps the shell, give it the full command: ssh_niche_shell niche build ...
-function ssh_niche_shell() {
-  local r="${1}"; shift;
-  ssh "${r}" -- "nix-shell -I nixpkgs=${nichepkgs} -p niche -p gnupg -p nixUnstable --command 'NICHE_DEBUG=1 $(printf '\"%s\" ' "${@}")'"
-}
+# function ssh_cachix_push() {
+#   set -euo pipefail
+#   ssh "${1}" "nix-shell -I nixpkgs=${cachixpkgs} -p cachix --run \
+#     'echo ${2} | env CACHIX_SIGNING_KEY=${CACHIX_SIGNING_KEY} cachix push ${cache} >/dev/stderr'" &>/dev/stderr
+# }
+# # this just wraps the shell, give it the full command: ssh_nixUnstable_shell nix build ...
+# function ssh_nixUnstable_shell() {
+#   local r="${1}"; shift;
+#   ssh "${r}" -- "nix-shell -I nixpkgs=${unstablepkgs} -p nixUnstable --run '$(printf '\"%s\" ' "${@}")'"
+# }
+# function ssh_nixUnstable_shell2() {
+#   local r="${1}"; shift;
+#   ssh "${r}" -- "$(printf '\"%s\" ' "${@}")"
+# }
+# # this just wraps the shell, give it the full command: ssh_niche_shell niche build ...
+# function ssh_niche_shell() {
+#   local r="${1}"; shift;
+#   ssh "${r}" -- "nix-shell -I nixpkgs=${nichepkgs} -p niche -p gnupg -p nixUnstable --command 'NICHE_DEBUG=1 $(printf '\"%s\" ' "${@}")'"
+# }
+#############
+# TODO: assume that we have competent builders, and/or that we can build drvs+copy them again?
+# function _remote() {
+#   remote="${1}"; buildattr="${2}"; target="${3}"; f="cm-nix-$RANDOM"
+#   stash
+#   git push origin HEAD -f
+#   rev="$(git rev-parse --short HEAD)"
+#   thing="github:colemickens/nixcfg/${rev}#${buildattr}"
+#   ssh_nixUnstable_shell "$remote" nix "${nixargs[@]}" build "${buildargs[@]}" -L "${thing}" --keep-going --out-link "/tmp/$f"
+#   out="$(ssh_nixUnstable_shell "$remote" readlink -f "/tmp/$f")"
 
-function remote() {
-  remote="${1}"; buildattr="${2}"; target="${3}"; f="cm-nix-$RANDOM"
-  stash
-  git push origin HEAD -f
-  rev="$(git rev-parse --short HEAD)"
-  thing="github:colemickens/nixcfg/${rev}#${buildattr}"
-  ssh_nixUnstable_shell "$remote" nix "${nixargs[@]}" build "${buildargs[@]}" -L "${thing}" --keep-going --out-link "/tmp/$f"
-  out="$(ssh_nixUnstable_shell "$remote" readlink -f "/tmp/$f")"
-
-  # target=copy   => copy back
-  # target=cachix => upload cachix, done
-  # target=skip   => do nothing
-  # target=*      => push to cachix, download on target, and activate
-  if [[ "${target}" == "copy" ]]; then
-    nix copy --no-check-sigs --from "ssh://${remote}" "${out}"
-  elif [[ "${target}" == "cachix" ]]; then
-    ssh_cachix_push "${remote}" "${out}"
-  elif [[ "${target}" == "cachixcp" ]]; then
-    ssh_cachix_push "${remote}" "${out}"
-    nix-store "${nixargs[@]}" -r "${out}"
-  elif [[ "${target:-}" != "skip" ]]; then
-    ssh_cachix_push "${remote}" "${out}"
-    ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -L --no-link -j0 "${out}"
-    ssh_nixUnstable_shell "${target}" sudo nix "${nixargs[@]}" build --no-link --profile /nix/var/nix/profiles/system "${out}";
-    ssh_nixUnstable_shell "${target}" sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch;
-  fi
-  ssh_nixUnstable_shell "${remote}" rm -f "/tmp/$f"
-  printf "${out}"
-}
-
-# TODO: remove after this ships: https://github.com/tailscale/tailscale/issues/2803
-function tsip() {
-  if [[ "${1}" == "$(hostname)" ]];
-  then printf "localhost";
-  else tailscale ip --4 ${1} | head -z -n1;
-  fi
-}
-
-a64com="colemickens@aarch64.nixos.community"
-function pinebook()  { remote "${a64com}"      "toplevels.pinebook"  "$(tsip pinebook)"; }
-function xeep()      { remote "$(tsip xeep)"   "toplevels.xeep"      "$(tsip xeep)"; }
-function raisin()    { remote "$(tsip raisin)" "toplevels.raisin"    "$(tsip raisin)"; }
-function jeffhyper() { remote "$(tsip xeep)"  "toplevels.jeffhyper" "$(tsip jeffhyper)"; }
-function porty()     { remote "$(tsip porty)"  "toplevels.porty"     "$(tsip porty)"; }
-function rpizero1()  { remote "$(tsip porty)"  "toplevels.rpizero1"  "192.168.145.120"; }
-function rpifour1()  { remote "${a64com}"      "toplevels.rpifour1"  "$(tsip rpifour1)"; }
-function sinkor()    { remote "${a64com}"      "toplevels.sinkor"    "$(tsip sinkor)"; }
-function install_sinkor()    {
-  set -euo pipefail
-  stash
-  remote "${a64com}" "toplevels.sinkor" "cachix"
-  out="$(nix eval --raw ".#toplevels.sinkor.outPath")"
-  target="nixos@192.168.133.202"
-  SSH_AUTH_SOCK=/run/user/1000/sshagent  ssh-copy-id "${target}"
-  scp "hosts/_new/disk.sh" ${target}:/tmp/disk.sh
-  ssh "${target}" /tmp/disk.sh install $out
-}
-function pinephone() { remote "${a64com}" "toplevels.pinephone"      "cole@$(tsip pinephone)"; }
-function bluephone() { remote "${a64com}" "toplevels.bluephone"      "cole@$(tsip bluephone)"; }
-function pinesd()    { remote "${a64com}" "images.pinephone_bundle"  "copy"; }
-
-function all() {
-  ./nixup
-  ./nixup xeep
-  ./nixup porty
-  ./nixup raisin
-  #./nixup jeffhyper # retired
-  #./nixup sinkor # jfc, who knows, not yet working
-  ./nixup rpifour1
-  #./nixup pinebook # lol water damage
-  #./nixup bluephone # not quite yet
-  #./nixup pinephone # not quite yet
-}
+#   # target=copy   => copy back
+#   # target=cachix => upload cachix, done
+#   # target=skip   => do nothing
+#   # target=*      => push to cachix, download on target, and activate
+#   if [[ "${target}" == "copy" ]]; then
+#     nix copy --no-check-sigs --from "ssh://${remote}" "${out}"
+#   elif [[ "${target}" == "cachix" ]]; then
+#     ssh_cachix_push "${remote}" "${out}"
+#   elif [[ "${target}" == "cachixcp" ]]; then
+#     ssh_cachix_push "${remote}" "${out}"
+#     nix-store "${nixargs[@]}" -r "${out}"
+#   elif [[ "${target:-}" != "skip" ]]; then
+#     ssh_cachix_push "${remote}" "${out}"
+#     ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -L --no-link -j0 "${out}"
+#     ssh_nixUnstable_shell "${target}" sudo nix "${nixargs[@]}" build --no-link --profile /nix/var/nix/profiles/system "${out}";
+#     ssh_nixUnstable_shell "${target}" sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch;
+#   fi
+#   ssh_nixUnstable_shell "${remote}" rm -f "/tmp/$f"
+#   printf "${out}"
+# }
+# function remote() {
+#   who="$1"; shift; what="$1"; shift; where="$1"; shift
+#   remote "$(ip "${who}")" "${what}" "$(ip "${where}")"
+# }
+# function ip() {
+#   if [[ "${1}" == "$(hostname)" ]]; then printf "%s" "colemickens@aarch64.nixos.community";
+#   elif [[ "${1}" == "a64" ]];       then printf "%s" "localhost";
+#   else                                   tailscale ip --6 ${1} | head -z -n1;
+#   fi
+# }
+# function pinebook()  { _remote "${a64com}"      "toplevels.pinebook"  "$(ip pinebook)"; }
+# function xeep()      { _remote "$(ip xeep)"     "toplevels.xeep"      "$(ip xeep)"; }
+# function raisin()    { _remote "$(ip raisin)"   "toplevels.raisin"    "$(ip raisin)"; }
+# function jeffhyper() { _remote "$(ip xeep)"     "toplevels.jeffhyper" "$(ip jeffhyper)"; }
+# function porty()     { _remote "$(ip porty)"    "toplevels.porty"     "$(ip porty)"; }
+# function rpizero1()  { _remote "$(ip porty)"    "toplevels.rpizero1"  "192.168.145.120"; }
+# function rpifour1()  { _remote "${a64com}"      "toplevels.rpifour1"  "$(ip rpifour1)"; }
+# function sinkor()    { _remote "${a64com}"      "toplevels.sinkor"    "$(ip sinkor)"; }
+# function pinephone() { _remote "${a64com}" "toplevels.pinephone"      "$(tsip pinephone)"; }
+# function bluephone() { _remote "${a64com}" "toplevels.bluephone"      "$(tsip bluephone)"; }
+## </remote> #################################################
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
-
-if [[ ! -z "${cmd:-""}" ]]; then
-  "${cmd}" "${@}"
-else
-  stash
+if [[ -z "${cmd:-""}" ]]; then
+  cmd="up"
 fi
+
+set -x
+"${cmd}" "${@}"
+set +x
+echo -e "\nexit=$?"
+exit 0

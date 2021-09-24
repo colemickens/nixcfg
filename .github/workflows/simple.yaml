@@ -21,8 +21,7 @@ jobs:
           set -x
           git checkout -b auto-simple
           git reset --hard main
-          ./nixup update
-          ./nixup update-pkgs
+          ./nixup fullup
           git push origin HEAD -f
         EOF
     - name: "build"
