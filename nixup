@@ -13,6 +13,7 @@ buildargs=(
     ssh-ng://cole@porty.ts.r10e.tech x86_64-linux /run/secrets/hydra_queue_runner_id_rsa;
     ssh-ng://cole@rpifour1.ts.r10e.tech aarch64-linux /run/secrets/hydra_queue_runner_id_rsa;'
   --builders-use-substitutes
+  --eval-store auto
 )
 cache="colemickens"
 
@@ -117,7 +118,7 @@ function ci_nb_cache() {
   else echo "******** nbu did not work..."
   fi
 
-  nix "${nixargs[@]}" build "${buildargs[@]}" "--out-link" "${out}/result" "${@}"
+  nix "${nixargs[@]}" build "${buildargs[@]}" --keep-going --out-link "${out}/result" ${@/#/'.#'}
   ls -al "${out}"
   readlink -f "${out}"/result* | cachix push colemickens
 }

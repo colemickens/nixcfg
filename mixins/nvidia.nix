@@ -56,20 +56,6 @@ in
   ] else [];
 
   config = {
-    environment.etc = {
-      # "egl/egl_external_platform.d/10_nvidia_wayland.json" = nvidiaWaylandJson;
-      # "glvnd/egl_vendor.d/10_nvidia.json" = nvidiaJson;
-    };
-
-    boot.blacklistedKernelModules = [ "nouveau" ];
-
-    boot.initrd.kernelModules = [
-      "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm"
-    ];
-    boot.kernelModules = [
-      "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm"
-    ];
-
     hardware.nvidia.modesetting.enable = true;
     hardware.nvidia.package = nvidiaPackage;
     hardware.nvidia.powerManagement.enable = false;

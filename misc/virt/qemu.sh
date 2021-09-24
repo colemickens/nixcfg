@@ -7,7 +7,7 @@ args=()
 #  -virtfs local,path=/run/media/cole,mount_tag=share,security_model=passthrough \
 sudo rm -rf /tmp/vmspice-tails.socket
 
-source ../secrets/unencrypted/qemu-profile-1
+source ../../secrets/unencrypted/qemu-profile-2
 
 [[ "${QEMU_ISO:-""}" != "" ]] && args=("${args[@]}" -cdrom "${QEMU_ISO}")
 [[ "${QEMU_VIRTIO_GPU:-""}" != "" ]]   && args=(
@@ -21,21 +21,19 @@ source ../secrets/unencrypted/qemu-profile-1
 )
 [[ "${QEMU_DRIVE_ARGS:-""}" != "" ]] && args=( "${QEMU_DRIVE_ARGS[@]}" )
 
-export QEMU_AUDIO_DRV=spice
+
 sudo qemu-system-x86_64 \
-  -nodefaults \
   -machine pc,accel=kvm \
   -cpu host \
   -smp 8 \
   -nic user,model=virtio-net-pci \
-  -boot d -cdrom $ISO \
   -m 4096 \
   -enable-kvm \
   -monitor unix:qemu-monitor-socket,server,nowait \
   -device intel-hda -device hda-duplex \
   -device virtio-serial \
   -device vhost-vsock-pci,id=vhost-vsock-pci0,guest-cid=3 \
-  "${args[@]}"
+  "${args[@]}" "${QEMU_EXTRA[@]}"
 &
 pid=$!
 sleep 1

@@ -6,7 +6,7 @@ on:
 
 concurrency: simple
 jobs:
-  "update":
+  "simple-update":
     runs-on: ubuntu-latest
     concurrency: simple-${{matrix.jobs.branch}}-${{matrix.jobs.target}}
     steps:

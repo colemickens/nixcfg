@@ -155,6 +155,8 @@
         };
       });
 
+      preferredNix = forAllSystems (system: nixPackage system);
+
       legacyPackages = forAllSystems (system: {
         # to `nix eval` the "currentSystem" in certain scenarios
         devShellSrc = inputs.self.devShell.${system}.inputDerivation;
@@ -162,8 +164,6 @@
       });
       packages = forAllSystems (system: fullPkgs_.${system}.colePackages);
       pkgs = forAllSystems (system: fullPkgs_.${system});
-
-      preferredNix = forAllSystems (system: nixPackage system);
 
       overlay = final: prev:
         let p = rec {
@@ -184,9 +184,9 @@
           mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
           meli = prev.callPackage ./pkgs/meli {};
           #niche = prev.callPackage ./pkgs/niche {};
-          neochat_ = prev.libsForQt5.callPackage ./pkgs/neochat {
-           neochat = prev.neochat;
-          };
+          # neochat_ = prev.libsForQt5.callPackage ./pkgs/neochat {
+          #  neochat = prev.neochat;
+          # };
           passrs = prev.callPackage ./pkgs/passrs {};
           rkvm = prev.callPackage ./pkgs/rkvm {};
           shreddit = prev.python3Packages.callPackage ./pkgs/shreddit {};
@@ -200,7 +200,7 @@
           rpi4-uefi = prev.callPackage ./pkgs/rpi4-uefi {};
 
           cpptoml = prev.callPackage ./pkgs/cpptoml {};
-          wireplumber = prev.callPackage ./pkgs/wireplumber {};
+          #wireplumber = prev.callPackage ./pkgs/wireplumber {};
 
           zellij = prev.callPackage ./pkgs/zellij {
             zellij = prev.zellij;
@@ -210,6 +210,12 @@
             patches = [ ./pkgs/nix/unset-is-macho.patch ];
           };
         }; in p // { colePackages = p; };
+
+      nixosModules = {
+        hydra-auto = import ./modules/hydra-auto.nix;
+        otg = import ./modules/otg.nix;
+        other-arch-vm = import ./modules/other-arch-vm.nix;
+      };
 
       nixosConfigurations = {
         #azdev     = mkSystem inputs.nixpkgs "x86_64-linux"  "azdev";
@@ -227,33 +233,26 @@
         pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
 
         # embedded devices:
-        rpifour1  = mkSystem inputs.nixpkgs   "aarch64-linux" "rpifour1";
-        rpizero1  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
+        # rpifour1  = mkSystem inputs.nixpkgs   "aarch64-linux" "rpifour1";
+        # rpizero1  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
 
         bluephone     = mkSystem inputs.nixpkgs "aarch64-linux" "bluephone";
         #demovm      = mkSystem fullPkgs_.x86_64-linux  "demovm";
         #testipfsvm  = mkSystem fullPkgs_.x86_64-linux  "testipfsvm";
       };
-
-      nixosModules = {
-        hydra-auto = import ./modules/hydra-auto.nix;
-        otg = import ./modules/otg.nix;
-        other-arch-vm = import ./modules/other-arch-vm.nix;
-      };
-
       toplevels = genAttrs
         (builtins.attrNames inputs.self.outputs.nixosConfigurations)
         (attr: nixosConfigurations.${attr}.config.system.build.toplevel);
 
-      hydraSpecs =
-        let
-          nfj = b: hydralib.flakeJob "github:colemickens/nixcfg/${b}";
-        in {
-          jobsets = hydralib.makeSpec {
-            nixcfg-main        = nfj "main";
-            nixcfg-auto-update = nfj "auto-update";
-          };
-        };
+      # hydraSpecs =
+      #   let
+      #     nfj = b: hydralib.flakeJob "github:colemickens/nixcfg/${b}";
+      #   in {
+      #     jobsets = hydralib.makeSpec {
+      #       nixcfg-main        = nfj "main";
+      #       nixcfg-auto-update = nfj "auto-update";
+      #     };
+      #   };
 
       # TODO : clamped to x86_64 - undo!
       hydraJobs = genAttrs [ "aarch64-linux" "x86_64-linux" ] (system:
