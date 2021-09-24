@@ -9,8 +9,8 @@ buildargs=(
   --option 'extra-trusted-public-keys' 'colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= arm.cachix.org-1:5BZ2kjoL1q6nWhlnrbAl+G7ThY7+HaBRD9PZzqZkbnM= thefloweringash-armv7.cachix.org-1:v+5yzBD2odFKeXbmC+OPWVqx4WVoIVO6UXgnSAWFtso='
   --option 'build-cores' '0'
   --option 'narinfo-cache-negative-ttl' '0'
-  --builders '\
-    ssh-ng://cole@porty.ts.r10e.tech x86_64-linux /run/secrets/hydra_queue_runner_id_rsa; \
+  --builders '
+    ssh-ng://cole@porty.ts.r10e.tech x86_64-linux /run/secrets/hydra_queue_runner_id_rsa;
     ssh-ng://cole@rpifour1.ts.r10e.tech aarch64-linux /run/secrets/hydra_queue_runner_id_rsa;'
   --builders-use-substitutes
 )

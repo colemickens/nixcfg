@@ -40,4 +40,5 @@ jobs:
           git checkout -b auto-simple-ready
           git reset --hard origin/auto-simple
           git rebase origin/main
+          git push origin HEAD -f
         EOF
