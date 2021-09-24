@@ -1,0 +1,44 @@
+name: "simple"
+on:
+  push:
+  schedule:
+    - cron: '*/10 * * * *'
+
+concurrency: simple
+jobs:
+  "update":
+    runs-on: ubuntu-latest
+    concurrency: simple-${{matrix.jobs.branch}}-${{matrix.jobs.target}}
+    steps:
+    - { "uses": "actions/checkout@v2", "with": { "ref": "main" } }
+    - name: prep
+      uses: ./.github/actions/prep
+      with:
+        sopsAgeKey: "${{ secrets.SOPS_AGE_KEY }}"
+    - name: "update"
+      run: |
+        cat << EOF | .github/exec
+          set -x
+          git checkout -b auto-simple
+          git reset --hard main
+          ./nixup update
+          ./nixup update-pkgs
+          git push origin HEAD -f
+        EOF
+    - name: "build"
+      run : |
+        cat << EOF | .github/exec
+          set -x
+          ./nixup ci_nb_cache bundles.x86_64-linux
+          # ./nixup ci_nb_cache bundles.all # no aarch builders right now so this would block
+        EOF
+    - name: "set-ready"
+      run : |
+        cat << EOF | .github/exec
+          set -x
+          git log -n 5 --oneline origin/main
+          git log -n 5 --oneline origin/auto-simple
+          git checkout -b auto-simple-ready
+          git reset --hard origin/auto-simple
+          git rebase origin/main
+        EOF
