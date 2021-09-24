@@ -9,8 +9,8 @@ set -x
 
 # workdir
 out="$(mktemp -d)"
-img="$HOME/downloads/tails-amd64-4.19-img/tails-amd64-4.19.img"
-#img="$HOME/downloads/tails-amd64-4.19-iso/tails-amd64-4.19.iso"
+
+img="${HOME}/.cache/sliat/tails-amd64-4.22-img/tails-amd64-4.22.img"
 
 # outputs
 CACHE="${KTAILS_CACHE:-"${HOME}/.cache/ktails"}"

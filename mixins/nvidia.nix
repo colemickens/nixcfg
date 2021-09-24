@@ -16,39 +16,39 @@
 # properly...
 
 let
-  useNvidiaWayland = false;
+  useNvidiaWayland = true;
   nvidiaPackage = config.boot.kernelPackages.nvidiaPackages.stable;
-  # this is configuring NVIDIA's EGL loader
-  # not sure what happens if this doesn't work or isn't here?
-  # wayland worked fine before...
-  eglVendorDir = "${nvidiaPackage}/share/glvnd/egl_vendor.d/";
-  nvidiaJson = { source = "${eglVendorDir}/10_nvidia.json"; };
+  # # this is configuring NVIDIA's EGL loader
+  # # not sure what happens if this doesn't work or isn't here?
+  # # wayland worked fine before...
+  # eglVendorDir = "${nvidiaPackage}/share/glvnd/egl_vendor.d/";
+  # nvidiaJson = { source = "${eglVendorDir}/10_nvidia.json"; };
 
-  # Interesting...:
-  # 1. I can corroborate that the egl-wayland provided libnvidia-egl-wayland
-  #    works better than the one provided by nvidia:
-  #    -> well, at least Gnome Settings can read the card info, not sure what else
-  # 2. VSCodium *requires* the wayland tweaks or else it just shows
-  #    a blank/grey/empty/unloaded screen
-  # 3. They both purport to be "1.1.7"
-  # 4. Do we patch egl-wayland better somehow? weird? TODO
-  useEglWaylandSo = false;
-  # this is some extra mechanism for NVIDIA to do EGL-y stuff via Wayland? I think? IDK?
-  nvidiaExtPlatDir = "${nvidiaPackage}/share/egl/egl_external_platform.d/";
-  # this is setup to allow us to quickly switch between egl-wayland impls: (link GH issue)
-  nvidiaWaylandJson =
-    if !useEglWaylandSo
-    then { source = "${nvidiaExtPlatDir}/10_nvidia_wayland.json"; }
-    else {
-      text = ''
-        {
-          "file_format_version" : "1.0.0",
-          "ICD" : {
-            "library_path" : "${pkgs.egl-wayland}/lib/libnvidia-egl-wayland.so.1"
-          }
-        }
-      '';
-    };
+  # # Interesting...:
+  # # 1. I can corroborate that the egl-wayland provided libnvidia-egl-wayland
+  # #    works better than the one provided by nvidia:
+  # #    -> well, at least Gnome Settings can read the card info, not sure what else
+  # # 2. VSCodium *requires* the wayland tweaks or else it just shows
+  # #    a blank/grey/empty/unloaded screen
+  # # 3. They both purport to be "1.1.7"
+  # # 4. Do we patch egl-wayland better somehow? weird? TODO
+  # useEglWaylandSo = false;
+  # # this is some extra mechanism for NVIDIA to do EGL-y stuff via Wayland? I think? IDK?
+  # nvidiaExtPlatDir = "${nvidiaPackage}/share/egl/egl_external_platform.d/";
+  # # this is setup to allow us to quickly switch between egl-wayland impls: (link GH issue)
+  # nvidiaWaylandJson =
+  #   if !useEglWaylandSo
+  #   then { source = "${nvidiaExtPlatDir}/10_nvidia_wayland.json"; }
+  #   else {
+  #     text = ''
+  #       {
+  #         "file_format_version" : "1.0.0",
+  #         "ICD" : {
+  #           "library_path" : "${pkgs.egl-wayland}/lib/libnvidia-egl-wayland.so.1"
+  #         }
+  #       }
+  #     '';
+  #   };
 in
 {
   imports = if useNvidiaWayland then [

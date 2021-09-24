@@ -18,8 +18,9 @@ in
         source-code-pro
         ttf_bitstream_vera
         font-awesome
-        plex-mono
+        ibm-plex
         roboto-mono
+        drafting-mono
       ] ++ [ font.package ];
 
       fontconfig = {
