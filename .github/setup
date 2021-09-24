@@ -11,6 +11,7 @@ buildargs=(
   --builders-use-substitutes
 )
 
+# TODO: move to an HM profile and install with it instead
 # enable SSHD
 mkdir -p ~/.ssh
 chmod og-rw ~/
@@ -18,7 +19,7 @@ chmod og-rw ~/
 
 # install secrets
 nix="$(which nix)"
-sudo "${nix}" "${nixargs[@]}" run "${buildargs[@]}" '.#install-secrets'
+sudo -E "${nix}" "${nixargs[@]}" run "${buildargs[@]}" '.#install-secrets'
 
 # export secrets needed for the rest of the gha setup
 set +x;

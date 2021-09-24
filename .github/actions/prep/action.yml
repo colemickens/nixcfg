@@ -2,9 +2,6 @@ name: prep
 description: prep
 author: cole
 inputs:
-  tailscaleAuthkey:
-    description: 'tailscale authkey'
-    required: true
   sopsAgeKey:
     description: 'sops age key'
     required: true
