@@ -11,7 +11,7 @@ buildargs=(
   --option 'narinfo-cache-negative-ttl' '0'
   --builders "
     ssh://cole@$(tailscale ip --4 porty) x86_64-linux /run/secrets/hydra_queue_runner_id_rsa - - ;
-    ssh://cole@$(tailscale ip --4 sinkor) aarch64-linux /run/secrets/hydra_queue_runner_id_rsa;"
+    ssh://cole@$(tailscale ip --6 sinkor) aarch64-linux /run/secrets/hydra_queue_runner_id_rsa;"
   --builders-use-substitutes
   --eval-store auto
 )
@@ -234,9 +234,21 @@ function ciup() {
 #   else                                   tailscale ip --6 ${1} | head -z -n1;
 #   fi
 # }
-function sinkor() {
+function rpifour1() {
+  rs="ssh-ng://cole@$(tailscale ip --6 sinkor)"
   nix "${nixargs[@]}" build "${buildargs[@]}" \
+    --store "${rs}" \
+    --eval-store auto \
+    ".#toplevels.rpifour1"
+  nix copy --no-check-sigs --from "${rs}" ".#toplevels.rpifour1"
+}
+function sinkor() {
+  rs="ssh-ng://cole@$(tailscale ip --6 sinkor)"
+  nix "${nixargs[@]}" build "${buildargs[@]}" \
+    --store "${rs}" \
+    --eval-store auto \
     ".#toplevels.sinkor"
+  nix copy --no-check-sigs --from "${rs}" ".#toplevels.sinkor"
 }
 # function pinebook()  { _remote "${a64com}"      "toplevels.pinebook"  "$(ip pinebook)"; }
 # function xeep()      { _remote "$(ip xeep)"     "toplevels.xeep"      "$(ip xeep)"; }

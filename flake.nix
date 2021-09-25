@@ -233,7 +233,7 @@
         pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
 
         # embedded devices:
-        # rpifour1  = mkSystem inputs.nixpkgs   "aarch64-linux" "rpifour1";
+        rpifour1  = mkSystem inputs.nixpkgs   "aarch64-linux" "rpifour1";
         # rpizero1  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
 
         bluephone     = mkSystem inputs.nixpkgs "aarch64-linux" "bluephone";
