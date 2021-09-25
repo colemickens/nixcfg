@@ -161,6 +161,7 @@
         # to `nix eval` the "currentSystem" in certain scenarios
         devShellSrc = inputs.self.devShell.${system}.inputDerivation;
         install-secrets = (import ./.github/secrets.nix { nixpkgs = inputs.nixpkgs; inherit inputs system; });
+        bundle = inputs.self.bundles."${system}";
       });
       packages = forAllSystems (system: fullPkgs_.${system}.colePackages);
       pkgs = forAllSystems (system: fullPkgs_.${system});
@@ -229,7 +230,6 @@
         porty = mkSystem inputs.nixpkgs "x86_64-linux"  "porty";
         raisin = mkSystem inputs.nixpkgs "x86_64-linux"  "raisin";
         sinkor = mkSystem inputs.nixpkgs "aarch64-linux"  "sinkor";
-
         pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
 
         # embedded devices:

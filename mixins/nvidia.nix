@@ -16,7 +16,7 @@
 # properly...
 
 let
-  useNvidiaWayland = true;
+  useNvidiaWayland = false;
   nvidiaPackage = config.boot.kernelPackages.nvidiaPackages.stable;
   # # this is configuring NVIDIA's EGL loader
   # # not sure what happens if this doesn't work or isn't here?

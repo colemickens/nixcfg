@@ -21,8 +21,3 @@ chmod og-rw ~/
 nix="$(which nix)"
 "${nix}" "${nixargs[@]}" run "${buildargs[@]}" '.#install-secrets'
 
-# export secrets needed for the rest of the gha setup
-set +x;
-source /run/secrets/nixup-secrets;
-echo "::set-output name=TAILSCALE_AUTHKEY::${TAILSCALE_AUTHKEY}"
-set -x

@@ -9,9 +9,9 @@ buildargs=(
   --option 'extra-trusted-public-keys' 'colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= arm.cachix.org-1:5BZ2kjoL1q6nWhlnrbAl+G7ThY7+HaBRD9PZzqZkbnM= thefloweringash-armv7.cachix.org-1:v+5yzBD2odFKeXbmC+OPWVqx4WVoIVO6UXgnSAWFtso='
   --option 'build-cores' '0'
   --option 'narinfo-cache-negative-ttl' '0'
-  --builders '
-    ssh-ng://cole@porty.ts.r10e.tech x86_64-linux /run/secrets/hydra_queue_runner_id_rsa;
-    ssh-ng://cole@rpifour1.ts.r10e.tech aarch64-linux /run/secrets/hydra_queue_runner_id_rsa;'
+  --builders "
+    ssh://cole@$(tailscale ip --4 porty) x86_64-linux /run/secrets/hydra_queue_runner_id_rsa - - ;
+    ssh://cole@$(tailscale ip --4 sinkor) aarch64-linux /run/secrets/hydra_queue_runner_id_rsa;"
   --builders-use-substitutes
   --eval-store auto
 )
@@ -140,8 +140,6 @@ function fullup() {
     parallel --jobs $(nproc) --halt soon,fail=1 --tag --progress -- \
       "[[ ! -d "${HOME}/code/{.}" ]] || (git -C '${HOME}/code/{.}' pull --rebase && git -C '${HOME}/code/{.}' push origin HEAD -f)"
   pushd "${DIR}"
-  [[ -f ../nixpkgs-wayland/pkgs/update.sh ]] && cp ../nixpkgs-wayland/pkgs/update.sh ./pkgs/update.sh
-  [[ -f ../nixpkgs-wayland/.github/exec ]] && cp ../nixpkgs-wayland/.github/exec .github/exec
   nix "${nixargs[@]}" flake update --no-registries --commit-lock-file
   popd
   pushd "${DIR}/pkgs"
@@ -151,6 +149,12 @@ function fullup() {
   outsh="$(mktemp -d)/result"
   nix build "${nixargs[@]}" "${buildargs[@]}" --out-link "${outsh}" ".#devShell.x86_64-linux.inputDerivation"
   readlink -f "${outsh}" | cachix push colemickens
+}
+function ciup() {
+  cachix watch-store -j2 "${cache}" & cachixpid=$!
+  trap "kill ${cachixpid}" EXIT
+  ci_nb_cache 'bundle'
+  kill -INT "${cachixpid}"; wait "${cachixpid}" || true
 }
 ## </ci> #################################################
 
@@ -218,6 +222,10 @@ function fullup() {
 #   else                                   tailscale ip --6 ${1} | head -z -n1;
 #   fi
 # }
+function sinkor() {
+  nix "${nixargs[@]}" build "${buildargs[@]}" \
+    ".#toplevels.sinkor"
+}
 # function pinebook()  { _remote "${a64com}"      "toplevels.pinebook"  "$(ip pinebook)"; }
 # function xeep()      { _remote "$(ip xeep)"     "toplevels.xeep"      "$(ip xeep)"; }
 # function raisin()    { _remote "$(ip raisin)"   "toplevels.raisin"    "$(ip raisin)"; }
@@ -225,7 +233,7 @@ function fullup() {
 # function porty()     { _remote "$(ip porty)"    "toplevels.porty"     "$(ip porty)"; }
 # function rpizero1()  { _remote "$(ip porty)"    "toplevels.rpizero1"  "192.168.145.120"; }
 # function rpifour1()  { _remote "${a64com}"      "toplevels.rpifour1"  "$(ip rpifour1)"; }
-# function sinkor()    { _remote "${a64com}"      "toplevels.sinkor"    "$(ip sinkor)"; }
+#function sinkor()    { _remote "${a64com}"      "toplevels.sinkor"    "$(ip sinkor)"; }
 # function pinephone() { _remote "${a64com}" "toplevels.pinephone"      "$(tsip pinephone)"; }
 # function bluephone() { _remote "${a64com}" "toplevels.bluephone"      "$(tsip bluephone)"; }
 ## </remote> #################################################

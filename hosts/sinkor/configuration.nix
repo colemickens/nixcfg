@@ -24,7 +24,7 @@ in
         "/var/log"
         "/var/lib/tailscale"
         # "/var/lib/bluetooth"
-        # "/var/lib/systemd/coredump"
+        # "/var/lib/systemd" # timers, rfkill state, etc
         # "/etc/NetworkManager/system-connections"
       ];
       files = [
@@ -39,6 +39,9 @@ in
     programs.fuse.userAllowOther = true;
     systemd.tmpfiles.rules = [
       "d /persist/home/cole 0750 cole cole - -"
+
+      # rfkill
+      "f+ /var/lib/systemd/rfkill/platform-fe300000.mmcnr:wlan 0755 root root - 1"
     ];
     home-manager.users.cole = { pkgs, ... }: {
       systemd.user.startServices = "sd-switch";
@@ -64,6 +67,19 @@ in
           # ".screenrc"
         ];
         allowOther = true;
+      };
+    };
+
+    # TODO: pull into module
+    systemd.services.rfkiller = {
+      description = "rfkiller - set rfkill";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = ''
+          ${pkgs.util-linux}/bin/rfkill block wlan || true
+          ${pkgs.util-linux}/bin/rfkill block bluetooth || true
+        '';
       };
     };
 

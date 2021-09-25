@@ -53,6 +53,12 @@ let
       gpg --card-status
     '')
 
+    (writeShellScriptBin "ssh-fix" ''
+      ent="$(/tmp/ssh-**/agent.* | head -1)"
+      ln -sf $ent /run/user/1000/sshagent
+      export SSH_AUTH_SOCK="/run/user/1000/sshagent"
+    '')
+
     (writeShellScriptBin "pulse-fix" ''
       set -x
       systemctl --user daemon-reload

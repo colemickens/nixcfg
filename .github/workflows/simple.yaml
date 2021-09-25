@@ -28,8 +28,7 @@ jobs:
       run : |
         cat << EOF | .github/exec
           set -x
-          ./nixup ci_nb_cache bundles.x86_64-linux
-          # ./nixup ci_nb_cache bundles.all # no aarch builders right now so this would block
+          ./nixup ciup
         EOF
     - name: "set-ready"
       run : |
