@@ -113,7 +113,7 @@ function _nix_build() { nix "${nixargs[@]}" build "${buildargs[@]}" "${@}"; }
 function ci_nb_cache() {
   out="$(mktemp -d)"; rm -rf "${out}" && mkdir -p "${out}"
   
-  if nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0" --no-link)" "${buildargs[@]}" "${@}";
+  if ci_check "${@}";
   then echo "******** nbu worked, exitting early"; return 0
   else echo "******** nbu did not work..."
   fi
@@ -123,7 +123,8 @@ function ci_nb_cache() {
   readlink -f "${out}"/result* | cachix push colemickens
 }
 function ci_check() {
-  command nix-build-uncached -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0" --no-link)" \
+  nix-build-uncached \
+    -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0" --no-link)" \
     "${buildargs[@]}" "${@}"
 }
 function up() {
@@ -131,6 +132,11 @@ function up() {
   pushd "${DIR}"
   git remote update
   git rev-parse "${BASE_BRANCH}" && git rebase "${BASE_BRANCH}" || true
+  popd
+}
+function pkgup() {
+  pushd "${DIR}/pkgs"
+  ./update.sh
   popd
 }
 function fullup() {
@@ -142,9 +148,6 @@ function fullup() {
   pushd "${DIR}"
   nix "${nixargs[@]}" flake update --no-registries --commit-lock-file
   popd
-  pushd "${DIR}/pkgs"
-  ./update.sh
-  popd
   # cache-shell
   outsh="$(mktemp -d)/result"
   nix build "${nixargs[@]}" "${buildargs[@]}" --out-link "${outsh}" ".#devShell.x86_64-linux.inputDerivation"
@@ -152,9 +155,8 @@ function fullup() {
 }
 function ciup() {
   cachix watch-store -j2 "${cache}" & cachixpid=$!
-  trap "kill ${cachixpid}" EXIT
   ci_nb_cache 'bundle'
-  kill -INT "${cachixpid}"; wait "${cachixpid}" || true
+  trap "kill -INT ${cachixpid}; wait ${cachixpid} || true" EXIT
 }
 ## </ci> #################################################
 
