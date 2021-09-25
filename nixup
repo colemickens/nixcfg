@@ -128,23 +128,33 @@ function ci_check() {
     "${buildargs[@]}" "${@}"
 }
 function up() {
+  otherup
+
   BASE_BRANCH="${BASE_BRANCH:-"origin/auto-simple-ready"}"
   pushd "${DIR}"
   git remote update
   git rev-parse "${BASE_BRANCH}" && git rebase "${BASE_BRANCH}" || true
   popd
+
+  pkgup
+  lockup
+  ciup
 }
 function pkgup() {
+  set -euo pipefail
   pushd "${DIR}/pkgs"
   ./update.sh
   popd
 }
-function fullup() {
+function otherup() {
   set -euo pipefail
   srcdirs=( "nixpkgs/cmpkgs"  "home-manager/cmhm"  "nixpkgs/master" "nixpkgs-wayland" "flake-firefox-nightly" )
   printf '%s\n' "${srcdirs[@]}" | \
     parallel --jobs $(nproc) --halt soon,fail=1 --tag --progress -- \
       "[[ ! -d "${HOME}/code/{.}" ]] || (git -C '${HOME}/code/{.}' pull --rebase && git -C '${HOME}/code/{.}' push origin HEAD -f)"
+}
+function lockup() {
+  set -euo pipefail
   pushd "${DIR}"
   nix "${nixargs[@]}" flake update --no-registries --commit-lock-file
   popd

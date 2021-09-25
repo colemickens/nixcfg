@@ -21,7 +21,7 @@ jobs:
           set -x
           git checkout -b auto-simple
           git reset --hard main
-          ./nixup fullup
+          ./nixup lockup
           git push origin HEAD -f
         EOF
     - name: "build"
@@ -34,9 +34,31 @@ jobs:
       run : |
         cat << EOF | .github/exec
           set -x
-          git log -n 5 --oneline origin/main
-          git log -n 5 --oneline origin/auto-simple
           git checkout -b auto-simple-ready
+          git reset --hard origin/auto-simple
+          git rebase origin/main
+          git push origin HEAD -f
+        EOF
+    - name: "update2"
+      run: |
+        cat << EOF | .github/exec
+          set -x
+          git checkout -b auto-simple
+          git reset --hard main
+          ./nixup pkgup
+          git push origin HEAD -f
+        EOF
+    - name: "build2"
+      run : |
+        cat << EOF | .github/exec
+          set -x
+          ./nixup ciup
+        EOF
+    - name: "set-ready2"
+      run : |
+        cat << EOF | .github/exec
+          set -x
+          git checkout -b auto-simple-ready2
           git reset --hard origin/auto-simple
           git rebase origin/main
           git push origin HEAD -f
