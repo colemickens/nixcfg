@@ -22,10 +22,8 @@ runs:
       shell: bash
       env:
         SOPS_AGE_KEY: "${{ inputs.sopsAgeKey }}"
-      run: ./.github/setup "${{ inputs.sopsAgeKey }}"
-    - name: gha-setup-tailscale-key
-      shell: bash
-      run: |
+      run:
+        ./.github/setup "${{ inputs.sopsAgeKey }}"
         source /run/secrets/nixup-secrets
         echo "::set-output name=TAILSCALE_AUTHKEY::${TAILSCALE_AUTHKEY}"
     - name: Tailscale
