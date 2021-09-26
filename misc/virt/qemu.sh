@@ -7,10 +7,10 @@ args=()
 #  -virtfs local,path=/run/media/cole,mount_tag=share,security_model=passthrough \
 sudo rm -rf /tmp/vmspice-tails.socket
 
-source ../../secrets/unencrypted/qemu-profile-2
+source ../../secrets/unencrypted/qemu-profile-$1
 
 [[ "${QEMU_ISO:-""}" != "" ]] && args=("${args[@]}" -cdrom "${QEMU_ISO}")
-[[ "${QEMU_VIRTIO_GPU:-""}" != "" ]]   && args=(
+[[ "${QEMU_VIRTIO_GPU:-""}" != "" ]]   && args=("${args[@]}"
   -vga none \
   -device virtio-gpu-pci,virgl=on \
   -spice gl=on,unix=on,addr=/tmp/vmspice-tails.socket,disable-ticketing=on \
@@ -19,7 +19,7 @@ source ../../secrets/unencrypted/qemu-profile-2
   -device virtserialport,chardev=charchannel1,id=channel1,name=org.spice-space.stream.0 \
   -chardev spiceport,name=org.spice-space.stream.0,id=charchannel1 \
 )
-[[ "${QEMU_DRIVE_ARGS:-""}" != "" ]] && args=( "${QEMU_DRIVE_ARGS[@]}" )
+[[ "${QEMU_DRIVE_ARGS:-""}" != "" ]] && args=("${args[@]}" "${QEMU_DRIVE_ARGS[@]}" )
 
 
 sudo qemu-system-x86_64 \
