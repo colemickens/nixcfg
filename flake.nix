@@ -138,6 +138,7 @@
             bash curl cacert jq parallel mercurial git
             nettools openssh ripgrep rsync sops gh gawk gnused gnugrep
             cachix nix-build-uncached nix-prefetch-git
+            tailscale
           ]) ++ [
             inputs.self.preferredNix.${system}
             fullPkgs_.${system}.metal-cli
