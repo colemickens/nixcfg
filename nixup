@@ -111,6 +111,7 @@ function packet-down-int() {
 function _nix() { nix "${nixargs[@]}" "${@}"; }
 function _nix_build() { nix "${nixargs[@]}" build "${buildargs[@]}" "${@}"; }
 function ci_nb_cache() {
+  set -euo pipefail
   out="$(mktemp -d)"; rm -rf "${out}" && mkdir -p "${out}"
   
   if ci_check "${@}";
@@ -123,18 +124,23 @@ function ci_nb_cache() {
   readlink -f "${out}"/result* | cachix push colemickens
 }
 function ci_check() {
+  set -euo pipefail
   nix-build-uncached \
     -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0" --no-link)" \
     "${buildargs[@]}" "${@}"
 }
 function up() {
-  otherup
-
+  set -euo pipefail
   BASE_BRANCH="${BASE_BRANCH:-"origin/auto-simple-part2-ready"}"
+
   pushd "${DIR}"
   git remote update
-  git rev-parse "${BASE_BRANCH}" && git rebase "${BASE_BRANCH}" || true
+  if git rev-parse "${BASE_BRANCH}"; then
+    git rebase "${BASE_BRANCH}"
+  fi
   popd
+
+  otherup
 
   pkgup
   lockup
