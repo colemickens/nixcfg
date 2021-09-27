@@ -108,6 +108,7 @@ in
         # browsers
         _someChromium
         _someFirefox
+        #falkon
       ]
       ++ _torPackages
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
