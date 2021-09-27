@@ -22,7 +22,7 @@ runs:
       shell: bash
       env:
         SOPS_AGE_KEY: "${{ inputs.sopsAgeKey }}"
-      run:
+      run: |
         set -x
         ./.github/setup
         source /run/secrets/nixup-secrets
