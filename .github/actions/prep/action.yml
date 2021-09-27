@@ -27,13 +27,6 @@ runs:
         ./.github/setup
         source /run/secrets/nixup-secrets
         set +x; echo "::set-output name=TAILSCALE_AUTHKEY::${TAILSCALE_AUTHKEY}"; set -x
-        echo "we set the key $(echo ${TAILSCALE_AUTHKEY} | base64)"
-    - name: check-ts-key
-      shell: bash
-      run: |
-        set -x
-        set -euo pipefail
-        echo "we set the key $(echo ${TAILSCALE_AUTHKEY} | base64)"
     - name: Tailscale
       uses: tailscale/github-action@v1
       with:

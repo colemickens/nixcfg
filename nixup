@@ -130,7 +130,7 @@ function ci_check() {
 function up() {
   otherup
 
-  BASE_BRANCH="${BASE_BRANCH:-"origin/auto-simple-ready"}"
+  BASE_BRANCH="${BASE_BRANCH:-"origin/auto-simple-part2-ready"}"
   pushd "${DIR}"
   git remote update
   git rev-parse "${BASE_BRANCH}" && git rebase "${BASE_BRANCH}" || true
