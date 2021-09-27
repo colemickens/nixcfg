@@ -36,13 +36,13 @@ jobs:
           git reset --hard origin/auto-simple
           git rebase origin/main
           git push origin HEAD -f
+          # get ready for pkg updates
         EOF
     - name: "update2"
       run: |
         cat << EOF | .github/exec
           set -x
-          git checkout -b auto-simple
-          git reset --hard main
+          git checkout -b auto-simple-part2
           ./nixup pkgup
           git push origin HEAD -f
         EOF
@@ -56,8 +56,7 @@ jobs:
       run : |
         cat << EOF | .github/exec
           set -x
-          git checkout -b auto-simple-ready2
-          git reset --hard origin/auto-simple
-          git rebase origin/main
+          git checkout -b auto-simple-part2-ready
+          git reset --hard auto-simple-part2
           git push origin HEAD -f
         EOF
