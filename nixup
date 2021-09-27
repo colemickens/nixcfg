@@ -140,6 +140,7 @@ function up() {
   fi
   popd
 
+  # TODO: actually get this step done somewhere in our CI process....
   otherup
 
   pkgup
