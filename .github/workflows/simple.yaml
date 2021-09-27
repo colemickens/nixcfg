@@ -1,6 +1,8 @@
 name: "simple"
 on:
   push:
+  schedule:
+    - cron: '*/10 * * * *'
 
 concurrency: simple
 jobs:
