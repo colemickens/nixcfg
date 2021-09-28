@@ -8,15 +8,15 @@
 
   config = {
     specialisation = {
-#      sway = {
-#        inheritParentConfig = false;
-#        configuration = {
-#          imports = [
-#            ./core.nix
-#            ../../profiles/desktop-sway-unstable-egl.nix
-#          ];
-#        };
-#      };
+     sway = {
+       inheritParentConfig = false;
+       configuration = {
+         imports = [
+           ./core.nix
+           ../../profiles/desktop-sway-unstable-egl.nix
+         ];
+       };
+     };
 
       plasma = {
         inheritParentConfig = false;

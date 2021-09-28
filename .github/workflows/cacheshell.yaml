@@ -1,0 +1,24 @@
+name: "cacheshell"
+on:
+  push:
+  schedule:
+    - cron: '*/10 * * * *'
+
+concurrency: cacheshell
+jobs:
+  "cacheshell-update":
+    runs-on: ubuntu-latest
+    concurrency: cacheshell-${{matrix.jobs.branch}}-${{matrix.jobs.target}}
+    steps:
+    - { "uses": "actions/checkout@v2", "with": { "ref": "main" } }
+    - name: prep
+      uses: ./.github/actions/prep
+      with:
+        sopsAgeKey: "${{ secrets.SOPS_AGE_KEY }}"
+    - name: "cacheshell"
+      run : |
+        cat << EOF | .github/exec
+          set -x
+          # this builds the 'devShell' deriv
+          ./nixup lockup
+        EOF
