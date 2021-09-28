@@ -10,7 +10,7 @@ buildargs=(
   --option 'build-cores' '0'
   --option 'narinfo-cache-negative-ttl' '0'
   --builders "
-    ssh://cole@$(tailscale ip --4 porty) x86_64-linux /run/secrets/hydra_queue_runner_id_rsa - - ;
+    ssh://cole@$(tailscale ip --6 porty) x86_64-linux /run/secrets/hydra_queue_runner_id_rsa - - ;
     ssh://cole@$(tailscale ip --6 sinkor) aarch64-linux /run/secrets/hydra_queue_runner_id_rsa;"
   --builders-use-substitutes
   --eval-store auto
@@ -202,45 +202,39 @@ function ciup() {
 # }
 #############
 # TODO: assume that we have competent builders, and/or that we can build drvs+copy them again?
-# function _remote() {
-#   remote="${1}"; buildattr="${2}"; target="${3}"; f="cm-nix-$RANDOM"
-#   stash
-#   git push origin HEAD -f
-#   rev="$(git rev-parse --short HEAD)"
-#   thing="github:colemickens/nixcfg/${rev}#${buildattr}"
-#   ssh_nixUnstable_shell "$remote" nix "${nixargs[@]}" build "${buildargs[@]}" -L "${thing}" --keep-going --out-link "/tmp/$f"
-#   out="$(ssh_nixUnstable_shell "$remote" readlink -f "/tmp/$f")"
+function _remote() {
+  remote="${1}"; buildattr="${2}"; target="${3}"; f="cm-nix-$RANDOM"
+  rev="$(git rev-parse --short HEAD)"
+  thing="github:colemickens/nixcfg/${rev}#${buildattr}"
+  ssh_nixUnstable_shell "$remote" nix "${nixargs[@]}" build "${buildargs[@]}" -L "${thing}" --keep-going --out-link "/tmp/$f"
+  out="$(ssh_nixUnstable_shell "$remote" readlink -f "/tmp/$f")"
 
-#   # target=copy   => copy back
-#   # target=cachix => upload cachix, done
-#   # target=skip   => do nothing
-#   # target=*      => push to cachix, download on target, and activate
-#   if [[ "${target}" == "copy" ]]; then
-#     nix copy --no-check-sigs --from "ssh://${remote}" "${out}"
-#   elif [[ "${target}" == "cachix" ]]; then
-#     ssh_cachix_push "${remote}" "${out}"
-#   elif [[ "${target}" == "cachixcp" ]]; then
-#     ssh_cachix_push "${remote}" "${out}"
-#     nix-store "${nixargs[@]}" -r "${out}"
-#   elif [[ "${target:-}" != "skip" ]]; then
-#     ssh_cachix_push "${remote}" "${out}"
-#     ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -L --no-link -j0 "${out}"
-#     ssh_nixUnstable_shell "${target}" sudo nix "${nixargs[@]}" build --no-link --profile /nix/var/nix/profiles/system "${out}";
-#     ssh_nixUnstable_shell "${target}" sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch;
-#   fi
-#   ssh_nixUnstable_shell "${remote}" rm -f "/tmp/$f"
-#   printf "${out}"
-# }
-# function remote() {
-#   who="$1"; shift; what="$1"; shift; where="$1"; shift
-#   remote "$(ip "${who}")" "${what}" "$(ip "${where}")"
-# }
-# function ip() {
-#   if [[ "${1}" == "$(hostname)" ]]; then printf "%s" "colemickens@aarch64.nixos.community";
-#   elif [[ "${1}" == "a64" ]];       then printf "%s" "localhost";
-#   else                                   tailscale ip --6 ${1} | head -z -n1;
-#   fi
-# }
+  # target=copy   => copy back
+  # target=cachix => upload cachix, done
+  # target=skip   => do nothing
+  # target=*      => push to cachix, download on target, and activate
+  if [[ "${target}" == "copy" ]]; then
+    nix copy --no-check-sigs --from "ssh://${remote}" "${out}"
+  elif [[ "${target}" == "cachix" ]]; then
+    ssh_cachix_push "${remote}" "${out}"
+  elif [[ "${target}" == "cachixcp" ]]; then
+    ssh_cachix_push "${remote}" "${out}"
+    nix-store "${nixargs[@]}" -r "${out}"
+  elif [[ "${target:-}" != "skip" ]]; then
+    ssh_cachix_push "${remote}" "${out}"
+    ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -L --no-link -j0 "${out}"
+    ssh_nixUnstable_shell "${target}" sudo nix "${nixargs[@]}" build --no-link --profile /nix/var/nix/profiles/system "${out}";
+    ssh_nixUnstable_shell "${target}" sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch;
+  fi
+  ssh_nixUnstable_shell "${remote}" rm -f "/tmp/$f"
+  printf "${out}"
+}
+function tsip() {
+  if [[ "${1}" == "$(hostname)" ]]; then printf "%s" "colemickens@aarch64.nixos.community";
+  elif [[ "${1}" == "a64" ]];       then printf "%s" "localhost";
+  else                                   tailscale ip --6 ${1} | head -z -n1;
+  fi
+}
 function rpifour1() {
   rs="ssh-ng://cole@$(tailscale ip --6 sinkor)"
   nix "${nixargs[@]}" build "${buildargs[@]}" \
@@ -256,6 +250,9 @@ function sinkor() {
     --eval-store auto \
     ".#toplevels.sinkor"
   nix copy --no-check-sigs --from "${rs}" ".#toplevels.sinkor"
+}
+function rpizero1()  {
+  _remote "$(tsip porty)"    "toplevels.rpizero1"  "192.168.145.120"
 }
 # function pinebook()  { _remote "${a64com}"      "toplevels.pinebook"  "$(ip pinebook)"; }
 # function xeep()      { _remote "$(ip xeep)"     "toplevels.xeep"      "$(ip xeep)"; }
