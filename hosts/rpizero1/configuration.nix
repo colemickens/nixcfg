@@ -16,6 +16,9 @@ in
   # TODO: check in on cross-compiling
   config = {
     system.stateVersion = "21.05";
+    environment.systemPackages = with pkgs; [
+      iotop
+    ];
 
     nix.nixPath = [];
     nix.gc.automatic = true;

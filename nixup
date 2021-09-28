@@ -13,7 +13,6 @@ buildargs=(
     ssh://cole@$(tailscale ip --6 porty) x86_64-linux /run/secrets/hydra_queue_runner_id_rsa - - ;
     ssh://cole@$(tailscale ip --6 sinkor) aarch64-linux /run/secrets/hydra_queue_runner_id_rsa;"
   --builders-use-substitutes
-  --eval-store auto
 )
 cache="colemickens"
 
@@ -121,7 +120,7 @@ function ci_nb_cache() {
 
   nix "${nixargs[@]}" build "${buildargs[@]}" --keep-going --out-link "${out}/result" ${@/#/'.#'}
   ls -al "${out}"
-  readlink -f "${out}"/result* | cachix push colemickens
+  readlink -f "${out}"/result* | tee /dev/stderr | cachix push colemickens
 }
 function ci_check() {
   set -euo pipefail
@@ -132,20 +131,16 @@ function ci_check() {
 function up() {
   set -euo pipefail
   BASE_BRANCH="${BASE_BRANCH:-"origin/auto-simple-part2-ready"}"
-
   pushd "${DIR}"
   git remote update
-  if git rev-parse "${BASE_BRANCH}"; then
-    git rebase "${BASE_BRANCH}"
-  fi
+  git rev-parse "${BASE_BRANCH}" && git rebase "${BASE_BRANCH}"
   popd
-
-  # TODO: actually get this step done somewhere in our CI process....
-  otherup
-
+}
+function upup() {
+  up
+  otherup # TODO: actually get this step done somewhere in our CI process....
   pkgup
   lockup
-  ciup
 }
 function pkgup() {
   set -euo pipefail
@@ -164,11 +159,10 @@ function lockup() {
   set -euo pipefail
   pushd "${DIR}"
   nix "${nixargs[@]}" flake update --no-registries --commit-lock-file
+  outsh="$(mktemp -d)"
+  nix build "${nixargs[@]}" "${buildargs[@]}" --out-link "${outsh}/result" ".#devShell.x86_64-linux.inputDerivation"
+  readlink -f "${outsh}"/result* | tee /dev/stderr | cachix push colemickens
   popd
-  # cache-shell
-  outsh="$(mktemp -d)/result"
-  nix build "${nixargs[@]}" "${buildargs[@]}" --out-link "${outsh}" ".#devShell.x86_64-linux.inputDerivation"
-  readlink -f "${outsh}" | cachix push colemickens
 }
 function ciup() {
   cachix watch-store -j2 "${cache}" & cachixpid=$!
@@ -178,92 +172,32 @@ function ciup() {
 ## </ci> #################################################
 
 ## <remote> #################################################
-#export cachixpkgs="https://github.com/nixos/nixpkgs/archive/$(jq -r '.nodes.stable.locked.rev' ./flake.lock).tar.gz"
-#export unstablepkgs="https://github.com/colemickens/nixpkgs/archive/$(jq -r '.nodes.nixpkgs.locked.rev' ./flake.lock).tar.gz"
-# this includes the actual `cachix push` command, just send it a path
-# function ssh_cachix_push() {
-#   set -euo pipefail
-#   ssh "${1}" "nix-shell -I nixpkgs=${cachixpkgs} -p cachix --run \
-#     'echo ${2} | env CACHIX_SIGNING_KEY=${CACHIX_SIGNING_KEY} cachix push ${cache} >/dev/stderr'" &>/dev/stderr
-# }
-# # this just wraps the shell, give it the full command: ssh_nixUnstable_shell nix build ...
-# function ssh_nixUnstable_shell() {
-#   local r="${1}"; shift;
-#   ssh "${r}" -- "nix-shell -I nixpkgs=${unstablepkgs} -p nixUnstable --run '$(printf '\"%s\" ' "${@}")'"
-# }
-# function ssh_nixUnstable_shell2() {
-#   local r="${1}"; shift;
-#   ssh "${r}" -- "$(printf '\"%s\" ' "${@}")"
-# }
-# # this just wraps the shell, give it the full command: ssh_niche_shell niche build ...
-# function ssh_niche_shell() {
-#   local r="${1}"; shift;
-#   ssh "${r}" -- "nix-shell -I nixpkgs=${nichepkgs} -p niche -p gnupg -p nixUnstable --command 'NICHE_DEBUG=1 $(printf '\"%s\" ' "${@}")'"
-# }
-#############
-# TODO: assume that we have competent builders, and/or that we can build drvs+copy them again?
 function _remote() {
-  remote="${1}"; buildattr="${2}"; target="${3}"; f="cm-nix-$RANDOM"
+  remote="${1}"; buildattr="${2}"; target="${3}"; action="${4:-""}"
   rev="$(git rev-parse --short HEAD)"
-  thing="github:colemickens/nixcfg/${rev}#${buildattr}"
-  ssh_nixUnstable_shell "$remote" nix "${nixargs[@]}" build "${buildargs[@]}" -L "${thing}" --keep-going --out-link "/tmp/$f"
-  out="$(ssh_nixUnstable_shell "$remote" readlink -f "/tmp/$f")"
-
-  # target=copy   => copy back
-  # target=cachix => upload cachix, done
-  # target=skip   => do nothing
-  # target=*      => push to cachix, download on target, and activate
-  if [[ "${target}" == "copy" ]]; then
-    nix copy --no-check-sigs --from "ssh://${remote}" "${out}"
-  elif [[ "${target}" == "cachix" ]]; then
-    ssh_cachix_push "${remote}" "${out}"
-  elif [[ "${target}" == "cachixcp" ]]; then
-    ssh_cachix_push "${remote}" "${out}"
-    nix-store "${nixargs[@]}" -r "${out}"
-  elif [[ "${target:-}" != "skip" ]]; then
-    ssh_cachix_push "${remote}" "${out}"
-    ssh_nixUnstable_shell "${target}" nix "${nixargs[@]}" build "${buildargs[@]}" -L --no-link -j0 "${out}"
-    ssh_nixUnstable_shell "${target}" sudo nix "${nixargs[@]}" build --no-link --profile /nix/var/nix/profiles/system "${out}";
-    ssh_nixUnstable_shell "${target}" sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch;
+  out="$(nix eval --raw ".#${buildattr}")"
+  _nix_build --store "ssh-ng://${remote}" --eval-store "auto" "${buildattr}"
+  nix copy --no-check-sigs --from "ssh-ng://${remote}" --to "ssh-ng://${target}" "${out}"
+  if [[ "${action:-""}" == "activate" ]]; then
+    ssh "${target}" sudo nix "${nixargs[@]}" build --no-link --profile /nix/var/nix/profiles/system "${out}";
+    ssh "${target}" sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch;
   fi
-  ssh_nixUnstable_shell "${remote}" rm -f "/tmp/$f"
-  printf "${out}"
 }
 function tsip() {
-  if [[ "${1}" == "$(hostname)" ]]; then printf "%s" "colemickens@aarch64.nixos.community";
-  elif [[ "${1}" == "a64" ]];       then printf "%s" "localhost";
-  else                                   tailscale ip --6 ${1} | head -z -n1;
-  fi
+  if [[ "${1}" == "$(hostname)" ]]; then printf "%s" "localhost";
+  elif [[ "${1}" == "a64com" ]];    then printf "%s" "colemickens@aarch64.nixos.community";
+  else                                   tailscale ip --6 ${1} | head -z -n1; fi
 }
-function rpifour1() {
-  rs="ssh-ng://cole@$(tailscale ip --6 sinkor)"
-  nix "${nixargs[@]}" build "${buildargs[@]}" \
-    --store "${rs}" \
-    --eval-store auto \
-    ".#toplevels.rpifour1"
-  nix copy --no-check-sigs --from "${rs}" ".#toplevels.rpifour1"
-}
-function sinkor() {
-  rs="ssh-ng://cole@$(tailscale ip --6 sinkor)"
-  nix "${nixargs[@]}" build "${buildargs[@]}" \
-    --store "${rs}" \
-    --eval-store auto \
-    ".#toplevels.sinkor"
-  nix copy --no-check-sigs --from "${rs}" ".#toplevels.sinkor"
-}
-function rpizero1()  {
-  _remote "$(tsip porty)"    "toplevels.rpizero1"  "192.168.145.120"
-}
-# function pinebook()  { _remote "${a64com}"      "toplevels.pinebook"  "$(ip pinebook)"; }
-# function xeep()      { _remote "$(ip xeep)"     "toplevels.xeep"      "$(ip xeep)"; }
-# function raisin()    { _remote "$(ip raisin)"   "toplevels.raisin"    "$(ip raisin)"; }
-# function jeffhyper() { _remote "$(ip xeep)"     "toplevels.jeffhyper" "$(ip jeffhyper)"; }
-# function porty()     { _remote "$(ip porty)"    "toplevels.porty"     "$(ip porty)"; }
-# function rpizero1()  { _remote "$(ip porty)"    "toplevels.rpizero1"  "192.168.145.120"; }
-# function rpifour1()  { _remote "${a64com}"      "toplevels.rpifour1"  "$(ip rpifour1)"; }
-#function sinkor()    { _remote "${a64com}"      "toplevels.sinkor"    "$(ip sinkor)"; }
-# function pinephone() { _remote "${a64com}" "toplevels.pinephone"      "$(tsip pinephone)"; }
-# function bluephone() { _remote "${a64com}" "toplevels.bluephone"      "$(tsip bluephone)"; }
+function pinebook()  { _remote "a64com"         ".#toplevels.pinebook"  "$(ip pinebook)"; }
+function xeep()      { _remote "$(ip xeep)"     ".#toplevels.xeep"      "$(ip xeep)"; }
+function raisin()    { _remote "$(ip raisin)"   ".#toplevels.raisin"    "$(ip raisin)"; }
+function jeffhyper() { _remote "$(ip xeep)"     ".#toplevels.jeffhyper" "$(ip jeffhyper)"; }
+function porty()     { _remote "$(ip porty)"    ".#toplevels.porty"     "$(ip porty)"; }
+function rpizero1()  { _remote "$(tsip porty)"  ".#toplevels.rpizero1"  "192.168.145.120" "activate"; }
+function rpifour1()  { _remote "a64com"         ".#toplevels.rpifour1"  "$(ip rpifour1)"; }
+function sinkor()    { _remote "a64com"         ".#toplevels.sinkor"    "$(ip sinkor)"; }
+function pinephone() { _remote "a64com"         ".#toplevels.pinephone" "$(tsip pinephone)"; }
+function bluephone() { _remote "a64com"         ".#toplevels.bluephone" "$(tsip bluephone)"; }
 ## </remote> #################################################
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi

@@ -207,10 +207,6 @@
           zellij = prev.callPackage ./pkgs/zellij {
             zellij = prev.zellij;
           };
-
-          nixUnstable = prev.nixUnstable.override {
-            patches = [ ./pkgs/nix/unset-is-macho.patch ];
-          };
         }; in p // { colePackages = p; };
 
       nixosModules = {
