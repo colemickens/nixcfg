@@ -102,7 +102,7 @@
     let
       nameValuePair = name: value: { inherit name value; };
       genAttrs = names: f: builtins.listToAttrs (map (n: nameValuePair n (f n)) names);
-      supportedSystems = [ "x86_64-linux" "aarch64-linux" "armv6l-linux" ];
+      supportedSystems = [ "x86_64-linux" "aarch64-linux" "armv6l-linux" "armv7l-linux" ];
       forAllSystems = genAttrs supportedSystems;
       filterPkg_ = system: (pkg: builtins.elem "${system}" (pkg.meta.platforms or [ "x86_64-linux" "aarch64-linux" ]));
       # TODO: we probably want to skip broken?
@@ -231,9 +231,10 @@
         pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
 
         # embedded devices:
-        rpifour1  = mkSystem inputs.nixpkgs   "aarch64-linux" "rpifour1";
-        rpizero1  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
-        rpizero2  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
+        rpifour1   = mkSystem inputs.nixpkgs   "aarch64-linux" "rpifour1";
+        rpizero1   = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
+        rpizero2   = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
+        rpithreebp = mkSystem inputs.crosspkgs "x86_64-linux" "rpithreebp";
 
         bluephone     = mkSystem inputs.nixpkgs "aarch64-linux" "bluephone";
         #demovm      = mkSystem fullPkgs_.x86_64-linux  "demovm";
@@ -293,6 +294,7 @@
 
         rpizero1 = inputs.self.nixosConfigurations.rpizero1.config.system.build.sdImage;
         rpizero2 = inputs.self.nixosConfigurations.rpizero2.config.system.build.sdImage;
+        rpithreebp = inputs.self.nixosConfigurations.rpithreebp.config.system.build.sdImage;
 
         pinebook_bundle = let wpp = inputs.wip-pinebook-pro.packages.aarch64-linux; in
           pkgs_.nixpkgs.aarch64-linux.runCommandNoCC "pinebook-bundle" {} ''
