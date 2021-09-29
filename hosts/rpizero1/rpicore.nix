@@ -22,9 +22,7 @@
             pname = firmwareLinuxNonfree.pname;
             version = "${firmwareLinuxNonfree.version}-fixed";
             src = null;
-            nativeBuildInputs = [
-              rsync
-            ];
+            nativeBuildInputs = [ rsync ];
             phases = [ "installPhase" ];
             installPhase = ''
               mkdir $out

@@ -182,17 +182,17 @@ function tsip() {
   elif [[ "${1}" == "a64com" ]];    then printf "%s" "colemickens@aarch64.nixos.community";
   else                                   tailscale ip --6 ${1} | head -z -n1; fi
 }
-function pinebook()  { _remote "a64com"         ".#toplevels.pinebook"  "$(ip pinebook)" "activate"; }
-function xeep()      { _remote "$(ip xeep)"     ".#toplevels.xeep"      "$(ip xeep)" "activate"; }
-function raisin()    { _remote "$(ip raisin)"   ".#toplevels.raisin"    "$(ip raisin)" "activate"; }
-function jeffhyper() { _remote "$(ip xeep)"     ".#toplevels.jeffhyper" "$(ip jeffhyper)" "activate"; }
-function porty()     { _remote "$(ip porty)"    ".#toplevels.porty"     "$(ip porty)" "activate"; }
-function rpizero1()  { _remote "$(tsip porty)"  ".#toplevels.rpizero1"  "192.168.145.120" "activate"; }
-function rpizero2()  { _remote "$(tsip porty)"  ".#toplevels.rpizero2"  "$(ip rpizero2)" "activate"; }
-function rpifour1()  { _remote "a64com"         ".#toplevels.rpifour1"  "$(ip rpifour1)" "activate"; }
-function sinkor()    { _remote "a64com"         ".#toplevels.sinkor"    "$(ip sinkor)" "activate"; }
-function pinephone() { _remote "a64com"         ".#toplevels.pinephone" "$(tsip pinephone)" "activate"; }
-function bluephone() { _remote "a64com"         ".#toplevels.bluephone" "$(tsip bluephone)" "activate"; }
+function pinebook()  { _remote "a64com"           ".#toplevels.pinebook"  "$(tsip pinebook)" "activate"; }
+function xeep()      { _remote "$(tsip xeep)"     ".#toplevels.xeep"      "$(tsip xeep)" "activate"; }
+function raisin()    { _remote "$(tsip raisin)"   ".#toplevels.raisin"    "$(tsip raisin)" "activate"; }
+function jeffhyper() { _remote "$(tsip xeep)"     ".#toplevels.jeffhyper" "$(tsip jeffhyper)" "activate"; }
+function porty()     { _remote "$(tsip porty)"    ".#toplevels.porty"     "$(tsip porty)" "activate"; }
+function rpizero1()  { _remote "$(tsip porty)"    ".#toplevels.rpizero1"  "192.168.145.120" "activate"; }
+function rpizero2()  { _remote "$(tsip porty)"    ".#toplevels.rpizero2"  "$(tsip rpizero2)" "activate"; }
+function rpifour1()  { _remote "a64com"           ".#toplevels.rpifour1"  "$(tsip rpifour1)" "activate"; }
+function sinkor()    { _remote "a64com"           ".#toplevels.sinkor"    "$(tsip sinkor)" "activate"; }
+function pinephone() { _remote "a64com"           ".#toplevels.pinephone" "$(tsip pinephone)" "activate"; }
+function bluephone() { _remote "a64com"           ".#toplevels.bluephone" "$(tsip bluephone)" "activate"; }
 ## </remote> #################################################
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi

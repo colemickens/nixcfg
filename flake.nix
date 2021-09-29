@@ -186,28 +186,25 @@
           };
           mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
           meli = prev.callPackage ./pkgs/meli {};
+          passrs = prev.callPackage ./pkgs/passrs {};
+          rkvm = prev.callPackage ./pkgs/rkvm {};
+          shreddit = prev.python3Packages.callPackage ./pkgs/shreddit {};
+          metal-cli = prev.callPackage ./pkgs/metal-cli {};
+          v4l2rtspserver = prev.callPackage ./pkgs/v4l2rtspserver {};
+          rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {};
+          zellij = prev.callPackage ./pkgs/zellij { zellij = prev.zellij; };
+
+          #disabled:
           #niche = prev.callPackage ./pkgs/niche {};
           # neochat_ = prev.libsForQt5.callPackage ./pkgs/neochat {
           #  neochat = prev.neochat;
           # };
-          passrs = prev.callPackage ./pkgs/passrs {};
-          rkvm = prev.callPackage ./pkgs/rkvm {};
-          shreddit = prev.python3Packages.callPackage ./pkgs/shreddit {};
-
-          metal-cli = prev.callPackage ./pkgs/metal-cli {};
-
-          libquotient = prev.libsForQt5.callPackage ./pkgs/quaternion/libquotient.nix {};
-          quaternion = prev.libsForQt5.callPackage ./pkgs/quaternion {};
-
-          #disabled: raspberrypi-eeprom = prev.callPackage ./pkgs/raspberrypi-eeprom {};
-          rpi4-uefi = prev.callPackage ./pkgs/rpi4-uefi {};
-
-          cpptoml = prev.callPackage ./pkgs/cpptoml {};
+          #raspberrypi-eeprom = prev.callPackage ./pkgs/raspberrypi-eeprom {};
+          #rpi4-uefi = prev.callPackage ./pkgs/rpi4-uefi {};
+          #cpptoml = prev.callPackage ./pkgs/cpptoml {};
           #wireplumber = prev.callPackage ./pkgs/wireplumber {};
-
-          zellij = prev.callPackage ./pkgs/zellij {
-            zellij = prev.zellij;
-          };
+          #libquotient = prev.libsForQt5.callPackage ./pkgs/quaternion/libquotient.nix {};
+          #quaternion = prev.libsForQt5.callPackage ./pkgs/quaternion {};
         }; in p // { colePackages = p; };
 
       nixosModules = {
