@@ -13,6 +13,7 @@
     stable = { url = "github:nixos/nixpkgs/nixos-21.05"; }; # for cachix
 
     crosspkgs = {
+      # LKG: 79c444b5bdeaba142d128afddee14c89ecf2a968
       url = "github:colemickens/nixpkgs/crosspkgs";
     };
 
@@ -232,6 +233,7 @@
         # embedded devices:
         rpifour1  = mkSystem inputs.nixpkgs   "aarch64-linux" "rpifour1";
         rpizero1  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
+        rpizero2  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
 
         bluephone     = mkSystem inputs.nixpkgs "aarch64-linux" "bluephone";
         #demovm      = mkSystem fullPkgs_.x86_64-linux  "demovm";

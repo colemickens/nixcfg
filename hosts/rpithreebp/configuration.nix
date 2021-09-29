@@ -1,6 +1,6 @@
 { pkgs, lib, modulesPath, inputs, config, ... }:
 let
-  hostname = "rpizero1";
+  hostname = "rpithreebp";
 in
 {
   imports = [
@@ -23,7 +23,6 @@ in
     system.stateVersion = "21.05";
     environment.systemPackages = with pkgs; [
       iotop
-      htop
     ];
 
     nix.nixPath = [];
@@ -44,11 +43,9 @@ in
     programs.command-not-found.enable = false;
     environment.noXlibs = true;
 
-    # TODO: cole... why do you not understadn the diff here? why does this not get crossed the other way, I must be using the wrong thing everywhere i do pkgs.system
-    #nix.package = lib.mkForce pkgs.nix;
-    nix.package = lib.mkForce pkgs.nixUnstable;
+    nix.package = lib.mkForce pkgs.nix;
 
-    boot.initrd.availableKernelModules = lib.mkForce [
+    boot.initrd.availableKernelModules = lib.mkForce [ 
       "mmc_block"
       "usbhid"
       "hid_generic"
@@ -59,8 +56,8 @@ in
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      #kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_rpi0;
-      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
+      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_rpi0;
+      #kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
 
       loader.grub.enable = false;
       loader.generic-extlinux-compatible.enable = true;

@@ -5,8 +5,10 @@ set +x; source /run/secrets/nixup-secrets; set -x
 
 nixargs=(--experimental-features "nix-command flakes") #ca-references ca-derivations recursive-nix")
 buildargs=(
-  --option 'extra-substituters' 'https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://arm.cachix.org https://thefloweringash-armv7.cachix.org'
-  --option 'extra-trusted-public-keys' 'colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= arm.cachix.org-1:5BZ2kjoL1q6nWhlnrbAl+G7ThY7+HaBRD9PZzqZkbnM= thefloweringash-armv7.cachix.org-1:v+5yzBD2odFKeXbmC+OPWVqx4WVoIVO6UXgnSAWFtso='
+  #--option 'extra-substituters' 'https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://arm.cachix.org https://thefloweringash-armv7.cachix.org'
+  --option 'extra-binary-caches' 'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://arm.cachix.org https://thefloweringash-armv7.cachix.org'
+  #--option 'extra-trusted-public-keys' 'colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= arm.cachix.org-1:5BZ2kjoL1q6nWhlnrbAl+G7ThY7+HaBRD9PZzqZkbnM= thefloweringash-armv7.cachix.org-1:v+5yzBD2odFKeXbmC+OPWVqx4WVoIVO6UXgnSAWFtso='
+  --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= arm.cachix.org-1:5BZ2kjoL1q6nWhlnrbAl+G7ThY7+HaBRD9PZzqZkbnM= thefloweringash-armv7.cachix.org-1:v+5yzBD2odFKeXbmC+OPWVqx4WVoIVO6UXgnSAWFtso='
   --option 'build-cores' '0'
   --option 'narinfo-cache-negative-ttl' '0'
   --builders "
@@ -129,18 +131,10 @@ function ci_check() {
     "${buildargs[@]}" "${@}"
 }
 function up() {
-  set -euo pipefail
-  BASE_BRANCH="${BASE_BRANCH:-"origin/auto-simple-part2-ready"}"
-  pushd "${DIR}"
-  git remote update
-  git rev-parse "${BASE_BRANCH}" && git rebase "${BASE_BRANCH}"
-  popd
-}
-function upup() {
-  up
   otherup # TODO: actually get this step done somewhere in our CI process....
   pkgup
   lockup
+  ciup
 }
 function pkgup() {
   set -euo pipefail
@@ -175,12 +169,12 @@ function ciup() {
 function _remote() {
   remote="${1}"; buildattr="${2}"; target="${3}"; action="${4:-""}"
   rev="$(git rev-parse --short HEAD)"
-  out="$(nix eval --raw ".#${buildattr}")"
+  out="$(nix eval --raw "${buildattr}")"
   _nix_build --store "ssh-ng://${remote}" --eval-store "auto" "${buildattr}"
   nix copy --no-check-sigs --from "ssh-ng://${remote}" --to "ssh-ng://${target}" "${out}"
   if [[ "${action:-""}" == "activate" ]]; then
-    ssh "${target}" sudo nix "${nixargs[@]}" build --no-link --profile /nix/var/nix/profiles/system "${out}";
-    ssh "${target}" sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch;
+    ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --no-link --profile /nix/var/nix/profiles/system "${out}")"
+    ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch)"
   fi
 }
 function tsip() {
@@ -194,6 +188,7 @@ function raisin()    { _remote "$(ip raisin)"   ".#toplevels.raisin"    "$(ip ra
 function jeffhyper() { _remote "$(ip xeep)"     ".#toplevels.jeffhyper" "$(ip jeffhyper)"; }
 function porty()     { _remote "$(ip porty)"    ".#toplevels.porty"     "$(ip porty)"; }
 function rpizero1()  { _remote "$(tsip porty)"  ".#toplevels.rpizero1"  "192.168.145.120" "activate"; }
+function rpizero2()  { _remote "$(tsip porty)"  ".#toplevels.rpizero2"  "192.168.176.15" "activate"; }
 function rpifour1()  { _remote "a64com"         ".#toplevels.rpifour1"  "$(ip rpifour1)"; }
 function sinkor()    { _remote "a64com"         ".#toplevels.sinkor"    "$(ip sinkor)"; }
 function pinephone() { _remote "a64com"         ".#toplevels.pinephone" "$(tsip pinephone)"; }

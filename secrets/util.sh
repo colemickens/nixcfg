@@ -19,6 +19,7 @@ function e() {
       --input-type binary --output-type binary \
       --verbose --output ../encrypted/$f -e $f
   done
+  (cd ..; git add .)
 }
 
 import_host() {

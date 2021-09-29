@@ -2,31 +2,30 @@
 
 {
   imports = [
-    ../../profiles/desktop-gnome.nix
+    #../../profiles/desktop-gnome.nix
+    ../../profiles/desktop-sway-unstable-egl.nix
     ./core.nix
   ];
 
   config = {
     specialisation = {
-     sway = {
-       inheritParentConfig = false;
-       configuration = {
-         imports = [
-           ./core.nix
-           ../../profiles/desktop-sway-unstable-egl.nix
-         ];
-       };
-     };
+      gnome.inheritParentConfig = false;
+      gnome.configuration.imports = [
+          ./core.nix
+          ../../profiles/desktop-gnome.nix
+      ];
 
-      plasma = {
-        inheritParentConfig = false;
-        configuration = {
-          imports = [
-            ./core.nix
-            ../../profiles/desktop-plasma.nix
-          ];
-        };
-      };
+      # sway.inheritParentConfig = false;
+      # sway.configuration.imports = [
+      #   ./core.nix
+      #   ../../profiles/desktop-sway-unstable-egl.nix
+      # ];
+
+      plasma.inheritParentConfig = false;
+      plasma.configuration.imports = [
+        ./core.nix
+        ../../profiles/desktop-plasma.nix
+      ];
     };
   };
 }
