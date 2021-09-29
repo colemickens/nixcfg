@@ -1,7 +1,7 @@
 { stdenv, lib
 , fetchFromGitHub
 , pkgconfig, cmake, git
-, alsa-lib, systemd, live555, log4cpp
+, alsa-lib, systemd, live555, log4cpp, openssl
 }:
 
 let
@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
   # ca-certificates g++ autoconf automake libtool xz-utils cmake make pkg-config git wget libasound2-dev
   buildInputs = [
     alsa-lib systemd live555
-    log4cpp
+    log4cpp openssl
   ];
 
   meta = with lib; {
