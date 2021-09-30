@@ -1,4 +1,0 @@
-#!ipxe
-
-chain https://github.com/nix-community/nixos-images/releases/download/nixos-unstable/netboot-x86_64-linux.ipxe
-

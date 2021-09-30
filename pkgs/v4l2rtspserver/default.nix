@@ -1,7 +1,8 @@
 { stdenv, lib
-, fetchFromGitHub
-, pkgconfig, cmake, git
-, alsa-lib, systemd, live555, log4cpp, openssl
+, fetchFromGitHub, fetchpatch
+, pkgconfig, cmake
+, alsa-lib, live555, log4cpp, openssl
+# , systemd # NO do not give it systemd so it can't try to do dumb things
 }:
 
 let
@@ -18,24 +19,19 @@ in stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    pkgconfig cmake
+  patches = [ ./0001-cmake-find-openssl-and-live555-via-pkg-config.patch ];
 
-    # TODO: set VERSION ourselves in a saner way
-    git # if we don't give it git, it doesn't set VERSION and won't compile, ugh
-  ];
+  cmakeFlags = [ "-DVERSION=${metadata.rev}" ];
 
-  # https://github.com/mpromonet/v4l2rtspserver/blob/master/Dockerfile#L7
-  # ca-certificates g++ autoconf automake libtool xz-utils cmake make pkg-config git wget libasound2-dev
-  buildInputs = [
-    alsa-lib systemd live555
-    log4cpp openssl
-  ];
+  nativeBuildInputs = [ pkgconfig cmake ];
+
+  buildInputs = [ alsa-lib live555 log4cpp openssl ];
 
   meta = with lib; {
     description = "RTSP Server for V4L2 device capture supporting HEVC/H264/JPEG/VP8/VP9";
     homepage = "https://github.com/mpromonet/v4l2rtspserver";
     license = licenses.unlicense;
     maintainers = with maintainers; [ colemickens ];
+    #broken = true;
   };
 }

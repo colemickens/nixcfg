@@ -2,7 +2,6 @@
 
 {
   imports = [
-    #../../profiles/desktop-gnome.nix
     ../../profiles/desktop-sway-unstable-egl.nix
     ./core.nix
   ];
@@ -11,8 +10,8 @@
     specialisation = {
       gnome.inheritParentConfig = false;
       gnome.configuration.imports = [
-          ./core.nix
-          ../../profiles/desktop-gnome.nix
+        ./core.nix
+        ../../profiles/desktop-gnome.nix
       ];
 
       # sway.inheritParentConfig = false;

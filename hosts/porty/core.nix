@@ -3,7 +3,7 @@
 {
   imports = [
     ../../mixins/common.nix
-
+    
     ../../profiles/user.nix
     ../../profiles/gui.nix
 
@@ -12,7 +12,7 @@
     ../../mixins/nvidia.nix
     ../../profiles/gaming.nix
 
-
+    ../../mixins/code-server.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
@@ -69,7 +69,7 @@
     ];
     boot.kernelModules = [ ];
     #boot.kernelPackages = pkgs.linuxPackages_latest;
-    boot.kernelPackages = pkgs.linuxPackages_5_13;
+    boot.kernelPackages = pkgs.linuxPackages_5_14;
     boot.extraModulePackages = [ ];
 
     fileSystems."/" =

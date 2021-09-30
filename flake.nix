@@ -104,8 +104,7 @@
       genAttrs = names: f: builtins.listToAttrs (map (n: nameValuePair n (f n)) names);
       supportedSystems = [ "x86_64-linux" "aarch64-linux" "armv6l-linux" "armv7l-linux" ];
       forAllSystems = genAttrs supportedSystems;
-      filterPkg_ = system: (pkg: builtins.elem "${system}" (pkg.meta.platforms or [ "x86_64-linux" "aarch64-linux" ]));
-      # TODO: we probably want to skip broken?
+      filterPkg_ = system: (pkg: (builtins.elem "${system}" (pkg.meta.platforms or [ "x86_64-linux" "aarch64-linux" ]) && !(pkg.meta.broken or false)));
       filterPkgs = pkgs: pkgSet: (pkgs.lib.filterAttrs (filterPkg_ pkgs.system) pkgSet.${pkgs.system});
       filterHosts = pkgs: cfgs: (pkgs.lib.filterAttrs (n: v: pkgs.system == v.config.nixpkgs.system) cfgs);
       filterPkgs_ = pkgs: pkgSet: (builtins.filter (filterPkg_ pkgs.system) (builtins.attrValues pkgSet.${pkgs.system}));
@@ -214,26 +213,22 @@
       };
 
       nixosConfigurations = {
-        #azdev     = mkSystem inputs.nixpkgs "x86_64-linux"  "azdev";
-        #azmail    = mkSystem inputs.nixpkgs "x86_64-linux"  "azmail";
-        #rpifour2  (is a netboot device managed under rpifour1)
-        #slynux    = mkSystem inputs.nixpkgs "x86_64-linux"  "slynux";
-        xeep      = mkSystem inputs.nixpkgs "x86_64-linux"  "xeep";
-        pinebook  = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
-        #rpizero2  = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
+        # x86_64-linux
         jeffhyper = mkSystem inputs.nixpkgs "x86_64-linux"  "jeffhyper";
-        porty = mkSystem inputs.nixpkgs "x86_64-linux"  "porty";
-        raisin = mkSystem inputs.nixpkgs "x86_64-linux"  "raisin";
-        sinkor = mkSystem inputs.nixpkgs "aarch64-linux"  "sinkor";
-        pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
-
-        # embedded devices:
-        rpifour1   = mkSystem inputs.nixpkgs   "aarch64-linux" "rpifour1";
-        rpizero1   = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
-        rpizero2   = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
-        rpithreebp = mkSystem inputs.crosspkgs "x86_64-linux" "rpithreebp";
-
-        bluephone     = mkSystem inputs.nixpkgs "aarch64-linux" "bluephone";
+        porty     = mkSystem inputs.nixpkgs "x86_64-linux"  "porty";
+        raisin    = mkSystem inputs.nixpkgs "x86_64-linux"  "raisin";
+        xeep      = mkSystem inputs.nixpkgs "x86_64-linux"  "xeep";
+        # aarch64-linux
+        pinebook    = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
+        pinephone   = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
+        rpifour1    = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour1";
+        rpithreebp1 = mkSystem inputs.nixpkgs "aarch64-linux" "rpithreebp1";
+        sinkor      = mkSystem inputs.nixpkgs "aarch64-linux" "sinkor";
+        # armv6l-linux (cross-built)
+        rpizero1 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
+        rpizero2 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
+        # other
+        #bluephone     = mkSystem inputs.nixpkgs "aarch64-linux" "bluephone";
         #demovm      = mkSystem fullPkgs_.x86_64-linux  "demovm";
         #testipfsvm  = mkSystem fullPkgs_.x86_64-linux  "testipfsvm";
       };
@@ -259,14 +254,6 @@
           hosts = (builtins.mapAttrs (n: v: v.config.system.build.toplevel)
             (filterHosts pkgs_.nixpkgs.${system} inputs.self.nixosConfigurations));
         });
-
-      # these are required to build for the GHA job to auto advance the "ready" branch
-      # TODO: wtf??????????????????????
-      # any other toplevel attribute breaks nix-shell? jfc
-      req.bld = pkgs_.nixpkgs.x86_64-linux.linkFarmFromDrvs "required" [
-        toplevels.raisin
-        #toplevels.rpifour1
-      ];
 
       bundles = genAttrs [ "aarch64-linux" "x86_64-linux" ] (system:
         pkgs_.nixpkgs."${system}".linkFarmFromDrvs "${system}-outputs" ([]

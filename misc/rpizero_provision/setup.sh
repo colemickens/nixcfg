@@ -6,12 +6,17 @@ function nix() {
   ../../nixup _nix "${@}"
 }
 
+SDCARD_IMG="../..#images.rpithreebp"
 SDCARD_ID="/dev/disk/by-id/usb-Mass_Storage_Device_121220160204-0:0"
-SDCARD_ROOT="/dev/disk/by-id/usb-Mass_Storage_Device_121220160204-0:0-part2"
+SDCARD_ROOT="${SDCARD_ID}-part2"
 
-rm -f /tmp/rpizero2
-nix build --out-link /tmp/rpizero2 "../..#images.rpizero2"
-zstdcat /tmp/rpizero2/sd-image/nixos-sd-image-*.img.zst \
+# SDCARD_IMG="../..#images.rpizero2"
+# SDCARD_ID="/dev/disk/by-id/usb-Mass_Storage_Device_121220160204-0:0"
+# SDCARD_ROOT="/dev/disk/by-id/usb-Mass_Storage_Device_121220160204-0:0-part2"
+
+rm -f "/tmp/rpioutpath"
+nix build --out-link "/tmp/rpioutpath" "${SDCARD_IMG}"
+zstdcat /tmp/rpioutpath/sd-image/nixos-sd-image-*.img.zst \
   | sudo dd if=/dev/stdin of="${SDCARD_ID}" bs=4M;
 
 sudo udevadm settle

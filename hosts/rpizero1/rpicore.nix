@@ -9,8 +9,6 @@
     ../../mixins/tailscale.nix
 
     ../../modules/tailscale-autoconnect.nix
-
-    ./sd-image-raspberrypi.nix
   ];
 
   # TODO: check in on cross-compiling
@@ -39,6 +37,8 @@
 
     system.stateVersion = "21.05";
     environment.systemPackages = with pkgs; [
+      libraspberrypi # what's in here again?
+      # raspberrypi-eeprom # ? for updating eeprom?
       iotop
       htop
       ripgrep
@@ -67,7 +67,8 @@
     # TODO: cole... why do you not understadn the diff here? why does this not get crossed the other way, I must be using the wrong thing everywhere i do pkgs.system
     #nix.package = lib.mkForce inputs.self.outputs.nixPkgs?;
     nix.package = lib.mkForce pkgs.nixUnstable;
-
+  
+    boot.initrd.kernelModules = [ "vc4" "bcm2835_dma" "i2c_bcm2835" ];
     boot.initrd.availableKernelModules = lib.mkForce [
       "mmc_block"
       "usbhid"
@@ -99,6 +100,7 @@
 
     nixpkgs.config.allowUnfree = true;
     hardware = {
+      enableRedistributableFirmware = true;
       firmware = with pkgs; [
         raspberrypiWirelessFirmware
       ];
