@@ -1,10 +1,12 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, modulesPath, ... }:
 
 let
-  cfg = config.oci;
+  cfg = { efi = true; };
 in
 {
-  imports = [ ../profiles/qemu-guest.nix ];
+  imports = [
+    "${modulesPath}/profiles/qemu-guest.nix"
+  ];
 
   # Taken from /proc/cmdline of Ubuntu 20.04.2 LTS on OCI
   boot.kernelParams = [

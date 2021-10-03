@@ -187,10 +187,10 @@ function xeep()        { _remote "$(tsip xeep)"    ".#toplevels.xeep"         "$
 function raisin()      { _remote "$(tsip raisin)"  ".#toplevels.raisin"       "$(tsip raisin)"      "activate"; }
 function jeffhyper()   { _remote "$(tsip xeep)"    ".#toplevels.jeffhyper"    "$(tsip jeffhyper)"   "activate"; }
 function porty()       { _remote "$(tsip porty)"   ".#toplevels.porty"        "$(tsip porty)"       "activate"; }
-function rpizero1()    { _remote "$(tsip porty)"   ".#toplevels.rpizero1"     "192.168.145.120"     "activate"; }
+function rpizero1()    { _remote "$(tsip porty)"   ".#toplevels.rpizero1"     "$(tsip rpizero1)"    "activate"; }
 function rpizero2()    { _remote "$(tsip porty)"   ".#toplevels.rpizero2"     "$(tsip rpizero2)"    "activate"; }
 function rpifour1()    { _remote "$(tsip a64com)"  ".#toplevels.rpifour1"     "$(tsip rpifour1)"    "activate"; }
-function rpithreebp1() { _remote "$(tsip a64com)"  ".#toplevels.rpithreebp1"  "$(tsip rpithreebp1)" "activate"; }
+function rpithreebp1() { _remote "$(tsip sinkor)"  ".#toplevels.rpithreebp1"  "$(tsip rpithreebp1)" "activate"; }
 function sinkor()      { _remote "$(tsip a64com)"  ".#toplevels.sinkor"       "$(tsip sinkor)"      "activate"; }
 function pinephone()   { _remote "$(tsip a64com)"  ".#toplevels.pinephone"    "$(tsip pinephone)"   "activate"; }
 function bluephone()   { _remote "$(tsip a64com)"  ".#toplevels.bluephone"    "$(tsip bluephone)"   "activate"; }

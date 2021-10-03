@@ -33,19 +33,19 @@ cidr_block=$2
 ssh_authorized_keys_file=$3
 
 if [[ -z "${compartment_id}" ]] || [[ -z "${cidr_block}" ]] || [[ -z "${ssh_authorized_keys_file}" ]]; then
-    echo -e "Usage: $0 <compartment_id> <cidr_block> <ssh_authorized_keys_file>"
-    echo -e ""
-    echo -e "       <compartment_id>              The OCID of the compartment."
-    echo -e "       <cidr_block>                  The CIDR IP address block of the VCN."
-    echo -e "                                     Example: '172.16.0.0/16'."
-    echo -e "       <ssh_authorized_keys_file>    A file containing one or more public SSH keys to be"
-    echo -e "                                     included in the ~/.ssh/authorized_keys file for the"
-    echo -e "                                     default user on the instance. Use a newline character"
-    echo -e "                                     to separate multiple keys. "
+    echo -e "Usage: $0 <compartment_id> <cidr_block> <ssh_authorized_keys_file>" &>/dev/stderr
+    echo -e "" &>/dev/stderr
+    echo -e "       <compartment_id>              The OCID of the compartment." &>/dev/stderr
+    echo -e "       <cidr_block>                  The CIDR IP address block of the VCN." &>/dev/stderr
+    echo -e "                                     Example: '172.16.0.0/16'." &>/dev/stderr
+    echo -e "       <ssh_authorized_keys_file>    A file containing one or more public SSH keys to be" &>/dev/stderr
+    echo -e "                                     included in the ~/.ssh/authorized_keys file for the" &>/dev/stderr
+    echo -e "                                     default user on the instance. Use a newline character" &>/dev/stderr
+    echo -e "                                     to separate multiple keys. " &>/dev/stderr
     exit
 fi
 
-echo -e "Using compartment_id\n"${compartment_id}"\n"
+echo -e "Using compartment_id\n"${compartment_id}"\n" &>/dev/stderr
 
 if [[ "$mode" == "up" ]]; then
 
@@ -54,9 +54,9 @@ if [[ "$mode" == "up" ]]; then
         | jq -rc '.data')
     availability_domain=$(echo "${availability_domains}" | jq -rc '.[0]')
     availability_domain_name=$(echo "${availability_domain}" | jq -r '.name')
-    echo -e "Running in Availability Domain: "${availability_domain_name}"\n"${availability_domain}"\n"
+    echo -e "Running in Availability Domain: "${availability_domain_name}"\n"${availability_domain}"\n" &>/dev/stderr
 
-    echo -e "Looking up Shape ..."
+    echo -e "Looking up Shape ..." &>/dev/stderr
     shapes=$(oci compute shape list \
         --availability-domain "${availability_domain_name}" \
         --compartment-id "${compartment_id}" \
@@ -64,9 +64,9 @@ if [[ "$mode" == "up" ]]; then
     vm_shapes=$(echo "${shapes}" | jq -rc '[.[] | select(.shape | startswith("VM."))]')
     shape=$(echo "${vm_shapes}" | jq -rc '.[0]')
     shape_name=$(echo "${shape}" | jq -r '.shape')
-    echo -e "Found Shape: "${shape_name}"\n"${shape}"\n"
+    echo -e "Found Shape: "${shape_name}"\n"${shape}"\n" &>/dev/stderr
 
-    echo -e "Looking up Image ..."
+    echo -e "Looking up Image ..." &>/dev/stderr
     images=$(oci compute image list \
         --compartment-id "${compartment_id}" \
         --operating-system "Oracle Linux" \
@@ -74,9 +74,9 @@ if [[ "$mode" == "up" ]]; then
         | jq -rc '.data')
     image=$(echo "${images}" | jq -rc '.[0]')
     image_id=$(echo "${image}" | jq -r '.id')
-    echo -e "Found Image: "${image_id}"\n"${image}"\n"
+    echo -e "Found Image: "${image_id}"\n"${image}"\n" &>/dev/stderr
 
-    echo -e "Creating Vcn ..."
+    echo -e "Creating Vcn ..." &>/dev/stderr
     vcn_name="py_cli_example_vcn"
     vcn=$(oci network vcn create \
         --cidr-block "${cidr_block}" \
@@ -85,9 +85,9 @@ if [[ "$mode" == "up" ]]; then
         --wait-for-state "AVAILABLE" 2> /dev/stderr \
         | jq -rc '.data')
     vcn_id=$(echo "${vcn}" | jq -r '.id')
-    echo -e "Created Vcn: "${vcn_id}"\n"${vcn}"\n"
+    echo -e "Created Vcn: "${vcn_id}"\n"${vcn}"\n" &>/dev/stderr
 
-    echo -e "Creating Subnet ..."
+    echo -e "Creating Subnet ..." &>/dev/stderr
     subnet_name="py_cli_example_subnet"
     subnet=$(oci network subnet create \
         --availability-domain "${availability_domain_name}" \
@@ -98,9 +98,9 @@ if [[ "$mode" == "up" ]]; then
         --wait-for-state "AVAILABLE" 2> /dev/stderr \
         | jq -rc '.data')
     subnet_id=$(echo "${subnet}" | jq -r '.id')
-    echo -e "Created Subnet: "${subnet_id}"\n"${subnet}"\n"
+    echo -e "Created Subnet: "${subnet_id}"\n"${subnet}"\n" &>/dev/stderr
 
-    echo -e "Creating Internet Gateway ..."
+    echo -e "Creating Internet Gateway ..." &>/dev/stderr
     internet_gateway_name="py_cli_example_internet_gateway"
     internet_gateway=$(oci network internet-gateway create \
         --compartment-id "${compartment_id}" \
@@ -110,15 +110,15 @@ if [[ "$mode" == "up" ]]; then
         --wait-for-state "AVAILABLE" 2> /dev/stderr \
         | jq -rc '.data')
     internet_gateway_id=$(echo "${internet_gateway}" | jq -r '.id')
-    echo -e "Created Internet Gateway: "${internet_gateway_id}"\n"${internet_gateway}"\n"
+    echo -e "Created Internet Gateway: "${internet_gateway_id}"\n"${internet_gateway}"\n" &>/dev/stderr
 
-    echo -e "Updating Route Rules in Route Table ..."
+    echo -e "Updating Route Rules in Route Table ..." &>/dev/stderr
     default_route_table_id=$(echo ${vcn} | jq -r '.["default-route-table-id"]')
     route_table=$(oci network route-table get \
         --rt-id "${default_route_table_id}" \
         | jq -rc '.data')
     route_rules=$(echo "${route_table}" | jq -rc '.["route-rules"]')
-    echo -e "Current Route Rules in Route Table: "${default_route_table_id}"\n"${route_rules}"\n"
+    echo -e "Current Route Rules in Route Table: "${default_route_table_id}"\n"${route_rules}"\n" &>/dev/stderr
     route_rule=$(echo '{
         "destination":"0.0.0.0/0",
         "destinationType":"CIDR_BLOCK",
@@ -132,9 +132,9 @@ if [[ "$mode" == "up" ]]; then
         --wait-for-state "AVAILABLE" 2> /dev/stderr \
         | jq -rc '.data')
     route_rules=$(echo "${route_table}" | jq -rc '.["route-rules"]')
-    echo -e "Updated Route Rules in Route Table: "${default_route_table_id}"\n"${route_rules}"\n"
+    echo -e "Updated Route Rules in Route Table: "${default_route_table_id}"\n"${route_rules}"\n" &>/dev/stderr
 
-    echo -e "Creating Network Security Group ..."
+    echo -e "Creating Network Security Group ..." &>/dev/stderr
     network_security_group_name='py_cli_example_network_security_group'
     network_security_group=$(oci network nsg create \
         --compartment-id "${compartment_id}" \
@@ -143,15 +143,15 @@ if [[ "$mode" == "up" ]]; then
         --wait-for-state "AVAILABLE" 2> /dev/stderr \
         | jq -rc '.data')
     network_security_group_id=$(echo "${network_security_group}" | jq -r '.id')
-    echo -e "Created Network Security Group: "${network_security_group_id}"\n"${network_security_group}"\n"
+    echo -e "Created Network Security Group: "${network_security_group_id}"\n"${network_security_group}"\n" &>/dev/stderr
 
-    echo -e "Updating Security Rules in Network Security Group ..."
+    echo -e "Updating Security Rules in Network Security Group ..." &>/dev/stderr
     security_rules=$(oci network nsg rules list \
         --all \
         --nsg-id "${network_security_group_id}" \
         | jq -rc '.data')
     security_rules=$([[ -z "${security_rules}" ]] && echo "[]" || echo "${security_rules}")
-    echo -e "Current Security Rules in Network Security Group: "${network_security_group_id}"\n"${security_rules}"\n"
+    echo -e "Current Security Rules in Network Security Group: "${network_security_group_id}"\n"${security_rules}"\n" &>/dev/stderr
     security_rule=$(echo '{
         "description": "Incoming HTTP connections",
         "direction": "INGRESS",
@@ -171,10 +171,10 @@ if [[ "$mode" == "up" ]]; then
         --nsg-id "${network_security_group_id}" \
         --security-rules "${security_rules}" \
         | jq -rc '.data["security-rules"]')
-    echo -e "Updated Security Rules in Network Security Group: "${network_security_group_id}"\n"${security_rules}"\n"
+    echo -e "Updated Security Rules in Network Security Group: "${network_security_group_id}"\n"${security_rules}"\n" &>/dev/stderr
 
 
-    echo -e "Launching Instance ..."
+    echo -e "Launching Instance ..." &>/dev/stderr
     instance_name="py_cli_example_instance"
     metadata=$(echo '{
         "py_cli_test_metadata_key1": "py_cli_test_metadata_value1"
@@ -208,12 +208,15 @@ if [[ "$mode" == "up" ]]; then
         --wait-for-state "RUNNING" 2> /dev/stderr \
         | jq -rc '.data')
     instance_id=$(echo "${instance}" | jq -r '.id')
-    echo -e "Created Instance: "${instance_id}"\n"${instance}"\n"
+    echo -e "Created Instance: "${instance_id}"\n"${instance}"\n" &>/dev/stderr
 
     vnics=$(oci compute instance list-vnics \
         --instance-id "${instance_id}" \
         | jq -rc '.data')
-    echo -e "Vnics attached to Instance: "${instance_id}"\n"${vnics}"\n"
+    echo -e "Vnics attached to Instance: "${instance_id}"\n"${vnics}"\n" &>/dev/stderr
+
+    instance_ip4="$(echo "${instance}" | jq -r '.[0]["public-ip"]')"
+    echo -n "${instance_ip4}"
 elif [[ "$mode" == "down" ]]; then
     echo -e "Terminating Instance ..."
     subnet=$(oci compute instance terminate \

@@ -8,29 +8,36 @@
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
 
+    # TODO: still not working, it doesn't actually stop "loading" often times? wtf, or is that my restart wait?
     ../../modules/tailscale-autoconnect.nix
   ];
 
   # TODO: check in on cross-compiling
   config = {
-    nixpkgs.overlays = [
-      (final: prev: {
-        firmwareLinuxNonfree = prev.callPackage ({ rsync, stdenv, firmwareLinuxNonfree }:
-          stdenv.mkDerivation {
-            pname = firmwareLinuxNonfree.pname;
-            version = "${firmwareLinuxNonfree.version}-fixed";
-            src = null;
-            nativeBuildInputs = [ rsync ];
-            phases = [ "installPhase" ];
-            installPhase = ''
-              mkdir $out
-              rsync -avh --exclude='*43430-sdio.clm_blob' \
-                "${firmwareLinuxNonfree}/lib" "$out"
-            '';
-          }
-        ) { firmwareLinuxNonfree = prev.firmwareLinuxNonfree; };
-      })
-    ];
+    # nixpkgs.overlays = [
+    #   (final: prev: {
+    #     firmwareLinuxNonfree = prev.callPackage ({ rsync, stdenv, firmwareLinuxNonfree }:
+    #       stdenv.mkDerivation {
+    #         pname = firmwareLinuxNonfree.pname;
+    #         version = "${firmwareLinuxNonfree.version}-fixed";
+    #         src = null;
+    #         nativeBuildInputs = [ rsync ];
+    #         phases = [ "installPhase" ];
+    #         installPhase = ''
+    #           mkdir $out
+    #           rsync -avh --exclude='*43430-sdio.clm_blob' \
+    #             "${firmwareLinuxNonfree}/lib" "$out"
+    #         '';
+    #       }
+    #     ) { firmwareLinuxNonfree = prev.firmwareLinuxNonfree; };
+    #   })
+    # ];
+
+    fileSystems."/boot/firmware" = {
+      device = "/dev/disk/by-label/FIRMWARE";
+      fsType = "vfat";
+      options = [ "ro" "nofail" ];
+    };
 
     services.tailscale-autoconnect.enable = true;
     services.tailscale-autoconnect.tokenFile = "/tailscale-key.txt";
@@ -44,14 +51,16 @@
       ripgrep
       fd
       binutils
+
+      rtsp-simple-server
+      ffmpeg
     ];
 
     nix.nixPath = [];
     nix.gc.automatic = true;
 
-    # force cross-compilation here
-    #nixpkgs.system = "x86_64-linux"; # should be set in flake.nix anyway
-    nixpkgs.crossSystem = lib.systems.examples.raspberryPi;
+    # force cross-compilation by includer
+    nixpkgs.crossSystem = null;
 
     documentation.enable = false;
     documentation.doc.enable = false;
@@ -100,7 +109,8 @@
 
     nixpkgs.config.allowUnfree = true;
     hardware = {
-      enableRedistributableFirmware = true;
+      # this pulls in firmware-nonfree which clashes with raspberrypiWirelessFirmware
+      enableRedistributableFirmware = lib.mkForce false;
       firmware = with pkgs; [
         raspberrypiWirelessFirmware
       ];

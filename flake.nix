@@ -222,8 +222,9 @@
         pinebook    = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
         pinephone   = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
         rpifour1    = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour1";
-        rpithreebp1 = mkSystem inputs.nixpkgs "aarch64-linux" "rpithreebp1";
         sinkor      = mkSystem inputs.nixpkgs "aarch64-linux" "sinkor";
+        oracular    = mkSystem inputs.nixpkgs "aarch64-linux" "oracular";
+        oracular_kexec  = mkSystem inputs.nixpkgs "aarch64-linux" "oracular/installer";
         # armv6l-linux (cross-built)
         rpizero1 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
         rpizero2 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
@@ -276,9 +277,11 @@
         awsone = inputs.self.nixosConfigurations.awsone.config.system.build.amazonImage;
         newimg = inputs.self.nixosConfigurations.rpitwoefi.config.system.build.newimg;
 
-        rpizero1 = inputs.self.nixosConfigurations.rpizero1.config.system.build.sdImage;
-        rpizero2 = inputs.self.nixosConfigurations.rpizero2.config.system.build.sdImage;
-        rpithreebp = inputs.self.nixosConfigurations.rpithreebp.config.system.build.sdImage;
+        rpizero1  = inputs.self.nixosConfigurations.rpizero1.config.system.build.sdImage;
+        rpizero2  = inputs.self.nixosConfigurations.rpizero2.config.system.build.sdImage;
+        rpionebp  = inputs.self.nixosConfigurations.rpionebp.config.system.build.sdImage;
+
+        oracular_kexec = inputs.self.nixosConfigurations.oracular_kexec.config.system.build.kexec_tarball;
 
         pinebook_bundle = let wpp = inputs.wip-pinebook-pro.packages.aarch64-linux; in
           pkgs_.nixpkgs.aarch64-linux.runCommandNoCC "pinebook-bundle" {} ''

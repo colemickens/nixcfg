@@ -32,6 +32,6 @@ in stdenv.mkDerivation {
     homepage = "https://github.com/mpromonet/v4l2rtspserver";
     license = licenses.unlicense;
     maintainers = with maintainers; [ colemickens ];
-    #broken = true;
+    broken = true;
   };
 }

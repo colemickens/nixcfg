@@ -1,0 +1,138 @@
+[org/gnome/Weather]
+locations=[<(uint32 2, <('Seattle', 'KBFI', true, [(0.82983133145337307, -2.134775231953554)], [(0.83088509144255718, -2.135097419733472)])>)>]
+
+[org/gnome/desktop/background]
+color-shading-type='solid'
+picture-options='zoom'
+picture-uri='file:///nix/store/hqg0pnwh7ckm1z5agfr646763cksxs8y-gnome-backgrounds-40.1/share/backgrounds/gnome/adwaita-timed.xml'
+primary-color='#3465a4'
+secondary-color='#000000'
+
+[org/gnome/desktop/interface]
+cursor-theme='capitaine-cursors-white'
+document-font-name='Segoe UI Variable 11'
+enable-animations=true
+font-antialiasing='rgba'
+font-hinting='slight'
+font-name='Noto Sans 11'
+gtk-im-module='gtk-im-context-simple'
+gtk-theme='Arc-Dark'
+icon-theme='capitaine-cursors-white'
+monospace-font-name='Cascadia Code 10'
+
+[org/gnome/desktop/peripherals/touchpad]
+two-finger-scrolling-enabled=true
+
+[org/gnome/desktop/screensaver]
+color-shading-type='solid'
+lock-delay=uint32 0
+lock-enabled=true
+picture-options='zoom'
+picture-uri='file:///nix/store/hqg0pnwh7ckm1z5agfr646763cksxs8y-gnome-backgrounds-40.1/share/backgrounds/gnome/adwaita-timed.xml'
+primary-color='#3465a4'
+secondary-color='#000000'
+
+[org/gnome/desktop/wm/preferences]
+button-layout='appmenu:minimize,maximize,close'
+mouse-button-modifier='<Super>'
+resize-with-right-button=true
+titlebar-font='Segoe UI Variable Bold 11'
+
+[org/gnome/mutter]
+attach-modal-dialogs=false
+dynamic-workspaces=true
+edge-tiling=true
+focus-change-on-pointer-rest=true
+workspaces-only-on-primary=true
+
+[org/gnome/nautilus/list-view]
+default-zoom-level='small'
+use-tree-view=true
+
+[org/gnome/nautilus/preferences]
+default-folder-viewer='list-view'
+search-filter-time-type='last_modified'
+search-view='list-view'
+
+[org/gnome/settings-daemon/plugins/color]
+night-light-enabled=false
+night-light-schedule-automatic=false
+night-light-schedule-from=20.0
+night-light-schedule-to=8.0
+night-light-temperature=uint32 2259
+
+[org/gnome/settings-daemon/plugins/media-keys]
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']
+help=@as []
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
+binding='<Super>Return'
+command='gnome-terminal'
+name='gnome-terminal'
+
+[org/gnome/settings-daemon/plugins/power]
+sleep-inactive-ac-type='nothing'
+
+[org/gnome/shell]
+app-picker-layout=[{'fb558ded-d83a-45ce-b3a0-6857d770fc57': <{'position': <0>}>, '25bb34ac-9fdc-4975-b991-e8c3066c5b98': <{'position': <1>}>, '9bc1caf1-f2a1-4372-848a-cd1a955c7330': <{'position': <2>}>, 'ccfaa28e-d5d9-41d5-8670-f413f379f529': <{'position': <3>}>, '49478819-05a5-4071-92d5-3897f14ea263': <{'position': <4>}>, 'f43286c3-8380-4d43-9e8f-945a0b2e4171': <{'position': <5>}>}]
+disable-user-extensions=true
+disabled-extensions=['native-window-placement@gnome-shell-extensions.gcampax.github.com']
+enabled-extensions=['appindicatorsupport@rgcjonas.gmail.com', 'workspaces-bar@fthx', 'sound-output-device-chooser@kgshank.net', 'lockkeys@vaina.lt', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'espresso@coadmunkee.github.com', 'apps-menu@gnome-shell-extensions.gcampax.github.com', 'openweather-extension@jenslody.de', 'gnome-shell-screenshot@ttll.de']
+favorite-apps=['org.gnome.tweaks.desktop', 'org.gnome.Extensions.desktop', 'gnome-control-center.desktop', 'org.gnome.Nautilus.desktop', 'firefox.desktop', 'element-desktop.desktop', 'discord.desktop', 'org.gnome.Terminal.desktop', 'codium.desktop', 'steam.desktop', 'syncthing-gtk.desktop', 'pavucontrol.desktop', 'nvidia-settings.desktop']
+remember-mount-password=false
+welcome-dialog-last-shown-version='40.3'
+
+[org/gnome/shell/extensions/espresso]
+user-enabled=true
+
+[org/gnome/shell/extensions/openweather]
+actual-city=0
+center-forecast=true
+city='47.61074086196562,-122.30346108914887>Seattle, King County, Washington, 98122, United States >-1'
+days-forecast=3
+decimal-places=1
+geolocation-provider='openstreetmaps'
+position-in-panel='center'
+pressure-unit='inHg'
+show-comment-in-forecast=true
+show-comment-in-panel=true
+show-text-in-panel=true
+translate-condition=true
+unit='fahrenheit'
+use-default-owm-key=true
+use-symbolic-icons=true
+weather-provider='openweathermap'
+wind-direction=true
+wind-speed-unit='mph'
+
+[org/gnome/shell/weather]
+automatic-location=true
+locations=[<(uint32 2, <('Seattle', 'KBFI', true, [(0.82983133145337307, -2.134775231953554)], [(0.83088509144255718, -2.135097419733472)])>)>]
+
+[org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9]
+audible-bell=false
+background-color='rgb(12,13,14)'
+custom-command='nu'
+font='Iosevka 12'
+foreground-color='rgb(211,215,207)'
+use-custom-command=false
+use-system-font=false
+use-theme-colors=false
+
+[org/gtk/settings/color-chooser]
+custom-colors=[(0.045333333333333344, 0.051333333333333335, 0.053333333333333337, 1.0), (0.1803921568627451, 0.20392156862745098, 0.21176470588235294, 1.0)]
+selected-color=(true, 0.045333333333333344, 0.051333333333333335, 0.053333333333333337, 1.0)
+
+[org/gtk/settings/file-chooser]
+date-format='regular'
+location-mode='path-bar'
+show-hidden=false
+show-size-column=true
+show-type-column=true
+sidebar-width=155
+sort-column='name'
+sort-directories-first=true
+sort-order='descending'
+type-format='category'
+window-position=(23, 15)
+window-size=(1231, 902)

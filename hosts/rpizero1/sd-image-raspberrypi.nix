@@ -17,6 +17,8 @@
         # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
         # when attempting to show low-voltage or overtemperature warnings.
         avoid_warnings=1
+        hdmi_safe=1 # probably needed for u-boot to boot w/o hdmi attached
+        #boot_delay=2 # unsure if needed
         [pi0]
         kernel=u-boot-rpi0.bin
         [pi1]

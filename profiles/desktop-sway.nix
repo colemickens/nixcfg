@@ -58,6 +58,7 @@
         wlvncc
         #wshowkeys # broken
         xwayland
+        ydotool
       ];
     };
   };

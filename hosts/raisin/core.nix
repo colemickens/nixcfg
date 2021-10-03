@@ -15,7 +15,6 @@ in
     ../../mixins/tailscale.nix
     ../../mixins/tpm.nix
 
-    ../../profiles/desktop-sway-unstable.nix
     ../../profiles/gaming.nix
 
     ../../modules/loginctl-linger.nix
@@ -118,7 +117,7 @@ in
           #fallbackToPassword = true;
         };
       };
-      loader.timeout = 1;
+      loader.timeout = 6;
       loader.systemd-boot.enable = true;
       loader.systemd-boot.configurationLimit = 5;
       loader.efi.canTouchEfiVariables = true;

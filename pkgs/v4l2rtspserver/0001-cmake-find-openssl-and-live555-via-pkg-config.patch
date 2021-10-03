@@ -1,17 +1,17 @@
-From 72f363f5eb23d015949d9c809275eb93967b34ff Mon Sep 17 00:00:00 2001
+From dbe7c0dd8b1e910b4866669bd6361c70c37e7f0e Mon Sep 17 00:00:00 2001
 From: Cole Mickens <cole.mickens@gmail.com>
 Date: Wed, 29 Sep 2021 23:22:08 -0700
 Subject: [PATCH] cmake: find openssl and live555 via pkg-config
 
 ---
- CMakeLists.txt | 64 +++++++++++++++++++++++++++-----------------------
- 1 file changed, 35 insertions(+), 29 deletions(-)
+ CMakeLists.txt | 63 +++++++++++++++++++++++++++-----------------------
+ 1 file changed, 34 insertions(+), 29 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index e95a269..b941656 100644
+index e95a269..f8d0f93 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -13,13 +13,8 @@ set(CMAKE_CXX_STANDARD 11)
+@@ -13,13 +13,7 @@ set(CMAKE_CXX_STANDARD 11)
  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake/")
  
  # set version based on git
@@ -22,12 +22,11 @@ index e95a269..b941656 100644
 -    add_definitions("-DVERSION=\"${VERSION}\"")
 -endif()
 -
-+set(VERSION "$ENV{VERSION}" CACHE INTERNAL "Copied from environment variable")
 +add_definitions("-DVERSION=\"${VERSION}\"")
  
  # define executable to build
  include_directories("inc")
-@@ -42,6 +37,17 @@ set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+@@ -42,6 +36,17 @@ set(THREADS_PREFER_PTHREAD_FLAG TRUE)
  find_package (Threads)
  target_link_libraries (${PROJECT_NAME} Threads::Threads) 
  
@@ -45,7 +44,7 @@ index e95a269..b941656 100644
  
  # LOG4CPP
  find_library(LOG4CPP_LIBRARY NAMES log4cpp)
-@@ -55,28 +61,28 @@ endif ()
+@@ -55,28 +60,28 @@ endif ()
  
  
  # live555

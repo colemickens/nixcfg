@@ -29,7 +29,7 @@ in
   ];
 
   config = {
-    system.stateVersion = "21.03";
+    system.stateVersion = "21.05";
 
     nix.nixPath = [];
     nix.gc.automatic = true;
@@ -131,7 +131,7 @@ in
       hostId = "ef66d560";
       hostName = hostname;
       firewall.enable = true;
-      firewall.allowedTCPPorts = [ 22 10554 ];
+      firewall.allowedTCPPorts = [ 22 ];
       networkmanager.enable = true;
       wireless.enable = false;
       wireless.iwd.enable = false;

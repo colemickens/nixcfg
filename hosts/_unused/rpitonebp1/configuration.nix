@@ -1,18 +1,17 @@
 { pkgs, lib, modulesPath, inputs, config, ... }:
 let
-  hostname = "rpithreebp";
+  hostname = "rpionebp";
 in
 {
   imports = [
     ../rpizero1/rpicore.nix
-    ./sd-image-aarch64.nix
+    ../rpizero1/sd-image-raspberrypi.nix
   ];
 
   config = {
-    nixpkgs.crossSystem = lib.systems.examples.aarch64-multiplatform;
     boot = {
       kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
-      loader.raspberryPi.version = lib.mkForce 3;
+      loader.raspberryPi.version = lib.mkForce 1;
     };
 
     networking.hostName = hostname;

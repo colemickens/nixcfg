@@ -82,6 +82,7 @@ in
         smplayer
         rkvm
         spotify-qt
+        vlc
         # nvui # https://github.com/NixOS/nixpkgs/issues/136229
 
         virt-viewer

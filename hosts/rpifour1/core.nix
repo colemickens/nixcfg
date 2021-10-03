@@ -84,7 +84,8 @@ in
 
     nixpkgs.config.allowUnfree = true;
     hardware = {
-      enableRedistributableFirmware = true;
+      # this pulls in firmware-nonfree which clashes with raspberrypiWirelessFirmware
+      enableRedistributableFirmware = false;
     };
   };
 }

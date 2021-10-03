@@ -9,7 +9,8 @@ in
   ];
 
   config = {
-    nixpkgs.crossSystem = lib.systems.examples.raspberryPi;
+    nixpkgs.crossSystem = lib.mkForce lib.systems.examples.raspberryPi;
+
     boot = {
       #kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_rpi0;
       kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
