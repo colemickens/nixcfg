@@ -116,9 +116,9 @@ in {
       nix-store --store /mnt \
         --option 'extra-binary-caches' 'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://arm.cachix.org https://thefloweringash-armv7.cachix.org' \
         --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= arm.cachix.org-1:5BZ2kjoL1q6nWhlnrbAl+G7ThY7+HaBRD9PZzqZkbnM= thefloweringash-armv7.cachix.org-1:v+5yzBD2odFKeXbmC+OPWVqx4WVoIVO6UXgnSAWFtso=' \
-        -r "${cfg.toplevel}"
+        -r "${builtins.unsafeDiscardStringContext cfg.toplevel}"
 
-      nixos-install "${cfg.toplevel}"
+      nixos-install "${builtins.unsafeDiscardStringContext cfg.toplevel}"
       
       umount /mnt/home /mnt/nix ${lib.optionalString (cfg.bootType != "zfs") "/mnt/boot"} /mnt
       zpool export ${cfg.poolName}

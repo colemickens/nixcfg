@@ -17,7 +17,7 @@
     networking.hostName = "oracular_kexec";
 
     kexec.justdoit = {
-      toplevel = "${inputs.self.toplevels.oracular}";
+      toplevel = builtins.unsafeDiscardStringContext inputs.self.toplevels.oracular.outPath;
     };
   };
 }
