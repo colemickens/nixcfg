@@ -766,6 +766,7 @@
         "nixpkgs-wayland": "nixpkgs-wayland",
         "sops-nix": "sops-nix",
         "stable": "stable",
+        "tow-boot": "tow-boot",
         "wfvm": "wfvm",
         "wip-pinebook-pro": "wip-pinebook-pro"
       }
@@ -821,6 +822,22 @@
         "owner": "nixos",
         "ref": "nixos-21.05",
         "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "tow-boot": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1624856915,
+        "narHash": "sha256-SWua74zJUlqMHGsHHTNLjyf07tHcuxevntExDeYID0E=",
+        "owner": "tow-boot",
+        "repo": "tow-boot",
+        "rev": "00f2cce0e270f87e8f013e476ef5db8e0f79e3b7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tow-boot",
+        "repo": "tow-boot",
         "type": "github"
       }
     },

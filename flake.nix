@@ -96,6 +96,8 @@
 
     hydra = { url = "github:NixOS/hydra"; };
     #hydra.inputs.nixpkgs.follows = "nixpkgs";
+
+    tow-boot = { url = "github:tow-boot/tow-boot"; flake = false; };
   };
 
   outputs = inputs:
@@ -189,7 +191,7 @@
           rkvm = prev.callPackage ./pkgs/rkvm {};
           shreddit = prev.python3Packages.callPackage ./pkgs/shreddit {};
           metal-cli = prev.callPackage ./pkgs/metal-cli {};
-          v4l2rtspserver = prev.callPackage ./pkgs/v4l2rtspserver {};
+          # UGH : #v4l2rtspserver = prev.callPackage ./pkgs/v4l2rtspserver {};
           rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {};
           zellij = prev.callPackage ./pkgs/zellij { zellij = prev.zellij; };
 
@@ -265,11 +267,12 @@
         ));
 
       images = let
-        tow-boot = import inputs.tow-boot { pkgs = inputs.nixpkgs; };
+        tow-boot = sys: (import inputs.tow-boot { pkgs = import inputs.nixpkgs { system = sys; }; });
+        tow-boot-aarch64 = tow-boot "aarch64-linux";
       in {
-        rpifour1_towboot = tow-boot.raspberryPi4.sharedImage;
-        sinkor_towboot = tow-boot.raspberryPi4.sharedImage;
-        pinebook_towboot = tow-boot.pinebook.sharedImage;
+        rpifour1_towboot = tow-boot-aarch64.raspberryPi4.sharedImage;
+        sinkor_towboot = tow-boot-aarch64.outputs.raspberryPi4.sharedImage;
+        pinebook_towboot = tow-boot-aarch64.pinebook.sharedImage;
 
         # azure vhd for azdev machine (a custom Azure image using `nixos-azure` module)
         azdev = inputs.self.nixosConfigurations.azdev.config.system.build.azureImage;
