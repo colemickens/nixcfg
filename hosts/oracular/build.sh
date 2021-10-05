@@ -5,9 +5,9 @@ set -x
 R="../.."
 h="opc@132.226.31.59"
 nix copy --no-check-sigs --to "ssh-ng://${h}" "${R}#toplevels.oracular_kexec"
-nix build --eval-store "auto" --store "ssh-ng://${h}" "${R}#images.oracular_kexec"
+nix build --eval-store "auto" --store "ssh-ng://${h}" "${R}#nixosConfigurations.oracular.config.system.build.kexec_script"
 
-nix eval --raw "${R}#images.oracular_kexec"
+nix eval --raw "${R}#nixosConfigurations.oracular.config.system.build.kexec_script"
 
 # TODO: what does nix build do in regards to --out-link when store is remote?
 

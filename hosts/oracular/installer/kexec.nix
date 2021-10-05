@@ -31,6 +31,7 @@
     mkdir -p /mnt-root/root/.ssh/
     cp /authorized_keys /mnt-root/root/.ssh/
   '';
+  system.build.kexec_script = kexec_script;
   system.build.kexec_tarball = pkgs.callPackage "${modulesPath}/../lib/make-system-tarball.nix" {
     storeContents = [
       { object = config.system.build.kexec_script; symlink = "/kexec_nixos"; }
