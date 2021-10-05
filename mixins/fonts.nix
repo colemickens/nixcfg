@@ -8,19 +8,14 @@ in
   config = {
     fonts = {
       fonts = with pkgs; [
-        corefonts
-        cascadia-code
-        fira-code fira-code-symbols
-        jetbrains-mono
-        gelasio
-        iosevka
+        corefonts ttf_bitstream_vera
         noto-fonts noto-fonts-cjk noto-fonts-emoji
-        source-code-pro
-        ttf_bitstream_vera
+        iosevka # first place
+        jetbrains-mono # second place
+        monoid # untested
+        fira-code fira-code-symbols # its okay, but wide
         font-awesome
-        ibm-plex
-        roboto-mono
-        drafting-mono
+        gelasio # ???
       ] ++ [ font.package ];
 
       fontconfig = {
