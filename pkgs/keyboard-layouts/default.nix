@@ -1,6 +1,6 @@
 { stdenv, lib, rustPlatform, fetchFromGitHub
-, pkgconfig
-, openssl
+, pkg-config
+, openssl, llvmPackages
 }:
 
 let
@@ -19,9 +19,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = metadata.cargoSha256;
 
-  nativeBuildInputs = [ pkgconfig ];
+  doCheck = false; # TODO
+
+  nativeBuildInputs = [ llvmPackages.clang pkg-config openssl ];
   buildInputs = [ openssl ];
 
+  #BINDGEN_EXTRA_CLANG_ARGS = "-I${lib.getDev libevdev}/include/libevdev-1.0";
+  LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
+  
   meta = with lib; {
     description = "Get the keycodes and modifier keys required to type an ASCII string for a number of different keyboard layouts.";
     homepage = "https://github.com/chris-ricketts/keyboard-layouts";

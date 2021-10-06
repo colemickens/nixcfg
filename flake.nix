@@ -185,6 +185,7 @@
               inherit (inputs.fenix.packages.${prev.system}.minimal) cargo rustc;
             });
           };
+          keyboard-layouts = prev.callPackage ./pkgs/keyboard-layouts {};
           mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
           meli = prev.callPackage ./pkgs/meli {};
           passrs = prev.callPackage ./pkgs/passrs {};

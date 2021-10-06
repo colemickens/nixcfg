@@ -22,11 +22,10 @@ buildargs=(
 
 ## the rest should be generic across repos that use `update.sh`+`metadata.nix`
 
-if [[ "${1:-}" == "updateinternal" ]]; then
+if [[ "${1:-""}" != "" ]]; then
   ##
   ## internal script (called in parallel)
   ##
-  shift
   t="$(mktemp)"; trap "rm ${t}" EXIT;
   m="$(mktemp)"; trap "rm ${m}" EXIT;
   l="$(mktemp)"; trap "rm ${l}" EXIT;
@@ -121,18 +120,7 @@ fi
 pkgslist=()
 for p in `ls -v -d -- ./*/ | sort -V`; do
   #pkgslist=("${pkgslist[@]}" "${p}")
-  "${0}" updateinternal "${p}"
+  echo "${0}" "${p}"
 done
 
 exit 0
-
-# collect package names into array, pipe into parallel
-_nproc="$(nproc)"
-# Doing multiple in parallel is unsafe because of how we update the sha256s:
-# If A depends on B and they get updated at the same time, the process for updating A
-# could get B's dependency.
-_nproc="1"
-echo "====> starting internal package update (p=${_nproc})"
-printf '%s\n' "${pkgslist[@]}" | \
-  parallel --jobs "${_nproc}" --halt soon,fail=1 --tag -- "${0} updateinternal '{.}'"
-echo "====> done with internal package updates"

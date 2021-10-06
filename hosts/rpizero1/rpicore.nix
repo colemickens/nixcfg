@@ -45,15 +45,7 @@
     system.stateVersion = "21.05";
     environment.systemPackages = with pkgs; [
       libraspberrypi # what's in here again?
-      # raspberrypi-eeprom # ? for updating eeprom?
-      iotop
-      htop
-      ripgrep
-      fd
-      binutils
-
-      rtsp-simple-server
-      ffmpeg
+      raspberrypi-eeprom # ? for updating eeprom?
     ];
 
     nix.nixPath = [];

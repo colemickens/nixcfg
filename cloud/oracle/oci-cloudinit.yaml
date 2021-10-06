@@ -6,6 +6,9 @@ runcmd:
         NIX_CHANNEL=nixos-21.05 \
           bash 2>&1 | tee /tmp/infect.log
 
+# status - close but fails when nixos-infect fails
+# - nixos infect makes some bad assumptions about /boot etc
+
 # write_files:
 # - path: /etc/nixos/host.nix
 #   permissions: '0644'
