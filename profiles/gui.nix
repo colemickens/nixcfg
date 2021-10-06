@@ -105,12 +105,13 @@ in
         gnome3.gnome-tweaks
 
         # browsers
-        _someChromium
         _someFirefox
         #falkon
       ]
       ++ _torPackages
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
+        _someChromium # some clang shit marked as broken on aarch64
+
         easyeffects # weird, doesn't support aarch64?
 
         mplayer # weird non-aarch64

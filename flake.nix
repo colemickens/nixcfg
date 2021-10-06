@@ -216,7 +216,7 @@
         raisin    = mkSystem inputs.nixpkgs "x86_64-linux"  "raisin";
         xeep      = mkSystem inputs.nixpkgs "x86_64-linux"  "xeep";
         # aarch64-linux
-        #BROKEN# pinebook    = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
+        pinebook    = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
         pinephone   = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
         rpifour1    = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour1";
         sinkor      = mkSystem inputs.nixpkgs "aarch64-linux" "sinkor";
