@@ -80,7 +80,7 @@ in
       cleanTmpDir = true;
 
       #kernelPackages = pkgs.linuxPackages_latest;
-      kernelPackages = pkgs.linuxPackages_5_13;
+      kernelPackages = pkgs.linuxPackages_5_14;
       initrd.availableKernelModules = [
         "xhci_pci" "xhci_hcd" # usb
         "nvme" "usb_storage" "sd_mod" # nvme / external usb storage

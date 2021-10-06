@@ -128,21 +128,17 @@
 
       minimalMkShell = system: import ./lib/minimalMkShell.nix { pkgs = fullPkgs_.${system}; };
       hydralib = import ./lib/hydralib.nix;
-
-      nixPackage = sys: pkgs_.nixpkgs.${sys}.nixUnstable;
-
-      #mkApp = {script}: { type = "app"; program = pkgs.writeShellScript "foo" script; };
     in rec {
       devShell = forAllSystems (system: minimalMkShell system {
         name = "nixcfg-devshell";
         nativeBuildInputs = map (x: (x.bin or x.out or x))
           ((with pkgs_.nixpkgs.${system}; [
+            nixUnstable
             bash curl cacert jq parallel mercurial git
             nettools openssh ripgrep rsync sops gh gawk gnused gnugrep
             cachix nix-build-uncached nix-prefetch-git
             tailscale
           ]) ++ [
-            inputs.self.preferredNix.${system}
             fullPkgs_.${system}.metal-cli
           ]);
       });
@@ -157,8 +153,6 @@
           program = legacyPackages."${system}".install-secrets.outPath;
         };
       });
-
-      preferredNix = forAllSystems (system: nixPackage system);
 
       legacyPackages = forAllSystems (system: {
         # to `nix eval` the "currentSystem" in certain scenarios
@@ -222,7 +216,7 @@
         raisin    = mkSystem inputs.nixpkgs "x86_64-linux"  "raisin";
         xeep      = mkSystem inputs.nixpkgs "x86_64-linux"  "xeep";
         # aarch64-linux
-        pinebook    = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
+        #BROKEN# pinebook    = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
         pinephone   = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
         rpifour1    = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour1";
         sinkor      = mkSystem inputs.nixpkgs "aarch64-linux" "sinkor";
@@ -259,8 +253,17 @@
             (filterHosts pkgs_.nixpkgs.${system} inputs.self.nixosConfigurations));
         });
 
+      bundle_pkgs = genAttrs [ "aarch64-linux" "x86_64-linux" ] (system:
+        pkgs_.nixpkgs."${system}".linkFarmFromDrvs "${system}-pkgs" ([]
+          ++ (filterPkgs_ pkgs_.nixpkgs.${system} inputs.self.packages)
+        ));
+      bundle_hosts = genAttrs [ "aarch64-linux" "x86_64-linux" ] (system:
+        pkgs_.nixpkgs."${system}".linkFarmFromDrvs "${system}-hosts" ([]
+          ++ (builtins.map (host: host.config.system.build.toplevel)
+               (filterHosts_ pkgs_.nixpkgs.${system} inputs.self.nixosConfigurations))
+        ));
       bundles = genAttrs [ "aarch64-linux" "x86_64-linux" ] (system:
-        pkgs_.nixpkgs."${system}".linkFarmFromDrvs "${system}-outputs" ([]
+        pkgs_.nixpkgs."${system}".linkFarmFromDrvs "${system}-bundle" ([]
           ++ [ inputs.self.devShell.${system}.inputDerivation ]
           ++ (filterPkgs_ pkgs_.nixpkgs.${system} inputs.self.packages)
           ++ (builtins.map (host: host.config.system.build.toplevel)

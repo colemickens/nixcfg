@@ -22,8 +22,12 @@ cache="colemickens"
 ## <ci> #################################################
 function _nix() { nix "${nixargs[@]}" "${@}"; }
 function _nix_build() { nix "${nixargs[@]}" build "${buildargs[@]}" "${@}"; }
+function ci_check() {
+  nix-build-uncached \
+    -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0" --no-link)" \
+    "${buildargs[@]}" -A "${@}"
+}
 function ci_nb_cache() {
-  set -euo pipefail
   out="$(mktemp -d)"; rm -rf "${out}" && mkdir -p "${out}"
 
   if ci_check "${@}";
@@ -34,12 +38,6 @@ function ci_nb_cache() {
   nix "${nixargs[@]}" build "${buildargs[@]}" --keep-going --out-link "${out}/result" ${@/#/'.#'}
   ls -al "${out}"
   readlink -f "${out}"/result* | tee /dev/stderr | cachix push colemickens
-}
-function ci_check() {
-  set -euo pipefail
-  nix-build-uncached \
-    -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0" --no-link)" \
-    "${buildargs[@]}" "${@}"
 }
 function ciup() {
   cachix watch-store -j2 "${cache}" & cachixpid=$!
@@ -95,6 +93,9 @@ function rpithreebp1() { _remote "$(tsip sinkor)"  ".#toplevels.rpithreebp1"  "$
 function sinkor()      { _remote "$(tsip a64com)"  ".#toplevels.sinkor"       "$(tsip sinkor)"      "activate"; }
 function pinephone()   { _remote "$(tsip a64com)"  ".#toplevels.pinephone"    "$(tsip pinephone)"   "activate"; }
 function bluephone()   { _remote "$(tsip a64com)"  ".#toplevels.bluephone"    "$(tsip bluephone)"   "activate"; }
+
+function x64()   { _remote "$(tsip porty)"  ".#bundles.x86_64-linux" "$(tsip porty)" "none"; }
+function a64()   { _remote "opc@132.226.31.59" ".#bundles.aarch64-linux" "$(tsip porty)" "none"; }
 ## </remote> #################################################
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi

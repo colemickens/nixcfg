@@ -63,7 +63,7 @@
     # https://askubuntu.com/a/399960
     kernelParams = [ "video=hyperv_fb:800x600" ];
     #kernelPackages = pkgs.linuxPackages_latest;  # ZFS
-    kernelPackages = pkgs.linuxPackages_5_13;
+    kernelPackages = pkgs.linuxPackages_5_14;
 
     # https://github.com/NixOS/nix/issues/421
     kernel.sysctl."vm.overcommit_memory" = "1";

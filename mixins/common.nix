@@ -49,7 +49,7 @@ with lib;
         "https://nixpkgs-wayland.cachix.org"
       ];
       trustedUsers = [ "@wheel" "root" ];
-      package = (inputs.self.preferredNix.${pkgs.system});
+      package = pkgs.nixUnstable;
       extraOptions =
         #lib.optionalString (config.nix.package == pkgs.nixUnstable)
           "experimental-features = nix-command flakes ca-references recursive-nix";

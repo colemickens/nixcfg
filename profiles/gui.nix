@@ -104,8 +104,6 @@ in
         gnome3.file-roller
         gnome3.gnome-tweaks
 
-        easyeffects
-
         # browsers
         _someChromium
         _someFirefox
@@ -113,6 +111,8 @@ in
       ]
       ++ _torPackages
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
+        easyeffects # weird, doesn't support aarch64?
+
         mplayer # weird non-aarch64
 
         ddccontrol
