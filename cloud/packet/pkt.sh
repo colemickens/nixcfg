@@ -30,7 +30,20 @@ function packet_script() {
   set -x
 }
 
-function packet_up_script() {
+function down() {
+  dev="${1}"
+  id="$(metal device get --search "${dev}" --output json | jq -r '.[].id' || true)"
+  if [[ "${id:-""}" != "" ]]; then
+    echo "deleting ${dev}: ${id}, waiting..."; set +x
+    while ! metal device delete --force --id "${id}" &>/dev/null; do echo "deleting ${dev}: ${id}, waiting..."; sleep 10; done; set -x
+  fi
+  runnerid="$(gh api repos/cole-mickens/nixcfg/actions/runners | jq -r ".runners[] | select (.name == \"${dev}\").id")"
+  if [[ "${runnerid:-""}" != "" ]]; then
+    gh api -X DELETE "repos/cole-mickens/nixcfg/actions/runners/${runnerid}" | jq
+  fi
+}
+
+function up_script() {
   machinename="${1}"
   plan="${2}"
   os="${3}"
@@ -59,8 +72,8 @@ function packet_up_script() {
 
 # packet bills by hour, so we always schedule spot instances for just an hour
 # (these are picked to boot fast)
-function up_nix_x64() { packet_up_script "bldr-x86" "c2.medium.x86"   "ubuntu_18_04" "./scripts/nix-unstable.sh"; }
-function up_nix_a64() { packet_up_script "bldr-a64" "c2.large.arm" "ubuntu_18_04" "./scripts/nix-unstable.sh"; }
+function up_nix_x64() { up_script "bldr-x86" "c2.medium.x86"   "ubuntu_18_04" "./scripts/nix-unstable.sh"; }
+function up_nix_a64() { up_script "bldr-a64" "c2.large.arm" "ubuntu_18_04" "./scripts/nix-unstable.sh"; }
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 if [[ -z "${cmd:-""}" ]]; then

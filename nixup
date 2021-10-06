@@ -25,7 +25,7 @@ function _nix_build() { nix "${nixargs[@]}" build "${buildargs[@]}" "${@}"; }
 function ci_nb_cache() {
   set -euo pipefail
   out="$(mktemp -d)"; rm -rf "${out}" && mkdir -p "${out}"
-  
+
   if ci_check "${@}";
   then echo "******** nbu worked, exitting early"; return 0
   else echo "******** nbu did not work..."
@@ -52,7 +52,7 @@ function up() {
   # TODO: `pkgup` doesn't actually run in CI, arguably the most important bit
   otherup && lockup && pkgup && ciup
 }
-function pkgup() { ./update.sh "${@:-}"; }
+function pkgup() { pushd pkgs; ./update.sh "${@:-}"; popd; }
 function otherup() {
   srcdirs=( "nixpkgs/cmpkgs"  "home-manager/cmhm"  "nixpkgs/master" "nixpkgs-wayland" "flake-firefox-nightly" )
   printf '%s\n' "${srcdirs[@]}" | \
@@ -72,10 +72,11 @@ function _remote() {
   out="$(nix eval --raw "${buildattr}")"
   _nix_build --store "ssh-ng://${remote}" --eval-store "auto" "${buildattr}"
   nix copy --no-check-sigs --from "ssh-ng://${remote}" --to "ssh-ng://${target}" "${out}"
-  if [[ "${action:-""}" == "activate" ]]; then
+  if [[ "${action:-""}" == *activate* ]]; then
     ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --no-link --profile /nix/var/nix/profiles/system "${out}")"
     ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch)"
   fi
+  if [[ "${action:-""}" == *reboot* ]]; then ssh "${target}" "sudo reboot"; fi
 }
 function tsip() {
   if [[ "${1}" == "$(hostname)" ]]; then printf "%s" "localhost";
@@ -87,7 +88,7 @@ function xeep()        { _remote "$(tsip xeep)"    ".#toplevels.xeep"         "$
 function raisin()      { _remote "$(tsip raisin)"  ".#toplevels.raisin"       "$(tsip raisin)"      "activate"; }
 function jeffhyper()   { _remote "$(tsip xeep)"    ".#toplevels.jeffhyper"    "$(tsip jeffhyper)"   "activate"; }
 function porty()       { _remote "$(tsip porty)"   ".#toplevels.porty"        "$(tsip porty)"       "activate"; }
-function rpizero1()    { _remote "$(tsip porty)"   ".#toplevels.rpizero1"     "$(tsip rpizero1)"    "activate"; }
+function rpizero1()    { _remote "$(tsip porty)"   ".#toplevels.rpizero1"     "$(tsip rpizero1)"    "activatereboot"; }
 function rpizero2()    { _remote "$(tsip porty)"   ".#toplevels.rpizero2"     "$(tsip rpizero2)"    "activate"; }
 function rpifour1()    { _remote "$(tsip a64com)"  ".#toplevels.rpifour1"     "$(tsip rpifour1)"    "activate"; }
 function rpithreebp1() { _remote "$(tsip sinkor)"  ".#toplevels.rpithreebp1"  "$(tsip rpithreebp1)" "activate"; }

@@ -17,7 +17,10 @@ in
 
     boot = {
       #kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_rpi0;
-      initrd.availableKernelModules = [ "dwc2" "g_hid" ];
+
+      # TODO: it might be -just- libcomposite now, no g_hid?
+      initrd.availableKernelModules = [ "dwc2" "libcomposite" ];
+      kernelModules = [ "dwc2" "libcomposite" ];
       kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
       loader.raspberryPi.version = 0;
       loader.raspberryPi.firmwareConfig = ''
