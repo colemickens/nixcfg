@@ -15,17 +15,73 @@ jobs:
       uses: ./.github/actions/prep
       with:
         sopsAgeKey: "${{ secrets.SOPS_AGE_KEY }}"
+
+    # first off, we're just gonna ignore whatever the old cache has to say
+    # TODO: do we need to worry about them overlapping and one cleaning up before the other? idk?
+
+    # original_cache (key)
+    - name: cache_key_1
+      id: cache_key_1
+      shell: bash
+      run: |
+        echo "setting cache_key_1"
+        set -x
+        echo "::set-output name=drvPath::$(nix eval --raw '.#devShellSrc.drvPath')"
+        echo "::set-output name=outPath::$(nix eval --raw '.#devShellSrc')"
+    # original_cache (build)
     - name: "cacheshell"
       run : .github/exec ./.github/workflows/cacheshell.sh
-
-      # then run cache ... again, with a new key/path
-
+    # original_cache (establish)
     - name: cache-setup
       uses: actions/cache@v2
       with:
-        path: ./.nixcache/${{ steps.cache-key.outputs.outPath }}
-        key: ${{ steps.cache-key.outputs.outPath }}
+        path: ./.nixcache/${{ steps.cache_key_1.outputs.outPath }}
+        key: ${{ steps.cache_key_1.outputs.outPath }}
+    # original_cache (export)
+    - name: cache-maybe-save-shell
+      shell: bash
+      run: |
+        set -x
+        if [[ ! -f ./.nixcache/${{ steps.cache_key_1.outputs.outPath }}-loaded ]]; then
+          nix copy \
+            --no-check-sigs \
+            --to ./.nixcache/${{ steps.cache_key_1.outputs.outPath }} \
+            "${{ steps.cache_key_1.outputs.outPath }}"
+        fi
 
-    # run our update process, with overridden flake...
-    # then run the cacheshell.sh again after update
-    # done, let the maybe second cache be setup ahead of other jobs, yay!
+    # TODO:
+    # UPDATE INPUTS STEP (in common with advance!)
+
+    # do the build with overrides?
+    # -(load overrides from file?) 
+    # -(have another meta format?)
+
+    # original_cache (key)
+    - name: cache_key_2
+      id: cache_key_2
+      shell: bash
+      run: |
+        echo "setting cache_key_2"
+        set -x
+        echo "::set-output name=drvPath::$(nix eval --raw '.#devShellSrc.drvPath')"
+        echo "::set-output name=outPath::$(nix eval --raw '.#devShellSrc')"
+    # original_cache (build)
+    - name: "cacheshell"
+      run : .github/exec ./.github/workflows/cacheshell.sh
+    # original_cache (establish)
+    - name: cache-setup
+      uses: actions/cache@v2
+      with:
+        path: ./.nixcache/${{ steps.cache_key_2.outputs.outPath }}
+        key: ${{ steps.cache_key_2.outputs.outPath }}
+    # original_cache (export)
+    - name: cache-maybe-save-shell
+      shell: bash
+      run: |
+        set -x
+        if [[ ! -f ./.nixcache/${{ steps.cache_key_2.outputs.outPath }}-loaded ]]; then
+          nix copy \
+            --no-check-sigs \
+            --to ./.nixcache/${{ steps.cache_key_2.outputs.outPath }} \
+            "${{ steps.cache_key_2.outputs.outPath }}"
+        fi

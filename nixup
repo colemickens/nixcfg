@@ -20,8 +20,8 @@ buildargs=(
 cache="colemickens"
 
 ## <ci> #################################################
-function _nix() { nix "${nixargs[@]}" "${@}"; }
-function _nix_build() { nix "${nixargs[@]}" build "${buildargs[@]}" "${@}"; }
+function _nix() { nix "${nixargs[@]}" "${buildargs[@]}" "${@}"; }
+#function _nix_build() { nix "${nixargs[@]}" build "${buildargs[@]}" "${@}"; }
 function ci_check() {
   nix-build-uncached \
     -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0" --no-link)" \
@@ -44,31 +44,29 @@ function ciup() {
   ci_nb_cache 'bundle'
   trap "kill -INT ${cachixpid}; wait ${cachixpid} || true" EXIT
 }
+function pushbuild() {
+  cachix watch-store -j2 "${cache}" & cachixpid=$!
+  _nix build "${@}"
+  kill -INT ${cachixpid}; wait ${cachixpid}
+}
 ## </ci> #################################################
 
-function up() {
-  # TODO: `pkgup` doesn't actually run in CI, arguably the most important bit
-  otherup && lockup && pkgup && ciup
-}
-function pkgup() { pushd pkgs; ./update.sh "${@:-}"; popd; }
-function otherup() {
+function inputup() {
   srcdirs=( "nixpkgs/cmpkgs"  "home-manager/cmhm"  "nixpkgs/master" "nixpkgs-wayland" "flake-firefox-nightly" )
   printf '%s\n' "${srcdirs[@]}" | \
     parallel --jobs $(nproc) --halt soon,fail=1 --tag --progress -- \
       "[[ ! -d "${HOME}/code/{.}" ]] || (git -C '${HOME}/code/{.}' pull --rebase && git -C '${HOME}/code/{.}' push origin HEAD -f)"
 }
-function lockup() {
-  nix "${nixargs[@]}" flake update --no-registries --commit-lock-file
-  outsh="$(mktemp -d)"
-  nix build "${nixargs[@]}" "${buildargs[@]}" --out-link "${outsh}/result" ".#devShell.x86_64-linux.inputDerivation"
-  readlink -f "${outsh}"/result* | tee /dev/stderr | cachix push colemickens
-}
+function lockup() { nix "${nixargs[@]}" flake update --no-registries --commit-lock-file; cacheshell }
+function pkgup() { pushd pkgs; ./update.sh "${@:-}"; popd; }
+function up() { inputup && lockup && pkgup && ciup && cacheshell; }
 
+function cacheshell() { pushbuild ".#devShell.x86_64-linux.inputDerivation"; }
 ## <remote> #################################################
 function _remote() {
   remote="${1}"; buildattr="${2}"; target="${3}"; action="${4:-""}"
   out="$(nix eval --raw "${buildattr}")"
-  _nix_build --store "ssh-ng://${remote}" --eval-store "auto" "${buildattr}"
+  _nix build -vv --store "ssh-ng://${remote}" --eval-store "auto" "${buildattr}" |& tee /tmp/nb
   nix copy --no-check-sigs --from "ssh-ng://${remote}" --to "ssh-ng://${target}" "${out}"
   if [[ "${action:-""}" == *activate* ]]; then
     ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --no-link --profile /nix/var/nix/profiles/system "${out}")"

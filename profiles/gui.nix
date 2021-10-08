@@ -83,6 +83,7 @@ in
         rkvm
         spotify-qt
         vlc
+        wezterm
         # nvui # https://github.com/NixOS/nixpkgs/issues/136229
 
         virt-viewer

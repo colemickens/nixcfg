@@ -4,6 +4,9 @@ set -x
 
 USERNAME="cole"
 
+# TODO: support re-exec as root if we're not
+# check if we're not "cole" and if so, make it and then re-exec *again*
+
 if [[ "${1:-""}" != "stage2" ]]; then
     adduser --gecos "" --disabled-password "${USERNAME}"
     mkdir -p /home/cole/.ssh

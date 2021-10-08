@@ -36,10 +36,9 @@ runs:
       shell: bash
       run: |
         echo "setting cache key"
-        echo
+        set -x
         echo "::set-output name=drvPath::$(nix eval --raw '.#devShellSrc.drvPath')"
         echo "::set-output name=outPath::$(nix eval --raw '.#devShellSrc')"
-        printf "%s" "cache key set\ndrvPath::$(nix eval --raw '.#devShellSrc.drvPath')\noutPath::$(nix eval --raw '.#devShellSrc')"
     - name: cache-setup
       uses: actions/cache@v2
       with:
