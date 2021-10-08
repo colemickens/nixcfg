@@ -183,6 +183,7 @@
           mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
           meli = prev.callPackage ./pkgs/meli {};
           passrs = prev.callPackage ./pkgs/passrs {};
+          poweralertd = prev.callPackage ./pkgs/poweralertd {};
           rkvm = prev.callPackage ./pkgs/rkvm {};
           shreddit = prev.python3Packages.callPackage ./pkgs/shreddit {};
           metal-cli = prev.callPackage ./pkgs/metal-cli {};

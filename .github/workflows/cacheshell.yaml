@@ -17,3 +17,15 @@ jobs:
         sopsAgeKey: "${{ secrets.SOPS_AGE_KEY }}"
     - name: "cacheshell"
       run : .github/exec ./.github/workflows/cacheshell.sh
+
+      # then run cache ... again, with a new key/path
+
+    - name: cache-setup
+      uses: actions/cache@v2
+      with:
+        path: ./.nixcache/${{ steps.cache-key.outputs.outPath }}
+        key: ${{ steps.cache-key.outputs.outPath }}
+
+    # run our update process, with overridden flake...
+    # then run the cacheshell.sh again after update
+    # done, let the maybe second cache be setup ahead of other jobs, yay!
