@@ -15,5 +15,9 @@ in {
   ];
   config = {
     networking.hostName = hostname;
+
+    # we could run two different nixos containers
+    # -> one serves the public cleo image and the links to the internal VPN services
+    # -> one is the actual frontend bound on the wg0 interface
   };
 }

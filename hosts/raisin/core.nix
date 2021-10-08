@@ -1,6 +1,6 @@
 { config, pkgs, lib, inputs, ... }:
 let
-  hostname = "raisin";
+  hostname = "raisin1";
 in
 {
   imports = [

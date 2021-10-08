@@ -51,6 +51,12 @@ jobs:
 
     # TODO:
     # UPDATE INPUTS STEP (in common with advance!)
+    - name: local-overrides
+      shell: bash
+      run: |
+        set -x
+        # should we just call "otherup" and have the dirs in the right locations?
+        ./nixup overrideup
 
     # do the build with overrides?
     # -(load overrides from file?) 

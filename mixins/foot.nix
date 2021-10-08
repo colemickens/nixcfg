@@ -6,7 +6,8 @@ let
   colors = ts.colors.default;
 
   # foot scales the font size?
-  fontSize = (builtins.floor (ts.fonts.default.size / 1.25));
+  #fontSize = (builtins.ceil (ts.fonts.default.size / 1.25) - 1);
+  fontSize = ts.fonts.default.size;
 
   # maybe we should store the colors without '#' and then add it in alacritty/kitty?
   c = color: builtins.substring 1 10000 color;

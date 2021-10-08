@@ -129,6 +129,7 @@
       minimalMkShell = system: import ./lib/minimalMkShell.nix { pkgs = fullPkgs_.${system}; };
       hydralib = import ./lib/hydralib.nix;
     in rec {
+      internals = { inherit pkgs_ fullPkgs_; };
       devShell = forAllSystems (system: minimalMkShell system {
         name = "nixcfg-devshell";
         nativeBuildInputs = map (x: (x.bin or x.out or x))
@@ -136,10 +137,12 @@
             nixUnstable
             bash curl cacert jq parallel mercurial git
             nettools openssh ripgrep rsync sops gh gawk gnused gnugrep
-            cachix nix-build-uncached nix-prefetch-git
+            cachix nix-prefetch-git
             tailscale
+            # nix-build-uncached
           ]) ++ [
             fullPkgs_.${system}.metal-cli
+            fullPkgs_.${system}.nix-build-uncached
           ]);
       });
 
@@ -191,6 +194,14 @@
           rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {};
           zellij = prev.callPackage ./pkgs/zellij { zellij = prev.zellij; };
 
+          nix-build-uncached = prev.nix-build-uncached.overrideAttrs(old: {
+            src = prev.fetchFromGitHub {
+              owner = "colemickens";
+              repo = "nix-build-uncached";
+              rev = "36ea105"; sha256 = "sha256-Ovx+q5pdfg+yIF5HU7pV0nR6nnoTa3y/f9m4TV0XXc0=";
+            };
+          });
+
           #disabled:
           #niche = prev.callPackage ./pkgs/niche {};
           # neochat_ = prev.libsForQt5.callPackage ./pkgs/neochat {
@@ -227,7 +238,7 @@
         rpizero1 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
         rpizero2 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
         # other
-        #bluephone     = mkSystem inputs.nixpkgs "aarch64-linux" "bluephone";
+        bluephone     = mkSystem inputs.nixpkgs "aarch64-linux" "bluephone";
         #demovm      = mkSystem fullPkgs_.x86_64-linux  "demovm";
         #testipfsvm  = mkSystem fullPkgs_.x86_64-linux  "testipfsvm";
       };

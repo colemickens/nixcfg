@@ -20,6 +20,10 @@
   ];
 
   config = {
+    networking.extraHosts = ''
+      100.72.11.62 cleo.cat
+    '';
+
     environment.etc = {
       test_cole_version.source = ./version.txt;
     };

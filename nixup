@@ -12,56 +12,36 @@ buildargs=(
   --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= arm.cachix.org-1:5BZ2kjoL1q6nWhlnrbAl+G7ThY7+HaBRD9PZzqZkbnM= thefloweringash-armv7.cachix.org-1:v+5yzBD2odFKeXbmC+OPWVqx4WVoIVO6UXgnSAWFtso='
   --option 'build-cores' '0'
   --option 'narinfo-cache-negative-ttl' '0'
-#  --builders "
-#    ssh://cole@$(tailscale ip --6 porty) x86_64-linux /run/secrets/hydra_queue_runner_id_rsa - - ;
-#    ssh://cole@$(tailscale ip --6 sinkor) aarch64-linux /run/secrets/hydra_queue_runner_id_rsa;"
   --builders-use-substitutes
 )
 cache="colemickens"
 
 ## <ci> #################################################
 function _nix() { nix "${nixargs[@]}" "${buildargs[@]}" "${@}"; }
-#function _nix_build() { nix "${nixargs[@]}" build "${buildargs[@]}" "${@}"; }
-function ci_check() {
-  nix-build-uncached \
-    -build-flags "$(printf '\"%s\" ' "${nixargs[@]}" "${buildargs[@]}" "-j0" --no-link)" \
-    "${buildargs[@]}" -A "${@}"
-}
-function ci_nb_cache() {
-  out="$(mktemp -d)"; rm -rf "${out}" && mkdir -p "${out}"
-
-  if ci_check "${@}";
-  then echo "******** nbu worked, exitting early"; return 0
-  else echo "******** nbu did not work..."
-  fi
-
-  nix "${nixargs[@]}" build "${buildargs[@]}" --keep-going --out-link "${out}/result" ${@/#/'.#'}
-  ls -al "${out}"
-  readlink -f "${out}"/result* | tee /dev/stderr | cachix push colemickens
-}
-function ciup() {
-  cachix watch-store -j2 "${cache}" & cachixpid=$!
-  ci_nb_cache 'bundle'
-  trap "kill -INT ${cachixpid}; wait ${cachixpid} || true" EXIT
-}
 function pushbuild() {
   cachix watch-store -j2 "${cache}" & cachixpid=$!
   _nix build "${@}"
   kill -INT ${cachixpid}; wait ${cachixpid}
 }
+function cacheshell() { pushbuild ".#devShell.x86_64-linux.inputDerivation"; }
+
+function ci_check() { nix-build-uncached "${nixargs[@]}" "${buildargs[@]}" "${@}" -build-flags "-j0"; }
+function ci_nb_cache() { ci_check "${@}" || pushbuild "${@}"; }
+function ciup() { ci_nb_cache '.#bundle'; }
+
 ## </ci> #################################################
 
 function inputup() {
-  srcdirs=( "nixpkgs/cmpkgs"  "home-manager/cmhm"  "nixpkgs/master" "nixpkgs-wayland" "flake-firefox-nightly" )
+  srcdirs=( "nixpkgs/cmpkgs" "home-manager/cmhm" "nixpkgs/master" "nixpkgs-wayland" "flake-firefox-nightly" )
   printf '%s\n' "${srcdirs[@]}" | \
     parallel --jobs $(nproc) --halt soon,fail=1 --tag --progress -- \
       "[[ ! -d "${HOME}/code/{.}" ]] || (git -C '${HOME}/code/{.}' pull --rebase && git -C '${HOME}/code/{.}' push origin HEAD -f)"
+   cacheshell;
 }
-function lockup() { nix "${nixargs[@]}" flake update --no-registries --commit-lock-file; cacheshell }
-function pkgup() { pushd pkgs; ./update.sh "${@:-}"; popd; }
+function lockup() { nix "${nixargs[@]}" flake update --no-registries --commit-lock-file; cacheshell; }
+function pkgup() { ./pkgs/update.sh "${@:-}"; cacheshell; }
 function up() { inputup && lockup && pkgup && ciup && cacheshell; }
 
-function cacheshell() { pushbuild ".#devShell.x86_64-linux.inputDerivation"; }
 ## <remote> #################################################
 function _remote() {
   remote="${1}"; buildattr="${2}"; target="${3}"; action="${4:-""}"
@@ -89,8 +69,9 @@ function rpizero2()    { _remote "$(tsip porty)"   ".#toplevels.rpizero2"     "$
 function rpifour1()    { _remote "$(tsip a64com)"  ".#toplevels.rpifour1"     "$(tsip rpifour1)"    "activate"; }
 function rpithreebp1() { _remote "$(tsip sinkor)"  ".#toplevels.rpithreebp1"  "$(tsip rpithreebp1)" "activate"; }
 function sinkor()      { _remote "$(tsip a64com)"  ".#toplevels.sinkor"       "$(tsip sinkor)"      "activate"; }
-function pinephone()   { _remote "$(tsip a64com)"  ".#toplevels.pinephone"    "$(tsip pinephone)"   "activate"; }
-function bluephone()   { _remote "$(tsip a64com)"  ".#toplevels.bluephone"    "$(tsip bluephone)"   "activate"; }
+
+function pinephone()   { _remote "opc@132.226.31.59"  ".#toplevels.pinephone"    "$(tsip pinephone)"   "activate"; }
+function bluephone()   { _remote "opc@132.226.31.59"  ".#toplevels.bluephone"    "$(tsip bluephone)"   "activate"; }
 
 function x64()   { _remote "$(tsip porty)"  ".#bundles.x86_64-linux" "$(tsip porty)" "none"; }
 function a64()   { _remote "opc@132.226.31.59" ".#bundles.aarch64-linux" "$(tsip porty)" "none"; }
