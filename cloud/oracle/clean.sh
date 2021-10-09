@@ -15,6 +15,11 @@ declare -a region_codes=("SJC"
             "BOM"
             ) # list of region codes where cmpt resources exists
 
+
+echo "TODO: manually delete compute instances to free capacity"
+sleep 3
+
+
 for OCI_REGION_CODE in "${region_codes[@]}"
 do
     UNIQUE_STACK_ID=$(date "+DATE_%Y_%m_%d_TIME_%H_%M") 
@@ -32,6 +37,6 @@ do
     
     oci resource-manager stack delete --stack-id ${OCID_CMPT_STACK} --force --wait-for-state DELETED
 
-done            
+done
 
 oci iam compartment delete -c ${OCI_CMPT_ID} --force --wait-for-state SUCCEEDED

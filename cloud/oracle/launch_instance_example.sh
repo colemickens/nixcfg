@@ -66,15 +66,17 @@ if [[ "$mode" == "up" ]]; then
     shape_name=$(echo "${shape}" | jq -r '.shape')
     echo -e "Found Shape: "${shape_name}"\n"${shape}"\n" &>/dev/stderr
 
-    echo -e "Looking up Image ..." &>/dev/stderr
-    images=$(oci compute image list \
-        --compartment-id "${compartment_id}" \
-        --operating-system "Oracle Linux" \
-        --shape "${shape_name}" \
-        | jq -rc '.data')
-    image=$(echo "${images}" | jq -rc '.[0]')
-    image_id=$(echo "${image}" | jq -r '.id')
-    echo -e "Found Image: "${image_id}"\n"${image}"\n" &>/dev/stderr
+    # echo -e "Looking up Image ..." &>/dev/stderr
+    # images=$(oci compute image list \
+    #     --compartment-id "${compartment_id}" \
+    #     --operating-system "Oracle Linux" \
+    #     --shape "${shape_name}" \
+    #     | jq -rc '.data')
+    # image=$(echo "${images}" | jq -rc '.[0]')
+    # image_id=$(echo "${image}" | jq -r '.id')
+    # echo -e "Found Image: "${image_id}"\n"${image}"\n" &>/dev/stderr
+
+    image_id="ocid1.image.oc1.phx.aaaaaaaa7kuixckmi44mvcy3lfx6tusfjdfl7qfq3qwpa6cx5ogbhsxofq6a"
 
     echo -e "Creating Vcn ..." &>/dev/stderr
     vcn_name="py_cli_example_vcn"
@@ -215,7 +217,7 @@ if [[ "$mode" == "up" ]]; then
         | jq -rc '.data')
     echo -e "Vnics attached to Instance: "${instance_id}"\n"${vnics}"\n" &>/dev/stderr
 
-    instance_ip4="$(echo "${instance}" | jq -r '.[0]["public-ip"]')"
+    instance_ip4="$(echo "${vnics}" | jq -r '.[0]["public-ip"]')"
     echo -n "${instance_ip4}"
 elif [[ "$mode" == "down" ]]; then
     echo -e "Terminating Instance ..."

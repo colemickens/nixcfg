@@ -314,7 +314,7 @@
           let
             dev = inputs.self.nixosConfigurations.bluephone;
           in
-            dev.config.system.build.android-bootimg;
+            dev.config.mobile.outputs.android.android-bootimg;
 
         pinephone_bundle = let p = nixosConfigurations.pinephone.config.system.build; in
           pkgs_.nixpkgs.aarch64-linux.runCommandNoCC "pinephone-bundle" {} ''
