@@ -4,11 +4,11 @@ let
 in
 {
   imports = [
-    # (import "${inputs.mobile-nixos}/lib/configuration.nix" {
-    #   device = "pine64-pinephone";
-    # })
+    (import "${inputs.mobile-nixos}/lib/configuration.nix" {
+      device = "pine64-pinephone";
+    })
 
-    "${inputs.mobile-nixos}/devices/pine64-pinephone/default.nix"
+    # "${inputs.mobile-nixos}/devices/pine64-pinephone/default.nix"
 
     ../../profiles/interactive.nix
     
