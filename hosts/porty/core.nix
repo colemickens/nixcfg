@@ -12,6 +12,7 @@
     ../../mixins/nvidia.nix
     ../../profiles/gaming.nix
 
+    ../../mixins/android.nix
     ../../mixins/code-server.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/sshd.nix

@@ -321,7 +321,7 @@
             mkdir $out
 
             # uboot
-            ln -s "${p.u-boot}" $out/uboot;
+            #ln -s "''${p.u-boot}" $out/uboot;
 
             # full image
             # inf recursion with mobile-nixos/master :(
