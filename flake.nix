@@ -316,7 +316,7 @@
           in
             dev.config.mobile.outputs.android.android-bootimg;
 
-        pinephone_bundle = let 
+        pinephone_bundle = let
           p = nixosConfigurations.pinephone.config.system.build;
         in
           pkgs_.nixpkgs.aarch64-linux.runCommandNoCC "pinephone-bundle" {} ''
