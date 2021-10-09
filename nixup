@@ -78,7 +78,7 @@ function a64()   { _remote "opc@132.226.31.59" ".#bundles.aarch64-linux" "$(tsip
 
 function commbox() {
   ssh "colemickens@aarch64.nixos.community" \
-    "nix-env -f /run/current-system/nixpkgs -iA git zellij nixUnstable htop"
+    "nix-env -f /run/current-system/nixpkgs -iA git zellij nixUnstable htop ncdu"
   ssh "colemickens@aarch64.nixos.community" \
     "mkdir /home/colemickens/.config/cachix/cachix.dhall"
   scp "${HOME}/.config/cachix/cachix.dhall" \
