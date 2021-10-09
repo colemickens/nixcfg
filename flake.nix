@@ -317,7 +317,7 @@
             dev.config.mobile.outputs.android.android-bootimg;
 
         pinephone_bundle = let
-          p = nixosConfigurations.pinephone.config.mobile.outputs;
+          p = nixosConfigurations.pinephone.config.mobile.outputs.u-boot;
         in
           pkgs_.nixpkgs.aarch64-linux.runCommandNoCC "pinephone-bundle" {} ''
             mkdir $out
