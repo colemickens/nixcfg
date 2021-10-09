@@ -323,11 +323,11 @@
             mkdir $out
 
             # uboot
-            ln -s "${p.u-boot}" $out/uboot;
+            ln -s "''${p.u-boot}" $out/uboot;
 
             # full image
             # inf recursion with mobile-nixos/master :(
-            ln -s "${p.disk-image}" $out/disk-image;
+            ln -s "''${p.disk-image}" $out/disk-image;
 
             # boot partition
             # inf recursion with mobile-nixos/master :(
