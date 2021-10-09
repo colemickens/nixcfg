@@ -80,7 +80,7 @@ function commbox() {
   ssh "colemickens@aarch64.nixos.community" \
     "nix-env -f /run/current-system/nixpkgs -iA git zellij nixUnstable htop ncdu"
   ssh "colemickens@aarch64.nixos.community" \
-    "mkdir /home/colemickens/.config/cachix/cachix.dhall"
+    "mkdir -p /home/colemickens/.config/cachix"
   scp "${HOME}/.config/cachix/cachix.dhall" \
     "colemickens@aarch64.nixos.community:/home/colemickens/.config/cachix/cachix.dhall"
 }
