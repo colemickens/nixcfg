@@ -331,7 +331,7 @@
 
             # boot partition
             # inf recursion with mobile-nixos/master :(
-            ln -s "${p.boot-partition}" $out/boot-partition;
+            ln -s "''${p.boot-partition}" $out/boot-partition;
           '';
       };
       linuxVMs = {
