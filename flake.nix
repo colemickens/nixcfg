@@ -323,7 +323,7 @@
             mkdir $out
 
             # uboot
-            ln -s "''${p.u-boot}" $out/uboot;
+            ln -s "${p.u-boot}" $out/uboot;
 
             # full image
             # inf recursion with mobile-nixos/master :(
@@ -331,7 +331,7 @@
 
             # boot partition
             # inf recursion with mobile-nixos/master :(
-            ln -s "''${p.boot-partition}" $out/boot-partition;
+            ln -s "${p.boot-partition}" $out/boot-partition;
           '';
       };
       linuxVMs = {
