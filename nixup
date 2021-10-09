@@ -33,8 +33,10 @@ function ciup() { ci_nb_cache '.#bundle'; }
 
 function inputup() {
   srcdirs=( "nixpkgs/cmpkgs" "home-manager/cmhm" "nixpkgs/master" "nixpkgs-wayland" "flake-firefox-nightly" )
+  # we basically undo parallel for now by setting, parallelism to 1
+  # otherwise git shits its pants in the multi-worktree dirs
   printf '%s\n' "${srcdirs[@]}" | \
-    parallel --jobs $(nproc) --halt soon,fail=1 --tag --progress -- \
+    parallel --jobs 1 --halt soon,fail=1 --tag --progress -- \
       "[[ ! -d "${HOME}/code/{.}" ]] || (git -C '${HOME}/code/{.}' pull --rebase && git -C '${HOME}/code/{.}' push origin HEAD -f)"
    cacheshell;
 }

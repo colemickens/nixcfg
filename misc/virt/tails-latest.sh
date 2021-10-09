@@ -4,12 +4,15 @@ set -euo pipefail
 set -x
 
 export TAILS_SEED_TIME=99999999
+trap "echo \$TAILS_VERSION" EXIT
+TAILS_VERSION="0"
 #export TAILS_SEED_TIME=0
 
 # fetch upstream info
 index="https://tails.boum.org/install/v2/Tails/amd64/stable/latest.json"
-curl --silent "${index}" > /tmp/tails.json 
+curl --silent "${index}" > /tmp/tails.json
 ver="$(</tmp/tails.json jq -r ".installations[0].version")"
+TAILS_VERSION="${ver}"
 
 # check if we exist
 dest="${HOME}/.cache/sliat-${ver}"
@@ -21,6 +24,7 @@ trap "rm -rf ${OUTDIR}" EXIT
 
 aria2c --dir="${OUTDIR}" --seed-time="${TAILS_SEED_TIME}" -Z \
   "https://tails.boum.org/torrents/files/tails-amd64-${ver}.iso.torrent" \
-  "https://tails.boum.org/torrents/files/tails-amd64-${ver}.img.torrent"
+  "https://tails.boum.org/torrents/files/tails-amd64-${ver}.img.torrent" > /dev/stderr
 
 mv "${OUTDIR}" "${dest}"
+

@@ -11,6 +11,8 @@ buildargs=(
   --builders-use-substitutes
 )
 
+echo "${USER:-"unknown"}"
+
 # TODO: move to an HM profile and install with it instead
 # enable SSHD
 mkdir -p ~/.ssh

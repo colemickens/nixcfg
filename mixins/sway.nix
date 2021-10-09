@@ -147,6 +147,7 @@ in
 
             { always = true;  command = "pkill swayidle"; } # Disable swayidle for a bit
             { always = true; command = "${idlecmd}"; }
+            { command = "${pkgs.poweralertd}/bin/poweralertd"; }
           ];
           input = {
             "${in_touchpad}" = {
