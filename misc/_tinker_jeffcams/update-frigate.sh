@@ -3,6 +3,9 @@
 set -euo pipefail
 set -x
 
-rm /tmp/frigate.yml
-nix build -f ./frigate.yml.nix --out-link /tmp/frigate.yml
-scp /tmp/frigate.yml cole@$(tailscale ip --6 homeassistant):config/frigate.yml
+rm -f /tmp/frigate.json
+nix build -f ./frigate.nix --out-link /tmp/frigate.json
+ssh cole@$(tailscale ip --6 homeassistant) sudo rm -f /tmp/frigate.yml /config/frigate.yml
+scp /tmp/frigate.json cole@"[$(tailscale ip --6 homeassistant)]":/tmp/frigate.yml
+ssh cole@$(tailscale ip --6 homeassistant) sudo mv /tmp/frigate.yml /config/frigate.yml
+ssh cole@$(tailscale ip --6 homeassistant) 'sudo /usr/local/bin/docker kill $(sudo /usr/local/bin/docker ps | grep frigate | head -1 | cut -d\  -f1)'

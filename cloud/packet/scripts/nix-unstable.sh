@@ -14,7 +14,9 @@ if [[ "${1:-""}" != "stage2" ]]; then
     sudo chown -R cole /home/cole/.ssh
     sudo chmod -R ugo-w /home/cole/.ssh
     sudo chmod -R ugo+rx /home/cole/.ssh
-    sudo chmod -R u+w /home/cole/.ssh
+    sudo chmod -R ugo-w /home/cole/.ssh
+    sudo chmod -R u+rw /home/cole/.ssh
+    sudo chmod u+x /home/cole/.ssh
     sudo usermod -aG sudo "${USERNAME}"
     echo "%sudo   ALL=(ALL:ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
     sudo cp "${0}" "/tmp/nix-unstable.sh"
@@ -40,7 +42,7 @@ TSPATH="/tmp/tailscale_${TSVERSION}_${TSARCH}"
 sudo mv "${TSPATH}/tailscale" "${TSPATH}/tailscaled" /usr/bin
 # ==tailscale=run
 sudo tailscaled 2>~/tailscaled.log &
-HOSTNAME="pkt-$(cat /etc/hostname)"
+HOSTNAME="$(cat /etc/hostname)"
 until sudo tailscale up --authkey "@TAILSCALE_AUTHKEY@" --hostname=${HOSTNAME} --accept-routes; do
     sleep 0.5
 done

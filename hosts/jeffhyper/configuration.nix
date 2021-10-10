@@ -16,8 +16,6 @@
   config = {
     users.users.cole.linger = true;
 
-    #environment.etc."test_cole_version".source = ./version.txt;
-
     system.stateVersion = "21.05";
     virtualisation.hypervGuest.enable = true;
 
@@ -93,7 +91,13 @@
       interfaces.eth0.ipv4.addresses = [
         {
           address = "192.168.1.200";
-          prefixLength = 16;
+          prefixLength = 24;
+        }
+      ];
+      interfaces.eth1.ipv4.addresses = [
+        {
+          address = "192.168.10.200";
+          prefixLength = 24;
         }
       ];
       defaultGateway = "192.168.1.1";
