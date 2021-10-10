@@ -177,7 +177,7 @@ if [[ "$mode" == "up" ]]; then
 
 
     echo -e "Launching Instance ..." &>/dev/stderr
-    instance_name="py_cli_example_instance"
+    instance_name="oracular"
     metadata=$(echo '{
         "py_cli_test_metadata_key1": "py_cli_test_metadata_value1"
     }' | jq -rc)
@@ -206,6 +206,7 @@ if [[ "$mode" == "up" ]]; then
         --user-data-file "${user_data_file}" \
         --ssh-authorized-keys-file "${ssh_authorized_keys_file}" \
         --subnet-id "${subnet_id}" \
+        --boot-volume-size-in-gbs 200 \
         --nsg-ids "${network_security_group_ids}" \
         --wait-for-state "RUNNING" 2> /dev/stderr \
         | jq -rc '.data')

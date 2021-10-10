@@ -11,9 +11,10 @@ if [[ "${1:-""}" != "stage2" ]]; then
     sudo adduser --gecos "" --disabled-password "${USERNAME}"
     mkdir -p /home/cole/.ssh
     curl -L "https://github.com/colemickens.keys" > /home/cole/.ssh/authorized_keys
-    sudo chown -R cole:users /home/cole/.ssh
+    sudo chown -R cole /home/cole/.ssh
     sudo chmod -R ugo-w /home/cole/.ssh
     sudo chmod -R ugo+rx /home/cole/.ssh
+    sudo chmod -R u+w /home/cole/.ssh
     sudo usermod -aG sudo "${USERNAME}"
     echo "%sudo   ALL=(ALL:ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
     sudo cp "${0}" "/tmp/nix-unstable.sh"
@@ -58,11 +59,12 @@ echo -e "${cfgline}\n\n$(cat "${HOME}/.bashrc")" > "${HOME}/.bashrc"
 
 bash -cl "nix-env -iA nixpkgs.nixUnstable"
 
-mkdir -p "${HOME}/.config/nix"
-cat <<EOF >"${HOME}/.config/nix/nix.conf"
+mkdir -p "/etc/nix"
+cat <<EOF | sudo tee -a "/etc/nix/nix.conf"
 experimental-features = nix-command flakes ca-references
 extra-binary-caches = https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://arm.cachix.org https://thefloweringash-armv7.cachix.org
 trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= arm.cachix.org-1:5BZ2kjoL1q6nWhlnrbAl+G7ThY7+HaBRD9PZzqZkbnM= thefloweringash-armv7.cachix.org-1:v+5yzBD2odFKeXbmC+OPWVqx4WVoIVO6UXgnSAWFtso=
+trusted-users = root cole @sudo
 EOF
 
 echo "bootstrap: all done!"

@@ -106,11 +106,9 @@
       genAttrs = names: f: builtins.listToAttrs (map (n: nameValuePair n (f n)) names);
       supportedSystems = [ "x86_64-linux" "aarch64-linux" "armv6l-linux" "armv7l-linux" ];
       forAllSystems = genAttrs supportedSystems;
-      filterPkg_ = system: (pkg: (builtins.elem "${system}" (pkg.meta.platforms or [ "x86_64-linux" "aarch64-linux" ]) && !(pkg.meta.broken or false)));
-      filterPkgs = pkgs: pkgSet: (pkgs.lib.filterAttrs (filterPkg_ pkgs.system) pkgSet.${pkgs.system});
+      filterPkg_ = system: (n: p: (builtins.elem "${system}" (p.meta.platforms or [ "x86_64-linux" "aarch64-linux" ])) && !(p.meta.broken or false));
+      filterPkgs = pkgs: pkgSet: (pkgs.lib.filterAttrs (filterPkg_ pkgs.system) pkgSet);
       filterHosts = pkgs: cfgs: (pkgs.lib.filterAttrs (n: v: pkgs.system == v.config.nixpkgs.system) cfgs);
-      filterPkgs_ = pkgs: pkgSet: (builtins.filter (filterPkg_ pkgs.system) (builtins.attrValues pkgSet.${pkgs.system}));
-      filterHosts_ = pkgs: cfgs: (builtins.filter (c: pkgs.system == c.config.nixpkgs.system) (builtins.attrValues cfgs));
       pkgsFor = pkgs: system: overlays:
         import pkgs {
           inherit system overlays;
@@ -128,6 +126,9 @@
 
       minimalMkShell = system: import ./lib/minimalMkShell.nix { pkgs = fullPkgs_.${system}; };
       hydralib = import ./lib/hydralib.nix;
+
+      force_cached = sys: pkgs_.nixpkgs."${sys}".callPackage ./lib/force_cached.nix {};
+      pkgNames = s: builtins.attrNames (inputs.self.overlay pkgs_.${s} pkgs_.${s});
     in rec {
       internals = { inherit pkgs_ fullPkgs_; };
       devShell = forAllSystems (system: minimalMkShell system {
@@ -163,8 +164,10 @@
         install-secrets = (import ./.github/secrets.nix { nixpkgs = inputs.nixpkgs; inherit inputs system; });
         bundle = inputs.self.bundles."${system}";
       });
-      packages = forAllSystems (system: fullPkgs_.${system}.colePackages);
-      pkgs = forAllSystems (system: fullPkgs_.${system});
+
+      #packages = forAllSystems (s: pkgs_.nixpkgs.${s}.lib.filterAttrs (n: v: (builtins.elem n (pkgNames s))) fullPkgs_.${s});
+      packages = forAllSystems (s: fullPkgs_.${s}.colePackages);
+      pkgs = forAllSystems (s: fullPkgs_.${s});
 
       overlay = final: prev:
         let p = rec {
@@ -194,13 +197,13 @@
           rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {};
           zellij = prev.callPackage ./pkgs/zellij { zellij = prev.zellij; };
 
-          nix-build-uncached = prev.nix-build-uncached.overrideAttrs(old: {
-            src = prev.fetchFromGitHub {
-              owner = "colemickens";
-              repo = "nix-build-uncached";
-              rev = "36ea105"; sha256 = "sha256-Ovx+q5pdfg+yIF5HU7pV0nR6nnoTa3y/f9m4TV0XXc0=";
-            };
-          });
+          # nix-build-uncached = prev.nix-build-uncached.overrideAttrs(old: {
+          #   src = prev.fetchFromGitHub {
+          #     owner = "colemickens";
+          #     repo = "nix-build-uncached";
+          #     rev = "36ea105"; sha256 = "sha256-Ovx+q5pdfg+yIF5HU7pV0nR6nnoTa3y/f9m4TV0XXc0=";
+          #   };
+          # });
 
           #disabled:
           #niche = prev.callPackage ./pkgs/niche {};
@@ -257,29 +260,21 @@
       #   };
 
       # TODO : clamped to x86_64 - undo!
-      hydraJobs = genAttrs [ "aarch64-linux" "x86_64-linux" ] (system:
-        {
-          devshell = inputs.self.devShell.${system}.inputDerivation;
-          selfPkgs = filterPkgs pkgs_.nixpkgs.${system} inputs.self.packages;
-          hosts = (builtins.mapAttrs (n: v: v.config.system.build.toplevel)
-            (filterHosts pkgs_.nixpkgs.${system} inputs.self.nixosConfigurations));
-        });
-
-      bundle_pkgs = genAttrs [ "aarch64-linux" "x86_64-linux" ] (system:
-        pkgs_.nixpkgs."${system}".linkFarmFromDrvs "${system}-pkgs" ([]
-          ++ (filterPkgs_ pkgs_.nixpkgs.${system} inputs.self.packages)
-        ));
-      bundle_hosts = genAttrs [ "aarch64-linux" "x86_64-linux" ] (system:
-        pkgs_.nixpkgs."${system}".linkFarmFromDrvs "${system}-hosts" ([]
-          ++ (builtins.map (host: host.config.system.build.toplevel)
-               (filterHosts_ pkgs_.nixpkgs.${system} inputs.self.nixosConfigurations))
-        ));
-      bundles = genAttrs [ "aarch64-linux" "x86_64-linux" ] (system:
-        pkgs_.nixpkgs."${system}".linkFarmFromDrvs "${system}-bundle" ([]
-          ++ [ inputs.self.devShell.${system}.inputDerivation ]
-          ++ (filterPkgs_ pkgs_.nixpkgs.${system} inputs.self.packages)
-          ++ (builtins.map (host: host.config.system.build.toplevel)
-               (filterHosts_ pkgs_.nixpkgs.${system} inputs.self.nixosConfigurations))
+      hydraJobs = forAllSystems (s: {
+        devshell = inputs.self.devShell.${s}.inputDerivation;
+        pkgs = force_cached s (filterPkgs pkgs_.nixpkgs.${s} inputs.self.packages.${s});
+        hosts = force_cached s (builtins.mapAttrs (n: v: v.config.system.build.toplevel)
+          (filterHosts pkgs_.nixpkgs.${s} inputs.self.nixosConfigurations));
+      });
+      # bundle_pkgs = forAllSystems (s: (pkgs_.nixpkgs."${s}".linkFarmFromDrvs "${s}-pkgs"
+      #   (builtins.attrValues hydraJobs.${s}.pkgs)));
+      # bundle_hosts = forAllSystems (s: (pkgs_.nixpkgs."${s}".linkFarmFromDrvs "${s}-hosts"
+      #     (builtins.attrValues hydraJobs.${s}.hosts)));
+      bundles = forAllSystems (s:
+        pkgs_.nixpkgs."${s}".linkFarmFromDrvs "${s}-bundle" ([]
+          ++ [ inputs.self.devShell.${s}.inputDerivation ]
+          ++ (builtins.attrValues hydraJobs.${s}.pkgs)
+          ++ (builtins.attrValues hydraJobs.${s}.hosts)
         ));
 
       images = let

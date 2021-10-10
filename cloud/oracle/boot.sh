@@ -30,7 +30,7 @@ COMPARTMENT_ID="$(oci iam compartment create \
 # shape="VM.Standard.E2.1.Micro"
 # === aarch64-linux shape
 shape="VM.Standard.A1.Flex"
-shape_config='{"memoryInGBs":8,"ocpus":1}'
+shape_config='{"memoryInGBs":24,"ocpus":4}'
 
 ./launch_instance_example.sh \
   up \
