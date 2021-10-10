@@ -63,7 +63,7 @@ function tsip() {
 }
 function pinebook()    { _remote "$(tsip a64com)"  ".#toplevels.pinebook"     "$(tsip pinebook)"    "activate"; }
 function xeep()        { _remote "$(tsip xeep)"    ".#toplevels.xeep"         "$(tsip xeep)"        "activate"; }
-function raisin()      { _remote "$(tsip raisin)"  ".#toplevels.raisin"       "$(tsip raisin)"      "activate"; }
+function raisin()      { _remote "$(tsip raisin)"  ".#toplevels.raisin"       "$(tsip raisin)"      "${1:-"activate"}"; }
 function jeffhyper()   { _remote "$(tsip xeep)"    ".#toplevels.jeffhyper"    "$(tsip jeffhyper)"   "activate"; }
 function porty()       { _remote "$(tsip porty)"   ".#toplevels.porty"        "$(tsip porty)"       "activate"; }
 function rpizero1()    { _remote "$(tsip porty)"   ".#toplevels.rpizero1"     "$(tsip rpizero1)"    "activatereboot"; }

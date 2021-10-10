@@ -30,7 +30,7 @@ jobs:
         echo "::set-output name=outPath::$(nix eval --raw '.#devShellSrc')"
     # original_cache (build)
     - name: "cacheshell"
-      run : .github/exec ./.github/workflows/cacheshell.sh
+      run : .github/exec ./nixup cacheshell
     # original_cache (establish)
     - name: cache-setup
       uses: actions/cache@v2
@@ -73,7 +73,7 @@ jobs:
         echo "::set-output name=outPath::$(nix eval --raw '.#devShellSrc')"
     # original_cache (build)
     - name: "cacheshell"
-      run : .github/exec ./.github/workflows/cacheshell.sh
+      run : .github/exec ./nixup cacheshell
     # original_cache (establish)
     - name: cache-setup
       uses: actions/cache@v2
