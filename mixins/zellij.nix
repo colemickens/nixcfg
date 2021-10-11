@@ -54,9 +54,9 @@ in
         enable = true;
 
         settings = {
-          default-mode = "normal";
-          simplified-ui = true;
-          no-pane-frames = true;
+          default_mode = "normal";
+          simplified_ui = true;
+          no_pane_frames = true;
 
           themes = {
             custom = {
