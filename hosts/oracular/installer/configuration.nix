@@ -5,7 +5,7 @@
     ../oci-common.nix
 
     ./kexec.nix
-    ./justdoit.nix
+    #./justdoit.nix
     #./justdoit-auto.nix
 
     ../../../profiles/user.nix
