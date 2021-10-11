@@ -6,11 +6,10 @@ R="../.."
 h="cole@$(tailscale ip --6 oracular)"
 nix copy --no-check-sigs --to "ssh-ng://${h}" "${R}#toplevels.oracular_kexec"
 nix build --eval-store "auto" --store "ssh-ng://${h}" "${R}#nixosConfigurations.oracular_kexec.config.system.build.kexec_script"
+
 out="$(nix eval --raw "${R}#nixosConfigurations.oracular_kexec.config.system.build.kexec_script")"
 
-
-ssh "${h}" \
-    "sudo $out"
+ssh "${h}" "sudo ${out}"
 
 # TODO: what does nix build do in regards to --out-link when store is remote?
 
