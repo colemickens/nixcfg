@@ -90,7 +90,8 @@ function commbox() {
 }
 
 function kexec() {
-  _nix build ".#nixosConfigurations.oracular.config.system.build.kexec_script"
+  _nix build --out-link /tmp/kexec \
+    ".#nixosConfigurations.oracular.config.system.build.kexec_script"
 }
 ## </remote> #################################################
 
