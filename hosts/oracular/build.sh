@@ -10,7 +10,7 @@ out="$(nix eval --raw "${R}#nixosConfigurations.oracular_kexec.config.system.bui
 
 
 ssh "${h}" \
-    
+    "sudo $out"
 
 # TODO: what does nix build do in regards to --out-link when store is remote?
 
