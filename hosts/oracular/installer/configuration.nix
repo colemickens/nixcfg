@@ -16,8 +16,8 @@
   config = {
     networking.hostName = "oracular_kexec";
 
-    kexec.justdoit = {
-      toplevel = builtins.unsafeDiscardStringContext inputs.self.toplevels.oracular.outPath;
-    };
+    # kexec.justdoit = {
+    #   toplevel = builtins.unsafeDiscardStringContext inputs.self.toplevels.oracular.outPath;
+    # };
   };
 }
