@@ -4,7 +4,8 @@ set -x
 
 R="../.."
 h="cole@$(tailscale ip --6 oracular)"
-nix build --eval-store "auto" --store "ssh-ng://${h}" "${R}#nixosConfigurations.oracular_kexec.config.system.build.kexec_script"
+nix build --eval-store "auto" --store "ssh-ng://${h}" \
+    "${R}#nixosConfigurations.oracular_kexec.config.system.build.kexec_script"
 
 out="$(nix eval --raw "${R}#nixosConfigurations.oracular_kexec.config.system.build.kexec_script")"
 
