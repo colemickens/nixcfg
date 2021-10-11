@@ -3,7 +3,7 @@ set -euo pipefail
 set -x
 
 R="../.."
-h="opc@132.226.31.59"
+h="cole@$(tailscale ip --6 oracular)"
 nix copy --no-check-sigs --to "ssh-ng://${h}" "${R}#toplevels.oracular_kexec"
 nix build --eval-store "auto" --store "ssh-ng://${h}" "${R}#nixosConfigurations.oracular_kexec.config.system.build.kexec_script"
 
