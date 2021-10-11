@@ -13,6 +13,7 @@ in
 
     ../mixins/gpg-agent.nix
 
+    ../mixins/broot.nix
     ../mixins/cachix.nix
     ../mixins/direnv.nix
     ../mixins/gh.nix

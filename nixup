@@ -32,9 +32,11 @@ function ciup() { ci_nb_cache '.#bundle'; }
 ## </ci> #################################################
 
 function inputup() {
+  set -e
   srcdirs=( "nixpkgs/cmpkgs" "home-manager/cmhm" "nixpkgs/master" "nixpkgs-wayland" "flake-firefox-nightly" )
   # we basically undo parallel for now by setting, parallelism to 1
   # otherwise git shits its pants in the multi-worktree dirs
+  false
   printf '%s\n' "${srcdirs[@]}" | \
     parallel --jobs 1 --halt soon,fail=1 --tag --progress -- \
       "[[ ! -d "${HOME}/code/{.}" ]] || (git -C '${HOME}/code/{.}' pull --rebase && git -C '${HOME}/code/{.}' push origin HEAD -f)"
@@ -48,7 +50,7 @@ function up() { inputup && lockup && pkgup && ciup && cacheshell; }
 function _remote() {
   remote="${1}"; buildattr="${2}"; target="${3}"; action="${4:-""}"
   out="$(nix eval --raw "${buildattr}")"
-  _nix build -vv --store "ssh-ng://${remote}" --eval-store "auto" "${buildattr}" |& tee /tmp/nb
+  _nix build --store "ssh-ng://${remote}" --eval-store "auto" "${buildattr}" |& tee /tmp/nb
   nix copy --no-check-sigs --from "ssh-ng://${remote}" --to "ssh-ng://${target}" "${out}"
   if [[ "${action:-""}" == *activate* ]]; then
     ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --no-link --profile /nix/var/nix/profiles/system "${out}")"
