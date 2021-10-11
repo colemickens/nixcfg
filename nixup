@@ -88,6 +88,10 @@ function commbox() {
   scp "${HOME}/.config/cachix/cachix.dhall" \
     "colemickens@aarch64.nixos.community:/home/colemickens/.config/cachix/cachix.dhall"
 }
+
+function kexec() {
+  
+}
 ## </remote> #################################################
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
