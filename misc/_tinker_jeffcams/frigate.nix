@@ -22,7 +22,7 @@ let
         };
       };
     };
-    cameras = (pkgs.lib.genAttrs camera_names (cam_name: 
+    cameras = (pkgs.lib.genAttrs camera_names (cam_name:
       # n(ame) => 
       {
         detect = {

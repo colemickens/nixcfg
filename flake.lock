@@ -342,6 +342,22 @@
         "type": "github"
       }
     },
+    "lowdown-src_3": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1598695561,
+        "narHash": "sha256-gyH/5j+h/nWw0W8AcR2WKvNBUsiQ7QuxqSJNXAwV+8E=",
+        "owner": "kristapsdz",
+        "repo": "lowdown",
+        "rev": "1705b4a26fbf065d9574dce47a94e8c7c79e052f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kristapsdz",
+        "repo": "lowdown",
+        "type": "github"
+      }
+    },
     "mobile-nixos": {
       "flake": false,
       "locked": {
@@ -471,6 +487,25 @@
         "owner": "erikarvstedt",
         "ref": "nixos-unstable",
         "repo": "nix-bitcoin",
+        "type": "github"
+      }
+    },
+    "nix-ipfs": {
+      "inputs": {
+        "lowdown-src": "lowdown-src_3",
+        "nixpkgs": "nixpkgs_5"
+      },
+      "locked": {
+        "lastModified": 1602773364,
+        "narHash": "sha256-1Nu2n/+owP3Sm/8CI3TIJSdn6ylG9UFkPLOaH3Hl7oU=",
+        "owner": "obsidiansystems",
+        "repo": "nix",
+        "rev": "62271e6dca4b559dae2b47daa5dba9741ed262d2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "obsidiansystems",
+        "repo": "nix",
         "type": "github"
       }
     },
@@ -726,6 +761,21 @@
     },
     "nixpkgs_5": {
       "locked": {
+        "lastModified": 1591633336,
+        "narHash": "sha256-oVXv4xAnDJB03LvZGbC72vSVlIbbJr8tpjEW5o/Fdek=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "70717a337f7ae4e486ba71a500367cad697e5f09",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-20.03-small",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_6": {
+      "locked": {
         "lastModified": 1633875155,
         "narHash": "sha256-1rI8GO92Pj/8xAB3/S3hA6ur93QY1XDt6mkWgaDJTZY=",
         "owner": "colemickens",
@@ -757,11 +807,12 @@
         "nickel": "nickel",
         "nix": "nix_2",
         "nix-bitcoin": "nix-bitcoin",
+        "nix-ipfs": "nix-ipfs",
         "nixos-azure": "nixos-azure",
         "nixos-mailserver": "nixos-mailserver",
         "nixos-unstable": "nixos-unstable",
         "nixos-unstable-small": "nixos-unstable-small",
-        "nixpkgs": "nixpkgs_5",
+        "nixpkgs": "nixpkgs_6",
         "nixpkgs-kubernetes": "nixpkgs-kubernetes",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "sops-nix": "sops-nix",

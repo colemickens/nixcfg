@@ -14,6 +14,7 @@ in
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
     ../../mixins/tpm.nix
+    ../../mixins/upower.nix
 
     ../../profiles/gaming.nix
 

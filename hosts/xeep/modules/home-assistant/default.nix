@@ -1,15 +1,18 @@
 { pkgs, ... }:
 
+# TODO: share trusted networks with nginx
+
 let
   secrets = import ./secrets.nix;
   trusted_networks = [
     "192.168.0.0/16" # default chimera network
     #"172.27.66.0/24" # wireguard network
     "100.64.0.0/10"  # tailscale network
+    "fd7a:115c:a1e0:ab12:0000:0000:0000:0000/64"
     #"192.168.69.0/24" # esphome network (but doesn't need to hit HA frontdoor)
   ];
 
-  ha_host = "127.0.0.1";
+  ha_host = "0.0.0.0";
   ha_port = 8123;
   ha_host_port = "${ha_host}:${toString ha_port}";
 in {
@@ -138,8 +141,14 @@ in {
         };
         history = { };
         http = {
-          server_host = "0.0.0.0";
+          server_host = ha_host;
           server_port = ha_port;
+          use_x_forwarded_for = true; # TODO nginx side?
+          trusted_proxies = [
+            # TODO TODO TODO
+            "127.0.0.1"
+            "::1"
+          ];
         };
         media_player = [
           {
@@ -148,12 +157,7 @@ in {
             host = "192.168.1.119";
           }
         ];
-        mobile_app = {}; # needs hass_nabucasa or w/e
         # prometheus = { namespace = "hass"; };
-        spotify = {
-          client_id = "564722c0ad94" + "4866b156c4da0184e062";
-          client_secret = "87f63124e3454" + "d369f971cfa90f903b0";
-        };
         ssdp = { };
         recorder = {
           purge_interval = 1;

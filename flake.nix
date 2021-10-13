@@ -58,7 +58,7 @@
     # mobile-nixos = { url = "github:samueldr/mobile-nixos/mobile-nixos-blueline"; };
     #mobile-nixos.inputs.nixpkgs.follows = "nixpkgs";
 
-    # nix-ipfs = { url = "github:obsidiansystems/nix"; };
+    nix-ipfs = { url = "github:obsidiansystems/nix"; };
 
     nixos-azure = { url = "github:colemickens/nixos-azure/dev"; };
     nixos-azure.inputs.nixpkgs.follows = "nixpkgs";
@@ -140,12 +140,19 @@
             nettools openssh ripgrep rsync sops gh gawk gnused gnugrep
             cachix nix-prefetch-git
             tailscale
+            nixpkgs-fmt
             # nix-build-uncached
           ]) ++ [
             fullPkgs_.${system}.metal-cli
             fullPkgs_.${system}.nix-build-uncached
           ]);
       });
+
+      # TODO: implement/finish:
+      devShells = {
+        default = devShell;
+        uber = import ./shells/uber-devenv.nix {};
+      };
 
       apps = forAllSystems (system: {
         # this is to have a minimal deriv to build/dl/run early on in CI jobs

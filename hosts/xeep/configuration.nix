@@ -4,6 +4,8 @@ let
 in
 {
   imports = [
+    ../../mixins/common.nix
+
     ../../mixins/docker.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/plex.nix
@@ -13,6 +15,7 @@ in
 
     ../../mixins/loremipsum-media/rclone-mnt.nix
 
+    ./modules/revproxy.nix ##
     ./modules/home-assistant
     ./modules/unifi.nix
 

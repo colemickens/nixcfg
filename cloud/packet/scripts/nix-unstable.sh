@@ -69,4 +69,17 @@ trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDS
 trusted-users = root cole @sudo
 EOF
 
+if [[ "${NIXOS_LUSTRATE}" == "1" ]]; then
+  sudo /home/cole/.nix-profile/bin/nix build --no-link --profile /nix/var/nix/profiles/system \
+    "github:colemickens/nixcfg#toplevels.oracular"
+  sudo umount /dev/disk/by-label/UEFI
+  sudo find /boot -depth ! -path /boot -exec sudo rm -rf {} +
+  sudo mount /dev/disk/by-label/UEFI /boot
+  sudo find /boot -depth ! -path /boot -exec sudo rm -rf {} +
+  sudo touch /etc/NIXOS
+  echo "" | sudo tee -a /etc/NIXOS_LUSTRATE
+  sudo env NIXOS_INSTALL_BOOTLOADER=1 /nix/var/nix/profiles/system/bin/switch-to-configuration boot
+  true
+fi
+
 echo "bootstrap: all done!"

@@ -15,70 +15,70 @@
           #   name = "Fireplace";
           #   entity = "switch.ge_14291_in_wall_smart_switch_switch";
           # }
-          {
-            name = "Fireplace Christmas Lights";
-            entity = "switch.wp6_sw102_relay";
-          }
+          # {
+          #   name = "Fireplace Christmas Lights";
+          #   entity = "switch.wp6_sw102_relay";
+          # }
           {
             name = "Receiver";
             entity = "media_player.denon";
           }
         ];
       }
-      {
-        title = "Kitchen";
-        type = "entities";
-        entities = [
-          {
-            name = "Kitchen Lights Switch";
-            entity = "switch.gosundsw120_relay";
-          }
-          {
-            name = "Barry's Lamp";
-            entity = "switch.wp6_sw105_relay";
-          }
-        ];
-      }
-      {
-        title = "Den";
-        type = "entities";
-        entities = [{
-          name = "Light Strip";
-          entity = "light.mh_led101";
-        }];
-      }
-      {
-        title = "Buddie's Desk";
-        type = "entities";
-        entities = [
-          {
-            name = "Desk Lamp";
-            entity = "switch.wp6_sw104_relay";
-          }
-          {
-            name = "Emerald Lamp";
-            entity = "switch.wp6_sw109_relay";
-          }
-        ];
-      }
-      {
-        title = "Bed Room";
-        type = "entities";
-        entities = [{
-          name = "Bedside Lamp";
-          entity = "switch.wp6_sw103_relay";
-        }];
-      }
-      {
-        title = "Bathroom";
-        type = "entities";
-        entities = [
-          { name = "Fan + Heat Lamp";
-            entity = "switch.gosundsw121_relay"; }
-          { name = "Vanity Light";
-            entity = "switch.gosundsw122_relay"; }
-        ];
-      }
+      # {
+      #   title = "Kitchen";
+      #   type = "entities";
+      #   entities = [
+      #     {
+      #       name = "Kitchen Lights Switch";
+      #       entity = "switch.gosundsw120_relay";
+      #     }
+      #     {
+      #       name = "Barry's Lamp";
+      #       entity = "switch.wp6_sw105_relay";
+      #     }
+      #   ];
+      # }
+      # {
+      #   title = "Den";
+      #   type = "entities";
+      #   entities = [{
+      #     name = "Light Strip";
+      #     entity = "light.mh_led101";
+      #   }];
+      # }
+      # {
+      #   title = "Buddie's Desk";
+      #   type = "entities";
+      #   entities = [
+      #     {
+      #       name = "Desk Lamp";
+      #       entity = "switch.wp6_sw104_relay";
+      #     }
+      #     {
+      #       name = "Emerald Lamp";
+      #       entity = "switch.wp6_sw109_relay";
+      #     }
+      #   ];
+      # }
+      # {
+      #   title = "Bed Room";
+      #   type = "entities";
+      #   entities = [{
+      #     name = "Bedside Lamp";
+      #     entity = "switch.wp6_sw103_relay";
+      #   }];
+      # }
+      # {
+      #   title = "Bathroom";
+      #   type = "entities";
+      #   entities = [
+      #     { name = "Fan + Heat Lamp";
+      #       entity = "switch.gosundsw121_relay"; }
+      #     { name = "Vanity Light";
+      #       entity = "switch.gosundsw122_relay"; }
+      #   ];
+      # }
     ];
   }
   # (let mkSensor = title: entity:
