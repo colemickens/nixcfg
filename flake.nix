@@ -141,6 +141,7 @@
             cachix nix-prefetch-git
             tailscale
             nixpkgs-fmt
+            yq # json->yaml?
             # nix-build-uncached
           ]) ++ [
             fullPkgs_.${system}.metal-cli

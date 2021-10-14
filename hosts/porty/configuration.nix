@@ -8,6 +8,12 @@
 
   config = {
     specialisation = {
+      regularsway.inheritParentConfig = false;
+      regularsway.configuration.imports = [
+        ./core.nix
+        ../../profiles/desktop-sway-unstable.nix
+      ];
+
       gnome.inheritParentConfig = false;
       gnome.configuration.imports = [
         ./core.nix

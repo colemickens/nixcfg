@@ -17,7 +17,7 @@
 
 let
   useNvidiaWayland = false;
-  nvidiaPackage = config.boot.kernelPackages.nvidiaPackages.stable;
+  nvidiaPackage = config.boot.kernelPackages.nvidiaPackages.beta;
   # # this is configuring NVIDIA's EGL loader
   # # not sure what happens if this doesn't work or isn't here?
   # # wayland worked fine before...
