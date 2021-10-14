@@ -57,6 +57,7 @@
         wl-gammactl
         wlvncc
         #wshowkeys # broken
+        wtype
         xwayland
         ydotool
       ];
