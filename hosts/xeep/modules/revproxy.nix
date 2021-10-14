@@ -18,6 +18,7 @@ let
       <body>
         <ul>
           <li><a href="https://home.x.cleo.cat">home-assistant</a></li>
+          <li><a href="https://home2.x.cleo.cat">home-assistant (sdcard, HA OS)</a></li>
           <li><a href="https://unifi.x.cleo.cat">unifi</a></li>
           <li><a href="https://denon.x.cleo.cat">denon</a></li>
         </ul>
@@ -95,6 +96,12 @@ in
       virtualHosts."home.x.cleo.cat" = internalVhost // {
         locations."/" = {
           proxyPass = "http://localhost:8123/";
+          proxyWebsockets = true;
+        };
+      };
+      virtualHosts."home2.x.cleo.cat" = internalVhost // {
+        locations."/" = {
+          proxyPass = "http://192.168.162.88:8123/";
           proxyWebsockets = true;
         };
       };

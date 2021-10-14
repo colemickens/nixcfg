@@ -7,6 +7,8 @@
 modprobe libcomposite
 cd /sys/kernel/config/usb_gadget/
 
+if [[ -d "${pwdgen}" ]]; then exit 0; fi
+
 mkdir -p pwdgen
 cd pwdgen
 echo 0x1d6b > idVendor # Linux Foundation
