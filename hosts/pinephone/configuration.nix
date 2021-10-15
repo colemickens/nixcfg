@@ -14,7 +14,7 @@ in
     
     ../../mixins/ssh.nix
     ../../mixins/tailscale.nix
-  ] ++ (import "${inputs.mobile-nixos}/modules/module-list.nix");
+  ]; #++ (import "${inputs.mobile-nixos}/modules/module-list.nix");
 
   config = {
       # https://github.com/Dejvino/pinephone-sway-poc
