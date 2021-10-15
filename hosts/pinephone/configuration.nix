@@ -13,7 +13,7 @@ in
     #../../profiles/interactive.nix
     ../../mixins/common.nix
     
-    ../../mixins/ssh.nix
+    ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
   ]; #++ (import "${inputs.mobile-nixos}/modules/module-list.nix");
 
