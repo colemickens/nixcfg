@@ -19,6 +19,7 @@ cache="colemickens"
 ## <ci> #################################################
 function _nix() { nix "${nixargs[@]}" "${buildargs[@]}" "${@}"; }
 function pushbuild() {
+  set -euo pipefail
   cachix watch-store -j2 "${cache}" & cachixpid=$!
   _nix build "${@}"
   kill -INT ${cachixpid}; wait ${cachixpid}
@@ -32,22 +33,23 @@ function ciup() { ci_nb_cache '.#bundle'; }
 ## </ci> #################################################
 
 function inputup() {
-  set -e
+  set -euo pipefail
   srcdirs=( "nixpkgs/cmpkgs" "home-manager/cmhm" "nixpkgs/master" "nixpkgs-wayland" "flake-firefox-nightly" )
   # we basically undo parallel for now by setting, parallelism to 1
   # otherwise git shits its pants in the multi-worktree dirs
   false
   printf '%s\n' "${srcdirs[@]}" | \
     parallel --jobs 1 --halt soon,fail=1 --tag --progress -- \
-      "[[ ! -d "${HOME}/code/{.}" ]] || (git -C '${HOME}/code/{.}' pull --rebase && git -C '${HOME}/code/{.}' push origin HEAD -f)"
+      "[[ ! -d \"${HOME}/code/{.}\" ]] || (git -C '${HOME}/code/{.}' pull --rebase && git -C '${HOME}/code/{.}' push origin HEAD -f)"
    cacheshell;
 }
 function lockup() { nix "${nixargs[@]}" flake update --no-registries --commit-lock-file; cacheshell; }
 function pkgup() { ./pkgs/update.sh "${@:-}"; cacheshell; }
-function up() { inputup && lockup && pkgup && ciup && cacheshell; }
+function up() { set -euo pipefail; inputup && lockup && pkgup && ciup && cacheshell; }
 
 ## <remote> #################################################
 function _remote() {
+  set -euo pipefail
   remote="${1}"; buildattr="${2}"; target="${3}"; action="${4:-""}"
   out="$(nix eval --raw "${buildattr}")"
   _nix build --store "ssh-ng://${remote}" --eval-store "auto" "${buildattr}" |& tee /tmp/nb

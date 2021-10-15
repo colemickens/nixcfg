@@ -10,7 +10,9 @@
     ../../modules/loginctl-linger.nix
 
     ../../mixins/nvidia.nix
-    ../../profiles/gaming.nix
+    #../../profiles/gaming.nix
+
+    ../../profiles/desktop-sway-unstable.nix
 
     ../../mixins/android.nix
     ../../mixins/code-server.nix
@@ -21,14 +23,6 @@
   ];
 
   config = {
-    networking.extraHosts = ''
-      100.72.11.62 cleo.cat
-    '';
-
-    environment.etc = {
-      test_cole_version.source = ./version.txt;
-    };
-    
     users.users.cole.linger = true;
 
     # Use the systemd-boot EFI boot loader.

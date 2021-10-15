@@ -34,7 +34,8 @@ let
 
   # OUTPUTS
   out_laptop = "Sharp Corporation 0x148B 0x00000000";
-  out_alien = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
+  out_aw3418dw = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
+  out_aw2521h = "Dell Inc. Dell AW2521H #HLAYMxgwABDZ";
   out_raisin = "Unknown 0x1402 0x00000000";
 
   # INPUTS
@@ -192,19 +193,26 @@ in
             #  scale = "2.0";
             #};>
             "${out_laptop}" = { disable = ""; }; # disable laptop display for a bit
-            "${out_alien}" = {
-              mode = "3440x1440@120Hz";
-              #mode = "3440x1440Hz";
-              # don't force alienware to be a certain refresh rate (it depends what adapter is used :/)
-              subpixel = "rgb";
-              scale = "1.0";
-              adaptive_sync = "on";
-            };
+            # "${out_aw3418dw}" = {
+            #   mode = "3440x1440@120Hz";
+            #   #mode = "3440x1440Hz";
+            #   # don't force alienware to be a certain refresh rate (it depends what adapter is used :/)
+            #   subpixel = "rgb";
+            #   scale = "1.0";
+            #   adaptive_sync = "on";
+            # };
+            "${out_aw3418dw}" = { disable = ""; };
             "${out_raisin}" = {
               mode = "2880x1800@90Hz";
               subpixel = "rgb";
               scale = "1.8";
               adaptive_sync = "on";
+            };
+            "${out_aw2521h}" = {
+              mode = "1920x1080@240Hz";
+              #subpixel = "rgb";
+              #scale = "1.8";
+              #adaptive_sync = "on";
             };
             "*" = {
               background = background;

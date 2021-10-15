@@ -60,6 +60,10 @@ in
     hardware.nvidia.package = nvidiaPackage;
     hardware.nvidia.powerManagement.enable = false;
 
+    # TODO: implement and add to existing PR:
+    # kind of a weird place to put this option
+    # hardware.nvidia.useUpstreamEglWayland = true;
+
     services.xserver = {
       videoDrivers = [ "nvidia" ];
       displayManager.gdm.wayland = useNvidiaWayland;

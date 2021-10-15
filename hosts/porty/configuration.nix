@@ -3,34 +3,27 @@
 {
   imports = [
     ./core.nix
-    ../../profiles/desktop-sway-unstable-egl.nix
   ];
 
   config = {
     specialisation = {
-      regularsway.inheritParentConfig = false;
-      regularsway.configuration.imports = [
-        ./core.nix
-        ../../profiles/desktop-sway-unstable.nix
-      ];
-
-      gnome.inheritParentConfig = false;
-      gnome.configuration.imports = [
-        ./core.nix
-        ../../profiles/desktop-gnome.nix
-      ];
-
-      # sway.inheritParentConfig = false;
-      # sway.configuration.imports = [
+      # gnome.inheritParentConfig = false;
+      # gnome.configuration.imports = [
       #   ./core.nix
-      #   ../../profiles/desktop-sway-unstable-egl.nix
+      #   ../../profiles/desktop-gnome.nix
       # ];
 
-      plasma.inheritParentConfig = false;
-      plasma.configuration.imports = [
-        ./core.nix
-        ../../profiles/desktop-plasma.nix
-      ];
+      # # sway.inheritParentConfig = false;
+      # # sway.configuration.imports = [
+      # #   ./core.nix
+      # #   ../../profiles/desktop-sway-unstable-egl.nix
+      # # ];
+
+      # plasma.inheritParentConfig = false;
+      # plasma.configuration.imports = [
+      #   ./core.nix
+      #   ../../profiles/desktop-plasma.nix
+      # ];
     };
   };
 }
