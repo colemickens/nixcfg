@@ -10,7 +10,8 @@ in
 
     # "${inputs.mobile-nixos}/devices/pine64-pinephone/default.nix"
 
-    ../../profiles/interactive.nix
+    #../../profiles/interactive.nix
+    ../../mixins/common.nix
     
     ../../mixins/ssh.nix
     ../../mixins/tailscale.nix
