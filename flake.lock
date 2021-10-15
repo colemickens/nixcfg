@@ -361,11 +361,11 @@
     "mobile-nixos": {
       "flake": false,
       "locked": {
-        "lastModified": 1633719807,
-        "narHash": "sha256-6yaFFpnDD0tP3t/lcHirpP3AAlYj15kYPLAeSp32/2E=",
+        "lastModified": 1633839044,
+        "narHash": "sha256-0riNMokSmJCL/Ay2xYZQB0KwMzCAQ63QyA4WIxUsdmY=",
         "owner": "colemickens",
         "repo": "mobile-nixos",
-        "rev": "477ee59c79c57db52375e1a632c078236961a936",
+        "rev": "01286fbc55792d427c47a6cd15ea7538690e8272",
         "type": "github"
       },
       "original": {
@@ -442,11 +442,11 @@
         "nixpkgs-wasm": "nixpkgs-wasm"
       },
       "locked": {
-        "lastModified": 1634175717,
-        "narHash": "sha256-eCkQnavw1xnzjm7Flb6S4p1Ld/1TkVbc7axR2q4Odt0=",
+        "lastModified": 1634262141,
+        "narHash": "sha256-3X2LcXngo1K5QkHQnWxn1o6JqgCr4zjUi/r0IN/AcZo=",
         "owner": "tweag",
         "repo": "nickel",
-        "rev": "7a9ebc2f7be5606b69b321c08878423c92d8c7f3",
+        "rev": "ad50f28a43a9570521ca9c7b15171795f368dee4",
         "type": "github"
       },
       "original": {
