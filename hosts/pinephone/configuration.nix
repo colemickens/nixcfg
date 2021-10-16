@@ -45,6 +45,7 @@ in
       networking.wireless.environmentFile = "/run/secrets/wireless.env";
       networking.wireless.networks = {
         "chimera-wifi".psk = "@PSK_chimera-wifi@";
+      };
 
       ### BEGIN HACKY COPY
   };
