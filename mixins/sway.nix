@@ -193,15 +193,15 @@ in
             #  scale = "2.0";
             #};>
             "${out_laptop}" = { disable = ""; }; # disable laptop display for a bit
-            # "${out_aw3418dw}" = {
-            #   mode = "3440x1440@120Hz";
-            #   #mode = "3440x1440Hz";
-            #   # don't force alienware to be a certain refresh rate (it depends what adapter is used :/)
-            #   subpixel = "rgb";
-            #   scale = "1.0";
-            #   adaptive_sync = "on";
-            # };
-            "${out_aw3418dw}" = { disable = ""; };
+            "${out_aw3418dw}" = {
+              mode = "3440x1440@120Hz";
+              #mode = "3440x1440Hz";
+              # don't force alienware to be a certain refresh rate (it depends what adapter is used :/)
+              subpixel = "rgb";
+              scale = "1.0";
+              adaptive_sync = "on";
+            };
+            #"${out_aw3418dw}" = { disable = ""; };
             "${out_raisin}" = {
               mode = "2880x1800@90Hz";
               subpixel = "rgb";
