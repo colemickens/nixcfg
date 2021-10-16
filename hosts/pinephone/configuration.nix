@@ -7,6 +7,8 @@ in
   imports = [
     ../../profiles/user.nix
     ../../profiles/interactive.nix
+    ../../profiles/desktop-sway-unstable.nix
+    
     ../../modules/loginctl-linger.nix
     ../../mixins/common.nix
     ../../mixins/sshd.nix
@@ -18,10 +20,17 @@ in
   ];
 
   config = {
+      #
+      # TODO: investigate:
+      #
       # https://github.com/Dejvino/pinephone-sway-poc
       # package: https://git.sr.ht/~mil/lisgd
       # https://aur.archlinux.org/packages/squeekboard/
       # https://github.com/efernau/rot8
+
+      environment.systemPackages = with pkgs; [
+        pipes
+      ];
 
       users.users.cole.linger = true;
 
@@ -33,5 +42,3 @@ in
       ### BEGIN HACKY COPY
   };
 }
-
-# https://patchwork.ozlabs.org/project/uboot/patch/20200619121657.180850-1-icenowy@aosc.io/
