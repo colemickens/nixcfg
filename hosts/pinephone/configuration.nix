@@ -39,12 +39,12 @@ in
       nixpkgs.config.allowUnfree = true;
       nixpkgs.overlays = [ inputs.self.overlay ];
 
-      # TODO: get it to auto-connect on wifi with secure pw
-      # TODO: pre-load ssh host-key?
       networking.wireless.enable = true;
-      # networking.wireless.environmentFile = "/run/secrets/wireless.env";
-      # networking.wireless.networks = {
-      #   "chimera-wifi".psk = "@PSK_chimera-wifi@";
+      # nix shell 'github:nixos/nixpkgs/nixos-unstable#wpa_supplicant' \
+      #   -c wpa_passphrase -- "chimera-wifi"
+      networking.wireless.environmentFile = "/run/secrets/wireless.env";
+      networking.wireless.networks = {
+        "chimera-wifi".psk = "@PSK_chimera-wifi@";
 
       ### BEGIN HACKY COPY
   };
