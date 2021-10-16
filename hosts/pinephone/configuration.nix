@@ -1,22 +1,20 @@
 { pkgs, config, inputs, ... }:
 
 let
-  hostname = "pinephone";
+  hostname = "pinephon4";
 in
 {
   imports = [
-    (import "${inputs.mobile-nixos}/lib/configuration.nix" {
-      device = "pine64-pinephone";
-    })
-
     ../../profiles/user.nix
     #../../profiles/interactive.nix
-
     #../../modules/loginctl-linger.nix
-
     #../../mixins/common.nix
     ../../mixins/sshd.nix
     #../../mixins/tailscale.nix
+
+    (import "${inputs.mobile-nixos}/lib/configuration.nix" {
+      device = "pine64-pinephone";
+    })
   ];
 
   config = {
@@ -27,7 +25,15 @@ in
 
       #users.users.cole.linger = true;
 
-      networking.hostName = "pinephon3";
+      networking.hostName = hostname;
+
+      users.extraUsers."demo" = {
+        isNormalUser = true;
+        openssh.authorizedKeys.keys = (import ../data/sshkeys.nix);
+        #mkpasswd -m sha-512
+        hashedPassword = "$6$Q3FVuYDM$.W.cnGu2HJpF0jPc36WG7uxWr8APu6/fWe3M7LGUOkYrL3/XcEbKv/5r4VjTd6ARcStRBNHvSB1QxaAtRRp9B/";
+        uid = 1010;
+      };
 
       nixpkgs.config.allowUnfree = true;
       nixpkgs.overlays = [ inputs.self.overlay ];
