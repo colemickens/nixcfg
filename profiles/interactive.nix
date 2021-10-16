@@ -94,8 +94,8 @@ in
         dogdns
 
         # random
-        wireguard-tools
-        pijul
+        #wireguard-tools
+        #pijul
         jj
 
         sops age cryptsetup
@@ -119,7 +119,7 @@ in
         #plowshare
 
         # eh?
-        cordless
+        #cordless
         xdg_utils
         bb
         usbutils

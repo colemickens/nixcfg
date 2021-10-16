@@ -52,8 +52,13 @@ function _remote() {
   set -euo pipefail
   remote="${1}"; buildattr="${2}"; target="${3}"; action="${4:-""}"
   out="$(nix eval --raw "${buildattr}")"
+  _nix copy --to "ssh-ng://${remote}" --derivation "${buildattr}" --no-check-sigs
   _nix build --store "ssh-ng://${remote}" --eval-store "auto" "${buildattr}" |& tee /tmp/nb
-  nix copy --no-check-sigs --from "ssh-ng://${remote}" --to "ssh-ng://${target}" "${out}"
+  if [[ "${action}" == *cachix* ]]; then
+    echo "${out}" | ssh "${remote}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" run nixpkgs/nixos-unstable#cachix push "${cache}")"
+    ssh "${target}" "$(printf '\"%s\" ' sudo nix-store "${nixargs[@]}" -r "${out}")"
+  else nix copy --no-check-sigs --from "ssh-ng://${remote}" --to "ssh-ng://${target}" "${out}"
+  fi
   if [[ "${action:-""}" == *activate* ]]; then
     ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --no-link --profile /nix/var/nix/profiles/system "${out}")"
     ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch)"
@@ -63,7 +68,7 @@ function _remote() {
 function tsip() {
   if [[ "${1}" == "$(hostname)" ]]; then printf "%s" "localhost";
   elif [[ "${1}" == "a64com" ]];    then printf "%s" "colemickens@aarch64.nixos.community";
-  else                                   tailscale ip --4 ${1} | head -z -n1; fi
+  else                                   tailscale ip --6 ${1} | head -z -n1; fi
 }
 function pinebook()    { _remote "$(tsip a64com)"  ".#toplevels.pinebook"     "$(tsip pinebook)"    "activate"; }
 function xeep()        { _remote "$(tsip xeep)"    ".#toplevels.xeep"         "$(tsip xeep)"        "activate"; }
@@ -75,8 +80,9 @@ function rpizero2()    { _remote "$(tsip porty)"   ".#toplevels.rpizero2"     "$
 function rpifour1()    { _remote "$(tsip a64com)"  ".#toplevels.rpifour1"     "$(tsip rpifour1)"    "activate"; }
 function sinkor()      { _remote "$(tsip a64com)"  ".#toplevels.sinkor"       "$(tsip sinkor)"      "activate"; }
 
-function pinephone()   { _remote "$(tsip pinephone)"  ".#toplevels.pinephone"    "$(tsip pinephone)"   "activate"; }
-function bluephone()   { _remote "opc@132.226.31.59"  ".#toplevels.bluephone"    "$(tsip bluephone)"   "activate"; }
+function pinephone()   { _remote "$(tsip bldr-a64)"  ".#toplevels.pinephone"    "$(tsip pinephone)"   "activate"; }
+function pinecache()   { _remote "$(tsip bldr-a64)"  ".#toplevels.pinephone"    "$(tsip pinephone)"   "cachix-activate"; }
+function bluephone()   { _remote "$(tsip bldr-a64)"  ".#toplevels.bluephone"    "$(tsip bluephone)"   "activate"; }
 
 function x64up() { up; porty; xeep; jeffhyper; raisin; rpizero1; rpizero2; }
 function a64up() { rpifour1; sinkor; pinebook; }

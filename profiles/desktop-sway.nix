@@ -51,6 +51,7 @@
         slurp
         udiskie
         nwg-launchers
+        waypipe
         wayvnc
         wf-recorder
         wl-clipboard

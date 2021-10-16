@@ -47,6 +47,17 @@ until sudo tailscale up --authkey "@TAILSCALE_AUTHKEY@" --hostname=${HOSTNAME} -
     sleep 0.5
 done
 
+# configure nix ahead of time so daemon starts up with correct settings
+mkdir -p "/etc/nix"
+cat <<EOF | sudo tee -a "/etc/nix/nix.conf"
+experimental-features = nix-command flakes ca-references
+extra-binary-caches = https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://arm.cachix.org https://thefloweringash-armv7.cachix.org
+trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= arm.cachix.org-1:5BZ2kjoL1q6nWhlnrbAl+G7ThY7+HaBRD9PZzqZkbnM= thefloweringash-armv7.cachix.org-1:v+5yzBD2odFKeXbmC+OPWVqx4WVoIVO6UXgnSAWFtso=
+trusted-users = root cole @sudo
+cores = 0
+max-jobs = auto
+EOF
+
 # == nix latest -  not working on aarch64, so for now install stable, then upgrade
 curl -L "https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.5pre20211008_6bd74a6/install" > /tmp/install
 chmod +x /tmp/install
@@ -54,16 +65,6 @@ chmod +x /tmp/install
 
 cfgline="if [ -e /home/cole/.nix-profile/etc/profile.d/nix.sh ]; then . /home/cole/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer]"
 echo -e "${cfgline}\n\n$(cat "${HOME}/.bashrc")" > "${HOME}/.bashrc"
-
-bash -cl "nix-env -iA nixpkgs.nixUnstable"
-
-mkdir -p "/etc/nix"
-cat <<EOF | sudo tee -a "/etc/nix/nix.conf"
-experimental-features = nix-command flakes ca-references
-extra-binary-caches = https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://arm.cachix.org https://thefloweringash-armv7.cachix.org
-trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= arm.cachix.org-1:5BZ2kjoL1q6nWhlnrbAl+G7ThY7+HaBRD9PZzqZkbnM= thefloweringash-armv7.cachix.org-1:v+5yzBD2odFKeXbmC+OPWVqx4WVoIVO6UXgnSAWFtso=
-trusted-users = root cole @sudo
-EOF
 
 if [[ "${NIXOS_LUSTRATE}" == "1" ]]; then
   sudo /home/cole/.nix-profile/bin/nix build --no-link --profile /nix/var/nix/profiles/system \

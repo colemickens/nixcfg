@@ -7,7 +7,7 @@ in
   imports = [
     ../../profiles/user.nix
     ../../profiles/interactive.nix
-    ../../profiles/desktop-sway-unstable.nix
+    #../../profiles/desktop-sway-unstable.nix
     
     ../../modules/loginctl-linger.nix
     ../../mixins/common.nix
