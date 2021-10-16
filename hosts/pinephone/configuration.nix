@@ -29,7 +29,7 @@ in
 
       users.users."demo" = {
         isNormalUser = true;
-        openssh.authorizedKeys.keys = (import ../data/sshkeys.nix);
+        openssh.authorizedKeys.keys = (import ../../data/sshkeys.nix);
         #mkpasswd -m sha-512
         hashedPassword = "$6$Q3FVuYDM$.W.cnGu2HJpF0jPc36WG7uxWr8APu6/fWe3M7LGUOkYrL3/XcEbKv/5r4VjTd6ARcStRBNHvSB1QxaAtRRp9B/";
         uid = 1010;
