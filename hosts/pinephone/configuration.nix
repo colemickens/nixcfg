@@ -10,13 +10,13 @@ in
     })
 
     ../../profiles/user.nix
-    ../../profiles/interactive.nix
+    #../../profiles/interactive.nix
 
-    ../../modules/loginctl-linger.nix
+    #../../modules/loginctl-linger.nix
 
-    ../../mixins/common.nix
+    #../../mixins/common.nix
     ../../mixins/sshd.nix
-    ../../mixins/tailscale.nix
+    #../../mixins/tailscale.nix
   ];
 
   config = {
