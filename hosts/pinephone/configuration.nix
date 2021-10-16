@@ -25,7 +25,7 @@ in
       # https://aur.archlinux.org/packages/squeekboard/
       # https://github.com/efernau/rot8
 
-      users.users.cole.linger = true;
+      #users.users.cole.linger = true;
 
       networking.hostName = "pinephon3";
 
