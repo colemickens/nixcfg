@@ -63,7 +63,7 @@ function _remote() {
 function tsip() {
   if [[ "${1}" == "$(hostname)" ]]; then printf "%s" "localhost";
   elif [[ "${1}" == "a64com" ]];    then printf "%s" "colemickens@aarch64.nixos.community";
-  else                                   tailscale ip --6 ${1} | head -z -n1; fi
+  else                                   tailscale ip --4 ${1} | head -z -n1; fi
 }
 function pinebook()    { _remote "$(tsip a64com)"  ".#toplevels.pinebook"     "$(tsip pinebook)"    "activate"; }
 function xeep()        { _remote "$(tsip xeep)"    ".#toplevels.xeep"         "$(tsip xeep)"        "activate"; }
@@ -75,7 +75,7 @@ function rpizero2()    { _remote "$(tsip porty)"   ".#toplevels.rpizero2"     "$
 function rpifour1()    { _remote "$(tsip a64com)"  ".#toplevels.rpifour1"     "$(tsip rpifour1)"    "activate"; }
 function sinkor()      { _remote "$(tsip a64com)"  ".#toplevels.sinkor"       "$(tsip sinkor)"      "activate"; }
 
-function pinephone()   { _remote "$(tsip a64com)"  ".#toplevels.pinephone"    "192.168.206.119"   "activate"; }
+function pinephone()   { _remote "$(tsip pinephone)"  ".#toplevels.pinephone"    "$(tsip pinephone)"   "activate"; }
 function bluephone()   { _remote "opc@132.226.31.59"  ".#toplevels.bluephone"    "$(tsip bluephone)"   "activate"; }
 
 function x64up() { up; porty; xeep; jeffhyper; raisin; rpizero1; rpizero2; }

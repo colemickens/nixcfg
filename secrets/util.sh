@@ -26,7 +26,7 @@ import_host() {
   name="$1"
   addr="$2"
   nix shell github:Mic92/sops-nix#ssh-to-pgp --command "bash" \
-    -c "ssh cole@${addr} \"sudo cat /etc/ssh/ssh_host_rsa_key\" | ssh-to-pgp -o keys/${name}.pub 2> \"keys/${name}.fingerprint\""
+    -c "ssh ${addr} \"sudo cat /etc/ssh/ssh_host_rsa_key\" | ssh-to-pgp -o keys/${name}.pub 2> \"keys/${name}.fingerprint\""
 }
 
 function import_keys() {

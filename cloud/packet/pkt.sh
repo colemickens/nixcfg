@@ -7,6 +7,11 @@ cd "${DIR}"
 
 function packet_wait() {
   dev="${1}"
+
+  # TODO: start catting the emergency console
+  # to a log:
+  # ssh ${M_ID}@sos.${REGION}.platformequinix.com
+
   set +x; echo -n "waiting for "${dev}" to finish provisioning."
   while true; do
     status="$(metal device get --output 'json' --search "${1}" | jq -r '.[0].state')"
