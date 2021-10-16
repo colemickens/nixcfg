@@ -27,7 +27,7 @@ in
 
       networking.hostName = hostname;
 
-      users.extraUsers."demo" = {
+      users.users."demo" = {
         isNormalUser = true;
         openssh.authorizedKeys.keys = (import ../data/sshkeys.nix);
         #mkpasswd -m sha-512
