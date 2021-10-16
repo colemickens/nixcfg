@@ -1,4 +1,5 @@
-{ pkgs, inputs, ... }:
+{ pkgs, config, inputs, ... }:
+
 let
   hostname = "pinephone";
 in
@@ -8,20 +9,21 @@ in
       device = "pine64-pinephone";
     })
 
-    # "${inputs.mobile-nixos}/devices/pine64-pinephone/default.nix"
-
+    ../../profiles/user.nix
     ../../profiles/interactive.nix
+
     ../../mixins/common.nix
-    
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
-  ]; #++ (import "${inputs.mobile-nixos}/modules/module-list.nix");
+  ];
 
   config = {
       # https://github.com/Dejvino/pinephone-sway-poc
       # package: https://git.sr.ht/~mil/lisgd
       # https://aur.archlinux.org/packages/squeekboard/
       # https://github.com/efernau/rot8
+
+      users.users.cole.linger = true;
 
       networking.hostName = "pinephone";
 
