@@ -27,7 +27,7 @@ in
 
       users.users.cole.linger = true;
 
-      networking.hostName = "pinephone";
+      networking.hostName = "pinephon3";
 
       nixpkgs.config.allowUnfree = true;
       nixpkgs.overlays = [ inputs.self.overlay ];
