@@ -78,7 +78,6 @@ in
         remmina
         imv
         syncthing-gtk
-        thunderbird
         smplayer
         rkvm
         spotify-qt
@@ -114,6 +113,8 @@ in
         _someChromium # some clang shit marked as broken on aarch64
 
         easyeffects # weird, doesn't support aarch64?
+
+        thunderbird # just a bit too painful to build on aarch64
 
         mplayer # weird non-aarch64
 
