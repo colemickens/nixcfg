@@ -48,13 +48,9 @@ until sudo tailscale up --authkey "@TAILSCALE_AUTHKEY@" --hostname=${HOSTNAME} -
 done
 
 # == nix latest -  not working on aarch64, so for now install stable, then upgrade
-# curl "https://nixos-nix-install-tests.cachix.org/serve/j087w6xqqspfs363449x750x9r0kn31s/install" > install
-# chmod +x install
-# ./install --tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve
-# == nix stable
-curl -L "https://nixos.org/nix/install" > /tmp/install
-chmod +x /tmp/install
-/tmp/install --daemon
+curl -L "https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.5pre20211008_6bd74a6/install" > install
+chmod +x install
+./install --daemon
 
 cfgline="if [ -e /home/cole/.nix-profile/etc/profile.d/nix.sh ]; then . /home/cole/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer]"
 echo -e "${cfgline}\n\n$(cat "${HOME}/.bashrc")" > "${HOME}/.bashrc"
