@@ -12,6 +12,8 @@ in
     ../../profiles/user.nix
     ../../profiles/interactive.nix
 
+    ../../modules/loginctl-linger.nix
+
     ../../mixins/common.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
