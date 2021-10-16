@@ -44,7 +44,7 @@ in
       #   -c wpa_passphrase -- "chimera-wifi"
       networking.wireless.environmentFile = "/run/secrets/wireless.env";
       networking.wireless.networks = {
-        "chimera-wifi".pskRaw = "@PSK_chimera-wifi@";
+        "chimera-wifi".pskRaw = "@PSKRAW_CHIMERA_WIFI@";
       };
 
       ### BEGIN HACKY COPY
