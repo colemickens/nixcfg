@@ -4,6 +4,19 @@ let
   hostname = "pinephone";
 in
 {
+  # TODO: check that the config works if the device
+  # import comes first
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  #
+  #
   imports = [
     ../../profiles/user.nix
     ../../profiles/interactive.nix

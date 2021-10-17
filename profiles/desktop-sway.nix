@@ -26,7 +26,7 @@
       };
 
       home.sessionVariables = {
-        
+
         MOZ_ENABLE_WAYLAND = "1";
 
         #WLR_DRM_NO_MODIFIERS = "1";
@@ -44,6 +44,8 @@
       home.packages = with pkgs; [
         pavucontrol
         qjackctl
+
+        sirula
 
         #drm_info
         grim
