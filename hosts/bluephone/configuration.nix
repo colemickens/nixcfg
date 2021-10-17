@@ -26,39 +26,29 @@ in
     mobile.boot.stage-1.kernel.provenance = "mainline";
 
     services.udev.packages = [ pkgs.libinput.out ];
-
-    users.users.kiosk = {
-      isNormalUser = true;
-      useDefaultShell = true;
-    };
-
-    systemd.services."cage@" = {
-      serviceConfig.Restart = "always";
-      environment = {
-        WLR_LIBINPUT_NO_DEVICES = "1";
-        NO_AT_BRIDGE = "1";
-      };
-    };
-
-    systemd.enableEmergencyMode = false;
-    systemd.services."serial-getty@ttyS0".enable = false;
-    systemd.services."serial-getty@hvc0".enable = false;
-    systemd.services."getty@tty1".enable = false;
-    systemd.services."autovt@".enable = false;
-
     documentation.enable = false;
     programs.command-not-found.enable = false;
 
-    services.cage = {
-      enable = true;
-      user = "kiosk";
-    };
-
-    nixpkgs.config.allowUnfree = true;
-    nixpkgs.overlays = [
-      inputs.self.overlay
-      inputs.nixpkgs-wayland.overlay
-    ];
+    # users.users.kiosk = {
+    #   isNormalUser = true;
+    #   useDefaultShell = true;
+    # };
+    # systemd.services."cage@" = {
+    #   serviceConfig.Restart = "always";
+    #   environment = {
+    #     WLR_LIBINPUT_NO_DEVICES = "1";
+    #     NO_AT_BRIDGE = "1";
+    #   };
+    # };
+    # systemd.enableEmergencyMode = false;
+    # systemd.services."serial-getty@ttyS0".enable = false;
+    # systemd.services."serial-getty@hvc0".enable = false;
+    # systemd.services."getty@tty1".enable = false;
+    # systemd.services."autovt@".enable = false;
+    # services.cage = {
+    #   enable = true;
+    #   user = "kiosk";
+    # };
 
     ## <debug> pivot->stage-2, ext4 issues, etc
     mobile.boot.stage-1.shell.enable = false;
