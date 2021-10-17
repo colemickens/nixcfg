@@ -91,13 +91,15 @@ function x64()   { _remote "$(tsip porty)"  ".#bundles.x86_64-linux" "$(tsip por
 function a64()   { _remote "$(tsip a64com)" ".#bundles.aarch64-linux" "$(tsip porty)" "none"; }
 
 function commbox() {
-  ssh "colemickens@aarch64.nixos.community" \
-    "nix-env -f /run/current-system/nixpkgs -iA git zellij nixUnstable htop ncdu"
-  ssh "colemickens@aarch64.nixos.community" \
-    "mkdir -p /home/colemickens/.config/cachix"
-  scp "${HOME}/.config/cachix/cachix.dhall" \
-    "colemickens@aarch64.nixos.community:/home/colemickens/.config/cachix/cachix.dhall"
-  ssh "colemickens@aarch64.nixos.community"
+  # ssh "colemickens@aarch64.nixos.community" \
+  #   "nix-env -f /run/current-system/nixpkgs -iA git zellij nixUnstable htop ncdu"
+  # ssh "colemickens@aarch64.nixos.community" \
+  #   "mkdir -p /home/colemickens/.config/cachix"
+  # scp "${HOME}/.config/cachix/cachix.dhall" \
+  #   "colemickens@aarch64.nixos.community:/home/colemickens/.config/cachix/cachix.dhall"
+  ssh "colemickens@aarch64.nixos.community" "git -C /home/colemickens/code/nixcfg pull"
+  ssh "colemickens@aarch64.nixos.community" "nix build -L /home/colemickens/code/nixcfg#toplevels.bluephone --out-link /home/colemickens/out"
+  ssh "colemickens@aarch64.nixos.community" "readlink -f /home/colemickens/out | cachix push colemickens"
 }
 
 function kexec() {

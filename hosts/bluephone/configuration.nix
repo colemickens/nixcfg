@@ -95,6 +95,8 @@ in
 
     networking.firewall.enable = false;
 
+    networking.hostName = hostname;
+
     networking.networkmanager.enable = true;
     networking.networkmanager.unmanaged = [ "rndis0" "usb0" ];
     services.blueman.enable = true;
