@@ -81,6 +81,7 @@ in
         zellij
 
         unar
+        gitui
 
         tokei
 
