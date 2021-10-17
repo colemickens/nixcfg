@@ -2,6 +2,10 @@
 set -x
 set -ueo pipefail
 
+# the idea is to keep 0.4 bootloader in both slots
+# then, slot_b => good android 12 boot (fastbootd), etc
+# then, slot_a => up for mobile-nixos experimentation
+
 fastboot reboot recovery
 # normalize radio/bootloader/boot to start with, duplicate slot b steps in a to start from scratch
 fastboot set_active a
@@ -21,3 +25,5 @@ fastboot flash boot "${d}/boot.img"
 fastboot flash dtbo "${d}/dtbo.img"
 fastboot flash vendor "${d}/vendor.img"
 fastboot flash vbmeta "${d}/vbmeta.img"
+
+./flash.sh
