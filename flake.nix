@@ -299,8 +299,10 @@
 
         bluephone = let bp = inputs.self.nixosConfigurations.bluephone; in
           pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "bluephone" ([
-            bp.config.mobile.outputs.android.android-bootimg
-            bp.config.mobile.outputs.android.android-systemimg
+            #bp.config.mobile.outputs.android.android-bootimg
+            #bp.config.mobile.outputs.android.android-systemimg
+            bp.config.mobile.outputs.android.android-flashable-bootimg
+            bp.config.mobile.outputs.android.android-flashable-system
           ]);
       };
       
