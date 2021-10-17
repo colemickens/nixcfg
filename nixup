@@ -100,13 +100,17 @@ function commbox() {
 }
 function doit() {
   set -euo pipefail
-  thing="${1}"; nix eval --raw ".#${thing}"
+  thing="${1}";
+  result="$(nix eval --raw ".#${thing}")"
   out="$(echo "${thing}" | sha256sum | cut -d' ' -f1)"
   git commit . -m "wip"; git push origin HEAD
   ssh "colemickens@aarch64.nixos.community" "git -C /home/colemickens/code/nixcfg pull"
   ssh "colemickens@aarch64.nixos.community" "nix build -L /home/colemickens/code/nixcfg#${thing} --out-link /home/colemickens/${out}"
   ssh "colemickens@aarch64.nixos.community" "readlink -f /home/colemickens/${out} | cachix push colemickens"
   ssh "colemickens@aarch64.nixos.community" "rm -f /home/colemickens/${out}"
+
+  nix-store -r "${result}"
+  fastboot boot "${result}"
 }
 
 function kexec() {
