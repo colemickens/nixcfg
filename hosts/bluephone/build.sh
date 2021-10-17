@@ -11,5 +11,6 @@ git -C /home/cole/code/nixcfg commit . -m "wip" || true; git -C /home/cole/code/
 ssh "colemickens@aarch64.nixos.community" "git -C /home/colemickens/code/nixcfg pull"
 ssh "colemickens@aarch64.nixos.community" "nix build -L /home/colemickens/code/nixcfg#${thing} --out-link /tmp/${out}"
 
-nix copy --no-check-sigs --from "ssh-ng://colemickens@aarch64.nixos.community" "${result}"
-ssh "colemickens@aarch64.nixos.community" "rm -f /tmp/${out}"
+#nix copy --no-check-sigs --from "ssh-ng://colemickens@aarch64.nixos.community" "${result}"
+ssh "colemickens@aarch64.nixos.community" "nix path-info -r $result"
+#ssh "colemickens@aarch64.nixos.community" "rm -f /tmp/${out}"
