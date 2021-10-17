@@ -80,6 +80,8 @@ in
         yubico-piv-tool
         zellij
 
+        unar
+
         tokei
 
         # https://zaiste.net/posts/shell-commands-rust/
