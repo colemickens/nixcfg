@@ -19,10 +19,14 @@ in
   ];
 
   config = {
+    documentation.enable = false;
+    documentation.doc.enable = false;
+    documentation.info.enable = false;
+    documentation.nixos.enable = false;
+
     mobile.boot.stage-1.kernel.provenance = "mainline";
 
     services.udev.packages = [ pkgs.libinput.out ];
-    documentation.enable = false;
     programs.command-not-found.enable = false;
 
     nixpkgs.config.allowUnfree = true;
