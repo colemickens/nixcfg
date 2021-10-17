@@ -106,7 +106,8 @@ function doit() {
   git commit . -m "wip"; git push origin HEAD
   ssh "colemickens@aarch64.nixos.community" "git -C /home/colemickens/code/nixcfg pull"
   ssh "colemickens@aarch64.nixos.community" "nix build -L /home/colemickens/code/nixcfg#${thing} --out-link /home/colemickens/${out}"
-  ssh "colemickens@aarch64.nixos.community" "readlink -f /home/colemickens/${out} | cachix push colemickens"
+  #ssh "colemickens@aarch64.nixos.community" "echo ${out} | cachix push colemickens"
+  nix copy --no-check-sigs --from "colemickens@aarch64.nixos.community" "${out}"
   ssh "colemickens@aarch64.nixos.community" "rm -f /home/colemickens/${out}"
 
   nix-store -r "${result}"
