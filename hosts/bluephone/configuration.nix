@@ -1,10 +1,6 @@
 { pkgs, lib, inputs, ... }:
 let
   hostname = "bluephone";
-  extras = with pkgs; [
-    drm-howto
-    dtc
-  ];
 in
 {
   imports = [
@@ -54,7 +50,7 @@ in
       sudo ip route add 172.16.42.0/24 dev usb0
       */
     #mobile.boot.stage-1.ssh.enable = false; # breaks stage-2 ssh
-    mobile.boot.stage-1.extraUtils = extras;
+    #mobile.boot.stage-1.extraUtils = [];
 
     networking.firewall.enable = false;
 
