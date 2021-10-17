@@ -110,7 +110,8 @@ function doit() {
   ssh "colemickens@aarch64.nixos.community" "rm -f /home/colemickens/${out}"
 
   nix-store -r "${result}"
-  fastboot boot "${result}"
+  fastboot flash boot "${result}"
+  fastboot reboot
 }
 
 function kexec() {
