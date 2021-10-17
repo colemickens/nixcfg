@@ -52,7 +52,7 @@
     #nixos-veloren = { url = "github:colemickens/nixos-veloren"; };
     #nixos-veloren.inputs.nixpkgs.follows = "nixpkgs";
 
-    mobile-nixos = { url = "github:colemickens/mobile-nixos/master"; flake = false; };
+    mobile-nixos = { url = "github:colemickens/mobile-nixos/master"; };
     #mobile-nixos = { url = "github:colemickens/mobile-nixos/mobile-nixos-blueline"; };
     # wait is the flakes pr not merged ? :(
     # mobile-nixos = { url = "github:samueldr/mobile-nixos/mobile-nixos-blueline"; };
@@ -299,8 +299,6 @@
 
         bluephone = let bp = inputs.self.nixosConfigurations.bluephone; in
           pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "bluephone" ([
-            #bp.config.mobile.outputs.android.android-bootimg
-            #bp.config.mobile.outputs.android.android-systemimg
             bp.config.mobile.outputs.android.android-flashable-bootimg
             bp.config.mobile.outputs.android.android-flashable-system
           ]);
