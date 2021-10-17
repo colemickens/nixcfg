@@ -289,51 +289,21 @@
         tow-boot = sys: (import inputs.tow-boot { pkgs = import inputs.nixpkgs { system = sys; }; });
         tow-boot-aarch64 = tow-boot "aarch64-linux";
       in {
-        rpifour1_towboot = tow-boot-aarch64.raspberryPi4.sharedImage;
+        #rpifour1_towboot = tow-boot-aarch64.raspberryPi4.sharedImage; # not used yet, still on weird cmpkgs rpi4 stuff
         sinkor_towboot = tow-boot-aarch64.outputs.raspberryPi4.sharedImage;
         pinebook_towboot = tow-boot-aarch64.pinebook.sharedImage;
-
-        # azure vhd for azdev machine (a custom Azure image using `nixos-azure` module)
-        azdev = inputs.self.nixosConfigurations.azdev.config.system.build.azureImage;
-        azmail = inputs.self.nixosConfigurations.azmail.config.system.build.azureImage;
-        awsone = inputs.self.nixosConfigurations.awsone.config.system.build.amazonImage;
-        newimg = inputs.self.nixosConfigurations.rpitwoefi.config.system.build.newimg;
 
         rpizero1  = inputs.self.nixosConfigurations.rpizero1.config.system.build.sdImage;
         rpizero2  = inputs.self.nixosConfigurations.rpizero2.config.system.build.sdImage;
         rpionebp  = inputs.self.nixosConfigurations.rpionebp.config.system.build.sdImage;
 
-        oracular_kexec = inputs.self.nixosConfigurations.oracular_kexec.config.system.build.kexec_tarball;
-
-        pinebook_bundle = let wpp = inputs.wip-pinebook-pro.packages.aarch64-linux; in
-          pkgs_.nixpkgs.aarch64-linux.runCommandNoCC "pinebook-bundle" {} ''
-            mkdir $out
-            ln -s "${toplevels.pinebook.toplevel}" $out/toplevel
-            ln -s "${wpp.uBootPinebookPro}" $out/uboot
-            ln -s "${wpp.pinebookpro-keyboard-updater}" $out/kbfw
-          '';
-
         bluephone = let bp = inputs.self.nixosConfigurations.bluephone; in
-          bp.config.mobile.outputs.android.android-flashable-zip;
-
-        pinephone_bundle = let
-          p = nixosConfigurations.pinephone.config.mobile.outputs.u-boot;
-        in
-          pkgs_.nixpkgs.aarch64-linux.runCommandNoCC "pinephone-bundle" {} ''
-            mkdir $out
-
-            # uboot
-            ln -s "${p.u-boot}" $out/uboot;
-
-            # full image
-            # inf recursion with mobile-nixos/master :(
-            ln -s "${p.disk-image}" $out/disk-image;
-
-            # boot partition
-            # inf recursion with mobile-nixos/master :(
-            ln -s "${p.boot-partition}" $out/boot-partition;
-          '';
+          pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "bluephone" ([
+            bp.config.mobile.outputs.android.android-bootimg
+            bp.config.mobile.outputs.android.android-systemimg
+          ]);
       };
+      
       linuxVMs = {
         demovm = inputs.self.nixosConfigurations.demovm.config.system.build.vm;
         testipfsvm = inputs.self.nixosConfigurations.testipfsvm.config.system.build.vm;
