@@ -313,11 +313,8 @@
             ln -s "${wpp.pinebookpro-keyboard-updater}" $out/kbfw
           '';
 
-        bluephone = let bp = inputs.self.nixosConfigurations.bluephone; in rec {
-          boot = bp.config.mobile.outputs.android.android-bootimg;
-          rootfs = bp.config.mobile.outputs.generatedFilesystems.rootfs;
-          bundle = pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "bluephone" ([ boot rootfs]);
-        };
+        bluephone = let bp = inputs.self.nixosConfigurations.bluephone; in
+          bp.config.mobile.outputs.android.android-flashable-zip;
 
         pinephone_bundle = let
           p = nixosConfigurations.pinephone.config.mobile.outputs.u-boot;
