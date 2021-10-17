@@ -315,7 +315,7 @@
 
         bluephone = let bp = inputs.self.nixosConfigurations.bluephone; in rec {
           boot = bp.config.mobile.outputs.android.android-bootimg;
-          rootfs = bp.config.mobile.outputs.android.android-flashable-system;
+          rootfs = bp.config.mobile.outputs.generatedFilesystems.rootfs;
           bundle = pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "bluephone" ([ boot rootfs]);
         };
 
