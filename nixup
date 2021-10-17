@@ -91,60 +91,9 @@ function x64()   { _remote "$(tsip porty)"  ".#bundles.x86_64-linux" "$(tsip por
 function a64()   { _remote "$(tsip a64com)" ".#bundles.aarch64-linux" "$(tsip porty)" "none"; }
 
 function commbox() {
-  ssh "colemickens@aarch64.nixos.community" \
-    "nix-env -f /run/current-system/nixpkgs -iA git zellij nixUnstable htop ncdu"
-  ssh "colemickens@aarch64.nixos.community" \
-    "mkdir -p /home/colemickens/.config/cachix"
-  scp "${HOME}/.config/cachix/cachix.dhall" \
-    "colemickens@aarch64.nixos.community:/home/colemickens/.config/cachix/cachix.dhall"
-}
-function doit() {
-  set -euo pipefail
-  thing="${1}";
-  result="$(nix eval --raw ".#${thing}")"
-  out="$(echo "${thing}" | sha256sum | cut -d' ' -f1)"
-  git commit . -m "wip" || true; git push origin HEAD
-  ssh "colemickens@aarch64.nixos.community" "git -C /home/colemickens/code/nixcfg pull"
-  ssh "colemickens@aarch64.nixos.community" "nix build -L /home/colemickens/code/nixcfg#${thing} --out-link /home/colemickens/${out}"
-  #ssh "colemickens@aarch64.nixos.community" "echo ${out} | cachix push colemickens"
-  nix copy --no-check-sigs --from "ssh-ng://colemickens@aarch64.nixos.community" "${result}"
-  ssh "colemickens@aarch64.nixos.community" "rm -f /home/colemickens/${out}"
-}
-function reflashit() {
-  set -ueo pipefail
-  fastboot reboot recovery
-  # normalize radio/bootloader/boot to start with, duplicate slot b steps in a to start from scratch
-  fastboot set_active a
-  d="$HOME/downloads/blueline-spb5.210812.002-factory-6390aefc/blueline-spb5.210812.002"
-  fastboot flash radio "${d}/radio-blueline-g845-00194-210812-b-7635520.img"
-  fastboot flash bootloader "${d}/bootloader-blueline-b1c1-0.4-7617406.img"
-  fastboot flash boot "${d}/boot.img"
-  fastboot reboot fastboot
-  # now start over but mainly get the "known good" on slot b
-  fastboot set_active b
-  d="$HOME/downloads/blueline-spb5.210812.002-factory-6390aefc/blueline-spb5.210812.002"
-  fastboot flash radio "${d}/radio-blueline-g845-00194-210812-b-7635520.img"
-  fastboot flash bootloader "${d}/bootloader-blueline-b1c1-0.4-7617406.img"
-  fastboot flash boot "${d}/boot.img"
-  fastboot reboot fastboot
-  fastboot flash boot "${d}/boot.img"
-  fastboot flash dtbo "${d}/dtbo.img"
-  fastboot flash vendor "${d}/vendor.img"
-  fastboot flash vbmeta "${d}/vbmeta.img"
-}
-function flashit() {
-  result="$(nix eval --raw ".#images.bluephone")"
-  fastboot reboot bootloader
-  fastboot set_active b
-  fastboot reboot recovery
-  fastboot set_active a
-  fastboot flash userdata "${result}/rootfs.img"
-  fastboot flash boot "${result}/boot.img"
-  fastboot set_active b # we should have the same bootloader probably... but just in case
-  fastboot reboot bootloader
-  fastboot set_active a
-  # reset boot counter here maybe?
-  fastboot reboot
+  ssh "colemickens@aarch64.nixos.community" "nix-env -f /run/current-system/nixpkgs -iA git zellij nixUnstable htop ncdu"
+  ssh "colemickens@aarch64.nixos.community" "mkdir -p /home/colemickens/.config/cachix"
+  scp "${HOME}/.config/cachix/cachix.dhall" "colemickens@aarch64.nixos.community:/home/colemickens/.config/cachix/cachix.dhall"
 }
 
 function kexec() {
