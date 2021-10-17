@@ -313,7 +313,7 @@
             ln -s "${wpp.pinebookpro-keyboard-updater}" $out/kbfw
           '';
 
-        bluephone_bootimg =
+        bluephone =
           let
             dev = inputs.self.nixosConfigurations.bluephone;
           in
