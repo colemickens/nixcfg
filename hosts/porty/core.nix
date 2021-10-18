@@ -3,7 +3,7 @@
 {
   imports = [
     ../../mixins/common.nix
-    
+
     ../../profiles/user.nix
     ../../profiles/gui.nix
 
@@ -12,7 +12,9 @@
     ../../mixins/nvidia.nix
     #../../profiles/gaming.nix
 
+    #../../profiles/desktop-sway.nix
     ../../profiles/desktop-sway-unstable.nix
+    #../../profiles/desktop-sway-unstable-egl.nix
 
     ../../mixins/android.nix
     ../../mixins/code-server.nix

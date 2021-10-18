@@ -56,6 +56,18 @@ in
   ] else [];
 
   config = {
+    environment.systemPackages = with pkgs; [
+      mesa-demos
+      vulkan-tools
+      (writeShellScriptBin "nvidia-sway" ''
+        env \
+          GBM_BACKEND=nvidia-drm \
+          __GLX_VENDOR_LIBRARY_NAME=nvidia \
+          WLR_NO_HARDWARE_CURSORS=1 \
+            sway --my-next-gpu-wont-be-nvidia -d &>/tmp/sway.log
+      '')
+    ];
+
     hardware.nvidia.modesetting.enable = true;
     hardware.nvidia.package = nvidiaPackage;
     hardware.nvidia.powerManagement.enable = false;

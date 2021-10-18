@@ -115,7 +115,7 @@ in
         #   export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
         #   systemctl --user import-environment
         # '';
-        xwayland = true;
+        xwayland = false;
         extraConfig = ''
           seat seat0 xcursor_theme "capitaine-cursors"
         '';

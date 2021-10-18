@@ -57,9 +57,9 @@
         wayvnc
         wf-recorder
         wl-clipboard
-        wl-gammactl
-        wlvncc
-        #wshowkeys # broken
+        # wl-gammactl # nixpkgs-wayland only
+        # wlvncc # nixpkgs-wayland only
+        wshowkeys # broken
         wtype
         xwayland
         ydotool
