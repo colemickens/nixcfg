@@ -12,6 +12,14 @@
     ./gui.nix
   ];
   config = {
+    security.wrappers = {
+      "wshowkeys" = {
+        owner = "root";
+        group = "root";
+        setuid = true;
+        source = "${pkgs.wshowkeys}/bin/wshowkeys";
+      };
+    };
     home-manager.users.cole = { pkgs, ... }: {
 
       # block auto-sway reload, Sway crashes...
@@ -59,7 +67,7 @@
         wl-clipboard
         # wl-gammactl # nixpkgs-wayland only
         # wlvncc # nixpkgs-wayland only
-        wshowkeys # broken
+        # wshowkeys # use the wrapper ^
         wtype
         xwayland
         ydotool

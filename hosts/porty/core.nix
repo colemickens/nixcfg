@@ -10,7 +10,7 @@
     ../../modules/loginctl-linger.nix
 
     ../../mixins/nvidia.nix
-    #../../profiles/gaming.nix
+    ../../profiles/gaming.nix
 
     #../../profiles/desktop-sway.nix
     ../../profiles/desktop-sway-unstable.nix
@@ -19,6 +19,7 @@
     ../../mixins/android.nix
     ../../mixins/code-server.nix
     ../../mixins/logitech-mouse.nix
+    ../../mixins/obs.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
