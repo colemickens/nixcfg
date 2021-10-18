@@ -4,20 +4,20 @@ let
   mkPacketVM = import ./mkPacketVM.nix;
   mkOracleVM = import ./mkOracleVM.nix;
 
-  _tf = (pkgs.terraform_0_15.withPlugins (p: [
-      p.archive
-      p.aws
-      p.external
-      p.gitlab
+  _tf = (pkgs.terraform_1_0.withPlugins (p: [
+      #p.archive
+      #p.aws
+      #p.external
+      #p.gitlab
       #p.grafana
       #p.helm
-      p.kubernetes
+      #p.kubernetes
       p.local
       p.metal
       p.null
       p.random
       p.template
-      p.tls
+      #p.tls
     ]));
   tf = "${_tf}/bin/terraform";
   tfstate = "./cloud/_tf/_state";
@@ -69,9 +69,9 @@ in {
     duration="1 hour"
     export TF_VAR_termtime="$(TZ=UTC date --date="''${duration}" --iso-8601=seconds)"
     export METAL_AUTH_TOKEN="$(gopass show colemickens/packet.net | grep apikey | cut -d' ' -f2)"
-    rm -f "${tfstate}/config.tf.json"
-    function v() { "${tf}" "-chdir=${tfstate}" version; }
-    trap v EXIT
+    rm -rf "${tfstate}"; mkdir -p "${tfstate}"
+    function trap_dump_tf_version() { "${tf}" "-chdir=${tfstate}" version; }
+    trap trap_dump_tf_version EXIT
     cp "${terraformCfg}/config.tf.json" "${tfstate}/config.tf.json" \
       && "${tf}" "-chdir=${tfstate}" init \
       && "${tf}" "-chdir=${tfstate}" apply
