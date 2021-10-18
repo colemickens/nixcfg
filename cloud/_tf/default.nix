@@ -15,6 +15,7 @@ let
       p.local
       p.metal
       p.null
+      p.oci
       p.random
       p.template
       #p.tls
@@ -46,21 +47,19 @@ let
     project_id = "afc67974-ff22-41fd-9346-5b2c8d51e3a9";
   };
 
-  pkt_bldr_x86 = (mkPacketVM  metal_cole  "c2.medium.x86"  "sjc1"  "bldr-x86");
-  pkt_bldr_a64 = (mkPacketVM  metal_cole  "c2.large.arm"   "sjc1"  "bldr-a64");
+  pkt_bldr_x86 = (mkPacketVM  metal_cole  "c2.medium.x86"  "sv"  "bldr-x86");
+  pkt_bldr_a64 = (mkPacketVM  metal_cole  "c2.large.arm"   "sv"  "bldr-a64");
+  #oracle1_amp_one = (mkOracleVM )
+  #oracle2_amp_one = (mkOracleVM )
 
   terraformCfg = terranix.lib.buildTerranix {
     inherit pkgs;
-    #terranix_config = pkgs.lib.mkMerge [ pktVm1 ];
     terranix_config.imports = [
       #pkt_bldr_x86
       pkt_bldr_a64
       #oracle1_amp_one
       #oracle2_amp_one
     ];
-    #terranix_config = pktVm1;
-    #terranix_config = pktVm1;
-    #terranix_config = {};
   };
 in {
   # TODO: replace with lovesegfault's sanity checked saneScript writer
