@@ -1,103 +1,68 @@
 {
   # flakes feedback
-  # - flake-overrides.nix: https://github.com/NixOS/nix/issues/4193
-  # - I dislike the special-cased GitHub special URL syntax
-  # shout-outs to: @bqv, @balsoft, @cole-h for flake.nix inspriation
+  # - flake-overrides.lock: https://github.com/NixOS/nix/issues/4193
+  # - I still dislike the registry + special-cased GitHub special URL syntax
+  #   (still haven't heard it explained in a convincing way)
+  # - ...?
 
   description = "colemickens-nixcfg";
 
   inputs = {
-    nixpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; }; # for my regular nixpkgs
-    nixos-unstable-small = { url = "github:nixos/nixpkgs/nixos-unstable-small"; };
-    nixos-unstable = { url = "github:nixos/nixpkgs/nixos-unstable"; };
-    stable = { url = "github:nixos/nixpkgs/nixos-21.05"; }; # for cachix
+    nixpkgs.url = "github:colemickens/nixpkgs/cmpkgs"; # for my regular nixpkgs
+    nixos-unstable-small.url = "github:nixos/nixpkgs/nixos-unstable-small";
+    nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    stable.url = "github:nixos/nixpkgs/nixos-21.05"; # for cachix
 
-    crosspkgs = {
-      # LKG: 79c444b5bdeaba142d128afddee14c89ecf2a968
-      url = "github:colemickens/nixpkgs/crosspkgs";
-    };
-
-    # We're back to using nixUnstable so we shouldn't need this:
-    nix.url = "github:nixos/nix/master";
-
-    impermanence.url = "github:nix-community/impermanence/5e8913aa1c311da17e3da5a4bf5c5a47152f6408";
-    impermanence.inputs.nixpkgs.follows = "nixpkgs";
-
-    nixpkgs-kubernetes.url = "github:colemickens/nixpkgs-kubernetes/main";
-    nixpkgs-kubernetes.inputs.nixpkgs.follows = "nixpkgs";
-
-    niche.url = "github:colemickens/niche/master";
-    niche.inputs.nixpkgs.follows = "nixpkgs";
+    crosspkgs.url = "github:colemickens/nixpkgs/crosspkgs";
 
     home-manager.url = "github:colemickens/home-manager/cmhm";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    construct.url = "github:matrix-construct/construct";
-    construct.inputs.nixpkgs.follows = "nixpkgs";
-
     sops-nix.url = "github:Mic92/sops-nix/master";
-    #sops-nix.url = "github:colemickens/sops-nix/master";
-    #sops-nix.url = "github:mic92/sops-nix/23fae8a8b15b07c11f8c4c7f95ae0ce191d0c86a";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    deploy-rs.url = "github:colemickens/deploy-rs";
-    deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
+    hardware.url = "github:nixos/nixos-hardware";
 
-    firefox  = { url = "github:colemickens/flake-firefox-nightly"; };
-    firefox.inputs.nixpkgs.follows = "nixpkgs";
-
-    # chromium  = { url = "github:colemickens/flake-chromium"; };
-    # chromium.inputs.nixpkgs.follows = "nixpkgs";
-
-    #nixos-veloren = { url = "github:colemickens/nixos-veloren"; };
-    #nixos-veloren.inputs.nixpkgs.follows = "nixpkgs";
-
-    mobile-nixos = { url = "github:colemickens/mobile-nixos/master"; };
-    #mobile-nixos = { url = "github:colemickens/mobile-nixos/mobile-nixos-blueline"; };
-    # wait is the flakes pr not merged ? :(
-    # mobile-nixos = { url = "github:samueldr/mobile-nixos/mobile-nixos-blueline"; };
-    #mobile-nixos.inputs.nixpkgs.follows = "nixpkgs";
-
-    nix-ipfs = { url = "github:obsidiansystems/nix"; };
-
-    nixos-azure = { url = "github:colemickens/nixos-azure/dev"; };
-    nixos-azure.inputs.nixpkgs.follows = "nixpkgs";
-
-    wip-pinebook-pro = { url = "github:colemickens/wip-pinebook-pro/master"; flake = false; };
-    wip-pinebook-pro.inputs.nixpkgs.follows = "nixpkgs";
-    #wip-pinebook-pro = { url = "github:samueldr/wip-pinebook-pro"; flake = false; };
-
-    nixpkgs-wayland  = { url = "github:nix-community/nixpkgs-wayland/master"; };
+    nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland/master";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
 
-    hardware = { url = "github:nixos/nixos-hardware"; };
+    firefox.url = "github:colemickens/flake-firefox-nightly";
+    firefox.inputs.nixpkgs.follows = "nixpkgs";
 
-    #nix-bitcoin = { url = "github:fort-nix/nix-bitcoin"; flake = false; };
-    nix-bitcoin = { url = "github:erikarvstedt/nix-bitcoin/nixos-unstable"; flake = false; };
-    #daedalus = { url = "github:input-output-hk/daedalus"; flake = false; };
-
-    fenix = { url = "github:figsoda/fenix"; };
-    fenix.inputs.nixpkgs.follows = "nixpkgs";
-
-    # neovim-nightly = { url = "github:nix-community/neovim-nightly-overlay"; };
-    # neovim-nightly.inputs.nixpkgs.follows = "nixpkgs";
-
-    envfs = { url = "github:Mic92/envfs"; };
-    envfs.inputs.nixpkgs.follows = "nixpkgs";
-
-    # rust-overlay.url = "github:oxalica/rust-overlay";
-
-    wfvm = { type = "git"; url = "https://git.m-labs.hk/M-Labs/wfvm"; flake = false;};
-
-    nixos-mailserver = { url = "gitlab:simple-nixos-mailserver/nixos-mailserver"; };
-    nixos-mailserver.inputs.nixpkgs.follows = "nixpkgs";
-
-    nickel = { url = "github:tweag/nickel"; };
-
-    hydra = { url = "github:NixOS/hydra"; };
-    #hydra.inputs.nixpkgs.follows = "nixpkgs";
+    impermanence.url = "github:nix-community/impermanence/5e8913aa1c311da17e3da5a4bf5c5a47152f6408"; # TODO TODO TODO TODO TODO
+    impermanence.inputs.nixpkgs.follows = "nixpkgs";
 
     tow-boot = { url = "github:tow-boot/tow-boot"; flake = false; };
+
+    mobile-nixos.url = "github:colemickens/mobile-nixos/master"; # its nixpkgs is _only_ used for its devshell
+
+    wip-pinebook-pro = { url = "github:colemickens/wip-pinebook-pro/master"; flake = false; };
+    # wip-pinebook-pro.inputs.nixpkgs.follows = "nixpkgs"; # ?? # TODO TODO TODO
+
+    # used for... veloren? other nightly shit? what?
+    fenix.url = "github:figsoda/fenix";
+    fenix.inputs.nixpkgs.follows = "nixpkgs";
+
+    # We're back to using nixUnstable so we shouldn't need this:
+    #nix.url = "github:nixos/nix/master";
+    #nixpkgs-kubernetes.url = "github:colemickens/nixpkgs-kubernetes/main";
+    #nixpkgs-kubernetes.inputs.nixpkgs.follows = "nixpkgs";
+    #niche.url = "github:colemickens/niche/master";
+    #niche.inputs.nixpkgs.follows = "nixpkgs";
+    # construct.url = "github:matrix-construct/construct";
+    # construct.inputs.nixpkgs.follows = "nixpkgs";
+    # deploy-rs.url = "github:colemickens/deploy-rs";
+    # deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
+    #nixos-azure.url = "github:colemickens/nixos-azure/dev";
+    #nixos-azure.inputs.nixpkgs.follows = "nixpkgs";
+    # TODO: use this? or from nixpkgs???
+    # envfs.url = "github:Mic92/envfs"; };
+    # envfs.inputs.nixpkgs.follows = "nixpkgs";
+    # rust-overlay.url = "github:oxalica/rust-overlay"; # TODO: switch frm fenix?
+    # wfvm = { url = "https://git.m-labs.hk/M-Labs/wfvm"; type = "git"; flake = false; };
+    #nickel.url = "github:tweag/nickel"; };
+    #hydra.url = "github:NixOS/hydra"; };
+    #hydra.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs:
@@ -130,7 +95,9 @@
       force_cached = sys: pkgs_.nixpkgs."${sys}".callPackage ./lib/force_cached.nix {};
       pkgNames = s: builtins.attrNames (inputs.self.overlay pkgs_.${s} pkgs_.${s});
     in rec {
-      internals = { inherit pkgs_ fullPkgs_; };
+      # devShells->default didn't work
+      # devShells->devShel didn't work
+      # outputs.devShells.foo + outputs.devShell did work
       devShell = forAllSystems (system: minimalMkShell system {
         name = "nixcfg-devshell";
         nativeBuildInputs = map (x: (x.bin or x.out or x))
@@ -141,39 +108,27 @@
             cachix nix-prefetch-git
             tailscale
             nixpkgs-fmt
-            yq # json->yaml?
-            # nix-build-uncached
+            nix-build-uncached
           ]) ++ [
             fullPkgs_.${system}.metal-cli
             fullPkgs_.${system}.nix-build-uncached
           ]);
       });
-
-      # TODO: implement/finish:
-      devShells = {
-        default = devShell;
-        uber = import ./shells/uber-devenv.nix {};
-      };
-
-      apps = forAllSystems (system: {
-        # this is to have a minimal deriv to build/dl/run early on in CI jobs
-        # we want to have a chance to load the devShell from cache using the CI's cache mechanism
-        install-secrets = {
-          type = "app";
-          # ugh, dupe in/from legacyPackages so we can both easily build *and* run this, wtf nix cli
-          # maybe just map these in from legacyPackages? maybe not
-          program = legacyPackages."${system}".install-secrets.outPath;
-        };
+      devShells = forAllSystems (system: {
+        devenv = import ./shells/shell-devenv.nix { inherit inputs system; };
       });
 
-      legacyPackages = forAllSystems (system: {
-        # to `nix eval` the "currentSystem" in certain scenarios
+      # TODO: is this really the best way to expose this command outward?
+      apps = forAllSystems (system: {
+        install-secrets = { type = "app"; program = legacyPackages."${system}".install-secrets.outPath; };
+      });
+
+      legacyPackages = forAllSystems (system: { # to `nix eval` with the "currentSystem" in certain scenarios
         devShellSrc = inputs.self.devShell.${system}.inputDerivation;
         install-secrets = (import ./.github/secrets.nix { nixpkgs = inputs.nixpkgs; inherit inputs system; });
-        bundle = inputs.self.bundles."${system}";
+        bundle = inputs.self.bundles.${system};
       });
 
-      #packages = forAllSystems (s: pkgs_.nixpkgs.${s}.lib.filterAttrs (n: v: (builtins.elem n (pkgNames s))) fullPkgs_.${s});
       packages = forAllSystems (s: fullPkgs_.${s}.colePackages);
       pkgs = forAllSystems (s: fullPkgs_.${s});
 
@@ -201,7 +156,6 @@
           rkvm = prev.callPackage ./pkgs/rkvm {};
           shreddit = prev.python3Packages.callPackage ./pkgs/shreddit {};
           metal-cli = prev.callPackage ./pkgs/metal-cli {};
-          # UGH : #v4l2rtspserver = prev.callPackage ./pkgs/v4l2rtspserver {};
           rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {};
           zellij = prev.callPackage ./pkgs/zellij { zellij = prev.zellij; };
 
@@ -212,25 +166,13 @@
           #     rev = "36ea105"; sha256 = "sha256-Ovx+q5pdfg+yIF5HU7pV0nR6nnoTa3y/f9m4TV0XXc0=";
           #   };
           # });
-
-          #disabled:
-          #niche = prev.callPackage ./pkgs/niche {};
-          # neochat_ = prev.libsForQt5.callPackage ./pkgs/neochat {
-          #  neochat = prev.neochat;
-          # };
-          #raspberrypi-eeprom = prev.callPackage ./pkgs/raspberrypi-eeprom {};
-          #rpi4-uefi = prev.callPackage ./pkgs/rpi4-uefi {};
-          #cpptoml = prev.callPackage ./pkgs/cpptoml {};
-          #wireplumber = prev.callPackage ./pkgs/wireplumber {};
-          #libquotient = prev.libsForQt5.callPackage ./pkgs/quaternion/libquotient.nix {};
-          #quaternion = prev.libsForQt5.callPackage ./pkgs/quaternion {};
         }; in p // { colePackages = p; };
 
-      nixosModules = {
-        hydra-auto = import ./modules/hydra-auto.nix;
-        otg = import ./modules/otg.nix;
-        other-arch-vm = import ./modules/other-arch-vm.nix;
-      };
+      # nixosModules = {
+      #   hydra-auto = import ./modules/hydra-auto.nix;
+      #   otg = import ./modules/otg.nix;
+      #   other-arch-vm = import ./modules/other-arch-vm.nix;
+      # };
 
       nixosConfigurations = {
         # x86_64-linux
@@ -241,17 +183,15 @@
         # aarch64-linux
         pinebook    = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
         pinephone   = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
+        bluephone    = mkSystem inputs.nixpkgs "aarch64-linux" "bluephone";
         rpifour1    = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour1";
         sinkor      = mkSystem inputs.nixpkgs "aarch64-linux" "sinkor";
         oracular    = mkSystem inputs.nixpkgs "aarch64-linux" "oracular";
-        oracular_kexec  = mkSystem inputs.nixpkgs "aarch64-linux" "oracular/installer";
         # armv6l-linux (cross-built)
         rpizero1 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
         rpizero2 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
-        # other
-        bluephone     = mkSystem inputs.nixpkgs "aarch64-linux" "bluephone";
-        #demovm      = mkSystem fullPkgs_.x86_64-linux  "demovm";
-        #testipfsvm  = mkSystem fullPkgs_.x86_64-linux  "testipfsvm";
+        # disabled:
+        #oracular_kexec  = mkSystem inputs.nixpkgs "aarch64-linux" "oracular/installer"; # not working, half-abandonded
       };
       toplevels = genAttrs
         (builtins.attrNames inputs.self.outputs.nixosConfigurations)
@@ -267,17 +207,12 @@
       #     };
       #   };
 
-      # TODO : clamped to x86_64 - undo!
       hydraJobs = forAllSystems (s: {
         devshell = inputs.self.devShell.${s}.inputDerivation;
         pkgs = force_cached s (filterPkgs pkgs_.nixpkgs.${s} inputs.self.packages.${s});
         hosts = force_cached s (builtins.mapAttrs (n: v: v.config.system.build.toplevel)
           (filterHosts pkgs_.nixpkgs.${s} inputs.self.nixosConfigurations));
       });
-      # bundle_pkgs = forAllSystems (s: (pkgs_.nixpkgs."${s}".linkFarmFromDrvs "${s}-pkgs"
-      #   (builtins.attrValues hydraJobs.${s}.pkgs)));
-      # bundle_hosts = forAllSystems (s: (pkgs_.nixpkgs."${s}".linkFarmFromDrvs "${s}-hosts"
-      #     (builtins.attrValues hydraJobs.${s}.hosts)));
       bundles = forAllSystems (s:
         pkgs_.nixpkgs."${s}".linkFarmFromDrvs "${s}-bundle" ([]
           ++ [ inputs.self.devShell.${s}.inputDerivation ]
@@ -304,22 +239,22 @@
           ]);
       };
       
-      linuxVMs = {
-        demovm = inputs.self.nixosConfigurations.demovm.config.system.build.vm;
-        testipfsvm = inputs.self.nixosConfigurations.testipfsvm.config.system.build.vm;
-      };
-      winVMs = {
-        nixwinvm = import ./hosts/nixwinvm {
-          pkgs = pkgs_.nixpkgs.x86_64-linux;
-          inherit inputs;
-        };
-      };
+      # linuxVMs = {
+      #   demovm = inputs.self.nixosConfigurations.demovm.config.system.build.vm;
+      #   testipfsvm = inputs.self.nixosConfigurations.testipfsvm.config.system.build.vm;
+      # };
+      # winVMs = {
+      #   nixwinvm = import ./hosts/nixwinvm {
+      #     pkgs = pkgs_.nixpkgs.x86_64-linux;
+      #     inherit inputs;
+      #   };
+      # };
 
-      experiments = {
-        nixbox = {
-          dash = import ./hosts/nixbox/dashboard.nix { inherit inputs; };
-          linux = import ./hosts/nixbox/linux.nix { inherit inputs; };
-        };
-      };
+      # experiments = {
+      #   nixbox = {
+      #     dash = import ./hosts/nixbox/dashboard.nix { inherit inputs; };
+      #     linux = import ./hosts/nixbox/linux.nix { inherit inputs; };
+      #   };
+      # };
     };
 }
