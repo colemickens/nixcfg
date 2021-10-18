@@ -95,38 +95,29 @@
       force_cached = sys: pkgs_.nixpkgs."${sys}".callPackage ./lib/force_cached.nix {};
       pkgNames = s: builtins.attrNames (inputs.self.overlay pkgs_.${s} pkgs_.${s});
     in rec {
-      # devShells->default didn't work
-      # devShells->devShel didn't work
-      # outputs.devShells.foo + outputs.devShell did work
       devShell = forAllSystems (system: minimalMkShell system {
         name = "nixcfg-devshell";
-        nativeBuildInputs = map (x: (x.bin or x.out or x))
-          ((with pkgs_.nixpkgs.${system}; [
-            nixUnstable
-            bash curl cacert jq parallel mercurial git
-            nettools openssh ripgrep rsync sops gh gawk gnused gnugrep
-            cachix nix-prefetch-git
-            tailscale
-            nixpkgs-fmt
-            nix-build-uncached
-          ]) ++ [
-            fullPkgs_.${system}.metal-cli
-            fullPkgs_.${system}.nix-build-uncached
-          ]);
+        nativeBuildInputs = map (x: (x.bin or x.out or x)) (with pkgs_.nixpkgs.${system}; [
+          nixUnstable cachix nixpkgs-fmt nix-prefetch-git
+          bash curl cacert jq parallel mercurial git tailscale
+          nettools openssh ripgrep rsync sops gh gawk gnused gnugrep
+          # nix-build-uncached # use the overlayed one for now
+          fullPkgs_.${system}.metal-cli
+          fullPkgs_.${system}.nix-build-uncached
+        ]);
       });
       devShells = forAllSystems (system: {
         devenv = import ./shells/shell-devenv.nix { inherit inputs system; };
-      });
-
-      # TODO: is this really the best way to expose this command outward?
-      apps = forAllSystems (system: {
-        install-secrets = { type = "app"; program = legacyPackages."${system}".install-secrets.outPath; };
       });
 
       legacyPackages = forAllSystems (system: { # to `nix eval` with the "currentSystem" in certain scenarios
         devShellSrc = inputs.self.devShell.${system}.inputDerivation;
         install-secrets = (import ./.github/secrets.nix { nixpkgs = inputs.nixpkgs; inherit inputs system; });
         bundle = inputs.self.bundles.${system};
+      });
+      apps = forAllSystems (system: {
+        # TODO: is this really the best way to expose this command outward?
+        install-secrets = { type = "app"; program = legacyPackages."${system}".install-secrets.outPath; };
       });
 
       packages = forAllSystems (s: fullPkgs_.${s}.colePackages);
@@ -159,13 +150,13 @@
           rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {};
           zellij = prev.callPackage ./pkgs/zellij { zellij = prev.zellij; };
 
-          # nix-build-uncached = prev.nix-build-uncached.overrideAttrs(old: {
-          #   src = prev.fetchFromGitHub {
-          #     owner = "colemickens";
-          #     repo = "nix-build-uncached";
-          #     rev = "36ea105"; sha256 = "sha256-Ovx+q5pdfg+yIF5HU7pV0nR6nnoTa3y/f9m4TV0XXc0=";
-          #   };
-          # });
+          nix-build-uncached = prev.nix-build-uncached.overrideAttrs(old: {
+            src = prev.fetchFromGitHub {
+              owner = "colemickens";
+              repo = "nix-build-uncached";
+              rev = "36ea105"; sha256 = "sha256-Ovx+q5pdfg+yIF5HU7pV0nR6nnoTa3y/f9m4TV0XXc0=";
+            };
+          });
         }; in p // { colePackages = p; };
 
       # nixosModules = {
@@ -191,7 +182,7 @@
         rpizero1 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
         rpizero2 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
         # disabled:
-        #oracular_kexec  = mkSystem inputs.nixpkgs "aarch64-linux" "oracular/installer"; # not working, half-abandonded
+        # - oracular_kexec  = mkSystem inputs.nixpkgs "aarch64-linux" "oracular/installer"; # not working, half-abandonded
       };
       toplevels = genAttrs
         (builtins.attrNames inputs.self.outputs.nixosConfigurations)
