@@ -39,6 +39,9 @@
     wip-pinebook-pro = { url = "github:colemickens/wip-pinebook-pro/master"; flake = false; };
     # wip-pinebook-pro.inputs.nixpkgs.follows = "nixpkgs"; # ?? # TODO TODO TODO
 
+    terranix.url = "github:terranix/terranix";
+    terranix.inputs.nixpkgs.follows = "nixpkgs";
+
     # used for... veloren? other nightly shit? what?
     fenix.url = "github:figsoda/fenix";
     fenix.inputs.nixpkgs.follows = "nixpkgs";
@@ -115,9 +118,13 @@
         install-secrets = (import ./.github/secrets.nix { nixpkgs = inputs.nixpkgs; inherit inputs system; });
         bundle = inputs.self.bundles.${system};
       });
-      apps = forAllSystems (system: {
+      apps = forAllSystems (system: let
+        tfout = import ./cloud/_tf { inherit inputs; pkgs = pkgs_.nixpkgs.${system}; };
+      in {
         # TODO: is this really the best way to expose this command outward?
         install-secrets = { type = "app"; program = legacyPackages."${system}".install-secrets.outPath; };
+        apply = { type = "app"; program = tfout.apply.outPath; };
+        destroy = { type = "app"; program = tfout.destroy.outPath; };
       });
 
       packages = forAllSystems (s: fullPkgs_.${s}.colePackages);

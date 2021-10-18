@@ -66,7 +66,7 @@ chmod +x /tmp/install
 cfgline="if [ -e /home/cole/.nix-profile/etc/profile.d/nix.sh ]; then . /home/cole/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer]"
 echo -e "${cfgline}\n\n$(cat "${HOME}/.bashrc")" > "${HOME}/.bashrc"
 
-if [[ "${NIXOS_LUSTRATE}" == "1" ]]; then
+if [[ "${NIXOS_LUSTRATE:-""}" == "1" ]]; then
   sudo /home/cole/.nix-profile/bin/nix build --no-link --profile /nix/var/nix/profiles/system \
     "github:colemickens/nixcfg#toplevels.oracular"
   sudo umount /dev/disk/by-label/UEFI

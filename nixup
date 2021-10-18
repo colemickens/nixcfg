@@ -82,7 +82,7 @@ function sinkor()    { _remote "$(tsip bldr-a64)"  ".#toplevels.ocular"     "$(t
 function rpizero1()  { _remote "$(tsip porty)"     ".#toplevels.rpizero1"   "$(tsip rpizero1)"   "${1:-"activate"}"; }
 function rpizero2()  { _remote "$(tsip porty)"     ".#toplevels.rpizero2"   "$(tsip rpizero2)"   "${1:-"activate"}"; }
 ## bundles
-function x64()   { _remote "$(tsip bldr-x64)"  ".#bundles.x86_64-linux"   "$(tsip porty)" "${1:-"none"}"; }
+function x86()   { _remote "$(tsip bldr-x86)"  ".#bundles.x86_64-linux"   "$(tsip porty)" "${1:-"none"}"; }
 function a64()   { _remote "$(tsip bldr-a64)"  ".#bundles.aarch64-linux"  "$(tsip porty)" "${1:-"none"}"; }
 ## </remote> ##################################################################
 

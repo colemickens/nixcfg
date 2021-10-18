@@ -91,6 +91,21 @@
         "type": "github"
       }
     },
+    "flake-utils": {
+      "locked": {
+        "lastModified": 1631561581,
+        "narHash": "sha256-3VQMV5zvxaVLvqqUrNz3iJelLw30mIVSfZmAaauM3dA=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "7e5bf3925f6fbdfaf50a2a7ca0be2879c4261d19",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "hardware": {
       "locked": {
         "lastModified": 1633793047,
@@ -278,6 +293,7 @@
         "nixpkgs-wayland": "nixpkgs-wayland",
         "sops-nix": "sops-nix",
         "stable": "stable",
+        "terranix": "terranix",
         "tow-boot": "tow-boot",
         "wip-pinebook-pro": "wip-pinebook-pro"
       }
@@ -333,6 +349,43 @@
         "owner": "nixos",
         "ref": "nixos-21.05",
         "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "terranix": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "terranix-examples": "terranix-examples"
+      },
+      "locked": {
+        "lastModified": 1633870896,
+        "narHash": "sha256-3N4a5VhZqIgJW11w8oJKJ9T8mhfwEM33kEwV/zZkCs8=",
+        "owner": "terranix",
+        "repo": "terranix",
+        "rev": "246aac5ab11cbd97b5bfbc7047e07c8fc0c78b90",
+        "type": "github"
+      },
+      "original": {
+        "owner": "terranix",
+        "repo": "terranix",
+        "type": "github"
+      }
+    },
+    "terranix-examples": {
+      "locked": {
+        "lastModified": 1633460746,
+        "narHash": "sha256-4xvhK7DzFX2BA6aafcOsWZmuhzQYRtHcLqel1VEXv6s=",
+        "owner": "terranix",
+        "repo": "terranix-examples",
+        "rev": "c6f88d372750c28ff0bf49e1360efda904d12da0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "terranix",
+        "repo": "terranix-examples",
         "type": "github"
       }
     },
