@@ -1,10 +1,26 @@
-{ inputs, pkgs }:
+{ pkgs, terranix }:
 
 let
   mkPacketVM = import ./mkPacketVM.nix;
   mkOracleVM = import ./mkOracleVM.nix;
 
-  tf = "${pkgs.terraform_0_15}/bin/terraform";
+  _tf = (pkgs.terraform_0_15.withPlugins (p: [
+      p.archive
+      p.aws
+      p.external
+      p.gitlab
+      #p.grafana
+      #p.helm
+      p.kubernetes
+      p.local
+      p.metal
+      p.null
+      p.random
+      p.template
+      p.tls
+    ]));
+  tf = "${_tf}/bin/terraform";
+  tfstate = "./cloud/_tf/_state";
 
   oracle_colemickens = {
     tenancy_id = "ocid1.tenancy.oc1..aaaaaaaafyqmgtgi5nwkolwjujayjrx5qw2qmzpbp7wzche2kgmdrlptnj4q";
@@ -26,43 +42,51 @@ let
     # "terraform" compartment in colemickens2
     compartment_id = "ocid1.compartment.oc1..aaaaaaaawrfmgshb57lsir25eqpd3x6hgyb2lddwn3uyjzm7tnhpdyt2fwca";
   };
-  equinix_metal_cole = {
-    auth_token__file = "/run/secrets/packet_apikey";
+  metal_cole = {
     project_id = "afc67974-ff22-41fd-9346-5b2c8d51e3a9";
   };
 
-  pktVm1 = (mkPacketVM equinix_metal_cole "c2.medium.x86" "sjc1" "bldr-x86");
-  terraformCfg = inputs.terranix.lib.buildTerranix {
+  pkt_bldr_x86 = (mkPacketVM  metal_cole  "c2.medium.x86"  "sjc1"  "bldr-x86");
+  pkt_bldr_a64 = (mkPacketVM  metal_cole  "c2.large.arm"   "sjc1"  "bldr-a64");
+
+  terraformCfg = terranix.lib.buildTerranix {
     inherit pkgs;
     #terranix_config = pkgs.lib.mkMerge [ pktVm1 ];
-    terranix_config.imports = [ pktVm1 ];
+    terranix_config.imports = [
+      #pkt_bldr_x86
+      pkt_bldr_a64
+      #oracle1_amp_one
+      #oracle2_amp_one
+    ];
     #terranix_config = pktVm1;
     #terranix_config = pktVm1;
     #terranix_config = {};
   };
-  pktVm1Json = pkgs.writeText "pktVm1.json" (pkgs.lib.generators.toJSON {} pktVm1);
 in {
   # TODO: replace with lovesegfault's sanity checked saneScript writer
   apply = (pkgs.writeShellScript "apply" ''
     set -euo pipefail; set -x
-    nvim "${pktVm1Json}";
-    sleep 5
     duration="1 hour"
     export TF_VAR_termtime="$(TZ=UTC date --date="''${duration}" --iso-8601=seconds)"
     export METAL_AUTH_TOKEN="$(gopass show colemickens/packet.net | grep apikey | cut -d' ' -f2)"
-    if [[ -e config.tf.json ]]; then rm -f config.tf.json; fi
-    
-    cp ${terraformCfg}/config.tf.json config.tf.json \
-      && ${tf} init \
-      && ${tf} apply
+    rm -f "${tfstate}/config.tf.json"
+    function v() { "${tf}" "-chdir=${tfstate}" version; }
+    trap v EXIT
+    cp "${terraformCfg}/config.tf.json" "${tfstate}/config.tf.json" \
+      && "${tf}" "-chdir=${tfstate}" init \
+      && "${tf}" "-chdir=${tfstate}" apply
+    chmod -R +w "${tfstate}"
   '');
 
   destroy = (pkgs.writeShellScript "destroy" ''
     set -euo pipefail; set -x
     export METAL_AUTH_TOKEN="$(gopass show colemickens/packet.net | grep apikey | cut -d' ' -f2)"
-    # if [[ -e config.tf.json ]]; then rm -f config.tf.json; fi
-    cp ${terraformCfg}/config.tf.json config.tf.json \
-      && ${tf} init \
-      && ${tf} destroy
+    if [[ ! -e config.tf.json ]]; then
+      cp "${terraformCfg}/config.tf.json" "${tfstate}/config.tf.json"
+    fi
+    true \
+      && "${tf}" "-chdir=${tfstate}" init \
+      && "${tf}" "-chdir=${tfstate}" destroy
+    rm -rf "${tfstate}"/*
   '');
 }

@@ -119,12 +119,12 @@
         bundle = inputs.self.bundles.${system};
       });
       apps = forAllSystems (system: let
-        tfout = import ./cloud/_tf { inherit inputs; pkgs = pkgs_.nixpkgs.${system}; };
+        tfout = import ./cloud/_tf { terranix = inputs.terranix; pkgs = pkgs_.nixpkgs.${system}; };
       in {
         # TODO: is this really the best way to expose this command outward?
         install-secrets = { type = "app"; program = legacyPackages."${system}".install-secrets.outPath; };
-        apply = { type = "app"; program = tfout.apply.outPath; };
-        destroy = { type = "app"; program = tfout.destroy.outPath; };
+        tf-apply = { type = "app"; program = tfout.apply.outPath; };
+        tf-destroy = { type = "app"; program = tfout.destroy.outPath; };
       });
 
       packages = forAllSystems (s: fullPkgs_.${s}.colePackages);
