@@ -28,10 +28,17 @@ let
     # "terraform" compartment in colemickens2
     compartment_id = "ocid1.compartment.oc1..aaaaaaaawrfmgshb57lsir25eqpd3x6hgyb2lddwn3uyjzm7tnhpdyt2fwca";
   };
+  packet_config1 = {
+    auth_token__file = "/run/secrets/packet_apikey";
+    project_id = "afc67974-ff22-41fd-9346-5b2c8d51e3a9";
+  };
 
   oracle_instances = [
-    (mkInstance oracle_config1 "oracular1")
-    # (mkInstance oracle_config2 "oracular2")
+    (mkOracleVM oracle_config1 "oracular1")
+  ];
+
+  packet_instances = [
+    (mkPacketVM packet_config1 "bldr-x86")
   ];
 
   tfdo = pkgs.writeScriptBin "tfdo" ''

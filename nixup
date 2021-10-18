@@ -16,7 +16,7 @@ buildargs=(
 )
 cache="colemickens"
 
-## <ci> #################################################
+## <ci> #######################################################################
 function _nix() { nix "${nixargs[@]}" "${buildargs[@]}" "${@}"; }
 function pushbuild() {
   set -euo pipefail
@@ -29,15 +29,11 @@ function cacheshell() { pushbuild ".#devShell.x86_64-linux.inputDerivation"; }
 function ci_check() { nix-build-uncached "${nixargs[@]}" "${buildargs[@]}" "${@}" -build-flags "-j0"; }
 function ci_nb_cache() { ci_check "${@}" || pushbuild "${@}"; }
 function ciup() { ci_nb_cache '.#bundle'; }
-
-## </ci> #################################################
-
+## </ci> ######################################################################
+## <updates> ##################################################################
 function inputup() {
   set -euo pipefail
   srcdirs=( "nixpkgs/cmpkgs" "home-manager/cmhm" "nixpkgs/master" "nixpkgs-wayland" "flake-firefox-nightly" )
-  # we basically undo parallel for now by setting, parallelism to 1
-  # otherwise git shits its pants in the multi-worktree dirs
-  false
   printf '%s\n' "${srcdirs[@]}" | \
     parallel --jobs 1 --halt soon,fail=1 --tag --progress -- \
       "[[ ! -d \"${HOME}/code/{.}\" ]] || (git -C '${HOME}/code/{.}' pull --rebase && git -C '${HOME}/code/{.}' push origin HEAD -f)"
@@ -46,13 +42,13 @@ function inputup() {
 function lockup() { nix "${nixargs[@]}" flake update --no-registries --commit-lock-file; cacheshell; }
 function pkgup() { ./pkgs/update.sh "${@:-}"; cacheshell; }
 function up() { set -euo pipefail; inputup && lockup && pkgup && ciup && cacheshell; }
-
-## <remote> #################################################
+## </updates> #################################################################
+## <remote> ###################################################################
 function _remote() {
   set -euo pipefail
   remote="${1}"; buildattr="${2}"; target="${3}"; action="${4:-""}"
   out="$(nix eval --raw "${buildattr}")"
-  _nix copy --to "ssh-ng://${remote}" --derivation "${buildattr}" --no-check-sigs
+  #_nix copy --to "ssh-ng://${remote}" --derivation "${buildattr}" --no-check-sigs
   _nix build --store "ssh-ng://${remote}" --eval-store "auto" "${buildattr}" |& tee /tmp/nb
   if [[ "${action}" == *cachix* ]]; then
     echo "${out}" | ssh "${remote}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" run nixpkgs/nixos-unstable#cachix push "${cache}")"
@@ -70,47 +66,32 @@ function tsip() {
   elif [[ "${1}" == "a64com" ]];    then printf "%s" "colemickens@aarch64.nixos.community";
   else                                   tailscale ip --6 ${1} | head -z -n1; fi
 }
-function pinebook()    { _remote "$(tsip a64com)"  ".#toplevels.pinebook"     "$(tsip pinebook)"    "activate"; }
-function xeep()        { _remote "$(tsip xeep)"    ".#toplevels.xeep"         "$(tsip xeep)"        "activate"; }
-function raisin()      { _remote "$(tsip raisin)"  ".#toplevels.raisin"       "$(tsip raisin)"      "${1:-"activate"}"; }
-function jeffhyper()   { _remote "$(tsip porty)"   ".#toplevels.jeffhyper"    "$(tsip jeffhyper)"   "activate"; }
-function porty()       { _remote "$(tsip porty)"   ".#toplevels.porty"        "$(tsip porty)"       "activate"; }
-function rpizero1()    { _remote "$(tsip porty)"   ".#toplevels.rpizero1"     "$(tsip rpizero1)"    "activate"; }
-function rpizero2()    { _remote "$(tsip porty)"   ".#toplevels.rpizero2"     "$(tsip rpizero2)"    "activate"; }
-function rpifour1()    { _remote "$(tsip a64com)"  ".#toplevels.rpifour1"     "$(tsip rpifour1)"    "activate"; }
-function sinkor()      { _remote "$(tsip a64com)"  ".#toplevels.sinkor"       "$(tsip sinkor)"      "activate"; }
-
-function pinephone()   { _remote "$(tsip bldr-a64)"  ".#toplevels.pinephone"    "$(tsip pinephone)"   "activate"; }
-function pinecache()   { _remote "$(tsip bldr-a64)"  ".#toplevels.pinephone"    "$(tsip pinephone)"   "cachix-activate"; }
-function bluephone()   { _remote "$(tsip bldr-a64)"  ".#toplevels.bluephone"    "$(tsip bluephone)"   "activate"; }
-
-function x64up() { up; porty; xeep; jeffhyper; raisin; rpizero1; rpizero2; }
-function a64up() { rpifour1; sinkor; pinebook; }
-
-function x64()   { _remote "$(tsip porty)"  ".#bundles.x86_64-linux" "$(tsip porty)" "none"; }
-function a64()   { _remote "$(tsip a64com)" ".#bundles.aarch64-linux" "$(tsip porty)" "none"; }
-
-function commbox() {
-  ssh "colemickens@aarch64.nixos.community" "nix-env -f /run/current-system/nixpkgs -iA git zellij nixUnstable htop ncdu"
-  ssh "colemickens@aarch64.nixos.community" "mkdir -p /home/colemickens/.config/cachix"
-  scp "${HOME}/.config/cachix/cachix.dhall" "colemickens@aarch64.nixos.community:/home/colemickens/.config/cachix/cachix.dhall"
-}
-
-function kexec() {
-  _nix build --out-link /tmp/kexec \
-    ".#nixosConfigurations.oracular_kexec.config.system.build.kexec_script"
-
-  sudo /tmp/kexec
-}
-## </remote> #################################################
+## x86_64-linux
+function porty()     { _remote "$(tsip porty)"   ".#toplevels.porty"        "$(tsip porty)"      "${1:-"activate"}"; }
+function xeep()      { _remote "$(tsip xeep)"    ".#toplevels.xeep"         "$(tsip xeep)"       "${1:-"activate"}"; }
+function raisin()    { _remote "$(tsip raisin)"  ".#toplevels.raisin"       "$(tsip raisin)"     "${1:-"activate"}"; }
+function jeffhyper() { _remote "$(tsip porty)"   ".#toplevels.jeffhyper"    "$(tsip jeffhyper)"  "${1:-"activate"}"; }
+## aarch64-linux
+function pinebook()  { _remote "$(tsip bldr-a64)"  ".#toplevels.pinebook"   "$(tsip pinebook)"   "${1:-"activate"}"; }
+function pinephone() { _remote "$(tsip bldr-a64)"  ".#toplevels.pinephone"  "$(tsip pinephone)"  "${1:-"activate"}"; }
+function bluephone() { _remote "$(tsip bldr-a64)"  ".#toplevels.bluephone"  "$(tsip bluephone)"  "${1:-"activate"}"; }
+function rpifour1()  { _remote "$(tsip bldr-a64)"  ".#toplevels.rpifour1"   "$(tsip rpifour1)"   "${1:-"activate"}"; }
+function sinkor()    { _remote "$(tsip bldr-a64)"  ".#toplevels.sinkor"     "$(tsip sinkor)"     "${1:-"activate"}"; }
+function sinkor()    { _remote "$(tsip bldr-a64)"  ".#toplevels.ocular"     "$(tsip sinkor)"     "${1:-"activate"}"; }
+## armv6l-linux (cross-built)
+function rpizero1()  { _remote "$(tsip porty)"     ".#toplevels.rpizero1"   "$(tsip rpizero1)"   "${1:-"activate"}"; }
+function rpizero2()  { _remote "$(tsip porty)"     ".#toplevels.rpizero2"   "$(tsip rpizero2)"   "${1:-"activate"}"; }
+## bundles
+function x64()   { _remote "$(tsip bldr-x64)"  ".#bundles.x86_64-linux"   "$(tsip porty)" "${1:-"none"}"; }
+function a64()   { _remote "$(tsip bldr-a64)"  ".#bundles.aarch64-linux"  "$(tsip porty)" "${1:-"none"}"; }
+## </remote> ##################################################################
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 if [[ -z "${cmd:-""}" ]]; then
   cmd="up"
 fi
 
-set -x
-"${cmd}" "${@}"
-set +x
+set -x; "${cmd}" "${@}"; set +x
+
 echo -e "\nexit=$?"
 exit 0
