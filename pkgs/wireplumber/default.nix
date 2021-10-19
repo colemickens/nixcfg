@@ -2,6 +2,8 @@
 , meson, ninja, pkgconfig
 , gtk3, pipewire, cpptoml
 , gobject-introspection
+, lua5_4, systemd
+, python3
 }:
 
 let metadata = import ./metadata.nix; in
@@ -18,17 +20,21 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig meson ninja gobject-introspection
+    pkgconfig meson ninja gobject-introspection lua5_4
+    python3
   ];
 
   buildInputs = [
-    pipewire gtk3 cpptoml
+    pipewire gtk3 cpptoml lua5_4
+    systemd
   ];
 
   enableParallelBuilding = true;
 
   mesonFlags = [
-    "-Dwrap_mode=nodownload"
+    "-Delogind=disabled"
+    "-Dsystem-lua=true"
+    "-Dsystem-lua-version=5.4"
     "-Ddoc=disabled"
   ];
 

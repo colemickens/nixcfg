@@ -26,6 +26,11 @@
   ];
 
   config = {
+    environment.systemPackages = with pkgs; [
+      hdparm
+      esphome
+    ];
+
     users.users.cole.linger = true;
 
     # Use the systemd-boot EFI boot loader.
@@ -46,8 +51,6 @@
     documentation.doc.enable = false;
     documentation.info.enable = false;
     documentation.nixos.enable = false;
-
-    environment.systemPackages = with pkgs; [ hdparm ];
 
     networking.hostName = "porty"; # Define your hostname.
     networking.hostId = "abbadaba";

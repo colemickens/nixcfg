@@ -155,6 +155,14 @@
           shreddit = prev.python3Packages.callPackage ./pkgs/shreddit {};
           metal-cli = prev.callPackage ./pkgs/metal-cli {};
           rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {};
+          #disabled # wezterm = prev.callPackage ./pkgs/wezterm { wezterm = prev.wezterm; };
+          
+          # <wireplumber>
+          wireplumber = prev.callPackage ./pkgs/wireplumber {};
+          # <wireguard deps> # must be visible for update script to hit it
+          cpptoml = prev.callPackage ./pkgs/cpptoml {};
+          # </wireguard deps>
+          # </wireplumber>
           zellij = prev.callPackage ./pkgs/zellij { zellij = prev.zellij; };
 
           nix-build-uncached = prev.nix-build-uncached.overrideAttrs(old: {
@@ -236,7 +244,7 @@
             bp.config.mobile.outputs.android.android-flashable-system
           ]);
       };
-      
+
       # linuxVMs = {
       #   demovm = inputs.self.nixosConfigurations.demovm.config.system.build.vm;
       #   testipfsvm = inputs.self.nixosConfigurations.testipfsvm.config.system.build.vm;

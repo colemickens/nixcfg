@@ -47,8 +47,9 @@ let
     project_id = "afc67974-ff22-41fd-9346-5b2c8d51e3a9";
   };
 
-  pkt_bldr_x86 = (mkPacketVM  metal_cole  "c2.medium.x86"  "sv"  "bldr-x86");
-  pkt_bldr_a64 = (mkPacketVM  metal_cole  "c2.large.arm"   "sv"  "bldr-a64");
+  pkt_loc = "sjc1"; # "sv";
+  pkt_bldr_x86 = (mkPacketVM  metal_cole  "c2.medium.x86"  pkt_loc  "bldr-x86");
+  pkt_bldr_a64 = (mkPacketVM  metal_cole  "c2.large.arm"   pkt_loc  "bldr-a64");
   #oracle1_amp_one = (mkOracleVM )
   #oracle2_amp_one = (mkOracleVM )
 
@@ -68,13 +69,20 @@ in {
     duration="1 hour"
     export TF_VAR_termtime="$(TZ=UTC date --date="''${duration}" --iso-8601=seconds)"
     export METAL_AUTH_TOKEN="$(gopass show colemickens/packet.net | grep apikey | cut -d' ' -f2)"
+  
+    export TF_LOG=DEBUG
+    export TF_LOG_PATH=/tmp/log.txt
+
     rm -rf "${tfstate}"; mkdir -p "${tfstate}"
-    function trap_dump_tf_version() { "${tf}" "-chdir=${tfstate}" version; }
+    function trap_dump_tf_version() {
+      "${tf}" "-chdir=${tfstate}" version
+      sed -i "s/''${METAL_AUTH_TOKEN}/METAL_AUTH_TOKEN_REDACTED/g" /tmp/log.txt
+      chmod -R +w "${tfstate}"
+    }
     trap trap_dump_tf_version EXIT
     cp "${terraformCfg}/config.tf.json" "${tfstate}/config.tf.json" \
       && "${tf}" "-chdir=${tfstate}" init \
       && "${tf}" "-chdir=${tfstate}" apply
-    chmod -R +w "${tfstate}"
   '');
 
   destroy = (pkgs.writeShellScript "destroy" ''
