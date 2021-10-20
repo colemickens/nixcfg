@@ -2,10 +2,7 @@
 , cmake
 }:
 
-let metadata = {
-    rev="121b4b664fd7b98546bb45adc4d45ee8a3043295";
-    sha256="sha256-vBIImuiUqeZXhNQ55qpS8+wxCddnHu4jIY+dsjieHHE=";
-}; in
+let metadata = import ./metadata.nix; in
 stdenv.mkDerivation rec {
   pname = "cpptoml";
   version = "${metadata.rev}";
@@ -16,6 +13,10 @@ stdenv.mkDerivation rec {
     rev = metadata.rev;
     sha256 = metadata.sha256;
   };
+
+  patches = [
+    ./0001-cmake-output-cpptoml.pc-for-pkg-config-discoverabili.patch
+  ];
 
   nativeBuildInputs = [
     cmake

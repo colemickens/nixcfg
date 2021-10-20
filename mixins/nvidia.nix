@@ -9,7 +9,7 @@ let
       GBM_BACKEND=nvidia-drm \
       __GLX_VENDOR_LIBRARY_NAME=nvidia \
       WLR_NO_HARDWARE_CURSORS=1 \
-        sway --my-next-gpu-wont-be-nvidia -d &>/tmp/sway.log
+        sway --unsupported-gpu -d &>/tmp/sway.log
   '');
   nvidia-wlroots-overlay = (final: prev: {
     wlroots = prev.wlroots.overrideAttrs(old: {

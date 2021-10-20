@@ -158,9 +158,9 @@
           #disabled # wezterm = prev.callPackage ./pkgs/wezterm { wezterm = prev.wezterm; };
           
           # <wireplumber>
-          wireplumber = prev.callPackage ./pkgs/wireplumber {};
+          #disabled wireplumber = prev.callPackage ./pkgs/wireplumber {};
           # <wireguard deps> # must be visible for update script to hit it
-          cpptoml = prev.callPackage ./pkgs/cpptoml {};
+          #disabled cpptoml = prev.callPackage ./pkgs/cpptoml {};
           # </wireguard deps>
           # </wireplumber>
           zellij = prev.callPackage ./pkgs/zellij { zellij = prev.zellij; };
