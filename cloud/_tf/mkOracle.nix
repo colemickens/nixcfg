@@ -1,9 +1,14 @@
+{ pkgs, ... }:
+
 oracle_config: vms:
 # oracle_config: shape: image_name: instance_name:
 
 let
+  lib = pkgs.lib;
   mapAttrs' = f: set:
     builtins.listToAttrs (map (attr: f attr set.${attr}) (builtins.attrNames set));
+  mapAttrsToList = f: attrs:
+    map (name: f name attrs.${name}) (builtins.attrNames attrs);
 
   canonical_ubuntu_20_04__aarch64__20210922_0 = {
     "ap-chuncheon-1" = "ocid1.image.oc1.ap-chuncheon-1.aaaaaaaapgcextelmkktqpz623asl4adp2o7dkpnr7v6cstvwwrresewme3q";
@@ -61,16 +66,12 @@ let
     "Canonical-Ubuntu-20.04-Minimal-2021.09.23-0" = canonical_ubuntu_20_04_minimal__arm64__20210923_0;
   };
 
-  sshpubkey = (import ../../data/sshkeys.nix)[0];
-  userdata = "" ; # TODO
+  sshpubkey = (builtins.elemAt (import ../../data/sshkeys.nix) 0);
 
   compartment_ocid = oracle_config.compartment_id;
 
-  mkVm = name: { image, shape }: let
-    source_id = oracle_images."${image}"."${oracle_config.region}";
-    group_name = "terraform"; # TODO
-  in {
-    oci_core_instance."${name}" = [{
+  mkVm = name: v: {
+    resource.oci_core_instance."${name}" = [{
       availability_domain = "\${data.oci_identity_availability_domain.default_ad.name}";
       compartment_id = compartment_ocid;
       create_vnic_details = [
@@ -85,15 +86,17 @@ let
       display_name = "${name}";
       metadata = {
         ssh_authorized_keys = sshpubkey;
-        user_data = userdata;
+          # TODO: terranix function? (esp if we can handle data/secrets better?)
+        #user_data = "\${base64encode(templatefile(${v.userdata}, ${v.uservars}))}";
+        #user_data = "base64encode('asdfasdfadfasdf!@#123123')";
       };
-      shape = shape.name;
-      shape_config = if (!builtins.hasAttr "config" shape) then [] else [{
-        memory_in_gbs = shape.config.mem;
-        ocpus = shape.config.ocpus;
+      shape = v.shape.name;
+      shape_config = if (!builtins.hasAttr "config" v.shape) then [] else [{
+        memory_in_gbs =  v.shape.config.mem;
+        ocpus = v.shape.config.ocpus;
       }];
       source_details = [{
-        source_id = source_id;
+        source_id = oracle_images."${v.image}"."${oracle_config.region}";
         source_type = "image";
       }];
       timeouts = [{
@@ -101,62 +104,65 @@ let
       }];
     }];
   };
-in {
-  provider = {
-    oci = [{
-      fingerprint = oracle_config.fingerprint;
-      private_key_path = oracle_config.key_file;
-      region = oracle_config.region;
-      tenancy_ocid = oracle_config.tenancy_id;
-      user_ocid = oracle_config.user;
-    }];
-  };
-  data = {
-    oci_identity_availability_domain."default_ad" = [{
-      compartment_id = compartment_ocid;
-      ad_number = 1;
-    }];
-  };
-  resource = (rec {
-    oci_core_internet_gateway."default_internet_gateway" = [{ 
-      compartment_id = compartment_ocid;
-      display_name = "DefaultInternetGateway";
-      vcn_id = "\${oci_core_vcn.default_vcn.id}";
-    }];
-    oci_core_default_route_table."default_route_table" = [{
-      display_name = "DefaultRouteTable";
-      manage_default_resource_id = "\${oci_core_vcn.default_vcn.default_route_table_id}";
-      route_rules = [
-        {
-          destination = "0.0.0.0/0";
-          destination_type = "CIDR_BLOCK";
-          network_entity_id = "\${oci_core_internet_gateway.default_internet_gateway.id}";
-        }
-      ];
-    }];
-    oci_core_subnet."default_subnet" = [{
-      availability_domain = "\${data.oci_identity_availability_domain.default_ad.name}";
-      cidr_block = "10.0.1.0/24";
-      compartment_id = compartment_ocid;
-      dhcp_options_id = "\${oci_core_vcn.default_vcn.default_dhcp_options_id}";
-      display_name = "DefaultSubnet";
-      dns_label = "default";
-      route_table_id = "\${oci_core_vcn.default_vcn.default_route_table_id}";
-      security_list_ids = [
-        "\${oci_core_vcn.default_vcn.default_security_list_id}"
-      ];
-      vcn_id = "\${oci_core_vcn.default_vcn.id}";
-    }];
-    oci_core_vcn."default_vcn" = [{
-      cidr_block = "10.0.0.0/16";
-      compartment_id = compartment_ocid;
-      display_name = "DefaultVcn";
-      dns_label = "default";
-    }];
-  })
-  
-  # // (mapAttrs' mkVm vms)
-  ;
-}
+
+  mergeListToAttrs = lib.fold (c: el: lib.recursiveUpdate el c) {};
+in mergeListToAttrs ([]
+  ++ (lib.mapAttrsToList mkVm vms)
+  ++ [{
+    locals = {};
+    provider = {
+      oci = [{
+        fingerprint = oracle_config.fingerprint;
+        private_key_path = oracle_config.key_file;
+        region = oracle_config.region;
+        tenancy_ocid = oracle_config.tenancy_id;
+        user_ocid = oracle_config.user;
+      }];
+    };
+    data = {
+      oci_identity_availability_domain."default_ad" = [{
+        compartment_id = compartment_ocid;
+        ad_number = 1;
+      }];
+    };
+    resource = rec {
+      oci_core_internet_gateway."default_internet_gateway" = [{ 
+        compartment_id = compartment_ocid;
+        display_name = "DefaultInternetGateway";
+        vcn_id = "\${oci_core_vcn.default_vcn.id}";
+      }];
+      oci_core_default_route_table."default_route_table" = [{
+        display_name = "DefaultRouteTable";
+        manage_default_resource_id = "\${oci_core_vcn.default_vcn.default_route_table_id}";
+        route_rules = [
+          {
+            destination = "0.0.0.0/0";
+            destination_type = "CIDR_BLOCK";
+            network_entity_id = "\${oci_core_internet_gateway.default_internet_gateway.id}";
+          }
+        ];
+      }];
+      oci_core_subnet."default_subnet" = [{
+        availability_domain = "\${data.oci_identity_availability_domain.default_ad.name}";
+        cidr_block = "10.0.1.0/24";
+        compartment_id = compartment_ocid;
+        dhcp_options_id = "\${oci_core_vcn.default_vcn.default_dhcp_options_id}";
+        display_name = "DefaultSubnet";
+        dns_label = "default";
+        route_table_id = "\${oci_core_vcn.default_vcn.default_route_table_id}";
+        security_list_ids = [
+          "\${oci_core_vcn.default_vcn.default_security_list_id}"
+        ];
+        vcn_id = "\${oci_core_vcn.default_vcn.id}";
+      }];
+      oci_core_vcn."default_vcn" = [{
+        cidr_block = "10.0.0.0/16";
+        compartment_id = compartment_ocid;
+        display_name = "DefaultVcn";
+        dns_label = "default";
+      }];
+    };
+  }]
+)
 
 

@@ -1,8 +1,12 @@
 { pkgs, terranix }:
 
 let
-  mkPacketVM = import ./mkPacketVM.nix;
-  mkOracle = import ./mkOracle.nix;
+  lib = pkgs.lib;
+  
+  mkPacketVM = import ./mkPacketVM.nix { inherit pkgs; };
+  mkOracle = import ./mkOracle.nix { inherit pkgs; };
+
+  userdata = import ./userdata.nix { inherit pkgs; };
 
   _tf = (pkgs.terraform_1_0.withPlugins (p: [
       p.local
@@ -10,6 +14,7 @@ let
       p.null
       p.oci
       p.random
+      p.sops
       p.template
     ]));
   tf = "${_tf}/bin/terraform";
@@ -39,9 +44,23 @@ let
   o_amd = { name = "VM.Standard.E2.1.Micro"; };
   o_arm_img = "canonical_ubuntu_20_04__aarch64";
   o_amd_img = "canonical_ubuntu_20_04_minimal__arm64";
+  
+  udi = f: "\n\n##\n##\n${f}\n${builtins.readFile f}";
+  ud = takeover: pkgs.writeShellScript "bootstrap.sh.tmpl" ''
+    set -x
+    set -euo pipefail
+    ${udi ./userdata/install-nix.sh}
+    ${if takeover then (udi ./userdata/nixos-hermancain.sh) else ""}
+  #'';
+  toVars = vars: "{ " + (builtins.concatStringsSep ", " (lib.mapAttrsToList (k: v: "${k} = \"${v}\"") vars)) + " }";
+  uv = toVars {
+    TF_NIX_INSTALL_URL = "https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.5pre20211008_6bd74a6/install";
+    TF_USERNAME = "cole";
+    TF_NIXOS_LUSTRATE = "false"; # todo: we already selectively include the script?
+  };
   oci1_vcn = (mkOracle ociacct1 {
-    oci1arm1 = { shape = o_arm; image=o_arm_img; };
-    #oci1amd1 = { shape = o_amd; image=o_amd_img; };
+    oci1arm1 = { shape = o_arm; image=o_arm_img; userdata=(ud false); uservars=uv; };
+    oci1amd1 = { shape = o_amd; image=o_amd_img; userdata=(ud false); uservars=uv; };
   });
   ## </oracle>
 
