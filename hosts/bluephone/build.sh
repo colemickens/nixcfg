@@ -4,8 +4,11 @@ set -euo pipefail
 set -x
 
 thing="images.bluephone"
-result="$(nix eval --raw "/home/cole/code/nixcfg#${thing}")"
 out="colemickens-$(echo "${thing}" | sha256sum | cut -d' ' -f1)"
+
+result="$(nix eval \
+  --raw "/home/cole/code/nixcfg#${thing}" \
+  --override-input mobile-nixos ~/code/mobile-nixos)"
 
 ## update mobile-nixos
 [[ -z $(git -C ~/code/mobile-nixos status -s) ]] \
