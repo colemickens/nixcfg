@@ -37,3 +37,9 @@ cat "/tmp/${out}-paths"
 echo; echo; echo
 echo "these are your friends: "
 cat "/tmp/${out}-paths" | grep "install" | grep ".sh"
+
+if [[ "${1:-""}" == "flash" ]]; then
+  script="$(cat "/tmp/${out}-paths" | grep "install" | grep "system" | grep ".sh")"
+
+  ${script}
+fi
