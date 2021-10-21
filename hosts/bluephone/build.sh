@@ -33,6 +33,7 @@ ssh "colemickens@aarch64.nixos.community" "nix path-info -r $result" > "/tmp/${o
 ssh "colemickens@aarch64.nixos.community" "rm -f /tmp/${out}"
 
 set +x
+cat "/tmp/${out}-paths"
 echo; echo; echo
 echo "these are your friends: "
 cat "/tmp/${out}-paths" | grep "install" | grep ".sh"
