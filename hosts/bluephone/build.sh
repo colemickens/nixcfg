@@ -19,4 +19,4 @@ ssh "colemickens@aarch64.nixos.community" "rm -f /tmp/${out}"
 set +x
 echo; echo; echo
 echo "these are your friends: "
-cat "/tmp/${out}-paths" | grep "install*sh"
+cat "/tmp/${out}-paths" | grep "install" | grep ".sh"
