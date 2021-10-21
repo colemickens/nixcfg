@@ -7,6 +7,10 @@ thing="images.bluephone"
 result="$(nix eval --raw "/home/cole/code/nixcfg#${thing}")"
 out="colemickens-$(echo "${thing}" | sha256sum | cut -d' ' -f1)"
 
+## update mobile-nixos
+(cd ~/code/mobile-nixos; git commit . --amend --no-edit; git push origin HEAD -f)
+(cd ../..; nix flake lock --update-input mobile-nixos --commit-lock-file)
+
 git -C /home/cole/code/nixcfg commit . -m "wip" || true; git -C /home/cole/code/nixcfg push origin HEAD
 ssh "colemickens@aarch64.nixos.community" "git -C /home/colemickens/code/nixcfg remote update \
   && git -C /home/colemickens/code/nixcfg reset --hard origin/main \
