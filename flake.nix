@@ -110,7 +110,8 @@
         ]);
       });
       devShells = forAllSystems (system: {
-        devenv = import ./shells/shell-devenv.nix { inherit inputs system; };
+        devenv = (import ./shells/shell-devenv.nix { inherit inputs system minimalMkShell; });
+        legacy = (import ./shells/shell-legacy.nix { inherit inputs system minimalMkShell; });
       });
 
       legacyPackages = forAllSystems (system: { # to `nix eval` with the "currentSystem" in certain scenarios

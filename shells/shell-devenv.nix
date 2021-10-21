@@ -1,11 +1,11 @@
-{ inputs, system }:
+{ inputs, system, minimalMkShell }:
 
 let
   pkgs = inputs.nixpkgs.legacyPackages.${system};
   rustPlatform = (pkgs.makeRustPlatform {
     inherit (inputs.fenix.packages.${system}.minimal) cargo rustc;
   });
-in pkgs.stdenv.mkDerivation {
+in minimalMkShell pkgs.system { # TODO use something else for system?
   name = "devenv";
   hardeningDisable = [ "fortify" ];
 
