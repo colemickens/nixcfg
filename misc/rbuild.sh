@@ -3,7 +3,7 @@ DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 set -euo pipefail
 set -x
 
-# TODO: NOTE: this isn't working right now and I honestly don't know why
+function nix() { "${DIR}/nix.sh" "${@}"; }
 
 # {thing} {remote} {cachix|newcopy|oldcopy}
 thing="${1}"; shift
