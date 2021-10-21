@@ -13,10 +13,10 @@ ssh "colemickens@aarch64.nixos.community" "git -C /home/colemickens/code/nixcfg 
   && nix build -L /home/colemickens/code/nixcfg#${thing} --out-link /tmp/${out}"
 
 nix copy --no-check-sigs --from "ssh-ng://colemickens@aarch64.nixos.community" "${result}"
-ssh "colemickens@aarch64.nixos.community" "nix path-info -r $result" | tee /tmp/${out}-paths
+ssh "colemickens@aarch64.nixos.community" "nix path-info -r $result" > "/tmp/${out}-paths"
 ssh "colemickens@aarch64.nixos.community" "rm -f /tmp/${out}"
 
 set +x
 echo; echo; echo
 echo "these are your friends: "
-cat | grep "install*sh"
+cat "/tmp/${out}-paths" | grep "install*sh"
