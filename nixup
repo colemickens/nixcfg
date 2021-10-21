@@ -44,23 +44,6 @@ function pkgup() { ./pkgs/update.sh "${@:-}"; cacheshell; }
 function up() { set -euo pipefail; inputup && lockup && pkgup && ciup && cacheshell; }
 ## </updates> #################################################################
 ## <remote> ###################################################################
-function _remote() {
-  set -euo pipefail
-  remote="${1}"; buildattr="${2}"; target="${3}"; action="${4:-""}"
-  out="$(nix eval --raw "${buildattr}")"
-  #_nix copy --to "ssh-ng://${remote}" --derivation "${buildattr}" --no-check-sigs
-  _nix build --store "ssh-ng://${remote}" --eval-store "auto" "${buildattr}" |& tee /tmp/nb
-  if [[ "${action}" == *cachix* ]]; then
-    echo "${out}" | ssh "${remote}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" run nixpkgs/nixos-unstable#cachix push "${cache}")"
-    ssh "${target}" "$(printf '\"%s\" ' sudo nix-store "${nixargs[@]}" -r "${out}")"
-  else nix copy --no-check-sigs --from "ssh-ng://${remote}" --to "ssh-ng://${target}" "${out}"
-  fi
-  if [[ "${action:-""}" == *activate* ]]; then
-    ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --no-link --profile /nix/var/nix/profiles/system "${out}")"
-    ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch)"
-  fi
-  if [[ "${action:-""}" == *reboot* ]]; then ssh "${target}" "sudo reboot"; fi
-}
 function tsip() {
   if [[ "${1}" == "$(hostname)" ]]; then printf "%s" "localhost";
   elif [[ "${1}" == "a64com" ]];    then printf "%s" "colemickens@aarch64.nixos.community";
@@ -74,7 +57,7 @@ function jeffhyper() { _remote "$(tsip porty)"   ".#toplevels.jeffhyper"    "$(t
 ## aarch64-linux
 function pinebook()  { _remote "$(tsip bldr-a64)"  ".#toplevels.pinebook"   "$(tsip pinebook)"   "${1:-"activate"}"; }
 function pinephone() { _remote "$(tsip bldr-a64)"  ".#toplevels.pinephone"  "$(tsip pinephone)"  "${1:-"activate"}"; }
-function bluephone() { _remote "$(tsip bldr-a64)"  ".#toplevels.bluephone"  "$(tsip bluephone)"  "${1:-"activate"}"; }
+function bluephone() { "${DIR}/misc/rbuild.sh" ".#toplevels.bluephone"  "$(tsip a64com)"  "newcopy" }
 function rpifour1()  { _remote "$(tsip bldr-a64)"  ".#toplevels.rpifour1"   "$(tsip rpifour1)"   "${1:-"activate"}"; }
 function sinkor()    { _remote "$(tsip bldr-a64)"  ".#toplevels.sinkor"     "$(tsip sinkor)"     "${1:-"activate"}"; }
 function sinkor()    { _remote "$(tsip bldr-a64)"  ".#toplevels.ocular"     "$(tsip sinkor)"     "${1:-"activate"}"; }
