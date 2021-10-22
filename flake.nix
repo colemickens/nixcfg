@@ -227,6 +227,10 @@
           ++ (builtins.attrValues hydraJobs.${s}.hosts)
         ));
 
+      devices = {
+        bluephone = inputs.self.nixosConfigurations.bluephone.config.mobile.outputs.android;
+      };
+
       images = let
         tow-boot = sys: (import inputs.tow-boot { pkgs = import inputs.nixpkgs { system = sys; }; });
         tow-boot-aarch64 = tow-boot "aarch64-linux";
