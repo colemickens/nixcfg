@@ -17,6 +17,10 @@ nixcfg
 
 
 
+convert gpg->ccid
+get ready for solo keys 22
+
+
 - actually package qmic
 - oracle-cloud/tf/interpolate?
 - mobile-nixos -> split into [native aarch64] [any-arch imagebuild]
