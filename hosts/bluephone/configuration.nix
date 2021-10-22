@@ -22,9 +22,7 @@ in
   config = {
     system.stateVersion = "21.05";
 
-    documentation.enable =
-      #builtins.trace config.environment.etc."NetworkManager/NetworkManager.conf".source
-      false;
+    documentation.enable = false;
     documentation.doc.enable = false;
     documentation.info.enable = false;
     documentation.nixos.enable = false;
