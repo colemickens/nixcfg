@@ -26,7 +26,7 @@ git -C /home/cole/code/nixcfg push origin HEAD
 ## pull remote, build
 ssh "colemickens@aarch64.nixos.community" "git -C /home/colemickens/code/nixcfg remote update \
   && git -C /home/colemickens/code/nixcfg reset --hard origin/main \
-  && nix build -L /home/colemickens/code/nixcfg#${thing} --out-link /tmp/${out}"
+  && nix build -L /home/colemickens/code/nixcfg#${thing} --keep-going --out-link /tmp/${out}"
 
 nix copy --no-check-sigs --from "ssh-ng://colemickens@aarch64.nixos.community" "${result}"
 ssh "colemickens@aarch64.nixos.community" "nix path-info -r $result" > "/tmp/${out}-paths"
