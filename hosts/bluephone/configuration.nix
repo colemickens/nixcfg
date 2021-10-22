@@ -11,6 +11,7 @@ in
     #../../modules/loginctl-linger.nix
     ../../mixins/common.nix
     ../../mixins/sshd.nix
+    ../../mixins/networkmanager-minimal.nix
     #../../mixins/tailscale.nix
 
     (import "${inputs.mobile-nixos}/lib/configuration.nix" {
@@ -26,7 +27,7 @@ in
     documentation.info.enable = false;
     documentation.nixos.enable = false;
     programs.command-not-found.enable = false;
-    # environment.noXlibs = true; # fuck you nm
+    environment.noXlibs = true; # fuck you nm
     security.polkit.enable = false;
     services.udisks2.enable = false;
     boot.enableContainers = false;
