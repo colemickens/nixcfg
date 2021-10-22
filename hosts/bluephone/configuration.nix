@@ -56,6 +56,6 @@ in
     networking.networkmanager.enable = true;
     networking.networkmanager.unmanaged = [ "rndis0" "usb0" ];
     services.blueman.enable = false;
-    hardware.bluetooth.enable = false;
+    hardware.bluetooth.enable = lib.mkForce false;
   };
 }
