@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, ... }:
+{ pkgs, lib, inputs, config, ... }:
 let
   hostname = "bluephone";
 in
@@ -22,7 +22,9 @@ in
   config = {
     system.stateVersion = "21.05";
 
-    documentation.enable = false;
+    documentation.enable =
+      #builtins.trace config.environment.etc."NetworkManager/NetworkManager.conf".source
+      false;
     documentation.doc.enable = false;
     documentation.info.enable = false;
     documentation.nixos.enable = false;
