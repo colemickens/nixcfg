@@ -47,8 +47,8 @@ function jeffhyper() { _remote "$(tsip porty)"   ".#toplevels.jeffhyper"    "$(t
 ## aarch64-linux
 function pinebook()  { _remote "$(tsip bldr-a64)"  ".#toplevels.pinebook"   "$(tsip pinebook)"   "${1:-"activate"}"; }
 function pinephone() { _remote "$(tsip bldr-a64)"  ".#toplevels.pinephone"  "$(tsip pinephone)"  "${1:-"activate"}"; }
-function bluephone() { false }
-function enchilada() { false }
+function bluephone() { false; }
+function enchilada() { false; }
 function rpifour1()  { _remote "$(tsip bldr-a64)"  ".#toplevels.rpifour1"   "$(tsip rpifour1)"   "${1:-"activate"}"; }
 function sinkor()    { _remote "$(tsip bldr-a64)"  ".#toplevels.sinkor"     "$(tsip sinkor)"     "${1:-"activate"}"; }
 function sinkor()    { _remote "$(tsip bldr-a64)"  ".#toplevels.ocular"     "$(tsip sinkor)"     "${1:-"activate"}"; }
