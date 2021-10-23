@@ -247,12 +247,12 @@
         rpionebp  = inputs.self.nixosConfigurations.rpionebp.config.system.build.sdImage;
 
         bluephone = let bp = inputs.self.nixosConfigurations.bluephone; in
-          pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "bluephone" ([
+          pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "bluephone-bundle" ([
             devices.bluephone.extra
             devices.bluephone.android-fastboot-images
           ]);
         enchilada = let bp = inputs.self.nixosConfigurations.enchilada; in
-          pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "enchilada" ([
+          pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "enchilada-bundle" ([
             # devices.enchilada.extra
             devices.enchilada.android-fastboot-images
           ]);

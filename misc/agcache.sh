@@ -7,12 +7,13 @@ set -x
 nix path-info --derivation -r "${DIR}/..#${thing}" > /tmp/drvs
 
 while read p; do
-  (echo "${p}" | grep "partition") && continue
-  (echo "${p}" | grep "fastboot") && continue
-
+  if [[ "${p}" != *drv ]]; then continue; fi
+  
   nix-build -j0 "${p}"\
     | grep -v fastboot \
     | grep -v partition \
     | grep -v PARTITION \
+    | grep -v firmware \
+    | grep -v "-bundle" \
     | cachix push "colemickens"
 done </tmp/drvs
