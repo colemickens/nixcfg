@@ -8,10 +8,10 @@ NIX_INSTALL_URL="${TF_NIX_INSTALL_URL}"
 # TODO: support re-exec as root if we're not
 # check if we're not "cole" and if so, make it and then re-exec *again*
 
-if [[ "${1:-""}" != "stage2" ]]; then
-  if [[ "$(whoami)" != "${USERNAME}}" ]]; then
+if [[ "$${1:-""}" != "stage2" ]]; then
+  if [[ "$(whoami)" != "$${USERNAME}}" ]]; then
     sudo adduser --gecos "" --disabled-password "$${USERNAME}"
-    mkdir -p /home/"${USERNAME}"/.ssh
+    mkdir -p /home/"$${USERNAME}"/.ssh
     curl -L "https://github.com/colemickens.keys" > /home/cole/.ssh/authorized_keys
     sudo chown -R cole /home/"$${USERNAME}"/.ssh
     sudo chmod -R ugo-w /home/"$${USERNAME}"/.ssh
@@ -30,7 +30,7 @@ fi
 
 # configure nix ahead of time so daemon starts up with correct settings
 # TODO: pull out extra subs/keys to TF var?
-mkdir -p "/etc/nix"
+sudo mkdir -p "/etc/nix"
 cat <<EOF | sudo tee -a "/etc/nix/nix.conf"
 experimental-features = nix-command flakes ca-references
 extra-substituters = https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://arm.cachix.org https://thefloweringash-armv7.cachix.org
@@ -41,17 +41,18 @@ max-jobs = auto
 EOF
 
 curl -L "$${NIX_INSTALL_URL}" > /tmp/install
-chmod +x /tmp/install
+sudo chmod +x /tmp/install
 /tmp/install --daemon
 
-BASHRC="$(cat "$${HOME}/.bashrc")"
-cat <<EOF
+BASHRC="$(cat "/home/$${USERNAME}/.bashrc")"
+cat <<EOF > "/home/$${USERNAME}/.bashrc"
 if [ -e /home/$${USERNAME}/.nix-profile/etc/profile.d/nix.sh ]; then   # added by Nix installer
   source /home/$${USERNAME}/.nix-profile/etc/profile.d/nix.sh;         # added by Nix installer
 fi                                                             # added by Nix installer
 $${BASHRC}
-EOF > "$${HOME}/.bashrc"
+EOF
 
 source /home/$${USERNAME}/.nix-profile/etc/profile.d/nix.sh
+nix version
 
-echo "bootstrap: all done!"
+echo "install-nix: all done!"

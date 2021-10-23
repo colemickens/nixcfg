@@ -124,6 +124,7 @@
       in {
         # TODO: is this really the best way to expose this command outward?
         install-secrets = { type = "app"; program = legacyPackages."${system}".install-secrets.outPath; };
+        tf = { type = "app"; program = tfout.tf.outPath; };
         tf-apply = { type = "app"; program = tfout.apply.outPath; };
         tf-destroy = { type = "app"; program = tfout.destroy.outPath; };
       });

@@ -6,12 +6,13 @@ set -x
 function nix() { "${DIR}/nix.sh" "${@}"; }
 
 # {thing} {remote} {cachix|newcopy|oldcopy}
-thing="${1}"; shift
-remote="${2:-"colemickens@aarch64.nixos.community"}"
-copymethod="${3:-"oldcopy"}"
 
-drv="$(nix eval --raw "${DIR}/..#${thing}.drvPath")"
-out="$(nix eval --raw "${DIR}/..#${thing}")"
+copymethod="${1}"; shift
+remote="${1:-"colemickens@aarch64.nixos.community"}"; shift
+thing="${1}"; shift
+
+drv="$(nix eval --raw "${DIR}/..#${thing}.drvPath" "${@}")"
+out="$(nix eval --raw "${DIR}/..#${thing}" "${@}")"
 
 #### build + copy
 
@@ -23,7 +24,7 @@ if [[ "${copymethod}" == new* ]]; then
     false # TODO: cachix
   fi
 elif [[ "${copymethod}" == old** ]]; then
-  workdir="/tmp/$(echo "${thing}" | sha256sum | cut -d' ' -f1)"
+  workdir="/tmp/rbuild-$(echo "${thing}" | sha256sum | cut -d' ' -f1)"
   nix copy --to "file://${workdir}" --derivation "${drv}"
   rsync -avh "${workdir}/" "${remote}":"${workdir}/"
 

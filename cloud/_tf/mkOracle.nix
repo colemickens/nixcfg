@@ -67,8 +67,9 @@ let
   };
 
   sshpubkey = (builtins.elemAt (import ../../data/sshkeys.nix) 0);
-
   compartment_ocid = oracle_config.compartment_id;
+
+  # TODO: put public ip as an output?
 
   mkVm = name: v: {
     resource.oci_core_instance."${name}" = [{
@@ -86,9 +87,7 @@ let
       display_name = "${name}";
       metadata = {
         ssh_authorized_keys = sshpubkey;
-          # TODO: terranix function? (esp if we can handle data/secrets better?)
-        #user_data = "\${base64encode(templatefile(${v.userdata}, ${v.uservars}))}";
-        #user_data = "base64encode('asdfasdfadfasdf!@#123123')";
+        user_data = "\${base64encode(templatefile(\"${v.userdata}\", ${v.uservars}))}";
       };
       shape = v.shape.name;
       shape_config = if (!builtins.hasAttr "config" v.shape) then [] else [{
