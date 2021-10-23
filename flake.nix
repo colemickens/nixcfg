@@ -253,7 +253,7 @@
           ]);
         enchilada = let bp = inputs.self.nixosConfigurations.enchilada; in
           pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "enchilada-bundle" ([
-            # devices.enchilada.extra
+            devices.enchilada.extra
             devices.enchilada.android-fastboot-images
           ]);
       };
