@@ -15,7 +15,7 @@ in
     #../../mixins/tailscale.nix
 
     (import "${inputs.mobile-nixos}/lib/configuration.nix" {
-      device = "oneplus-fajita";
+      device = "oneplus-enchilada";
     })
   ];
 

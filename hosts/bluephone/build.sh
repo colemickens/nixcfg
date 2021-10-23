@@ -3,7 +3,7 @@
 set -euo pipefail
 set -x
 
-thing="images.bluephone"
+thing="images.$(basename "$(dirname "$(readlink -f "${0}")")")"
 out="colemickens-$(echo "${thing}" | sha256sum | cut -d' ' -f1)"
 
 ## check if we eval ok with the update mobile-nixos

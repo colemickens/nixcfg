@@ -191,7 +191,7 @@
         pinebook    = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
         pinephone   = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
         bluephone   = mkSystem inputs.nixpkgs "aarch64-linux" "bluephone";
-        fajita      = mkSystem inputs.nixpkgs "aarch64-linux" "fajita";
+        enchilada      = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
         rpifour1    = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour1";
         sinkor      = mkSystem inputs.nixpkgs "aarch64-linux" "sinkor";
         oracular    = mkSystem inputs.nixpkgs "aarch64-linux" "oracular";
@@ -230,7 +230,7 @@
 
       devices = {
         bluephone = inputs.self.nixosConfigurations.bluephone.config.mobile.outputs.android;
-        fajita = inputs.self.nixosConfigurations.fajita.config.mobile.outputs.android;
+        enchilada = inputs.self.nixosConfigurations.enchilada.config.mobile.outputs.android;
       };
 
       images = let
@@ -250,10 +250,10 @@
             devices.bluephone.extra
             devices.bluephone.android-fastboot-images
           ]);
-        fajita = let bp = inputs.self.nixosConfigurations.fajita; in
-          pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "fajita" ([
-            # devices.fajita.extra
-            devices.fajita.android-fastboot-images
+        enchilada = let bp = inputs.self.nixosConfigurations.enchilada; in
+          pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "enchilada" ([
+            # devices.enchilada.extra
+            devices.enchilada.android-fastboot-images
           ]);
       };
 
