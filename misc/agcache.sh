@@ -15,6 +15,8 @@ while read p; do
     | grep -v PARTITION \
     | grep -v firmware \
     | grep -v -- "-bundle" \
+    | grep -v -- "boot.img" \
+    | grep -v -- "system.img" \
     | tee /dev/stderr \
     | cachix push "colemickens"
 done </tmp/drvs
