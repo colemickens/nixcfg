@@ -1,6 +1,6 @@
 { pkgs, lib, inputs, config, ... }:
 let
-  hostname = "fajita";
+  hostname = "enchilada";
 in
 {
   imports = [
@@ -31,13 +31,11 @@ in
     security.polkit.enable = false;
     services.udisks2.enable = false;
 
-    mobile.boot.stage-1.kernel.provenance = "mainline";
+    #mobile.boot.stage-1.kernel.provenance = "mainline";
+
     services.udev.packages = [ pkgs.libinput.out ]; # TODO: generic mobile goodness? where is this even from?
 
     nixpkgs.config.allowUnfree = true;
-
-    boot.growPartition = lib.mkDefault true;
-    powerManagement.enable = true;
 
     # systemd.services.systemd-udev-settle.enable = false; ## ????
     # # there's no gadgetfs afaict so don't bother:
