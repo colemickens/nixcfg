@@ -14,6 +14,6 @@ while read p; do
     | grep -v partition \
     | grep -v PARTITION \
     | grep -v firmware \
-    | grep -v "-bundle" \
+    | grep -v -- "-bundle" \
     | cachix push "colemickens"
 done </tmp/drvs
