@@ -9,8 +9,8 @@ in
     #../../profiles/desktop-sway-unstable.nix
     
     #../../modules/loginctl-linger.nix
-    ../../mixins/common.nix
-    ../../mixins/sshd.nix
+    #../../mixins/common.nix
+    #../../mixins/sshd.nix
     ../../mixins/networkmanager-minimal.nix
     #../../mixins/tailscale.nix
 
@@ -30,7 +30,6 @@ in
     environment.noXlibs = true;
     security.polkit.enable = false;
     services.udisks2.enable = false;
-    boot.enableContainers = false;
 
     mobile.boot.stage-1.kernel.provenance = "mainline";
     services.udev.packages = [ pkgs.libinput.out ]; # TODO: generic mobile goodness? where is this even from?
@@ -40,22 +39,22 @@ in
     boot.growPartition = lib.mkDefault true;
     powerManagement.enable = true;
 
-    systemd.services.systemd-udev-settle.enable = false; ## ????
-    # there's no gadgetfs afaict so don't bother:
-    mobile.boot.stage-1.shell.enable = false;
-    mobile.boot.stage-1.ssh.enable = false;
+    # systemd.services.systemd-udev-settle.enable = false; ## ????
+    # # there's no gadgetfs afaict so don't bother:
+    # mobile.boot.stage-1.shell.enable = false;
+    # mobile.boot.stage-1.ssh.enable = false;
 
-    mobile.boot.stage-1.bootConfig.log.level = "DEBUG";
-    mobile.boot.stage-1.crashToBootloader = true;
-    #mobile.boot.stage-1.fbterm.enable = false;         #??????????
-    mobile.boot.stage-1.networking.enable = true;       #??????????
+    # mobile.boot.stage-1.bootConfig.log.level = "DEBUG";
+    # mobile.boot.stage-1.crashToBootloader = true;
+    # #mobile.boot.stage-1.fbterm.enable = false;         #??????????
+    # mobile.boot.stage-1.networking.enable = true;       #??????????
 
-    networking.hostName = hostname;
-    networking.firewall.enable = false;
-    networking.wireless.enable = true;
-    networking.networkmanager.enable = true;
-    networking.networkmanager.unmanaged = [ "rndis0" "usb0" ];
-    services.blueman.enable = false;
-    hardware.bluetooth.enable = lib.mkForce false;
+    # networking.hostName = hostname;
+    # networking.firewall.enable = false;
+    # networking.wireless.enable = true;
+    # networking.networkmanager.enable = true;
+    # networking.networkmanager.unmanaged = [ "rndis0" "usb0" ];
+    # services.blueman.enable = false;
+    # hardware.bluetooth.enable = lib.mkForce false;
   };
 }
