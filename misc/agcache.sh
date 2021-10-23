@@ -4,7 +4,7 @@ thing="${1}"
 
 set -x
 
-nix path-info -r "${DIR}/..#${thing}" > /tmp/drvs
+nix path-info --derivation -r "${DIR}/..#${thing}" > /tmp/drvs
 
 while read p; do
   if [[ "${p}" != *drv ]]; then continue; fi
