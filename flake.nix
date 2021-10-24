@@ -192,7 +192,8 @@
         pinebook    = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
         pinephone   = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
         bluephone   = mkSystem inputs.nixpkgs "aarch64-linux" "bluephone";
-        enchilada      = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
+        enchilada   = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
+        enchiloco   = mkSystem inputs.nixpkgs "x86_64-linux"  "enchiloco";
         rpifour1    = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour1";
         sinkor      = mkSystem inputs.nixpkgs "aarch64-linux" "sinkor";
         oracular    = mkSystem inputs.nixpkgs "aarch64-linux" "oracular";
@@ -232,6 +233,7 @@
       devices = {
         bluephone = inputs.self.nixosConfigurations.bluephone.config.mobile.outputs.android;
         enchilada = inputs.self.nixosConfigurations.enchilada.config.mobile.outputs.android;
+        enchiloco = inputs.self.nixosConfigurations.enchiloco.config.mobile.outputs.android;
       };
 
       images = let
@@ -255,6 +257,11 @@
           pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "enchilada-bundle" ([
             devices.enchilada.extra
             devices.enchilada.android-fastboot-images
+          ]);
+        enchiloco = let bp = inputs.self.nixosConfigurations.enchiloco; in
+          pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "enchiloco-bundle" ([
+            devices.enchiloco.extra
+            devices.enchiloco.android-fastboot-images
           ]);
       };
 
