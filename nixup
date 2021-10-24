@@ -11,7 +11,7 @@ function nix() { "${DIR}/misc/nix.sh" "${@}"; }
 function pushbuild() {
   set -euo pipefail
   cachix watch-store -j2 "${cache}" & cachixpid=$!
-  _nix build "${@}"
+  nix build "${@}"
   kill -INT ${cachixpid}; wait ${cachixpid}
 }
 function cacheshell() { pushbuild ".#devShell.x86_64-linux.inputDerivation"; }
