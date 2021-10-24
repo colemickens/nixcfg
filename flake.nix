@@ -120,13 +120,33 @@
         bundle = inputs.self.bundles.${system};
       });
       apps = forAllSystems (system: let
+        app = program: { type = "app"; program = "${program}"; };
         tfout = import ./cloud/_tf { terranix = inputs.terranix; pkgs = pkgs_.nixpkgs.${system}; };
       in {
         # TODO: is this really the best way to expose this command outward?
+        # CI
         install-secrets = { type = "app"; program = legacyPackages."${system}".install-secrets.outPath; };
+
+        # Terraform
         tf = { type = "app"; program = tfout.tf.outPath; };
         tf-apply = { type = "app"; program = tfout.apply.outPath; };
         tf-destroy = { type = "app"; program = tfout.destroy.outPath; };
+
+        # Misc convenience
+        enchilada = {
+          factory-reset = app "${devices.enchiloco.extra}/factory-reset.sh";
+          #factory-critical = app "${devices.enchiloco.extra}/factory-critical.sh";
+          nixos-boot = app "${devices.enchiloco.extra}/nixos-boot.sh";
+          nixos-system = app "${devices.enchiloco.extra}/nixos-system.sh";
+          nixos = app "${devices.enchiloco.extra}/nixos.sh";
+        };
+        blueline = {
+          factory-reset = app "${devices.blueloco.extra}/factory-reset.sh";
+          factory-critical = app "${devices.blueloco.extra}/factory-critical.sh";
+          nixos-boot = app "${devices.blueloco.extra}/nixos-boot.sh";
+          nixos-system = app "${devices.blueloco.extra}/nixos-system.sh";
+          nixos = app "${devices.blueloco.extra}/nixos.sh";
+        };
       });
 
       packages = forAllSystems (s: fullPkgs_.${s}.colePackages);
@@ -191,7 +211,8 @@
         # aarch64-linux
         pinebook    = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
         pinephone   = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
-        bluephone   = mkSystem inputs.nixpkgs "aarch64-linux" "bluephone";
+        blueline    = mkSystem inputs.nixpkgs "aarch64-linux" "blueline";
+        blueloco    = mkSystem inputs.nixpkgs "x86_64-linux"  "blueloco";
         enchilada   = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
         enchiloco   = mkSystem inputs.nixpkgs "x86_64-linux"  "enchiloco";
         rpifour1    = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour1";
@@ -231,7 +252,8 @@
         ));
 
       devices = {
-        bluephone = inputs.self.nixosConfigurations.bluephone.config.mobile.outputs.android;
+        blueline = inputs.self.nixosConfigurations.blueline.config.mobile.outputs.android;
+        blueloco = inputs.self.nixosConfigurations.blueloco.config.mobile.outputs.android;
         enchilada = inputs.self.nixosConfigurations.enchilada.config.mobile.outputs.android;
         enchiloco = inputs.self.nixosConfigurations.enchiloco.config.mobile.outputs.android;
       };
@@ -248,10 +270,15 @@
         rpizero2  = inputs.self.nixosConfigurations.rpizero2.config.system.build.sdImage;
         rpionebp  = inputs.self.nixosConfigurations.rpionebp.config.system.build.sdImage;
 
-        bluephone = let bp = inputs.self.nixosConfigurations.bluephone; in
-          pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "bluephone-bundle" ([
-            devices.bluephone.extra
-            devices.bluephone.android-fastboot-images
+        blueline = let bp = inputs.self.nixosConfigurations.blueline; in
+          pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "blueline-bundle" ([
+            devices.blueline.extra
+            devices.blueline.android-fastboot-images
+          ]);
+        blueloco = let bp = inputs.self.nixosConfigurations.blueloco; in
+          pkgs_.nixpkgs.x86_64-linux.linkFarmFromDrvs "blueloco-bundle" ([
+            devices.blueloco.extra
+            devices.blueloco.android-fastboot-images
           ]);
         enchilada = let bp = inputs.self.nixosConfigurations.enchilada; in
           pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "enchilada-bundle" ([
@@ -259,7 +286,7 @@
             devices.enchilada.android-fastboot-images
           ]);
         enchiloco = let bp = inputs.self.nixosConfigurations.enchiloco; in
-          pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "enchiloco-bundle" ([
+          pkgs_.nixpkgs.x86_64-linux.linkFarmFromDrvs "enchiloco-bundle" ([
             devices.enchiloco.extra
             devices.enchiloco.android-fastboot-images
           ]);

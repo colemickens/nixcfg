@@ -47,7 +47,7 @@ function jeffhyper() { _remote "$(tsip porty)"   ".#toplevels.jeffhyper"    "$(t
 ## aarch64-linux
 function pinebook()  { _remote "$(tsip bldr-a64)"  ".#toplevels.pinebook"   "$(tsip pinebook)"   "${1:-"activate"}"; }
 function pinephone() { _remote "$(tsip bldr-a64)"  ".#toplevels.pinephone"  "$(tsip pinephone)"  "${1:-"activate"}"; }
-function bluephone() { false; }
+function blueline()  { false; }
 function enchilada() { false; }
 function rpifour1()  { _remote "$(tsip bldr-a64)"  ".#toplevels.rpifour1"   "$(tsip rpifour1)"   "${1:-"activate"}"; }
 function sinkor()    { _remote "$(tsip bldr-a64)"  ".#toplevels.sinkor"     "$(tsip sinkor)"     "${1:-"activate"}"; }
@@ -59,10 +59,6 @@ function rpizero2()  { _remote "$(tsip porty)"     ".#toplevels.rpizero2"   "$(t
 function x86()   { _remote "$(tsip bldr-x86)"  ".#bundles.x86_64-linux"   "$(tsip porty)" "${1:-"none"}"; }
 function a64()   { _remote "$(tsip bldr-a64)"  ".#bundles.aarch64-linux"  "$(tsip porty)" "${1:-"none"}"; }
 ## </remote> ##################################################################
-
-function dev() {
-  ./misc/mobile/build.sh images.enchilada
-}
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 if [[ -z "${cmd:-""}" ]]; then

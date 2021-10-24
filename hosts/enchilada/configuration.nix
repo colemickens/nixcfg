@@ -21,6 +21,7 @@ in
 
   config = {
     system.stateVersion = "21.05";
+    mobile.device.serial = "b205392d";
 
     documentation.enable = false;
     documentation.doc.enable = false;

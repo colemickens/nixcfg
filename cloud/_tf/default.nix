@@ -3,20 +3,12 @@
 let
   lib = pkgs.lib;
   
-  mkPacketVM = import ./mkPacketVM.nix { inherit pkgs; };
+  mkPacket = import ./mkPacket.nix { inherit pkgs; };
   mkOracle = import ./mkOracle.nix { inherit pkgs; };
 
   userdata = import ./userdata.nix { inherit pkgs; };
 
-  _tf = (pkgs.terraform_1_0.withPlugins (p: [
-      p.local
-      p.metal
-      p.null
-      p.oci
-      p.random
-      p.sops
-      p.template
-    ]));
+  _tf = (pkgs.terraform_1_0.withPlugins (p: [ p.metal p.oci /* p.sops */ ]));
   tf = "${_tf}/bin/terraform";
   tfstate = "./cloud/_tf/_state";
 
@@ -65,11 +57,6 @@ let
   metal_cole = {
     project_id = "afc67974-ff22-41fd-9346-5b2c8d51e3a9";
   };
-  #pkt_loc = "sjc1"; # https://github.com/equinix/terraform-provider-metal/issues/196
-  pkt_loc = "sv";
-  pkt_spot_amd = (mkPacketVM  metal_cole  "c2.medium.x86"  pkt_loc  "pktspotamd");
-  pkt_spot_arm = (mkPacketVM  metal_cole  "c2.large.arm"   pkt_loc  "pktspotarm");
-  pkt_spot_gpu = (mkPacketVM  metal_cole  "x2.xlarge.arm"  pkt_loc  "pktspotgpu");
   ## </packet>
 
   ##
@@ -77,13 +64,18 @@ let
   terraformCfg = terranix.lib.buildTerranix {
     inherit pkgs;
     terranix_config.imports = [
-      #pkt_spot_arm
-      #pkt_spot_amd
-      #pkt_spot_gpu
+      ### PACKET VMS
+      (mkPacket  metal_cole  {
+        #pktspotamd = { plan="c3.medium.x86";  loc="sv";  bid="0.5"; userdata=ud; uservars=uv; };
+        #pktspotarm = { "c2.large.arm"   "sv"  "0.5" };
+        #pktspotgpu = { "x2.large.x86"   "sv"  "0.5" }; ## is this the right type?
+      })
+
+      ### ORACLE VMS
       (mkOracle ociacct1 {
-        oci1arm1 = { shape = o_arm; image=o_arm_img; userdata=ud; uservars=uv; };
-        oci1amd1 = { shape = o_amd; image=o_amd_img; userdata=ud; uservars=uv; };
-        #oci1amd2 = { shape = o_amd; image=o_amd_img; userdata=ud; uservars=uv; };
+      #   oci1arm1 = { shape = o_arm; image=o_arm_img; userdata=ud; uservars=uv; };
+      #   oci1amd1 = { shape = o_amd; image=o_amd_img; userdata=ud; uservars=uv; };
+      #   #oci1amd2 = { shape = o_amd; image=o_amd_img; userdata=ud; uservars=uv; };
       })
       # (mkOracle ociacct2 {
       #   oci2arm1 = { shape = o_arm; image=o_arm_img; userdata=ud; uservars=uv; };
@@ -106,12 +98,14 @@ in {
     duration="1 hour"
     export TF_VAR_termtime="$(TZ=UTC date --date="''${duration}" --iso-8601=seconds)"
     
-    # TODO: retrieve from other means:
-    export METAL_AUTH_TOKEN="$(gopass show colemickens/packet.net | grep apikey | cut -d' ' -f2)"
-    
-    # TODO: actually utilize this:
-    export TF_VAR_tailscale_token="$(gopass show colemickens/packet.net | grep apikey | cut -d' ' -f2)"
-  
+    set +x
+      # TODO: retrieve from other means:
+      export METAL_AUTH_TOKEN="$(gopass show colemickens/packet.net | grep apikey | cut -d' ' -f2)"
+      
+      # TODO: actually utilize this:
+      export TF_VAR_tailscale_token="$(gopass show colemickens/packet.net | grep apikey | cut -d' ' -f2)"
+    set -x
+
     export TF_STATE="${tfstate}"
     export RUN_DIR="${tfstate}/run-$(date '+%s')"
     export TF_LOG=DEBUG
