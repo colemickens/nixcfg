@@ -18,19 +18,17 @@ in
     
     mobile.boot.stage-1.kernel.provenance = "mainline";
     
-    # ...... whoa.... rndis doesnt work at all without this
-    # but it does on enchilada???? wtf????
-    #mobile.boot.stage-1.networking.enable = true;
+    ## !!!!!!!!!!!!!!!!!!!!!!!!
+    # usb0 never appears with this disabled:
+    # mobile.boot.stage-1.networking.enable = true;
+    ## !!!!!!!!!!!!!!!!!!!!!!!!
 
     networking = {
       hostName = hostname;
-      #wireless.enable = true;
-      #wireless.iwd.enable = false;
-
+      # wireless.enable = true;
       # wireless.networks."chimera-iot".pskRaw = "61e387f2c2f49c6e266515096d289cedfc1325aa6e17ab72abf25c64e62eb297";
       # interfaces."wlan0".useDHCP = true;
 
-      # # TODO: allow flexing this on/off with usb_gadget mode
       useDHCP = false;
       interfaces."usb0".ipv4.addresses = [{
         address = "10.88.0.5";
