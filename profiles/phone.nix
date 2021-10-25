@@ -3,7 +3,7 @@
 {
   imports = [
     ../profiles/user.nix
-    #../../profiles/interactive.nix
+    ../profiles/interactive.nix
     #../../profiles/desktop-sway-unstable.nix
     
     #../../modules/loginctl-linger.nix
@@ -41,7 +41,7 @@
     networking = {
       firewall.enable = true;
       firewall.allowedTCPPorts = [ 22 ];
-      networkmanager.enable = false; # cairo doesn't cross compile
+      networkmanager.enable = true; # cairo doesn't cross compile
       networkmanager.unmanaged = [ "rndis0" "usb0" ];
     };
     services.blueman.enable = false;
