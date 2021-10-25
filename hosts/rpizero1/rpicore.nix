@@ -12,27 +12,7 @@
     ../../modules/tailscale-autoconnect.nix
   ];
 
-  # TODO: check in on cross-compiling
   config = {
-    # nixpkgs.overlays = [
-    #   (final: prev: {
-    #     firmwareLinuxNonfree = prev.callPackage ({ rsync, stdenv, firmwareLinuxNonfree }:
-    #       stdenv.mkDerivation {
-    #         pname = firmwareLinuxNonfree.pname;
-    #         version = "${firmwareLinuxNonfree.version}-fixed";
-    #         src = null;
-    #         nativeBuildInputs = [ rsync ];
-    #         phases = [ "installPhase" ];
-    #         installPhase = ''
-    #           mkdir $out
-    #           rsync -avh --exclude='*43430-sdio.clm_blob' \
-    #             "${firmwareLinuxNonfree}/lib" "$out"
-    #         '';
-    #       }
-    #     ) { firmwareLinuxNonfree = prev.firmwareLinuxNonfree; };
-    #   })
-    # ];
-
     fileSystems."/boot/firmware" = {
       device = "/dev/disk/by-label/FIRMWARE";
       fsType = "vfat";

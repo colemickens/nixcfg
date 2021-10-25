@@ -1,10 +1,5 @@
 { pkgs, lib, config, inputs, ... }:
 
-let
-#   crtFilePath = "/home/cole/.mitmproxy/mitmproxy-ca-cert.pem";
-#   crtFile = pkgs.copyPathToStore crtFilePath;
-  extraCommands = import ./extra/commands.nix {inherit pkgs; };
-in
 {
   imports = [
     ./core.nix  # imports hm

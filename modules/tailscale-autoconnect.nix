@@ -23,7 +23,7 @@ in {
     };
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     # adapted from: https://tailscale.com/blog/nixos-minecraft/
 
     systemd.services.tailscale-autoconnect = {
