@@ -138,7 +138,7 @@
           #factory-critical = app "${devices.enchiloco.extra}/factory-critical.sh";
           nixos-boot = app "${devices.enchiloco.extra}/nixos-boot.sh";
           nixos-system = app "${devices.enchiloco.extra}/nixos-system.sh";
-          nixos = app "${devices.enchilada.extra}/nixos.sh";
+          nixos = app "${devices.enchiloco.extra}/nixos.sh";
         };
         blueline = {
           factory-reset = app "${devices.blueloco.extra}/factory-reset.sh";
