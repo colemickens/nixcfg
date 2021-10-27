@@ -30,6 +30,8 @@ fi
 
 # configure nix ahead of time so daemon starts up with correct settings
 # TODO: pull out extra subs/keys to TF var?
+
+# TODO: keep in sync: commbox.sh/install-nix.sh
 sudo mkdir -p "/etc/nix"
 cat <<EOF | sudo tee -a "/etc/nix/nix.conf"
 experimental-features = nix-command flakes ca-references
