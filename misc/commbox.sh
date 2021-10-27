@@ -10,8 +10,8 @@ ssh "colemickens@aarch64.nixos.community" \
     git zellij nixUnstable htop ncdu file nix-top ncdu neovim cachix"
 
 ssh "colemickens@aarch64.nixos.community" \
-  "rm -rf ~/.config/cachix; mkdir -p ~/.config/cachix; mkdir -p ~/.config/nix"
-scp "${HOME}/.config/cachix/cachix.dhall" "colemickens@aarch64.nixos.community:/home/colemickens/.config/cachix/cachix.dhall"
+  "rm -rf ~/.config/cachix; mkdir -p ~/.config/cachix; mkdir -p ~/.config/nix; mkdir -p ~/code/"
+scp "${HOME}/.config/cachix/cachix.dhall" "colemickens@aarch64.nixos.community:~/.config/cachix/cachix.dhall"
 
 # TODO: keep in sync: commbox.sh/install-nix.sh
 cat<<EOF >/tmp/nix.conf
@@ -24,5 +24,7 @@ max-jobs = auto
 EOF
 
 scp /tmp/nix.conf \
-  "colemickens@aarch64.nixos.community:/home/colemickens/.config/nix/nix.conf"
+  "colemickens@aarch64.nixos.community:~/.config/nix/nix.conf"
 
+ssh "colemickens@aarch64.nixos.community" \
+  "[[ ! -d ~/code/nixcfg ]] && git clone https://github.com/colemickens/nixcfg ~/code/nixcfg"
