@@ -39,26 +39,28 @@ function tsip() {
   elif [[ "${1}" == "a64com" ]];    then printf "%s" "colemickens@aarch64.nixos.community";
   else                                   tailscale ip --6 ${1} | head -z -n1; fi
 }
-## x86_64-linux
-function porty()     { _remote "$(tsip porty)"   ".#toplevels.porty"        "$(tsip porty)"      "${1:-"activate"}"; }
-function xeep()      { _remote "$(tsip xeep)"    ".#toplevels.xeep"         "$(tsip xeep)"       "${1:-"activate"}"; }
-function raisin()    { _remote "$(tsip raisin)"  ".#toplevels.raisin"       "$(tsip raisin)"     "${1:-"activate"}"; }
-function jeffhyper() { _remote "$(tsip porty)"   ".#toplevels.jeffhyper"    "$(tsip jeffhyper)"  "${1:-"activate"}"; }
-## aarch64-linux
-function pinebook()  { _remote "$(tsip bldr-a64)"  ".#toplevels.pinebook"   "$(tsip pinebook)"   "${1:-"activate"}"; }
-function pinephone() { _remote "$(tsip bldr-a64)"  ".#toplevels.pinephone"  "$(tsip pinephone)"  "${1:-"activate"}"; }
-function blueline()  { false; }
-function enchilada() { false; }
-function rpifour1()  { _remote "$(tsip bldr-a64)"  ".#toplevels.rpifour1"   "$(tsip rpifour1)"   "${1:-"activate"}"; }
-function sinkor()    { _remote "$(tsip bldr-a64)"  ".#toplevels.sinkor"     "$(tsip sinkor)"     "${1:-"activate"}"; }
-function sinkor()    { _remote "$(tsip bldr-a64)"  ".#toplevels.ocular"     "$(tsip sinkor)"     "${1:-"activate"}"; }
-## armv6l-linux (cross-built)
-function rpizero1()  { _remote "$(tsip porty)"     ".#toplevels.rpizero1"   "$(tsip rpizero1)"   "${1:-"activate"}"; }
-function rpizero2()  { _remote "$(tsip porty)"     ".#toplevels.rpizero2"   "$(tsip rpizero2)"   "${1:-"activate"}"; }
-## bundles
-function x86()   { _remote "$(tsip bldr-x86)"  ".#bundles.x86_64-linux"   "$(tsip porty)" "${1:-"none"}"; }
-function a64()   { _remote "$(tsip bldr-a64)"  ".#bundles.aarch64-linux"  "$(tsip porty)" "${1:-"none"}"; }
-## </remote> ##################################################################
+function rbuild() { ./misc/rbuild.sh "${@}"; }
+function sinkor() { rbuild "oldcopy" "activate" "$(tsip sinkor)" "$(tsip sinkor)"  "toplevels.sinkor"; }
+# ## x86_64-linux
+# function porty()     { _remote "$(tsip porty)"   ".#toplevels.porty"        "$(tsip porty)"      "${1:-"activate"}"; }
+# function xeep()      { _remote "$(tsip xeep)"    ".#toplevels.xeep"         "$(tsip xeep)"       "${1:-"activate"}"; }
+# function raisin()    { _remote "$(tsip raisin)"  ".#toplevels.raisin"       "$(tsip raisin)"     "${1:-"activate"}"; }
+# function jeffhyper() { _remote "$(tsip porty)"   ".#toplevels.jeffhyper"    "$(tsip jeffhyper)"  "${1:-"activate"}"; }
+# ## aarch64-linux
+# function pinebook()  { _remote "$(tsip bldr-a64)"  ".#toplevels.pinebook"   "$(tsip pinebook)"   "${1:-"activate"}"; }
+# function pinephone() { _remote "$(tsip bldr-a64)"  ".#toplevels.pinephone"  "$(tsip pinephone)"  "${1:-"activate"}"; }
+# function blueline()  { false; }
+# function enchilada() { false; }
+# function rpifour1()  { _remote "$(tsip bldr-a64)"  ".#toplevels.rpifour1"   "$(tsip rpifour1)"   "${1:-"activate"}"; }
+# function sinkor()    { _remote "$(tsip sinkor)"  ".#toplevels.sinkor"     "$(tsip sinkor)"     "${1:-"activate"}"; }
+# function sinkor()    { _remote "$(tsip sinkor)"  ".#toplevels.ocular"     "$(tsip sinkor)"     "${1:-"activate"}"; }
+# ## armv6l-linux (cross-built)
+# function rpizero1()  { _remote "$(tsip porty)"     ".#toplevels.rpizero1"   "$(tsip rpizero1)"   "${1:-"activate"}"; }
+# function rpizero2()  { _remote "$(tsip porty)"     ".#toplevels.rpizero2"   "$(tsip rpizero2)"   "${1:-"activate"}"; }
+# ## bundles
+# function x86()   { _remote "$(tsip bldr-x86)"  ".#bundles.x86_64-linux"   "$(tsip porty)" "${1:-"none"}"; }
+# function a64()   { _remote "$(tsip bldr-a64)"  ".#bundles.aarch64-linux"  "$(tsip porty)" "${1:-"none"}"; }
+# ## </remote> ##################################################################
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 if [[ -z "${cmd:-""}" ]]; then

@@ -5,10 +5,12 @@ set -x
 
 function nix() { "${DIR}/nix.sh" "${@}"; }
 
-# {thing} {remote} {cachix|newcopy|oldcopy}
+# {copy_method} {activate_action} {remote_builder} {target} {thing}
 
 copymethod="${1}"; shift
-remote="${1:-"colemickens@aarch64.nixos.community"}"; shift
+action="${1}"; shift
+remote="${1}"; shift
+target="${1}"; shift
 thing="${1}"; shift
 
 drv="$(nix eval --raw "${DIR}/..#${thing}.drvPath" "${@}")"
@@ -26,14 +28,14 @@ if [[ "${copymethod}" == new* ]]; then
 elif [[ "${copymethod}" == old** ]]; then
   workdir="/tmp/rbuild-$(echo "${thing}" | sha256sum | cut -d' ' -f1)"
   nix copy --to "file://${workdir}" --derivation "${drv}"
-  rsync -avh "${workdir}/" "${remote}":"${workdir}/"
+  rsync -avh "${workdir}/" "[${remote}]":"${workdir}/"
 
   ssh "${remote}" "nix copy --from \"file://${workdir}\" \"${drv}\""
   ssh "${remote}" "nix build -L \"${drv}\" --no-out-link"
 
   if [[ "${copymethod}" == *copy ]]; then
     ssh "${remote}" "nix copy --to \"file://${workdir}\" \"${out}\""
-    rsync -avh "${remote}":"${workdir}/" "${workdir}/"
+    rsync -avh "[${remote}]":"${workdir}/" "${workdir}/"
     nix copy --no-check-sigs --from "${workdir}" "${out}"
   elif [[ "${copymethod}" == *cachix ]]; then
     false # TODO: cachix

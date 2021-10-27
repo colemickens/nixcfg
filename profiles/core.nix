@@ -18,6 +18,7 @@ in
     ../mixins/neovim.nix
     ../mixins/ssh.nix
     ../mixins/tmux.nix
+    ../mixins/zellij.nix # congrats zellij! you've become essential :) good luck to tmux wherever she is
     ../mixins/zsh.nix
   ];
 

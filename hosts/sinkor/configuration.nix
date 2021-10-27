@@ -18,6 +18,7 @@ in
   ];
 
   config = {
+    
     # impermance system-wide
     environment.persistence."/persist" = {
       directories = [
@@ -87,6 +88,7 @@ in
       raspberrypifw
       raspberrypi-eeprom
       libraspberrypi
+      picocom
     ];
 
     system.stateVersion = "21.05";
