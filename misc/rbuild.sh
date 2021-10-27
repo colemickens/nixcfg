@@ -18,48 +18,54 @@ out="$(nix eval --raw "${DIR}/..#${thing}" "${@}")"
 
 #### build + copy
 
-if [[ "${copymethod}" == new* ]]; then
+if [[ "${copymethod}" == *new* ]]; then
   nix build --store "ssh-ng://${remote}" --eval-store auto "${thing}"
-  if [[ "${copymethod}" == *copy ]]; then
+  if [[ "${copymethod}" == *copy* ]]; then
     nix copy --from "ssh-ng://${remote}" "${thing}"
-  elif [[ "${copymethod}" == *cachix ]]; then
+  elif [[ "${copymethod}" == *cachix* ]]; then
     false # TODO: cachix
   fi
-elif [[ "${copymethod}" == old** ]]; then
+elif [[ "${copymethod}" == *old** ]]; then
   workdir="/tmp/rbuild-$(echo "${thing}" | sha256sum | cut -d' ' -f1)"
   nix copy --to "file://${workdir}" --derivation "${drv}"
   rsync -avh "${workdir}/" "[${remote}]":"${workdir}/"
 
-  ssh "${remote}" "nix copy --from \"file://${workdir}\" \"${drv}\""
-  ssh "${remote}" "nix build -L \"${drv}\" --no-out-link"
+  ssh "${remote}" "nix copy --derivation --from \"file://${workdir}\" \"${drv}\""
+  ssh "${remote}" "nix build -L \"${drv}\" --no-link"
 
-  if [[ "${copymethod}" == *copy ]]; then
+  if [[ "${copymethod}" == *copy* ]]; then
     ssh "${remote}" "nix copy --to \"file://${workdir}\" \"${out}\""
     rsync -avh "[${remote}]":"${workdir}/" "${workdir}/"
     nix copy --no-check-sigs --from "${workdir}" "${out}"
   elif [[ "${copymethod}" == *cachix ]]; then
     false # TODO: cachix
   fi
+# elif [[ "${copymethod}" == *git* ]]; then
+#   # copy from mobuild
+#   # git commit, push
+#   # ON REMOTE:
+#   # make sure ~/code/nixcfg exists
+#   # remote update; reset --hard HEAD
+#   git -C /home/cole/code/nixcfg commit . -m "wip" || true
+#   git -C /home/cole/code/nixcfg push origin HEAD
+
+#   ssh "colemickens@aarch64.nixos.community" "git -C /home/colemickens/code/nixcfg remote update \
+#     && git -C /home/colemickens/code/nixcfg reset --hard origin/main \
+#     && nix build -L /home/colemickens/code/nixcfg#${thing} --keep-going --out-link /tmp/${out}"
+
+#   true
+#   if [[ "${copymethod}" == *copy* ]]; then
+#     nix copy --from "ssh-ng://${remote}" "${thing}"
+#   elif [[ "${copymethod}" == *cachix ]]; then
+#     false # TODO: cachix
+#   fi
 fi
 
-
-# function _remote() {
-#   set -euo pipefail
-#   remote="${1}"; buildattr="${2}"; target="${3}"; action="${4:-""}"
-#   out="$(nix eval --raw "${buildattr}")"
-#   #_nix copy --to "ssh-ng://${remote}" --derivation "${buildattr}" --no-check-sigs
-#   _nix build --store "ssh-ng://${remote}" --eval-store "auto" "${buildattr}" |& tee /tmp/nb
-#   if [[ "${action}" == *cachix* ]]; then
-#     echo "${out}" | ssh "${remote}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" run nixpkgs/nixos-unstable#cachix push "${cache}")"
-#     ssh "${target}" "$(printf '\"%s\" ' sudo nix-store "${nixargs[@]}" -r "${out}")"
-#   else nix copy --no-check-sigs --from "ssh-ng://${remote}" --to "ssh-ng://${target}" "${out}"
-#   fi
-#   if [[ "${action:-""}" == *activate* ]]; then
-#     ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --no-link --profile /nix/var/nix/profiles/system "${out}")"
-#     ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch)"
-#   fi
-#   if [[ "${action:-""}" == *reboot* ]]; then ssh "${target}" "sudo reboot"; fi
-# }
+if [[ "${action:-""}" == *activate* ]]; then
+  ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --no-link --profile /nix/var/nix/profiles/system "${out}")"
+  ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${out}" -c switch-to-configuration switch)"
+fi
+if [[ "${action:-""}" == *reboot* ]]; then ssh "${target}" "sudo reboot"; fi
 
 #### whew
 echo "done"
