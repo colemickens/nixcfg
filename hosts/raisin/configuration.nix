@@ -7,26 +7,26 @@
   ];
 
   config = {
-    specialisation = {
-      gnome = {
-        inheritParentConfig = false;
-        configuration = {
-          imports = [
-            ./core.nix
-            ../../profiles/desktop-gnome.nix
-          ];
-        };
-      };
+    # specialisation = {
+    #   gnome = {
+    #     inheritParentConfig = false;
+    #     configuration = {
+    #       imports = [
+    #         ./core.nix
+    #         ../../profiles/desktop-gnome.nix
+    #       ];
+    #     };
+    #   };
 
-      plasma = {
-        inheritParentConfig = false;
-        configuration = {
-          imports = [
-            ./core.nix
-            ../../profiles/desktop-plasma.nix
-          ];
-        };
-      };
-    };
+    #   plasma = {
+    #     inheritParentConfig = false;
+    #     configuration = {
+    #       imports = [
+    #         ./core.nix
+    #         ../../profiles/desktop-plasma.nix
+    #       ];
+    #     };
+    #   };
+    # };
   };
 }

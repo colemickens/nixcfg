@@ -24,10 +24,15 @@ function ciup() { ci_nb_cache '.#bundle'; }
 function inputup() {
   set -euo pipefail
   srcdirs=( "nixpkgs/cmpkgs" "home-manager/cmhm" "nixpkgs/master" "nixpkgs-wayland" "flake-firefox-nightly" )
-  printf '%s\n' "${srcdirs[@]}" | \
-    parallel --jobs 1 --halt soon,fail=1 --tag --progress -- \
-      "[[ ! -d \"${HOME}/code/{.}\" ]] || (git -C '${HOME}/code/{.}' pull --rebase && git -C '${HOME}/code/{.}' push origin HEAD -f)"
-   cacheshell;
+  for i in "${srcdirs[@]}"; do
+    if [[ -d "$HOME/code/${i}" ]]; then echo "rebase/update: ${i}" && true \
+        && git -C "$HOME/code/${i}" pull --rebase \
+        && git -C "$HOME/code/${i}" push origin HEAD -f
+    else
+      echo "skip: ${i}"
+    fi
+  done
+  cacheshell
 }
 function lockup() { nix "${nixargs[@]}" flake update --no-registries --commit-lock-file; cacheshell; }
 function pkgup() { ./pkgs/update.sh "${@:-}"; cacheshell; }
@@ -41,6 +46,9 @@ function tsip() {
 }
 function rbuild() { ./misc/rbuild.sh "${@}"; }
 function sinkor() { rbuild "oldcopy" "activate" "$(tsip sinkor)" "$(tsip sinkor)"  "toplevels.sinkor"; }
+
+function a64()    { rbuild "oldcopy" "activate" "$(tsip a64com)" "$(tsip raisin)"  "topbundles.aarch64-linux"; }
+
 # ## x86_64-linux
 # function porty()     { _remote "$(tsip porty)"   ".#toplevels.porty"        "$(tsip porty)"      "${1:-"activate"}"; }
 # function xeep()      { _remote "$(tsip xeep)"    ".#toplevels.xeep"         "$(tsip xeep)"       "${1:-"activate"}"; }

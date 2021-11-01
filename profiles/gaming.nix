@@ -21,7 +21,7 @@ in {
     #programs.steam.enable = true;
 
     environment.systemPackages = with steamPkgs; [
-      lutris
+      #lutris
       #steam-run-native
       steam
       steam.run

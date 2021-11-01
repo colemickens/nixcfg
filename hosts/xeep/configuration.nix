@@ -24,6 +24,7 @@ in
     #../../profiles/desktop-sway-unstable.nix
     #../../profiles/desktop-gnome.nix
 
+    #../../modules/cf-ts-sync
     ../../modules/loginctl-linger.nix
 
     # xps 13 9370 specific:

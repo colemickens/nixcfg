@@ -105,7 +105,7 @@
           bash curl cacert jq parallel mercurial git tailscale
           nettools openssh ripgrep rsync sops gh gawk gnused gnugrep
           # nix-build-uncached # use the overlayed one for now
-          fullPkgs_.${system}.metal-cli
+          #fullPkgs_.${system}.metal-cli
           fullPkgs_.${system}.nix-build-uncached
         ]);
       });
@@ -171,14 +171,13 @@
           keyboard-layouts = prev.callPackage ./pkgs/keyboard-layouts {};
           mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
           meli = prev.callPackage ./pkgs/meli {};
-          passrs = prev.callPackage ./pkgs/passrs {};
           poweralertd = prev.callPackage ./pkgs/poweralertd {};
           rkvm = prev.callPackage ./pkgs/rkvm {};
           shreddit = prev.python3Packages.callPackage ./pkgs/shreddit {};
-          metal-cli = prev.callPackage ./pkgs/metal-cli {};
+          #metal-cli = prev.callPackage ./pkgs/metal-cli {};
           rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {};
           #disabled # wezterm = prev.callPackage ./pkgs/wezterm { wezterm = prev.wezterm; };
-          
+
           # <wireplumber>
           #disabled wireplumber = prev.callPackage ./pkgs/wireplumber {};
           # <wireguard deps> # must be visible for update script to hit it
@@ -212,9 +211,9 @@
         pinebook    = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
         pinephone   = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
         blueline    = mkSystem inputs.nixpkgs "aarch64-linux" "blueline";
-        blueloco    = mkSystem inputs.nixpkgs "x86_64-linux"  "blueloco";
+        #blueloco    = mkSystem inputs.nixpkgs "x86_64-linux"  "blueloco";
         enchilada   = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
-        enchiloco   = mkSystem inputs.nixpkgs "x86_64-linux"  "enchiloco";
+        #enchiloco   = mkSystem inputs.nixpkgs "x86_64-linux"  "enchiloco";
         rpifour1    = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour1";
         sinkor      = mkSystem inputs.nixpkgs "aarch64-linux" "sinkor";
         oracular    = mkSystem inputs.nixpkgs "aarch64-linux" "oracular";
@@ -227,7 +226,10 @@
       toplevels = genAttrs
         (builtins.attrNames inputs.self.outputs.nixosConfigurations)
         (attr: nixosConfigurations.${attr}.config.system.build.toplevel);
-
+      topbundles = forAllSystems (s:
+        pkgs_.nixpkgs."${s}".linkFarmFromDrvs "${s}-toplevel-bundle" ([]
+          ++ (builtins.attrValues hydraJobs.${s}.hosts))
+      );
       # hydraSpecs =
       #   let
       #     nfj = b: hydralib.flakeJob "github:colemickens/nixcfg/${b}";

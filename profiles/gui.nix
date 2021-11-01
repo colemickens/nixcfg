@@ -75,7 +75,7 @@ in
         meld
         vscodium
         freerdp
-        remmina
+        # remmina # webkitgtk
         imv
         syncthing-gtk
         smplayer
@@ -100,9 +100,9 @@ in
         # neochat
         # element-desktop
 
-        gnome3.nautilus
-        gnome3.file-roller
-        gnome3.gnome-tweaks
+        #gnome3.gnome-tweaks # webkitgtk
+        # gnome3.nautilus # yikes tracker-miner->evolution-data-server->webkit-gtk
+        # gnome3.file-roller # lmao same
 
         # browsers
         _someFirefox

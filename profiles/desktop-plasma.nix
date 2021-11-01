@@ -9,6 +9,12 @@
     services.xserver.displayManager.sddm.enable = true;
     services.xserver.desktopManager.plasma5.enable = true;
 
+    # ??
+    # xdg.portal.enable = true;
+    # xdg.portal.gtkUsePortal = true;
+    # xdg.portal.extraPortals = with pkgs;
+    #   [ xdg-desktop-portal-wlr xdg-desktop-portal-gtk ];
+
     home-manager.users.cole = { pkgs, ... }: {
       home.sessionVariables = {
 
