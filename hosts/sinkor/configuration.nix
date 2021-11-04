@@ -6,6 +6,9 @@ in
   imports = [
     ../../modules/loginctl-linger.nix
 
+
+    ../../secrets
+
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
     ../../mixins/common.nix
@@ -18,7 +21,6 @@ in
   ];
 
   config = {
-    
     # impermance system-wide
     environment.persistence."/persist" = {
       directories = [
@@ -42,7 +44,7 @@ in
       "d /persist/home/cole 0750 cole cole - -"
 
       # rfkill
-      "f+ /var/lib/systemd/rfkill/platform-fe300000.mmcnr:wlan 0755 root root - 1"
+      # "f+ /var/lib/systemd/rfkill/platform-fe300000.mmcnr:wlan 0755 root root - 1"
     ];
     home-manager.users.cole = { pkgs, ... }: {
       systemd.user.startServices = "sd-switch";
@@ -71,18 +73,18 @@ in
       };
     };
 
-    # TODO: pull into module
-    systemd.services.rfkiller = {
-      description = "rfkiller - set rfkill";
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = ''
-          ${pkgs.util-linux}/bin/rfkill block wlan || true
-          ${pkgs.util-linux}/bin/rfkill block bluetooth || true
-        '';
-      };
-    };
+    # # TODO: pull into module
+    # systemd.services.rfkiller = {
+    #   description = "rfkiller - set rfkill";
+    #   wantedBy = [ "multi-user.target" ];
+    #   serviceConfig = {
+    #     Type = "oneshot";
+    #     ExecStart = ''
+    #       ${pkgs.util-linux}/bin/rfkill block wlan || true
+    #       ${pkgs.util-linux}/bin/rfkill block bluetooth || true
+    #     '';
+    #   };
+    # };
 
     environment.systemPackages = with pkgs; [
       raspberrypifw
@@ -159,7 +161,11 @@ in
       hostName = hostname;
       firewall.enable = true;
       networkmanager.enable = false;
-      wireless.enable = false;
+      wireless.enable = true;
+      wireless.environmentFile = "/run/secrets/wireless.env";
+      wireless.networks = {
+        "Mickey".pskRaw = "@PSKRAW_MICKEY@";
+      };
       wireless.iwd.enable = false;
       useDHCP = true;
     };

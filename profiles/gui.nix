@@ -6,7 +6,8 @@ let
   #_someFirefox = firefoxFlake.firefox-nightly-bin;
   #_someFirefox = pkgs.firefox-bin;
   _someFirefox = pkgs.firefox;
-  _someChromium = pkgs.ungoogled-chromium;
+  #_someChromium = pkgs.ungoogled-chromium;
+  _someChromium = pkgs.google-chrome-dev;
   #_someFirefox = inputs.nixos-unstable.legacyPackages.${pkgs.system}.firefox;
   #_someChromium = inputs.nixos-unstable.legacyPackages.${pkgs.system}.ungoogled-chromium;
 

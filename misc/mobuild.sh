@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 set -euo pipefail
 set -x
 
@@ -11,5 +11,5 @@ set -x
   "activate" \
   "colemickens@aarch64.nixos.community" \
   "colemickens@$(tailscale ip --4 "enchilada")" \
-      "~/code/nixcfg#enchilada" \
-      --override-input 'mobile-nixos' "~/code/mobile-nixos"
+      "${HOME}/code/nixcfg#toplevels.enchilada" \
+      --override-input 'mobile-nixos'  "${HOME}/code/mobile-nixos"

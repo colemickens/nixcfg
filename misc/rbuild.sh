@@ -13,15 +13,15 @@ remote="${1}"; shift
 target="${1}"; shift
 thing="${1}"; shift
 
-drv="$(nix eval --raw "${DIR}/..#${thing}.drvPath" "${@}")"
-out="$(nix eval --raw "${DIR}/..#${thing}" "${@}")"
+drv="$(nix eval --raw "${thing}.drvPath" "${@}")"
+out="$(nix eval --raw "${thing}" "${@}")"
 
 #### build + copy
 
 if [[ "${copymethod}" == *new* ]]; then
-  nix build --store "ssh-ng://${remote}" --eval-store auto "${thing}"
+  nix build --store "ssh-ng://${remote}" --eval-store auto "${thing}" --keep-going
   if [[ "${copymethod}" == *copy* ]]; then
-    nix copy --from "ssh-ng://${remote}" "${thing}"
+    nix copy --no-check-sigs --from "ssh-ng://${remote}" --to "ssh-ng://${target}" "${thing}"
   elif [[ "${copymethod}" == *cachix* ]]; then
     false # TODO: cachix
   fi
@@ -31,34 +31,17 @@ elif [[ "${copymethod}" == *old** ]]; then
   rsync -avh "${workdir}/" "[${remote}]":"${workdir}/"
 
   ssh "${remote}" "nix copy --derivation --from \"file://${workdir}\" \"${drv}\""
-  ssh "${remote}" "nix build -L \"${drv}\" --no-link"
+  ssh "${remote}" "nix build -L \"${drv}\" --no-link --keep-going"
 
-  if [[ "${copymethod}" == *copy* ]]; then
+  if [[ "${copymethod}" == *rsync* ]]; then
     ssh "${remote}" "nix copy --to \"file://${workdir}\" \"${out}\""
     rsync -avh "[${remote}]":"${workdir}/" "${workdir}/"
     nix copy --no-check-sigs --from "${workdir}" "${out}"
+  elif [[ "${copymethod}" == *copy* ]]; then
+    nix copy --no-check-sigs --from "ssh-ng://${remote}" --to "ssh-ng://${target}" "${out}"
   elif [[ "${copymethod}" == *cachix ]]; then
     false # TODO: cachix
   fi
-# elif [[ "${copymethod}" == *git* ]]; then
-#   # copy from mobuild
-#   # git commit, push
-#   # ON REMOTE:
-#   # make sure ~/code/nixcfg exists
-#   # remote update; reset --hard HEAD
-#   git -C /home/cole/code/nixcfg commit . -m "wip" || true
-#   git -C /home/cole/code/nixcfg push origin HEAD
-
-#   ssh "colemickens@aarch64.nixos.community" "git -C /home/colemickens/code/nixcfg remote update \
-#     && git -C /home/colemickens/code/nixcfg reset --hard origin/main \
-#     && nix build -L /home/colemickens/code/nixcfg#${thing} --keep-going --out-link /tmp/${out}"
-
-#   true
-#   if [[ "${copymethod}" == *copy* ]]; then
-#     nix copy --from "ssh-ng://${remote}" "${thing}"
-#   elif [[ "${copymethod}" == *cachix ]]; then
-#     false # TODO: cachix
-#   fi
 fi
 
 if [[ "${action:-""}" == *activate* ]]; then

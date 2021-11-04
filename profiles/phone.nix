@@ -24,7 +24,7 @@
     documentation.info.enable = false;
     documentation.nixos.enable = false;
     programs.command-not-found.enable = false;
-    environment.noXlibs = true;
+    #environment.noXlibs = true;
     security.polkit.enable = false;
     services.udisks2.enable = false;
 
