@@ -27,10 +27,10 @@ runs:
         ./.github/setup
         source /run/secrets/nixup-secrets
         set +x; echo "::set-output name=TAILSCALE_AUTHKEY::${TAILSCALE_AUTHKEY}"; set -x
-    - name: Tailscale
-      uses: tailscale/github-action@v1
-      with:
-        authkey: '${{ steps.gha-init.outputs.TAILSCALE_AUTHKEY }}'
+    # - name: Tailscale
+    #   uses: tailscale/github-action@v1
+    #   with:
+    #     authkey: '${{ steps.gha-init.outputs.TAILSCALE_AUTHKEY }}'
     - name: cache-key
       id: cache-key
       shell: bash
