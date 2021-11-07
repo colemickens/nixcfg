@@ -264,11 +264,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1636118862,
-        "narHash": "sha256-4j0nUBhCkNnBeydUIh3hwn93MPnU4FCO/YAnkZhGgGc=",
+        "lastModified": 1636244663,
+        "narHash": "sha256-eGMd0jR2mIfiNnxK2Yj6nXfcy9foWvNsKOFwGLWfax0=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "9e4d5ef70312114af7a7be9e00501aeaa28db602",
+        "rev": "696822355521b2e33b6d166011f930cc80291bed",
         "type": "github"
       },
       "original": {
@@ -390,17 +390,21 @@
       }
     },
     "tow-boot": {
-      "flake": false,
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
       "locked": {
-        "lastModified": 1624856915,
-        "narHash": "sha256-SWua74zJUlqMHGsHHTNLjyf07tHcuxevntExDeYID0E=",
-        "owner": "tow-boot",
+        "lastModified": 1636241060,
+        "narHash": "sha256-W+2qDEpH40Uec/uagdxnErVyTSt8CzPxjSpbr6xcSPY=",
+        "owner": "colemickens",
         "repo": "tow-boot",
-        "rev": "00f2cce0e270f87e8f013e476ef5db8e0f79e3b7",
+        "rev": "5d8a33ae321ef3cf1c5c5f4fef86032694cc59b0",
         "type": "github"
       },
       "original": {
-        "owner": "tow-boot",
+        "owner": "colemickens",
         "repo": "tow-boot",
         "type": "github"
       }
