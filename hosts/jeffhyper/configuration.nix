@@ -10,7 +10,7 @@
 
     ../../profiles/interactive.nix
 
-    ./rtsp.nix
+    #./rtsp.nix
   ];
 
   config = {

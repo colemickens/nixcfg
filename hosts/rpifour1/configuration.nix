@@ -29,19 +29,6 @@ in
         device = "tank/nix";
         fsType = "zfs";
       };
-      # sudo zfs create -o mountpoint=none tank/var
-      "/var/lib/unifi" = {
-        # sudo zfs create -o mountpoint=legacy tank/var/unifi
-        device = "tank/var/unifi";
-        fsType = "zfs";
-      };
-      "/var/lib/hass" = {
-        # sudo zfs create -o mountpoint=legacy tank/var/hass
-        device = "tank/var/hass";
-        fsType = "zfs";
-      };
-
-      # see in netboot-server for the /var/lib/nfs/rpifour2 mount
     };
   };
 }

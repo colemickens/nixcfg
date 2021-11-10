@@ -32,11 +32,11 @@
       xdg.configFile."sway/config".onChange = lib.mkForce "";
 
       services = {
-        udiskie = {
-          enable = true;
-          automount = false;
-          tray = "always";
-        };
+        # udiskie = {
+        #   enable = true;
+        #   automount = false;
+        #   tray = "always";
+        # };
       };
 
       home.sessionVariables = {
@@ -65,12 +65,12 @@
         grim
         qt5.qtwayland
         slurp
-        udiskie
         nwg-launchers
         waypipe
         wayvnc
         wf-recorder
         wl-clipboard
+        wlrctl
         # wl-gammactl # nixpkgs-wayland only
         # wlvncc # nixpkgs-wayland only
         # wshowkeys # use the wrapper ^

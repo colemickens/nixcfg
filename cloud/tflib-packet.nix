@@ -22,6 +22,7 @@ let
         #termination_time = "\${vars.termtime}";
       };
     };
+    # TODO: add output for the public ip
   };
   mergeListToAttrs = lib.fold (c: el: lib.recursiveUpdate el c) {};
 in mergeListToAttrs ([]

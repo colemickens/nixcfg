@@ -19,9 +19,10 @@ out="$(nix eval --raw "${thing}" "${@}")"
 #### build + copy
 
 if [[ "${copymethod}" == *new* ]]; then
-  nix build --store "ssh-ng://${remote}" --eval-store auto "${thing}" --keep-going
+  nix copy --no-check-sigs --to "ssh-ng://${remote}" --derivation "${drv}"
+  nix build -L --store "ssh-ng://${remote}" --eval-store auto "${drv}" --keep-going
   if [[ "${copymethod}" == *copy* ]]; then
-    nix copy --no-check-sigs --from "ssh-ng://${remote}" --to "ssh-ng://${target}" "${thing}"
+    nix copy --no-check-sigs --from "ssh-ng://${remote}" --to "ssh-ng://${target}" "${out}"
   elif [[ "${copymethod}" == *cachix* ]]; then
     false # TODO: cachix
   fi
@@ -31,7 +32,11 @@ elif [[ "${copymethod}" == *old** ]]; then
   rsync -avh "${workdir}/" "[${remote}]":"${workdir}/"
 
   ssh "${remote}" "nix copy --derivation --from \"file://${workdir}\" \"${drv}\""
-  ssh "${remote}" "nix build -L \"${drv}\" --no-link --keep-going"
+  
+  #### Test: instead:
+  #####ssh "${remote}" "nix build -L \"${drv}\" --no-link --keep-going"
+  nix build --store "ssh-ng://${remote}" --eval-store auto "${drv}" --keep-going
+  #####
 
   if [[ "${copymethod}" == *rsync* ]]; then
     ssh "${remote}" "nix copy --to \"file://${workdir}\" \"${out}\""

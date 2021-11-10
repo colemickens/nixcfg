@@ -7,7 +7,7 @@ set -x
 
 ssh "colemickens@aarch64.nixos.community" \
   "nix-env -f /run/current-system/nixpkgs -iA \
-    git zellij nixUnstable htop ncdu file nix-top ncdu neovim cachix"
+    git zellij nixUnstable htop ncdu file nix-top ncdu neovim cachix nix-tree"
 
 ssh "colemickens@aarch64.nixos.community" \
   "rm -rf ~/.config/cachix; mkdir -p ~/.config/cachix; mkdir -p ~/.config/nix; mkdir -p ~/code/"

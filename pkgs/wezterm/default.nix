@@ -1,7 +1,6 @@
 args_@{ lib
 , fetchFromGitHub
 , wezterm
-, zlib
 , ... }:
 
 let
@@ -11,13 +10,13 @@ let
   ];
   extraBuildInputs = [
     # "qqc2-desktop-style" "sonnet" "kio"
-    "zlib"
   ];
   ignore = [ "wezterm" "fetchFromGithub" ] ++ extraBuildInputs;
   args = lib.filterAttrs (n: v: (!builtins.elem n ignore)) args_;
   newsrc = fetchFromGitHub {
     owner = "wez";
     repo = "wezterm";
+    fetchSubmodules = true;
     inherit (metadata) rev sha256;
   };
 in
@@ -30,6 +29,8 @@ in
     src = newsrc;
     outputHash = metadata.cargoSha256;
   });
+
+  doCheck = false;
 
   buildInputs = old.buildInputs ++ (map (n: args_.${n}) extraBuildInputs);
   nativeBuildInputs = old.nativeBuildInputs ++ (map (n: args_.${n}) extraNativeBuildInputs);

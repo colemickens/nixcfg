@@ -1,6 +1,7 @@
 args_@{ lib, fetchFromGitLab
 , neochat
 , qqc2-desktop-style, sonnet, kio
+, qcoro, syntax-highlighting, kquickimageedit
 , extra-cmake-modules, pkg-config
 , ... }:
 
@@ -10,7 +11,8 @@ let
     "extra-cmake-modules" "pkg-config"
   ];
   extraBuildInputs = [
-    "qqc2-desktop-style" "sonnet" "kio"
+    "qqc2-desktop-style" "sonnet" "kio" "qcoro"
+    "syntax-highlighting" "kquickimageedit"
   ];
   ignore = [ "neochat" ] ++ extraBuildInputs;
   args = lib.filterAttrs (n: v: (!builtins.elem n ignore)) args_;

@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 let
   bg_gruvbox_blue = builtins.fetchurl {
@@ -23,6 +23,10 @@ let
   wofi = "${pkgs.wofi}/bin/wofi --insensitive";
   drun = "${wofi} --show drun";
   nwggrid = "${pkgs.nwg-launchers}/bin/nwggrid";
+  nwgdrawer = "${pkgs.nwg-drawer}/bin/nwg-drawer";
+  sirula = "${pkgs.sirula}/bin/sirula";
+  launcher = nwgdrawer;
+  launcher2 = sirula;
 
   terminal = "foot";
 
@@ -96,7 +100,7 @@ in
 {
   config = {
     programs.sway.enable = true; # needed for swaylock/pam stuff
-    programs.sway.extraPackages = []; # block rxvt
+    programs.sway.extraPackages = lib.mkForce []; # block rxvt
 
     environment.systemPackages = with pkgs; [
       capitaine-cursors
@@ -230,7 +234,8 @@ in
             "${modifier}+Shift+c" = "reload";
             "${modifier}+Delete" = "exec ${swaylockcmd}";
 
-            "${modifier}+Escape" = "exec ${nwggrid}";
+            "${modifier}+Escape" = "exec ${launcher}";
+            "${modifier}+Ctrl+Escape" = "exec ${launcher2}";
             "${modifier}+F1" = "exec ${passShowCmd}";
             "${modifier}+F2" = "exec ${passTotpCmd}";
 

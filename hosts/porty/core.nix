@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, modulesPath, ... }:
 
 {
   imports = [
@@ -26,9 +26,11 @@
   ];
 
   config = {
+    # it sometimes boots as a hyper-v guest, so...
+    virtualisation.hypervGuest.enable = true;
+
     environment.systemPackages = with pkgs; [
       hdparm
-      esphome
     ];
 
     users.users.cole.linger = true;
@@ -57,23 +59,25 @@
 
     networking.useDHCP = false;
     networking.interfaces."eth0".useDHCP = true;
-    networking.interfaces."enp9s0f3u2u1".ipv4.addresses = [{
-      address = "10.99.0.1";
-      prefixLength = 24;
-    }];
-    networking.interfaces."enp9s0f3u2u3".ipv4.addresses = [{
-      address = "10.88.0.1";
-      prefixLength = 24;
-    }];
-    networking.nat = {
-      enable = true;
-      internalInterfaces = [
-        "enp9s0f3u2u3u1"
-        "enp9s0f3u2u3"
-      ];
-      externalInterface = "eth0";
-      internalIPs = [ "10.0.0.0/16" ];
-    };
+
+    # TODO: only enable when natively booted and working on mobile-nixos, otherwise quite a pain to wait at boot
+    # networking.interfaces."enp9s0f3u2u1".ipv4.addresses = [{
+    #   address = "10.99.0.1";
+    #   prefixLength = 24;
+    # }];
+    # networking.interfaces."enp9s0f3u2u3".ipv4.addresses = [{
+    #   address = "10.88.0.1";
+    #   prefixLength = 24;
+    # }];
+    # networking.nat = {
+    #   enable = true;
+    #   internalInterfaces = [
+    #     "enp9s0f3u2u3u1"
+    #     "enp9s0f3u2u3"
+    #   ];
+    #   externalInterface = "eth0";
+    #   internalIPs = [ "10.0.0.0/16" ];
+    # };
 
 
     hardware = {
@@ -83,6 +87,7 @@
     };
     boot.initrd.availableKernelModules = [ "sd_mod" "sr_mod" ];
     boot.initrd.kernelModules = [
+      "hv_vmbus" "hv_storvsc" # for booting under hyperv
       "xhci_pci"
       "nvme"
       "usb_storage"

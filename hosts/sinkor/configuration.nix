@@ -5,8 +5,6 @@ in
 {
   imports = [
     ../../modules/loginctl-linger.nix
-
-
     ../../secrets
 
     ../../mixins/syncthing.nix

@@ -8,10 +8,6 @@ unset NIX_PATH
 # build up commit msg
 cprefix="auto-update(${JOB_ID:-"manual"}):"
 
-# keep track of what we build for the README
-pkgentries=(); nixpkgentries=();
-cache="nixpkgs-wayland";
-
 nixargs=(--experimental-features 'nix-command flakes')
 buildargs=(
   --option 'extra-binary-caches' 'https://cache.nixos.org https://nixpkgs-wayland.cachix.org'
@@ -119,8 +115,7 @@ fi
 # updates galore
 pkgslist=()
 for p in `ls -v -d -- ./*/ | sort -V`; do
-  #pkgslist=("${pkgslist[@]}" "${p}")
-  echo "${0}" "${p}"
+  "${0}" "${p}"
 done
 
 exit 0

@@ -32,7 +32,6 @@ in
     environment.systemPackages = with pkgs; [
       efibootmgr p7zip cpio
       yubikey-manager
-      esphome
     ];
     system.stateVersion = "21.05";
 
@@ -94,7 +93,7 @@ in
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      kernelPackages = pkgs.linuxPackages_latest;
+      kernelPackages = pkgs.linuxPackages_5_14;
       zfs.enableUnstable = true;
 
       initrd.availableKernelModules = [

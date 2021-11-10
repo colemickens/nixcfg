@@ -11,6 +11,12 @@ in
     ../../mixins/tailscale.nix
   ];
 
+  /*
+  *
+  *
+  * THIS IS SHARED BETWEEN SINKOR/RPIFOUR1
+  *
+  */
   config = {
     system.stateVersion = "21.05";
 

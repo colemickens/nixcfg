@@ -21,7 +21,8 @@ let
           <li><a href="https://home2.x.cleo.cat">home-assistant (sdcard, HA OS)</a></li>
           <li><a href="https://unifi.x.cleo.cat">unifi</a></li>
           <li><a href="https://denon.x.cleo.cat">denon</a></li>
-          <li><a href="https://code.x.cleo.cat">code</a></li>
+          <li><a href="https://code.x.cleo.cat">code-server</a></li>
+          <li><a href="https://openvscode.x.cleo.cat">openvscode</a></li>
         </ul>
         <br/><br/><pre>version: @systemLabel@</pre>
       </body>
@@ -120,7 +121,17 @@ in
       };
       virtualHosts."code.x.cleo.cat" = internalVhost // {
         locations."/" = {
-          proxyPass = "http://100.93.180.71:5902/";
+          proxyPass = "http://100.93.180.71:5902/"; # porty
+          #proxyPass = "http://100.72.11.62:5902/"; # xeep
+          #proxyPass = "http://localhost:5902/"; # self (xeep)
+          proxyWebsockets = true;
+        };
+      };
+      virtualHosts."openvscode.x.cleo.cat" = internalVhost // {
+        locations."/" = {
+          proxyPass = "http://100.93.180.71:5904/"; # porty
+          #proxyPass = "http://100.72.11.62:5904/"; # xeep
+          #proxyPass = "http://localhost:5904/"; # self (xeep)
           proxyWebsockets = true;
         };
       };

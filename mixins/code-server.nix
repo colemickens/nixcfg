@@ -3,12 +3,17 @@
 {
   imports = [
     ../modules/code-server.nix
+    ../modules/openvscode-server.nix
   ];
 
   config = {
     code-server = {
       enable = true;
-      domain = "${config.networking.hostName}.ts.r10e.tech";
+      user = "cole";
+    };
+
+    openvscode-server = {
+      enable = true;
       user = "cole";
     };
   };

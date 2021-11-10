@@ -1,16 +1,10 @@
 { pkgs, terranix }:
 
 let
-  lib = pkgs.lib;
-  
-  mkPacket = import ./mkPacket.nix { inherit pkgs; };
-  mkOracle = import ./mkOracle.nix { inherit pkgs; };
-
-  userdata = import ./userdata.nix { inherit pkgs; };
-
-  _tf = (pkgs.terraform_1_0.withPlugins (p: [ p.metal p.oci /* p.sops */ ]));
-  tf = "${_tf}/bin/terraform";
-  tfstate = "./cloud/_tf/_state";
+  tflib = import ./tflib.nix { inherit pkgs; };
+  tfpkg = (pkgs.terraform_1_0.withPlugins (p: [ p.metal p.oci /* p.sops */ ]));
+  tf = "${tfpkg}/bin/terraform"; # "${tf}"
+  tfstate = "./cloud/_state";
 
   ##
   ## <oracle>
@@ -36,20 +30,6 @@ let
   o_amd = { name = "VM.Standard.E2.1.Micro"; };
   o_arm_img = "canonical_ubuntu_20_04__aarch64";
   o_amd_img = "canonical_ubuntu_20_04_minimal__arm64";
-  
-  udi = f: "\n\n##\n##\n# ${f}\n${builtins.readFile ( ./. + "/${f}" )}";
-  ud = pkgs.writeScript "bootstrap.sh.tmpl" ''
-    #!/usr/bin/env bash
-    set -x
-    set -euo pipefail
-    ${udi "./userdata/install-nix.sh"}
-  '';
-  toVars = vars: "{ " + (builtins.concatStringsSep ", " (lib.mapAttrsToList (k: v: "${k} = \"${v}\"") vars)) + " }";
-  uv = toVars {
-    TF_NIX_INSTALL_URL = "https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.5pre20211008_6bd74a6/install";
-    TF_USERNAME = "cole";
-    TF_NIXOS_LUSTRATE = "false"; # todo: we already selectively include the script?
-  };
   ## </oracle>
 
   ##
@@ -61,18 +41,19 @@ let
 
   ##
   ## <terranix>
+  ud = tflib.userdata;
+  uv = tflib.uservars;
   terraformCfg = terranix.lib.buildTerranix {
     inherit pkgs;
     terranix_config.imports = [
       ### PACKET VMS
-      (mkPacket  metal_cole  {
-        #pktspotamd = { plan="c3.medium.x86";  loc="sv";  bid="0.5"; userdata=ud; uservars=uv; };
-        #pktspotarm = { "c2.large.arm"   "sv"  "0.5" };
-        #pktspotgpu = { "x2.large.x86"   "sv"  "0.5" }; ## is this the right type?
+      (tflib.packet  metal_cole  {
+        pktspotamd0 = { plan="c3.medium.x86";  loc="sv";  bid="0.50"; userdata=ud; uservars=uv; };
+        #pktspotamdz3 = { plan="m3.large.x86";  loc="sv";  bid="0.70"; userdata=ud; uservars=uv; };
       })
 
       ### ORACLE VMS
-      (mkOracle ociacct1 {
+      (tflib.oracle ociacct1 {
       #   oci1arm1 = { shape = o_arm; image=o_arm_img; userdata=ud; uservars=uv; };
       #   oci1amd1 = { shape = o_amd; image=o_amd_img; userdata=ud; uservars=uv; };
       #   #oci1amd2 = { shape = o_amd; image=o_amd_img; userdata=ud; uservars=uv; };

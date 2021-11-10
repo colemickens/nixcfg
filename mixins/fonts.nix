@@ -12,8 +12,6 @@ in
         noto-fonts noto-fonts-cjk noto-fonts-emoji
         iosevka # first place
         jetbrains-mono # second place
-        monoid # untested
-        fira-code fira-code-symbols # its okay, but wide
         font-awesome
         gelasio # ???
       ] ++ [ font.package ];

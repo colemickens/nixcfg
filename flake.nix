@@ -2,8 +2,9 @@
   # flakes feedback
   # - flake-overrides.lock: https://github.com/NixOS/nix/issues/4193
   # - I still dislike the registry + special-cased GitHub special URL syntax
-  #   (still haven't heard it explained in a convincing way)
-  # - ...?
+  #  -- bonus validation, gitlab repos are weird because they can be nested
+  #  -- forcing users to url-encode '/' in their special flake refs
+  # - lots of other stuff, too much to get into...
 
   description = "colemickens-nixcfg";
 
@@ -32,7 +33,8 @@
     impermanence.url = "github:nix-community/impermanence/5e8913aa1c311da17e3da5a4bf5c5a47152f6408"; # TODO TODO TODO TODO TODO
     impermanence.inputs.nixpkgs.follows = "nixpkgs";
 
-    tow-boot = { url = "github:tow-boot/tow-boot"; flake = false; };
+    tow-boot = { url = "github:colemickens/tow-boot"; };
+    tow-boot.inputs.nixpkgs.follows = "nixpkgs"; # TODO: might break u-boot?
 
     mobile-nixos.url = "github:colemickens/mobile-nixos/master"; # its nixpkgs is _only_ used for its devshell
 
@@ -121,32 +123,15 @@
       });
       apps = forAllSystems (system: let
         app = program: { type = "app"; program = "${program}"; };
-        tfout = import ./cloud/_tf { terranix = inputs.terranix; pkgs = pkgs_.nixpkgs.${system}; };
+        tfout = import ./cloud { terranix = inputs.terranix; pkgs = pkgs_.nixpkgs.${system}; };
       in {
-        # TODO: is this really the best way to expose this command outward?
-        # CI
+        # CI (should we use HM for this instead?)
         install-secrets = { type = "app"; program = legacyPackages."${system}".install-secrets.outPath; };
 
         # Terraform
         tf = { type = "app"; program = tfout.tf.outPath; };
         tf-apply = { type = "app"; program = tfout.apply.outPath; };
         tf-destroy = { type = "app"; program = tfout.destroy.outPath; };
-
-        # Misc convenience
-        enchilada = {
-          factory-reset = app "${devices.enchiloco.extra}/factory-reset.sh";
-          #factory-critical = app "${devices.enchiloco.extra}/factory-critical.sh";
-          nixos-boot = app "${devices.enchiloco.extra}/nixos-boot.sh";
-          nixos-system = app "${devices.enchiloco.extra}/nixos-system.sh";
-          nixos = app "${devices.enchiloco.extra}/nixos.sh";
-        };
-        blueline = {
-          factory-reset = app "${devices.blueloco.extra}/factory-reset.sh";
-          factory-critical = app "${devices.blueloco.extra}/factory-critical.sh";
-          nixos-boot = app "${devices.blueloco.extra}/nixos-boot.sh";
-          nixos-system = app "${devices.blueloco.extra}/nixos-system.sh";
-          nixos = app "${devices.blueloco.extra}/nixos.sh";
-        };
       });
 
       packages = forAllSystems (s: fullPkgs_.${s}.colePackages);
@@ -171,19 +156,12 @@
           keyboard-layouts = prev.callPackage ./pkgs/keyboard-layouts {};
           mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
           meli = prev.callPackage ./pkgs/meli {};
+          neochat = prev.libsForQt5.callPackage ./pkgs/neochat { neochat = prev.neochat; };
           poweralertd = prev.callPackage ./pkgs/poweralertd {};
           rkvm = prev.callPackage ./pkgs/rkvm {};
           shreddit = prev.python3Packages.callPackage ./pkgs/shreddit {};
-          #metal-cli = prev.callPackage ./pkgs/metal-cli {};
           rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {};
-          #disabled # wezterm = prev.callPackage ./pkgs/wezterm { wezterm = prev.wezterm; };
-
-          # <wireplumber>
-          #disabled wireplumber = prev.callPackage ./pkgs/wireplumber {};
-          # <wireguard deps> # must be visible for update script to hit it
-          #disabled cpptoml = prev.callPackage ./pkgs/cpptoml {};
-          # </wireguard deps>
-          # </wireplumber>
+          wezterm = prev.callPackage ./pkgs/wezterm { wezterm = prev.wezterm; };
           zellij = prev.callPackage ./pkgs/zellij { zellij = prev.zellij; };
 
           nix-build-uncached = prev.nix-build-uncached.overrideAttrs(old: {
@@ -215,6 +193,9 @@
         enchilada   = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
         #enchiloco   = mkSystem inputs.nixpkgs "x86_64-linux"  "enchiloco";
         rpifour1    = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour1";
+        rpizerotwo1 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo1";
+        # rpizerotwo2 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo2";
+        # rpizerotwo3 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo3";
         sinkor      = mkSystem inputs.nixpkgs "aarch64-linux" "sinkor";
         oracular    = mkSystem inputs.nixpkgs "aarch64-linux" "oracular";
         # armv6l-linux (cross-built)
@@ -241,7 +222,7 @@
       #   };
 
       hydraJobs = forAllSystems (s: {
-        devshell = inputs.self.devShell.${s}.inputDerivation;
+        devshell = force_cached s inputs.self.devShell.${s}.inputDerivation;
         pkgs = force_cached s (filterPkgs pkgs_.nixpkgs.${s} inputs.self.packages.${s});
         hosts = force_cached s (builtins.mapAttrs (n: v: v.config.system.build.toplevel)
           (filterHosts pkgs_.nixpkgs.${s} inputs.self.nixosConfigurations));
@@ -255,42 +236,45 @@
 
       devices = {
         blueline = inputs.self.nixosConfigurations.blueline.config.mobile.outputs.android;
-        blueloco = inputs.self.nixosConfigurations.blueloco.config.mobile.outputs.android;
         enchilada = inputs.self.nixosConfigurations.enchilada.config.mobile.outputs.android;
-        enchiloco = inputs.self.nixosConfigurations.enchiloco.config.mobile.outputs.android;
       };
 
       images = let
-        tow-boot = sys: (import inputs.tow-boot { pkgs = import inputs.nixpkgs { system = sys; }; });
-        tow-boot-aarch64 = tow-boot "aarch64-linux";
+        #tb_aarch64 = import inputs.tow-boot { pkgs = import inputs.nixpkgs { system = "aarch64-linux"; }; };
+        tb_aarch64 = inputs.tow-boot.packages.aarch64-linux;
       in {
-        #rpifour1_towboot = tow-boot-aarch64.raspberryPi4.sharedImage; # not used yet, still on weird cmpkgs rpi4 stuff
-        sinkor_towboot = tow-boot-aarch64.outputs.raspberryPi4.sharedImage;
-        pinebook_towboot = tow-boot-aarch64.pinebook.sharedImage;
+        # TODO: move rpifour1 back to nixos + tow-boot (and then drop old rpi4 nixpkgs commits + pr)
+        #rpifour1_towboot = tb_aarch64.raspberryPi4.sharedImage; # not used yet, still on weird cmpkgs rpi4 stuff
+        sinkor_towboot = tb_aarch64.raspberryPi4-aarch64; # sharedImage? wtf? where did taht come from?
+        pinebook_towboot = tb_aarch64.pine64-pinebookPro;
+        rpizerotwo1_towboot = tb_aarch64.raspberryPi-aarch64;
+        # rpizerotwo2_towboot = tb_aarch64.raspberryPi-aarch64;
+        # rpizerotwo3_towboot = tb_aarch64.raspberryPi-aarch64;
 
         rpizero1  = inputs.self.nixosConfigurations.rpizero1.config.system.build.sdImage;
         rpizero2  = inputs.self.nixosConfigurations.rpizero2.config.system.build.sdImage;
         rpionebp  = inputs.self.nixosConfigurations.rpionebp.config.system.build.sdImage;
 
-        blueline = let bp = inputs.self.nixosConfigurations.blueline; in
+        blueline = let x = inputs.self.nixosConfigurations.blueline.config.system.build.mobile-nixos; in
           pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "blueline-bundle" ([
-            devices.blueline.extra
-            devices.blueline.android-fastboot-images
+            # ? # devices.blueline.extra
+            # ? # devices.blueline.android-fastboot-images
+            x.scripts.nixos
+            x.scripts.factoryReset
+            #devices.blueline.android-flashable-bootimg
+            #devices.blueline.android-flashable-system
           ]);
-        blueloco = let bp = inputs.self.nixosConfigurations.blueloco; in
-          pkgs_.nixpkgs.x86_64-linux.linkFarmFromDrvs "blueloco-bundle" ([
-            devices.blueloco.extra
-            devices.blueloco.android-fastboot-images
-          ]);
-        enchilada = let bp = inputs.self.nixosConfigurations.enchilada; in
+        enchilada = let x = inputs.self.nixosConfigurations.enchilada.config.system.build.mobile-nixos; in
           pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "enchilada-bundle" ([
-            devices.enchilada.extra
-            devices.enchilada.android-fastboot-images
-          ]);
-        enchiloco = let bp = inputs.self.nixosConfigurations.enchiloco; in
-          pkgs_.nixpkgs.x86_64-linux.linkFarmFromDrvs "enchiloco-bundle" ([
-            devices.enchiloco.extra
-            devices.enchiloco.android-fastboot-images
+            # valid: # (zstd, device-specific flashing script for PC)
+            #x.scripts.nixos
+            x.scripts.nixosBoot
+            #x.scripts.nixosSystem
+            #x.scripts.factoryReset
+
+            # valid: # (slow, uses zip, no script for PC)
+            #devices.enchilada.android-flashable-bootimg
+            #devices.enchilada.android-flashable-system
           ]);
       };
 

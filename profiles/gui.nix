@@ -65,7 +65,7 @@ in
         # gui cli
         brightnessctl
         pulsemixer
-        alsaTools
+        #alsaTools
         alsaUtils
 
         # misc gui
@@ -74,7 +74,7 @@ in
         gimp
         qemu
         meld
-        vscodium
+        #vscodium
         freerdp
         # remmina # webkitgtk
         imv
@@ -98,7 +98,7 @@ in
         # spectral
         # mirage-im
         # cchat-gtk
-        # neochat
+        neochat
         # element-desktop
 
         #gnome3.gnome-tweaks # webkitgtk
@@ -115,7 +115,7 @@ in
 
         easyeffects # weird, doesn't support aarch64?
 
-        thunderbird # just a bit too painful to build on aarch64
+        #thunderbird # just a bit too painful to build on aarch64
 
         mplayer # weird non-aarch64
 

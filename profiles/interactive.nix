@@ -106,7 +106,7 @@
 
         nix-prefetch  nixpkgs-review
 
-        ffmpeg linuxPackages.cpupower
+        linuxPackages.cpupower
         sshfs cifs-utils ms-sys ntfs3g
         imgurbash2
 

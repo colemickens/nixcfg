@@ -1,15 +1,15 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config.code-server;
+let cfg = config.openvscode-server;
 
 in {
-  options.code-server = with lib; {
+  options.openvscode-server = with lib; {
     enable = lib.mkEnableOption "Enable this to start a visual studio code server.";
     port = lib.mkOption {
       type = lib.types.port;
       description = "The port on which vs code is served.";
-      default = 5902;
-      example = 5902;
+      default = 5904;
+      example = 5904;
     };
     user = lib.mkOption {
       type = lib.types.str;
@@ -20,24 +20,24 @@ in {
   };
 
   config =
-    let extensionDir = "/home/${cfg.user}/.local/share/code-server/extensions";
+    let extensionDir = "/home/${cfg.user}/.local/share/openvscode-server/extensions";
     in lib.mkIf cfg.enable {
-      system.activationScripts.preinstall-vscode-extensions = let extensions = with pkgs; [
-        vscode-extensions.ms-vscode.cpptools
-      ]; in {
-        text = ''
-          mkdir -p ${extensionDir}
-          chown -R ${cfg.user}:users /home/${cfg.user}/.local/share/code-server
-          for x in ${lib.concatMapStringsSep " " toString extensions}; do
-              ln -sf $x/share/vscode/extensions/* ${extensionDir}/
-          done
-          chown -R ${cfg.user}:users ${extensionDir}
-        '';
-        deps = [];
-      };
+      # system.activationScripts.preinstall-vscode-extensions = let extensions = with pkgs; [
+      #   vscode-extensions.ms-vscode.cpptools
+      # ]; in {
+      #   text = ''
+      #     mkdir -p ${extensionDir}
+      #     chown -R ${cfg.user}:users /home/${cfg.user}/.local/share/openvscode-server
+      #     for x in ${lib.concatMapStringsSep " " toString extensions}; do
+      #         ln -sf $x/share/vscode/extensions/* ${extensionDir}/
+      #     done
+      #     chown -R ${cfg.user}:users ${extensionDir}
+      #   '';
+      #   deps = [];
+      # };
 
-      systemd.services.code-server = {
-        description = "Visual Studio Code Server";
+      systemd.services.openvscode-server = {
+        description = "Open VSCode Server";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         path = [ pkgs.git ];
@@ -47,7 +47,7 @@ in {
           User = cfg.user;
           Group = "users";
           ExecStart = ''
-            ${pkgs.code-server}/bin/code-server \
+            ${pkgs.openvscode-server}/bin/openvscode-server \
               --port ${toString cfg.port} \
               --bind-addr 0.0.0.0:${toString cfg.port} \
               --auth none
