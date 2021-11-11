@@ -1,8 +1,9 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 let
   def = {
-    gnupgPkg = pkgs.gnupg23;
+    #gnupgPkg = pkgs.gnupg23;
+    gnupgPkg = inputs.temp-gpg-pr.legacyPackages.${pkgs.system}.gnupg;
   };
   config1 = def // {
     enableGpgRules = true;

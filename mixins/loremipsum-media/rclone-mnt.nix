@@ -23,6 +23,8 @@ in {
   systemd.services = {
     rclone_tvshows = mkMount "tvshows";
     rclone_movies  = mkMount "movies";
+    # TODO: finish
+    #rclone_incoming  = mkMount "incoming";
   };
 }
 

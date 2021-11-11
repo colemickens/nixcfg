@@ -19,6 +19,8 @@ out="$(nix eval --raw "${thing}" "${@}")"
 #### build + copy
 
 if [[ "${copymethod}" == *new* ]]; then
+  echo "should we have to copy the drv manually with --eval-store like this?"
+  sleep 10
   nix copy --no-check-sigs --to "ssh-ng://${remote}" --derivation "${drv}"
   nix build -L --store "ssh-ng://${remote}" --eval-store auto "${drv}" --keep-going
   if [[ "${copymethod}" == *copy* ]]; then

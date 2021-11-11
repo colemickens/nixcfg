@@ -3,6 +3,9 @@ set -x
 set -eu
 args=()
 
+#OVMF="$(nix-build ../.. -A pkgs.x86_64-linux.OVMF.fd)/FV/OVMF.fd"
+OVMF="/nix/store/7ggn9i4w6kfhgsb3acc0xw5wqhh5dk95-OVMF-202108-fd/FV/OVMF.fd"
+
 # echo "remote-viewer spice+unix:///tmp/vmspice.socket"
 #  -virtfs local,path=/run/media/cole,mount_tag=share,security_model=passthrough \
 sudo rm -rf /tmp/qemu.socket
@@ -18,7 +21,7 @@ source ../../secrets/unencrypted/qemu-profile-$1
   -spice unix=on,addr=/tmp/qemu.socket,disable-ticketing=on
 )
 [[ "${QEMU_EXTRA:-""}" != "" ]] && args=("${args[@]}" "${QEMU_EXTRA[@]}" )
-[[ "${QEMU_UEFI:-""}" != "" ]] && args=("${args[@]}" -bios "$(nix-build ../.. -A pkgs.x86_64-linux.OVMF.fd)/FV/OVMF.fd")
+[[ "${QEMU_UEFI:-""}" != "" ]] && args=("${args[@]}" -bios "${OVMF}")
 
 sudo qemu-system-x86_64 \
   -nodefaults \

@@ -14,6 +14,8 @@
     nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     stable.url = "github:nixos/nixpkgs/nixos-21.05"; # for cachix
 
+    temp-gpg-pr.url = "github:colemickens/nixpkgs/gpg23"; # TEMP to test gpg without full sys rebuild
+
     crosspkgs.url = "github:colemickens/nixpkgs/crosspkgs";
 
     home-manager.url = "github:colemickens/home-manager/cmhm";
@@ -106,8 +108,6 @@
           nixUnstable cachix nixpkgs-fmt nix-prefetch-git
           bash curl cacert jq parallel mercurial git tailscale
           nettools openssh ripgrep rsync sops gh gawk gnused gnugrep
-          # nix-build-uncached # use the overlayed one for now
-          #fullPkgs_.${system}.metal-cli
           fullPkgs_.${system}.nix-build-uncached
         ]);
       });

@@ -108,6 +108,14 @@ let
 in mergeListToAttrs ([]
   ++ (lib.mapAttrsToList mkVm vms)
   ++ [{
+    terraform = {
+      required_providers = {
+        oci = {
+          source = "oci";
+          version = "4.51.0";
+        };
+      };
+    };
     locals = {};
     provider = {
       oci = [{

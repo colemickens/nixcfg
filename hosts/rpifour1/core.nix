@@ -50,7 +50,7 @@ in
       '';
       loader.raspberryPi.uboot.enable = true;
       loader.raspberryPi.uboot.configurationLimit = 5;
-      #############3
+      #############
 
       tmpOnTmpfs = false;
       cleanTmpDir = true;
@@ -61,6 +61,7 @@ in
       initrd.availableKernelModules = [
         "pcie_brcmstb" "bcm_phy_lib" "broadcom" "mdio_bcm_unimac" "genet"
         "vc4" "bcm2835_dma" "i2c_bcm2835"
+        "reset_raspberrypi" # needed for USB reset, so that USB works in kernel 5.14
         "xhci_pci" "nvme" "usbhid" "usb_storage" "sd_mod"
         "uas" # necessary for my UAS-enabled NVME-USB adapter
       ];

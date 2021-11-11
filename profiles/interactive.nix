@@ -48,10 +48,7 @@
       home.packages = with pkgs; [
         colePackages.customCommands
 
-        #inputs.stable.legacyPackages.${pkgs.system}.cachix
         cachix
-
-        #nixops
         screen minicom picocom
         asciinema
         wget curl rsync
@@ -78,8 +75,6 @@
         unar
         gitui
 
-        tokei
-
         # https://zaiste.net/posts/shell-commands-rust/
         bat
         tealdeer
@@ -90,19 +85,12 @@
         hexyl
         xh
         dogdns
-
-        # random
-        #wireguard-tools
-        #pijul
         jj
 
         sops age cryptsetup
 
-        #bottom
         iotop which binutils.bintools
         parallel unzip xz zip
-        gomuks #rumatui
-        oci-cli
 
         nix-prefetch  nixpkgs-review
 
@@ -114,10 +102,7 @@
         parted psmisc wipe
 
         aria2 megatools youtube-dl
-        #plowshare
-
-        # eh?
-        #cordless
+        
         xdg_utils
         bb
         usbutils

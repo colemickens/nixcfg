@@ -15,7 +15,7 @@
       unifiPackage = pkgs.unifiStable;
       #mongodbPackage = pkgs.mongodb;
       # defaults to regular `pkgs.jre8` ?
-      # jrePackage = pkgs.jre8_headless;
+      jrePackage = pkgs.jre8_headless;
       maximumJavaHeapSize = 256;
     };
 

@@ -119,6 +119,12 @@ in
           proxyWebsockets = true;
         };
       };
+      virtualHosts."flood.x.cleo.cat" = internalVhost // {
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:3000/";
+          proxyWebsockets = true;
+        };
+      };
       virtualHosts."code.x.cleo.cat" = internalVhost // {
         locations."/" = {
           proxyPass = "http://100.93.180.71:5902/"; # porty
