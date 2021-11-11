@@ -264,11 +264,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1636577244,
-        "narHash": "sha256-Z7ivrbun16EJewPVcmNmhiuhftaxb2FHljAx3GjsfpE=",
+        "lastModified": 1636589373,
+        "narHash": "sha256-GnzpwFQ1f01jnSmcd2oK+65FdNSTds4d4gtXsOzO3Tg=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "02bbe8f513267b3050a36f9c219dd06bb9c5010c",
+        "rev": "86e7e1c09393751d9b4f1d9be36e9549c7edf91c",
         "type": "github"
       },
       "original": {
@@ -293,6 +293,7 @@
         "nixpkgs-wayland": "nixpkgs-wayland",
         "sops-nix": "sops-nix",
         "stable": "stable",
+        "temp-gpg-pr": "temp-gpg-pr",
         "terranix": "terranix",
         "tow-boot": "tow-boot",
         "wip-pinebook-pro": "wip-pinebook-pro"
@@ -348,6 +349,22 @@
       "original": {
         "owner": "nixos",
         "ref": "nixos-21.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "temp-gpg-pr": {
+      "locked": {
+        "lastModified": 1636587706,
+        "narHash": "sha256-rqlKCpXgDObwTt0Wb+IJ5zLENBYHyzzTNOqhF8GGPxs=",
+        "owner": "colemickens",
+        "repo": "nixpkgs",
+        "rev": "4a319cfc81eb75ac4b766632de78ac92cb83e3c0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "colemickens",
+        "ref": "gpg23",
         "repo": "nixpkgs",
         "type": "github"
       }
