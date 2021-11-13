@@ -32,11 +32,11 @@
       xdg.configFile."sway/config".onChange = lib.mkForce "";
 
       services = {
-        # udiskie = {
-        #   enable = true;
-        #   automount = false;
-        #   tray = "always";
-        # };
+        udiskie = {
+          enable = true;
+          automount = false;
+          tray = "always";
+        };
       };
 
       home.sessionVariables = {

@@ -69,6 +69,7 @@ in
         alsaUtils
 
         # misc gui
+        calibre
         glxinfo
         evince
         gimp

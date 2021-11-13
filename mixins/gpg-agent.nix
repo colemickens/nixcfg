@@ -6,6 +6,12 @@ let
     #gnupgPkg = inputs.temp-gpg-pr.legacyPackages.${pkgs.system}.gnupg;
     gnupgPkg = pkgs.callPackage "${inputs.temp-gpg-pr}/pkgs/tools/security/gnupg/23.nix" {};
   };
+  bad = def // {
+    enableGpgRules = false;
+    enableYubikeyRules = false;
+    enablePcscd = false;
+    disableCcid = false;
+  };
   config1 = def // {
     enableGpgRules = true;
     enableYubikeyRules = false;
@@ -37,7 +43,7 @@ let
     enablePcscd = true;
     disableCcid = true;
   };
-  ecfg = ult;
+  ecfg = config2;
 in {
   config = {
     # okay yikes, since some of this is dependent on scdaemon

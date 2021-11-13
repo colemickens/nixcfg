@@ -159,6 +159,7 @@
           neochat = prev.libsForQt5.callPackage ./pkgs/neochat { neochat = prev.neochat; };
           poweralertd = prev.callPackage ./pkgs/poweralertd {};
           rkvm = prev.callPackage ./pkgs/rkvm {};
+          space-cadet-pinball = prev.callPackage ./pkgs/SpaceCadetPinball {};
           shreddit = prev.python3Packages.callPackage ./pkgs/shreddit {};
           rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {};
           wezterm = prev.callPackage ./pkgs/wezterm { wezterm = prev.wezterm; };

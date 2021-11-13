@@ -49,7 +49,7 @@ in {
           ExecStart = ''
             ${pkgs.openvscode-server}/bin/openvscode-server \
               --port ${toString cfg.port} \
-              --bind-addr 0.0.0.0:${toString cfg.port} \
+              --host 0.0.0.0 \
               --auth none
           '';
           Restart = "always";

@@ -19,7 +19,7 @@ in
 
     ./modules/revproxy.nix
     ./modules/home-assistant
-    #./modules/unifi.nix
+    ./modules/unifi.nix
 
     ../../profiles/interactive.nix
     #../../profiles/desktop-sway.nix
