@@ -52,6 +52,10 @@ let
       deny all;
     '';
   };
+
+  redirSecret = pkgs.writeText "redir-tkn.conf" ''
+    return 301 https://openvscode.x.cleo.cat?tkn="";
+  '';
 in
 {
   config = {

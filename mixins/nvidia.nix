@@ -8,7 +8,7 @@ let
     env \
       WLR_NO_HARDWARE_CURSORS=1 \
       GBM_BACKEND=nvidia-drm \
-      GBM_BACKEND_PATHS=/run/opengl-driver/lib/gbm \
+      GBM_BACKENDS_PATH=/run/opengl-driver/lib/gbm \
       __GLX_VENDOR_LIBRARY_NAME=nvidia \
       sway --unsupported-gpu --debug \
         &>$HOME/nvidia-sway.log

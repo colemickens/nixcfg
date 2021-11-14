@@ -12,10 +12,10 @@
       user = "cole";
     };
 
-    sops."openvscode-conn-token".owner = "cole";
+    sops.secrets."openvscode-conn-token".owner = "cole";
     openvscode-server = {
       enable = true;
-      connectionSecret = config.sops."openvscode-conn-token".path;
+      connectionSecret = config.sops.secrets."openvscode-conn-token".path;
       user = "cole";
     };
   };
