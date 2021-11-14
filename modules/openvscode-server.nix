@@ -11,6 +11,11 @@ in {
       default = 5904;
       example = 5904;
     };
+    connectionSecret = lib.mkOption {
+      type = lib.types.str;
+      description = "File containing the secret connection token.";
+      example = "/run/secrets/vscode-conn-token";
+    };
     user = lib.mkOption {
       type = lib.types.str;
       description = "The user under which the server runs.";
@@ -50,7 +55,7 @@ in {
             ${pkgs.openvscode-server}/bin/openvscode-server \
               --port ${toString cfg.port} \
               --host 0.0.0.0 \
-              --auth none
+              --connection-secret "${cfg.connectionSecret}"
           '';
           Restart = "always";
         };
