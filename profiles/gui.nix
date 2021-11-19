@@ -79,7 +79,6 @@ in
         freerdp
         # remmina # webkitgtk
         imv
-        syncthing-gtk
         smplayer
         rkvm
         spotify-qt
@@ -108,6 +107,7 @@ in
 
         # browsers
         _someFirefox
+        epiphany
         #falkon
       ]
       ++ _torPackages

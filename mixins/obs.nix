@@ -17,9 +17,10 @@
     home-manager.users.cole = { pkgs, ... }: {
       programs.obs-studio = {
         enable = true;
-
+        
+        # TODO: is this even needed? isn't it built in?
         plugins = with pkgs; [
-          obs-wlrobs
+          obs-studio-plugins.wlrobs
         ];
       };
     };

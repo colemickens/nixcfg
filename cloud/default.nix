@@ -43,12 +43,13 @@ let
   ## <terranix>
   ud = tflib.userdata;
   uv = tflib.uservars;
-  terraformCfg = terranix.lib.buildTerranix {
+  terraformCfg = terranix.lib.terranixConfiguration {
     inherit pkgs;
-    terranix_config.imports = [
+    modules = [
       ### PACKET VMS
       (tflib.packet  metal_cole  {
         pktspotamd0 = { plan="c3.medium.x86";  loc="sv";  bid="0.50"; userdata=ud; uservars=uv; };
+        pktspotarm0 = { plan="c2.medium.arm";  loc="sv";  bid="0.50"; userdata=ud; uservars=uv; };
         #pktspotamdz3 = { plan="m3.large.x86";  loc="sv";  bid="0.70"; userdata=ud; uservars=uv; };
       })
 
@@ -96,8 +97,10 @@ in {
     function tixe() { set +x; sed -i "s/''${METAL_AUTH_TOKEN}/METAL_AUTH_TOKEN_REDACTED/g" "''${TF_LOG_PATH}"; }
     trap tixe EXIT
     
-    cp "${terraformCfg}/config.tf.json" "''${TF_STATE}/config.tf.json"
+    cp "${terraformCfg}" "''${TF_STATE}/config.tf.json"
     chmod -R +w "''${TF_STATE}"
+
+    "${tf}" "-chdir=''${TF_STATE}" init -upgrade
     
     "${tf}" "-chdir=''${TF_STATE}" version > "''${RUN_DIR}/version.txt"
     "${tf}" "-chdir=''${TF_STATE}" providers > "''${RUN_DIR}/providers.txt"
@@ -110,7 +113,7 @@ in {
     export METAL_AUTH_TOKEN="$(gopass show colemickens/packet.net | grep apikey | cut -d' ' -f2)"
     export TF_STATE="${tfstate}"
     if [[ ! -e "''${TF_STATE}/config.tf.json" ]]; then
-      cp "${terraformCfg}/config.tf.json" "''${TF_STATE}/config.tf.json"
+      cp "${terraformCfg}" "''${TF_STATE}/config.tf.json"
     fi
     
     "${tf}" "-chdir=''${TF_STATE}" init

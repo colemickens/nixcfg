@@ -19,7 +19,7 @@
     xdg.portal.enable = true;
     xdg.portal.gtkUsePortal = true;
     xdg.portal.extraPortals = with pkgs;
-      [ xdg-desktop-portal-wlr xdg-desktop-portal-gtk ];
+      [ xdg-desktop-portal-wlr /*xdg-desktop-portal-gtk*/ ];
 
     #services.gnome.gnome-disks.enable = true;
     services.gnome.gnome-online-miners.enable = lib.mkForce false;

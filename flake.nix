@@ -156,12 +156,17 @@
           keyboard-layouts = prev.callPackage ./pkgs/keyboard-layouts {};
           mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
           meli = prev.callPackage ./pkgs/meli {};
-          neochat = prev.libsForQt5.callPackage ./pkgs/neochat { neochat = prev.neochat; };
+          # disabled # neochat = prev.libsForQt5.callPackage ./pkgs/neochat { neochat = prev.neochat; };
           poweralertd = prev.callPackage ./pkgs/poweralertd {};
           rkvm = prev.callPackage ./pkgs/rkvm {};
-          space-cadet-pinball = prev.callPackage ./pkgs/SpaceCadetPinball {};
+          space-cadet-pinball = prev.callPackage ./pkgs/space-cadet-pinball {};
+          space-cadet-pinball-unfree = prev.callPackage ./pkgs/space-cadet-pinball {
+            _assets = import ./pkgs/space-cadet-pinball/assets.nix { pkgs = prev; };
+          };
           shreddit = prev.python3Packages.callPackage ./pkgs/shreddit {};
-          rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {};
+          rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {
+            buildGoModule = prev.buildGo117Module;
+          };
           wezterm = prev.callPackage ./pkgs/wezterm { wezterm = prev.wezterm; };
           zellij = prev.callPackage ./pkgs/zellij { zellij = prev.zellij; };
 
@@ -228,6 +233,13 @@
         hosts = force_cached s (builtins.mapAttrs (n: v: v.config.system.build.toplevel)
           (filterHosts pkgs_.nixpkgs.${s} inputs.self.nixosConfigurations));
       });
+      # TODO: finish this...
+      hydraBundles = forAllSystems (s: (
+        pkgs_.nixpkgs.${s}.lib.mapAttrs (n: v:
+          pkgs_.nixpkgs.${s}.linkFarmFromDrvs "${n}-bundle"
+            (builtins.attrValues v)
+        ) inputs.self.hydraJobs.${s}
+      ));
       bundles = forAllSystems (s:
         pkgs_.nixpkgs."${s}".linkFarmFromDrvs "${s}-bundle" ([]
           ++ [ inputs.self.devShell.${s}.inputDerivation ]

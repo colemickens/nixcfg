@@ -13,7 +13,7 @@
     ../../profiles/gaming.nix
 
     #../../profiles/desktop-sway.nix
-    ../../profiles/desktop-sway-unstable.nix
+    #../../profiles/desktop-sway-unstable.nix
     #../../profiles/desktop-sway-unstable-egl.nix
 
     ../../mixins/android.nix

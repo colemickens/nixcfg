@@ -14,6 +14,7 @@ target="${1}"; shift
 thing="${1}"; shift
 
 drv="$(nix eval --raw "${thing}.drvPath" "${@}")"
+# caching doens't work or I woulnd't have to wait so fucking long for this to eval again:
 out="$(nix eval --raw "${thing}" "${@}")"
 
 #### build + copy
