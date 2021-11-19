@@ -12,7 +12,7 @@
     ../../mixins/nvidia.nix
     ../../profiles/gaming.nix
 
-    #../../profiles/desktop-sway.nix
+    ../../profiles/desktop-sway.nix
     #../../profiles/desktop-sway-unstable.nix
     #../../profiles/desktop-sway-unstable-egl.nix
 
@@ -54,7 +54,7 @@
     documentation.info.enable = false;
     documentation.nixos.enable = false;
 
-    networking.hostName = "porty"; # Define your hostname.
+    networking.hostName = "slynux"; # Define your hostname.
     networking.hostId = "abbadaba";
 
     networking.useDHCP = false;
@@ -100,17 +100,11 @@
     boot.kernelPackages = pkgs.linuxPackages_5_14;
     boot.extraModulePackages = [ ];
 
-    fileSystems."/" =
-      { device = "/dev/mapper/porty-root";
-        fsType = "ext4";
-      };
+    fileSystems."/"     = { fsType = "zfs";   device = "slynuxpool/root"; };
+    fileSystems."/nix"  = { fsType = "zfs";   device = "slynuxpool/nix"; };
+    fileSystems."/boot" = { fsType = "vfat";  device = "/dev/disk/by-partlabel/porty-boot"; };
 
-    boot.initrd.luks.devices."porty-root".device = "/dev/disk/by-partlabel/porty-luks";
-
-    fileSystems."/boot" =
-      { device = "/dev/disk/by-partlabel/porty-boot";
-        fsType = "vfat";
-      };
+    boot.initrd.luks.devices."slynux-root".device = "/dev/disk/by-partlabel/slynux-luks";
 
     swapDevices = [ ];
 

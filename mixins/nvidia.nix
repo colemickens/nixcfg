@@ -19,11 +19,7 @@ let
     # https://forums.developer.nvidia.com/t/nvidia-495-does-not-advertise-ar24-xr24-as-shm-formats-as-required-by-wayland-wlroots/194651
     wlroots = prev.wlroots.overrideAttrs(old: {
       postPatch = ''
-        orig='#include <wlr/types/wlr_output.h>'
         sed -i 's/assert(argb8888 &&/assert(true || argb8888 ||/g' 'render/wlr_renderer.c'
-        sed -i \
-          "7 i void output_init_render(struct wlr_output *output, struct wlr_allocator *allocator, struct wlr_renderer *renderer)" \
-          'include/types/wlr_output.h'
       '';
     });
     #
