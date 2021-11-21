@@ -46,7 +46,7 @@ function tsip() {
   else                                   tailscale ip --4 ${1} | head -z -n1; fi
 }
 function r() { ./misc/rbuild.sh "${@}"; }
-BLDR_X86="${BLDR_X86:-$(tsip porty)}";
+BLDR_X86="${BLDR_X86:-$(tsip xeep)}";
 BLDR_A64="${BLDR_A64:-$(tsip a64com)}";
 function jeffhyper() { r "newcopy" "activate" "${BLDR_X86}" "$(tsip jeffhyper)" "$HOME/code/nixcfg#toplevels.jeffhyper" "${@}"; }
 function porty()     { r "newcopy" "activate" "${BLDR_X86}" "$(tsip porty)"     "$HOME/code/nixcfg#toplevels.porty" "${@}"; }

@@ -9,10 +9,10 @@
 
     ../../modules/loginctl-linger.nix
 
-    ../../mixins/nvidia.nix
+    #../../mixins/nvidia.nix
     ../../profiles/gaming.nix
 
-    ../../profiles/desktop-sway.nix
+    #../../profiles/desktop-sway.nix
     #../../profiles/desktop-sway-unstable.nix
     #../../profiles/desktop-sway-unstable-egl.nix
 

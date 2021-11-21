@@ -1,6 +1,7 @@
 { config, pkgs, lib, modulesPath, inputs, ... }:
 
 let
+  slynux_ts_ip = "100.74.188.40";
   template = pkgs.writeText "template.html" ''
     <html>
       <head><title>cleo cat!</title></head>
@@ -132,7 +133,7 @@ in
       };
       virtualHosts."code.x.cleo.cat" = internalVhost // {
         locations."/" = {
-          proxyPass = "http://100.93.180.71:5902/"; # porty
+          proxyPass = "http://${slynux_ts_ip}:5902/"; # porty
           #proxyPass = "http://100.72.11.62:5902/"; # xeep
           #proxyPass = "http://localhost:5902/"; # self (xeep)
           proxyWebsockets = true;
@@ -140,7 +141,7 @@ in
       };
       virtualHosts."openvscode.x.cleo.cat" = internalVhost // {
         locations."/" = {
-          proxyPass = "http://100.93.180.71:5904/"; # porty
+          proxyPass = "http://${slynux_ts_ip}:5904/"; # porty
           #proxyPass = "http://100.72.11.62:5904/"; # xeep
           #proxyPass = "http://localhost:5904/"; # self (xeep)
           proxyWebsockets = true;
