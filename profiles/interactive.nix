@@ -56,8 +56,9 @@
         wget curl stow ncdu tree
         nix-tree
         #pdu
-        git-crypt gopass
-        #passrs ripasso-cursive
+        git-crypt
+        gopass
+        #ripasso-cursive
 
         openssh autossh mosh sshuttle
         tig #git-absorb
