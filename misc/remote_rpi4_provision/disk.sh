@@ -3,16 +3,16 @@ set -x
 set -euo pipefail
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-POOL="sinkortank"
-LUKSLABEL="luksroot"
-NIXOSLABEL="nixosroot"
+POOL="slynuxpool"
+LUKSLABEL="slynux-luks"
+NIXOSLABEL="nixos"
 DEVMAPPER_NAME="${NIXOSLABEL}"
-BOOTTARGET="/dev/disk/by-id/mmc-SH64G_0x548598bb-part2"
+BOOTTARGET="/dev/disk/by-id/scsi-SNVMe_WDC_PC_SN730_SDB001B_448B_485C_145F.-part1"
 BOOTLABEL="SINKORBOOT"
 SWAPLABEL="swap"
 WINLABEL="windows"
-DISK="/dev/disk/by-id/usb-WD_Elements_25A3_5758333244353146395A5546-0:0"
-LUKSTARGET="/dev/disk/by-id/usb-WD_Elements_25A3_5758333244353146395A5546-0:0"
+DISK="/dev/disk/by-id/scsi-SNVMe_WDC_PC_SN730_SDB001B_448B_485C_145F."
+LUKSTARGET="/dev/disk/by-id/scsi-SNVMe_WDC_PC_SN730_SDB001B_448B_485C_145F."
 
 DETACHED_LUKS_HEADER="/dev/disk/by-id/mmc-SH64G_0x548598bb-part3"
 
@@ -90,15 +90,15 @@ function install() {
   #sudo cryptsetup luksOpen   --key-file "${TMPLUKSKEYFILE}" "${LUKSTARGET}" "${DEVMAPPER_NAME}"
   sudo cryptsetup luksOpen --header "${DETACHED_LUKS_HEADER}" --key-file "${TMPLUKSKEYFILE}" "${LUKSTARGET}" "${DEVMAPPER_NAME}"
   #sudo cryptsetup luksOpen "${LUKSTARGET}" "${DEVMAPPER_NAME}"
-  
+
   sudo zpool import -f "${POOL}"
-  
+
   sudo mkdir -p /mnt
   sudo mount -t zfs "${POOL}/root" /mnt
-  
+
   sudo mkdir -p /mnt/nix
   sudo mount -t zfs "${POOL}/nix" /mnt/nix
-  
+
   sudo mkdir -p /mnt/persist
   sudo mount -t zfs "${POOL}/persist" /mnt/persist
 

@@ -54,7 +54,7 @@
     documentation.info.enable = false;
     documentation.nixos.enable = false;
 
-    networking.hostName = "slynux"; # Define your hostname.
+    networking.hostName = "porty"; # Define your hostname.
     networking.hostId = "abbadaba";
 
     networking.useDHCP = false;
@@ -100,11 +100,11 @@
     boot.kernelPackages = pkgs.linuxPackages_5_14;
     boot.extraModulePackages = [ ];
 
-    fileSystems."/"     = { fsType = "zfs";   device = "slynuxpool/root"; };
-    fileSystems."/nix"  = { fsType = "zfs";   device = "slynuxpool/nix"; };
+    fileSystems."/"     = { fsType = "zfs";   device = "portypool/root"; };
+    fileSystems."/nix"  = { fsType = "zfs";   device = "portypool/nix"; };
     fileSystems."/boot" = { fsType = "vfat";  device = "/dev/disk/by-partlabel/porty-boot"; };
 
-    boot.initrd.luks.devices."slynux-root".device = "/dev/disk/by-partlabel/slynux-luks";
+    boot.initrd.luks.devices."porty-luks".device = "/dev/disk/by-partlabel/porty-luks";
 
     swapDevices = [ ];
 

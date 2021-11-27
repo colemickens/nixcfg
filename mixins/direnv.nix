@@ -7,7 +7,6 @@
         enable = true;
         nix-direnv = {
           enable = true;
-          enableFlakes = true;
         };
         stdlib = ''
           # $HOME/.config/direnv/direnvrc

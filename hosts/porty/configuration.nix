@@ -7,12 +7,12 @@
 
   config = {
     specialisation = {
-      gnome.inheritParentConfig = false;
-      gnome.configuration.imports = [
-        ./core.nix
-        ../../mixins/nvidia.nix # because of the wlroots patch, and ordering issues
-        ../../profiles/desktop-gnome.nix
-      ];
+      #gnome.inheritParentConfig = false;
+      #gnome.configuration.imports = [
+      #  ./core.nix
+      #  ../../mixins/nvidia.nix # because of the wlroots patch, and ordering issues
+      #  ../../profiles/desktop-gnome.nix
+      #];
 
       sway.inheritParentConfig = false;
       sway.configuration.imports = [
@@ -21,12 +21,12 @@
         ../../profiles/desktop-sway-unstable.nix
       ];
 
-      plasma.inheritParentConfig = false;
-      plasma.configuration.imports = [
-        ./core.nix
-        ../../mixins/nvidia.nix # because of the wlroots patch, and ordering issues
-        ../../profiles/desktop-plasma.nix
-      ];
+      #plasma.inheritParentConfig = false;
+      #plasma.configuration.imports = [
+      #  ./core.nix
+      #  ../../mixins/nvidia.nix # because of the wlroots patch, and ordering issues
+      #  ../../profiles/desktop-plasma.nix
+      #];
     };
   };
 }

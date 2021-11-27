@@ -1,7 +1,7 @@
 { config, pkgs, lib, modulesPath, inputs, ... }:
 
 let
-  slynux_ts_ip = "100.74.188.40";
+  slynux_ts_ip = "100.112.137.125";
   template = pkgs.writeText "template.html" ''
     <html>
       <head><title>cleo cat!</title></head>
@@ -17,6 +17,10 @@ let
     <html>
       <head><title>cleo cat!</title></head>
       <body>
+        <h1>Ens encanta la Cleo!</h1>
+        
+        <br /><br />
+        <h2>serveis</h2>
         <ul>
           <li><a href="https://home.x.cleo.cat">home-assistant</a></li>
           <li><a href="https://home2.x.cleo.cat">home-assistant (sdcard, HA OS)</a></li>
@@ -26,7 +30,15 @@ let
           <li><a href="https://code.x.cleo.cat">code-server</a></li>
           <li><a href="https://openvscode.x.cleo.cat">openvscode</a></li>
         </ul>
-        <br/><br/><pre>version: @systemLabel@</pre>
+
+        <br /><br />
+        <h2>serveis futurs</h2>
+        <ul>
+          <li><a href="https://aria.x.cleo.cat">aria2c - webui</a></li>
+        </ul>
+
+        <br/><br/>
+        <pre>versió: @systemLabel@</pre>
       </body>
     </html>
   '';

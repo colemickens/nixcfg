@@ -188,7 +188,7 @@
       nixosConfigurations = {
         # x86_64-linux
         jeffhyper = mkSystem inputs.nixpkgs "x86_64-linux"  "jeffhyper";
-        porty     = mkSystem inputs.nixpkgs "x86_64-linux"  "slynux";
+        porty     = mkSystem inputs.nixpkgs "x86_64-linux"  "porty";
         raisin    = mkSystem inputs.nixpkgs "x86_64-linux"  "raisin";
         xeep      = mkSystem inputs.nixpkgs "x86_64-linux"  "xeep";
         # aarch64-linux

@@ -13,8 +13,14 @@ remote="${1}"; shift
 target="${1}"; shift
 thing="${1}"; shift
 
-drv="$(nix eval --raw "${thing}.drvPath" "${@}")"
+# lol "caching" in 2.4, ooookay.
+# TMPDRV="$(mktemp)"; #trap "rm ${TMPDRV}" EXIT;
+# nix build --derivation "${thing}.inputDerivation" "${@}" > "${TMPDRV}"
+# drv="$(jq -r .drvPath <"${TMPDRV}")"
+# out="$(jq -r .out[0].path <"${TMPDRV}")"
+
 # caching doens't work or I woulnd't have to wait so fucking long for this to eval again:
+drv="$(nix eval --raw "${thing}.drvPath" "${@}")"
 out="$(nix eval --raw "${thing}" "${@}")"
 
 #### build + copy

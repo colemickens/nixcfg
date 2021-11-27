@@ -10,6 +10,11 @@
   environment.systemPackages = with pkgs; [
     helvum
   ];
+  
+  programs.dconf.enable = true;
+  home-manager.users.cole = { pkgs, ... }: {
+    services.easyeffects.enable = true;
+  };
 
   services.pipewire = {
     enable = true;
