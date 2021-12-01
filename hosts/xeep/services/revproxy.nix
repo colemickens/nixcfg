@@ -1,15 +1,30 @@
 { config, pkgs, lib, modulesPath, inputs, ... }:
 
 let
-  slynux_ts_ip = "100.112.137.125";
+  porty_ip4 = "100.112.137.125";
+  porty_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6270:897d]";
+  xeep_ip4 = "100.72.11.62";
+  xeep_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6248:b3e]";
+  raisin_ip4 = "100.92.252.95";
+  raisin_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:625c:fc5f]";
+  redsly_ip4 = "100.96.145.20";
+  redsly_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6260:9114]";
+  raiswin_ip4 = "100.84.178.79";
+  raiswin_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6254:b24f]";
+
   template = pkgs.writeText "template.html" ''
     <html>
       <head><title>cleo cat!</title></head>
       <body>
+        <h1>Ens encanta la Cleo!</h1>
+        
+        <h2>serveis</h2>
         <ul>
-          <li><a href="https://x.cleo.cat">let me in</a></li>
+          <li><a href="https://x.cleo.cat">deixa'm entrar</a></li>
         </ul>
-        <br/><br/><pre>version: @systemLabel@</pre>
+
+        <br/>
+        <pre>versió: @systemLabel@</pre>
       </body>
     </html>
   '';
@@ -18,8 +33,7 @@ let
       <head><title>cleo cat!</title></head>
       <body>
         <h1>Ens encanta la Cleo!</h1>
-        
-        <br /><br />
+
         <h2>serveis</h2>
         <ul>
           <li><a href="https://home.x.cleo.cat">home-assistant</a></li>
@@ -30,14 +44,21 @@ let
           <li><a href="https://code.x.cleo.cat">code-server</a></li>
           <li><a href="https://openvscode.x.cleo.cat">openvscode</a></li>
         </ul>
+        <ul>
+          <li><a href="https://syncthing-porty.x.cleo.cat">syncthing (porty)</a></li>
+          <li><a href="https://syncthing-raisin.x.cleo.cat">syncthing (raisin)</a></li>
+          <li><a href="https://syncthing-xeep.x.cleo.cat">syncthing (xeep)</a></li>
+          
+          <li><a href="https://syncthing-redsly.x.cleo.cat">syncthing (redsly)</a></li>
+          <li><a href="https://syncthing-raiswin.x.cleo.cat">syncthing (raiswin)</a></li>
+        </ul>
 
-        <br /><br />
         <h2>serveis futurs</h2>
         <ul>
           <li><a href="https://aria.x.cleo.cat">aria2c - webui</a></li>
         </ul>
 
-        <br/><br/>
+        <br/>
         <pre>versió: @systemLabel@</pre>
       </body>
     </html>
@@ -144,20 +165,34 @@ in
         };
       };
       virtualHosts."code.x.cleo.cat" = internalVhost // {
-        locations."/" = {
-          proxyPass = "http://${slynux_ts_ip}:5902/"; # porty
-          #proxyPass = "http://100.72.11.62:5902/"; # xeep
-          #proxyPass = "http://localhost:5902/"; # self (xeep)
-          proxyWebsockets = true;
-        };
+        locations."/".proxyPass = "http://${porty_ip4}:5902/"; # porty
+        locations."/".proxyWebsockets = true;
       };
       virtualHosts."openvscode.x.cleo.cat" = internalVhost // {
-        locations."/" = {
-          proxyPass = "http://${slynux_ts_ip}:5904/"; # porty
-          #proxyPass = "http://100.72.11.62:5904/"; # xeep
-          #proxyPass = "http://localhost:5904/"; # self (xeep)
-          proxyWebsockets = true;
-        };
+        locations."/".proxyPass = "http://${porty_ip4}:5904/";
+        locations."/".proxyWebsockets = true;
+      };
+
+      # syncthing
+      virtualHosts."syncthing-porty.x.cleo.cat" = internalVhost // {
+        locations."/".proxyPass = "http://${porty_ip6}:8384/";
+        locations."/".proxyWebsockets = true;
+      };
+      virtualHosts."syncthing-xeep.x.cleo.cat" = internalVhost // {
+        locations."/".proxyPass = "http://${xeep_ip6}:8384/";
+        locations."/".proxyWebsockets = true;
+      };
+      virtualHosts."syncthing-raisin.x.cleo.cat" = internalVhost // {
+        locations."/".proxyPass = "http://${raisin_ip6}:8384/";
+        locations."/".proxyWebsockets = true;
+      };
+      virtualHosts."syncthing-redsly.x.cleo.cat" = internalVhost // {
+        locations."/".proxyPass = "http://${redsly_ip4}:8384/";
+        locations."/".proxyWebsockets = true;
+      };
+      virtualHosts."syncthing-raiswin.x.cleo.cat" = internalVhost // {
+        locations."/".proxyPass = "http://${raiswin_ip4}:8384/";
+        locations."/".proxyWebsockets = true;
       };
     };
   };

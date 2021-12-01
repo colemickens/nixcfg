@@ -12,14 +12,15 @@ in
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
     ../../mixins/syncthing.nix
+    ../../mixins/zfs-snapshots.nix
 
     ../../mixins/rtorrentflood.nix
 
     ../../mixins/loremipsum-media/rclone-mnt.nix
 
-    ./modules/revproxy.nix
-    ./modules/home-assistant
-    ./modules/unifi.nix
+    ./services/revproxy.nix
+    ./services/home-assistant
+    ./services/unifi.nix
 
     ../../profiles/interactive.nix
     #../../profiles/desktop-sway.nix
