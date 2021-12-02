@@ -38,7 +38,7 @@ function lockup() { nix "${nixargs[@]}" flake update --no-registries --commit-lo
 function pkgup() { ./pkgs/update.sh "${@:-}"; cacheshell; }
 function up() { set -euo pipefail; inputup && lockup && pkgup && ciup && cacheshell; }
 function upup() { set -euo pipefail; up && x86 && a64; }
-## </updates> ##################################################################
+## </updates> ################################### ###############################
 ## <remote> ####################################################################
 function tsip() {
   if [[ "${1}" == "$(hostname)" ]]; then printf "%s" "localhost";
@@ -46,7 +46,7 @@ function tsip() {
   else                                   tailscale ip --4 ${1} | head -z -n1; fi
 }
 function r() { ./misc/rbuild.sh "${@}"; }
-BLDR_X86="${BLDR_X86:-$(tsip xeep)}";
+BLDR_X86="${BLDR_X86:-$(tsip porty)}";
 BLDR_A64="${BLDR_A64:-$(tsip a64com)}";
 function jeffhyper() { r "newcopy" "activate" "${BLDR_X86}" "$(tsip jeffhyper)" "$HOME/code/nixcfg#toplevels.jeffhyper" "${@}"; }
 function porty()     { r "newcopy" "activate" "${BLDR_X86}" "$(tsip porty)"     "$HOME/code/nixcfg#toplevels.porty" "${@}"; }
@@ -55,15 +55,20 @@ function rpizero1()  { r "newcopy" "activate" "${BLDR_X86}" "$(tsip rpizero1)"  
 function rpizero2()  { r "newcopy" "activate" "${BLDR_X86}" "$(tsip rpizero2)"  "$HOME/code/nixcfg#toplevels.rpizero2" "${@}"; }
 function xeep()      { r "newcopy" "activate" "${BLDR_X86}" "$(tsip xeep)"      "$HOME/code/nixcfg#toplevels.xeep" "${@}"; }
 
+function rpifour1()  { r "oldcopy" "activate" "${BLDR_A64}" "$(tsip rpifour1)"  "$HOME/code/nixcfg#toplevels.rpifour1" "${@}"; }
 function sinkor()    { r "oldcopy" "activate" "${BLDR_A64}" "$(tsip sinkor)"    "$HOME/code/nixcfg#toplevels.sinkor" "${@}"; }
 function pinebook()  { r "oldcopy" "activate" "${BLDR_A64}" "$(tsip pinebook)"  "${HOME}/code/nixcfg#toplevels.pinebook" "${@}"; }
 function pinephone() { r "oldcopy" "activate" "${BLDR_A64}" "$(tsip pinephone)" "${HOME}/code/nixcfg#toplevels.pinephone" "${@}"; }
 #function blueline()  { r "oldcopy" "nothingg" "${BLDR_A64}" "$(tsip blueline)"  "${HOME}/code/nixcfg#toplevels.blueline" "${@}"; }
-function blueline()  { r "oldcopy" "nothingg" "${BLDR_A64}" "$(tsip porty)"     "${HOME}/code/nixcfg#toplevels.blueline" "${@}"; }
+function blueline()  {
+  r "newcopy" "nothingg" "${BLDR_A64}"      "localhost"            "${HOME}/code/nixcfg#images.blueline" "${@}";
+}
 function enchilada() { r "oldcopy" "activate" "${BLDR_A64}" "$(tsip enchilada)" "${HOME}/code/nixcfg#toplevels.enchilada" "${@}"; }
 
-function a64()    { r "oldcopy" "nothing" "${BLDR_A64}" "$(tsip raisin)" "${HOME}/code/nixcfg#topbundles.aarch64-linux" "${@}"; }
-function x86()    { r "newcopy" "nothing" "${BLDR_X86}"  "$(tsip porty)"  "${HOME}/code/nixcfg#topbundles.x86_64-linux" "${@}"; }
+#function a64()    { r "oldcopy" "nothing" "${BLDR_A64}" "$(tsip raisin)" "${HOME}/code/nixcfg#topbundles.aarch64-linux" "${@}"; }
+#function x86()    { r "newcopy" "nothing" "${BLDR_X86}"  "$(tsip porty)"  "${HOME}/code/nixcfg#topbundles.x86_64-linux" "${@}"; }
+#function x86()    { r "newcopy" "nothing" "${BLDR_X86}" "localhost" "${@}"; }
+#function a64()    { r "newcopy" "nothing" "${BLDR_A64}" "localhost" "${@}"; }
 ## </remote> ###################################################################
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
@@ -73,5 +78,5 @@ fi
 
 set -x; "${cmd}" "${@}"; set +x
 
-echo -e "\nexit=$?"
+echo -e "\nexit=$?" > /dev/stderr
 exit 0

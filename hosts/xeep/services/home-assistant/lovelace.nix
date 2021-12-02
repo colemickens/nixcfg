@@ -25,6 +25,16 @@
           }
         ];
       }
+      {
+        title = "Bedroom";
+        type = "entities";
+        entities = [
+          {
+            name = "Dab Rig";
+            entity = "switch.wp6_sw104_relay";
+          }
+        ];
+      }
       # {
       #   title = "Kitchen";
       #   type = "entities";

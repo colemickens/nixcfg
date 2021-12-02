@@ -70,7 +70,6 @@ in
 
         # misc gui
         calibre
-        glxinfo
         evince
         gimp
         qemu
@@ -113,21 +112,11 @@ in
       ++ _torPackages
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
         _someChromium # some clang shit marked as broken on aarch64
-
         #thunderbird # just a bit too painful to build on aarch64
-
-        mplayer # weird non-aarch64
-
         ddccontrol
         i2c-tools
-
-        # yucky non-free
-        discord
-        ripcord
-
         # android
         scrcpy
-
         # not supported on aarch64, likely its an appimage or something
         radicle-upstream
       ] ++ lib.optionals (pkgs.system == "aarch64-linux") [

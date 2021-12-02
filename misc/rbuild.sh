@@ -3,6 +3,8 @@ DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 set -euo pipefail
 set -x
 
+cachix_cache="colemickens"
+
 function nix() { "${DIR}/nix.sh" "${@}"; }
 
 # {copy_method} {activate_action} {remote_builder} {target} {thing}
@@ -26,13 +28,13 @@ out="$(nix eval --raw "${thing}" "${@}")"
 #### build + copy
 
 if [[ "${copymethod}" == *new* ]]; then
-  echo "should we have to copy the drv manually with --eval-store like this?"
-  sleep 10
+  printf "%s" "***************\n***************\nshould we have to copy the drv manually with --eval-store like this?***************\n***************\n" >/dev/stderr
   nix copy --no-check-sigs --to "ssh-ng://${remote}" --derivation "${drv}"
   nix build -L --store "ssh-ng://${remote}" --eval-store auto "${drv}" --keep-going
   if [[ "${copymethod}" == *copy* ]]; then
     nix copy --no-check-sigs --from "ssh-ng://${remote}" --to "ssh-ng://${target}" "${out}"
   elif [[ "${copymethod}" == *cachix* ]]; then
+    echo "${out}" | cachix push "${cachix_cache}"
     false # TODO: cachix
   fi
 elif [[ "${copymethod}" == *old** ]]; then
@@ -65,4 +67,5 @@ fi
 if [[ "${action:-""}" == *reboot* ]]; then ssh "${target}" "sudo reboot"; fi
 
 #### whew
-echo "done"
+echo "done" > /dev/stderr
+echo "${out}" > /dev/stdout

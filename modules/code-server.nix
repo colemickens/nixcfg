@@ -49,7 +49,7 @@ in {
           ExecStart = ''
             ${pkgs.code-server}/bin/code-server \
               --port ${toString cfg.port} \
-              --bind-addr 0.0.0.0:${toString cfg.port} \
+              --bind-addr "[::]:${toString cfg.port}" \
               --auth none
           '';
           Restart = "always";

@@ -20,7 +20,7 @@ in
     
     ## !!!!!!!!!!!!!!!!!!!!!!!!
     # usb0 never appears with this disabled:
-    # mobile.boot.stage-1.networking.enable = true;
+    mobile.boot.stage-1.networking.enable = true;
     ## !!!!!!!!!!!!!!!!!!!!!!!!
 
     networking = {

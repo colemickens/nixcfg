@@ -20,9 +20,11 @@
     ../../mixins/code-server.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/obs.nix
+    ../../mixins/plex-mpv.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
+    ../../mixins/zfs-snapshots.nix
   ];
 
   config = {
@@ -31,6 +33,7 @@
 
     environment.systemPackages = with pkgs; [
       hdparm
+      esphome
     ];
 
     users.users.cole.linger = true;
@@ -65,19 +68,19 @@
     #   address = "10.99.0.1";
     #   prefixLength = 24;
     # }];
-    # networking.interfaces."enp9s0f3u2u3".ipv4.addresses = [{
-    #   address = "10.88.0.1";
-    #   prefixLength = 24;
-    # }];
-    # networking.nat = {
-    #   enable = true;
-    #   internalInterfaces = [
-    #     "enp9s0f3u2u3u1"
-    #     "enp9s0f3u2u3"
-    #   ];
-    #   externalInterface = "eth0";
-    #   internalIPs = [ "10.0.0.0/16" ];
-    # };
+    networking.interfaces."enp9s0f3u2u3".ipv4.addresses = [{
+      address = "10.88.0.1";
+      prefixLength = 24;
+    }];
+    networking.nat = {
+      enable = true;
+      internalInterfaces = [
+        # "enp9s0f3u2u3u1"
+        "enp9s0f3u2u3"
+      ];
+      externalInterface = "eth0";
+      internalIPs = [ "10.0.0.0/16" ];
+    };
 
 
     hardware = {
@@ -104,7 +107,10 @@
     fileSystems."/nix"  = { fsType = "zfs";   device = "portypool/nix"; };
     fileSystems."/boot" = { fsType = "vfat";  device = "/dev/disk/by-partlabel/porty-boot"; };
 
-    boot.initrd.luks.devices."porty-luks".device = "/dev/disk/by-partlabel/porty-luks";
+    boot.initrd.luks.devices."porty-luks" = {
+      allowDiscards = true;
+      device = "/dev/disk/by-partlabel/porty-luks";
+    };
 
     swapDevices = [ ];
 

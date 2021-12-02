@@ -12,6 +12,9 @@
     #   [ xdg-desktop-portal-wlr xdg-desktop-portal-gtk ];
 
     home-manager.users.cole = { pkgs, ... }: {
+      home.packages = with pkgs; [
+        xdg_utils
+      ];
       xdg.userDirs = {
         enable = true;
         desktop = "\$HOME/desktop";

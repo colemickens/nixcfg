@@ -1,0 +1,53 @@
+From edc610a3549440f3a4735ea0bef18211da32f137 Mon Sep 17 00:00:00 2001
+From: Cole Mickens <cole.mickens@gmail.com>
+Date: Sat, 27 Nov 2021 01:11:58 -0800
+Subject: [PATCH] gles2: fix pixel_format
+
+---
+ render/gles2/pixel_format.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/render/gles2/pixel_format.c b/render/gles2/pixel_format.c
+index 31bb3908e..6ce34da01 100644
+--- a/render/gles2/pixel_format.c
++++ b/render/gles2/pixel_format.c
+@@ -10,31 +10,31 @@
+ static const struct wlr_gles2_pixel_format formats[] = {
+ 	{
+ 		.drm_format = DRM_FORMAT_ARGB8888,
+-		.gl_format = GL_BGRA_EXT,
++		.gl_format = GL_RGBA,
+ 		.gl_type = GL_UNSIGNED_BYTE,
+ 		.has_alpha = true,
+ 	},
+ 	{
+ 		.drm_format = DRM_FORMAT_XRGB8888,
+-		.gl_format = GL_BGRA_EXT,
++		.gl_format = GL_RGBA,
+ 		.gl_type = GL_UNSIGNED_BYTE,
+ 		.has_alpha = false,
+ 	},
+ 	{
+ 		.drm_format = DRM_FORMAT_XBGR8888,
+-		.gl_format = GL_RGBA,
++		.gl_format = GL_BGRA_EXT,
+ 		.gl_type = GL_UNSIGNED_BYTE,
+ 		.has_alpha = false,
+ 	},
+ 	{
+ 		.drm_format = DRM_FORMAT_ABGR8888,
+-		.gl_format = GL_RGBA,
++		.gl_format = GL_BGRA_EXT,
+ 		.gl_type = GL_UNSIGNED_BYTE,
+ 		.has_alpha = true,
+ 	},
+ 	{
+ 		.drm_format = DRM_FORMAT_BGR888,
+-		.gl_format = GL_RGB,
++		.gl_format = GL_BGRA_EXT,
+ 		.gl_type = GL_UNSIGNED_BYTE,
+ 		.has_alpha = false,
+ 	},
+-- 
+2.33.1
+

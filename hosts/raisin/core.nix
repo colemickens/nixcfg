@@ -9,12 +9,14 @@ in
     ../../mixins/android.nix
     ../../mixins/ledger.nix
     ../../mixins/logitech-mouse.nix
+    ../../mixins/obs.nix
     ../../mixins/plex-mpv.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
     ../../mixins/tpm.nix
     ../../mixins/upower.nix
+    ../../mixins/zfs-snapshots.nix
 
     ../../profiles/gaming.nix
 
@@ -32,6 +34,7 @@ in
     environment.systemPackages = with pkgs; [
       efibootmgr p7zip cpio
       yubikey-manager
+      esphome
     ];
     system.stateVersion = "21.05";
 

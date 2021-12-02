@@ -2,7 +2,7 @@
 
 let
   c = import ./common.nix { inherit pkgs config; };
-  mkMount = target: {
+  mkMount = target: readonly: {
     description = "RCloneGoogDrv Mount Thing";
     path = with pkgs; [ fuse bash ];
     serviceConfig = {
@@ -13,7 +13,7 @@ let
         "-${pkgs.fuse}/bin/fusermount -uz /mnt/rclone/${target}"
         "${pkgs.coreutils}/bin/mkdir -p /mnt/rclone/${target}"
       ];
-      ExecStart = "${c.rclone-lim-mount}/bin/rclone-lim-mount --allow-other ${target}: /mnt/rclone/${target}";
+      ExecStart = "${c.rclone-lim-mount readonly}/bin/rclone-lim-mount --allow-other ${target}: /mnt/rclone/${target}";
       ExecStop = "${pkgs.fuse}/bin/fusermount -uz /mnt/rclone/${target}";
       Restart = "on-failure";
     };
@@ -21,10 +21,10 @@ let
   };
 in {
   systemd.services = {
-    rclone_tvshows = mkMount "tvshows";
-    rclone_movies  = mkMount "movies";
+    rclone_tvshows = mkMount "tvshows" true;
+    rclone_movies  = mkMount "movies" true;
     # TODO: finish
-    #rclone_incoming  = mkMount "incoming";
+    rclone_incoming  = mkMount "incoming" false;
   };
 }
 

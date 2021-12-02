@@ -13,7 +13,6 @@
     ../mixins/direnv.nix
     ../mixins/gh.nix
     ../mixins/gopass/gopass.nix
-    #../mixins/mega/mega.nix
     ../mixins/mcfly.nix
     ../mixins/nushell.nix
     ../mixins/skim.nix
@@ -48,6 +47,15 @@
       home.packages = with pkgs; [
         colePackages.customCommands
 
+        usbutils pciutils lshw
+        efibootmgr cryptsetup
+        sops age
+        
+        linuxPackages.cpupower
+        sshfs cifs-utils ms-sys ntfs3g
+        gdb lldb file gptfdisk
+        parted psmisc wipe
+
         cachix
         screen minicom picocom
         asciinema
@@ -77,6 +85,7 @@
         gitui
 
         # https://zaiste.net/posts/shell-commands-rust/
+        bb
         bat
         tealdeer
         du-dust
@@ -88,28 +97,13 @@
         dogdns
         jj
 
-        sops age cryptsetup
-
         iotop which binutils.bintools
         parallel unzip xz zip
 
         nix-prefetch  nixpkgs-review
 
-        linuxPackages.cpupower
-        sshfs cifs-utils ms-sys ntfs3g
+        aria2 youtube-dl # TODO: remove whenever we get aria2->incoming setup
         imgurbash2
-
-        gdb lldb file gptfdisk
-        parted psmisc wipe
-
-        aria2 megatools youtube-dl
-        
-        xdg_utils
-        bb
-        usbutils
-        pciutils
-        lshw
-        efibootmgr
       ]
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
 

@@ -13,7 +13,7 @@ rec {
     ${pkgs.rclone}/bin/rclone --config "${rcloneConfigFile}" "''${@}"
   '';
 
-  rclone-lim-mount = (pkgs.writeScriptBin "rclone-lim-mount" ''
+  rclone-lim-mount = readonly: (pkgs.writeScriptBin "rclone-lim-mount" ''
     #!/usr/bin/env bash
     ${pkgs.rclone}/bin/rclone \
       --config ${rcloneConfigFile} \
@@ -32,7 +32,7 @@ rec {
       --drive-chunk-size=64M \
       --fuse-flag=sync_read \
       --fuse-flag=auto_cache \
-      --read-only \
+      ${if readonly then "--read-only \\" else "\\"}
       --umask=002 \
       -v \
       mount ''${@}

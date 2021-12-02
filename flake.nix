@@ -143,7 +143,7 @@
           customGuiCommands = prev.callPackage ./pkgs/commands-gui.nix {};
 
           bb = prev.callPackage ./pkgs/bb {};
-          cchat-gtk = prev.callPackage ./pkgs/cchat-gtk {};
+          # disabled (huge build + unused) # cchat-gtk = prev.callPackage ./pkgs/cchat-gtk {};
           conduit = prev.callPackage ./pkgs/conduit {};
           drm-howto = prev.callPackage ./pkgs/drm-howto {};
           get-xoauth2-token = prev.callPackage ./pkgs/get-xoauth2-token {};
@@ -272,7 +272,7 @@
           pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "blueline-bundle" ([
             # ? # devices.blueline.extra
             # ? # devices.blueline.android-fastboot-images
-            x.scripts.nixos
+            x.scripts.nixosBoot
             x.scripts.factoryReset
             #devices.blueline.android-flashable-bootimg
             #devices.blueline.android-flashable-system
