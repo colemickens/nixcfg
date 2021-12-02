@@ -1,7 +1,7 @@
 {
   repo_git = "https://github.com/aler9/rtsp-simple-server";
   branch = "main";
-  rev = "411a35e89fb256039908bc8bfb703503c8c679f0";
-  sha256 = "sha256-+I9gfoQjsv67kLp+6FuERgsoOqCpGaQZ3+tz5XMnSvo=";
-  vendorSha256 = "sha256-9xtc69X/Iu5GGMIhLbXPr5+ZtxKpLsk6KErWMAVsyNI=";
+  rev = "4fcfd95619ccd4d7896a78a0ea20229e637168ec";
+  sha256 = "sha256-/kvsHx547fQF2MRNrxQZO428q30dWbjSs4ti+bb8hdA=";
+  vendorSha256 = "sha256-/DkThvrgw/z2GHhqCwN0LwYAAsmdNA77a3wDg/3XcKA=";
 }
