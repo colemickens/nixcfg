@@ -4,7 +4,7 @@
   imports = [
     ../profiles/user.nix
     ../profiles/interactive.nix
-    #../../profiles/desktop-sway-unstable.nix
+    ../profiles/desktop-sway-unstable.nix
 
     ../modules/loginctl-linger.nix
     ../mixins/common.nix
@@ -23,10 +23,6 @@
     documentation.doc.enable = false;
     documentation.info.enable = false;
     documentation.nixos.enable = false;
-    programs.command-not-found.enable = false;
-    #environment.noXlibs = true;
-    security.polkit.enable = false;
-    services.udisks2.enable = false;
 
     services.udev.packages = [ pkgs.libinput.out ]; # TODO: generic mobile goodness? where is this even from?
 

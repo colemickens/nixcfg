@@ -63,12 +63,15 @@ function pinephone() { r "oldcopy" "activate" "${BLDR_A64}" "$(tsip pinephone)" 
 function blueline()  {
   r "newcopy" "nothingg" "${BLDR_A64}"      "localhost"            "${HOME}/code/nixcfg#images.blueline" "${@}";
 }
+function bluetop()  {
+  r "newcopycachix" "nothingg" "${BLDR_A64}"      "10.88.0.5"            "${HOME}/code/nixcfg#toplevels.blueline" "${@}";
+}
 function enchilada() { r "oldcopy" "activate" "${BLDR_A64}" "$(tsip enchilada)" "${HOME}/code/nixcfg#toplevels.enchilada" "${@}"; }
 
 #function a64()    { r "oldcopy" "nothing" "${BLDR_A64}" "$(tsip raisin)" "${HOME}/code/nixcfg#topbundles.aarch64-linux" "${@}"; }
 #function x86()    { r "newcopy" "nothing" "${BLDR_X86}"  "$(tsip porty)"  "${HOME}/code/nixcfg#topbundles.x86_64-linux" "${@}"; }
-#function x86()    { r "newcopy" "nothing" "${BLDR_X86}" "localhost" "${@}"; }
-#function a64()    { r "newcopy" "nothing" "${BLDR_A64}" "localhost" "${@}"; }
+function x86()    { r "newcopy" "nothing" "${BLDR_X86}" "localhost" "${@}"; }
+function a64()    { r "newcopy" "nothing" "${BLDR_A64}" "localhost" "${@}"; }
 ## </remote> ###################################################################
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi

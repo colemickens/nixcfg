@@ -114,7 +114,7 @@ fi
 
 # updates galore
 pkgslist=()
-for p in `ls -v -d -- ./*/ | sort -V`; do
+for p in `ls -v -d -- "${DIR}"/*/ | sort -V`; do
   "${0}" "${p}"
 done
 

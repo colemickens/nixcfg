@@ -3,6 +3,8 @@
 let
   porty_ip4 = "100.112.137.125";
   porty_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6270:897d]";
+  sinkor_ip4 = "100.88.111.30";
+  sinkor_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6258:6f1e]";
   xeep_ip4 = "100.72.11.62";
   xeep_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6248:b3e]";
   raisin_ip4 = "100.92.252.95";
@@ -46,6 +48,7 @@ let
         </ul>
         <ul>
           <li><a href="https://syncthing-porty.x.cleo.cat">syncthing (porty)</a></li>
+          <li><a href="https://syncthing-sinkor.x.cleo.cat">syncthing (sinkor)</a></li>
           <li><a href="https://syncthing-raisin.x.cleo.cat">syncthing (raisin)</a></li>
           <li><a href="https://syncthing-xeep.x.cleo.cat">syncthing (xeep)</a></li>
           
@@ -176,6 +179,10 @@ in
       # syncthing
       virtualHosts."syncthing-porty.x.cleo.cat" = internalVhost // {
         locations."/".proxyPass = "http://${porty_ip6}:8384/";
+        locations."/".proxyWebsockets = true;
+      };
+      virtualHosts."syncthing-sinkor.x.cleo.cat" = internalVhost // {
+        locations."/".proxyPass = "http://${sinkor_ip6}:8384/";
         locations."/".proxyWebsockets = true;
       };
       virtualHosts."syncthing-xeep.x.cleo.cat" = internalVhost // {

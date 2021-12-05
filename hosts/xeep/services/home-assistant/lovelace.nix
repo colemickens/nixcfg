@@ -33,6 +33,14 @@
             name = "Dab Rig";
             entity = "switch.wp6_sw104_relay";
           }
+          {
+            name = "Desk 1";
+            entity = "switch.wp6_sw106_relay";
+          }
+          {
+            name = "Desk 2";
+            entity = "switch.wp6_sw107_relay";
+          }
         ];
       }
       # {

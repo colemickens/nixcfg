@@ -5,7 +5,8 @@ substitutions:
 esphome:
   name: ${devname}
   platform: ESP32
-  board: esp32doit-devkit-v1
+  #board: esp32doit-devkit-v1
+  board: nodemcu-32s
 
 ### START COMMON (TODO extract, make sure interpolation happens after concat)
 
@@ -52,7 +53,7 @@ ota:
 
 i2c:
   scan: False
-  frequency: 400kHz
+  frequency: 200kHz
 
 pn532_i2c:
   id: pn532_board

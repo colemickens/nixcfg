@@ -147,7 +147,10 @@
           conduit = prev.callPackage ./pkgs/conduit {};
           drm-howto = prev.callPackage ./pkgs/drm-howto {};
           get-xoauth2-token = prev.callPackage ./pkgs/get-xoauth2-token {};
-          headscale = prev.callPackage ./pkgs/headscale {};
+          # headscale = prev.callPackage ./pkgs/headscale {
+          #   buildGoModule = prev.buildGo117Module;
+          # };
+          headscale = prev.callPackage ./pkgs/headscale { headscale = prev.headscale; };
           jj = prev.callPackage ./pkgs/jj {
             rustPlatform = (prev.makeRustPlatform {
               inherit (inputs.fenix.packages.${prev.system}.minimal) cargo rustc;

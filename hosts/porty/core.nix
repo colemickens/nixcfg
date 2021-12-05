@@ -1,6 +1,8 @@
 { config, pkgs, modulesPath, ... }:
 
-{
+let
+  porty_usb_if = "enp11s0f3u4u4";
+in {
   imports = [
     ../../mixins/common.nix
 
@@ -68,7 +70,7 @@
     #   address = "10.99.0.1";
     #   prefixLength = 24;
     # }];
-    networking.interfaces."enp9s0f3u2u3".ipv4.addresses = [{
+    networking.interfaces."${porty_usb_if}".ipv4.addresses = [{
       address = "10.88.0.1";
       prefixLength = 24;
     }];
@@ -76,12 +78,11 @@
       enable = true;
       internalInterfaces = [
         # "enp9s0f3u2u3u1"
-        "enp9s0f3u2u3"
+        "${porty_usb_if}"
       ];
       externalInterface = "eth0";
       internalIPs = [ "10.0.0.0/16" ];
     };
-
 
     hardware = {
       enableRedistributableFirmware = true;

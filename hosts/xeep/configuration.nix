@@ -36,6 +36,8 @@ in
   ];
 
   config = {
+    services.tailscale.advertiseExitNode = true;
+    
     system.stateVersion = "21.05";
 
     nix.nixPath = [];
