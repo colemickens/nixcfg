@@ -42,6 +42,7 @@ function upup() { set -euo pipefail; up && x86 && a64; }
 ## <remote> ####################################################################
 function tsip() {
   if [[ "${1}" == "$(hostname)" ]]; then printf "%s" "localhost";
+  elif [[ "${1}" == "xeep" ]]; then printf "%s" "192.168.1.35";
   elif [[ "${1}" == "a64com" ]];    then printf "%s" "colemickens@aarch64.nixos.community";
   else                                   tailscale ip --4 ${1} | head -z -n1; fi
 }
@@ -72,6 +73,14 @@ function enchilada() { r "oldcopy" "activate" "${BLDR_A64}" "$(tsip enchilada)" 
 #function x86()    { r "newcopy" "nothing" "${BLDR_X86}"  "$(tsip porty)"  "${HOME}/code/nixcfg#topbundles.x86_64-linux" "${@}"; }
 function x86()    { r "newcopy" "nothing" "${BLDR_X86}" "localhost" "${@}"; }
 function a64()    { r "newcopy" "nothing" "${BLDR_A64}" "localhost" "${@}"; }
+
+function go() {
+  "${0}" xeep || true
+  "${0}" raisin || true
+  "${0}" porty || true
+
+  "${0}" x86 '.#hydraBundles.x86_64-linux' || true
+}
 ## </remote> ###################################################################
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi

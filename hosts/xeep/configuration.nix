@@ -36,8 +36,10 @@ in
   ];
 
   config = {
-    services.tailscale.advertiseExitNode = true;
-    
+    services.tailscale.advertiseExitNode = false;
+    boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
+    boot.kernel.sysctl."net.ipv6.ip_forward" = 1;
+
     system.stateVersion = "21.05";
 
     nix.nixPath = [];
