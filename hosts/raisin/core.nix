@@ -92,11 +92,12 @@ in
     console.font = "ter-v32n";
     console.packages = [ pkgs.terminus_font ];
 
+    nixpkgs.config.allowBroken = true; # TODO: remove zfs
     boot = {
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      kernelPackages = pkgs.linuxPackages_5_14;
+      kernelPackages = pkgs.linuxPackages_5_15;
       zfs.enableUnstable = true;
 
       initrd.availableKernelModules = [

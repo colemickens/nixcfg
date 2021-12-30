@@ -5,6 +5,7 @@ set +x; source /run/secrets/nixup-secrets; set -x
 cd "${DIR}"
 
 cache="colemickens"
+nixcfg="${HOME}/code/nixcfg"
 
 ## <ci> ########################################################################
 function nix() { "${DIR}/misc/nix.sh" "${@}"; }
@@ -47,30 +48,34 @@ function tsip() {
   else                                   tailscale ip --4 ${1} | head -z -n1; fi
 }
 function r() { ./misc/rbuild.sh "${@}"; }
-BLDR_X86="${BLDR_X86:-$(tsip porty)}";
+BLDR_X86="${BLDR_X86:-$(tsip xeep)}";
 BLDR_A64="${BLDR_A64:-$(tsip a64com)}";
-function jeffhyper() { r "newcopy" "activate" "${BLDR_X86}" "$(tsip jeffhyper)" "$HOME/code/nixcfg#toplevels.jeffhyper" "${@}"; }
-function porty()     { r "newcopy" "activate" "${BLDR_X86}" "$(tsip porty)"     "$HOME/code/nixcfg#toplevels.porty" "${@}"; }
-function raisin()    { r "newcopy" "activate" "${BLDR_X86}" "$(tsip raisin)"    "$HOME/code/nixcfg#toplevels.raisin" "${@}"; }
-function rpizero1()  { r "newcopy" "activate" "${BLDR_X86}" "$(tsip rpizero1)"  "$HOME/code/nixcfg#toplevels.rpizero1" "${@}"; }
-function rpizero2()  { r "newcopy" "activate" "${BLDR_X86}" "$(tsip rpizero2)"  "$HOME/code/nixcfg#toplevels.rpizero2" "${@}"; }
-function xeep()      { r "newcopy" "activate" "${BLDR_X86}" "$(tsip xeep)"      "$HOME/code/nixcfg#toplevels.xeep" "${@}"; }
+function jeffhyper() { r "newcopy" "activate" "${BLDR_X86}" "$(tsip jeffhyper)" "${nixcfg}#toplevels.jeffhyper" "${@}"; }
+function porty()     { r "newcopy" "activate" "${BLDR_X86}" "$(tsip porty)"     "${nixcfg}#toplevels.porty" "${@}"; }
+function raisin()    { r "newcopy" "activate" "${BLDR_X86}" "$(tsip raisin)"    "${nixcfg}#toplevels.raisin" "${@}"; }
+function rpizero1()  { r "newcopy" "activate" "${BLDR_X86}" "$(tsip rpizero1)"  "${nixcfg}#toplevels.rpizero1" "${@}"; }
+function rpizero2()  { r "newcopy" "activate" "${BLDR_X86}" "$(tsip rpizero2)"  "${nixcfg}#toplevels.rpizero2" "${@}"; }
+function xeep() {
+  r "newcopy" "nothing_" "${BLDR_A64}"      "$(tsip rpifour1)"  "${nixcfg}#nixosConfigurations.netboot-aarch64.config.system.build.toplevel" "${@}";
+  r "newcopy" "nothing_" "$(tsip rpifour1)" "$(tsip xeep)"     "${nixcfg}#nixosConfigurations.netboot-aarch64.config.system.build.netbootEnv" "${@}";
+  r "newcopy" "activate" "${BLDR_X86}"      "$(tsip xeep)"      "${nixcfg}#toplevels.xeep" "${@}";
+}
 
-function rpifour1()  { r "oldcopy" "activate" "${BLDR_A64}" "$(tsip rpifour1)"  "$HOME/code/nixcfg#toplevels.rpifour1" "${@}"; }
-function sinkor()    { r "oldcopy" "activate" "${BLDR_A64}" "$(tsip sinkor)"    "$HOME/code/nixcfg#toplevels.sinkor" "${@}"; }
-function pinebook()  { r "oldcopy" "activate" "${BLDR_A64}" "$(tsip pinebook)"  "${HOME}/code/nixcfg#toplevels.pinebook" "${@}"; }
-function pinephone() { r "oldcopy" "activate" "${BLDR_A64}" "$(tsip pinephone)" "${HOME}/code/nixcfg#toplevels.pinephone" "${@}"; }
-#function blueline()  { r "oldcopy" "nothingg" "${BLDR_A64}" "$(tsip blueline)"  "${HOME}/code/nixcfg#toplevels.blueline" "${@}"; }
+function rpifour1()  { r "oldcopy" "activate" "${BLDR_A64}" "$(tsip rpifour1)"  "${nixcfg}#toplevels.rpifour1" "${@}"; }
+function sinkor()    { r "oldcopy" "activate" "${BLDR_A64}" "$(tsip sinkor)"    "${nixcfg}#toplevels.sinkor" "${@}"; }
+function pinebook()  { r "oldcopy" "activate" "${BLDR_A64}" "$(tsip pinebook)"  "${nixcfg}#toplevels.pinebook" "${@}"; }
+function pinephone() { r "oldcopy" "activate" "${BLDR_A64}" "$(tsip pinephone)" "${nixcfg}#toplevels.pinephone" "${@}"; }
+#function blueline()  { r "oldcopy" "nothingg" "${BLDR_A64}" "$(tsip blueline)"  "${nixcfg}#toplevels.blueline" "${@}"; }
 function blueline()  {
-  r "newcopy" "nothingg" "${BLDR_A64}"      "localhost"            "${HOME}/code/nixcfg#images.blueline" "${@}";
+  r "newcopy" "nothing_" "${BLDR_A64}"      "localhost"            "${nixcfg}#images.blueline" "${@}";
 }
 function bluetop()  {
-  r "newcopycachix" "nothingg" "${BLDR_A64}"      "10.88.0.5"            "${HOME}/code/nixcfg#toplevels.blueline" "${@}";
+  r "newcopycachix" "nothingg" "${BLDR_A64}"      "10.88.0.5"            "${nixcfg}#toplevels.blueline" "${@}";
 }
-function enchilada() { r "oldcopy" "activate" "${BLDR_A64}" "$(tsip enchilada)" "${HOME}/code/nixcfg#toplevels.enchilada" "${@}"; }
+function enchilada() { r "oldcopy" "activate" "${BLDR_A64}" "$(tsip enchilada)" "${nixcfg}#toplevels.enchilada" "${@}"; }
 
-#function a64()    { r "oldcopy" "nothing" "${BLDR_A64}" "$(tsip raisin)" "${HOME}/code/nixcfg#topbundles.aarch64-linux" "${@}"; }
-#function x86()    { r "newcopy" "nothing" "${BLDR_X86}"  "$(tsip porty)"  "${HOME}/code/nixcfg#topbundles.x86_64-linux" "${@}"; }
+#function a64()    { r "oldcopy" "nothing" "${BLDR_A64}" "$(tsip raisin)" "${nixcfg}#topbundles.aarch64-linux" "${@}"; }
+#function x86()    { r "newcopy" "nothing" "${BLDR_X86}"  "$(tsip porty)"  "${nixcfg}#topbundles.x86_64-linux" "${@}"; }
 function x86()    { r "newcopy" "nothing" "${BLDR_X86}" "localhost" "${@}"; }
 function a64()    { r "newcopy" "nothing" "${BLDR_A64}" "localhost" "${@}"; }
 

@@ -164,6 +164,19 @@ in {
           purge_keep_days = 30;
         };
         system_health = { };
+        wake_on_lan =  {};
+        webostv = [{
+          name = "LivingRoom_LG_C1";
+          host = "192.168.5.202";
+          turn_on_action = {
+            service = "wake_on_lan.send_magic_packet";
+            data = {
+              #mac = "74:e6:b8:0e:bb:38";
+              mac = "74-E6-B8-0E-BB-38";
+              #broadcast_address = "192.168.255.255";
+            };
+          };
+        }];
         # weather = {
         #   platform = "openweathermap";
         #   api_key = secrets.openweathermap_apikey;

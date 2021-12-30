@@ -27,6 +27,7 @@
       cursorColor = "#FFFFFF";
       #selectionBackground = "#FFFFFF"; # ms-terminal-only
 
+      gray = "#333333";
       foreground = "#CCCCCC";
       foregroundBold = "#FFFFFF"; # termite-only
       background = "#0C0C0C";
@@ -54,6 +55,7 @@
     onehalfdark = {
       cursorColor = "#FFFFFF";
 
+      gray = "#333333";
       foreground = "#DCDFE4";
       foregroundBold = "#FFFFFF"; # termite-onnly
       background = "#282C34";
@@ -81,6 +83,7 @@
     tango = {
         cursorColor = "#FFFFFF";
 
+        gray = "#333333";
         foreground = "#cccccc";
         foregroundBold = "#FFFFFF"; # termite only
         background = "#0C0C0C";

@@ -14,8 +14,6 @@ in
     ../../mixins/syncthing.nix
     ../../mixins/zfs-snapshots.nix
 
-    ../../mixins/rtorrentflood.nix
-
     ../../mixins/loremipsum-media/rclone-mnt.nix
 
     ./services/revproxy.nix
@@ -86,12 +84,13 @@ in
     console.font = "ter-v32n";
     console.packages = [ pkgs.terminus_font ];
 
+    nixpkgs.config.allowBroken = true;
     boot = {
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
       #kernelPackages = pkgs.linuxPackages_latest;
-      kernelPackages = pkgs.linuxPackages_5_14;
+      kernelPackages = pkgs.linuxPackages_5_15;
       initrd.availableKernelModules = [
         "xhci_pci" "xhci_hcd" # usb
         "nvme" "usb_storage" "sd_mod" # nvme / external usb storage

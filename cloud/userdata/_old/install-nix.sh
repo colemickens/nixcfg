@@ -4,6 +4,7 @@ set -x
 
 USERNAME="${TF_USERNAME}"
 NIX_INSTALL_URL="${TF_NIX_INSTALL_URL}"
+NIXOS_INFECT="${TF_NIXOS_INFECT:-}"
 
 # TODO: support re-exec as root if we're not
 # check if we're not "cole" and if so, make it and then re-exec *again*
@@ -21,6 +22,16 @@ if [[ "${1:-""}" != "stage2" ]]; then
     sudo chmod u+x /home/"${USERNAME}"/.ssh
     sudo usermod -aG sudo "${USERNAME}"
     echo "%sudo   ALL=(ALL:ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+
+    echo "checking if we should infect..."
+    if [[ ! -z "${NIXOS_INFECT}" ]]; then
+      echo "INFECTING!"
+
+      # TODO
+
+      exit 0
+    fi
+
     sudo cp "${0}" "/tmp/nix-unstable.sh"
     sudo chmod ugo+rx "/tmp/nix-unstable.sh"
     sudo -u "${USERNAME}" "/tmp/nix-unstable.sh" stage2

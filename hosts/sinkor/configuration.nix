@@ -137,7 +137,7 @@ in
       cleanTmpDir = true;
 
       zfs.enableUnstable = true;
-      kernelPackages = pkgs.linuxPackages_5_14;
+      kernelPackages = pkgs.linuxPackages_5_15;
 
       initrd.availableKernelModules = [
         "pcie_brcmstb" "bcm_phy_lib" "broadcom" "mdio_bcm_unimac" "genet"

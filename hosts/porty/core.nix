@@ -100,8 +100,10 @@ in {
       "uas"
     ];
     boot.kernelModules = [ ];
-    #boot.kernelPackages = pkgs.linuxPackages_latest;
-    boot.kernelPackages = pkgs.linuxPackages_5_14;
+
+    nixpkgs.config.allowBroken = true; # ugh, god, why, TODO: add allowBrokenPredicate?
+    boot.kernelPackages = pkgs.linuxPackages_latest;
+
     boot.extraModulePackages = [ ];
 
     fileSystems."/"     = { fsType = "zfs";   device = "portypool/root"; };

@@ -14,6 +14,9 @@ let
   raiswin_ip4 = "100.84.178.79";
   raiswin_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6254:b24f]";
 
+  rpifour1_ip4 = "100.111.5.113";
+  rpifour1_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:626f:571]";
+
   template = pkgs.writeText "template.html" ''
     <html>
       <head><title>cleo cat!</title></head>
@@ -126,6 +129,10 @@ in
 
     services.nginx = {
       enable = true;
+
+      #recommendedTLSSettings = true;
+      recommendedOptimisation = true;
+      recommendedGzipSettings = true;
       recommendedProxySettings = true;
 
       virtualHosts."cleo.cat" = {
@@ -133,6 +140,39 @@ in
         default = true;
         useACMEHost = "cleo.cat";
         forceSSL = true;
+      };
+      virtualHosts."oci.cleo.cat" = {
+        useACMEHost = "cleo.cat";
+        addSSL = true;
+        forceSSL = false;
+        locations."/" = {
+          extraConfig = ''
+            proxy_set_header Host $proxy_host;
+          '';
+          # TODO: make this a dynamic proxy for oracle cloud?
+          proxyPass = "https://objectstorage.us-phoenix-1.oraclecloud.com/n/axobinpd5xwy/b/ocicole1_bucket/o/";
+        };
+      };
+
+      virtualHosts."netboot.cleo.cat" = {
+        useACMEHost = "cleo.cat";
+        addSSL = true;
+        forceSSL = false;
+        locations."/" = {
+          root = pkgs.linkFarm "netboot" [
+            { name = "x86_64"; path = (pkgs.linkFarm "netboot-x86_64" [
+              { name = "generic"; path = inputs.self.nixosConfigurations.netboot-x86_64.config.system.build.netbootEnv; }
+            ]);}
+            { name = "aarch64"; path = (pkgs.linkFarm "netboot-aarch64" [
+              { name = "generic"; path = inputs.self.nixosConfigurations.netboot-aarch64.config.system.build.netbootEnv; }
+            ]);}
+          ];
+           
+          extraConfig = ''
+            disable_symlinks off;
+            autoindex on;
+          '';
+        };
       };
       virtualHosts."x.cleo.cat" = internalVhost // {
         root = payload_vpn;

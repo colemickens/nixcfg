@@ -28,6 +28,9 @@
     # TODO: sops.secrets."nixup-secrets".owner = config.users.users.cole;
     sops.secrets."nixup-secrets".owner = "cole";
     sops.secrets."tailscale-join-authkey".owner = "cole";
+    
+    sops.secrets."oraclecloud_colemickens_privkey".owner = "cole";
+    sops.secrets."oraclecloud_colemickens2_privkey".owner = "cole";
 
     services.dbus.packages = with pkgs; [ gnome3.dconf ];
     nix.extraOptions = ''
@@ -66,7 +69,7 @@
         #pdu
         git-crypt
         gopass
-        #ripasso-cursive
+        ripasso-cursive
 
         openssh autossh mosh sshuttle
         tig #git-absorb

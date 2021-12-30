@@ -12,11 +12,15 @@ in
   ];
 
   /*
-  *
-  *
-  * THIS IS SHARED BETWEEN SINKOR/RPIFOUR1
-  *
+  if it's running as root... then it mounts to /run/secretdirs/
+  this tool mounts Dictionaries to /run/user/1000/secretdirs/{dirname}/
+  apps can then rely on it, user-access by default for some stuff
+  can run as a daemon/tool in CI jobs easily
+  can have dicts encrypted with different access keys
+  - use sops as the "Backend"
+  - the nix machine would then just mount hte backend 
   */
+
   config = {
     system.stateVersion = "21.05";
 
@@ -38,6 +42,7 @@ in
       ncdu
     ];
 
+    nixpkgs.config.allowBroken = true;
     boot = {
       ############# TODO: replace with tow-boot when its not so damn slow with grub
       loader.grub.enable = false;
@@ -56,7 +61,14 @@ in
       cleanTmpDir = true;
 
       #kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
-      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_5_14;
+      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_5_15;
+      kernelPatches = [{
+        name = "kcore-config";
+        patch = null;
+        extraConfig = ''
+          PROC_KCORE y
+        '';
+      }];
 
       initrd.availableKernelModules = [
         "pcie_brcmstb" "bcm_phy_lib" "broadcom" "mdio_bcm_unimac" "genet"

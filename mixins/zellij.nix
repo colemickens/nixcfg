@@ -56,23 +56,24 @@ in
         settings = {
           default_mode = "normal";
           simplified_ui = true;
-          no_pane_frames = true;
-
-          themes = {
-            custom = {
-              fg = convert colors.foreground;
-              bg = convert colors.background;
-              black = convert colors.black;
-              red = convert colors.red;
-              green = convert colors.green;
-              yellow = convert colors.yellow;
-              blue = convert colors.blue;
-              magenta = convert colors.purple;
-              cyan = convert colors.cyan;
-              white = convert colors.white;
-              orange = convert colors.yellow;
-            };
-          };
+          pane_frames = false;
+          # themes = {
+          # TODO: not good, and the default theme is great!
+          #   default = {
+          #     fg = convert colors.foreground;
+          #     bg = convert colors.background;
+          #     gray = convert colors.background;
+          #     black = convert colors.black;
+          #     red = convert colors.red;
+          #     green = convert colors.green;
+          #     yellow = convert colors.yellow;
+          #     blue = convert colors.blue;
+          #     magenta = convert colors.purple;
+          #     cyan = convert colors.cyan;
+          #     white = convert colors.white;
+          #     orange = convert colors.yellow;
+          #   };
+          # };
         };
       };
     };

@@ -81,6 +81,7 @@ in
         smplayer
         rkvm
         spotify-qt
+        spot
         vlc
         wezterm
         # nvui # https://github.com/NixOS/nixpkgs/issues/136229

@@ -21,8 +21,13 @@ let
   };
 in {
   systemd.services = {
+    rclone_misc = mkMount "misc" true;
     rclone_tvshows = mkMount "tvshows" true;
     rclone_movies  = mkMount "movies" true;
+
+    rclone_archives  = mkMount "archives" true;
+    rclone_backups  = mkMount "backups" true;
+
     # TODO: finish
     rclone_incoming  = mkMount "incoming" false;
   };

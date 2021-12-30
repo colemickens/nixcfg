@@ -3,7 +3,7 @@
 {
   config = {
     nixpkgs.config = {
-      allowUnfree = true;
+      #allowUnfree = true;
       #oraclejdk.accept_license = true;
     };
 
@@ -13,15 +13,14 @@
     services.unifi = {
       enable = true;
       unifiPackage = pkgs.unifiStable;
-      #mongodbPackage = pkgs.mongodb;
-      # defaults to regular `pkgs.jre8` ?
-      jrePackage = pkgs.jre8_headless;
+      jrePackage = pkgs.jdk8_headless;
       maximumJavaHeapSize = 256;
     };
 
-    # only allow it to be started manually when we need it
-    # systemd.services.unifi.wantedBy = pkgs.lib.mkForce [];
+    networking.firewall.interfaces."tailscale0".allowedTCPPorts =
+      [ 8080 8443 ];
 
-    networking.firewall.allowedTCPPorts = [ 8080 8443 ];
+    networking.firewall.interfaces."eth0".allowedTCPPorts =
+      [ 8080 ];
   };
 }

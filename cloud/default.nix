@@ -2,32 +2,33 @@
 
 let
   tflib = import ./tflib.nix { inherit pkgs; };
-  tfpkg = (pkgs.terraform_1_0.withPlugins (p: [ p.metal p.oci /* p.sops */ ]));
+  tfpkg = (pkgs.terraform_1.withPlugins (p: [ p.metal p.oci /* p.sops */ ]));
   tf = "${tfpkg}/bin/terraform"; # "${tf}"
   tfstate = "./cloud/_state";
 
   ##
   ## <oracle>
   ociacct1 = {
+    uniqueid = "ocicole1";
     tenancy_id = "ocid1.tenancy.oc1..aaaaaaaafyqmgtgi5nwkolwjujayjrx5qw2qmzpbp7wzche2kgmdrlptnj4q";
     user = "ocid1.user.oc1..aaaaaaaah76dpd2bz6pqmy53t2p7mxy3wieydldjxshmnpe6nsoensqieulq";
     fingerprint = "d4:d8:ce:6c:c4:ca:b9:ab:11:ac:2a:1f:1b:e7:70:71";
     region = "us-phoenix-1";
     key_file = "/run/secrets/oraclecloud_colemickens_privkey";
-    compartment_id = # "terraform" compartment in colemickens
+    compartment_ocid = # "terraform" compartment in colemickens
       "ocid1.compartment.oc1..aaaaaaaafclyuqguzm2rtz5a5kcijxnjnidd4x3u35rwlivim6xuwuutzsta";
   };
   ociacct2 = {
+    uniqueid = "ocicole2";
     tenancy_id = "ocid1.tenancy.oc1..aaaaaaaa5wbwazusekjhx4qrtz3zpyey5ougiamcjshyjpqjuwtuaxr5esna";
     user = "ocid1.user.oc1..aaaaaaaauova2ywoupcudpxscp4gcxuzsauj5ymsksccubsaedqvjzw6o3yq";
     fingerprint = "d5:4a:e6:5a:1f:cd:65:96:9d:52:72:5b:85:42:2c:f8";
     region = "us-phoenix-1";
     key_file = "/run/secrets/oraclecloud_colemickens2_privkey";
-    compartment_id = # "terraform" compartment in colemickens2
+    compartment_ocid = # "terraform" compartment in colemickens2
       "ocid1.compartment.oc1..aaaaaaaawrfmgshb57lsir25eqpd3x6hgyb2lddwn3uyjzm7tnhpdyt2fwca";
   };
-  o_arm = { name = "VM.Standard.A1.Flex"; config = { ocpus = 4; mem = 24; }; };
-  o_amd = { name = "VM.Standard.E2.1.Micro"; };
+
   o_arm_img = "canonical_ubuntu_20_04__aarch64";
   o_amd_img = "canonical_ubuntu_20_04_minimal__arm64";
   ## </oracle>
@@ -40,30 +41,63 @@ let
   ## </packet>
 
   ##
+  ## get nixpkgs provider versions:
+  ## - jq -r ".metal" pkgs/applications/networking/cluster/terraform-providers/providers.json
+  ## - jq -r ".equinix" pkgs/applications/networking/cluster/terraform-providers/providers.json
   ## <terranix>
-  ud = tflib.userdata;
-  uv = tflib.uservars;
+  ud = tflib.ubuntu.userdata;
+  uv = tflib.ubuntu.uservars;
+  n_ud = tflib.nixos.userdata;
+  n_uv = tflib.nixos.uservars;
+
+  # TODO: use google cloud to store our netboot data
+
   terraformCfg = terranix.lib.terranixConfiguration {
     inherit pkgs;
     modules = [
       ### PACKET VMS
-      (tflib.packet  metal_cole  {
-        pktspotamd0 = { plan="c3.medium.x86";  loc="sv";  bid="0.50"; userdata=ud; uservars=uv; };
-        pktspotarm0 = { plan="c2.medium.arm";  loc="sv";  bid="0.50"; userdata=ud; uservars=uv; };
-        #pktspotamdz3 = { plan="m3.large.x86";  loc="sv";  bid="0.70"; userdata=ud; uservars=uv; };
+      (tflib.packet.tfplan metal_cole {
+        # pktspotnewnixosarm0 = {
+        #   plan = tflib.packet.plans.c3_large_arm;
+        #   os = tflib.packet.os.nixos_21_05;
+        #   loc = tflib.packet.metros.dc10;
+        #   bid = "0.60";
+        #   payload = tflib.payloads.nixos-generic-config;
+        # };
+
+        # ipxe works too!
+        # pktspotnewnixosarm0 = {
+        #   plan = tflib.packet.plans.c3_large_arm;
+        #   loc = tflib.packet.metros.dc10;
+        #   bid = "0.60";
+        #   ipxe_script_url = "http://netboot.cleo.cat/aarch64/generic/netboot.ipxe";
+        # };
       })
 
       ### ORACLE VMS
-      (tflib.oracle ociacct1 {
-      #   oci1arm1 = { shape = o_arm; image=o_arm_img; userdata=ud; uservars=uv; };
-      #   oci1amd1 = { shape = o_amd; image=o_amd_img; userdata=ud; uservars=uv; };
-      #   #oci1amd2 = { shape = o_amd; image=o_amd_img; userdata=ud; uservars=uv; };
+      # delete the entire compartment to start over:
+      # to check on any instances:
+      #  - oci list?
+      (tflib.oracle.tfplan ociacct1 {
+        oci1arm1 = {
+          shape = tflib.oracle.shapes.freetier_a1flex_full;
+          ipxe_url = "http://netboot.cleo.cat/aarch64/generic/netboot.ipxe";
+        };
       })
-      # (mkOracle ociacct2 {
-      #   oci2arm1 = { shape = o_arm; image=o_arm_img; userdata=ud; uservars=uv; };
-      #   oci2amd1 = { shape = o_amd; image=o_amd_img; userdata=ud; uservars=uv; };
-      #   oci2amd2 = { shape = o_amd; image=o_amd_img; userdata=ud; uservars=uv; };
-      # })
+      (let
+        tmpl = {
+          shape = tflib.oracle.shapes.freetier_a1flex_mini;
+          image = tflib.oracle.images.canonical_ubuntu_20_04__aarch64;
+          payload = tflib.payloads.ubuntu-nixos-infect;
+        };
+      in
+        (tflib.oracle.tfplan ociacct2 {
+          oci2arm1 = tmpl;
+          oci2arm2 = tmpl;
+          oci2arm3 = tmpl;
+          oci2arm4 = tmpl;
+        })
+      )
     ];
   };
   ## </terranix>

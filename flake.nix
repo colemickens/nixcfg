@@ -13,6 +13,9 @@
     nixos-unstable-small.url = "github:nixos/nixpkgs/nixos-unstable-small";
     nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     stable.url = "github:nixos/nixpkgs/nixos-21.05"; # for cachix
+    nixos-unstable-git = {
+      url = "git+https://github.com/nixos/nixpkgs?ref=nixos-unstable";
+    };
 
     temp-gpg-pr.url = "github:colemickens/nixpkgs/gpg23"; # TEMP to test gpg without full sys rebuild
 
@@ -81,33 +84,37 @@
       filterPkg_ = system: (n: p: (builtins.elem "${system}" (p.meta.platforms or [ "x86_64-linux" "aarch64-linux" ])) && !(p.meta.broken or false));
       filterPkgs = pkgs: pkgSet: (pkgs.lib.filterAttrs (filterPkg_ pkgs.system) pkgSet);
       filterHosts = pkgs: cfgs: (pkgs.lib.filterAttrs (n: v: pkgs.system == v.config.nixpkgs.system) cfgs);
-      pkgsFor = pkgs: system: overlays:
-        import pkgs {
-          inherit system overlays;
-          config.allowUnfree = true;
-        };
-      pkgs_ = genAttrs (builtins.attrNames inputs) (inp: genAttrs supportedSystems (sys: pkgsFor inputs."${inp}" sys []));
-      fullPkgs_ = genAttrs supportedSystems (sys:
-        pkgsFor inputs.nixpkgs sys [ inputs.self.overlay inputs.nixpkgs-wayland.overlay ]);
-      mkSystem = pkgs: system: hostname:
-        pkgs.lib.nixosSystem {
-          system = system;
-          modules = [(./. + "/hosts/${hostname}/configuration.nix")];
-          specialArgs = { inherit inputs; };
-        };
 
-      minimalMkShell = system: import ./lib/minimalMkShell.nix { pkgs = fullPkgs_.${system}; };
-      hydralib = import ./lib/hydralib.nix;
+      colelib = rec {
+        force_cached = sys: pkgs_.nixpkgs."${sys}".callPackage ./lib/force_cached.nix {};
+        minimalMkShell = system: import ./lib/minimalMkShell.nix { pkgs = fullPkgs_.${system}; };
+        hydralib = import ./lib/hydralib.nix;
+        pkgsFor = pkgs: system: overlays:
+          import pkgs {
+            inherit system overlays;
+            config.allowUnfree = true;
+          };
+        pkgs_ = genAttrs (builtins.attrNames inputs) (inp: genAttrs supportedSystems (sys: pkgsFor inputs."${inp}" sys []));
+        fullPkgs_ = genAttrs supportedSystems (sys:
+          pkgsFor inputs.nixpkgs sys [ inputs.self.overlay inputs.nixpkgs-wayland.overlay ]);
+        mkSystem = pkgs: system: hostname:
+          pkgs.lib.nixosSystem {
+            system = system;
+            modules = [(./. + "/hosts/${hostname}/configuration.nix")];
+            specialArgs = { inherit inputs; };
+          };
+        pkgNames = s: builtins.attrNames (inputs.self.overlay pkgs_.${s} pkgs_.${s});
+      };
 
-      force_cached = sys: pkgs_.nixpkgs."${sys}".callPackage ./lib/force_cached.nix {};
-      pkgNames = s: builtins.attrNames (inputs.self.overlay pkgs_.${s} pkgs_.${s});
-    in rec {
+      
+    in with colelib; rec {
       devShell = forAllSystems (system: minimalMkShell system {
         name = "nixcfg-devshell";
         nativeBuildInputs = map (x: (x.bin or x.out or x)) (with pkgs_.nixpkgs.${system}; [
           nixUnstable cachix nixpkgs-fmt nix-prefetch-git
           bash curl cacert jq parallel mercurial git tailscale
           nettools openssh ripgrep rsync sops gh gawk gnused gnugrep
+          metal-cli
           fullPkgs_.${system}.nix-build-uncached
         ]);
       });
@@ -133,6 +140,8 @@
         tf-apply = { type = "app"; program = tfout.apply.outPath; };
         tf-destroy = { type = "app"; program = tfout.destroy.outPath; };
       });
+
+      colelib = colelib;
 
       packages = forAllSystems (s: fullPkgs_.${s}.colePackages);
       pkgs = forAllSystems (s: fullPkgs_.${s});
@@ -194,7 +203,9 @@
         porty     = mkSystem inputs.nixpkgs "x86_64-linux"  "porty";
         raisin    = mkSystem inputs.nixpkgs "x86_64-linux"  "raisin";
         xeep      = mkSystem inputs.nixpkgs "x86_64-linux"  "xeep";
+        netboot-x86_64 = mkSystem inputs.nixpkgs "x86_64-linux" "netboot";
         # aarch64-linux
+        netboot-aarch64 = mkSystem inputs.nixpkgs "aarch64-linux" "netboot";
         pinebook    = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
         pinephone   = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
         blueline    = mkSystem inputs.nixpkgs "aarch64-linux" "blueline";

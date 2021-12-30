@@ -7,9 +7,13 @@
         title = "Living Room";
         type = "entities";
         entities = [
+          #{
+          #  name = "TV - Sony 55";
+          #  entity = "media_player.braviatv";
+          #}
           {
-            name = "Television";
-            entity = "media_player.braviatv";
+            name = "TV - LG C1 65";
+            entity = "media_player.livingroom_lg_c1";
           }
           # {
           #   name = "Fireplace";
@@ -22,6 +26,16 @@
           {
             name = "Receiver";
             entity = "media_player.denon";
+          }
+        ];
+      }
+      {
+        title = "Kitchen";
+        type = "entities";
+        entities = [
+          {
+            name = "Green Lamp";
+            entity = "switch.wp6_sw108_relay";
           }
         ];
       }

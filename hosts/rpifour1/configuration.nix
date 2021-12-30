@@ -8,7 +8,7 @@ in
     #./modules/home-assistant
     #./modules/unifi.nix
 
-    ../../mixins/tailscale.nix
+    ./services/nginx-svc-netboot.nix
   ];
 
   config = {
