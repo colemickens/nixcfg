@@ -259,11 +259,11 @@
     },
     "nixos-unstable-small": {
       "locked": {
-        "lastModified": 1641832899,
-        "narHash": "sha256-DeOIMVFHvwCXDcrtO5Yhj4tK9I5t3pZVxGCb73gFZ+4=",
+        "lastModified": 1641865627,
+        "narHash": "sha256-B3b7KCThCx5bcDtWCX9ZZIl/EVs/lB8iDdI277/tvNA=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "ca3c54a88d29b909ae52c10ae9004b21ba895eb4",
+        "rev": "3fe528dec572a26404f130893d2c22a35646247c",
         "type": "github"
       },
       "original": {
@@ -296,11 +296,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1641809468,
-        "narHash": "sha256-FaGbksgeF2LLg0/bFbgU86/kA4BtQep8vx8pk56G3D4=",
+        "lastModified": 1641871904,
+        "narHash": "sha256-3wrMTjcIdsZEQ5etI6LcGAaQqdIiiirL3AoZQl7c3ro=",
         "owner": "nix-community",
         "repo": "nixpkgs-wayland",
-        "rev": "30ae4fe5083fb98e8cc5d8ea5e005e0135fc4e66",
+        "rev": "1f5f4a6ff2f853460406d82522e5074681c7938a",
         "type": "github"
       },
       "original": {
@@ -312,11 +312,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1641848958,
-        "narHash": "sha256-fahMtqDgVTJuvGIIYohVjnl+6ZoWIPQbHumOH+Nhuis=",
+        "lastModified": 1641872029,
+        "narHash": "sha256-4KzJ32h8g24hyHFWBExl2BerGUCXbFaBf9PPEk29i3I=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "5a6371cb8df8f2d21736bf57eea4e9f525f1e0c9",
+        "rev": "a523a93e7e2a60279ebb99ff944356992e472177",
         "type": "github"
       },
       "original": {
@@ -342,7 +342,6 @@
         "nixpkgs-wayland": "nixpkgs-wayland",
         "sops-nix": "sops-nix",
         "stable": "stable",
-        "temp-gpg-pr": "temp-gpg-pr",
         "terranix": "terranix",
         "tow-boot": "tow-boot",
         "wip-pinebook-pro": "wip-pinebook-pro"
@@ -402,22 +401,6 @@
         "type": "github"
       }
     },
-    "temp-gpg-pr": {
-      "locked": {
-        "lastModified": 1636591488,
-        "narHash": "sha256-rqlKCpXgDObwTt0Wb+IJ5zLENBYHyzzTNOqhF8GGPxs=",
-        "owner": "colemickens",
-        "repo": "nixpkgs",
-        "rev": "062de00b5a4d1444f98a3f8ea42b24304075a0d6",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "ref": "gpg23",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "terranix": {
       "inputs": {
         "bats-assert": "bats-assert",
@@ -464,11 +447,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1641771653,
-        "narHash": "sha256-fC8N/I7KswZq+4r6VNHuj7B0254SN3bf/oaS8qA85cM=",
+        "lastModified": 1641868190,
+        "narHash": "sha256-nJpNAilqiZ7pn20ESMLUF9PJWXa2lrUEkCfbtCXy3+0=",
         "owner": "colemickens",
         "repo": "tow-boot",
-        "rev": "994611291ae8d20143fdd2ddcfc98568f9194357",
+        "rev": "12cea860db40ebaee32057d29f475819bde78af5",
         "type": "github"
       },
       "original": {
