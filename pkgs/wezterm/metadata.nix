@@ -1,7 +1,7 @@
 {
   repo_git = "https://github.com/wez/wezterm";
   branch = "main";
-  rev = "b5dfbc392c55064e156a13c3bd22a873c3309192";
-  sha256 = "sha256-3tD7pBUk7/LMAUs/i5A7t+EwLMVrFT1YTJ6ly+bjH5g=";
-  cargoSha256 = "sha256-RaMwlekbRS/VoTGAkm8Nz+0fBPoDLwe7zb4ZTkn+eGw=";
+  rev = "631f7869a5a40262a46e1da4ea4ab1ec1541887d";
+  sha256 = "sha256-fjLHwOkowz6d4mjAv837u0ftPzgIEgsAc/g7rs/OvWE=";
+  cargoSha256 = "sha256-0OGXmlmMtlAxzBL2rLIDaXZIcanTcvhioe60Tft0Cqs=";
 }
