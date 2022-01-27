@@ -1,6 +1,6 @@
 {
   repo_git = "https://github.com/k4zmu2a/SpaceCadetPinball";
   branch = "master";
-  rev = "6039f843a7511924df8c5e8a7566c508f4bad8a7";
-  sha256 = "sha256-JxbL7jmGZA9iTHMTeYXFvH95LOClPwC58c9yVOsf8SI=";
+  rev = "29c84c37c8e8469588e8e3c26ac3808eccdf4eb7";
+  sha256 = "sha256-pcscm3PCwQBsGGEsXFWcEEV4ASOLMzDf+aEPfPrtMDU=";
 }
