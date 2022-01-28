@@ -1,7 +1,7 @@
 {
   repo_git = "https://github.com/zellij-org/zellij";
   branch = "main";
-  rev = "20c7e7789d5ac01dd86ce8416d56f1f6c9e620ba";
-  sha256 = "sha256-CQ0BL3A2H4kzMS3tlLw2Rl/4HFOsEI16fpgO0WiItbc=";
+  rev = "a0791e35048dc5f7262328fc9a6ed61d78bd8c1d";
+  sha256 = "sha256-4/nsVySe/pnDDl4JeYhAQtwiju2ovvLPewkBXNe2ZDk=";
   cargoSha256 = "sha256-sE4ytwQpeGg396c4aksGPEnaNu1oDl+AqIiKOcLy3p4=";
 }
