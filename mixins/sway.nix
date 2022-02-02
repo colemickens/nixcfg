@@ -78,6 +78,7 @@ let
     done
     IFS=
     echo "" >/tmp/gsettings.log
+    echo "$expressions" >/tmp/gsettings-expressions.log
     echo exec sed -E $expressions "''${XDG_CONFIG_HOME:-$HOME/.config}"/gtk-3.0/settings.ini &>>/tmp/gsettings.log
     eval exec sed -E $expressions "''${XDG_CONFIG_HOME:-$HOME/.config}"/gtk-3.0/settings.ini &>>/tmp/gsettings.log
   '';
@@ -90,9 +91,12 @@ let
       icon-theme:gtk-icon-theme-name \
       font-name:gtk-font-name \
       cursor-theme:gtk-cursor-theme-name \
-      gtk-xft-antialias:gtk-xft-antialias \
-      gtk-xft-hinting:gtk-xft-hinting \
-      gtk-xft-hintstyle:gtk-xft-hintstyle
+      gtk-xft-antialias:font-antialiasing \
+      gtk-xft-hinting:font-hintstyle \
+      gtk-xft-rgba:font-rgb-order \
+        &>/tmp/auto.log
+
+    gsettings set org.gnome.desktop.interface "font-antialiasing" "grayscale"
   '';
 
   # change output scales incrementally w/ kb shortcuts
