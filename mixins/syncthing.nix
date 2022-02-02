@@ -1,7 +1,8 @@
 { config, pkgs, inputs, ... }:
 
 {
-  config = { 
+  config = {
+    # https://docs.syncthing.net/users/firewall.html
     networking.firewall.allowedTCPPorts = [ 22000 ];
     networking.firewall.allowedUDPPorts = [ 22000 21027 ];
 

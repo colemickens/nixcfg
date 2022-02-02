@@ -6,7 +6,10 @@ in
   imports = [
     ../../mixins/common.nix
 
+    ../../mixins/gfx-radeonsi.nix
+
     ../../mixins/android.nix
+    #../../mixins/code-server.nix # moved to xeep, disable there first
     ../../mixins/ledger.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/obs.nix
@@ -18,9 +21,11 @@ in
     ../../mixins/upower.nix
     ../../mixins/zfs-snapshots.nix
 
-    ../../profiles/gaming.nix
+    # ../../profiles/gaming.nix
 
     ../../modules/loginctl-linger.nix
+
+    ../porty/grub-shim.nix
 
     #inputs.nixpkgs-kubernetes.nixosModules.kata-containers
   ];
@@ -33,13 +38,12 @@ in
 
     environment.systemPackages = with pkgs; [
       efibootmgr p7zip cpio
-      yubikey-manager
       esphome
     ];
     system.stateVersion = "21.05";
 
     nix.nixPath = [];
-    nix.gc.automatic = true;
+    #nix.gc.automatic = true;
     nix.maxJobs = 8;
     #nix.package = lib.mkForce pkgs.nix;
 
@@ -97,7 +101,7 @@ in
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      kernelPackages = pkgs.linuxPackages_5_15;
+      kernelPackages = pkgs.linuxPackages_5_16;
       zfs.enableUnstable = true;
 
       initrd.availableKernelModules = [
@@ -121,10 +125,6 @@ in
           #fallbackToPassword = true;
         };
       };
-      loader.timeout = 6;
-      loader.systemd-boot.enable = true;
-      loader.systemd-boot.configurationLimit = 5;
-      loader.efi.canTouchEfiVariables = true;
     };
     networking = {
       hostId = "ef66d342";

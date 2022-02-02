@@ -14,7 +14,7 @@ in
 
     ../../profiles/core.nix # we need core+linger for hm to power syncthing, I guess
     ../../profiles/user.nix
-    
+
     inputs.impermanence.nixosModules.impermanence
   ];
 
@@ -85,6 +85,7 @@ in
     # };
 
     environment.systemPackages = with pkgs; [
+      cachix
       raspberrypifw
       raspberrypi-eeprom
       libraspberrypi
@@ -121,7 +122,7 @@ in
         efiSupport = true;
         efiInstallAsRemovable = true;
         device = "nodev";
-        configurationLimit = 20;
+        configurationLimit = 3;
       };
       kernelParams = [ "console=ttyS0,115200n8" "console=tty1" ]; # some msgs come through? (errors, but not the stage1 messages, etc)
       # console doesn't work once linux starts booting?
@@ -189,7 +190,7 @@ in
           name = "sinkor-zfs";
           device = "/dev/disk/by-id/usb-WD_Elements_25A3_5758333244353146395A5546-0:0";
           preLVM = true;
-          
+
           #keyFileSize = 4096;
           keyFile = "/lukskey";
           header = "/dev/disk/by-id/mmc-SH64G_0x548598bb-part3";
@@ -215,7 +216,7 @@ in
         fsType = "vfat";
         options = [ "nofail" "ro" ];
       };
-      
+
       # on the spinning rust backup HDD
       "/" = {
         # TODO: should we snapshot and revert this on boot, like grahamc's darlings?

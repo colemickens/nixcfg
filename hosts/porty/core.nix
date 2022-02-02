@@ -19,7 +19,7 @@ in {
     #../../profiles/desktop-sway-unstable-egl.nix
 
     ../../mixins/android.nix
-    ../../mixins/code-server.nix
+    #../../mixins/code-server.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/obs.nix
     ../../mixins/plex-mpv.nix
@@ -27,6 +27,8 @@ in {
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
     ../../mixins/zfs-snapshots.nix
+
+    ./grub-shim.nix
   ];
 
   config = {
@@ -36,19 +38,15 @@ in {
     environment.systemPackages = with pkgs; [
       hdparm
       esphome
+      mokutil
     ];
 
     users.users.cole.linger = true;
 
-    # Use the systemd-boot EFI boot loader.
-    boot.loader.grub.enable = true;
-    boot.loader.grub.devices = [ "nodev" ];
-    boot.loader.grub.efiSupport = true;
-    boot.loader.grub.efiInstallAsRemovable = true;
-    boot.loader.grub.configurationLimit = 5;
-    boot.loader.efi.canTouchEfiVariables = false;
-    boot.supportedFilesystems = [ "zfs" ];
-    boot.kernelParams = [ "mitigations=off" ];
+    boot = {
+      supportedFilesystems = [ "zfs" ];
+      kernelParams = [ "mitigations=off" ];
+    };
 
     nix.nixPath = [];
 
@@ -70,19 +68,19 @@ in {
     #   address = "10.99.0.1";
     #   prefixLength = 24;
     # }];
-    networking.interfaces."${porty_usb_if}".ipv4.addresses = [{
-      address = "10.88.0.1";
-      prefixLength = 24;
-    }];
-    networking.nat = {
-      enable = true;
-      internalInterfaces = [
-        # "enp9s0f3u2u3u1"
-        "${porty_usb_if}"
-      ];
-      externalInterface = "eth0";
-      internalIPs = [ "10.0.0.0/16" ];
-    };
+#    networking.interfaces."${porty_usb_if}".ipv4.addresses = [{
+#      address = "10.88.0.1";
+#      prefixLength = 24;
+#    }];
+#    networking.nat = {
+#      enable = true;
+#      internalInterfaces = [
+#        # "enp9s0f3u2u3u1"
+#        "${porty_usb_if}"
+#      ];
+#      externalInterface = "eth0";
+#      internalIPs = [ "10.0.0.0/16" ];
+#    };
 
     hardware = {
       enableRedistributableFirmware = true;
@@ -113,6 +111,12 @@ in {
     boot.initrd.luks.devices."porty-luks" = {
       allowDiscards = true;
       device = "/dev/disk/by-partlabel/porty-luks";
+
+      keyFile = "/lukskey";
+      fallbackToPassword = true;
+    };
+    boot.initrd.secrets = {
+      "/lukskey" = pkgs.writeText "lukskey" "test";
     };
 
     swapDevices = [ ];

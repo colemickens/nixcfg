@@ -5,8 +5,7 @@ substitutions:
 esphome:
   name: ${devname}
   platform: ESP32
-  #board: esp32doit-devkit-v1
-  board: nodemcu-32s
+  board: esp32doit-devkit-v1
 
 ### START COMMON (TODO extract, make sure interpolation happens after concat)
 
@@ -29,17 +28,14 @@ captive_portal:
 api:
   password: "fafc996b949b6d53800"
 
-debug:
-
 logger:
-  level: debug
 
 ota:
 
 ### END COMMON
 
 uart:
-  rx_pin: GPIO13
+  rx_pin: GPIO16
   baud_rate: 9600
   debug:
 

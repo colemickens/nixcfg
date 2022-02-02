@@ -63,11 +63,6 @@
 
       loader.grub.enable = false;
       loader.generic-extlinux-compatible.enable = true;
-      loader.raspberryPi = {
-        enable = true;
-        uboot.enable = true;
-        version = null;
-      };
     };
 
     networking = {

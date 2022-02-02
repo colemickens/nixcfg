@@ -13,9 +13,10 @@
     ../mixins/direnv.nix
     ../mixins/gh.nix
     ../mixins/gopass/gopass.nix
+    ../mixins/helix.nix
     ../mixins/mcfly.nix
     ../mixins/nushell.nix
-    ../mixins/skim.nix
+    # ../mixins/skim.nix # weird aarch64 build error...?
     ../mixins/sshd.nix
     ../mixins/tailscale.nix
     ../mixins/xdg.nix
@@ -28,11 +29,11 @@
     # TODO: sops.secrets."nixup-secrets".owner = config.users.users.cole;
     sops.secrets."nixup-secrets".owner = "cole";
     sops.secrets."tailscale-join-authkey".owner = "cole";
-    
+
     sops.secrets."oraclecloud_colemickens_privkey".owner = "cole";
     sops.secrets."oraclecloud_colemickens2_privkey".owner = "cole";
 
-    services.dbus.packages = with pkgs; [ gnome3.dconf ];
+    services.dbus.packages = with pkgs; [ pkgs.dconf ];
     nix.extraOptions = ''
       keep-outputs = true
       keep-derivations = true
@@ -49,11 +50,13 @@
       };
       home.packages = with pkgs; [
         colePackages.customCommands
-
+        
         usbutils pciutils lshw
         efibootmgr cryptsetup
         sops age
-        
+
+        pijul
+
         linuxPackages.cpupower
         sshfs cifs-utils ms-sys ntfs3g
         gdb lldb file gptfdisk
@@ -82,7 +85,6 @@
         dnsutils
         usbutils
         yubico-piv-tool
-        zellij
 
         unar
         gitui
@@ -92,6 +94,7 @@
         bat
         tealdeer
         du-dust
+        exa
         fd
         grex # regex
         # more rust tools
@@ -99,6 +102,10 @@
         xh
         dogdns
         jj
+        joshuto
+        sd
+        procs
+        bandwhich
 
         iotop which binutils.bintools
         parallel unzip xz zip

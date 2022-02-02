@@ -19,6 +19,7 @@ in
             size = font.size;
           };
           draw_bold_text_with_bright_colors = colors.bold_as_bright;
+          background_opacity = 0.7;
           colors = rec {
             primary.foreground = colors.foreground;
             primary.background = colors.background;

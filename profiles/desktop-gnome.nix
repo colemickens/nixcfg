@@ -3,6 +3,9 @@
 {
   imports = [
     ./gui.nix
+
+    # ugh, just breaks chrome anyway:
+    # ../mixins/wayland-tweaks.nix
   ];
   config = {
     nixpkgs.config.firefox.enableGnomeExtensions = true;
@@ -18,8 +21,8 @@
 
     xdg.portal.enable = true;
     xdg.portal.gtkUsePortal = true;
-    xdg.portal.extraPortals = with pkgs;
-      [ xdg-desktop-portal-wlr /*xdg-desktop-portal-gtk*/ ];
+    # xdg.portal.extraPortals = with pkgs;
+    #   [ xdg-desktop-portal-wlr /*xdg-desktop-portal-gtk*/ ];
 
     #services.gnome.gnome-disks.enable = true;
     services.gnome.gnome-online-miners.enable = lib.mkForce false;
@@ -44,28 +47,30 @@
     services.tlp.enable = lib.mkForce false;
 
     environment.gnome.excludePackages = [
-      pkgs.epiphany
       pkgs.yelp
       pkgs.gnome.gnome-maps
       pkgs.gnome.gnome-initial-setup
       pkgs.gnome.gnome-contacts
-      pkgs.gnome.gnome-photos
+      pkgs.gnome-photos
       pkgs.gnome.gnome-calendar
       pkgs.gnome.gnome-control-center
+      # also unneeded:
+      # weather calculator text-editor document-scanner connections
+      # videos cheese music tour
     ];
 
     # TODO: nix2dconf!
     
     home-manager.users.cole = { pkgs, ... }: {
       home.sessionVariables = {
-        #MOZ_ENABLE_WAYLAND = "1";
+        MOZ_ENABLE_WAYLAND = "1";
 
-        #SDL_VIDEODRIVER = "wayland";
-        #QT_QPA_PLATFORM = "wayland";
-        #QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-        #_JAVA_AWT_WM_NONREPARENTING = "1";
+        SDL_VIDEODRIVER = "wayland";
+        QT_QPA_PLATFORM = "wayland";
+        QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+        _JAVA_AWT_WM_NONREPARENTING = "1";
 
-        #XDG_SESSION_TYPE = "wayland";
+        TERMINAL = "gnome-terminal";
       };
       home.packages = with pkgs; [
         pavucontrol

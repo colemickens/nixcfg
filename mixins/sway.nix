@@ -68,8 +68,10 @@ let
   # silly gtk/gnome wayland schenanigans
   # TODO: see if this is necessary if we get HM to do it? or our own systemd user units?
   gsettings="${pkgs.glib}/bin/gsettings";
-  gsettingsscript = pkgs.writeShellScript "gsettings-auto.sh" ''
-    expression=""
+  gsettings_inner = pkgs.writeShellScript "gsettings-inner.sh" ''
+    set -x
+    set -eu
+    expressions=""
     for pair in "$@"; do
       IFS=:; set -- $pair
       expressions="$expressions -e 's:^$2=(.*)$:${gsettings} set org.gnome.desktop.interface $1 \1:e'"
@@ -79,15 +81,24 @@ let
     echo exec sed -E $expressions "''${XDG_CONFIG_HOME:-$HOME/.config}"/gtk-3.0/settings.ini &>>/tmp/gsettings.log
     eval exec sed -E $expressions "''${XDG_CONFIG_HOME:-$HOME/.config}"/gtk-3.0/settings.ini &>>/tmp/gsettings.log
   '';
-  gsettingscmd = ''${gsettingsscript} \
-    gtk-theme:gtk-theme-name \
-    icon-theme:gtk-icon-theme-name \
-    font-name:gtk-font-name \
-    cursor-theme:gtk-cursor-theme-name'';
+  gsettings_auto = pkgs.writeShellScript "gsettings-auto.sh" ''
+    set -x
+    set -euo pipefail
+
+    ${gsettings_inner} \
+      gtk-theme:gtk-theme-name \
+      icon-theme:gtk-icon-theme-name \
+      font-name:gtk-font-name \
+      cursor-theme:gtk-cursor-theme-name \
+      gtk-xft-antialias:gtk-xft-antialias \
+      gtk-xft-hinting:gtk-xft-hinting \
+      gtk-xft-hintstyle:gtk-xft-hintstyle
+  '';
 
   # change output scales incrementally w/ kb shortcuts
   outputScale = pkgs.writeShellScript "scale-wlr-outputs.sh" ''
-    set -xeuo pipefail
+    set -x
+    set -euo pipefail
     delta=''${1}
 
     scale="$(swaymsg -t get_outputs | ${pkgs.jq}/bin/jq '.[] | select(.focused == true) | .scale')"
@@ -145,7 +156,7 @@ in
             }
           ];
           startup = [
-            { always = true; command = "${gsettingscmd}"; }
+            { always = true; command = "${gsettings_auto}"; }
             { always = true; command = "${pkgs.xorg.xrdb}/bin/xrdb -l $HOME/.Xresources"; }
             { always = true; command = "${pkgs.mako}/bin/mako"; }
             { always = true; command = "${pkgs.systemd}/bin/systemd-notify --ready || true"; }

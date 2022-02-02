@@ -23,7 +23,7 @@ in
       kernelModules = [ "dwc2" "libcomposite" ];
       kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
       loader.raspberryPi.version = 0;
-      loader.raspberryPi.firmwareConfig = ''
+      loader.raspberryPi.firmwareConfig =  ''
         dtoverlay=dwc2
       '';
     };

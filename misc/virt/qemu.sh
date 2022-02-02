@@ -3,8 +3,8 @@ set -x
 set -eu
 args=()
 
-#OVMF="$(nix-build ../.. -A pkgs.x86_64-linux.OVMF.fd)/FV/OVMF.fd"
-OVMF="/nix/store/7ggn9i4w6kfhgsb3acc0xw5wqhh5dk95-OVMF-202108-fd/FV/OVMF.fd"
+OVMF="$(nix eval --raw '../..#pkgs.x86_64-linux.OVMF.fd')/FV/OVMF.fd"
+#OVMF="/nix/store/7ggn9i4w6kfhgsb3acc0xw5wqhh5dk95-OVMF-202108-fd/FV/OVMF.fd"
 
 # echo "remote-viewer spice+unix:///tmp/vmspice.socket"
 #  -virtfs local,path=/run/media/cole,mount_tag=share,security_model=passthrough \

@@ -1,6 +1,6 @@
 { pkgs, modulesPath, inputs, config, ... }:
 let
-  hostname = "rpicore";
+  hostname = "rpifour1";
 in
 {
   imports = [
@@ -11,17 +11,34 @@ in
     ../../mixins/tailscale.nix
   ];
 
-  /*
-  if it's running as root... then it mounts to /run/secretdirs/
-  this tool mounts Dictionaries to /run/user/1000/secretdirs/{dirname}/
-  apps can then rely on it, user-access by default for some stuff
-  can run as a daemon/tool in CI jobs easily
-  can have dicts encrypted with different access keys
-  - use sops as the "Backend"
-  - the nix machine would then just mount hte backend 
-  */
+  #
+  # sudo env BOOTFS=/boot/firmware FIRMWARE_RELEASE_STATUS=stable rpi-eeprom-config --edit
+  #
 
   config = {
+    # ZFS
+    fileSystems = {
+      "/boot" = {
+        device = "/dev/disk/by-partlabel/boot";
+        fsType = "vfat";
+        options = [ "nofail" ];
+      };
+      "/boot/firmware" = {
+        # the fucking dev name changes depending on how I boot (likely due to diffs in DTBs/bootloader-dtb-loading)
+        device = "/dev/disk/by-partuuid/ce8f2026-17b1-4b5b-88f3-3e239f8bd3d8";
+        fsType = "vfat";
+        options = [ "nofail" "ro" ];
+      };
+      "/" = {
+        device = "tank/root";
+        fsType = "zfs";
+      };
+      "/nix" = {
+        device = "tank/nix";
+        fsType = "zfs";
+      };
+    };
+
     system.stateVersion = "21.05";
 
     nix.nixPath = [];
@@ -36,39 +53,20 @@ in
       raspberrypifw
       raspberrypi-eeprom
       libraspberrypi
+      cachix
 
       minicom
       screen
       ncdu
+      binutils
     ];
 
     nixpkgs.config.allowBroken = true;
     boot = {
-      ############# TODO: replace with tow-boot when its not so damn slow with grub
-      loader.grub.enable = false;
-      loader.raspberryPi.enable = true;
-      loader.raspberryPi.version = 4;
-      loader.raspberryPi.firmwareConfig = ''
-        dtoverlay=disable-wifi
-        dtoverlay=disable-bt
-        dtparam=sd_poll_once
-      '';
-      loader.raspberryPi.uboot.enable = true;
-      loader.raspberryPi.uboot.configurationLimit = 5;
-      #############
-
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      #kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
-      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_5_15;
-      kernelPatches = [{
-        name = "kcore-config";
-        patch = null;
-        extraConfig = ''
-          PROC_KCORE y
-        '';
-      }];
+      kernelPackages = null;
 
       initrd.availableKernelModules = [
         "pcie_brcmstb" "bcm_phy_lib" "broadcom" "mdio_bcm_unimac" "genet"
@@ -104,6 +102,7 @@ in
     nixpkgs.config.allowUnfree = true;
     hardware = {
       # this pulls in firmware-nonfree which clashes with raspberrypiWirelessFirmware
+      # TODO: why does this even clash? Shouldn't the rpiWifiFw package supply the FW for *only* those devices?
       enableRedistributableFirmware = false;
     };
   };

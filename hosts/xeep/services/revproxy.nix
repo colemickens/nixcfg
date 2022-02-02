@@ -22,7 +22,7 @@ let
       <head><title>cleo cat!</title></head>
       <body>
         <h1>Ens encanta la Cleo!</h1>
-        
+
         <h2>serveis</h2>
         <ul>
           <li><a href="https://x.cleo.cat">deixa'm entrar</a></li>
@@ -42,8 +42,7 @@ let
         <h2>serveis</h2>
         <ul>
           <li><a href="https://home.x.cleo.cat">home-assistant</a></li>
-          <li><a href="https://home2.x.cleo.cat">home-assistant (sdcard, HA OS)</a></li>
-          <li><a href="https://flood.x.cleo.cat">flood</a></li>
+          <li><a href="https://homie.x.cleo.cat">homie (hodd)</a></li>
           <li><a href="https://unifi.x.cleo.cat">unifi</a></li>
           <li><a href="https://denon.x.cleo.cat">denon</a></li>
           <li><a href="https://code.x.cleo.cat">code-server</a></li>
@@ -54,7 +53,7 @@ let
           <li><a href="https://syncthing-sinkor.x.cleo.cat">syncthing (sinkor)</a></li>
           <li><a href="https://syncthing-raisin.x.cleo.cat">syncthing (raisin)</a></li>
           <li><a href="https://syncthing-xeep.x.cleo.cat">syncthing (xeep)</a></li>
-          
+
           <li><a href="https://syncthing-redsly.x.cleo.cat">syncthing (redsly)</a></li>
           <li><a href="https://syncthing-raiswin.x.cleo.cat">syncthing (raiswin)</a></li>
         </ul>
@@ -160,14 +159,14 @@ in
         forceSSL = false;
         locations."/" = {
           root = pkgs.linkFarm "netboot" [
-            { name = "x86_64"; path = (pkgs.linkFarm "netboot-x86_64" [
-              { name = "generic"; path = inputs.self.nixosConfigurations.netboot-x86_64.config.system.build.netbootEnv; }
-            ]);}
-            { name = "aarch64"; path = (pkgs.linkFarm "netboot-aarch64" [
-              { name = "generic"; path = inputs.self.nixosConfigurations.netboot-aarch64.config.system.build.netbootEnv; }
-            ]);}
+            #{ name = "x86_64"; path = (pkgs.linkFarm "netboot-x86_64" [
+            #  { name = "generic"; path = inputs.self.nixosConfigurations.netboot-x86_64.config.system.build.netbootEnv; }
+            #]);}
+            #{ name = "aarch64"; path = (pkgs.linkFarm "netboot-aarch64" [
+            #  { name = "generic"; path = inputs.self.nixosConfigurations.netboot-aarch64.config.system.build.netbootEnv; }
+            #]);}
           ];
-           
+
           extraConfig = ''
             disable_symlinks off;
             autoindex on;
@@ -183,10 +182,15 @@ in
           proxyWebsockets = true;
         };
       };
-      virtualHosts."home2.x.cleo.cat" = internalVhost // {
+      virtualHosts."homie.x.cleo.cat" = {
+        useACMEHost = "cleo.cat";
+        addSSL = true;
+        forceSSL = false;
         locations."/" = {
-          proxyPass = "http://192.168.162.88:8123/";
-          proxyWebsockets = true;
+          root = pkgs.hodd;
+          extraConfig = ''
+            autoindex on;
+          '';
         };
       };
       virtualHosts."unifi.x.cleo.cat" = internalVhost // {
@@ -201,18 +205,12 @@ in
           proxyWebsockets = true;
         };
       };
-      virtualHosts."flood.x.cleo.cat" = internalVhost // {
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:3000/";
-          proxyWebsockets = true;
-        };
-      };
       virtualHosts."code.x.cleo.cat" = internalVhost // {
-        locations."/".proxyPass = "http://${porty_ip4}:5902/"; # porty
+        locations."/".proxyPass = "http://${xeep_ip4}:5902/"; # porty
         locations."/".proxyWebsockets = true;
       };
       virtualHosts."openvscode.x.cleo.cat" = internalVhost // {
-        locations."/".proxyPass = "http://${porty_ip4}:5904/";
+        locations."/".proxyPass = "http://${raisin_ip4}:5904/";
         locations."/".proxyWebsockets = true;
       };
 

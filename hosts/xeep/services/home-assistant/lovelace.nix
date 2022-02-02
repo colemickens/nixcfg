@@ -4,32 +4,6 @@
     title = "Main View";
     cards = [
       {
-        title = "Living Room";
-        type = "entities";
-        entities = [
-          #{
-          #  name = "TV - Sony 55";
-          #  entity = "media_player.braviatv";
-          #}
-          {
-            name = "TV - LG C1 65";
-            entity = "media_player.livingroom_lg_c1";
-          }
-          # {
-          #   name = "Fireplace";
-          #   entity = "switch.ge_14291_in_wall_smart_switch_switch";
-          # }
-          # {
-          #   name = "Fireplace Christmas Lights";
-          #   entity = "switch.wp6_sw102_relay";
-          # }
-          {
-            name = "Receiver";
-            entity = "media_player.denon";
-          }
-        ];
-      }
-      {
         title = "Kitchen";
         type = "entities";
         entities = [
@@ -40,21 +14,62 @@
         ];
       }
       {
-        title = "Bedroom";
+        title = "Living Room";
         type = "entities";
         entities = [
+          {
+           name = "TV - Sony 55";
+           entity = "media_player.braviatv";
+          }
+        ];
+      }
+      {
+        title = "Media Room";
+        type = "entities";
+        entities = [
+          {
+            name = "TV - LG C1 65";
+            entity = "media_player.livingroom_lg_c1";
+          }
+
+          {
+            name = "Redsly PC";
+            entity = "switch.redsly";
+          }
+          {
+            name = "Receiver";
+            entity = "media_player.denon";
+          }
+        ];
+      }
+      {
+        title = "Desk";
+        type = "entities";
+        entities = [
+          {
+            name = "Desk Motor";
+            entity = "switch.wp6_sw102_relay";
+          }
           {
             name = "Dab Rig";
             entity = "switch.wp6_sw104_relay";
           }
           {
-            name = "Desk 1";
-            entity = "switch.wp6_sw106_relay";
+            name = "Volcano";
+            entity = "switch.wp6_sw103_relay";
           }
           {
-            name = "Desk 2";
-            entity = "switch.wp6_sw107_relay";
+            name = "Lava Lamp";
+            entity = "switch.wp6_sw109_relay";
           }
+          # {
+          #   name = "Wall Outlet 1";
+          #   entity = "switch.wp6_sw106_relay";
+          # }
+          # {
+          #   name = "Wall Outlet 2";
+          #   entity = "switch.wp6_sw107_relay";
+          # }
         ];
       }
       # {

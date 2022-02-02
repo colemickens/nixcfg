@@ -53,7 +53,7 @@ if [[ "${1:-""}" != "" ]]; then
   if [[ "${repo_git}" != "null" ]]; then
     repotyp="git";
     repo="${repo_git}"
-    newrev="$(git ls-remote "${repo}" "${branch}" | awk '{ print $1}')"
+    newrev="$(git ls-remote "${repo}" "refs/heads/${branch}" | awk '{ print $1}')"
   elif [[ "${repo_hg}" != "null" ]]; then
     repotyp="hg";
     repo="${repo_hg}"
@@ -74,7 +74,7 @@ if [[ "${1:-""}" != "" ]]; then
   # Update Sha256
   sed -i "s|${rev}|${newrev}|" "${metadata}"; echo $?
   sed -i "s|${sha256}|0000000000000000000000000000000000000000000000000000|" "${metadata}"
-  nix "${nixargs[@]}" build "..#${upattr}" &> "${l}" || true
+  nix "${nixargs[@]}" build --no-link "..#${upattr}" &> "${l}" || true
   newsha256="$(cat "${l}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
   if [[ "${newsha256}" == "sha256" ]]; then newsha256="$(cat "${l}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
 
@@ -84,7 +84,7 @@ if [[ "${1:-""}" != "" ]]; then
   # CargoSha256 has to happen AFTER the other rev/sha256 bump
   if [[ "${cargoSha256}" != "null" ]]; then
     sed -i "s|${cargoSha256}|0000000000000000000000000000000000000000000000000000|" "${metadata}"
-    nix "${nixargs[@]}" build "..#${upattr}" &> "${l}" || true
+    nix "${nixargs[@]}" build --no-link "..#${upattr}" &> "${l}" || true
     newcargoSha256="$(cat "${l}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
     if [[ "${newcargoSha256}" == "sha256" ]]; then newcargoSha256="$(cat "${l}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
     newcargoSha256="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${newcargoSha256}")"
@@ -94,7 +94,7 @@ if [[ "${1:-""}" != "" ]]; then
   # VendorSha256 has to happen AFTER the other rev/sha256 bump
   if [[ "${vendorSha256}" != "null" ]]; then
     sed -i "s|${vendorSha256}|0000000000000000000000000000000000000000000000000000|" "${metadata}"
-    nix "${nixargs[@]}" build "..#${upattr}" &> "${l}" || true
+    nix "${nixargs[@]}" build --no-link "..#${upattr}" &> "${l}" || true
     newvendorSha256="$(cat "${l}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
     if [[ "${newvendorSha256}" == "sha256" ]]; then newvendorSha256="$(cat "${l}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
     newvendorSha256="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${newvendorSha256}")"
@@ -114,7 +114,7 @@ fi
 
 # updates galore
 pkgslist=()
-for p in `ls -v -d -- "${DIR}"/*/ | sort -V`; do
+for p in `ls -v -d -- ./*/ | sort -V`; do
   "${0}" "${p}"
 done
 

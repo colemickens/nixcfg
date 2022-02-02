@@ -77,6 +77,8 @@
         wtype
         xwayland
         ydotool
+
+        wayfire
       ];
     };
   };

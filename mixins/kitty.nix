@@ -28,6 +28,8 @@ in
           # lmao wat: https://github.com/kovidgoyal/kitty/pull/3234
           # bold_is_bright
 
+          background_opacity = "0.70";
+
           foreground = colors.foreground;
           background = colors.background;
           color0  = colors.black;

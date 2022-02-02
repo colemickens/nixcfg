@@ -30,13 +30,13 @@
         "console=ttyAMA0,115200" # aarch64-linux
       ];
       kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_5_15;
-      kernelPatches = [{
-        name = "kcore-config";
-        patch = null;
-        extraConfig = ''
-          PROC_KCORE y
-        '';
-      }];
+      # kernelPatches = [{
+      #   name = "kcore-config";
+      #   patch = null;
+      #   extraConfig = ''
+      #     PROC_KCORE y
+      #   '';
+      # }];
     };
 
     networking.timeServers = [ "169.254.169.254" ];

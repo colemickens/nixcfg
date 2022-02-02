@@ -2,7 +2,7 @@
 
 {
   config = {
-    nix.trustedUsers = [ "cole" ];
+    #nix.settings.trusted-users = [ "cole" ];
 
     users.extraGroups."cole".gid = 1000;
     users.extraUsers."cole" = {

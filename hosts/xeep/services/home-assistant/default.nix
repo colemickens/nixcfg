@@ -163,6 +163,13 @@ in {
           purge_interval = 1;
           purge_keep_days = 30;
         };
+        switch = [
+          {
+            platform = "wake_on_lan";
+            name = "redsly";
+            mac = "18-c0-4d-a0-8d-22";
+          }
+        ];
         system_health = { };
         wake_on_lan =  {};
         webostv = [{

@@ -2,7 +2,8 @@
 
 {
   imports = [
-    ../../profiles/desktop-sway-unstable.nix
+    #../../profiles/desktop-sway-unstable.nix
+    ../../profiles/desktop-gnome.nix
     ./core.nix
   ];
 
@@ -13,7 +14,7 @@
         configuration = {
           imports = [
             ./core.nix
-            ../../profiles/desktop-gnome.nix
+            ../../profiles/desktop-sway-unstable.nix
           ];
         };
       };

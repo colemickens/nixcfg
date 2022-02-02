@@ -70,6 +70,7 @@
       kernel.sysctl."vm.overcommit_memory" = "1";
 
       loader.systemd-boot.enable = true;
+      loader.systemd-boot.configurationLimit = 3;
       loader.efi.canTouchEfiVariables = true;
 
       initrd.availableKernelModules = [ "sd_mod" "sr_mod" ];

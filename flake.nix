@@ -17,8 +17,6 @@
       url = "git+https://github.com/nixos/nixpkgs?ref=nixos-unstable";
     };
 
-    temp-gpg-pr.url = "github:colemickens/nixpkgs/gpg23"; # TEMP to test gpg without full sys rebuild
-
     crosspkgs.url = "github:colemickens/nixpkgs/crosspkgs";
 
     home-manager.url = "github:colemickens/home-manager/cmhm";
@@ -26,6 +24,9 @@
 
     sops-nix.url = "github:Mic92/sops-nix/master";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    helix.url = "github:helix-editor/helix";
+    helix.inputs.nixpkgs.follows = "nixpkgs";
 
     hardware.url = "github:nixos/nixos-hardware";
 
@@ -38,7 +39,7 @@
     impermanence.url = "github:nix-community/impermanence/5e8913aa1c311da17e3da5a4bf5c5a47152f6408"; # TODO TODO TODO TODO TODO
     impermanence.inputs.nixpkgs.follows = "nixpkgs";
 
-    tow-boot = { url = "github:colemickens/tow-boot"; };
+    tow-boot = { url = "github:colemickens/tow-boot/development"; };
     tow-boot.inputs.nixpkgs.follows = "nixpkgs"; # TODO: might break u-boot?
 
     mobile-nixos.url = "github:colemickens/mobile-nixos/master"; # its nixpkgs is _only_ used for its devshell
@@ -106,7 +107,7 @@
         pkgNames = s: builtins.attrNames (inputs.self.overlay pkgs_.${s} pkgs_.${s});
       };
 
-      
+
     in with colelib; rec {
       devShell = forAllSystems (system: minimalMkShell system {
         name = "nixcfg-devshell";
@@ -116,6 +117,7 @@
           nettools openssh ripgrep rsync sops gh gawk gnused gnugrep
           metal-cli
           fullPkgs_.${system}.nix-build-uncached
+          pkgs.x86_64-linux.OVMF.fd
         ]);
       });
       devShells = forAllSystems (system: {
@@ -156,21 +158,23 @@
           conduit = prev.callPackage ./pkgs/conduit {};
           drm-howto = prev.callPackage ./pkgs/drm-howto {};
           get-xoauth2-token = prev.callPackage ./pkgs/get-xoauth2-token {};
-          # headscale = prev.callPackage ./pkgs/headscale {
-          #   buildGoModule = prev.buildGo117Module;
-          # };
-          headscale = prev.callPackage ./pkgs/headscale { headscale = prev.headscale; };
+          headscale = prev.callPackage ./pkgs/headscale {
+           buildGoModule = prev.buildGo117Module;
+          };
+          hodd = prev.callPackage ./pkgs/hodd {};
+          # headscale = prev.callPackage ./pkgs/headscale { headscale = prev.headscale; };
           jj = prev.callPackage ./pkgs/jj {
             rustPlatform = (prev.makeRustPlatform {
               inherit (inputs.fenix.packages.${prev.system}.minimal) cargo rustc;
             });
           };
           keyboard-layouts = prev.callPackage ./pkgs/keyboard-layouts {};
-          mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
           meli = prev.callPackage ./pkgs/meli {};
+          # disabled # mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
           # disabled # neochat = prev.libsForQt5.callPackage ./pkgs/neochat { neochat = prev.neochat; };
           poweralertd = prev.callPackage ./pkgs/poweralertd {};
           rkvm = prev.callPackage ./pkgs/rkvm {};
+          rumqtt = prev.callPackage ./pkgs/rumqtt {};
           space-cadet-pinball = prev.callPackage ./pkgs/space-cadet-pinball {};
           space-cadet-pinball-unfree = prev.callPackage ./pkgs/space-cadet-pinball {
             _assets = import ./pkgs/space-cadet-pinball/assets.nix { pkgs = prev; };
@@ -268,20 +272,32 @@
 
       images = let
         #tb_aarch64 = import inputs.tow-boot { pkgs = import inputs.nixpkgs { system = "aarch64-linux"; }; };
-        tb_aarch64 = inputs.tow-boot.packages.aarch64-linux;
-      in {
-        # TODO: move rpifour1 back to nixos + tow-boot (and then drop old rpi4 nixpkgs commits + pr)
-        #rpifour1_towboot = tb_aarch64.raspberryPi4.sharedImage; # not used yet, still on weird cmpkgs rpi4 stuff
-        sinkor_towboot = tb_aarch64.raspberryPi4-aarch64; # sharedImage? wtf? where did taht come from?
-        pinebook_towboot = tb_aarch64.pine64-pinebookPro;
-        rpizerotwo1_towboot = tb_aarch64.raspberryPi-aarch64;
-        # rpizerotwo2_towboot = tb_aarch64.raspberryPi-aarch64;
-        # rpizerotwo3_towboot = tb_aarch64.raspberryPi-aarch64;
+        towboot_aarch64 = inputs.tow-boot.packages.aarch64-linux;
+        towboot_armv6l = inputs.tow-boot.packages.aarch64-linux;
+        towboot_rpi_combined = TODO;
+      in rec {
+        #
+        # TOW-BOOT IMAGES
+        # (todo: consider if we need separate tow-boot images for the rpizero* devices)
+        rpizero1_towboot = towboot_armv6l.raspberryPi;
 
-        rpizero1  = inputs.self.nixosConfigurations.rpizero1.config.system.build.sdImage;
-        rpizero2  = inputs.self.nixosConfigurations.rpizero2.config.system.build.sdImage;
-        rpionebp  = inputs.self.nixosConfigurations.rpionebp.config.system.build.sdImage;
+        rpifour1_towboot = towboot_aarch64.raspberryPi-aarch64;
+        sinkor_towboot   = towboot_aarch64.raspberryPi-aarch64;
 
+        pinebook_towboot = towboot_aarch64.pine64-pinebookPro;
+
+        rpizerotwo1_towboot = towboot_aarch64.raspberryPi-aarch64;
+        rpizerotwo2_towboot = towboot_aarch64.raspberryPi-aarch64;
+        rpizerotwo3_towboot = towboot_aarch64.raspberryPi-aarch64;
+
+        # TODO: replace these with images that use a tow-boot builder to build
+        # a normal in-place-updatable nixos
+        # rpizero1  = inputs.self.nixosConfigurations.rpizero1.config.system.build.sdImage;
+        # rpizero2  = inputs.self.nixosConfigurations.rpizero2.config.system.build.sdImage;
+        # rpionebp  = inputs.self.nixosConfigurations.rpionebp.config.system.build.sdImage;
+
+        #
+        # MOBILE-NIXOS IMAGES
         blueline = let x = inputs.self.nixosConfigurations.blueline.config.system.build.mobile-nixos; in
           pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "blueline-bundle" ([
             # ? # devices.blueline.extra

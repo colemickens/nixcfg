@@ -35,11 +35,12 @@ ota:
 ### END COMMON
 
 i2c:
- scan: False
- frequency: 200kHz
+  sda: GPIO21
+  scl: GPIO22
 
 pn532_i2c:
- id: pn532_board
- on_tag:
-   then:
-   - homeassistant.tag_scanned: !lambda 'return x;'
+  id: pn532_board
+  update_interval: 1s
+  on_tag:
+    then:
+    - homeassistant.tag_scanned: !lambda 'return x;'

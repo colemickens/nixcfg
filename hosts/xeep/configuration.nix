@@ -6,9 +6,9 @@ in
   imports = [
     ../../mixins/common.nix
 
+    ../../mixins/code-server.nix
     ../../mixins/docker.nix
     ../../mixins/logitech-mouse.nix
-    ../../mixins/plex.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
     ../../mixins/syncthing.nix
@@ -18,6 +18,7 @@ in
 
     ./services/revproxy.nix
     ./services/home-assistant
+    ./services/plex.nix
     ./services/unifi.nix
 
     ../../profiles/interactive.nix
@@ -41,7 +42,8 @@ in
     system.stateVersion = "21.05";
 
     nix.nixPath = [];
-    nix.gc.automatic = true;
+    # xeep is our builder for a bit, so lets not GC
+    # nix.gc.automatic = true;
     nix.maxJobs = 8;
     #nix.package = lib.mkForce pkgs.nix;
 
@@ -90,7 +92,7 @@ in
       cleanTmpDir = true;
 
       #kernelPackages = pkgs.linuxPackages_latest;
-      kernelPackages = pkgs.linuxPackages_5_15;
+      kernelPackages = pkgs.linuxPackages_5_16;
       initrd.availableKernelModules = [
         "xhci_pci" "xhci_hcd" # usb
         "nvme" "usb_storage" "sd_mod" # nvme / external usb storage

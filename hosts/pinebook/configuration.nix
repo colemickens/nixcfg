@@ -94,10 +94,6 @@ in
       cleanTmpDir = true;
 
       kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
-      kernelPatches = [{
-        name = "pinebook-disable-dp";
-        patch = ./pbp-disable-dp.patch;
-      }];
       kernelParams = [
         # "cma=32M" # samueldr says so
         "mitigations=off"

@@ -41,6 +41,8 @@ in
       # https://aur.archlinux.org/packages/squeekboard/
       # https://github.com/efernau/rot8
 
+      boot.kernelPackages = pkgs.linuxPackages_latest;
+
       environment.systemPackages = with pkgs; [
         pipes
       ];

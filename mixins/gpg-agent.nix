@@ -2,9 +2,9 @@
 
 let
   def = {
-    #gnupgPkg = pkgs.gnupg23;
+    gnupgPkg = pkgs.gnupg;
     #gnupgPkg = inputs.temp-gpg-pr.legacyPackages.${pkgs.system}.gnupg;
-    gnupgPkg = pkgs.callPackage "${inputs.temp-gpg-pr}/pkgs/tools/security/gnupg/23.nix" {};
+    #gnupgPkg = pkgs.callPackage "${inputs.temp-gpg-pr}/pkgs/tools/security/gnupg/23.nix" {};
   };
   bad = def // {
     enableGpgRules = false;
