@@ -26,8 +26,8 @@
 
     nix.nixPath = [];
     nix.gc.automatic = true;
-    nix.maxJobs = lib.mkDefault 1;
-    nix.trustedUsers = [ "jeff" "@wheel" ];
+    nix.settings.max-jobs = lib.mkDefault 1;
+    nix.settings.trusted-users = [ "jeff" "@wheel" ];
 
     #
     # DISK

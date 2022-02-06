@@ -33,7 +33,6 @@ in
     services.xserver = {
       videoDrivers = [ "nvidia" ];
       displayManager.gdm.wayland = true;
-      displayManager.gdm.nvidiaWayland = true;
     };
   };
 }

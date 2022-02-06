@@ -24,10 +24,10 @@ in {
     users.users.unifi.group = "unifi";
     users.groups.unifi = {};
 
-    environment.systemPackages = [
-      pkgs.mongodb-3_6
-      pkgs.mongodb-4_0
-    ];
+    # environment.systemPackages = [
+    #   pkgs.mongodb-3_6
+    #   pkgs.mongodb-4_0
+    # ];
     services.unifi = {
       enable = true;
       openFirewall = false;

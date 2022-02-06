@@ -1,0 +1,32 @@
+---
+tabs:
+  - direction: Vertical
+    parts:
+      - direction: Horizontal
+        split_size:
+          Percent: 50
+        parts:
+          - direction: Vertical
+            split_size:
+              Percent: 50
+            run:
+              command: {cmd: ./nixup, args: ["x86"]}
+          - direction: Vertical
+            split_size:
+              Percent: 50
+            run:
+              command: {cmd: ./nixup, args: ["a64"]}
+      - direction: Horizontal
+        split_size:
+          Percent: 50
+        parts:
+          - direction: Vertical
+            split_size:
+              Percent: 50
+            run:
+              command: {cmd: bb}
+          - direction: Vertical
+            split_size:
+              Percent: 50
+            run:
+              command: {cmd: ssh, args: ["-t", "colemickens@aarch64.nixos.community", "htop"]}

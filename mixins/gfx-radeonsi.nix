@@ -9,7 +9,7 @@
       opengl = {
         extraPackages = []
         ++ lib.optionals (pkgs.system=="x86_64-linux") (with pkgs; [
-          #pkgs.mesa.drivers
+          pkgs.mesa.drivers
         ]);
       };
     };

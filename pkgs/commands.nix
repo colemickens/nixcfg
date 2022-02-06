@@ -1,4 +1,4 @@
-{ gnupg, openssh, efibootmgr
+{ gnupg, openssh, efibootmgr, tailscale
 , writeShellScriptBin
 , linkFarmFromDrvs
 , symlinkJoin
@@ -7,30 +7,58 @@
 let
   efibootmgr_ = "${efibootmgr}/bin/efibootmgr";
 
+  tip = (writeShellScriptBin "tip" ''
+    ${tailscale}/bin/tailscale ip --6 "$1")"
+  '');
+
+  gfwd = (writeShellScriptBin "gpgfwd" ''
+    [[ -z "''${DEBUG_GPGSSH}" ]] || set -x
+    set -euo pipefail
+
+    ip="$(${tailscale}/bin/tailscale ip --6 "$1")"
+    "${gpgssh}/bin/gpgssh" cole@"$ip" "-N"
+  '');
+
+  gssh = (writeShellScriptBin "gssh" ''
+    [[ -z "''${DEBUG_GPGSSH}" ]] || set -x
+    set -euo pipefail
+
+    ip="$(${tailscale}/bin/tailscale ip --6 "$1")"
+    "${gpgssh}/bin/gpgssh" cole@"$ip"
+  '');
+
+  gpgssh = (writeShellScriptBin "gpgssh" ''
+    [[ -z "''${DEBUG_GPGSSH}" ]] || set -x
+    set -euo pipefail
+
+    host=$1; shift
+
+    lpath="$(${gnupg}/bin/gpgconf --list-dirs agent-socket)"
+    rpath="$(${openssh}/bin/ssh "$host" -- "\
+      pkill -9 gpg-agent; \
+      systemctl --user stop gpg-agent.service; \
+      pkill -9 gpg-agent; \
+      gpgconf --list-dirs agent-socket \
+        | xargs -d $'\n' sh -c 'for arg do rm -f "\$arg"; echo "\$arg"; done' _")"
+
+    ssh \
+        -o "RemoteForward $rpath:$lpath.extra" \
+        -o StreamLocalBindUnlink=yes \
+        -A "$@" "$host"
+  '');
+
   name = "cole-custom-commands";
   drvs = [
-    (writeShellScriptBin "gpgssh" ''
-      #!/nix/store/zcl19h06322c3kss6bvf05w2pxg4kfll-bash-4.4-p23/bin/bash
-      [[ -z "''${DEBUG_GPGSSH}" ]] || set -x
-      set -euo pipefail
-
-      lpath="$(${gnupg}/bin/gpgconf --list-dirs agent-socket)"
-      rpath="$(${openssh}/bin/ssh "$1" -- "\
-        pkill -9 gpg-agent; \
-        systemctl --user stop gpg-agent.service; \
-        pkill -9 gpg-agent; \
-        gpgconf --list-dirs agent-socket \
-          | xargs -d $'\n' sh -c 'for arg do rm -f "\$arg"; echo "\$arg"; done' _")"
-
-      ssh \
-          -o "RemoteForward $rpath:$lpath.extra" \
-          -o StreamLocalBindUnlink=yes \
-          -A "$@"
-    '')
+    gssh
+    gfwd
+    gpgssh
 
     (writeShellScriptBin "gpg-fix" ''
       ln -sf /run/user/1000/gnupg/S.gpg-agent.ssh /run/user/1000/sshagent
       set -x
+      CO='\033[0;30m'
+      NC='\033[0m' # No Color
+      printf "''${CO}"
       sudo systemctl stop pcscd.service
       sudo systemctl stop pcscd.socket
       systemctl --user stop gpg-agent.service
@@ -50,6 +78,7 @@ let
         (echo 5; echo y; echo save) |
           gpg --command-fd 0 --no-tty --no-greeting -q --edit-key "$KEYID" trust
       fi
+      printf "''${NC}"
       gpg --card-status
     '')
 
@@ -59,14 +88,14 @@ let
       export SSH_AUTH_SOCK="/run/user/1000/sshagent"
     '')
 
-    (writeShellScriptBin "pulse-fix" ''
-      set -x
-      systemctl --user daemon-reload
-      systemctl --user start pipewire.service
-      systemctl --user start pipewire-pulse.socket
-      pkill waybar; sleep 1
-      swaymsg reload
-    '')
+    # (writeShellScriptBin "pulse-fix" ''
+    #   set -x
+    #   systemctl --user daemon-reload
+    #   systemctl --user start pipewire.service
+    #   systemctl --user start pipewire-pulse.socket
+    #   pkill waybar; sleep 1
+    #   swaymsg reload
+    # '')
 
     (writeShellScriptBin "reboot-nixos" ''
       next="$(sudo ${efibootmgr_} | rg "Boot(\d+)\*+ Linux Boot Manager" -r '$1')"

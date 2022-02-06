@@ -1,6 +1,10 @@
 { pkgs, modulesPath, inputs, config, ... }:
 let
   hostname = "rpifour1";
+  _tow-boot-rpi = inputs.tow-boot.output.aarch64-linux {
+    device = "raspberrypi-aarch64";
+  };
+  _tow-boot-payload = _tow-boot-rpi.outputs.scripts;
 in
 {
   imports = [
@@ -59,6 +63,8 @@ in
       screen
       ncdu
       binutils
+
+      _tow-boot-payload
     ];
 
     nixpkgs.config.allowBroken = true;

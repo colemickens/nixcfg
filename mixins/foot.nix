@@ -28,7 +28,7 @@ in
           };
 
           colors = rec {
-            alpha = 0.8;
+            alpha = 1.0;
             foreground = c colors.foreground;
             background = c colors.background;
 

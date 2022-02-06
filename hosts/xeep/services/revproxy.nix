@@ -1,6 +1,9 @@
 { config, pkgs, lib, modulesPath, inputs, ... }:
 
 let
+  pixel3_ip4 = "100.83.93.42";
+  pixel3_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6253:5d2a]";
+
   porty_ip4 = "100.112.137.125";
   porty_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6270:897d]";
   sinkor_ip4 = "100.88.111.30";
@@ -9,10 +12,14 @@ let
   xeep_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6248:b3e]";
   raisin_ip4 = "100.92.252.95";
   raisin_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:625c:fc5f]";
-  redsly_ip4 = "100.96.145.20";
-  redsly_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6260:9114]";
+  slywin_ip4 = "100.71.20.50";
+  slywin_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6247:1432]";
   raiswin_ip4 = "100.84.178.79";
   raiswin_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6254:b24f]";
+  pelinore_ip4 = "100.78.207.66";
+  pelinore_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:624e:cf42]";
+  jeffhyper_ip4 = "100.103.91.27";
+  jeffhyper_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6267:5b1b]";
 
   rpifour1_ip4 = "100.111.5.113";
   rpifour1_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:626f:571]";
@@ -49,13 +56,17 @@ let
           <li><a href="https://openvscode.x.cleo.cat">openvscode</a></li>
         </ul>
         <ul>
+          <li><a href="https://syncthing-pixel3.x.cleo.cat">syncthing (pixel3)</a></li>
+          <br/>
           <li><a href="https://syncthing-porty.x.cleo.cat">syncthing (porty)</a></li>
           <li><a href="https://syncthing-sinkor.x.cleo.cat">syncthing (sinkor)</a></li>
           <li><a href="https://syncthing-raisin.x.cleo.cat">syncthing (raisin)</a></li>
           <li><a href="https://syncthing-xeep.x.cleo.cat">syncthing (xeep)</a></li>
-
-          <li><a href="https://syncthing-redsly.x.cleo.cat">syncthing (redsly)</a></li>
+          <li><a href="https://syncthing-jeffhyper.x.cleo.cat">syncthing (jeffhyper)</a></li>
+          <br/>
+          <li><a href="https://syncthing-slywin.x.cleo.cat">syncthing (slywin)</a></li>
           <li><a href="https://syncthing-raiswin.x.cleo.cat">syncthing (raiswin)</a></li>
+          <li><a href="https://syncthing-pelinore.x.cleo.cat">syncthing (pelinore)</a></li>
         </ul>
 
         <h2>serveis futurs</h2>
@@ -215,6 +226,10 @@ in
       };
 
       # syncthing
+      virtualHosts."syncthing-pixel3.x.cleo.cat" = internalVhost // {
+        locations."/".proxyPass = "http://${pixel3_ip6}:8384/";
+        locations."/".proxyWebsockets = true;
+      };
       virtualHosts."syncthing-porty.x.cleo.cat" = internalVhost // {
         locations."/".proxyPass = "http://${porty_ip6}:8384/";
         locations."/".proxyWebsockets = true;
@@ -231,12 +246,20 @@ in
         locations."/".proxyPass = "http://${raisin_ip6}:8384/";
         locations."/".proxyWebsockets = true;
       };
-      virtualHosts."syncthing-redsly.x.cleo.cat" = internalVhost // {
-        locations."/".proxyPass = "http://${redsly_ip4}:8384/";
+      virtualHosts."syncthing-slywin.x.cleo.cat" = internalVhost // {
+        locations."/".proxyPass = "http://${slywin_ip4}:8384/";
+        locations."/".proxyWebsockets = true;
+      };
+      virtualHosts."syncthing-pelinore.x.cleo.cat" = internalVhost // {
+        locations."/".proxyPass = "http://${pelinore_ip4}:8384/";
         locations."/".proxyWebsockets = true;
       };
       virtualHosts."syncthing-raiswin.x.cleo.cat" = internalVhost // {
         locations."/".proxyPass = "http://${raiswin_ip4}:8384/";
+        locations."/".proxyWebsockets = true;
+      };
+      virtualHosts."syncthing-jeffhyper.x.cleo.cat" = internalVhost // {
+        locations."/".proxyPass = "http://${jeffhyper_ip4}:8384/";
         locations."/".proxyWebsockets = true;
       };
     };

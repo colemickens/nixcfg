@@ -44,7 +44,7 @@ in
     nix.nixPath = [];
     # xeep is our builder for a bit, so lets not GC
     # nix.gc.automatic = true;
-    nix.maxJobs = 8;
+    nix.settings.max-jobs = 8;
     #nix.package = lib.mkForce pkgs.nix;
 
     documentation.enable = false;

@@ -37,7 +37,17 @@ function inputup() {
 }
 function lockup() { nix "${nixargs[@]}" flake lock --recreate-lock-file --commit-lock-file; cacheshell; }
 function pkgup() { pushd ./pkgs; ./update.sh "${@:-}"; popd; cacheshell; }
-function up() { set -euo pipefail; inputup && lockup && pkgup && ciup && cacheshell; }
+function up() {
+  set -euo pipefail;
+  inputup
+  lockup
+  pkgup
+  #ciup
+  cacheshell
+  "${0}" x86 &
+  a64
+  wait
+}
 function upup() { set -euo pipefail; up && x86 && a64; }
 ## </updates> ################################### ###############################
 ## <remote> ####################################################################

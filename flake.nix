@@ -17,7 +17,7 @@
       url = "git+https://github.com/nixos/nixpkgs?ref=nixos-unstable";
     };
 
-    crosspkgs.url = "github:colemickens/nixpkgs/crosspkgs";
+    # crosspkgs.url = "github:colemickens/nixpkgs/crosspkgs";
 
     home-manager.url = "github:colemickens/home-manager/cmhm";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -107,8 +107,11 @@
         pkgNames = s: builtins.attrNames (inputs.self.overlay pkgs_.${s} pkgs_.${s});
       };
 
+    _inputs = inputs;
 
     in with colelib; rec {
+      inputs = _inputs;
+
       devShell = forAllSystems (system: minimalMkShell system {
         name = "nixcfg-devshell";
         nativeBuildInputs = map (x: (x.bin or x.out or x)) (with pkgs_.nixpkgs.${system}; [
@@ -174,7 +177,7 @@
           # disabled # neochat = prev.libsForQt5.callPackage ./pkgs/neochat { neochat = prev.neochat; };
           poweralertd = prev.callPackage ./pkgs/poweralertd {};
           rkvm = prev.callPackage ./pkgs/rkvm {};
-          rumqtt = prev.callPackage ./pkgs/rumqtt {};
+          # disabled # rumqtt = prev.callPackage ./pkgs/rumqtt {};
           space-cadet-pinball = prev.callPackage ./pkgs/space-cadet-pinball {};
           space-cadet-pinball-unfree = prev.callPackage ./pkgs/space-cadet-pinball {
             _assets = import ./pkgs/space-cadet-pinball/assets.nix { pkgs = prev; };
@@ -183,7 +186,9 @@
           rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {
             buildGoModule = prev.buildGo117Module;
           };
-          wezterm = prev.callPackage ./pkgs/wezterm { wezterm = prev.wezterm; };
+          wezterm = prev.callPackage ./pkgs/wezterm {
+            inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics Foundation;
+          };
           zellij = prev.callPackage ./pkgs/zellij { zellij = prev.zellij; };
 
           nix-build-uncached = prev.nix-build-uncached.overrideAttrs(old: {
@@ -223,8 +228,8 @@
         sinkor      = mkSystem inputs.nixpkgs "aarch64-linux" "sinkor";
         oracular    = mkSystem inputs.nixpkgs "aarch64-linux" "oracular";
         # armv6l-linux (cross-built)
-        rpizero1 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
-        rpizero2 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
+        # rpizero1 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
+        # rpizero2 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
         # disabled:
         # - oracular_kexec  = mkSystem inputs.nixpkgs "aarch64-linux" "oracular/installer"; # not working, half-abandonded
       };

@@ -21,7 +21,7 @@
           gtk-xft-hinting = 1;
           gtk-xft-hintstyle = "slight";
           gtk-xft-antialias = 1; # => font-antialiasing="grayscale"
-          gtk-xft-rgba = "rgb" # => font-rgb-order="rgb"
+          gtk-xft-rgba = "rgb"; # => font-rgb-order="rgb"
         };
       };
     };

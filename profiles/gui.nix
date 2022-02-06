@@ -7,7 +7,10 @@ let
   __firefoxNightly = firefoxFlake.firefox-nightly-bin;
   
   #_someFirefox = __firefoxStable;
-  _someFirefox = __firefoxNightly;
+  _someFirefox =
+    if pkgs.system == "x86_64-linux"
+    then __firefoxNightly
+    else pkgs.firefox-beta-bin;
 
   #_someChromium = pkgs.ungoogled-chromium;
   _someChromium = pkgs.google-chrome-dev;
