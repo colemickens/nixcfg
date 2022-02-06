@@ -2,16 +2,20 @@ args_@{ lib
 , fetchFromGitHub
 , wezterm
 # , qqc2-desktop-style, sonnet, kio
-# , extra-cmake-modules, pkg-config
+# , extra-cmake-modules
+, pkg-config
+, zlib
 , ... }:
 
 let
   metadata = import ./metadata.nix;
   extraNativeBuildInputs = [
-    # "extra-cmake-modules" "pkg-config"
+    # "extra-cmake-modules"
+    "pkg-config"
   ];
   extraBuildInputs = [
     # "qqc2-desktop-style" "sonnet" "kio"
+    "zlib"
   ];
   ignore = [ "wezterm" "fetchFromGithub" ] ++ extraBuildInputs;
   args = lib.filterAttrs (n: v: (!builtins.elem n ignore)) args_;
@@ -19,6 +23,7 @@ let
     owner = "wez";
     repo = "wezterm";
     inherit (metadata) rev sha256;
+    fetchSubmodules = true;
   };
 in
 (wezterm.override args).overrideAttrs(old: {
