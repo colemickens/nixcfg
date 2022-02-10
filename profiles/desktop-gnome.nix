@@ -4,6 +4,8 @@
   imports = [
     ./gui.nix
 
+    ../mixins/gtk.nix
+
     # ugh, just breaks chrome anyway:
     # ../mixins/wayland-tweaks.nix
   ];
@@ -60,7 +62,7 @@
     ];
 
     # TODO: nix2dconf!
-    
+
     home-manager.users.cole = { pkgs, ... }: {
       home.sessionVariables = {
         MOZ_ENABLE_WAYLAND = "1";

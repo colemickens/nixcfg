@@ -98,7 +98,7 @@ let
     # '')
 
     (writeShellScriptBin "reboot-nixos" ''
-      next="$(sudo ${efibootmgr_} | rg "Boot(\d+)\*+ Linux Boot Manager" -r '$1')"
+      next="$(sudo ${efibootmgr_} | rg "Boot(\d+)\*+ nixos-grub-shim" -r '$1')"
       sudo ${efibootmgr_} --bootnext "$next"
     '')
     (writeShellScriptBin "reboot-windows" ''

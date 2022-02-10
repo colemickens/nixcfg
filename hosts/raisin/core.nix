@@ -8,16 +8,14 @@ in
 
     ../../mixins/gfx-radeonsi.nix
 
-    ../../mixins/android.nix
-    #../../mixins/code-server.nix # moved to xeep, disable there first
+    #../../mixins/android.nix
     ../../mixins/ledger.nix
     ../../mixins/logitech-mouse.nix
-    ../../mixins/obs.nix
     ../../mixins/plex-mpv.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
-    ../../mixins/tpm.nix
+    #../../mixins/tpm.nix
     ../../mixins/upower.nix
     ../../mixins/zfs-snapshots.nix
 

@@ -5,7 +5,7 @@ let
   colors = ts.colors.default;
 
   customIosevkaTerm = (pkgs.iosevka.override {
-    set = "Iosevka"; # ??
+    set = "term";
     # https://github.com/be5invis/Iosevka/blob/6b2b8b7e643a13e1cf56787aed4fd269dd3e044b/build-plans.toml#L186
     privateBuildPlan = {
       family = "Iosevka Term";
@@ -17,8 +17,8 @@ let
     };
   });
 
-  _iosevka = pkgs.iosevka;
-  #_iosevka = customIosevkaTerm;
+  #_iosevka = pkgs.iosevka;
+  _iosevka = customIosevkaTerm;
 in
 {
   config = {

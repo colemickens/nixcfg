@@ -3,6 +3,8 @@
 {
   imports = [
     ./gui.nix
+
+    ../mixins/gtk.nix
   ];
   config = {
     services.xserver.enable = true;

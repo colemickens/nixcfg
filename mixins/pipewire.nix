@@ -10,10 +10,11 @@
   environment.systemPackages = with pkgs; [
     helvum
   ];
-  
+
   programs.dconf.enable = true;
   home-manager.users.cole = { pkgs, ... }: {
-    services.easyeffects.enable = (pkgs.system == "x86_64-linux"); # TODO: ew, also why?
+    # services.easyeffects.enable =
+    #   (pkgs.system == "x86_64-linux");
   };
 
   services.pipewire = {

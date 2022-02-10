@@ -19,9 +19,9 @@ in {
     nixpkgs.overlays = [
       (final: prev: (
         {
-          
-        } //
-        (lib.optionalAttrs patchChromium {
+
+        }
+        // (lib.optionalAttrs patchChromium {
           ungoogled-chromium = (let
             c = prev.ungoogled-chromium;
             in prev.runCommandNoCC "wrap-chromium"
@@ -34,8 +34,8 @@ in {
                 ln -sf ${c}/share $out/share
               ''
               );
-        }) //
-        (lib.optionalAttrs patchChromium {
+        })
+        // (lib.optionalAttrs patchChromium {
           google-chrome-dev = (let
             c = prev.google-chrome-dev;
             in prev.runCommandNoCC "wrap-google-chrome-unstable"

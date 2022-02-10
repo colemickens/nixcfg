@@ -11,17 +11,8 @@ in {
 
     ../../modules/loginctl-linger.nix
 
-    #../../mixins/nvidia.nix
-    ../../profiles/gaming.nix
-
-    #../../profiles/desktop-sway.nix
-    #../../profiles/desktop-sway-unstable.nix
-    #../../profiles/desktop-sway-unstable-egl.nix
-
-    ../../mixins/android.nix
     #../../mixins/code-server.nix
     ../../mixins/logitech-mouse.nix
-    ../../mixins/obs.nix
     ../../mixins/plex-mpv.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix

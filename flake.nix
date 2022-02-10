@@ -187,7 +187,8 @@
             buildGoModule = prev.buildGo117Module;
           };
           wezterm = prev.callPackage ./pkgs/wezterm {
-            inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics Foundation;
+            wezterm = prev.wezterm;
+            #inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics Foundation;
           };
           zellij = prev.callPackage ./pkgs/zellij { zellij = prev.zellij; };
 

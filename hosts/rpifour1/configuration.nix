@@ -43,12 +43,6 @@ in
           config = {
             boot = {
               kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_rpi4;
-              kernelPatches = [
-                {
-                  name = "random-fix-crash";
-                  patch = ./kernel-fix-random-crash.patch;
-                }
-              ];
               # kernelParams = [ # when (!no ATF and) the passthru dtb, this isnt needed hm
               #   # not sure what the console is with rpi4
               # ];
@@ -63,7 +57,7 @@ in
       kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_5_16;
       kernelParams = [ # when (!no ATF and) the passthru dtb, this isnt needed hm
         "earlycon=uart8250,mmio32,0xfe215040"
-        
+
         "earlyprintk"
         "console=ttyS1,115200"
         "console=tty1"

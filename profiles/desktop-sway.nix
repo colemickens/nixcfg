@@ -2,6 +2,8 @@
 
 {
   imports = [
+    ../mixins/gtk.nix
+
     ../mixins/wlsunset.nix
     ../mixins/mako.nix
     ../mixins/sway.nix
@@ -51,6 +53,7 @@
 
         XDG_SESSION_TYPE = "wayland";
         XDG_CURRENT_DESKTOP = "sway";
+        TERMINAL = "foot";
 
         #WLR_DRM_NO_MODIFIERS = "1";
         #WLR_DRM_NO_ATOMIC = "1";
@@ -61,6 +64,7 @@
 
         sirula
 
+        imv
         #drm_info
         grim
         qt5.qtwayland

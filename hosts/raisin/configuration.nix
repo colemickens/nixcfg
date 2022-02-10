@@ -2,19 +2,28 @@
 
 {
   imports = [
-    #../../profiles/desktop-sway-unstable.nix
-    ../../profiles/desktop-gnome.nix
+    ../../profiles/desktop-plasma.nix
     ./core.nix
   ];
 
   config = {
     specialisation = {
-      gnome = {
+      sway = {
         inheritParentConfig = false;
         configuration = {
           imports = [
             ./core.nix
             ../../profiles/desktop-sway-unstable.nix
+          ];
+        };
+      };
+
+      gnome = {
+        inheritParentConfig = false;
+        configuration = {
+          imports = [
+            ./core.nix
+            ../../profiles/desktop-gnome.nix
           ];
         };
       };

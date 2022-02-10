@@ -21,18 +21,22 @@ thing="${1}"; shift
 
 
 ## find out our fate
+# TODO: try --eval --derivation?
 drv="$(nix eval --raw "${thing}.drvPath" "${@}")"
 out="$(nix-store --query ${drv})"
 
 # TODO: try: nix show-derivation | jq -r '.[].outputs.out.path' # https://github.com/NixOS/nix/issues/5895#issuecomment-1009370544
 
 ## copy up drvs
-nix copy --derivation --eval-store "auto" --no-check-sigs --to "ssh-ng://${remote}" "${drv}"
+nix copy \
+  --derivation \
+  --eval-store "auto" \
+  --no-check-sigs \
+  --to "ssh-ng://${remote}" \
+    "${drv}"
 
 ## build and copy back
-
-# TODO: does --keep-going work if we use it with nix build?
-nix build --eval-store "auto" \
+nix build -L --eval-store "auto" \
   --store "ssh-ng://${remote}" \
   --keep-going \
   "${thing}" "${@}"

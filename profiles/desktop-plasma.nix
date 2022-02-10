@@ -9,6 +9,12 @@
     services.xserver.displayManager.sddm.enable = true;
     services.xserver.desktopManager.plasma5.enable = true;
 
+    nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
+
+    environment.systemPackages = with pkgs.plasma5Packages; [
+      bismuth
+    ];
+
     # ??
     # xdg.portal.enable = true;
     # xdg.portal.gtkUsePortal = true;
@@ -21,8 +27,8 @@
       };
       home.packages = with pkgs; [
         pavucontrol-qt
-        
-        #kedit
+
+        kate
         konsole
       ];
     };

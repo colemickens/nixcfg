@@ -20,10 +20,10 @@
 
     home-manager.users.cole = { pkgs, ... }: {
       home.packages = with pkgs; [
-        ledger_agent
+        # ledger_agent
         ledger-live-desktop
 
-        monero-gui
+        # monero-gui
       ];
     };
   };

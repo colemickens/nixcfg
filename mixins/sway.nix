@@ -28,7 +28,9 @@ let
   launcher = nwgdrawer;
   launcher2 = sirula;
 
+  #terminal = "alacritty";
   terminal = "foot";
+  #terminal = "wezterm-gui";
 
   # PASS
   gp = "${pkgs.gopass}/bin/gopass";
@@ -134,7 +136,7 @@ in
         #   export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
         #   systemctl --user import-environment
         # '';
-        xwayland = true;
+        xwayland = false;
         extraConfig = ''
           seat seat0 xcursor_theme "capitaine-cursors"
         '';

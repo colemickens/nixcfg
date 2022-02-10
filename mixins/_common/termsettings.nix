@@ -1,12 +1,12 @@
-{ pkgs, ...}: 
+{ pkgs, ...}:
 
 {
   fonts = rec {
     # TODO: nothing ensures the font is available in
     # HM modules that don't use `fonts.default.package`
-    
+
     default = iosevka;
-    
+
     scp = {
       name = "Source Code Pro";
       size = 11;
@@ -28,7 +28,7 @@
       #selectionBackground = "#FFFFFF"; # ms-terminal-only
 
       gray = "#333333";
-      foreground = "#CCCCCC";
+      foreground = "#dcdcdc";
       foregroundBold = "#FFFFFF"; # termite-only
       background = "#0C0C0C";
 
@@ -61,7 +61,7 @@
       background = "#282C34";
 
       bold_as_bright = true;
-      
+
       black = "#282C34";
       red = "#E06C75";
       green = "#98C379";

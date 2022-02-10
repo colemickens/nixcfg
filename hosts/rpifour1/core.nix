@@ -1,10 +1,18 @@
 { pkgs, modulesPath, inputs, config, ... }:
 let
   hostname = "rpifour1";
-  _tow-boot-rpi = inputs.tow-boot.output.aarch64-linux {
-    device = "raspberrypi-aarch64";
+
+  tbEval = "${inputs.tow-boot}/support/nix/eval-with-configuration.nix";
+  tbPi = import tbEval {
+    pkgs = pkgs;
+    device = "raspberryPi-aarch64";
+    configuration = ({lib,config,...}: {
+      system.automaticCross = lib.mkForce false;
+      nixpkgs.system = "aarch64-linux";
+    });
   };
-  _tow-boot-payload = _tow-boot-rpi.outputs.scripts;
+  tbPiPkg = tbPi.config.Tow-Boot.outputs.scripts;
+  #tbPiPkg = builtins.trace _tbPiPkg _tbPiPkg;
 in
 {
   imports = [
@@ -64,7 +72,7 @@ in
       ncdu
       binutils
 
-      _tow-boot-payload
+      tbPiPkg
     ];
 
     nixpkgs.config.allowBroken = true;

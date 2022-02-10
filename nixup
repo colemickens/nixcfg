@@ -76,8 +76,8 @@ function enchilada() { r "oldcopy" "activate" "${BLDR_A64}" "$(tsip enchilada)" 
 
 function towboot() { r "oldcopy" "nothing" "${BLDR_A64}" "localhost" "${nixcfg}#images.rpifour1_towboot" "${@}"; }
 
-function x86()  { r "oldcopy" "nothing" "${BLDR_X86}" "$(tsip xeep)"  "${nixcfg}#topbundles.x86_64-linux" "${@}"; }
-function a64()  { r "oldcopy" "nothing" "${BLDR_A64}" "$(tsip xeep)"  "${nixcfg}#topbundles.aarch64-linux" "${@}"; }
+function x86()  { r "oldcopy" "nothing" "${BLDR_X86}" "$(tsip porty)"  "${nixcfg}#topbundles.x86_64-linux" "${@}"; }
+function a64()  { r "oldcopy" "nothing" "${BLDR_A64}" "$(tsip porty)"  "${nixcfg}#topbundles.aarch64-linux" "${@}"; }
 
 function all() {
   set -euo pipefail
@@ -94,11 +94,15 @@ function all() {
 
   #"${0}" x86 '.#hydraBundles.x86_64-linux' || true
 }
+function upall() {
+  set -euo pipefail
+  up && all
+}
 ## </remote> ###################################################################
 
 if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
 if [[ -z "${cmd:-""}" ]]; then
-  cmd="up"
+  cmd="upall"
 fi
 
 set -x; "${cmd}" "${@}"; set +x
