@@ -1,7 +1,7 @@
 {
   repo_git = "https://github.com/juanfont/headscale";
   branch = "main";
-  rev = "8c79165b0d7a576dc7681a130eb88486ca6cfefb";
-  sha256 = "sha256-MYLrn8ko6K08lLZ6OtlEaROxlKTKjDiOd2XDVPrZtwY=";
-  vendorSha256 = "sha256-hqiG1m/rMGcCmtNagGZ4y34eu1MyVwqkul70aYiTZsk=";
+  rev = "96f09e3f30a5f048bc894aeda540122399a3942e";
+  sha256 = "sha256-XWM5qo6bgXHEtpV53o774fB2NIsdwYBF/dv7NTjF5G8=";
+  vendorSha256 = "sha256-HWLW4lGRlVAm4surCUBd/SFsREVV8nuqnHjXmNxTX6k=";
 }
