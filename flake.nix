@@ -28,7 +28,7 @@
     helix.url = "github:helix-editor/helix";
     #helix.inputs.nixpkgs.follows = "nixpkgs";
     nci.url = "github:yusdacra/nix-cargo-integration/feed2c1f7ae104f38c295c210f3a26088ed3cf4f";
-    helix.inputs.nix-cargo-integration.follows = "nci";
+    helix.inputs.nixCargoIntegration.follows = "nci";
 
     hardware.url = "github:nixos/nixos-hardware";
 

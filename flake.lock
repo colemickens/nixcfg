@@ -81,21 +81,6 @@
       }
     },
     "devshell": {
-      "locked": {
-        "lastModified": 1641980203,
-        "narHash": "sha256-RiWJ3+6V267Ji+P54K1Xrj1Nsah9BfG/aLfIhqgVyBY=",
-        "owner": "numtide",
-        "repo": "devshell",
-        "rev": "d897c1ddb4eab66cc2b783c7868d78555b9880ad",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "devshell",
-        "type": "github"
-      }
-    },
-    "devshell_2": {
       "inputs": {
         "flake-utils": "flake-utils_2",
         "nixpkgs": [
@@ -263,7 +248,9 @@
     },
     "helix": {
       "inputs": {
-        "nixCargoIntegration": "nixCargoIntegration",
+        "nixCargoIntegration": [
+          "nci"
+        ],
         "nixpkgs": "nixpkgs",
         "rust-overlay": "rust-overlay"
       },
@@ -355,7 +342,7 @@
     },
     "nci": {
       "inputs": {
-        "devshell": "devshell_2",
+        "devshell": "devshell",
         "dream2nix": "dream2nix",
         "nixpkgs": "nixpkgs_5",
         "rustOverlay": "rustOverlay"
@@ -388,32 +375,6 @@
       "original": {
         "owner": "chessai",
         "repo": "nix-std",
-        "type": "github"
-      }
-    },
-    "nixCargoIntegration": {
-      "inputs": {
-        "devshell": "devshell",
-        "nixpkgs": [
-          "helix",
-          "nixpkgs"
-        ],
-        "rustOverlay": [
-          "helix",
-          "rust-overlay"
-        ]
-      },
-      "locked": {
-        "lastModified": 1642054253,
-        "narHash": "sha256-kHh9VmaB7gbS6pheheC4x0uT84LEmhfbsbWEQJgU2E4=",
-        "owner": "yusdacra",
-        "repo": "nix-cargo-integration",
-        "rev": "f8fa9af990195a3f63fe2dde84aa187e193da793",
-        "type": "github"
-      },
-      "original": {
-        "owner": "yusdacra",
-        "repo": "nix-cargo-integration",
         "type": "github"
       }
     },
