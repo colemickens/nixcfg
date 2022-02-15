@@ -4,8 +4,15 @@
 , wrapGAppsHook
 }:
 
-let metadata = import ./metadata.nix; in
-buildGoModule rec {
+let
+  metadata = rec {
+    repo_git = "https://github.com/juanfont/headscale";
+    branch = "main";
+    rev = "a3360b082fa8bd8090318e9be41d499927b1e1c8";
+    sha256 = "sha256-LDeWfC72sjx+kjjRb4XR+C28ZI2E2YDPh0Ag2kaNsMY=";
+    vendorSha256 = "sha256-HWLW4lGRlVAm4surCUBd/SFsREVV8nuqnHjXmNxTX6k=";
+  };
+in buildGoModule rec {
   pname = "headscale";
   version = metadata.rev;
 
@@ -29,6 +36,7 @@ buildGoModule rec {
   subPackages = [ "cmd/headscale" ];
 
   meta = with lib; {
+    verinfo = metadata;
     homepage = "https://github.com/juanfont/headscale";
     description = "An open source implementation of the Tailscale coordination server";
     license = licenses.bsd3;
