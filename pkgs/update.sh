@@ -28,11 +28,21 @@ if [[ "${1:-""}" != "" ]]; then
   pkg="${1}"
   pkgname="$(basename "${pkg}")"
 
-  metadata="${pkgname}/default.nix"
+
   if ! nix eval --json "..#pkgs.x86_64-linux.${pkgname}.meta.verinfo" > "${t}"; then
     echo "NO VERINFO"
     exit 0
   fi
+  if ! nix eval --json "..#pkgs.x86_64-linux.${pkgname}.meta.position" > "${t}.position"; then
+    echo "NO POSITION"
+    exit -1
+  fi
+
+  metadata="$(cat "${t}.position" | jq -r)"
+  # trim off the filenumber
+  # trim off the store path (assume its in here)
+  metadata=$(echo "${metadata}" | cut -d':' -f1)
+  metadata="${DIR}/$(echo "${metadata}" | cut -d'/' -f6-)"
 
   branch="$(cat "${t}" | jq -r .branch)"
   rev="$(cat "${t}" | jq -r .rev)"

@@ -5,7 +5,7 @@
 }:
 
 let
-  metadata = import {
+  metadata = rec {
     repo_git = "https://github.com/k4zmu2a/SpaceCadetPinball";
     branch = "master";
     rev = "b20e13ee97429826b1c9238f2faad9e1d31f339f";

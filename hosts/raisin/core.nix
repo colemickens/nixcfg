@@ -41,9 +41,8 @@ in
     system.stateVersion = "21.05";
 
     nix.nixPath = [];
-    #nix.gc.automatic = true;
+    nix.gc.automatic = true;
     nix.settings.max-jobs = 8;
-    #nix.package = lib.mkForce pkgs.nix;
 
     documentation.enable = false;
     documentation.doc.enable = false;

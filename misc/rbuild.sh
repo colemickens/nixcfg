@@ -42,7 +42,7 @@ nix copy --eval-store "auto" --no-check-sigs \
   "${thing}" "${@}" >/dev/stderr
 
 ## (if we're wanting cachix, go ahead and run the push in the background)
-ssh "${remote}" "echo \"${out}\" | env CACHIX_SIGNING_KEY=\"${cachix_key}\" cachix push ${cachix_cache}" &
+ssh "${remote}" "echo \"${out}\" | env CACHIX_SIGNING_KEY=\"${cachix_key}\" cachix push ${cachix_cache} >/dev/stderr" >/dev/stderr &
 
 #### whew
 echo "done" > /dev/stderr

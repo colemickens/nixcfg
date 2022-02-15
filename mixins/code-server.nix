@@ -11,6 +11,7 @@
       group = "cole";
 
       port = 4444;
+      host = "0.0.0.0";
       auth = "none";
     };
   };

@@ -43,7 +43,7 @@ in
 
     nix.nixPath = [];
     # xeep is our builder for a bit, so lets not GC
-    # nix.gc.automatic = true;
+    nix.gc.automatic = true;
     nix.settings.max-jobs = 8;
     #nix.package = lib.mkForce pkgs.nix;
 

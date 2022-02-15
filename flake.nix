@@ -26,7 +26,9 @@
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     helix.url = "github:helix-editor/helix";
-    helix.inputs.nixpkgs.follows = "nixpkgs";
+    #helix.inputs.nixpkgs.follows = "nixpkgs";
+    nci.url = "github:yusdacra/nix-cargo-integration/feed2c1f7ae104f38c295c210f3a26088ed3cf4f";
+    helix.inputs.nix-cargo-integration.follows = "nci";
 
     hardware.url = "github:nixos/nixos-hardware";
 
@@ -180,6 +182,7 @@
           poweralertd = prev.callPackage ./pkgs/poweralertd {};
           rkvm = prev.callPackage ./pkgs/rkvm {};
           # disabled # rumqtt = prev.callPackage ./pkgs/rumqtt {};
+          smithay = prev.callPackage ./pkgs/smithay {};
           space-cadet-pinball = prev.callPackage ./pkgs/space-cadet-pinball {};
           space-cadet-pinball-unfree = prev.callPackage ./pkgs/space-cadet-pinball {
             _assets = import ./pkgs/space-cadet-pinball/assets.nix { pkgs = prev; };

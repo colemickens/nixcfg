@@ -8,7 +8,7 @@ args_@{ lib
 , ... }:
 
 let
-  metadata = import {
+  metadata = rec {
     repo_git = "https://github.com/wez/wezterm";
     branch = "main";
     rev = "4a1c4b55662e6f6217f84137baa5ed0776753e56";

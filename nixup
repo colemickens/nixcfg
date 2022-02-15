@@ -47,29 +47,6 @@ case "${cmd}" in
     "${0}" cacheshell
   ;;
   "cacheshell") "${rb}" "${BLDR_X86}" "localhost" ".#devShell.x86_64-linux.inputDerivation";;
-  "all")
-    "${0}" xeep
-    "${0}" raisin
-    "${0}" porty
-    "${0}" jeffhyper
-
-    "${0}" rpifour1
-    "${0}" sinkor
-
-    "${0}" rpizero1
-  ;;
-  "up")
-    "${0}" lockup
-    "${0}" pkgup
-    "${0}" cacheshell
-    "${0}" x86 &
-    "${0}" a64
-    wait
-  ;;
-  "upall")
-    "${0}" up
-    "${0}" all
-  ;;
 
   # individual build targets
   "jeffhyper" | "porty" | "raisin" | "xeep")
@@ -106,10 +83,15 @@ case "${cmd}" in
   ;;
 
   "z")
+    "${0}" inputup
     "${0}" lockup
     "${0}" pkgup
+    "${0}" cacheshell
     env ZELLIJ_LAYOUT_NAME="nixup" \
       zellij --layout-path "${nixcfg}/nixup.zellij"
+  ;;
+  "zz")
+    "${0}" z
   ;;
 esac
 
