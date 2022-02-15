@@ -5,7 +5,10 @@
     home-manager.users.cole = { pkgs, ... }: {
       programs.helix = {
         enable = true;
-        package = inputs.helix.outputs.packages.${pkgs.system}.helix;
+        package =
+          if pkgs.system == "x86_64-linux"
+          then inputs.helix.outputs.packages.${pkgs.system}.helix
+          else pkgs.helix;
         settings = {
           theme = "base16";
         };

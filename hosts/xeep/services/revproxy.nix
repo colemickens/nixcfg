@@ -217,11 +217,7 @@ in
         };
       };
       virtualHosts."code.x.cleo.cat" = internalVhost // {
-        locations."/".proxyPass = "http://${xeep_ip4}:5902/"; # porty
-        locations."/".proxyWebsockets = true;
-      };
-      virtualHosts."openvscode.x.cleo.cat" = internalVhost // {
-        locations."/".proxyPass = "http://${raisin_ip4}:5904/";
+        locations."/".proxyPass = "http://${xeep_ip4}:${toString config.services.code-server.port}/"; # porty
         locations."/".proxyWebsockets = true;
       };
 

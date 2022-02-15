@@ -1,7 +1,5 @@
 { pkgs, modulesPath, inputs, config, ... }:
 let
-  hostname = "rpifour1";
-
   tbEval = "${inputs.tow-boot}/support/nix/eval-with-configuration.nix";
   tbPi = import tbEval {
     pkgs = pkgs;
@@ -12,10 +10,34 @@ let
     });
   };
   tbPiPkg = tbPi.config.Tow-Boot.outputs.scripts;
-  #tbPiPkg = builtins.trace _tbPiPkg _tbPiPkg;
+
+  cfgLimit = 10;
+  useGrub = false;
+  useGummi = false;
+  loader = if useGrub then {
+    efi.canTouchEfiVariables = false;
+    grub.enable = true;
+    grub.devices = [ "nodev" ];
+    grub.configurationLimit = cfgLimit;
+    grub.efiSupport = true;
+    grub.efiInstallAsRemovable = true;
+    generic-extlinux-compatible.enable = false;
+  } else if useGummi then {
+    # TODO: test this boot variant
+    grub.enable = false;
+    systemd-boot.enable = true;
+    systemd-boot.configurationLimit = cfgLimit;
+    generic-extlinux-compatible.enable = false;
+  } else {
+    grub.enable = false;
+    generic-extlinux-compatible.enable = true;
+    generic-extlinux-compatible.configurationLimit = cfgLimit;
+  };
 in
 {
   imports = [
+    ./wifi.nix
+
     ../../mixins/common.nix
     ../../profiles/user.nix
 
@@ -24,33 +46,13 @@ in
   ];
 
   #
-  # sudo env BOOTFS=/boot/firmware FIRMWARE_RELEASE_STATUS=stable rpi-eeprom-config --edit
+  # sudo env \
+  #   BOOTFS=/boot/firmware \
+  #   FIRMWARE_RELEASE_STATUS=stable \
+  #     rpi-eeprom-config --edit
   #
 
   config = {
-    # ZFS
-    fileSystems = {
-      "/boot" = {
-        device = "/dev/disk/by-partlabel/boot";
-        fsType = "vfat";
-        options = [ "nofail" ];
-      };
-      "/boot/firmware" = {
-        # the fucking dev name changes depending on how I boot (likely due to diffs in DTBs/bootloader-dtb-loading)
-        device = "/dev/disk/by-partuuid/ce8f2026-17b1-4b5b-88f3-3e239f8bd3d8";
-        fsType = "vfat";
-        options = [ "nofail" "ro" ];
-      };
-      "/" = {
-        device = "tank/root";
-        fsType = "zfs";
-      };
-      "/nix" = {
-        device = "tank/nix";
-        fsType = "zfs";
-      };
-    };
-
     system.stateVersion = "21.05";
 
     nix.nixPath = [];
@@ -65,23 +67,31 @@ in
       raspberrypifw
       raspberrypi-eeprom
       libraspberrypi
-      cachix
 
-      minicom
-      screen
-      ncdu
       binutils
 
       tbPiPkg
     ];
 
     nixpkgs.config.allowBroken = true;
+
+    specialisation = {
+      "foundation" = {
+        inheritParentConfig = true;
+        configuration = {
+          config = {
+            boot.kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_rpi4;
+          };
+        };
+      };
+    };
+
     boot = {
+      loader = loader;
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      kernelPackages = null;
-
+      kernelPackages = pkgs.linuxPackages_latest;
       initrd.availableKernelModules = [
         "pcie_brcmstb" "bcm_phy_lib" "broadcom" "mdio_bcm_unimac" "genet"
         "vc4" "bcm2835_dma" "i2c_bcm2835"
@@ -90,34 +100,17 @@ in
         "uas" # necessary for my UAS-enabled NVME-USB adapter
       ];
       kernelModules = config.boot.initrd.availableKernelModules;
-
-      initrd.supportedFilesystems = [ "zfs" ];
-      supportedFilesystems = [ "zfs" ];
     };
 
     networking = {
-      hostId = "deadb00f";
-      hostName = hostname;
       firewall.enable = true;
       firewall.allowedTCPPorts = [ 22 ];
       networkmanager.enable = false;
-      wireless.enable = false;
-      wireless.iwd.enable = false;
-      interfaces."eth0".ipv4.addresses = [{
-        address = "192.168.1.2";
-        prefixLength = 16;
-      }];
-      defaultGateway = "192.168.1.1";
-      nameservers = [ "192.168.1.1" ];
     };
     services.timesyncd.enable = true;
     time.timeZone = "America/Los_Angeles";
 
     nixpkgs.config.allowUnfree = true;
-    hardware = {
-      # this pulls in firmware-nonfree which clashes with raspberrypiWirelessFirmware
-      # TODO: why does this even clash? Shouldn't the rpiWifiFw package supply the FW for *only* those devices?
-      enableRedistributableFirmware = false;
-    };
+    hardware.enableRedistributableFirmware = false;
   };
 }

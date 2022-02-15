@@ -16,8 +16,13 @@
 , tornado
 }:
 
-let metadata = import ./metadata.nix; in
-buildPythonPackage rec {
+let metadata = {
+    repo_git = "https://github.com/x89/Shreddit";
+    branch = "master";
+    rev = "f4a5b67cebecdde4a679ba98c86ae5592f6919ca";
+    sha256 = "sha256-nwrqDGiY1Ykm0KClG6BbXlUao3YGvNlKhsWIGfNmWsg=";
+  };
+in buildPythonPackage rec {
   pname = "shreddit";
   version = metadata.rev;
   disabled = pythonOlder "3.8";
@@ -58,6 +63,7 @@ buildPythonPackage rec {
   # pythonImportsCheck = [ "mitmproxy" ];
 
   meta = with lib; {
+    verinfo = metadata;
     description = "Remove your comment history on Reddit as deleting an account does not do so.";
     homepage = "https://github.com/x89/Shreddit";
     maintainers = with maintainers; [];

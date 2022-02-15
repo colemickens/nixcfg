@@ -157,6 +157,7 @@
           customGuiCommands = prev.callPackage ./pkgs/commands-gui.nix {};
 
           bb = prev.callPackage ./pkgs/bb {};
+          bottom  = prev.callPackage ./pkgs/bottom  {};
           # disabled (huge build + unused) # cchat-gtk = prev.callPackage ./pkgs/cchat-gtk {};
           conduit = prev.callPackage ./pkgs/conduit {};
           drm-howto = prev.callPackage ./pkgs/drm-howto {};
@@ -173,6 +174,7 @@
           };
           keyboard-layouts = prev.callPackage ./pkgs/keyboard-layouts {};
           meli = prev.callPackage ./pkgs/meli {};
+          nvidia-vaapi-driver = prev.callPackage ./pkgs/nvidia-vaapi-driver {};
           # disabled # mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
           # disabled # neochat = prev.libsForQt5.callPackage ./pkgs/neochat { neochat = prev.neochat; };
           poweralertd = prev.callPackage ./pkgs/poweralertd {};
@@ -223,6 +225,7 @@
         enchilada   = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
         #enchiloco   = mkSystem inputs.nixpkgs "x86_64-linux"  "enchiloco";
         rpifour1    = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour1";
+        rpithreebp1 = mkSystem inputs.nixpkgs "aarch64-linux" "rpithreebp1";
         rpizerotwo1 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo1";
         # rpizerotwo2 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo2";
         # rpizerotwo3 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo3";

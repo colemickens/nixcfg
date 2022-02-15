@@ -8,8 +8,7 @@ set -x
 set +e
 ssh "colemickens@aarch64.nixos.community" \
   "test -d /home/colemickens/.config/cachix && exit 199; \
-    nix-env -f /run/current-system/nixpkgs -iA \
-      git zellij nixUnstable htop ncdu file nix-top ncdu neovim cachix nix-tree; \
+    nix-env -f /run/current-system/nixpkgs -iA git zellij nixUnstable bb neovim cachix; \
     rm -rf ~/.config/cachix; mkdir -p ~/.config/cachix; mkdir -p ~/.config/nix; exit 198"
 pexit=$?
 set -e

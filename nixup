@@ -1,111 +1,117 @@
 #! /usr/bin/env bash
-set -euo pipefail
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/stderr 2>&1 && pwd )"
 set +x; source /run/secrets/nixup-secrets; set -x
+set -euo pipefail
 cd "${DIR}"
 
 cache="colemickens"
 nixcfg="${HOME}/code/nixcfg"
 
-## <ci> ########################################################################
-function nix() { "${DIR}/misc/nix.sh" "${@}"; }
-function pushbuild() {
-  set -euo pipefail
-  cachix watch-store -j2 "${cache}" & cachixpid=$!
-  nix build "${@}"
-  kill -INT ${cachixpid}; wait ${cachixpid}
-}
-function cacheshell() { pushbuild ".#devShell.x86_64-linux.inputDerivation"; }
+nix="${DIR}/misc/nix.sh"
+rb="./misc/rbuild.sh"
+ra="./misc/ractivate.sh"
+cb="${DIR}/misc/commbox.sh"
+tsip="./misc/tsip.sh"
+a64com="colemickens@aarch64.nixos.community"
 
-function ci_check() { nix-build-uncached "${nixargs[@]}" "${buildargs[@]}" "${@}" -build-flags "-j0"; }
-function ci_nb_cache() { ci_check "${@}" || pushbuild "${@}"; }
-function ciup() { ci_nb_cache '.#bundle'; }
-## </ci> #######################################################################
-## <updates> ###################################################################
-function inputup() {
-  set -euo pipefail
-  srcdirs=( "nixpkgs/cmpkgs" "home-manager/cmhm" "nixpkgs/master" "nixpkgs-wayland" "flake-firefox-nightly" )
-  for i in "${srcdirs[@]}"; do
-    if [[ -d "$HOME/code/${i}" ]]; then echo "rebase/update: ${i}" && true \
-        && git -C "$HOME/code/${i}" pull --rebase \
+BLDR_X86="${BLDR_X86:-$("${tsip}" porty)}";
+BLDR_A64="${BLDR_A64:-${a64com}}";
+
+cmd="${1:-"upall"}"; shift || true
+
+cleanup() {
+  if [[ "${ZELLIJ_LAYOUT_NAME:-""}" != "" ]]; then
+    read -p 'Press enter to continue'
+  fi
+}
+trap "cleanup" EXIT
+
+case "${cmd}" in
+  "inputup")
+    srcdirs=( "nixpkgs/cmpkgs" "home-manager/cmhm" "nixpkgs/master" "nixpkgs-wayland" "flake-firefox-nightly" )
+    for i in "${srcdirs[@]}"; do
+      if [[ -d "$HOME/code/${i}" ]]; then
+        git -C "$HOME/code/${i}" pull --rebase \
         && git -C "$HOME/code/${i}" push origin HEAD -f
-    else
-      echo "skip: ${i}"
-    fi
-  done
-  cacheshell
-}
-function lockup() { nix "${nixargs[@]}" flake lock --recreate-lock-file --commit-lock-file; cacheshell; }
-function pkgup() { pushd ./pkgs; ./update.sh "${@:-}"; popd; cacheshell; }
-function up() {
-  set -euo pipefail;
-  inputup
-  lockup
-  pkgup
-  #ciup
-  cacheshell
-  "${0}" x86 &
-  a64
-  wait
-}
-function upup() { set -euo pipefail; up && x86 && a64; }
-## </updates> ################################### ###############################
-## <remote> ####################################################################
-function tsip() {
-  if [[ "${1}" == "$(hostname)" ]]; then printf "%s" "localhost";
-  elif [[ "${1}" == "a64com" ]];    then printf "%s" "colemickens@aarch64.nixos.community";
-  else                                   tailscale ip --4 ${1} | head -z -n1; fi
-}
-function r() { ./misc/rbuild.sh "${@}"; }
-BLDR_X86="${BLDR_X86:-$(tsip porty)}";
-BLDR_A64="${BLDR_A64:-$(tsip a64com)}";
-function jeffhyper() { r "newcopy" "activate" "${BLDR_X86}" "$(tsip jeffhyper)" "${nixcfg}#toplevels.jeffhyper" "${@}"; }
-function porty()     { r "newcopy" "activate" "${BLDR_X86}" "$(tsip porty)"     "${nixcfg}#toplevels.porty" "${@}"; }
-function raisin()    { r "newcopy" "activate" "${BLDR_X86}" "$(tsip raisin)"    "${nixcfg}#toplevels.raisin" "${@}"; }
-function rpizero1()  { r "newcopy" "activate" "${BLDR_X86}" "$(tsip rpizero1)"  "${nixcfg}#toplevels.rpizero1" "${@}"; }
-function rpizero2()  { r "newcopy" "activate" "${BLDR_X86}" "$(tsip rpizero2)"  "${nixcfg}#toplevels.rpizero2" "${@}"; }
-function xeep()      { r "newcopy" "activate" "${BLDR_X86}" "$(tsip xeep)"      "${nixcfg}#toplevels.xeep" "${@}"; }
+      fi
+    done
+  ;;
+  "pkgup")
+    pushd ./pkgs
+    ./update.sh "${@:-}"
+    popd
+    "${0}" cacheshell
+  ;;
+  "lockup")
+    "${nix}" "${nixargs[@]}" flake lock --recreate-lock-file --commit-lock-file
+    "${0}" cacheshell
+  ;;
+  "cacheshell") "${rb}" "${BLDR_X86}" "localhost" ".#devShell.x86_64-linux.inputDerivation";;
+  "all")
+    "${0}" xeep
+    "${0}" raisin
+    "${0}" porty
+    "${0}" jeffhyper
 
-function rpifour1()  { r "oldcopy" "activate" "${BLDR_A64}"        "$(tsip rpifour1)"  "${nixcfg}#toplevels.rpifour1" "${@}"; }
-function sinkor()    { r "oldcopy" "activate" "${BLDR_A64}"        "$(tsip sinkor)"    "${nixcfg}#toplevels.sinkor" "${@}"; }
-function pinebook()  { r "oldcopy" "activate" "${BLDR_A64}"        "$(tsip pinebook)"  "${nixcfg}#toplevels.pinebook" "${@}"; }
-function pinephone() { r "oldcopy" "activate" "${BLDR_A64}"        "$(tsip pinephone)" "${nixcfg}#toplevels.pinephone" "${@}"; }
-function blueline()  { r "newcopy" "nothing_" "${BLDR_A64}"        "localhost"          "${nixcfg}#images.blueline" "${@}"; }
-function bluetop()  {  r "newcopycachix" "nothingg" "${BLDR_A64}"  "10.88.0.5"          "${nixcfg}#toplevels.blueline" "${@}"; }
-function enchilada() { r "oldcopy" "activate" "${BLDR_A64}" "$(tsip enchilada)" "${nixcfg}#toplevels.enchilada" "${@}"; }
+    "${0}" rpifour1
+    "${0}" sinkor
 
-function towboot() { r "oldcopy" "nothing" "${BLDR_A64}" "localhost" "${nixcfg}#images.rpifour1_towboot" "${@}"; }
+    "${0}" rpizero1
+  ;;
+  "up")
+    "${0}" lockup
+    "${0}" pkgup
+    "${0}" cacheshell
+    "${0}" x86 &
+    "${0}" a64
+    wait
+  ;;
+  "upall")
+    "${0}" up
+    "${0}" all
+  ;;
 
-function x86()  { r "oldcopy" "nothing" "${BLDR_X86}" "$(tsip porty)"  "${nixcfg}#topbundles.x86_64-linux" "${@}"; }
-function a64()  { r "oldcopy" "nothing" "${BLDR_A64}" "$(tsip porty)"  "${nixcfg}#topbundles.aarch64-linux" "${@}"; }
+  # individual build targets
+  "jeffhyper" | "porty" | "raisin" | "xeep")
+    out="$("${rb}" "${BLDR_X86}" "$("${tsip}" "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}")"
+    "${ra}" "$out" "$("${tsip}" "${cmd}")"
+  ;;
 
-function all() {
-  set -euo pipefail
+  "rpifour1" | "rpithreebp1" | "rpizerotwo1")
+    "${cb}"
+    out="$("${rb}" "${BLDR_A64}" "$("${tsip}" "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}")" \
+      --override-input 'nixpkgs' "${HOME}/code/nixpkgs/rpi-updates-auto" \
+      --override-input 'tow-boot' "${HOME}/code/tow-boot"
+    "${ra}" "$out" "$("${tsip}" "${cmd}")"
+  ;;
 
-  "${0}" xeep
-  "${0}" raisin
-  "${0}" porty
-  "${0}" jeffhyper
+  # "rpifour1" | "rpithreebp1" | "rpizerotwo1" |
+  "sinkor" | "pinebook" | "blueline" | "enchilada")
+    "${cb}"
+    out="$("${rb}" "${BLDR_A64}" "$("${tsip}" "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}")"
+    "${ra}" "$out" "$("${tsip}" "${cmd}")"
+  ;;
 
-  "${0}" rpifour1
-  "${0}" sinkor
+  "towboot")
+    "${cb}"
+    "${rb}" "${BLDR_A64}" "localhost" "${nixcfg}#images.rpifour1_towboot" "${@}"
+  ;;
 
-  "${0}" rpizero1
+  "x86")
+    "${rb}" "${BLDR_X86}" "$("${tsip}" porty)"  "${nixcfg}#topbundles.x86_64-linux" "${@}"
+  ;;
+  "a64")
+    "${cb}"
+    "${rb}" "${BLDR_A64}" "$("${tsip}" porty)"  "${nixcfg}#topbundles.aarch64-linux" "${@}"
+  ;;
 
-  #"${0}" x86 '.#hydraBundles.x86_64-linux' || true
-}
-function upall() {
-  set -euo pipefail
-  up && all
-}
-## </remote> ###################################################################
-
-if [[ ! -z "${1:-""}" ]]; then cmd="${1}"; shift; fi
-if [[ -z "${cmd:-""}" ]]; then
-  cmd="upall"
-fi
-
-set -x; "${cmd}" "${@}"; set +x
+  "z")
+    "${0}" lockup
+    "${0}" pkgup
+    env ZELLIJ_LAYOUT_NAME="nixup" \
+      zellij --layout-path "${nixcfg}/nixup.zellij"
+  ;;
+esac
 
 echo -e "\nexit=$?" > /dev/stderr
 exit 0

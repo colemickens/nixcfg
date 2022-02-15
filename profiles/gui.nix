@@ -7,7 +7,7 @@ let
   __firefoxNightly = firefoxFlake.firefox-nightly-bin;
 
   #_someFirefox = __firefoxStable;
-  _someFirefox = pkgs.firefox;
+  _someFirefox = pkgs.firefox-wayland;
     # if pkgs.system == "x86_64-linux"
     # #then __firefoxNightly
     # then pkgs.firef

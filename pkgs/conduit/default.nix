@@ -4,7 +4,14 @@
 }:
 
 let
-  metadata = import ./metadata.nix;
+  metadata = {
+    repo_git = "https://gitlab.com/famedly/conduit.git/";
+    branch = "master";
+    rev = "faa0cdb595f9d398f4a209027f1a596a4f870a39";
+    sha256 = "sha256-jCBvenwXPgYms5Tbu16q/F8UNpvaw0Shao9kLEZLbHM=";
+    cargoSha256 = "sha256-YvoF5DZhAMpXb9L/cPCCg8w6iMfO86YhEd1w7x7mAck=";
+    revdate = "2020-08-31 06:57:21Z";
+  };
 in
 rustPlatform.buildRustPackage rec {
   pname = "conduit";
@@ -23,6 +30,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ];
 
   meta = with lib; {
+    verinfo = metadata;
     description = "Conduit is a simple, fast and reliable chat server powered by Matrix";
     homepage = "https://conduit.rs";
     license = licenses.asl20;

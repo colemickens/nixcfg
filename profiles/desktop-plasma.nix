@@ -8,12 +8,15 @@
     services.xserver.enable = true;
     services.xserver.displayManager.sddm.enable = true;
     services.xserver.desktopManager.plasma5.enable = true;
+    services.xserver.displayManager.defaultSession = "plasmawayland";
 
     nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
 
-    environment.systemPackages = with pkgs.plasma5Packages; [
+    environment.systemPackages = (with pkgs.plasma5Packages; [
       bismuth
-    ];
+    ]) ++ (with pkgs; [
+      syncthingtray
+    ]);
 
     # ??
     # xdg.portal.enable = true;
@@ -22,9 +25,6 @@
     #   [ xdg-desktop-portal-wlr xdg-desktop-portal-gtk ];
 
     home-manager.users.cole = { pkgs, ... }: {
-      home.sessionVariables = {
-
-      };
       home.packages = with pkgs; [
         pavucontrol-qt
 

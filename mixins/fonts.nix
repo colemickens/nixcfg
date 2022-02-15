@@ -17,8 +17,8 @@ let
     };
   });
 
-  #_iosevka = pkgs.iosevka;
-  _iosevka = customIosevkaTerm;
+  _iosevka = pkgs.iosevka;
+  #_iosevka = customIosevkaTerm;
 in
 {
   config = {

@@ -26,12 +26,14 @@ if [[ "${1:-""}" != "" ]]; then
   m="$(mktemp)"; trap "rm ${m}" EXIT;
   l="$(mktemp)"; trap "rm ${l}" EXIT;
   pkg="${1}"
-  metadata="${pkg}/metadata.nix"
   pkgname="$(basename "${pkg}")"
 
-  if [[ ! -f "${pkg}/metadata.nix" ]]; then exit 0; fi
+  metadata="${pkgname}/default.nix"
+  if ! nix eval --json "..#pkgs.x86_64-linux.${pkgname}.meta.verinfo" > "${t}"; then
+    echo "NO VERINFO"
+    exit 0
+  fi
 
-  nix "${nixargs[@]}" eval -f "${metadata}" --json > "${t}" 2>/dev/null
   branch="$(cat "${t}" | jq -r .branch)"
   rev="$(cat "${t}" | jq -r .rev)"
   sha256="$(cat "${t}" | jq -r .sha256)"

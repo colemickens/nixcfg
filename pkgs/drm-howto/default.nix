@@ -4,7 +4,11 @@
 , pkgconfig
 }:
 
-stdenv.mkDerivation {
+let
+  metadata = {
+    skip = true;
+  };
+in stdenv.mkDerivation {
   pname = "drm-sample";
   version = "2020-08-17";
 
@@ -34,4 +38,8 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp * $out/bin
   '';
+
+  meta = {
+    verinfo = metadata;
+  };
 }
