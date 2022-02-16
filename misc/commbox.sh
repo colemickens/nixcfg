@@ -8,7 +8,7 @@ set -x
 set +e
 ssh "colemickens@aarch64.nixos.community" \
   "test -d /home/colemickens/.config/cachix && exit 199; \
-    nix-env -f /run/current-system/nixpkgs -iA git zellij nixUnstable bb neovim cachix; \
+    nix-env -f /run/current-system/nixpkgs -iA git zellij nixUnstable bottom neovim cachix; \
     rm -rf ~/.config/cachix; mkdir -p ~/.config/cachix; mkdir -p ~/.config/nix; exit 198"
 pexit=$?
 set -e
@@ -20,12 +20,9 @@ if [[ $pexit == 199 ]]; then
 elif [[ $pexit != 198 ]]; then
   echo "unknown error!"
   exit -1
+else
+  scp "${HOME}/.config/cachix/cachix.dhall" "colemickens@aarch64.nixos.community:~/.config/cachix/cachix.dhall"
 fi
-
-#
-# cachix.dhall
-scp "${HOME}/.config/cachix/cachix.dhall" "colemickens@aarch64.nixos.community:~/.config/cachix/cachix.dhall"
-
 
 # nix.conf
 cat<<EOF >/tmp/nix.conf

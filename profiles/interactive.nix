@@ -17,6 +17,7 @@
     ../mixins/mcfly.nix
     ../mixins/nushell.nix
     # ../mixins/skim.nix # weird aarch64 build error...?
+    ../mixins/solo2.nix
     ../mixins/sshd.nix
     ../mixins/tailscale.nix
     ../mixins/xdg.nix

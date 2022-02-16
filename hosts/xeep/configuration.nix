@@ -58,6 +58,7 @@ in
         oldval="$(sudo ${pkgs.msr-tools}/bin/rdmsr 0x1FC)"
         newval="$(( 0xFFFFFFFE & 0x$oldval ))"
         sudo ${pkgs.msr-tools}/bin/wrmsr -a 0x1FC "$newval"
+        echo "hello"
       '')
     ];
 

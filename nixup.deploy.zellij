@@ -1,6 +1,6 @@
 ---
 session:
-  name: "nixup"
+  name: "nixup.deploy"
   connect: true
 
 pane_frames: true
@@ -32,33 +32,49 @@ tabs:
     parts:
       - direction: Horizontal
         split_size:
-          Percent: 50
+          Percent: 33
         parts:
           - direction: Vertical
-            pane_name: "nixup x86"
+            pane_name: "nixup xeep"
             split_size:
-              Percent: 50
+              Percent: 33
             run:
-              command: {cmd: ./nixup, args: ["x86"]}
+              command: {cmd: ./nixup, args: ["xeep"]}
           - direction: Vertical
-            pane_name: "nixup a64"
+            pane_name: "nixup porty"
             split_size:
-              Percent: 50
+              Percent: 33
             run:
-              command: {cmd: ./nixup, args: ["a64"]}
+              command: {cmd: ./nixup, args: ["porty"]}
       - direction: Horizontal
         split_size:
-          Percent: 50
+          Percent: 33
         parts:
           - direction: Vertical
-            pane_name: "local bb"
+            pane_name: "nixup raisin"
             split_size:
               Percent: 50
             run:
-              command: {cmd: "htop"}
+              command: {cmd: ./nixup, args: ["raisin"]}
           - direction: Vertical
-            pane_name: "commbox bb"
+            pane_name: "nixup jeffhyper"
             split_size:
               Percent: 50
             run:
-              command: {cmd: ssh, args: ["-t", "colemickens@aarch64.nixos.community", "htop"]}
+              command: {cmd: ./nixup, args: ["jeffhyper"]}
+      - direction: Horizontal
+        split_size:
+          Percent: 34
+        parts:
+          - direction: Vertical
+            pane_name: "nixup rpifour1"
+            split_size:
+              Percent: 50
+            run:
+              command: {cmd: ./nixup, args: ["rpifour1"]}
+          - direction: Vertical
+            pane_name: "nixup sinkor"
+            split_size:
+              Percent: 50
+            run:
+              command: {cmd: ./nixup, args: ["sinkor"]}

@@ -1,13 +1,15 @@
 { config, pkgs, ... }:
 
-{
+let
+  extraSpecial = false;
+in {
   imports = [
     ../../profiles/desktop-plasma.nix
     ./core.nix
   ];
 
   config = {
-    specialisation = {
+    specialisation = if !extraSpecial then {} else {
       sway = {
         inheritParentConfig = false;
         configuration = {

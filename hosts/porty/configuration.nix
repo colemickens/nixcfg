@@ -17,12 +17,12 @@
       #  ../../profiles/desktop-gnome.nix
       # ];
 
-      sway.inheritParentConfig = false;
-      sway.configuration.imports = [
-        ./core.nix
-        ../../mixins/gfx-nvidia.nix # because of the wlroots patch, and ordering issues
-        ../../profiles/desktop-sway-unstable.nix
-      ];
+      # sway.inheritParentConfig = false;
+      # sway.configuration.imports = [
+      #   ./core.nix
+      #   ../../mixins/gfx-nvidia.nix # because of the wlroots patch, and ordering issues
+      #   ../../profiles/desktop-sway-unstable.nix
+      # ];
     };
   };
 }

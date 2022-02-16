@@ -1,23 +1,32 @@
 #! /usr/bin/env bash
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/stderr 2>&1 && pwd )"
-set +x; source /run/secrets/nixup-secrets; set -x
+#set +x; source /run/secrets/nixup-secrets; set -x
 set -euo pipefail
 cd "${DIR}"
 
-cache="colemickens"
-nixcfg="${HOME}/code/nixcfg"
+function nix() { "${DIR}/misc/nix.sh" "${@}" ; }
 
-nix="${DIR}/misc/nix.sh"
+cache="colemickens"
+nixcfg="${DIR}"
+
 rb="./misc/rbuild.sh"
 ra="./misc/ractivate.sh"
-cb="${DIR}/misc/commbox.sh"
+commbox="${DIR}/misc/commbox.sh"
 tsip="./misc/tsip.sh"
-a64com="colemickens@aarch64.nixos.community"
+
+srcdirs=(
+  "nixpkgs/cmpkgs"
+  "home-manager/cmhm"
+  "nixpkgs/master"
+  "nixpkgs-wayland"
+  "flake-firefox-nightly"
+)
+srcdirs=("${srcdirs[@]/#/"${HOME}/code/"}")
 
 BLDR_X86="${BLDR_X86:-$("${tsip}" porty)}";
-BLDR_A64="${BLDR_A64:-${a64com}}";
+BLDR_A64="${BLDR_A64:-"colemickens@aarch64.nixos.community"}";
 
-cmd="${1:-"upall"}"; shift || true
+cmd="${1:-"z"}"; shift || true
 
 cleanup() {
   if [[ "${ZELLIJ_LAYOUT_NAME:-""}" != "" ]]; then
@@ -28,13 +37,16 @@ trap "cleanup" EXIT
 
 case "${cmd}" in
   "inputup")
-    srcdirs=( "nixpkgs/cmpkgs" "home-manager/cmhm" "nixpkgs/master" "nixpkgs-wayland" "flake-firefox-nightly" )
     for i in "${srcdirs[@]}"; do
-      if [[ -d "$HOME/code/${i}" ]]; then
-        git -C "$HOME/code/${i}" pull --rebase \
-        && git -C "$HOME/code/${i}" push origin HEAD -f
-      fi
+      (test -d "${i}/.git" && git -C "${i}" pull --rebase) &
     done
+    wait
+    for i in "${srcdirs[@]}"; do
+      (test -d "${i}" \
+        && git -C "${i}" pull --rebase \
+        && git -C "${i}" push origin HEAD -f) &
+    done
+    wait
   ;;
   "pkgup")
     pushd ./pkgs
@@ -43,7 +55,7 @@ case "${cmd}" in
     "${0}" cacheshell
   ;;
   "lockup")
-    "${nix}" "${nixargs[@]}" flake lock --recreate-lock-file --commit-lock-file
+    nix "${nixargs[@]}" flake lock --recreate-lock-file --commit-lock-file
     "${0}" cacheshell
   ;;
   "cacheshell") "${rb}" "${BLDR_X86}" "localhost" ".#devShell.x86_64-linux.inputDerivation";;
@@ -55,30 +67,31 @@ case "${cmd}" in
   ;;
 
   "rpifour1" | "rpithreebp1" | "rpizerotwo1")
-    "${cb}"
-    out="$("${rb}" "${BLDR_A64}" "$("${tsip}" "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}")" \
+    "${commbox}"
+    out="$("${rb}" "${BLDR_A64}" "$("${tsip}" "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}" \
       --override-input 'nixpkgs' "${HOME}/code/nixpkgs/rpi-updates-auto" \
-      --override-input 'tow-boot' "${HOME}/code/tow-boot"
+      --override-input 'tow-boot' "${HOME}/code/tow-boot")"
     "${ra}" "$out" "$("${tsip}" "${cmd}")"
   ;;
 
   # "rpifour1" | "rpithreebp1" | "rpizerotwo1" |
   "sinkor" | "pinebook" | "blueline" | "enchilada")
-    "${cb}"
+    "${commbox}"
     out="$("${rb}" "${BLDR_A64}" "$("${tsip}" "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}")"
     "${ra}" "$out" "$("${tsip}" "${cmd}")"
   ;;
 
   "towboot")
-    "${cb}"
+    "${commbox}"
     "${rb}" "${BLDR_A64}" "localhost" "${nixcfg}#images.rpifour1_towboot" "${@}"
   ;;
 
   "x86")
     "${rb}" "${BLDR_X86}" "$("${tsip}" porty)"  "${nixcfg}#topbundles.x86_64-linux" "${@}"
+    "${rb}" "${BLDR_X86}" "$("${tsip}" porty)"  "${nixcfg}#bundles.x86_64-linux" "${@}"
   ;;
   "a64")
-    "${cb}"
+    "${commbox}"
     "${rb}" "${BLDR_A64}" "$("${tsip}" porty)"  "${nixcfg}#topbundles.aarch64-linux" "${@}"
   ;;
 
@@ -87,11 +100,16 @@ case "${cmd}" in
     "${0}" lockup
     "${0}" pkgup
     "${0}" cacheshell
-    env ZELLIJ_LAYOUT_NAME="nixup" \
-      zellij --layout-path "${nixcfg}/nixup.zellij"
+    "${0}" build
+    "${0}" deploy
   ;;
-  "zz")
-    "${0}" z
+  "build")
+    env ZELLIJ_LAYOUT_NAME="nixup.build" \
+      zellij --layout-path "${nixcfg}/nixup.build.zellij"
+  ;;
+  "deploy")
+    env ZELLIJ_LAYOUT_NAME="nixup.deploy" \
+      zellij --layout-path "${nixcfg}/nixup.deploy.zellij"
   ;;
 esac
 

@@ -156,7 +156,9 @@
           customGuiCommands = prev.callPackage ./pkgs/commands-gui.nix {};
 
           bb = prev.callPackage ./pkgs/bb {};
-          bottom  = prev.callPackage ./pkgs/bottom  {};
+          bottom  = prev.callPackage ./pkgs/bottom  {
+            bottom = prev.bottom;
+          };
           # disabled (huge build + unused) # cchat-gtk = prev.callPackage ./pkgs/cchat-gtk {};
           conduit = prev.callPackage ./pkgs/conduit {};
           drm-howto = prev.callPackage ./pkgs/drm-howto {};
@@ -180,6 +182,7 @@
           rkvm = prev.callPackage ./pkgs/rkvm {};
           # disabled # rumqtt = prev.callPackage ./pkgs/rumqtt {};
           smithay = prev.callPackage ./pkgs/smithay {};
+          #solo2 = prev.callPackage ./pkgs/solo2 {};
           space-cadet-pinball = prev.callPackage ./pkgs/space-cadet-pinball {};
           space-cadet-pinball-unfree = prev.callPackage ./pkgs/space-cadet-pinball {
             _assets = import ./pkgs/space-cadet-pinball/assets.nix { pkgs = prev; };
@@ -220,7 +223,7 @@
         netboot-aarch64 = mkSystem inputs.nixpkgs "aarch64-linux" "netboot";
         pinebook    = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
         pinephone   = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
-        blueline    = mkSystem inputs.nixpkgs "aarch64-linux" "blueline";
+        #blueline    = mkSystem inputs.nixpkgs "aarch64-linux" "blueline";
         #blueloco    = mkSystem inputs.nixpkgs "x86_64-linux"  "blueloco";
         enchilada   = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
         #enchiloco   = mkSystem inputs.nixpkgs "x86_64-linux"  "enchiloco";
