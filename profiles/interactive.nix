@@ -50,7 +50,7 @@
       };
       home.packages = with pkgs; [
         colePackages.customCommands
-        
+
         usbutils pciutils lshw
         efibootmgr cryptsetup
         sops age
@@ -90,7 +90,8 @@
         gitui
 
         # https://zaiste.net/posts/shell-commands-rust/
-        bb
+        #bb
+        bottom
         bat
         tealdeer
         du-dust

@@ -192,7 +192,7 @@
             wezterm = prev.wezterm;
             #inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics Foundation;
           };
-          zellij = prev.callPackage ./pkgs/zellij { zellij = prev.zellij; };
+          zellij = prev.callPackage ./pkgs/zellij { };
 
           nix-build-uncached = prev.nix-build-uncached.overrideAttrs(old: {
             src = prev.fetchFromGitHub {

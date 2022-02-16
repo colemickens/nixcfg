@@ -17,7 +17,7 @@ let
     branch = "main";
     rev = "10a22c479ffb4d76627eadbee2dc4b53ae4309c3";
     sha256 = "sha256-nFph0c9GEvZR1Ao7oiNH2ewlQkUBfQxJFtNHfHo6vSI=";
-    cargoSha256 = "sha256-TPP6/4KzunKqWerfVFOk86aMepxnm7HJvDagC7GdTZI=";
+    cargoSha256 = "sha256-UOqaLx0U0/Bwi0H2qd9naFxjLRJB5qiMxsAooamI72g=";
   };
   cargo_new_version = "0.0.999-${builtins.substring 0 10 metadata.rev}";
   src = fetchFromGitHub {
@@ -32,7 +32,7 @@ let
   '';
 in rustPlatform.buildRustPackage rec {
   pname = "zellij";
-  version = "88888";
+  version = cargo_new_version;
 
   src = newsrc;
 
