@@ -26,13 +26,22 @@ srcdirs=("${srcdirs[@]/#/"${HOME}/code/"}")
 BLDR_X86="${BLDR_X86:-$("${tsip}" porty)}";
 BLDR_A64="${BLDR_A64:-"colemickens@aarch64.nixos.community"}";
 
+orig=("${@}")
 cmd="${1:-"z"}"; shift || true
 
-cleanup() {
-  if [[ "${ZELLIJ_LAYOUT_NAME:-""}" != "" ]]; then
-    read -p 'Press enter to continue'
-  fi
-}
+# cleanup() {
+#   exit=$?
+#   if [[ "${ZELLIJ_LAYOUT_NAME:-""}" != "" ]]; then
+#     read -r -p "restart? [y/N] " response
+#     if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
+#     then
+#         "${0}" "${orig[@]}"
+#     else
+#         do_something_else
+#     fi
+#   fi
+# }
+function cleanup() { true; }
 trap "cleanup" EXIT
 
 case "${cmd}" in
@@ -66,15 +75,7 @@ case "${cmd}" in
     "${ra}" "$out" "$("${tsip}" "${cmd}")"
   ;;
 
-  "rpifour1" | "rpithreebp1" | "rpizerotwo1")
-    "${commbox}"
-    out="$("${rb}" "${BLDR_A64}" "$("${tsip}" "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}" \
-      --override-input 'nixpkgs' "${HOME}/code/nixpkgs/rpi-updates-auto" \
-      --override-input 'tow-boot' "${HOME}/code/tow-boot")"
-    "${ra}" "$out" "$("${tsip}" "${cmd}")"
-  ;;
-
-  # "rpifour1" | "rpithreebp1" | "rpizerotwo1" |
+  "rpifour1" | "rpithreebp1" | "rpizerotwo1" | \
   "sinkor" | "pinebook" | "blueline" | "enchilada")
     "${commbox}"
     out="$("${rb}" "${BLDR_A64}" "$("${tsip}" "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}")"

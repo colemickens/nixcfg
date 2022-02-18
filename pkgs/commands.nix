@@ -7,16 +7,8 @@
 let
   efibootmgr_ = "${efibootmgr}/bin/efibootmgr";
 
-  tip = (writeShellScriptBin "tip" ''
+  tsip = (writeShellScriptBin "tsip" ''
     ${tailscale}/bin/tailscale ip --6 "$1")"
-  '');
-
-  gfwd = (writeShellScriptBin "gpgfwd" ''
-    [[ -z "''${DEBUG_GPGSSH}" ]] || set -x
-    set -euo pipefail
-
-    ip="$(${tailscale}/bin/tailscale ip --6 "$1")"
-    "${gpgssh}/bin/gpgssh" cole@"$ip" "-N"
   '');
 
   gssh = (writeShellScriptBin "gssh" ''
@@ -44,13 +36,12 @@ let
     ssh \
         -o "RemoteForward $rpath:$lpath.extra" \
         -o StreamLocalBindUnlink=yes \
-        -A "$@" "$host"
+        -A "$host" 'ssh-fix || true; exec \$SHELL -l'
   '');
 
   name = "cole-custom-commands";
   drvs = [
     gssh
-    gfwd
     gpgssh
 
     (writeShellScriptBin "gpg-fix" ''
@@ -86,6 +77,7 @@ let
       ent="$(ls /tmp/ssh-**/agent.* | head -1)"
       ln -sf $ent /run/user/1000/sshagent
       export SSH_AUTH_SOCK="/run/user/1000/sshagent"
+      ssh-add -l
     '')
 
     # (writeShellScriptBin "pulse-fix" ''

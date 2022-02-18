@@ -10,7 +10,7 @@ export TESTHOST="${1:-}"; shift || true
 #
 # DEPLOY+ACTIVATE "${TESTHOST}" TOPLEVEL
 if [[ "${TESTHOST}" != "" ]]; then
-  ../nixup "${TESTHOST}" \
+  ../../nixup "${TESTHOST}" \
     --override-input 'tow-boot' "${TOWBOOT}" \
     --override-input 'nixpkgs' "${NIXPKGS_WORKTREE}"
 

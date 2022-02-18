@@ -181,7 +181,7 @@
           poweralertd = prev.callPackage ./pkgs/poweralertd {};
           rkvm = prev.callPackage ./pkgs/rkvm {};
           # disabled # rumqtt = prev.callPackage ./pkgs/rumqtt {};
-          smithay = prev.callPackage ./pkgs/smithay {};
+          # smithay = prev.callPackage ./pkgs/smithay {};
           #solo2 = prev.callPackage ./pkgs/solo2 {};
           space-cadet-pinball = prev.callPackage ./pkgs/space-cadet-pinball {};
           space-cadet-pinball-unfree = prev.callPackage ./pkgs/space-cadet-pinball {

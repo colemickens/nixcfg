@@ -31,6 +31,8 @@
     sops.secrets."nixup-secrets".owner = "cole";
     sops.secrets."tailscale-join-authkey".owner = "cole";
 
+
+
     sops.secrets."oraclecloud_colemickens_privkey".owner = "cole";
     sops.secrets."oraclecloud_colemickens2_privkey".owner = "cole";
 
@@ -52,9 +54,12 @@
       home.packages = with pkgs; [
         colePackages.customCommands
 
+        config.boot.kernelPackages.usbip
+
         usbutils pciutils lshw
         efibootmgr cryptsetup
         sops age
+        step-cli
 
         pijul
 

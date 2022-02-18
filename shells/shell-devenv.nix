@@ -17,6 +17,7 @@ in minimalMkShell pkgs.system { # TODO use something else for system?
       "rustc"
       "rustfmt"
     ])
+    bacon
     # TODO: rust-overlay / fenix? ????? how to just get the very latest nightly?
 
     # deps

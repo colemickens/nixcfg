@@ -8,12 +8,6 @@ cachix_key="$(cat /run/secrets/cachix.dhall | grep "eIu" | cut -d '"' -f2)"
 
 function nix() { "${DIR}/nix.sh" "${@}"; }
 
-# TODO: ?
-# pre-open ssh to both sides?
-# function ssh() {
-#   ssh -o -N -T 'ControlMaster=yes' -S "$ssh_control_socket" "$HOST" "${@}"
-# }
-
 remote="${1}"; shift
 target="${1}"; shift
 thing="${1}"; shift
@@ -34,20 +28,21 @@ if [[ "${target}" != "cachix" ]]; then
     --from "ssh-ng://${remote}" \
     --to "ssh-ng://${target}" \
       "${thing}" "${@}" >/dev/stderr
-  _out="$(nix eval --raw "${thing}")"
 else
   nix build \
+    --keep-going \
     --eval-store "auto" \
     --no-check-sigs \
     --from "ssh-ng://${remote}" \
     --to "ssh-ng://${target}" \
       "${thing}" "${@}" >/dev/stderr
-  _out="$(nix eval --raw "${thing}")"
-  ssh "${remote}" "echo \"${_out}\" | env CACHIX_SIGNING_KEY=\"${cachix_key}\" cachix push ${cachix_cache} >/dev/stderr" >/dev/stderr &
 fi
 
-echo "${_out}"
+_out="$(nix eval --raw "${thing}")"
+printf "%s" "${_out}" > /tmp/out
+ssh "${remote}" "echo \"${_out}\" | env CACHIX_SIGNING_KEY=\"${cachix_key}\" cachix push ${cachix_cache} >/dev/stderr" >/dev/stderr &
 
+echo "${_out}"
 
 exit 0
 
