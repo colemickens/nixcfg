@@ -11,8 +11,8 @@ let
   metadata = rec {
     repo_git = "https://github.com/wez/wezterm";
     branch = "main";
-    rev = "4a1c4b55662e6f6217f84137baa5ed0776753e56";
-    sha256 = "sha256-tIbNFZUiGorOrmVxC9OJ5y0R2P6Ruc5xSo/D+JuToBk=";
+    rev = "85a8434ecb646556ced7d53dd18bebcdb9c9db3b";
+    sha256 = "sha256-TTDigCeRQzEkGKZLf/2QXRGVCOZBRxUlZCHJOVXxTJ4=";
     cargoSha256 = "sha256-UkoGBoEg8q5gjc18J/6Uh68HHbBKJuFopDtu8kOsBAQ=";
   };
   extraNativeBuildInputs = [
@@ -45,5 +45,5 @@ in
   buildInputs = old.buildInputs ++ (map (n: args_.${n}) extraBuildInputs);
   nativeBuildInputs = old.nativeBuildInputs ++ (map (n: args_.${n}) extraNativeBuildInputs);
 
-  meta = (old.meta or {}) // { verinfo = metadata; };
+  meta = (old.meta or {}) // { description = "${old.description or "zeterm"}"; verinfo = metadata; };
 })
