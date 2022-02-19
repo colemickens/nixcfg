@@ -4,15 +4,24 @@
   config = {
     home-manager.users.cole = { pkgs, ... }: {
       programs.helix = {
-        enable = true;
+        # lol wut it's broken on aarch64?
+        enable = (pkgs.system == "x86_64-linux");
         package =
-          #if pkgs.system == "x86_64-linux"
-          #then inputs.helix.outputs.packages.${pkgs.system}.helix
-          #else pkgs.helix;
+          if pkgs.system == "x86_64-linux"
+          then inputs.helix.outputs.packages.${pkgs.system}.helix
+          else pkgs.helix;
           #inputs.helix.outputs.packages.${pkgs.system}.helix;
-          pkgs.helix;
         settings = {
-          theme = "base16";
+          # theme = "default"; # cute but not enough contrast
+          # theme = "base16_default_dark"; # unreadable popup text
+          theme = "monokai_pro_octagon";
+
+          editor = {
+            true-color = true;
+          };
+          lsp = {
+            display-messages = true;
+          };
         };
       };
     };

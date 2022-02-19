@@ -25,7 +25,7 @@
     sops-nix.url = "github:Mic92/sops-nix/master";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    helix.url = "github:colemickens/helix";
+    helix.url = "github:helix-editor/helix";
 
     hardware.url = "github:nixos/nixos-hardware";
 
@@ -85,7 +85,7 @@
       filterPkgs = pkgs: pkgSet: (pkgs.lib.filterAttrs (filterPkg_ pkgs.system) pkgSet);
       filterHosts = pkgs: cfgs: (pkgs.lib.filterAttrs (n: v: pkgs.system == v.config.nixpkgs.system) cfgs);
 
-      colelib = rec {
+      _colelib = rec {
         force_cached = sys: pkgs_.nixpkgs."${sys}".callPackage ./lib/force_cached.nix {};
         minimalMkShell = system: import ./lib/minimalMkShell.nix { pkgs = fullPkgs_.${system}; };
         hydralib = import ./lib/hydralib.nix;
@@ -108,7 +108,7 @@
 
     _inputs = inputs;
 
-    in with colelib; rec {
+    in with _colelib; rec {
       inputs = _inputs;
 
       devShell = forAllSystems (system: minimalMkShell system {
@@ -120,6 +120,7 @@
           metal-cli
           fullPkgs_.${system}.nix-build-uncached
           pkgs.x86_64-linux.OVMF.fd
+          rnix-lsp
         ]);
       });
       devShells = forAllSystems (system: {
@@ -145,7 +146,7 @@
         tf-destroy = { type = "app"; program = tfout.destroy.outPath; };
       });
 
-      colelib = colelib;
+      colelib = _colelib;
 
       packages = forAllSystems (s: fullPkgs_.${s}.colePackages);
       pkgs = forAllSystems (s: fullPkgs_.${s});
@@ -160,7 +161,7 @@
             bottom = prev.bottom;
           };
           # disabled (huge build + unused) # cchat-gtk = prev.callPackage ./pkgs/cchat-gtk {};
-          conduit = prev.callPackage ./pkgs/conduit {};
+          # disabled (not sure how to add rocksdb) # conduit = prev.callPackage ./pkgs/conduit {};
           drm-howto = prev.callPackage ./pkgs/drm-howto {};
           get-xoauth2-token = prev.callPackage ./pkgs/get-xoauth2-token {};
           headscale = prev.callPackage ./pkgs/headscale {
@@ -222,10 +223,10 @@
         # aarch64-linux
         netboot-aarch64 = mkSystem inputs.nixpkgs "aarch64-linux" "netboot";
         pinebook    = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
-        pinephone   = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
+        #pinephone   = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
         #blueline    = mkSystem inputs.nixpkgs "aarch64-linux" "blueline";
         #blueloco    = mkSystem inputs.nixpkgs "x86_64-linux"  "blueloco";
-        enchilada   = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
+        #enchilada   = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
         #enchiloco   = mkSystem inputs.nixpkgs "x86_64-linux"  "enchiloco";
         rpifour1    = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour1";
         rpithreebp1 = mkSystem inputs.nixpkgs "aarch64-linux" "rpithreebp1";
@@ -286,7 +287,7 @@
         #tb_aarch64 = import inputs.tow-boot { pkgs = import inputs.nixpkgs { system = "aarch64-linux"; }; };
         towboot_aarch64 = inputs.tow-boot.packages.aarch64-linux;
         towboot_armv6l = inputs.tow-boot.packages.aarch64-linux;
-        towboot_rpi_combined = TODO;
+        #towboot_rpi_combined = TODO;
       in rec {
         #
         # TOW-BOOT IMAGES

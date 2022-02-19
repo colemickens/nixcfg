@@ -8,8 +8,8 @@ remote="colemickens@aarch64.nixos.community"
 
 pexit=0; set +e
 ssh "${remote}" \
-  "bash -c '\
-    test -d /home/colemickens/.config/cachix && exit 199 || exit \$?; \
+  "bash -c 'set -xe; \
+    test -d /home/colemickens/.config/cachix && exit 199; \
     nix-env -f /run/current-system/nixpkgs -iA git zellij nixUnstable bottom neovim cachix; \
     rm -rf ~/.config/cachix; mkdir -p ~/.config/cachix; mkdir -p ~/.config/nix; exit 198 \
   '"

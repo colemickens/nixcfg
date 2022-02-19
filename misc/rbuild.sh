@@ -25,8 +25,16 @@ if [[ "${target}" != "cachix" ]]; then
   nix copy \
     --eval-store "auto" \
     --no-check-sigs \
+    --derivation \
+    --to "ssh-ng://${remote}" \
+    "${thing}" "${@}"
+  nix copy \
+    --eval-store "auto" \
+    --no-check-sigs \
     --from "ssh-ng://${remote}" \
+    --no-check-sigs \
     --to "ssh-ng://${target}" \
+    --no-check-sigs \
       "${thing}" "${@}" >/dev/stderr
 else
   nix build \

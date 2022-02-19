@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
   imports = [
@@ -13,6 +13,10 @@
       port = 4444;
       host = "0.0.0.0";
       auth = "none";
+
+      extraEnvironment = {
+        NIX_PATH = "nixpkgs=${inputs.nixpkgs}";
+      };
     };
   };
 }

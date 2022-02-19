@@ -1,6 +1,7 @@
 { stdenv, lib, rustPlatform, fetchFromGitLab
 , pkgconfig
-, openssl
+, openssl, llvmPackages
+, cmake, ninja
 }:
 
 let
@@ -24,9 +25,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = metadata.sha256;
   };
 
+  LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
+
   cargoSha256 = metadata.cargoSha256;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig cmake ninja ];
   buildInputs = [ openssl ];
 
   meta = with lib; {

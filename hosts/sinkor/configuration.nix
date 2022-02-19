@@ -90,6 +90,7 @@ in
       raspberrypi-eeprom
       libraspberrypi
       picocom
+      pipes
     ];
 
     system.stateVersion = "21.05";

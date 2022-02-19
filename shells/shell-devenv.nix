@@ -1,7 +1,7 @@
 { inputs, system, minimalMkShell }:
 
 let
-  pkgs = import inputs.nixpkgs.legacyPackages.${system};
+  pkgs = inputs.nixpkgs.legacyPackages.${system};
   rustPlatform = (pkgs.makeRustPlatform {
     inherit (inputs.fenix.packages.${system}.minimal) cargo rustc;
   });
@@ -18,6 +18,7 @@ in minimalMkShell pkgs.system { # TODO use something else for system?
       "rustfmt"
     ])
     bacon
+    vscode-extensions.vadimcn.vscode-lldb.adapter
     # TODO: rust-overlay / fenix? ????? how to just get the very latest nightly?
 
     # deps

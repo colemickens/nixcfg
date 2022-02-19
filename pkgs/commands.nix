@@ -36,7 +36,7 @@ let
     ssh \
         -o "RemoteForward $rpath:$lpath.extra" \
         -o StreamLocalBindUnlink=yes \
-        -A "$host" 'ssh-fix || true; exec \$SHELL -l'
+        -A "$host" 'ssh-fix || true; exec \''${SHELL:-'zsh'} -l'
   '');
 
   name = "cole-custom-commands";

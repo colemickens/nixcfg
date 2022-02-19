@@ -47,9 +47,6 @@ in
 {
   config = {
     home-manager.users.cole = { pkgs, ... }: {
-      imports = [
-        ../modules-hm/zellij.nix
-      ];
       programs.zellij = {
         enable = true;
 

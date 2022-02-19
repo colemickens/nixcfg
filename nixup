@@ -29,19 +29,20 @@ BLDR_A64="${BLDR_A64:-"colemickens@aarch64.nixos.community"}";
 orig=("${@}")
 cmd="${1:-"z"}"; shift || true
 
-# cleanup() {
-#   exit=$?
-#   if [[ "${ZELLIJ_LAYOUT_NAME:-""}" != "" ]]; then
-#     read -r -p "restart? [y/N] " response
-#     if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
-#     then
-#         "${0}" "${orig[@]}"
-#     else
-#         do_something_else
-#     fi
-#   fi
-# }
-function cleanup() { true; }
+cleanup() {
+  retval=$?
+  if [[ "${ZELLIJ_LAYOUT_NAME:-""}" != "" ]]; then
+    read -r -p "restart? [y/N] " response
+    if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
+    then
+      exec "${0}" "${orig[@]}"
+    fi
+   fi
+  retval=$?
+  echo -e "\nexit=$? (cmd=${cmd})" > /dev/stderr
+  exit $retval;
+}
+
 trap "cleanup" EXIT
 
 case "${cmd}" in
@@ -113,6 +114,3 @@ case "${cmd}" in
       zellij --layout-path "${nixcfg}/nixup.deploy.zellij"
   ;;
 esac
-
-echo -e "\nexit=$?" > /dev/stderr
-exit 0
