@@ -9,9 +9,9 @@ let
   metadata = rec {
     repo_git = "https://github.com/ClementTsang/bottom";
     branch = "master";
-    rev = "9ef7f5d4b787b97a35c39407ce9748e11c0e2fcd";
-    sha256 = "sha256-HitiraFBN65StlgQt14AxERxazHkTg2wWV1sBXMahYE=";
-    cargoSha256 = "sha256-B5KqvWrhxNS2j/oFCgSWaq8gy9MowuVazwOR3LA0B4c=";
+    rev = "1642b570b86819944ed12abc712e43da29051375";
+    sha256 = "sha256-BjYm+qlqfCq1UCgYxa4sUwLKHREBJRlt+pmZvqgtbF0=";
+    cargoSha256 = "sha256-BjYm+qlqfCq1UCgYxa4sUwLKHREBJRlt+pmZvqgtbF0=";
     version = rev;
   };
   extraNativeBuildInputs = [
@@ -41,5 +41,5 @@ in
   buildInputs = old.buildInputs ++ (map (n: args_.${n}) extraBuildInputs);
   nativeBuildInputs = old.nativeBuildInputs ++ (map (n: args_.${n}) extraNativeBuildInputs);
 
-  meta = (old.meta or {}) // { verinfo = metadata; };
+  meta = (old.meta or {}) // { description = "${old.description or pname}"; verinfo = metadata; };
 })
