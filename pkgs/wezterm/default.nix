@@ -11,9 +11,9 @@ let
   metadata = rec {
     repo_git = "https://github.com/wez/wezterm";
     branch = "main";
-    rev = "85a8434ecb646556ced7d53dd18bebcdb9c9db3b";
-    sha256 = "sha256-TTDigCeRQzEkGKZLf/2QXRGVCOZBRxUlZCHJOVXxTJ4=";
-    cargoSha256 = "sha256-UkoGBoEg8q5gjc18J/6Uh68HHbBKJuFopDtu8kOsBAQ=";
+    rev = "9438e49726f949b310e5efe733060f5d9ad2f4fc";
+    sha256 = "sha256-eL+PUeWGHvZ68QupMlDIOHUrslbKS4dSbzVHWCf2qY0=";
+    cargoSha256 = "sha256-1fN1yLBEeJPLwEoFTlwvqtEzfGD5ijpYqe8nY6NitZA=";
   };
   extraNativeBuildInputs = [
     # "extra-cmake-modules"
