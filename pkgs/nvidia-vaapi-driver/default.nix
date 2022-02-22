@@ -5,8 +5,8 @@ let
   metadata = rec {
     repo_git = "https://github.com/elFarto/nvidia-vaapi-driver";
     branch = "master";
-    rev = "abd17d440e964fe7100fbe9f8e311c4f7cfad6ff";
-    sha256 = "sha256-hzX7WLfB6SNWSQP20SsdURXwm6CJ4K4PrsyfaRaj+d0=";
+    rev = "21d08037de0959ad2cbb1990d16f20d4c3e57c5f";
+    sha256 = "sha256-sdgBAwgEITbdmxLdnbf6h9Rq+j8ljiND8bjyxxMUIss=";
     version = rev;
   };
 in stdenv.mkDerivation rec {
