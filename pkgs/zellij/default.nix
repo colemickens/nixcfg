@@ -16,9 +16,9 @@ let
   metadata = rec {
     repo_git = "https://github.com/zellij-org/zellij";
     branch = "main";
-    rev = "4985864592bcaf45e75d6113006b242a85e226b3";
-    sha256 = "sha256-LUMTSZM5YdlktGnmg9SKCuuE/bnqINLB+lma5hJMygo=";
-    cargoSha256 = "sha256-Ly2cbPqorKVckfEmyaMsVhslKrQCS2CWSPGhklYgWIE=";
+    rev = "39eddd8b1c31eb6932163841bda18a82044e4700";
+    sha256 = "sha256-H4hUhVrvF11FlEzVLr9WXzV6mi50oYio3md69sguXdU=";
+    cargoSha256 = "sha256-XjrKRL/tzo5437HQKwIvoSXIAIY2IziMWP1XPw4VpXc=";
   };
   cargo_new_version = "0.0.999-${builtins.substring 0 10 metadata.rev}";
   src = fetchFromGitHub {
