@@ -8,8 +8,8 @@ let
   metadata = rec {
     repo_git = "https://github.com/juanfont/headscale";
     branch = "main";
-    rev = "69cdfbb56f56c0439d1b7af0c7d1708ba02f0f67";
-    sha256 = "sha256-qoV1OibGlgwAR6UqHz1Ilw+GqwUw00UrmMreXKGQAig=";
+    rev = "a37339fa54b104fbadc39c60e5cca5e9b89d9816";
+    sha256 = "sha256-SwXH8moMvPIbmLl6LbB6/w7vpT48vMPxlMlSVFdeqBY=";
     vendorSha256 = "sha256-v76UWaF6kdmuvABg6sDMmDpJ4HWvgliyEWAbAebK3wM=";
   };
 in buildGoModule rec {
