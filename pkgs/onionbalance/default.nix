@@ -1,6 +1,5 @@
 { lib
-#, fetchFromGitLab
-, fetchFromGitHub
+, fetchFromGitLab
 , buildPythonApplication
 , setuptools, setproctitle, stem, future, pyyaml, cryptography, pycrypto
 , pexpect, mock, pytest, pytest-mock, tox
@@ -10,28 +9,31 @@
 
 let
   metadata = {
-    #repo_git = "https://gitlab.torproject.org/tpo/core/onionbalance";
-    repo_git = "https://github.com/colemickens/onionbalance";
+    repo_git = "https://gitlab.torproject.org/tpo/core/onionbalance";
     branch = "main";
-    rev = "fefa5c93b1fd4fd833c7396f9b5116ef1de9db03";
-    sha256 = "sha256-Ilme+aj+OB6+cEJSargelIZE20szgXszvISoBrP86xQ=";
+    rev = "c2b50f7f2de7fe4d1b596cfa61393f27715508ea";
+    sha256 = "sha256-21LqMaWGeGaDzpDQ+SwfrEGxMFKvnEd7F0OmqclQRE8=";
   };
   version = builtins.substring 0 10 metadata.rev;
 in buildPythonApplication rec {
   pname = "onionbalance";
   inherit version;
 
-  # src = fetchFromGitLab {
-  #   domain = "gitlab.torproject.org";
-  #   owner = "tpo";
-  #   repo = "core/onionbalance";
-  #   inherit (metadata) rev sha256;
-  # };
-  src = fetchFromGitHub {
-    owner = "colemickens";
-    repo = "onionbalance";
+  src = fetchFromGitLab {
+    domain = "gitlab.torproject.org";
+    owner = "tpo";
+    repo = "core/onionbalance";
     inherit (metadata) rev sha256;
   };
+
+  prePatch = ''
+    substituteInPlace 'setup.py' --replace \
+      "'cryptography>=2.5'" \
+      "'cryptography>=36'"
+    substituteInPlace 'test/functional/util.py' --replace \
+      "from cryptography.hazmat.primitives.serialization.base import Encoding, PublicFormat" \
+      "from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat"
+  '';
 
   propagatedBuildInputs = [
     setuptools setproctitle stem pyyaml cryptography pycrypto future
