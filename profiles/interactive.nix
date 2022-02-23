@@ -43,7 +43,8 @@
     '';
     home-manager.users.cole = { pkgs, ... }: {
       home.sessionVariables = {
-        EDITOR = "${pkgs.neovim}/bin/nvim";
+        #EDITOR = "${pkgs.neovim}/bin/nvim";
+        EDITOR = "hx";
       };
       home.file = {
         ".gdbinit".source = (pkgs.writeText "gdbinit" ''set auto-load safe-path /nix/store'');
@@ -73,6 +74,7 @@
         asciinema
         wget curl rsync
         ripgrep jq fzy
+        jless
         wget curl stow ncdu tree
         nix-tree
         #pdu
@@ -108,7 +110,7 @@
         hexyl
         xh
         dogdns
-        jj
+        (inputs.jj.packages.${pkgs.system}.jujutsu)
         joshuto
         sd
         procs

@@ -18,6 +18,9 @@ in minimalMkShell pkgs.system { # TODO use something else for system?
       "rustfmt"
     ])
     bacon
+    cargo-watch
+    rust-analyzer
+    lldb_13
     vscode-extensions.vadimcn.vscode-lldb.adapter
     # TODO: rust-overlay / fenix? ????? how to just get the very latest nightly?
 
@@ -46,6 +49,10 @@ in minimalMkShell pkgs.system { # TODO use something else for system?
     golint
     gopls
   ];
+  #] ++ (if !fullPkgs then [] else [
+  #  zellij # config?
+  #  helix # config?
+  #]);
 
   buildInputs = with pkgs; [
     openssl

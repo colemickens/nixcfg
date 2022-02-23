@@ -38,25 +38,35 @@ cleanup() {
       exec "${0}" "${orig[@]}"
     fi
    fi
-  retval=$?
   echo -e "\nexit=$? (cmd=${cmd})" > /dev/stderr
   exit $retval;
 }
+
+update_input() { test -d "${1}/.git" || return 0; git -C "${1}" pull --rebase; }
+rebase_input() {
+  test -d "${1}" || return 0
+  git -C "${1}" pull --rebase
+  git -C "${1}" push origin HEAD -f
+}
+export -f update_input
+export -f rebase_input
 
 trap "cleanup" EXIT
 
 case "${cmd}" in
   "inputup")
-    for i in "${srcdirs[@]}"; do
-      (test -d "${i}/.git" && git -C "${i}" pull --rebase) &
-    done
-    wait
-    for i in "${srcdirs[@]}"; do
-      (test -d "${i}" \
-        && git -C "${i}" pull --rebase \
-        && git -C "${i}" push origin HEAD -f) &
-    done
-    wait
+    set -x
+    parallel --verbose --tag update_input ::: "${srcdirs[@]}"
+    parallel --verbose --tag rebase_input ::: "${srcdirs[@]}"
+    #for i in "${srcdirs[@]}"; do; update_input "${i}" &; done
+    #for i in "${srcdirs[@]}"; do; wait "${i}" &; done
+    #for i in "${srcdirs[@]}"; do; update_input "${i}" &; done
+    #for i in "${srcdirs[@]}"; do; rebase_input "${i}" &; done
+    #wait || exit $?
+    #for i in "${srcdirs[@]}"; do
+    #  rebase_input "${i}" &
+    #done
+    #wait || exit $?
   ;;
   "pkgup")
     pushd ./pkgs
@@ -89,12 +99,11 @@ case "${cmd}" in
   ;;
 
   "x86")
-    "${rb}" "${BLDR_X86}" "$("${tsip}" porty)"  "${nixcfg}#topbundles.x86_64-linux" "${@}"
-    "${rb}" "${BLDR_X86}" "$("${tsip}" porty)"  "${nixcfg}#bundles.x86_64-linux" "${@}"
+    "${rb}" "${BLDR_X86}" "$("${tsip}" porty)"  "${nixcfg}#hydraBundles.x86_64-linux.toplevels" "${@}"
   ;;
   "a64")
     "${commbox}"
-    "${rb}" "${BLDR_A64}" "$("${tsip}" porty)"  "${nixcfg}#topbundles.aarch64-linux" "${@}"
+    "${rb}" "${BLDR_A64}" "$("${tsip}" porty)"  "${nixcfg}#hydraBundles.aarch64-linux.toplevels" "${@}"
   ;;
 
   "z")

@@ -26,6 +26,7 @@
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     helix.url = "github:helix-editor/helix";
+    jj.url = "github:martinvonz/jj";
 
     hardware.url = "github:nixos/nixos-hardware";
 
@@ -124,8 +125,8 @@
         ]);
       });
       devShells = forAllSystems (system: {
-        devenv = (import ./shells/shell-devenv.nix { inherit inputs system minimalMkShell; });
-        legacy = (import ./shells/shell-legacy.nix { inherit inputs system minimalMkShell; });
+        default = devShell.${system};
+        devenv = (import ./shells/devenv.nix { inherit inputs system minimalMkShell; });
       });
 
       legacyPackages = forAllSystems (system: { # to `nix eval` with the "currentSystem" in certain scenarios
@@ -169,11 +170,6 @@
           };
           hodd = prev.callPackage ./pkgs/hodd {};
           # headscale = prev.callPackage ./pkgs/headscale { headscale = prev.headscale; };
-          jj = prev.callPackage ./pkgs/jj {
-            rustPlatform = (prev.makeRustPlatform {
-              inherit (inputs.fenix.packages.${prev.system}.minimal) cargo rustc;
-            });
-          };
           keyboard-layouts = prev.callPackage ./pkgs/keyboard-layouts {};
           meli = prev.callPackage ./pkgs/meli {};
           nvidia-vaapi-driver = prev.callPackage ./pkgs/nvidia-vaapi-driver {};
@@ -244,24 +240,14 @@
       toplevels = genAttrs
         (builtins.attrNames inputs.self.outputs.nixosConfigurations)
         (attr: nixosConfigurations.${attr}.config.system.build.toplevel);
-      topbundles = forAllSystems (s:
-        pkgs_.nixpkgs."${s}".linkFarmFromDrvs "${s}-toplevel-bundle" ([]
-          ++ (builtins.attrValues hydraJobs.${s}.hosts))
-      );
-      # hydraSpecs =
-      #   let
-      #     nfj = b: hydralib.flakeJob "github:colemickens/nixcfg/${b}";
-      #   in {
-      #     jobsets = hydralib.makeSpec {
-      #       nixcfg-main        = nfj "main";
-      #       nixcfg-auto-update = nfj "auto-update";
-      #     };
-      #   };
+
 
       hydraJobs = forAllSystems (s: {
-        devshell = force_cached s inputs.self.devShell.${s}.inputDerivation;
-        pkgs = force_cached s (filterPkgs pkgs_.nixpkgs.${s} inputs.self.packages.${s});
-        hosts = force_cached s (builtins.mapAttrs (n: v: v.config.system.build.toplevel)
+        #devshell = force_cached s inputs.self.devShell.${s}.inputDerivation;
+        devShells = force_cached s (builtins.mapAttrs (n: v: v.inputDerivation)
+          inputs.self.devShells.${s});
+        packages = force_cached s (filterPkgs pkgs_.nixpkgs.${s} inputs.self.packages.${s});
+        toplevels = force_cached s (builtins.mapAttrs (n: v: v.config.system.build.toplevel)
           (filterHosts pkgs_.nixpkgs.${s} inputs.self.nixosConfigurations));
       });
       # TODO: finish this...
@@ -271,22 +257,18 @@
             (builtins.attrValues v)
         ) inputs.self.hydraJobs.${s}
       ));
-      bundles = forAllSystems (s:
-        pkgs_.nixpkgs."${s}".linkFarmFromDrvs "${s}-bundle" ([]
-          ++ [ inputs.self.devShell.${s}.inputDerivation ]
-          ++ (builtins.attrValues hydraJobs.${s}.pkgs)
-          ++ (builtins.attrValues hydraJobs.${s}.hosts)
-        ));
+      #hydraAll = forAllSystems (s:
+        # TODO: map hydraBundles attributes into a linkFarm
+
 
       devices = {
+        pinephone = inputs.self.nixosConfigurations.pinephone.config.mobile.outputs.android;
         blueline = inputs.self.nixosConfigurations.blueline.config.mobile.outputs.android;
         enchilada = inputs.self.nixosConfigurations.enchilada.config.mobile.outputs.android;
       };
-
       images = let
         #tb_aarch64 = import inputs.tow-boot { pkgs = import inputs.nixpkgs { system = "aarch64-linux"; }; };
         towboot_aarch64 = inputs.tow-boot.packages.aarch64-linux;
-        towboot_armv6l = inputs.tow-boot.packages.aarch64-linux;
         #towboot_rpi_combined = TODO;
       in rec {
         #

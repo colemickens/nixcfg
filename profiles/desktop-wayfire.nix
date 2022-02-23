@@ -70,6 +70,7 @@ in {
         wf-recorder
         wl-clipboard
         wlrctl
+        wlr-randr
         # wl-gammactl # nixpkgs-wayland only
         # wlvncc # nixpkgs-wayland only
         # wshowkeys # use the wrapper ^

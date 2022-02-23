@@ -19,6 +19,8 @@ in {
         dotDir = ".config/zsh";
         shellAliases = {
           "ls" = "ls --color --group-directories-first";
+          "nvim" = "echo 'please use 'hx' or '_nvim'";
+          "_nvim" = "command nvim";
         };
 
         # TODO:
