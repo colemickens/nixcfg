@@ -1,97 +1,47 @@
-{ lib
+args_@{ lib
 , fetchFromGitHub
-, rustPlatform
-, stdenv
-, installShellFiles
-, pkg-config
-, libiconv
-, openssl
 , zellij
-, cargo
-, testVersion
-, runCommandNoCC
-}:
+, ... }:
 
 let
   metadata = rec {
-    repo_git = "https://github.com/zellij-org/zellij";
+    owner = "zellij-org";
+    pname = "zellij";
+    repo = pname;
+    repo_git = "https://github.com/${owner}/${repo}";
+    version = builtins.substring 0 10 metadata.rev;
     branch = "main";
     rev = "39eddd8b1c31eb6932163841bda18a82044e4700";
     sha256 = "sha256-H4hUhVrvF11FlEzVLr9WXzV6mi50oYio3md69sguXdU=";
-    cargoSha256 = "sha256-XjrKRL/tzo5437HQKwIvoSXIAIY2IziMWP1XPw4VpXc=";
+    cargoSha256 = "sha256-H4hUhVrvF11FlEzVLr9WXzV6mi50oYio3md69sguXdU=";
   };
-  cargo_new_version = "0.0.999-${builtins.substring 0 10 metadata.rev}";
-  src = fetchFromGitHub {
-    owner = "zellij-org";
-    repo = "zellij";
+  extraNativeBuildInputs = [
+  ];
+  extraBuildInputs = [
+  ];
+  ignore = [ metadata.pname "fetchFromGithub" ] ++ extraBuildInputs;
+  args = lib.filterAttrs (n: v: (!builtins.elem n ignore)) args_;
+  newsrc = fetchFromGitHub {
+    owner = metadata.owner;
+    repo = metadata.repo;
     inherit (metadata) rev sha256;
+    fetchSubmodules = true;
   };
-  newsrc = src;
-  # newsrc = ((fetchFromGitHub {
-  #   owner = "zellij-org";
-  #   repo = "zellij";
-  #   inherit (metadata) rev sha256;
-  # }).overrideAttrs(old: {
-  #   postFetch = old.postFetch + ''
-  #     export HOME=$TMPDIR
-  #     cd $out
-  #     sed -i "s/^version = .*/version = \"${cargo_new_version}\"/" "$out/Cargo.toml"
-  #     sed -i "s/^version = .*/version = \"${cargo_new_version}\"/" "$out/zellij-utils/Cargo.toml"
-  #     cargo generate-lockfile
-  #   '';
-  #   nativeBuildInputs = old.nativeBuildInputs ++ [
-  #     cargo
-  #     #(builtins.trace rustPlatform.passthru rustPlatform.passthru.cargo)
-  #   ];
-  # }));
-  # newsrc = runCommandNoCC "patch-zellij-src" {} ''
-  #   cp -a ${src} $out
-  #   chmod +w "$out/zellij-utils/src"
-  #   chmod +w "$out/zellij-utils"
-  #   chmod +w "$out/"
-  #   sed -i "s/^version = .*/version = \"${cargo_new_version}\"/" "$out/Cargo.toml"
-  #   sed -i "s/^version = .*/version = \"${cargo_new_version}\"/" "$out/zellij-utils/Cargo.toml"
-  #   sed -i "/name = \"zellij\"/{n;s/.*/version = \"${cargo_new_version}\"/}" "$out/Cargo.lock"
-  #   sed -i "/name = \"zellij\"/{n;s/.*/version = \"${cargo_new_version}\"/}" "$out/Cargo.lock"
-  # '';
-in rustPlatform.buildRustPackage rec {
-  pname = "zellij";
-  version = cargo_new_version;
-
+in
+(args_."${metadata.pname}".override args).overrideAttrs(old: rec {
+  pname = metadata.pname;
+  version = metadata.version;
   src = newsrc;
 
-  cargoSha256 = metadata.cargoSha256;
+  cargoDeps = old.cargoDeps.overrideAttrs (lib.const {
+    name = "${metadata.pname}-${metadata.version}-vendor.tar.gz";
+    src = newsrc;
+    inherit version;
+    outputHash = metadata.cargoSha256;
+  });
 
-  nativeBuildInputs = [
-    installShellFiles
-    pkg-config
-  ];
+  buildInputs = old.buildInputs ++ (map (n: args_.${n}) extraBuildInputs);
+  nativeBuildInputs = old.nativeBuildInputs ++ (map (n: args_.${n}) extraNativeBuildInputs);
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
-
-  preCheck = ''
-    HOME=$TMPDIR
-  '';
-
-  postInstall = ''
-    installShellCompletion --cmd $pname \
-      --bash <($out/bin/zellij setup --generate-completion bash) \
-      --fish <($out/bin/zellij setup --generate-completion fish) \
-      --zsh <($out/bin/zellij setup --generate-completion zsh)
-  '';
-
-  passthru.tests.version = testVersion { package = zellij; };
-
-  meta = with lib; {
-    verinfo = metadata;
-    description = "A terminal workspace with batteries included";
-    homepage = "https://zellij.dev/";
-    changelog = "https://github.com/zellij-org/zellij/blob/${version}/Changelog.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ therealansh _0x4A6F ];
-  };
-}
+  meta = (old.meta or {}) // { description = "${old.description or ""}"; verinfo = metadata; };
+})
