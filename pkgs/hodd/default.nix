@@ -4,10 +4,8 @@ let
   metadata = {
     repo_git = "https://github.com/rroemhild/hodd";
     branch = "master";
-    rev = "42bc5b47ed89db87307d505eceb94298077cf592";
-    sha256 = "sha256-4WUSnhc5uPuMF7lvEAaweWainLEVFIA8cnENrDb2CxY=";
-    cargoSha256 = "sha256-LpAh91by82w5/9S6f0/pyE6Q5ecMjzrvJreN/5rqNdg=";
-    skip = true;
+    rev = "25d6abc95213c506046c75458f9fab4d1c47401d";
+    sha256 = "sha256-3o85Ji47nWvVHFdnX6vFG1WDaCoHoeNGF9wZr0dpThA=";
   };
 in stdenv.mkDerivation rec {
   pname = "hodd";
@@ -32,6 +30,5 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/rroemhild/hodd";
     license = licenses.mit;
     maintainers = [ maintainers.colemickens ];
-    broken = true; # not finishing yet: https://github.com/bytebeamio/rumqtt/issues/338
   };
 }
