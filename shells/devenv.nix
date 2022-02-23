@@ -5,6 +5,16 @@ let
   rustPlatform = (pkgs.makeRustPlatform {
     inherit (inputs.fenix.packages.${system}.minimal) cargo rustc;
   });
+
+  x86_only = (with pkgs; [
+    # delve (should be okay now...)
+  ]);
+  extraPkgs =
+    if system == "x86_64-linux" then x86_only
+    else (with pkgs; [
+      # more here?
+      delve
+    ]);
 in minimalMkShell pkgs.system { # TODO use something else for system?
   name = "devenv";
   hardeningDisable = [ "fortify" ];
@@ -21,7 +31,7 @@ in minimalMkShell pkgs.system { # TODO use something else for system?
     cargo-watch
     rust-analyzer
     lldb_13
-    vscode-extensions.vadimcn.vscode-lldb.adapter
+    #vscode-extensions.vadimcn.vscode-lldb.adapter
     # TODO: rust-overlay / fenix? ????? how to just get the very latest nightly?
 
     # deps
@@ -41,14 +51,13 @@ in minimalMkShell pkgs.system { # TODO use something else for system?
 
     # golang
     go
-    delve
     go-outline
     goimports
     godef
     #godoctor
     golint
     gopls
-  ];
+  ] ++ extraPkgs;
   #] ++ (if !fullPkgs then [] else [
   #  zellij # config?
   #  helix # config?

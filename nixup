@@ -31,7 +31,7 @@ cmd="${1:-"z"}"; shift || true
 
 cleanup() {
   retval=$?
-  if [[ "${ZELLIJ_LAYOUT_NAME:-""}" != "" ]]; then
+  if [[ "${ZELLIJ_LAYOUT_NAME:-""}" != "" && ${retval} != 0 ]]; then
     read -r -p "restart? [y/N] " response
     if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
     then
@@ -42,7 +42,10 @@ cleanup() {
   exit $retval;
 }
 
-update_input() { test -d "${1}/.git" || return 0; git -C "${1}" pull --rebase; }
+update_input() {
+  test -d "${1}/.git" || return 0;
+  git -C "${1}" pull --rebase;
+}
 rebase_input() {
   test -d "${1}" || return 0
   git -C "${1}" pull --rebase
@@ -58,20 +61,10 @@ case "${cmd}" in
     set -x
     parallel --verbose --tag update_input ::: "${srcdirs[@]}"
     parallel --verbose --tag rebase_input ::: "${srcdirs[@]}"
-    #for i in "${srcdirs[@]}"; do; update_input "${i}" &; done
-    #for i in "${srcdirs[@]}"; do; wait "${i}" &; done
-    #for i in "${srcdirs[@]}"; do; update_input "${i}" &; done
-    #for i in "${srcdirs[@]}"; do; rebase_input "${i}" &; done
-    #wait || exit $?
-    #for i in "${srcdirs[@]}"; do
-    #  rebase_input "${i}" &
-    #done
-    #wait || exit $?
   ;;
   "pkgup")
-    pushd ./pkgs
-    ./update.sh "${@:-}"
-    popd
+    pushd ./pkgs;   ./update.sh "${@:-}";       popd
+    [[ "${1:-""}" != "" ]] && "${rb}" "${BLDR_X86}" "$("${tsip}" "porty")" "${nixcfg}#${1}"
     "${0}" cacheshell
   ;;
   "lockup")

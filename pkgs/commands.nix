@@ -1,4 +1,5 @@
 { gnupg, openssh, efibootmgr, tailscale
+, nixUnstable
 , writeShellScriptBin
 , linkFarmFromDrvs
 , symlinkJoin
@@ -44,6 +45,10 @@ let
     gssh
     gpgssh
 
+    (writeShellScriptBin "devenv" ''
+      "${nixUnstable}/bin/nix" develop "''${HOME}/code/nixcfg#devenv"
+    '')
+
     (writeShellScriptBin "gpg-fix" ''
       ln -sf /run/user/1000/gnupg/S.gpg-agent.ssh /run/user/1000/sshagent
       set -x
@@ -77,6 +82,7 @@ let
       ent="$(ls /tmp/ssh-**/agent.* | head -1)"
       ln -sf $ent /run/user/1000/sshagent
       export SSH_AUTH_SOCK="/run/user/1000/sshagent"
+      ssh-add -L | ssh-add -T /dev/stdin
       ssh-add -l
     '')
 

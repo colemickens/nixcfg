@@ -31,7 +31,7 @@ if [[ "${1:-""}" != "" ]]; then
 
   if ! nix eval --json "..#pkgs.x86_64-linux.${pkgname}.meta.verinfo" > "${t}"; then
     echo "NO VERINFO"
-    exit 0
+    exit -1
   fi
   if ! nix eval --json "..#pkgs.x86_64-linux.${pkgname}.meta.position" > "${t}.position"; then
     echo "NO POSITION"

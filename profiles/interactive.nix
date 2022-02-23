@@ -31,8 +31,6 @@
     sops.secrets."nixup-secrets".owner = "cole";
     sops.secrets."tailscale-join-authkey".owner = "cole";
 
-
-
     sops.secrets."oraclecloud_colemickens_privkey".owner = "cole";
     sops.secrets."oraclecloud_colemickens2_privkey".owner = "cole";
 

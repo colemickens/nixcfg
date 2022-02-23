@@ -16,7 +16,7 @@ in
     };
     networking = {
       hostId = "deadb00d";
-      hostName = "rpifour1";
+      hostName = hostname;
 
       wireless.enable = false;
       wireless.iwd.enable = false;

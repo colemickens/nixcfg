@@ -80,7 +80,13 @@
     let
       nameValuePair = name: value: { inherit name value; };
       genAttrs = names: f: builtins.listToAttrs (map (n: nameValuePair n (f n)) names);
-      supportedSystems = [ "x86_64-linux" "aarch64-linux" "armv6l-linux" "armv7l-linux" ];
+      supportedSystems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        # "riscv64-none-elf" # TODO
+        # "armv6l-linux" # eh, I think time is up
+        # "armv7l-linux" # eh, I think time is up
+      ];
       forAllSystems = genAttrs supportedSystems;
       filterPkg_ = system: (n: p: (builtins.elem "${system}" (p.meta.platforms or [ "x86_64-linux" "aarch64-linux" ])) && !(p.meta.broken or false));
       filterPkgs = pkgs: pkgSet: (pkgs.lib.filterAttrs (filterPkg_ pkgs.system) pkgSet);
@@ -157,29 +163,25 @@
           customCommands = prev.callPackage ./pkgs/commands.nix {};
           customGuiCommands = prev.callPackage ./pkgs/commands-gui.nix {};
 
-          bb = prev.callPackage ./pkgs/bb {};
+
           bottom  = prev.callPackage ./pkgs/bottom  {
             bottom = prev.bottom;
           };
-          # disabled (huge build + unused) # cchat-gtk = prev.callPackage ./pkgs/cchat-gtk {};
-          # disabled (not sure how to add rocksdb) # conduit = prev.callPackage ./pkgs/conduit {};
-          drm-howto = prev.callPackage ./pkgs/drm-howto {};
           get-xoauth2-token = prev.callPackage ./pkgs/get-xoauth2-token {};
           headscale = prev.callPackage ./pkgs/headscale {
            buildGoModule = prev.buildGo117Module;
           };
           hodd = prev.callPackage ./pkgs/hodd {};
-          # headscale = prev.callPackage ./pkgs/headscale { headscale = prev.headscale; };
           keyboard-layouts = prev.callPackage ./pkgs/keyboard-layouts {};
           meli = prev.callPackage ./pkgs/meli {};
           nvidia-vaapi-driver = prev.callPackage ./pkgs/nvidia-vaapi-driver {};
-          # disabled # mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
-          # disabled # neochat = prev.libsForQt5.callPackage ./pkgs/neochat { neochat = prev.neochat; };
+          onionbalance = prev.python3Packages.callPackage ./pkgs/onionbalance {};
           poweralertd = prev.callPackage ./pkgs/poweralertd {};
           rkvm = prev.callPackage ./pkgs/rkvm {};
-          # disabled # rumqtt = prev.callPackage ./pkgs/rumqtt {};
-          # smithay = prev.callPackage ./pkgs/smithay {};
-          #solo2 = prev.callPackage ./pkgs/solo2 {};
+          rumqtt = prev.callPackage ./pkgs/rumqtt {};
+          solo2-cli = prev.callPackage ./pkgs/solo2-cli {
+            solo2-cli = prev.solo2-cli;
+          };
           space-cadet-pinball = prev.callPackage ./pkgs/space-cadet-pinball {};
           space-cadet-pinball-unfree = prev.callPackage ./pkgs/space-cadet-pinball {
             _assets = import ./pkgs/space-cadet-pinball/assets.nix { pkgs = prev; };
@@ -190,17 +192,27 @@
           };
           wezterm = prev.callPackage ./pkgs/wezterm {
             wezterm = prev.wezterm;
-            #inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics Foundation;
           };
-          zellij = prev.callPackage ./pkgs/zellij { };
+          zellij = prev.callPackage ./pkgs/zellij {
+            zellij = prev.zellij;
+          };
 
           nix-build-uncached = prev.nix-build-uncached.overrideAttrs(old: {
             src = prev.fetchFromGitHub {
               owner = "colemickens";
               repo = "nix-build-uncached";
-              rev = "36ea105"; sha256 = "sha256-Ovx+q5pdfg+yIF5HU7pV0nR6nnoTa3y/f9m4TV0XXc0=";
+              rev = "36ea105";
+              sha256 = "sha256-Ovx+q5pdfg+yIF5HU7pV0nR6nnoTa3y/f9m4TV0XXc0=";
             };
           });
+
+          # disabled (very old, prob delete) # bb = prev.callPackage ./pkgs/bb {};
+          # disabled (huge build + unused) # cchat-gtk = prev.callPackage ./pkgs/cchat-gtk {};
+          # disabled (not sure how to add rocksdb) # conduit = prev.callPackage ./pkgs/conduit {};
+          # disabled (very old, prob delete) # drm-howto = prev.callPackage ./pkgs/drm-howto {};
+          # disabled # mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
+          # disabled # neochat = prev.libsForQt5.callPackage ./pkgs/neochat { neochat = prev.neochat; };
+          # disabled: they don't want me to build anvil # smithay = prev.callPackage ./pkgs/smithay {};
         }; in p // { colePackages = p; };
 
       # nixosModules = {
@@ -253,8 +265,10 @@
       # TODO: finish this...
       hydraBundles = forAllSystems (s: (
         pkgs_.nixpkgs.${s}.lib.mapAttrs (n: v:
-          pkgs_.nixpkgs.${s}.linkFarmFromDrvs "${n}-bundle"
-            (builtins.attrValues v)
+          (pkgs_.nixpkgs.${s}.linkFarmFromDrvs "${n}-bundle"
+            (builtins.trace
+              (builtins.mapAttrs (n: v: v.meta.name) v)
+              (builtins.attrValues v)))
         ) inputs.self.hydraJobs.${s}
       ));
       #hydraAll = forAllSystems (s:

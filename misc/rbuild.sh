@@ -14,6 +14,12 @@ thing="${1}"; shift
 
 name="$(echo "${thing}" | cut -d'#' -f2-)"
 
+# TODO: I _hate_ having to eval twice!
+
+t="$(mktemp)"; trap "rm $t" EXIT;
+nix eval --raw "${thing}" >"$t" &
+_out_pid=$!
+
 # TODO: consider removing the rest of the script
 # TODO: consider if we want to have rbuild copy locally and ractivate tries to do direct??
 # or just have an option that pushes this straight to cachix and skips copy to target...
@@ -46,9 +52,10 @@ else
       "${thing}" "${@}" >/dev/stderr
 fi
 
-_out="$(nix eval --raw "${thing}")"
+wait $_out_pid
+_out=$(cat "$t")
 printf "%s" "${_out}" > /tmp/out
-ssh "${remote}" "echo \"${_out}\" | env CACHIX_SIGNING_KEY=\"${cachix_key}\" cachix push ${cachix_cache} >/dev/stderr" >/dev/stderr &
+ssh "${remote}" "echo \"${_out}\" | env CACHIX_SIGNING_KEY=\"${cachix_key}\" cachix push ${cachix_cache} >/dev/stderr" >/dev/stderr
 
 echo "${_out}"
 

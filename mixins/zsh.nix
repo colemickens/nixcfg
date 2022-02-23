@@ -28,6 +28,10 @@ in {
         # - tab-completion isn't color-highlighted
         # - can rev search + tab-completion use the same tool/path?
 
+        envExtra = ''
+          MCFLY_RESULTS_SORT="LAST_RUN"
+        '';
+
         initExtra = ''
           export __COLE_HOST_COLOR="${promptColor}"
           # added to .zshrc
