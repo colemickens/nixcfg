@@ -122,7 +122,7 @@
         name = "nixcfg-devshell";
         nativeBuildInputs = map (x: (x.bin or x.out or x)) (with pkgs_.nixpkgs.${system}; [
           nixUnstable cachix nixpkgs-fmt nix-prefetch-git
-          bash curl cacert jq parallel mercurial git tailscale
+          bash curl cacert jq jless parallel mercurial git tailscale
           nettools openssh ripgrep rsync sops gh gawk gnused gnugrep
           metal-cli
           fullPkgs_.${system}.nix-build-uncached
@@ -163,7 +163,6 @@
           customCommands = prev.callPackage ./pkgs/commands.nix {};
           customGuiCommands = prev.callPackage ./pkgs/commands-gui.nix {};
 
-
           bottom  = prev.callPackage ./pkgs/bottom  {
             bottom = prev.bottom;
           };
@@ -177,7 +176,6 @@
           nvidia-vaapi-driver = prev.callPackage ./pkgs/nvidia-vaapi-driver {};
           onionbalance = prev.python3Packages.callPackage ./pkgs/onionbalance {};
           poweralertd = prev.callPackage ./pkgs/poweralertd {};
-          rkvm = prev.callPackage ./pkgs/rkvm {};
           rumqtt = prev.callPackage ./pkgs/rumqtt {};
           solo2-cli = prev.callPackage ./pkgs/solo2-cli {
             solo2-cli = prev.solo2-cli;
@@ -212,6 +210,7 @@
           # disabled (very old, prob delete) # drm-howto = prev.callPackage ./pkgs/drm-howto {};
           # disabled # mirage-im = prev.libsForQt5.callPackage ./pkgs/mirage-im {};
           # disabled # neochat = prev.libsForQt5.callPackage ./pkgs/neochat { neochat = prev.neochat; };
+          # disabled # just use usbip/usbredir # rkvm = prev.callPackage ./pkgs/rkvm {};
           # disabled: they don't want me to build anvil # smithay = prev.callPackage ./pkgs/smithay {};
         }; in p // { colePackages = p; };
 
@@ -239,8 +238,8 @@
         rpifour1    = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour1";
         rpithreebp1 = mkSystem inputs.nixpkgs "aarch64-linux" "rpithreebp1";
         rpizerotwo1 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo1";
-        # rpizerotwo2 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo2";
-        # rpizerotwo3 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo3";
+        #rpizerotwo2 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo2";
+        #rpizerotwo3 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo3";
         sinkor      = mkSystem inputs.nixpkgs "aarch64-linux" "sinkor";
         oracular    = mkSystem inputs.nixpkgs "aarch64-linux" "oracular";
         # armv6l-linux (cross-built)

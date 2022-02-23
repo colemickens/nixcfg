@@ -31,7 +31,7 @@ if [[ "${1:-""}" != "" ]]; then
   pkg="${1}"
   pkgname="$(basename "${pkg}")"
 
-  printf '\n%s\n' "### update: ${pkgname}"
+  printf '\n%s\n' ">>> update: ${pkgname}"
 
   if ! nix eval --json "..#pkgs.x86_64-linux.${pkgname}.meta.verinfo" >"${t}" ; then
     echo "NO VERINFO"

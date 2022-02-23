@@ -29,19 +29,19 @@ BLDR_A64="${BLDR_A64:-"colemickens@aarch64.nixos.community"}";
 orig=("${@}")
 cmd="${1:-"z"}"; shift || true
 
-printf "\n\n\n%s\n%s\n" "****************************************************" "${cmd}"
-printf "%s\n" "****************************************************"
+printf "\n\n%s\n%s\n" "###########################################" "${cmd}"
+printf "%s\n" "###########################################"
 
 cleanup() {
   retval=$?
-  if [[ "${ZELLIJ_LAYOUT_NAME:-""}" != "" && ${retval} != 0 ]]; then
+  if [[ ${retval} != 0 && "${ZELLIJ_LAYOUT_NAME:-""}" != "" ]]; then
     read -r -p "restart? [y/N] " response
     if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
     then
       exec "${0}" "${orig[@]}"
     fi
    fi
-  printf "\nexit=%d$? (cmd=${cmd})\n" > /dev/stderr
+  printf "\n### exit=%s$? (cmd=${cmd})\n" > /dev/stderr
   exit $retval;
 }
 
@@ -59,19 +59,19 @@ export -f rebase_input
 
 trap "cleanup" EXIT
 
+set -x
+
 case "${cmd}" in
   "inputup")
     parallel -j$(nproc) --verbose --tag update_input ::: "${srcdirs[@]}"
     parallel -j$(nproc) --verbose --tag rebase_input ::: "${srcdirs[@]}"
   ;;
   "pkgup")
-    pushd ./pkgs;   ./update.sh "${@:-}";       popd >/dev/null
-    [[ "${1:-""}" != "" ]] && "${rb}" "${BLDR_X86}" "$("${tsip}" "porty")" "${nixcfg}#${1}"
-    "${0}" cacheshell
+    pushd ./pkgs >/dev/null;   ./update.sh "${@:-}";       popd >/dev/null
+    if [[ "${1:-""}" != "" ]]; then "${rb}" "${BLDR_X86}" "$("${tsip}" "porty")" "${nixcfg}#${1}"; fi
   ;;
   "lockup")
-    nix "${nixargs[@]}" flake lock --recreate-lock-file --commit-lock-file
-    "${0}" cacheshell
+    set -x; nix "${nixargs[@]}" flake lock --recreate-lock-file --commit-lock-file; set +x
   ;;
   "cacheshell") "${rb}" "${BLDR_X86}" "localhost" ".#devShell.x86_64-linux.inputDerivation";;
 

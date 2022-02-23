@@ -57,7 +57,7 @@ tabs:
             run:
               command: {cmd: "btm", args: [ "-b" ]}
           - direction: Vertical
-            # pane_name: "commbox btm"
+            pane_name: "commbox btm"
             split_size:
               Percent: 70
             run:
