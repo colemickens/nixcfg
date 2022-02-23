@@ -5,11 +5,11 @@
 
 let
   metadata = {
-    repo_git = "https://github.com/colemickens/keyboard-layouts";
+    repo_git = "https://github.com/chris-ricketts/keyboard-layouts";
     branch = "master";
-    rev = "9527ae9597df38f737b3b254bf3fdeed60bdd02d";
+    rev = "35ab89e81160aa64bde9dc0b6d97954f65dc4a2d";
     sha256 = "sha256-W+iArJX7JJm1REgFay7c7idvoRcgEr6kO10GMct7u+A=";
-    cargoSha256 = "sha256-53g00oa66HzOf0nwALbusi3/W6Xmn7Mlshbvrp7p90k=";
+    cargoSha256 = "sha256-XzIhtIGTKeULBR9eJBtjYZlEFpKTXviiOufmjJ6b4No=";
   };
 in
 rustPlatform.buildRustPackage rec {
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   version = metadata.rev;
 
   src = fetchFromGitHub {
-    owner = "colemickens";
+    owner = "chris-ricketts";
     repo = pname;
     rev = metadata.rev;
     sha256 = metadata.sha256;
