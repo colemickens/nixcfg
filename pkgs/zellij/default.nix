@@ -13,7 +13,7 @@ let
     branch = "main";
     rev = "39eddd8b1c31eb6932163841bda18a82044e4700";
     sha256 = "sha256-H4hUhVrvF11FlEzVLr9WXzV6mi50oYio3md69sguXdU=";
-    cargoSha256 = "sha256-H4hUhVrvF11FlEzVLr9WXzV6mi50oYio3md69sguXdU=";
+    cargoSha256 = "sha256-2zJp8A8cfFKbruB/IxvcWfqPGLxmdxT147rJn8YJ5wM=";
   };
   extraNativeBuildInputs = [
   ];
