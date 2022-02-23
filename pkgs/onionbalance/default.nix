@@ -13,8 +13,8 @@ let
     #repo_git = "https://gitlab.torproject.org/tpo/core/onionbalance";
     repo_git = "https://github.com/colemickens/onionbalance";
     branch = "main";
-    rev = "1e4bae3409f14a1075365037d63a47c0329bab0c";
-    sha256 = "sha256-keuV1Tjqd1c7+8o2AAcyO8kvCUoRdpd/WoiJL4DCtHc=";
+    rev = "d524fea856376cc636770774bc12c8fff27d0492";
+    sha256 = "sha256-OS3hnEn1rKq9ZzJh8ozypVDDLR+32dEDXAUAU7UQU58=";
   };
   version = builtins.substring 0 10 metadata.rev;
 in buildPythonApplication rec {
