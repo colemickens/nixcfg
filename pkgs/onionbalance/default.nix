@@ -9,7 +9,7 @@
 
 let
   metadata = {
-    repo_git = "https://gitlab.torproject.org/tpo/core/onionbalance";
+    repo_git = "https://gitlab.torproject.org/tpo/core/onionbalance.git/";
     branch = "main";
     rev = "c2b50f7f2de7fe4d1b596cfa61393f27715508ea";
     sha256 = "sha256-21LqMaWGeGaDzpDQ+SwfrEGxMFKvnEd7F0OmqclQRE8=";

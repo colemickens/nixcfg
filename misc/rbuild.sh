@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 set -euo pipefail
-set -x
 
 cachix_cache="colemickens"
 cachix_key="$(cat /run/secrets/cachix.dhall | grep "eIu" | cut -d '"' -f2)"
@@ -28,12 +27,16 @@ cachix=0
 # RBUILD_MODE=="direct"
 # RBUILD_MODE=="cachix"
 if [[ "${target}" != "cachix" ]]; then
+  printf '\n%s\n' ">>> copy derivations" >&2
+  set -x;
   nix copy \
     --eval-store "auto" \
     --no-check-sigs \
     --derivation \
     --to "ssh-ng://${remote}" \
-    "${thing}" "${@}"
+    "${thing}" "${@}"; set +x;
+  printf '\n%s\n' ">>> build/copy outputs" >&2
+  set -x;
   nix copy \
     --eval-store "auto" \
     --no-check-sigs \
@@ -42,7 +45,10 @@ if [[ "${target}" != "cachix" ]]; then
     --to "ssh-ng://${target}" \
     --no-check-sigs \
       "${thing}" "${@}" >/dev/stderr
+  set +x;
 else
+  printf '\n%s\n' ">>> build outputs remote" >&2
+  set -x;
   nix build \
     --keep-going \
     --eval-store "auto" \
@@ -50,14 +56,19 @@ else
     --from "ssh-ng://${remote}" \
     --to "ssh-ng://${target}" \
       "${thing}" "${@}" >/dev/stderr
+  set +x;
 fi
 
 wait $_out_pid
 _out=$(cat "$t")
 printf "%s" "${_out}" > /tmp/out
-ssh "${remote}" "echo \"${_out}\" | env CACHIX_SIGNING_KEY=\"${cachix_key}\" cachix push ${cachix_cache} >/dev/stderr" >/dev/stderr
 
-echo "${_out}"
+printf '\n%s\n' ">>> push to cachix from remote" >/dev/stderr
+ssh "${remote}" "echo \"${_out}\" | env CACHIX_SIGNING_KEY=\"${cachix_key}\" tee /dev/stderr | cachix push ${cachix_cache} >/dev/stderr" >/dev/stderr
+
+printf '%s\n' ">>> done >>> ${_out}" >/dev/stderr
+
+printf '%s\n' "${_out}"
 
 exit 0
 

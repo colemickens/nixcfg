@@ -13,4 +13,4 @@ if [[ "${LEGACY:-""}" != "true" ]]; then
   )
 fi
 
-nix "${allargs[@]}" "${@}"
+nix "${allargs[@]}" "${@}" 2> >(grep -v warning) >&2

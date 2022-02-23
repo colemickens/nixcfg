@@ -29,6 +29,9 @@ BLDR_A64="${BLDR_A64:-"colemickens@aarch64.nixos.community"}";
 orig=("${@}")
 cmd="${1:-"z"}"; shift || true
 
+printf "\n\n\n%s\n%s\n" "****************************************************" "${cmd}"
+printf "%s\n" "****************************************************"
+
 cleanup() {
   retval=$?
   if [[ "${ZELLIJ_LAYOUT_NAME:-""}" != "" && ${retval} != 0 ]]; then
@@ -38,7 +41,7 @@ cleanup() {
       exec "${0}" "${orig[@]}"
     fi
    fi
-  echo -e "\nexit=$? (cmd=${cmd})" > /dev/stderr
+  printf "\nexit=%d$? (cmd=${cmd})\n" > /dev/stderr
   exit $retval;
 }
 
@@ -58,12 +61,11 @@ trap "cleanup" EXIT
 
 case "${cmd}" in
   "inputup")
-    set -x
-    parallel --verbose --tag update_input ::: "${srcdirs[@]}"
-    parallel --verbose --tag rebase_input ::: "${srcdirs[@]}"
+    parallel -j$(nproc) --verbose --tag update_input ::: "${srcdirs[@]}"
+    parallel -j$(nproc) --verbose --tag rebase_input ::: "${srcdirs[@]}"
   ;;
   "pkgup")
-    pushd ./pkgs;   ./update.sh "${@:-}";       popd
+    pushd ./pkgs;   ./update.sh "${@:-}";       popd >/dev/null
     [[ "${1:-""}" != "" ]] && "${rb}" "${BLDR_X86}" "$("${tsip}" "porty")" "${nixcfg}#${1}"
     "${0}" cacheshell
   ;;

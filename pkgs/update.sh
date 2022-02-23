@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 set -euo pipefail
-set -x
 
 unset NIX_PATH
+
+if [[ -f "${DIR}/../misc/nix.sh" ]]; then
+  function nix() { "${DIR}/../misc/nix.sh" "${@}"; }
+fi
 
 # build up commit msg
 cprefix="auto-update(${JOB_ID:-"manual"}):"
@@ -28,12 +31,13 @@ if [[ "${1:-""}" != "" ]]; then
   pkg="${1}"
   pkgname="$(basename "${pkg}")"
 
+  printf '\n%s\n' "### update: ${pkgname}"
 
-  if ! nix eval --json "..#pkgs.x86_64-linux.${pkgname}.meta.verinfo" > "${t}"; then
+  if ! nix eval --json "..#pkgs.x86_64-linux.${pkgname}.meta.verinfo" >"${t}" ; then
     echo "NO VERINFO"
     exit -1
   fi
-  if ! nix eval --json "..#pkgs.x86_64-linux.${pkgname}.meta.position" > "${t}.position"; then
+  if ! nix eval --json "..#pkgs.x86_64-linux.${pkgname}.meta.position" >"${t}.position"; then
     echo "NO POSITION"
     exit -1
   fi
@@ -88,6 +92,7 @@ if [[ "${1:-""}" != "" ]]; then
   sed -i "s|${sha256}|0000000000000000000000000000000000000000000000000000|" "${metadata}"
   nix "${nixargs[@]}" build --no-link "..#${upattr}" &> "${l}" || true
   newsha256="$(cat "${l}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
+  if [[ "${newsha256}" == "" ]]; then printf '%s' "${l}" >/dev/stderr; fi
   if [[ "${newsha256}" == "sha256" ]]; then newsha256="$(cat "${l}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
 
   newsha256="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${newsha256}")"
