@@ -25,8 +25,12 @@
     sops-nix.url = "github:Mic92/sops-nix/master";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
+    # eep, TODO: do we want to override nixpkgs?
     helix.url = "github:helix-editor/helix";
     jj.url = "github:martinvonz/jj";
+
+    # nixos-riscv64.url = "https://github.com/colemickens/nixos-riscv64";
+    # jh7100.url = "https://github.com/colemickens/jh7100";
 
     hardware.url = "github:nixos/nixos-hardware";
 
@@ -185,6 +189,7 @@
             _assets = import ./pkgs/space-cadet-pinball/assets.nix { pkgs = prev; };
           };
           shreddit = prev.python3Packages.callPackage ./pkgs/shreddit {};
+          tvp = prev.callPackage ./pkgs/tvp {};
           rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {
             buildGoModule = prev.buildGo117Module;
           };

@@ -1,5 +1,5 @@
 
-{ stdenv, lib, fetchFromGitHub, opencv }:
+{ stdenv, lib, fetchFromGitHub, pkg-config, opencv }:
 
 let
   metadata = rec {
@@ -20,11 +20,19 @@ in stdenv.mkDerivation rec {
     sha256 = metadata.sha256;
   };
 
-  buildInputs = [
-    opencv
-  ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ opencv ];
+
+  buildPhase = ''
+    install -d $out/bin
+    g++ src/main.cpp -std=c++17 -O3 \
+      $(pkg-config --cflags --libs opencv4) \
+      -o $out/bin/tvp
+  '';
+  dontInstall = true;
 
   meta = with lib; {
+    mainProgram = "tvp";
     verinfo = metadata;
     description = "This is a cursed terminal video player";
     homepage = metadata.repo_git;
