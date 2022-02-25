@@ -46,10 +46,12 @@ cleanup() {
 }
 
 update_input() {
+  set -x
   test -d "${1}/.git" || return 0;
   git -C "${1}" pull --rebase;
 }
 rebase_input() {
+  set -x
   test -d "${1}" || return 0
   git -C "${1}" pull --rebase
   git -C "${1}" push origin HEAD -f
@@ -63,8 +65,8 @@ set -x
 
 case "${cmd}" in
   "inputup")
-    parallel -j$(nproc) --verbose --tag update_input ::: "${srcdirs[@]}"
-    parallel -j$(nproc) --verbose --tag rebase_input ::: "${srcdirs[@]}"
+    parallel -j$(nproc) --halt 1 --verbose --tag update_input ::: "${srcdirs[@]}"
+    parallel -j$(nproc) --halt 1 --verbose --tag rebase_input ::: "${srcdirs[@]}"
   ;;
   "pkgup")
     pushd ./pkgs >/dev/null;   ./update.sh "${@:-}";       popd >/dev/null

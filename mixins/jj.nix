@@ -1,0 +1,21 @@
+{ pkgs, config, inputs, ... }:
+
+{
+  config = {
+    home-manager.users.cole = { pkgs, ... }: {
+      imports = [
+        ../modules-hm/jj.nix
+      ];
+      programs.jj = {
+        enable = true;
+        package = inputs.jj.outputs.packages.${pkgs.system}.jujutsu;
+        settings = {
+          user = {
+            name = "Cole Mickens";
+            email = "cole.mickens@gmail.com";
+          };
+        };
+      };
+    };
+  };
+}

@@ -14,8 +14,10 @@
     ../mixins/gh.nix
     ../mixins/gopass/gopass.nix
     ../mixins/helix.nix
-    ../mixins/mcfly.nix
+    ../mixins/jj.nix
+    ../mixins/mcfly.nix # wish it took the history arg in config file
     ../mixins/nushell.nix
+    ../mixins/pijul.nix
     # ../mixins/skim.nix # weird aarch64 build error...?
     ../mixins/solo2.nix
     ../mixins/sshd.nix
@@ -59,8 +61,6 @@
         efibootmgr cryptsetup
         sops age
         step-cli
-
-        pijul
 
         linuxPackages.cpupower
         sshfs cifs-utils ms-sys ntfs3g
@@ -108,7 +108,6 @@
         hexyl
         xh
         dogdns
-        (inputs.jj.packages.${pkgs.system}.jujutsu)
         joshuto
         sd
         procs

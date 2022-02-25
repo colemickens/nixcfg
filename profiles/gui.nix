@@ -5,10 +5,11 @@ let
   #_firefox = firefoxFlake.firefox-nightly-bin;
   _firefox = pkgs.firefox-wayland;
 
-  ppkgs = if pkgs.system == "x86_64-linux" then [
-  ] else if pkgs.system == "aarch64-linux" then [
-  ] else [
-  ];
+  ppkgs = if pkgs.system == "x86_64-linux" then (with pkgs; [
+    tribler # likely broken still on aarch64-linux
+  ]) else if pkgs.system == "aarch64-linux" then (with pkgs; [
+  ]) else (with pkgs; [
+  ]);
 in
 {
   imports = [
@@ -64,8 +65,6 @@ in
         virt-viewer
         spice-gtk # why do we need this? were we trying spicy? I think virt-viewer has picked up
         # hidpi fixes, so we can ditch this probably
-
-        tribler # likely broken still
 
         _firefox
       ]);
