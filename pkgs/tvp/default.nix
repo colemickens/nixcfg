@@ -5,8 +5,8 @@ let
   metadata = rec {
     repo_git = "https://github.com/TheRealOrange/terminalvideoplayer";
     branch = "main";
-    rev = "c8d9542aeff030c8c6415edef106b7db97bb25e2";
-    sha256 = "sha256-E1T4kGG6o+zRx72IR85uJGblP9dx15HuCdkxidhyBVQ=";
+    rev = "8295e4948567cbe4f7854bb35adf3fd1d010a178";
+    sha256 = "sha256-qDcDJXFaIqqWTpHc/MC1wQMJ4oTtEmQQ6qhDTSEjUtA=";
     version = rev;
   };
 in stdenv.mkDerivation rec {
