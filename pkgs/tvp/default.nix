@@ -1,5 +1,5 @@
 
-{ stdenv, lib, fetchFromGitHub, pkg-config, opencv }:
+{ stdenv, lib, fetchFromGitHub, pkg-config, ffmpeg_4 }:
 
 let
   metadata = rec {
@@ -21,12 +21,13 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ opencv ];
+  buildInputs = [ ffmpeg_4 ];
 
   buildPhase = ''
     install -d $out/bin
-    g++ src/main.cpp -std=c++17 -O3 \
-      $(pkg-config --cflags --libs opencv4) \
+    g++ src/main.cpp src/video.cpp \
+      -Iinc/ -std=c++17 -O3 \
+      $(pkg-config --cflags --libs libavcodec libavformat libavutil libswscale) \
       -o $out/bin/tvp
   '';
   dontInstall = true;

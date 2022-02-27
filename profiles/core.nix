@@ -11,15 +11,13 @@ in
 
     ../mixins/common.nix
 
-    ../mixins/bash.nix
-    ../mixins/fish.nix
     ../mixins/git.nix
-    ../mixins/htop.nix
-    ../mixins/neovim.nix
     ../mixins/ssh.nix
-    ../mixins/tmux.nix
-    ../mixins/zellij.nix # congrats zellij! you've become essential :) good luck to tmux wherever she is
     ../mixins/zsh.nix
+
+    ../mixins/bottom.nix
+    ../mixins/helix.nix
+    ../mixins/zellij.nix
   ];
 
   # gpg --pinentry-mode loopback --batch --passphrase '' --quick-generate-key "testkeyrpione"

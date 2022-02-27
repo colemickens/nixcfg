@@ -3,9 +3,6 @@
 {
   config = {
     home-manager.users.cole = { pkgs, ... }: {
-      imports = [
-        ../modules-hm/jj.nix
-      ];
       programs.jj = {
         enable = true;
         package = inputs.jj.outputs.packages.${pkgs.system}.jujutsu;

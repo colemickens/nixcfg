@@ -15,10 +15,11 @@
     ../mixins/gopass/gopass.nix
     ../mixins/helix.nix
     ../mixins/jj.nix
+    ../mixins/joshuto.nix
     ../mixins/mcfly.nix # wish it took the history arg in config file
     ../mixins/nushell.nix
     ../mixins/pijul.nix
-    # ../mixins/skim.nix # weird aarch64 build error...?
+    ../mixins/skim.nix # weird aarch64 build error...?
     ../mixins/solo2.nix
     ../mixins/sshd.nix
     ../mixins/tailscale.nix
@@ -55,71 +56,56 @@
       home.packages = with pkgs; [
         colePackages.customCommands
 
-        config.boot.kernelPackages.usbip
-
-        usbutils pciutils lshw
-        efibootmgr cryptsetup
-        sops age
-        step-cli
-
-        linuxPackages.cpupower
-        sshfs cifs-utils ms-sys ntfs3g
-        gdb lldb file gptfdisk
-        parted psmisc wipe
-
+        # TODO: remove the need for this
         cachix
-        screen minicom picocom
-        asciinema
-        wget curl rsync
-        ripgrep jq fzy
-        jless
-        wget curl stow ncdu tree
-        nix-tree
-        #pdu
-        git-crypt
-        gopass
-        ripasso-cursive
 
-        openssh autossh mosh sshuttle
-        tig #git-absorb
-        github-cli
-        git-lfs
-        cvs mercurial subversion
-        #mitmproxy
-        #nix-du
-        pv
-        dnsutils
-        usbutils
-        yubico-piv-tool
-
-        unar
-        gitui
-
+        # <rust pkgs>
         # https://zaiste.net/posts/shell-commands-rust/
-        #bb
         bottom
         bat
         tealdeer
         du-dust
+        dua
         exa
         fd
-        grex # regex
-        # more rust tools
+        gitui
+        grex
         hexyl
         xh
         dogdns
-        joshuto
+        ripasso-cursive
+        ripgrep
+        jless
         sd
         procs
         bandwhich
+        # </rust pkgs>
 
+        usbutils pciutils lshw
+        efibootmgr cryptsetup
+        wipe file unar
+        sops # age ?rage?
+        step-cli
+        gptfdisk parted
         iotop which binutils.bintools
         parallel unzip xz zip
+        picocom
+        asciinema
+        wget curl rsync wget curl jq
+        openssh autossh mosh sshuttle
 
-        nix-prefetch  nixpkgs-review
+        linuxPackages.cpupower
+        linuxPackages.usbip
 
         aria2 youtube-dl # TODO: remove whenever we get aria2->incoming setup
         imgurbash2
+
+        # nix-tree nix-du ncdu nix-prefetch nixpkgs-review
+        # git-crypt
+        # mitmproxy
+        # sshfs cifs-utils ms-sys ntfs3g
+        # github-cli cvs mercurial subversion git-lfs
+        # ? git-absorb
       ]
       ++ lib.optionals (pkgs.system == "x86_64-linux") [
 

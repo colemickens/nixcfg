@@ -50,6 +50,7 @@ in {
 
     networking.hostName = "porty"; # Define your hostname.
     networking.hostId = "abbadaba";
+    networking.firewall.allowedTCPPorts = [ 4444 ];
 
     networking.useDHCP = false;
     networking.interfaces."eth0".useDHCP = true;

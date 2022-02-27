@@ -28,6 +28,7 @@
     # eep, TODO: do we want to override nixpkgs?
     helix.url = "github:helix-editor/helix";
     jj.url = "github:martinvonz/jj";
+    #zellij.url = "github:zellij-org/zellij";
 
     # nixos-riscv64.url = "https://github.com/colemickens/nixos-riscv64";
     # jh7100.url = "https://github.com/colemickens/jh7100";

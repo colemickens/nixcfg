@@ -6,7 +6,6 @@ in
   imports = [
     ../../mixins/common.nix
 
-    ../../mixins/code-server.nix
     ../../mixins/docker.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/sshd.nix

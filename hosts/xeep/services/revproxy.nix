@@ -217,7 +217,7 @@ in
         };
       };
       virtualHosts."code.x.cleo.cat" = internalVhost // {
-        locations."/".proxyPass = "http://${xeep_ip4}:${toString config.services.code-server.port}/"; # porty
+        locations."/".proxyPass = "http://${porty_ip4}:4444";
         locations."/".proxyWebsockets = true;
       };
 

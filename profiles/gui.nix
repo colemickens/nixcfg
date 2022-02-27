@@ -15,6 +15,7 @@ in
   imports = [
     ./interactive.nix # includes core.nix (which imports hm)
 
+    ../mixins/alacritty.nix
     ../mixins/chromecast.nix
     ../mixins/fonts.nix
     ../mixins/foot.nix
@@ -22,6 +23,7 @@ in
     ../mixins/pipewire.nix
     ../mixins/qt.nix
     ../mixins/spotify.nix
+    ../mixins/wezterm.nix
   ];
 
   config = {

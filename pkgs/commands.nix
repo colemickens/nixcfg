@@ -1,4 +1,4 @@
-{ gnupg, openssh, efibootmgr, tailscale
+{ gnupg, openssh, efibootmgr, tailscale, code-server
 , nixUnstable
 , writeShellScriptBin
 , linkFarmFromDrvs
@@ -9,7 +9,7 @@ let
   efibootmgr_ = "${efibootmgr}/bin/efibootmgr";
 
   tsip = (writeShellScriptBin "tsip" ''
-    ${tailscale}/bin/tailscale ip --6 "$1")"
+    ${tailscale}/bin/tailscale ip --6 "$1"
   '');
 
   gssh = (writeShellScriptBin "gssh" ''
@@ -37,16 +37,25 @@ let
     ssh \
         -o "RemoteForward $rpath:$lpath.extra" \
         -o StreamLocalBindUnlink=yes \
-        -A "$host" 'ssh-fix || true; exec \''${SHELL:-'zsh'} -l'
+        -A "$host" -t 'ssh-fix || true; which zsh >/dev/null && exec zsh -l || exec bash -l'
   '');
 
   name = "cole-custom-commands";
   drvs = [
+    tsip
     gssh
     gpgssh
 
+    (writeShellScriptBin "devenv-code" ''
+      devenv --run -- "${code-server}/bin/code-server" --bind-addr "0.0.0.0:4444" --auth none --disable-telemetry
+    '')
+
+    (writeShellScriptBin "devenv-kate" ''
+      devenv --run -- kate
+    '')
+
     (writeShellScriptBin "devenv" ''
-      "${nixUnstable}/bin/nix" develop "''${HOME}/code/nixcfg#devenv"
+      devenv --run -- zellij attach -c devenv
     '')
 
     (writeShellScriptBin "gpg-fix" ''
@@ -85,15 +94,6 @@ let
       ssh-add -L | ssh-add -T /dev/stdin
       ssh-add -l
     '')
-
-    # (writeShellScriptBin "pulse-fix" ''
-    #   set -x
-    #   systemctl --user daemon-reload
-    #   systemctl --user start pipewire.service
-    #   systemctl --user start pipewire-pulse.socket
-    #   pkill waybar; sleep 1
-    #   swaymsg reload
-    # '')
 
     (writeShellScriptBin "reboot-nixos" ''
       next="$(sudo ${efibootmgr_} | rg "Boot(\d+)\*+ nixos-grub-shim" -r '$1')"

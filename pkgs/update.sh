@@ -88,11 +88,12 @@ if [[ "${1:-""}" != "" ]]; then
   echo "${rev} => ${newrev}"
 
   # Update Sha256
+  set -x
   sed -i "s|${rev}|${newrev}|" "${metadata}"; echo $?
   sed -i "s|${sha256}|0000000000000000000000000000000000000000000000000000|" "${metadata}"
   nix "${nixargs[@]}" build --no-link "..#${upattr}" &> "${l}" || true
   newsha256="$(cat "${l}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
-  if [[ "${newsha256}" == "" ]]; then printf '%s' "${l}" >/dev/stderr; fi
+  if [[ "${newsha256}" == "" ]]; then cat "${l}" >/dev/stderr; exit -1; fi
   if [[ "${newsha256}" == "sha256" ]]; then newsha256="$(cat "${l}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
 
   newsha256="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${newsha256}")"
