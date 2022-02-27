@@ -11,9 +11,9 @@ let
     repo_git = "https://github.com/${owner}/${repo}";
     version = builtins.substring 0 10 metadata.rev;
     branch = "main";
-    rev = "01f7f4f3d2a83b8f3af90d9e6a85371d988c9f2a";
-    sha256 = "sha256-vLAc1aWIdiBrkxYKmW2bckZLIEJYsNZRzCazxXMU73I=";
-    cargoSha256 = "sha256-YqzUxKWyjn7mPGpoOSxkxxBxMTzqys/kS4lNCOfztSA=";
+    rev = "2f475d5d1cf13a7a77c269e12291a7c7d74ea1cc";
+    sha256 = "sha256-fB+lQpoiJEi8p4DwohSrHUwybpeLBXfVWoTcqP/U8ag=";
+    cargoSha256 = "sha256-N1dLm16Le/7QWwVp3zfkt2ZH1r8XDA1zDUgM05sl0bk=";
   };
   extraNativeBuildInputs = [
   ];
