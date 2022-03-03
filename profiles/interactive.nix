@@ -80,6 +80,7 @@
         procs
         bandwhich
         # </rust pkgs>
+        python3Packages.pywatchman
 
         usbutils pciutils lshw
         efibootmgr cryptsetup

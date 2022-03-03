@@ -28,7 +28,7 @@
     # eep, TODO: do we want to override nixpkgs?
     helix.url = "github:helix-editor/helix";
     jj.url = "github:martinvonz/jj";
-    #zellij.url = "github:zellij-org/zellij";
+    zellij.url = "github:zellij-org/zellij";
 
     # nixos-riscv64.url = "https://github.com/colemickens/nixos-riscv64";
     # jh7100.url = "https://github.com/colemickens/jh7100";
@@ -127,12 +127,13 @@
         name = "nixcfg-devshell";
         nativeBuildInputs = map (x: (x.bin or x.out or x)) (with pkgs_.nixpkgs.${system}; [
           nixUnstable cachix nixpkgs-fmt nix-prefetch-git
-          bash curl cacert jq jless parallel mercurial git tailscale
+          bash curl cacert jq jless parallel mercurial git
+          # todo: move a bunch of these to 'apps#update-env' ?
           nettools openssh ripgrep rsync sops gh gawk gnused gnugrep
-          metal-cli
           fullPkgs_.${system}.nix-build-uncached
           pkgs.x86_64-linux.OVMF.fd
-          rnix-lsp
+          # not sure, would be nice for nix stuff to work in helix even if I forget to join the shell
+          rnix-lsp nixpkgs-fmt
         ]);
       });
       devShells = forAllSystems (system: {
@@ -197,9 +198,9 @@
           wezterm = prev.callPackage ./pkgs/wezterm {
             wezterm = prev.wezterm;
           };
-          zellij = prev.callPackage ./pkgs/zellij {
-            zellij = prev.zellij;
-          };
+          #zellij = prev.callPackage ./pkgs/zellij {
+          #  zellij = prev.zellij;
+          #};
 
           nix-build-uncached = prev.nix-build-uncached.overrideAttrs(old: {
             src = prev.fetchFromGitHub {

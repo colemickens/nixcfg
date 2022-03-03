@@ -15,7 +15,6 @@ in
     ../mixins/ssh.nix
     ../mixins/zsh.nix
 
-    ../mixins/bottom.nix
     ../mixins/helix.nix
     ../mixins/zellij.nix
   ];
@@ -38,6 +37,7 @@ in
       };
       home.packages = with pkgs; [
         git-crypt
+        bottom
       ];
     };
   };

@@ -1,23 +1,10 @@
 { pkgs, lib, config, inputs, ... }:
 
-let
-  _wfapps = with pkgs; [
-    wayfireApplications
-    wf-config
-  ];
-  __wfapps = pkgs.wayfireApplications ++ [ pkgs.wf-config ];
-  wfapps = with pkgs; [
-    pkgs.wayfireApplications.wayfire
-    pkgs.wayfireApplications.wcm
-    pkgs.wf-config
-    #pkgs.gnome.gnome-disks
-  ];
-in
 {
   imports = [
     ../mixins/gtk.nix
 
-    ../mixins/wayfire.nix
+    ../mixins/fireplace.nix
     ../mixins/wayland-tweaks.nix
 
     ./gui.nix
@@ -41,6 +28,7 @@ in
       home.sessionVariables = {
 
         MOZ_ENABLE_WAYLAND = "1";
+        TERMINAL = "alacritty";
 
         #WLR_DRM_NO_MODIFIERS = "1";
         # SDL_VIDEODRIVER = "wayland";
@@ -79,7 +67,7 @@ in
         wtype
         xwayland
         ydotool
-      ] ++ wfapps;
+      ];
     };
   };
 }

@@ -4,7 +4,9 @@ let
   extraSpecial = false;
 in {
   imports = [
-    ../../profiles/desktop-plasma.nix
+    #../../profiles/desktop-wayfire.nix
+    #../../profiles/desktop-fireplace.nix
+    ../../profiles/desktop-sway-unstable.nix
     ./core.nix
   ];
 

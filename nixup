@@ -97,6 +97,7 @@ case "${cmd}" in
 
   "x86")
     "${rb}" "${BLDR_X86}" "$("${tsip}" porty)"  "${nixcfg}#hydraBundles.x86_64-linux.toplevels" "${@}"
+    "${rb}" "${BLDR_X86}" "$("${tsip}" porty)"  "${nixcfg}#hydraBundles.x86_64-linux.devShells" "${@}"
   ;;
   "a64")
     "${commbox}"

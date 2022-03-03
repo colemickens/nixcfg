@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 set -euo pipefail
+set -x
 
 cachix_cache="colemickens"
 cachix_key="$(cat /run/secrets/cachix.dhall | grep "eIu" | cut -d '"' -f2)"

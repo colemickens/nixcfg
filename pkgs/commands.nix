@@ -1,4 +1,5 @@
 { gnupg, openssh, efibootmgr, tailscale, code-server
+, asciinema
 , nixUnstable
 , writeShellScriptBin
 , linkFarmFromDrvs
@@ -47,15 +48,19 @@ let
     gpgssh
 
     (writeShellScriptBin "devenv-code" ''
-      devenv --run -- "${code-server}/bin/code-server" --bind-addr "0.0.0.0:4444" --auth none --disable-telemetry
+      devenv --command -- "${code-server}/bin/code-server" --bind-addr "0.0.0.0:4444" --auth none --disable-telemetry
+    '')
+
+    (writeShellScriptBin "rec" ''
+      ${asciinema}/bin/asciinema rec "''${HOME}/''${1}.cast" -c "zellij attach -c ''${1}"
     '')
 
     (writeShellScriptBin "devenv-kate" ''
-      devenv --run -- kate
+      devenv --command -- kate
     '')
 
     (writeShellScriptBin "devenv" ''
-      devenv --run -- zellij attach -c devenv
+      nix develop $HOME/code/nixcfg#devenv "''${@}"
     '')
 
     (writeShellScriptBin "gpg-fix" ''

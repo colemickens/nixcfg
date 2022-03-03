@@ -9,7 +9,13 @@
         signing.signByDefault = true;
         userEmail = "cole.mickens@gmail.com";
         userName = "Cole Mickens";
-
+        
+        extraConfig = {
+          core = {
+            fsmonitor = "${pkgs.rs-git-fsmonitor}/bin/rs-git-fsmonitor";
+          };
+        };
+        
         delta = {
           enable = true;
           options = {

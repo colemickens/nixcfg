@@ -3,7 +3,7 @@
 {
   config = {
     home-manager.users.cole = { pkgs, ... }: {
-      xdg.config."wayfire/wayfire.ini".text = ''
+      xdg.configFile."wayfire/wayfire.ini".text = ''
         # Default config for Wayfire
         #
         # Copy this to ~/.config/wayfire.ini and edit it to your liking.

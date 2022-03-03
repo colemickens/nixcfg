@@ -2,6 +2,8 @@
 
 {
   config = {
+    documentation.enable = pkgs.lib.mkForce true; # for the demo
+    documentation.man.enable = pkgs.lib.mkForce true; # for the demo
     home-manager.users.cole = { pkgs, ... }: {
       programs.jj = {
         enable = true;

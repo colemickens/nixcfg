@@ -22,10 +22,11 @@ in minimalMkShell pkgs.system { # TODO use something else for system?
     inputs.fenix.packages.${system}.rust-analyzer
     cargo-watch bacon
     llvmPackages.lldb
+    rnix-lsp
 
     /*tools */ cmake pkgconfig lldb python3
     /*nodejs*/ nodejs yarn
-    /*golang*/ go go-outline goimports godef golint gopls
+    /*golang*/ go go-outline gotools godef golint gopls
   ];
 
   buildInputs = with pkgs; [
