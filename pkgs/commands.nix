@@ -47,16 +47,8 @@ let
     gssh
     gpgssh
 
-    (writeShellScriptBin "devenv-code" ''
-      devenv --command -- "${code-server}/bin/code-server" --bind-addr "0.0.0.0:4444" --auth none --disable-telemetry
-    '')
-
     (writeShellScriptBin "rec" ''
       ${asciinema}/bin/asciinema rec "''${HOME}/''${1}.cast" -c "zellij attach -c ''${1}"
-    '')
-
-    (writeShellScriptBin "devenv-kate" ''
-      devenv --command -- kate
     '')
 
     (writeShellScriptBin "devenv" ''

@@ -12,9 +12,15 @@
         settings = {
           # theme = "default"; # cute but not enough contrast
           # theme = "base16_default_dark"; # unreadable popup text
-          theme = "monokai_pro_octagon";
+          #theme = "dark_plus";
+          theme = "gruvbox";
 
           editor = {
+            cursor-shape = {
+              normal = "block";
+              insert = "bar";
+              select = "underline";
+            };
             true-color = true;
           };
           lsp = {

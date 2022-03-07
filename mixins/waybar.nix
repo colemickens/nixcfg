@@ -50,6 +50,7 @@ in
       #   #     timerConfig.OnCalendar = "hourly";
       #   # }
       # };
+      home.packages = [ pkgs.libappindicator-gtk3 ];
       programs.waybar = {
         enable = true;
         style = pkgs.lib.readFile ./waybar.css;

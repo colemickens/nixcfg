@@ -45,7 +45,6 @@
       };
       home.packages = with pkgs; [
         pavucontrol
-        qjackctl
 
         sirula
 

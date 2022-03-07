@@ -6,7 +6,9 @@
 
     ../mixins/wlsunset.nix
     ../mixins/mako.nix
+    ../mixins/sirula.nix
     ../mixins/sway.nix
+    ../mixins/wayfire.nix
     ../mixins/waybar.nix
 
     ../mixins/wayland-tweaks.nix
@@ -29,7 +31,6 @@
       [ xdg-desktop-portal-wlr xdg-desktop-portal-gtk ];
 
     home-manager.users.cole = { pkgs, ... }: {
-
       # block auto-sway reload, Sway crashes...
       xdg.configFile."sway/config".onChange = lib.mkForce "";
 
@@ -42,30 +43,16 @@
       };
 
       home.sessionVariables = {
-
+        TERMINAL = "wezterm";
         MOZ_ENABLE_WAYLAND = "1";
-
-        #WLR_DRM_NO_MODIFIERS = "1";
-        # SDL_VIDEODRIVER = "wayland";
-        # QT_QPA_PLATFORM = "wayland";
-        # QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-        # _JAVA_AWT_WM_NONREPARENTING = "1";
-
         XDG_SESSION_TYPE = "wayland";
         XDG_CURRENT_DESKTOP = "sway";
-        TERMINAL = "foot";
-
-        #WLR_DRM_NO_MODIFIERS = "1";
-        #WLR_DRM_NO_ATOMIC = "1";
       };
       home.packages = with pkgs; [
         pavucontrol
-        qjackctl
-
         sirula
 
         imv
-        #drm_info
         grim
         qt5.qtwayland
         slurp
@@ -75,6 +62,7 @@
         wf-recorder
         wl-clipboard
         wlrctl
+        wlr-randr
         # wl-gammactl # nixpkgs-wayland only
         # wlvncc # nixpkgs-wayland only
         # wshowkeys # use the wrapper ^

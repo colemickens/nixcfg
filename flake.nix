@@ -178,7 +178,6 @@
           };
           hodd = prev.callPackage ./pkgs/hodd {};
           keyboard-layouts = prev.callPackage ./pkgs/keyboard-layouts {};
-          meli = prev.callPackage ./pkgs/meli {};
           nvidia-vaapi-driver = prev.callPackage ./pkgs/nvidia-vaapi-driver {};
           onionbalance = prev.python3Packages.callPackage ./pkgs/onionbalance {};
           poweralertd = prev.callPackage ./pkgs/poweralertd {};
@@ -198,9 +197,6 @@
           wezterm = prev.callPackage ./pkgs/wezterm {
             wezterm = prev.wezterm;
           };
-          #zellij = prev.callPackage ./pkgs/zellij {
-          #  zellij = prev.zellij;
-          #};
 
           nix-build-uncached = prev.nix-build-uncached.overrideAttrs(old: {
             src = prev.fetchFromGitHub {
@@ -211,6 +207,11 @@
             };
           });
 
+          # disabled (we use it from their own flake now)
+          #zellij = prev.callPackage ./pkgs/zellij {
+          #  zellij = prev.zellij;
+          #};
+          # disabled (dont use) # meli = prev.callPackage ./pkgs/meli {};
           # disabled (very old, prob delete) # bb = prev.callPackage ./pkgs/bb {};
           # disabled (huge build + unused) # cchat-gtk = prev.callPackage ./pkgs/cchat-gtk {};
           # disabled (not sure how to add rocksdb) # conduit = prev.callPackage ./pkgs/conduit {};

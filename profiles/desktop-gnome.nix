@@ -76,7 +76,6 @@
       };
       home.packages = with pkgs; [
         pavucontrol
-        qjackctl
 
         gnome3.gnome-tweaks
       ];

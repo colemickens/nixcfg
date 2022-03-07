@@ -20,23 +20,26 @@ in
       xdg.configFile."wezterm/wezterm.lua".text = ''
         local wezterm = require 'wezterm';
 
+        local cs = "_unset"
+        cs = "Dimmed Monokia"
+        cs = "OneHalfDark"
+        cs = "WildCherry"
+        cs = "Monokai Remastered"
+        cs = "Builtin Solarized Dark"
+        cs = "Seti"
+        cs = "Dark+"
+        cs = "purplepeter"
+
         local config = {
-          enable_wayland = true,
-          font = wezterm.font_with_fallback({
-            {family="${font.name}", weight="Regular"},
-            {family="Font Awesome", weight="Regular"},
-            --"Font Awesome",
-          }),
-          freetype_load_target = "Light",
-          freetype_render_target = "HorizontalLcd",
-          -- default_prog = {"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"},
+          use_fancy_tab_bar = false,
+          color_scheme = cs,
           initial_rows = 24,
           initial_cols = 120,
           font_size = ${toString font.size},
+          enable_tab_bar = false,
           colors = {
             foreground = "${colors.foreground}",
             background = "${colors.background}",
-
             ansi = {
               "${colors.black}",
               "${colors.red}",
@@ -59,7 +62,22 @@ in
             },
           }
         }
-
+          
+        if wezterm.target_triple == "x86_64-pc-windows-msvc" then
+          config.default_prog = { "powershell.exe" }
+        else
+          config.enable_wayland = true
+          config.window_decorations = "TITLE"
+          config.window_close_confirmation = "NeverPrompt"
+          config.freetype_load_target = "Light"
+          config.freetype_render_target = "HorizontalLcd"
+          config.font = wezterm.font_with_fallback({
+            {family="${font.name}", weight="Medium"},
+            {family="Font Awesome", weight="Regular"},
+             --"Font Awesome",
+          })
+        end
+        
         return config
       '';
     };

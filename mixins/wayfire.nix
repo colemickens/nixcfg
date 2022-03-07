@@ -1,328 +1,227 @@
 { config, pkgs, inputs, ... }:
 
+let
+  bg_gruvbox_rainbow = builtins.fetchurl {
+    url = "https://raw.githubusercontent.com/lunik1/nixos-logo-gruvbox-wallpaper/master/png/gruvbox-dark-rainbow.png";
+    sha256 = "036gqhbf6s5ddgvfbgn6iqbzgizssyf7820m5815b2gd748jw8zc";
+  };
+  bgcolor = "#000000";
+
+  fmt = pkgs.formats.ini { };
+  gen = cfg: (fmt.generate "wayfire-config.ini" cfg);
+
+  #lockcmd = "${pkgs.swaylock}/bin/swaylock -c \#cccccc";
+  idlelockcmd = "${pkgs.swaylock-effects}/bin/swaylock --screenshots --clock --effect-scale 0.5 --effect-blur 7x5 --effect-scale 2 --effect-pixelate 10";
+  lockcmd = "${pkgs.swaylock-effects}/bin/swaylock --screenshots --clock --fade-in 5 --effect-scale 0.5 --effect-blur 7x5 --effect-scale 2 --effect-pixelate 10";
+in
 {
   config = {
     home-manager.users.cole = { pkgs, ... }: {
-      xdg.configFile."wayfire/wayfire.ini".text = ''
-        # Default config for Wayfire
-        #
-        # Copy this to ~/.config/wayfire.ini and edit it to your liking.
-        #
-        # Take the tutorial to get started.
-        # https://github.com/WayfireWM/wayfire/wiki/Tutorial
-        #
-        # Read the Configuration document for a complete reference.
-        # https://github.com/WayfireWM/wayfire/wiki/Configuration
-        
-        # Input configuration ──────────────────────────────────────────────────────────
-        
-        # Example configuration:
-        #
-        # [input]
-        # xkb_layout = us,fr
-        # xkb_variant = dvorak,bepo
-        #
-        # See Input options for a complete reference.
-        # https://github.com/WayfireWM/wayfire/wiki/Configuration#input
-        
-        # Output configuration ─────────────────────────────────────────────────────────
-        
-        # Example configuration:
-        #
-        [output:eDP-1]
-        mode = 3440x1440@120000
-        position = 0,0
-        transform = normal
-        scale = 1.000000
-        #
-        # You can get the names of your outputs with wlr-randr.
-        # https://github.com/emersion/wlr-randr
-        #
-        # See also kanshi for configuring your outputs automatically.
-        # https://wayland.emersion.fr/kanshi/
-        #
-        # See Output options for a complete reference.
-        # https://github.com/WayfireWM/wayfire/wiki/Configuration#output
-        
-        # Core options ─────────────────────────────────────────────────────────────────
-        
-        [core]
-        
-        # List of plugins to be enabled.
-        # See the Configuration document for a complete list.
-        plugins = \
-          alpha \
-          animate \
-          autostart \
-          command \
-          cube \
-          decoration \
-          expo \
-          fast-switcher \
-          fisheye \
-          grid \
-          idle \
-          invert \
-          move \
-          oswitch \
-          place \
-          resize \
-          switcher \
-          vswitch \
-          window-rules \
-          wm-actions \
-          wobbly \
-          wrot \
-          zoom
-        
-        # Note: [blur] is not enabled by default, because it can be resource-intensive.
-        # Feel free to add it to the list if you want it.
-        # You can find its documentation here:
-        # https://github.com/WayfireWM/wayfire/wiki/Configuration#blur
-        
-        # Close focused window.
-        close_top_view = <super> KEY_Q | <alt> KEY_F4
-        
-        # Workspaces arranged into a grid: 3 × 3.
-        vwidth = 3
-        vheight = 3
-        
-        # Prefer client-side decoration or server-side decoration
-        preferred_decoration_mode = client
-        
+      xdg.configFile."wayfire.ini".source = gen {
+        "input" = {
+          click_method = "clickfinger";
+          disable_touchpad_while_type = true;
+          natural_scroll = true;
+        };
+        "output:DP-1" = {
+          mode = "3440x1440@120000";
+        };
+        "output:eDP-1" = {
+          mode = "2880x1800@90000";
+          scale = 1.5;
+        };
+        "output:HDMI-A-1" = {
+          enabled = false;
+        };
+        core = {
+          plugins = (builtins.concatStringsSep " " [
+            "alpha"
+            "animate"
+            "autostart"
+            "blur"
+            "command"
+            #"cube"
+            "decoration"
+            "expo"
+            "fast-switcher"
+            "fisheye"
+            "follow-focus"
+            #"grid"
+            "idle"
+            "invert"
+            "move"
+            "oswitch"
+            "place"
+            "resize"
+            "switcher"
+            "vswitch"
+            "simple-tile"
+            "window-rules"
+            "wm-actions"
+            #"wobbly"
+            "wrot"
+            "zoom"
+          ]);
+          close_top_view = "<super> <shift> KEY_Q | <alt> KEY_F4";
+          vwidth = 2;
+          vheight = 2;
+          preferred_decoration_mode = "server";
+        };
+
         # Mouse bindings ───────────────────────────────────────────────────────────────
+        move.activate = "<super> BTN_LEFT";
+        resize.activate = "<super> BTN_RIGHT";
+        zoom.modifier = "<super>";
+        alpha.modifier = "<super> <alt>";
+        wrot.activate = "<super> <ctrl> BTN_RIGHT";
+        fisheye.toggle = "<super> <ctrl> KEY_F";
+
+        autostart = {
+          autostart_wf_shell = false;
+          # background = wf-background
+          # panel = wf-panel
+          # dock = wf-dock
+          import = "systemctl import-environment --user WAYLAND_DISPLAY XDG_SESSION_TYPE XDG_SESSION_ID";
+          panel = "waybar -l trace > /tmp/waybar.trace.txt"; # configured with hm
+          outputs = "${pkgs.kanshi}/bin/kanshi";
+          notifications = "mako"; # configured with hm
+          gamma = "${pkgs.wlsunset}/bin/wlsunset -l 47.6062 -L 122.3321"; # aha, lol, this is why I can't disable it?
+          idle = "${pkgs.swayidle}/bin/swayidle before-sleep '${idlelockcmd}'";
+
+          # XDG desktop portal
+          # Needed by some GTK applications
+          # portal = /usr/libexec/xdg-desktop-portal
+        };
+
+        idle = {
+          toggle = "<super> KEY_Z";
+          screensaver_timeout = 300;
+          dpms_timeout = 600;
+        };
+
+        command = {
+          binding_terminal = "<super> KEY_ENTER";
+          command_terminal = "wezterm";
+
+          binding_launcher = "<super> KEY_ESC";
+          command_launcher = "${pkgs.sirula}/bin/sirula";
+
+          binding_lock = "<super> <shift> KEY_DELETE | <super> KEY_DELETE";
+          command_lock = "${lockcmd}";
+
+          #binding_logout = <super> KEY_ESC
+          #command_logout = wlogout
+
+          binding_screenshot = "<super> KEY_PRINT";
+          command_screenshot = "grim $(date '+%F_%T').webp";
+
+          binding_screenshot_interactive = "<super> <shift> KEY_PRINT";
+          command_screenshot_interactive = "slurp | grim -g - $(date '+%F_%T').webp";
+        };
+        /*
+          # Volume controls
+          # https://alsa-project.org
+          repeatable_binding_volume_up = KEY_VOLUMEUP
+          command_volume_up = amixer set Master 5%+
+          repeatable_binding_volume_down = KEY_VOLUMEDOWN
+          command_volume_down = amixer set Master 5%-
+          binding_mute = KEY_MUTE
+          command_mute = amixer set Master toggle
         
-        # Drag windows by holding down Super and left mouse button.
-        [move]
-        activate = <super> BTN_LEFT
-        
-        # Resize them with right mouse button + Super.
-        [resize]
-        activate = <super> BTN_RIGHT
-        
-        # Zoom in the desktop by scrolling + Super.
-        [zoom]
-        modifier = <super>
-        
-        # Change opacity by scrolling with Super + Alt.
-        [alpha]
-        modifier = <super> <alt>
-        
-        # Rotate windows with the mouse.
-        [wrot]
-        activate = <super> <ctrl> BTN_RIGHT
-        
-        # Fisheye effect.
-        [fisheye]
-        toggle = <super> <ctrl> KEY_F
-        
-        # Startup commands ─────────────────────────────────────────────────────────────
-        
-        [autostart]
-        
-        # Automatically start background and panel.
-        # Set to false if you want to override the default clients.
-        autostart_wf_shell = true
-        
-        # Set the wallpaper, start a panel and dock if you want one.
-        # https://github.com/WayfireWM/wf-shell
-        #
-        # These are started by the autostart_wf_shell option above.
-        #
-        # background = wf-background
-        # panel = wf-panel
-        # dock = wf-dock
-        
-        # Output configuration
-        # https://wayland.emersion.fr/kanshi/
-        outputs = kanshi
-        
-        # Notifications
-        # https://wayland.emersion.fr/mako/
-        notifications = mako
-        
-        # Screen color temperature
-        # https://sr.ht/~kennylevinsen/wlsunset/
-        gamma = wlsunset
-        
-        # Idle configuration
-        # https://github.com/swaywm/swayidle
-        # https://github.com/swaywm/swaylock
-        idle = swayidle before-sleep swaylock
-        
-        # XDG desktop portal
-        # Needed by some GTK applications
-        portal = /usr/libexec/xdg-desktop-portal
-        
-        # Example configuration:
-        #
-        # [idle]
-        # toggle = <super> KEY_Z
-        # screensaver_timeout = 300
-        # dpms_timeout = 600
-        #
-        # Disables the compositor going idle with Super + z.
-        # This will lock your screen after 300 seconds of inactivity, then turn off
-        # your displays after another 300 seconds.
-        
-        # Applications ─────────────────────────────────────────────────────────────────
-        
-        [command]
-        
-        # Start a terminal
-        # https://github.com/alacritty/alacritty
-        binding_terminal = <super> KEY_ENTER
-        command_terminal = alacritty
-        
-        # Start your launcher
-        # https://hg.sr.ht/~scoopta/wofi
-        # Note: Add mode=run or mode=drun to ~/.config/wofi/config.
-        # You can also specify the mode with --show option.
-        binding_launcher = <super> <shift> KEY_ENTER
-        command_launcher = wofi
-        
-        # Screen locker
-        # https://github.com/swaywm/swaylock
-        binding_lock = <super> <shift> KEY_ESC
-        command_lock = swaylock
-        
-        # Logout
-        # https://github.com/ArtsyMacaw/wlogout
-        binding_logout = <super> KEY_ESC
-        command_logout = wlogout
-        
-        # Screenshots
-        # https://wayland.emersion.fr/grim/
-        # https://wayland.emersion.fr/slurp/
-        binding_screenshot = KEY_PRINT
-        command_screenshot = grim $(date '+%F_%T').webp
-        binding_screenshot_interactive = <shift> KEY_PRINT
-        command_screenshot_interactive = slurp | grim -g - $(date '+%F_%T').webp
-        
-        # Volume controls
-        # https://alsa-project.org
-        repeatable_binding_volume_up = KEY_VOLUMEUP
-        command_volume_up = amixer set Master 5%+
-        repeatable_binding_volume_down = KEY_VOLUMEDOWN
-        command_volume_down = amixer set Master 5%-
-        binding_mute = KEY_MUTE
-        command_mute = amixer set Master toggle
-        
-        # Screen brightness
-        # https://haikarainen.github.io/light/
-        repeatable_binding_light_up = KEY_BRIGHTNESSUP
-        command_light_up = light -A 5
-        repeatable_binding_light_down = KEY_BRIGHTNESSDOWN
-        command_light_down = light -U 5
-        
-        # Windows ──────────────────────────────────────────────────────────────────────
-        
-        # Actions related to window management functionalities.
-        #
-        # Example configuration:
-        #
-        # [wm-actions]
-        # toggle_fullscreen = <super> KEY_F
-        # toggle_always_on_top = <super> KEY_X
-        # toggle_sticky = <super> <shift> KEY_X
-        
-        # Position the windows in certain regions of the output.
-        [grid]
-        #
-        # ⇱ ↑ ⇲   │ 7 8 9
-        # ← f →   │ 4 5 6
-        # ⇱ ↓ ⇲ d │ 1 2 3 0
-        # ‾   ‾
-        slot_bl = <super> KEY_KP1
-        slot_b = <super> KEY_KP2
-        slot_br = <super> KEY_KP3
-        slot_l = <super> KEY_LEFT | <super> KEY_KP4
-        slot_c = <super> KEY_UP | <super> KEY_KP5
-        slot_r = <super> KEY_RIGHT | <super> KEY_KP6
-        slot_tl = <super> KEY_KP7
-        slot_t = <super> KEY_KP8
-        slot_tr = <super> KEY_KP9
-        # Restore default.
-        restore = <super> KEY_DOWN | <super> KEY_KP0
-        
+          # Screen brightness
+          # https://haikarainen.github.io/light/
+          repeatable_binding_light_up = KEY_BRIGHTNESSUP
+          command_light_up = light -A 5
+          repeatable_binding_light_down = KEY_BRIGHTNESSDOWN
+          command_light_down = light -U 5
+         
+        */
+        wm-actions = {
+          toggle_fullscreen = "<super> KEY_F";
+          toggle_always_on_top = "<super> KEY_X";
+          toggle_sticky = "<super> <shift> KEY_X";
+        };
+
+        grid = {
+          #
+          # ⇱ ↑ ⇲   │ 7 8 9
+          # ← f →   │ 4 5 6
+          # ⇱ ↓ ⇲ d │ 1 2 3 0
+          # ‾   ‾
+          slot_bl = "<super> KEY_KP1";
+          slot_b = "<super> KEY_KP2";
+          slot_br = "<super> KEY_KP3";
+          slot_l = "<super> KEY_LEFT | <super> KEY_KP4";
+          slot_c = "<super> KEY_UP | <super> KEY_KP5";
+          slot_r = "<super> KEY_RIGHT | <super> KEY_KP6";
+          slot_tl = "<super> KEY_KP7";
+          slot_t = "<super> KEY_KP8";
+          slot_tr = "<super> KEY_KP9";
+          # Restore default.
+          restore = "<super> KEY_DOWN | <super> KEY_KP0";
+        };
         # Change active window with an animation.
-        [switcher]
-        next_view = <alt> KEY_TAB
-        prev_view = <alt> <shift> KEY_TAB
-        
+        switcher = {
+          next_view = "<alt> KEY_TAB";
+          prev_view = "<alt> <shift> KEY_TAB";
+        };
+
         # Simple active window switcher.
-        [fast-switcher]
-        activate = <alt> KEY_ESC
-        
-        # Workspaces ───────────────────────────────────────────────────────────────────
-        
-        # Switch to workspace.
-        [vswitch]
-        binding_left = <ctrl> <super> KEY_LEFT
-        binding_down = <ctrl> <super> KEY_DOWN
-        binding_up = <ctrl> <super> KEY_UP
-        binding_right = <ctrl> <super> KEY_RIGHT
-        # Move the focused window with the same key-bindings, but add Shift.
-        with_win_left = <ctrl> <super> <shift> KEY_LEFT
-        with_win_down = <ctrl> <super> <shift> KEY_DOWN
-        with_win_up = <ctrl> <super> <shift> KEY_UP
-        with_win_right = <ctrl> <super> <shift> KEY_RIGHT
-        
+        fast-switcher = {
+          activate = "<alt> KEY_ESC";
+        };
+
+        vswitch = {
+          binding_left = "<ctrl> <super> KEY_LEFT";
+          binding_down = "<ctrl> <super> KEY_DOWN";
+          binding_up = "<ctrl> <super> KEY_UP";
+          binding_right = "<ctrl> <super> KEY_RIGHT";
+          # Move the focused window with the same key-bindings, but add Shift.
+          with_win_left = "<ctrl> <super> <shift> KEY_LEFT";
+          with_win_down = "<ctrl> <super> <shift> KEY_DOWN";
+          with_win_up = "<ctrl> <super> <shift> KEY_UP";
+          with_win_right = "<ctrl> <super> <shift> KEY_RIGHT";
+        };
+
         # Show the current workspace row as a cube.
-        [cube]
-        activate = <ctrl> <alt> BTN_LEFT
-        # Switch to the next or previous workspace.
-        #rotate_left = <super> <ctrl> KEY_H
-        #rotate_right = <super> <ctrl> KEY_L
-        
+        cube = {
+          activate = "<ctrl> <alt> BTN_LEFT";
+          # Switch to the next or previous workspace.
+          #rotate_left = <super> <ctrl> KEY_H
+          #rotate_right = <super> <ctrl> KEY_L
+        };
+
         # Show an overview of all workspaces.
-        [expo]
-        toggle = <super>
-        # Select a workspace.
-        # Workspaces are arranged into a grid of 3 × 3.
-        # The numbering is left to right, line by line.
-        #
-        # ⇱ k ⇲
-        # h ⏎ l
-        # ⇱ j ⇲
-        # ‾   ‾
-        # See core.vwidth and core.vheight for configuring the grid.
-        select_workspace_1 = KEY_1
-        select_workspace_2 = KEY_2
-        select_workspace_3 = KEY_3
-        select_workspace_4 = KEY_4
-        select_workspace_5 = KEY_5
-        select_workspace_6 = KEY_6
-        select_workspace_7 = KEY_7
-        select_workspace_8 = KEY_8
-        select_workspace_9 = KEY_9
-        
-        # Outputs ──────────────────────────────────────────────────────────────────────
-        
-        # Change focused output.
-        [oswitch]
-        # Switch to the next output.
-        next_output = <super> KEY_O
-        # Same with the window.
-        next_output_with_win = <super> <shift> KEY_O
-        
-        # Invert the colors of the whole output.
-        [invert]
-        toggle = <super> KEY_I
-        
-        # Rules ────────────────────────────────────────────────────────────────────────
-        
-        # Example configuration:
-        #
-        # [window-rules]
-        # maximize_alacritty = on created if app_id is "Alacritty" then maximize
-        #
-        # You can get the properties of your applications with the following command:
-        # $ WAYLAND_DEBUG=1 alacritty 2>&1 | kak
-        #
-        # See Window rules for a complete reference.
-        # https://github.com/WayfireWM/wayfire/wiki/Configuration#window-rules
-      '';
+        expo = {
+          toggle = "<super>";
+          # Workspaces are arranged into a grid of 3 × 3.
+          # The numbering is left to right, line by line.
+          #
+          # ⇱ k ⇲
+          # h ⏎ l
+          # ⇱ j ⇲
+          # ‾   ‾
+          select_workspace_1 = "KEY_1";
+          select_workspace_2 = "KEY_2";
+          select_workspace_3 = "KEY_3";
+          select_workspace_4 = "KEY_4";
+          select_workspace_5 = "KEY_5";
+          select_workspace_6 = "KEY_6";
+          select_workspace_7 = "KEY_7";
+          select_workspace_8 = "KEY_8";
+          select_workspace_9 = "KEY_9";
+        };
+        oswitch = {
+          next_output = "<super> KEY_O";
+          next_output_with_win = "<super> <shift> KEY_O";
+        };
+        invert = {
+          toggle = "<super> KEY_I";
+        };
+        window-rules = {
+          # maximize_alacritty = on created if app_id is "Alacritty" then maximize
+        };
+      };
     };
   };
 }

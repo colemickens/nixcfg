@@ -15,10 +15,10 @@ in
   imports = [
     ./interactive.nix # includes core.nix (which imports hm)
 
-    ../mixins/alacritty.nix
+    #../mixins/alacritty.nix
     ../mixins/chromecast.nix
     ../mixins/fonts.nix
-    ../mixins/foot.nix
+    #../mixins/foot.nix
     ../mixins/mpv.nix
     ../mixins/pipewire.nix
     ../mixins/qt.nix

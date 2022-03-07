@@ -5,11 +5,10 @@
     ./core.nix
 
     ../../mixins/gfx-nvidia.nix # because of the wlroots patch, and ordering issues
-    ../../profiles/desktop-fireplace.nix
-    #../../profiles/desktop-plasma.nix
+    ../../profiles/desktop-sway.nix
   ];
 
-  config = {
+ config = {
     specialisation = {
       #gnome.inheritParentConfig = false;
       #gnome.configuration.imports = [
