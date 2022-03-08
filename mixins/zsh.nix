@@ -31,7 +31,7 @@ in {
         # - can rev search + tab-completion use the same tool/path?
 
         envExtra = ''
-          MCFLY_RESULTS_SORT="LAST_RUN"
+          export MCFLY_RESULTS_SORT="LAST_RUN"
         '';
 
         initExtra = ''

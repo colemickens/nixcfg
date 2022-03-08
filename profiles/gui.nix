@@ -5,17 +5,21 @@ let
   #_firefox = firefoxFlake.firefox-nightly-bin;
   _firefox = pkgs.firefox-wayland;
 
-  ppkgs = if pkgs.system == "x86_64-linux" then (with pkgs; [
-    tribler # likely broken still on aarch64-linux
-  ]) else if pkgs.system == "aarch64-linux" then (with pkgs; [
-  ]) else (with pkgs; [
-  ]);
+  ppkgs =
+    if pkgs.system == "x86_64-linux" then
+      (with pkgs; [
+        tribler # likely broken still on aarch64-linux
+      ]) else if pkgs.system == "aarch64-linux" then
+      (with pkgs; [
+      ]) else
+      (with pkgs; [
+      ]);
 in
 {
   imports = [
     ./interactive.nix # includes core.nix (which imports hm)
 
-    #../mixins/alacritty.nix
+    ../mixins/alacritty.nix
     ../mixins/chromecast.nix
     ../mixins/fonts.nix
     #../mixins/foot.nix
@@ -54,7 +58,8 @@ in
 
         # gui cli
         brightnessctl
-        pulsemixer alsaUtils
+        pulsemixer
+        alsaUtils
 
         # misc gui
         evince
@@ -63,6 +68,7 @@ in
         freerdp
         spotify-qt
         vlc
+        glide
 
         virt-viewer
         spice-gtk # why do we need this? were we trying spicy? I think virt-viewer has picked up

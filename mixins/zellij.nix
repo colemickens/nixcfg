@@ -1,8 +1,8 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 let
-  ts = import ./_common/termsettings.nix { inherit pkgs; };
-  convert = ts.lib.convertToDecArray;
+  ts = import ./_common/termsettings.nix { inherit pkgs inputs; };
+  convert = ts.termlib.convertToDecArray;
   font = ts.fonts.default;
   colors = ts.colors.default;
 in
@@ -15,8 +15,9 @@ in
           default_mode = "normal";
           simplified_ui = true;
           pane_frames = false;
+          theme = "default";
           themes = {
-            default = {
+            nixdefault = {
               fg = convert colors.foreground;
               bg = convert colors.background;
               gray = convert colors.background;

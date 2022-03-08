@@ -1,42 +1,31 @@
-{ pkgs, config, ... }:
+{ pkgs, config, inputs, ... }:
 
 let
-  ts = import ./_common/termsettings.nix { inherit pkgs; };
+  ts = import ./_common/termsettings.nix { inherit pkgs inputs; };
   font = ts.fonts.default;
   colors = ts.colors.default;
 
   # foot scales the font size?
   #fontSize = (builtins.ceil (ts.fonts.default.size / 1.25) - 1);
-  fontSize = ts.fonts.default.size;
+  fontSize = 12;
 in
 {
   config = {
     home-manager.users.cole = { pkgs, ... }: {
       home.packages = with pkgs; [ wezterm ];
 
-      # wezterm.enable = true;
-      # wezterm.config = TODO;
-
       xdg.configFile."wezterm/wezterm.lua".text = ''
         local wezterm = require 'wezterm';
 
-        local cs = "_unset"
-        cs = "Dimmed Monokia"
-        cs = "OneHalfDark"
-        cs = "WildCherry"
-        cs = "Monokai Remastered"
-        cs = "Builtin Solarized Dark"
-        cs = "Seti"
-        cs = "Dark+"
-        cs = "purplepeter"
-
         local config = {
           use_fancy_tab_bar = false,
-          color_scheme = cs,
           initial_rows = 24,
           initial_cols = 120,
-          font_size = ${toString font.size},
+          font_size = ${toString fontSize},
           enable_tab_bar = false,
+          window_background_opacity = 1.0,
+          enable_csi_u_key_encoding = true,
+          default_cursor_style = 'BlinkingBar',
           colors = {
             foreground = "${colors.foreground}",
             background = "${colors.background}",
@@ -72,7 +61,7 @@ in
           config.freetype_load_target = "Light"
           config.freetype_render_target = "HorizontalLcd"
           config.font = wezterm.font_with_fallback({
-            {family="${font.name}", weight="Medium"},
+            {family="${font.name}", weight="Regular"},
             {family="Font Awesome", weight="Regular"},
              --"Font Awesome",
           })

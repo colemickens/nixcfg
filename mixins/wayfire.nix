@@ -1,6 +1,7 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, lib, ... }:
 
 let
+  termsettings = import ./_common/termsettings.nix { inherit config pkgs inputs lib; };
   bg_gruvbox_rainbow = builtins.fetchurl {
     url = "https://raw.githubusercontent.com/lunik1/nixos-logo-gruvbox-wallpaper/master/png/gruvbox-dark-rainbow.png";
     sha256 = "036gqhbf6s5ddgvfbgn6iqbzgizssyf7820m5815b2gd748jw8zc";
@@ -10,9 +11,10 @@ let
   fmt = pkgs.formats.ini { };
   gen = cfg: (fmt.generate "wayfire-config.ini" cfg);
 
+  default_term = termsettings.default_term;
   #lockcmd = "${pkgs.swaylock}/bin/swaylock -c \#cccccc";
-  idlelockcmd = "${pkgs.swaylock-effects}/bin/swaylock --screenshots --clock --effect-scale 0.5 --effect-blur 7x5 --effect-scale 2 --effect-pixelate 10";
-  lockcmd = "${pkgs.swaylock-effects}/bin/swaylock --screenshots --clock --fade-in 5 --effect-scale 0.5 --effect-blur 7x5 --effect-scale 2 --effect-pixelate 10";
+  lockcmd = "${pkgs.swaylock-effects}/bin/swaylock --screenshots --clock --effect-scale 0.5 --effect-blur 7x5 --effect-scale 2 --effect-pixelate 10";
+  idlelockcmd = "${pkgs.swaylock-effects}/bin/swaylock --screenshots --clock --fade-in 5 --effect-scale 0.5 --effect-blur 7x5 --effect-scale 2 --effect-pixelate 10";
 in
 {
   config = {
@@ -31,7 +33,7 @@ in
           scale = 1.5;
         };
         "output:HDMI-A-1" = {
-          enabled = false;
+          mode = "off";
         };
         core = {
           plugins = (builtins.concatStringsSep " " [
@@ -62,6 +64,7 @@ in
             "wrot"
             "zoom"
           ]);
+          background_color = bgcolor;
           close_top_view = "<super> <shift> KEY_Q | <alt> KEY_F4";
           vwidth = 2;
           vheight = 2;
@@ -101,7 +104,7 @@ in
 
         command = {
           binding_terminal = "<super> KEY_ENTER";
-          command_terminal = "wezterm";
+          command_terminal = default_term;
 
           binding_launcher = "<super> KEY_ESC";
           command_launcher = "${pkgs.sirula}/bin/sirula";

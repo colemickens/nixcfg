@@ -1,6 +1,6 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, inputs, lib, ... }:
 let
-  ts = import ./_common/termsettings.nix { inherit pkgs; };
+  ts = import ./_common/termsettings.nix { inherit pkgs inputs; };
   font = ts.fonts.default;
   colors = ts.colors.default;
 

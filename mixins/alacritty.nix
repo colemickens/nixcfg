@@ -1,7 +1,7 @@
-{ pkgs, config, ... }:
+{ pkgs, config, inputs, ... }:
 
 let
-  ts = import ./_common/termsettings.nix { inherit pkgs; };
+  ts = import ./_common/termsettings.nix { inherit pkgs inputs; };
   font = ts.fonts.default;
   colors = ts.colors.default;
 in
@@ -18,6 +18,11 @@ in
             normal.family = "${font.name}";
             size = font.size;
           };
+          #cursor.style = {
+          #  shape = "Block";
+          #  blinking = "Always";
+          #};
+          #cursor.blink_interval = 250;
           draw_bold_text_with_bright_colors = colors.bold_as_bright;
           window = {
             opacity = 1.0;
@@ -27,24 +32,24 @@ in
             primary.background = colors.background;
 
             normal = {
-              black   = colors.black;
-              red     = colors.red;
-              green   = colors.green;
-              yellow  = colors.yellow;
-              blue    = colors.blue;
+              black = colors.black;
+              red = colors.red;
+              green = colors.green;
+              yellow = colors.yellow;
+              blue = colors.blue;
               magenta = colors.purple;
-              cyan    = colors.cyan;
-              white   = colors.white;
+              cyan = colors.cyan;
+              white = colors.white;
             };
             bright = {
-              black   = colors.brightBlack;
-              red     = colors.brightRed;
-              green   = colors.brightGreen;
-              yellow  = colors.brightYellow;
-              blue    = colors.brightBlue;
+              black = colors.brightBlack;
+              red = colors.brightRed;
+              green = colors.brightGreen;
+              yellow = colors.brightYellow;
+              blue = colors.brightBlue;
               magenta = colors.brightPurple;
-              cyan    = colors.brightCyan;
-              white   = colors.brightWhite;
+              cyan = colors.brightCyan;
+              white = colors.brightWhite;
             };
           };
         };

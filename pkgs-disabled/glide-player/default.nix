@@ -4,7 +4,7 @@ args_@{ lib
 # , extra-cmake-modules
 , rustPlatform
 , pkg-config
-, gtk3
+, gtk3, gstreamer
 , ... }:
 
 let
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = metadata.sha256;
   };
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk3 ];
+  buildInputs = [ gtk3 gstreamer ];
 
   cargoSha256 = metadata.cargoSha256;
 

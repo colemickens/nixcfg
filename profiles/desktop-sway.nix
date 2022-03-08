@@ -1,6 +1,10 @@
 { pkgs, lib, config, inputs, ... }:
 
-{
+let
+  termsettings = import ../mixins/_common/termsettings.nix { inherit pkgs lib config inputs; };
+  default_term = termsettings.default_term;
+  _wayfire = pkgs.wayfire; # todo: disable xwayland
+in {
   imports = [
     ../mixins/gtk.nix
 
@@ -43,7 +47,7 @@
       };
 
       home.sessionVariables = {
-        TERMINAL = "wezterm";
+        TERMINAL = default_term;
         MOZ_ENABLE_WAYLAND = "1";
         XDG_SESSION_TYPE = "wayland";
         XDG_CURRENT_DESKTOP = "sway";
@@ -56,7 +60,6 @@
         grim
         qt5.qtwayland
         slurp
-        nwg-launchers
         waypipe
         wayvnc
         wf-recorder
@@ -70,7 +73,7 @@
         xwayland
         ydotool
 
-        wayfire
+        _wayfire
       ];
     };
   };

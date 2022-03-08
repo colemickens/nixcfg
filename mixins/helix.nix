@@ -6,9 +6,10 @@
       programs.helix = {
         enable = true;
         package =
-          if pkgs.system == "x86_64-linux"
-          then inputs.helix.outputs.packages.${pkgs.system}.helix
-          else pkgs.helix;
+          inputs.helix.outputs.packages.${pkgs.system}.helix;
+          #if pkgs.system == "x86_64-linux"
+          #then inputs.helix.outputs.packages.${pkgs.system}.helix
+          #else pkgs.helix;
         settings = {
           # theme = "default"; # cute but not enough contrast
           # theme = "base16_default_dark"; # unreadable popup text

@@ -34,6 +34,9 @@
     # jh7100.url = "https://github.com/colemickens/jh7100";
 
     hardware.url = "github:nixos/nixos-hardware";
+    
+    nix-rice.url = "github:colemickens/nix-rice";
+    nix-rice.inputs.nixpkgs.follows = "nixpkgs";
 
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland/master";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
@@ -139,6 +142,12 @@
       devShells = forAllSystems (system: {
         default = devShell.${system};
         devenv = (import ./shells/devenv.nix { inherit inputs system minimalMkShell; });
+        uutils = minimalMkShell system {
+          name = "uutils-devshell";
+          nativeBuildInputs = with pkgs_.nixpkgs.${system}; [
+            (uutils-coreutils.override { prefix = ""; })
+          ];
+        };
       });
 
       legacyPackages = forAllSystems (system: { # to `nix eval` with the "currentSystem" in certain scenarios
@@ -169,16 +178,21 @@
           customCommands = prev.callPackage ./pkgs/commands.nix {};
           customGuiCommands = prev.callPackage ./pkgs/commands-gui.nix {};
 
+          #alacritty = prev.callPackage ./pkgs/alacritty {
+          #  alacritty = prev.alacritty;
+          #};
           bottom  = prev.callPackage ./pkgs/bottom  {
             bottom = prev.bottom;
           };
           get-xoauth2-token = prev.callPackage ./pkgs/get-xoauth2-token {};
+          #glide-player = prev.callPackage ./pkgs/glide-player {
+          #};
           headscale = prev.callPackage ./pkgs/headscale {
            buildGoModule = prev.buildGo117Module;
           };
           hodd = prev.callPackage ./pkgs/hodd {};
           keyboard-layouts = prev.callPackage ./pkgs/keyboard-layouts {};
-          nvidia-vaapi-driver = prev.callPackage ./pkgs/nvidia-vaapi-driver {};
+          #nvidia-vaapi-driver = prev.callPackage ./pkgs/nvidia-vaapi-driver {};
           onionbalance = prev.python3Packages.callPackage ./pkgs/onionbalance {};
           poweralertd = prev.callPackage ./pkgs/poweralertd {};
           rumqtt = prev.callPackage ./pkgs/rumqtt {};
