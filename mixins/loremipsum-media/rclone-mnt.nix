@@ -7,8 +7,6 @@ let
     path = with pkgs; [ fuse bash ];
     serviceConfig = {
       Type = "simple";
-      StartLimitInterval = "60s";
-      StartLimitBurst = 3;
       ExecStartPre = [
         "-${pkgs.fuse}/bin/fusermount -uz /mnt/rclone/${target}"
         "${pkgs.coreutils}/bin/mkdir -p /mnt/rclone/${target}"
@@ -17,6 +15,8 @@ let
       ExecStop = "${pkgs.fuse}/bin/fusermount -uz /mnt/rclone/${target}";
       Restart = "on-failure";
     };
+    startLimitIntervalSec = 60;
+    startLimitBurst = 3;
     wantedBy = [ "default.target" ];
   };
 in {

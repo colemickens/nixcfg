@@ -1,14 +1,10 @@
 { pkgs, lib, config, inputs, ... }:
 
-let
-  hostColor = "blue1";
-in
 {
   imports = [
-    ./user.nix
     inputs.home-manager.nixosModules."home-manager"
-    ../mixins/common-hm.nix
 
+    ./user.nix
     ../mixins/common.nix
 
     ../mixins/git.nix
@@ -19,15 +15,21 @@ in
     ../mixins/zellij.nix
   ];
 
-  # gpg --pinentry-mode loopback --batch --passphrase '' --quick-generate-key "testkeyrpione"
-
   config = {
     home-manager.useGlobalPkgs = true;
     home-manager.useUserPackages = true;
-    home-manager.users.cole = { pkgs, ... }: {
-      home.stateVersion = "20.03";
+    home-manager.users.cole = { pkgs, ... }@hm: {
+      home.extraOutputsToInstall = [ "info" "man" "share" "icons" "doc" ];
+      home.stateVersion = "21.11";
       home.sessionVariables = {
-        EDITOR = "nvim";
+        EDITOR = "hx";
+        CARGO_HOME = "${hm.config.xdg.dataHome}/cargo";
+        PARALLEL_HOME = "${hm.config.xdg.configHome}/parallel";
+        PASSWORD_STORE_DIR = "${hm.config.xdg.dataHome}/password-store";
+      };
+      home.file = {
+        "${hm.config.home.sessionVariables.PARALLEL_HOME}/will-cite".text = "";
+        "${hm.config.home.sessionVariables.PARALLEL_HOME}/runs-without-willing-to-cite".text = "10";
       };
       manual = { manpages.enable = false; };
       news.display = "silent";
@@ -36,7 +38,6 @@ in
         gpg.enable = true;
       };
       home.packages = with pkgs; [
-        git-crypt
         bottom
       ];
     };

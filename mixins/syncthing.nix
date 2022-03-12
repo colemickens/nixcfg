@@ -8,9 +8,14 @@
 
     networking.firewall.interfaces."tailscale0".allowedTCPPorts = [ 8384 ];
 
-    home-manager.users.cole = { pkgs, ... }: {
+    home-manager.users.cole = { pkgs, ... }@hm: {
       services.syncthing = {
         enable = true;
+        extraOptions = [
+          "--config=${hm.config.xdg.configHome}/syncthing"
+          "--data=${hm.config.xdg.dataHome}/syncthing"
+        ];
+        # tray.enable = true;
       };
     };
   };

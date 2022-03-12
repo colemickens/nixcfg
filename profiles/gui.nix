@@ -75,6 +75,7 @@ in
         # hidpi fixes, so we can ditch this probably
 
         _firefox
+        ungoogled-chromium
       ]);
     };
   };

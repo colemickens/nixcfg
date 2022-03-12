@@ -1,10 +1,10 @@
 { config, pkgs, inputs, ... }:
 
 let
-  ts = import ./_common/termsettings.nix { inherit pkgs inputs; };
-  convert = ts.termlib.convertToDecArray;
-  font = ts.fonts.default;
-  colors = ts.colors.default;
+  prefs = import ./_preferences.nix { inherit pkgs inputs; };
+  convert = color: let c = inputs.nix-rice.lib.${pkgs.system}.color.hexToRgba color; in [c.r c.g c.b];
+  font = prefs.fonts.default;
+  colors = prefs.colors.default;
 in
 {
   config = {

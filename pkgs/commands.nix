@@ -46,9 +46,13 @@ let
     tsip
     gssh
     gpgssh
+    
+    (writeShellScriptBin "gopass-clip" ''
+      gopass show --clip "$(gopass ls --flat | sk --height '100%' -p "gopass show --clip> ")"
+    '')
 
-    (writeShellScriptBin "rec" ''
-      ${asciinema}/bin/asciinema rec "''${HOME}/''${1}.cast" -c "zellij attach -c ''${1}"
+    (writeShellScriptBin "gopass-totp" ''
+      gopass totp --clip "$(gopass ls --flat | sk --height '100%' -p "gopass totp --clip> ")"
     '')
 
     (writeShellScriptBin "devenv" ''
@@ -57,31 +61,27 @@ let
 
     (writeShellScriptBin "gpg-fix" ''
       ln -sf /run/user/1000/gnupg/S.gpg-agent.ssh /run/user/1000/sshagent
-      set -x
-      CO='\033[0;30m'
-      NC='\033[0m' # No Color
-      printf "''${CO}"
-      sudo systemctl stop pcscd.service
-      sudo systemctl stop pcscd.socket
-      systemctl --user stop gpg-agent.service
+      set +x
+      sudo systemctl stop pcscd.service >/dev/null
+      sudo systemctl stop pcscd.socket >/dev/null
+      systemctl --user stop gpg-agent.service 2>/dev/null
       sudo pkill -f gpg-agent
-      systemctl --user restart gpg-agent.socket
-      systemctl --user restart gpg-agent-extra.socket
-      systemctl --user restart gpg-agent-ssh.socket
+      systemctl --user restart gpg-agent.socket 2>/dev/null
+      systemctl --user restart gpg-agent-extra.socket 2>/dev/null
+      systemctl --user restart gpg-agent-ssh.socket 2>/dev/null
       export GPG_TTY=$(tty)
-      gpg-connect-agent updatestartuptty /bye
+      gpg-connect-agent updatestartuptty /bye >/dev/null 2>&1
       sleep 0.1
-      sudo systemctl start pcscd.service
+      sudo systemctl start pcscd.service >/dev/null
       sleep 0.1
       # check if key is known
       KEYID="0x9758078DE5308308"
       if ! gpg --list-keys $KEYID | grep $KEYID ; then
         curl -L https://github.com/colemickens.gpg | gpg --import
         (echo 5; echo y; echo save) |
-          gpg --command-fd 0 --no-tty --no-greeting -q --edit-key "$KEYID" trust
+          gpg --command-fd 0 --no-tty --no-greeting -q --edit-key "$KEYID" trust >/dev/null 2>&1
       fi
-      printf "''${NC}"
-      gpg --card-status
+      gpg --card-status >/dev/null
     '')
 
     (writeShellScriptBin "ssh-fix" ''

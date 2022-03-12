@@ -5,14 +5,16 @@ in
 {
   imports = [
     ../../mixins/common.nix
+    ../../modules/loginctl-linger.nix
 
     ../../mixins/bolt.nix
-    ../../mixins/docker.nix
+    #../../mixins/docker.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
+    ../../mixins/samba.nix
     ../../mixins/syncthing.nix
-    ../../mixins/zfs-snapshots.nix
+    ../../mixins/zfs.nix
 
     ../../mixins/loremipsum-media/rclone-mnt.nix
 
@@ -22,12 +24,6 @@ in
     ./services/unifi.nix
 
     ../../profiles/interactive.nix
-    #../../profiles/desktop-sway.nix
-    #../../profiles/desktop-sway-unstable.nix
-    #../../profiles/desktop-gnome.nix
-
-    #../../modules/cf-ts-sync
-    ../../modules/loginctl-linger.nix
 
     # xps 13 9370 specific:
     ../../mixins/gfx-intel.nix
@@ -35,17 +31,14 @@ in
   ];
 
   config = {
-    services.tailscale.advertiseExitNode = false;
     boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
     boot.kernel.sysctl."net.ipv6.ip_forward" = 1;
 
     system.stateVersion = "21.05";
 
     nix.nixPath = [];
-    # xeep is our builder for a bit, so lets not GC
     nix.gc.automatic = true;
     nix.settings.max-jobs = 8;
-    #nix.package = lib.mkForce pkgs.nix;
 
     documentation.enable = false;
     documentation.doc.enable = false;
@@ -70,6 +63,10 @@ in
 
       "/" = {
         device = "tank2/root";
+        fsType = "zfs";
+      };
+      "/home" = {
+        device = "tank2/home";
         fsType = "zfs";
       };
       "/nix" = {

@@ -12,15 +12,19 @@
     ../mixins/cachix.nix
     ../mixins/direnv.nix
     ../mixins/gh.nix
-    ../mixins/gopass/gopass.nix
+    ../mixins/gopass.nix
     ../mixins/helix.nix
+    ../mixins/ion.nix
     ../mixins/jj.nix
     ../mixins/joshuto.nix
-    ../mixins/mcfly.nix # wish it took the history arg in config file
+    ../mixins/lorri.nix
+    # do I need this, use skim's support instead?
+    # ../mixins/mcfly.nix # wish it took the history arg in config file
     ../mixins/nushell.nix
     ../mixins/pijul.nix
     ../mixins/skim.nix # weird aarch64 build error...?
     ../mixins/solo2.nix
+    ../mixins/starship.nix
     ../mixins/sshd.nix
     ../mixins/tailscale.nix
     ../mixins/xdg.nix
@@ -42,13 +46,11 @@
       keep-outputs = true
       keep-derivations = true
     '';
-    home-manager.users.cole = { pkgs, ... }: {
+    home-manager.users.cole = { pkgs, ... }@hm: {
       home.sessionVariables = {
-        #EDITOR = "${pkgs.neovim}/bin/nvim";
-        EDITOR = "hx";
       };
       home.file = {
-        ".gdbinit".source = (pkgs.writeText "gdbinit" ''set auto-load safe-path /nix/store'');
+        "${hm.config.xdg.configHome}/gdb/gdbinit".source = (pkgs.writeText "gdbinit" ''set auto-load safe-path /nix/store'');
       };
       programs = {
         git.package = pkgs.gitAndTools.gitFull;
@@ -79,6 +81,7 @@
         sd
         procs
         bandwhich
+        prs # gopass replacement, oh fuck thank god
         # </rust pkgs>
         python3Packages.pywatchman
 

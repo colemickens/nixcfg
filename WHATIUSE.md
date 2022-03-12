@@ -5,6 +5,8 @@
 - exa (ls)
 - helix (neovim)
 - glide-player (?) (mpv/vlc/totem)
+- bottom
+- bandwich
 - wayshot (grim, any other screenshot utility)
 - wayout
 

@@ -120,7 +120,7 @@ in
 
     security.acme = {
       acceptTerms = true;
-      email = "cole.mickens@gmail.com";
+      defaults.email = "cole.mickens@gmail.com";
       certs."cleo.cat" = {
         dnsProvider = "cloudflare";
         #server = "https://acme-staging-v02.api.letsencrypt.org/directory";

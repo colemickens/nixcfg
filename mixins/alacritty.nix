@@ -1,9 +1,9 @@
 { pkgs, config, inputs, ... }:
 
 let
-  ts = import ./_common/termsettings.nix { inherit pkgs inputs; };
-  font = ts.fonts.default;
-  colors = ts.colors.default;
+  prefs = import ./_preferences.nix { inherit pkgs inputs; };
+  font = prefs.font;
+  colors = prefs.colors.default;
 in
 {
   config = {
@@ -14,8 +14,10 @@ in
           env = {
             TERM = "xterm-256color";
           };
+          shell = prefs.shell;
           font = {
-            normal.family = "${font.name}";
+            normal.family = "${font.family}";
+            # normal.family = "Recursive";
             size = font.size;
           };
           #cursor.style = {
@@ -26,6 +28,7 @@ in
           draw_bold_text_with_bright_colors = colors.bold_as_bright;
           window = {
             opacity = 1.0;
+            padding = { x = 5; y = 5; };
           };
           colors = rec {
             primary.foreground = colors.foreground;

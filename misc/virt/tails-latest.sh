@@ -10,7 +10,7 @@ TAILS_VERSION="0"
 
 # fetch upstream info
 index="https://tails.boum.org/install/v2/Tails/amd64/stable/latest.json"
-curl --silent "${index}" > /tmp/tails.json
+xh "${index}" > /tmp/tails.json
 ver="$(</tmp/tails.json jq -r ".installations[0].version")"
 TAILS_VERSION="${ver}"
 

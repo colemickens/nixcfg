@@ -1,0 +1,1 @@
+- see `../hosts/azdev` as an example

@@ -17,7 +17,7 @@ in {
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
-    ../../mixins/zfs-snapshots.nix
+    ../../mixins/zfs.nix
 
     ./grub-shim.nix
   ];
@@ -98,6 +98,7 @@ in {
 
     fileSystems."/"     = { fsType = "zfs";   device = "portypool/root"; };
     fileSystems."/nix"  = { fsType = "zfs";   device = "portypool/nix"; };
+    fileSystems."/home" = { fsType = "zfs";   device = "portypool/home"; };
     fileSystems."/boot" = { fsType = "vfat";  device = "/dev/disk/by-partlabel/porty-boot"; };
 
     boot.initrd.luks.devices."porty-luks" = {

@@ -1,75 +1,84 @@
 { config, lib, pkgs, inputs, ... }:
 
 let
-  bg_gruvbox_blue = builtins.fetchurl {
-    url = "https://raw.githubusercontent.com/lunik1/nixos-logo-gruvbox-wallpaper/master/png/gruvbox-dark-blue.png";
-    sha256 = "1jrmdhlcnmqkrdzylpq6kv9m3qsl317af3g66wf9lm3mz6xd6dzs";
-  };
-  bg_gruvbox_rainbow = builtins.fetchurl {
-    url = "https://raw.githubusercontent.com/lunik1/nixos-logo-gruvbox-wallpaper/master/png/gruvbox-dark-rainbow.png";
-    sha256 = "036gqhbf6s5ddgvfbgn6iqbzgizssyf7820m5815b2gd748jw8zc";
-  };
-  bgfile = bg_gruvbox_rainbow;
-  background = "${bgfile} fill #185373";
+  prefs = import ./_preferences.nix { inherit inputs config lib pkgs; };
 
   swayfonts = {
     names = [ "Iosevka" "FontAwesome5Free" ];
     style = "Heavy";
-    size = 9.0;
+    size = 10.0;
   };
-  barfont = "Iosevka Bold 9"; # font matches waybar-config.css
-  editor = "${pkgs.vscodium}/bin/codium";
+  editor = prefs.editor;
+  launcher = prefs.default_launcher;
+  terminal = prefs.default_term;
 
-  wofi = "${pkgs.wofi}/bin/wofi --insensitive";
-  drun = "${wofi} --show drun";
-  nwggrid = "${pkgs.nwg-launchers}/bin/nwggrid";
-  nwgdrawer = "${pkgs.nwg-drawer}/bin/nwg-drawer";
-  sirula = "${pkgs.sirula}/bin/sirula";
-  launcher = nwgdrawer;
-  launcher2 = sirula;
+  background = "#000000 solid_color";
 
-  #terminal = "alacritty";
-  terminal = "foot";
-  #terminal = "wezterm-gui";
-
-  # PASS
-  gp = "${pkgs.gopass}/bin/gopass";
-  smsg = "${pkgs.sway}/bin/swaymsg";
-  passShowCmd = "${gp} ls --flat | ${wofi} --dmenu | xargs -r ${smsg} -t command exec -- ${gp} show --clip";
-  passTotpCmd = "${gp} ls --flat | ${wofi} --dmenu | xargs -r ${smsg} -t command exec -- ${gp} totp --clip";
-
-  # OUTPUTS
-  out_laptop = "Sharp Corporation 0x148B 0x00000000";
   out_aw3418dw = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
   out_aw2521h = "Dell Inc. Dell AW2521H #HLAYMxgwABDZ";
   out_raisin = "Unknown 0x1402 0x00000000";
+  out_lgc165 = "Goldstar Company Ltd LG TV SSCR2 0x00000101";
 
-  # INPUTS
   in_pine_touchpad = "9610:30:HAILUCK_CO.,LTD_USB_KEYBOARD_Touchpad";
   in_touchpad = "1739:30383:DELL07E6:00_06CB:76AF_Touchpad";
-  in_logi = "1133:16505:Logitech_G_Pro";
   in_raisin = "1739:52804:MSFT0001:00_06CB:CE44_Touchpad";
   in_trackpoint_ii = "6127:24814:Lenovo_TrackPoint_Keyboard_II";
+  in_logi = "1133:16505:Logitech_G_Pro";
 
-  i3statusConfig = import ./i3status-rust-config.nix { inherit pkgs; };
-  i3statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ${i3statusConfig}";
+  in_kb_porty = "1118:1957:Microsoft_Microsoft___Nano_Transceiver_v2.1_Consumer_Control";
+  in_kb_raisin = "";
+
+  # i3statusConfig = import ./i3status-rust-config.nix { inherit pkgs; };
+  # i3statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ${i3statusConfig}";
   waybarCommand = "${pkgs.waybar}/bin/waybar";
   statusCommand = waybarCommand; # switch back?
 
   # idle/lock
   # TODO: test and fix/ remove this message
-  swaylockcmd = "${pkgs.swaylock}/bin/swaylock --font 'Iosevka' -i '${bgfile}' -s 'fill' -c '#000000'";
-  idlecmd = ''${pkgs.swayidle}/bin/swayidle -w \
-    before-sleep \"${swaylockcmd}\" \
-    lock \"${swaylockcmd}\" \
-    timeout 10 \"${pkgs.brightnessctl}/bin/brightnessctl set 10%\" \
-    timeout 500 \"${swaylockcmd}\" \
-    timeout 1000 \"${pkgs.systemd}/bin/systemctl suspend\" \
-    resume 'swaymsg \"output * dpms on\"' '';
+  swaylockcmd = prefs.lockcmd;
+  idlecmd = prefs.idlecmd;
+
+  cmd_pass = "${prefs.default_term} --class floatmeplz -e 'gopass-clip'";
+  cmd_totp = "${prefs.default_term} --class floatmeplz -e 'gopass-totp'";
+
+  _kbmods = {
+    xkb_layout = "us";
+    xkb_options = "shift:both_capslock,caps:super";
+  };
+  _touchpad = {
+    click_method = "clickfinger";
+    tap = "enabled";
+    dwt = "enabled";
+    scroll_method = "two_finger";
+    natural_scroll = "enabled";
+    accel_profile = "adaptive";
+    pointer_accel = "1";
+  };
+  _mouse = {
+    accel_profile = "adaptive";
+    pointer_accel = ".1";
+  };
+  _hostinputs = {
+    porty = {
+      "${in_kb_porty}" = _kbmods;
+      "${in_logi}" = _mouse;
+    };
+    pinebook = {
+      "${in_pine_touchpad}" = _touchpad;
+    };
+    raisin = {
+      "${in_raisin}" = _touchpad;
+      "${in_kb_raisin}" = _kbmods;
+    };
+  };
+  hostinputs = let hn = config.networking.hostName; in
+    if !builtins.hasAttr hn _hostinputs
+    then { "input:keyboard" = _kbmods; }
+    else _hostinputs.${hn};
 
   # silly gtk/gnome wayland schenanigans
   # TODO: see if this is necessary if we get HM to do it? or our own systemd user units?
-  gsettings="${pkgs.glib}/bin/gsettings";
+  gsettings = "${pkgs.glib}/bin/gsettings";
   gsettings_inner = pkgs.writeShellScript "gsettings-inner.sh" ''
     set -x
     set -eu
@@ -117,14 +126,16 @@ in
 {
   config = {
     programs.sway.enable = true; # needed for swaylock/pam stuff
-    programs.sway.extraPackages = lib.mkForce []; # block rxvt
+    programs.sway.extraPackages = lib.mkForce [ ]; # block rxvt
 
     environment.systemPackages = with pkgs; [
       capitaine-cursors
-      nwg-panel
     ];
 
     home-manager.users.cole = { pkgs, ... }: {
+      # block auto-sway reload, Sway crashes... ... but now  we work around it by doing kbmods per dev
+      #xdg.configFile."sway/config".onChange = lib.mkForce "";
+
       wayland.windowManager.sway = {
         enable = true;
         #systemdIntegration = true; # beta
@@ -132,11 +143,10 @@ in
           base = true; # this is the default, but be explicit for now
           gtk = true;
         };
-        # extraSessionCommands = ''
-        #   export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
-        #   systemctl --user import-environment
-        # '';
-        xwayland = false;
+        extraSessionCommands = ''
+          true
+        '';
+        xwayland = prefs.xwayland_enabled;
         extraConfig = ''
           seat seat0 xcursor_theme "capitaine-cursors"
         '';
@@ -145,7 +155,7 @@ in
           inherit terminal;
           fonts = swayfonts;
           focus.followMouse = "always";
-          window.border = 4;
+          window.border = 5;
           window.titlebar = true;
           window.commands = [
             { criteria = { app_id = "mpv"; }; command = "sticky enable"; }
@@ -157,63 +167,32 @@ in
             }
 
             {
+              criteria = { app_id = "floatmeplz"; };
+              command = "floating enable";
+            }
+              
+            {
+              criteria = { app_id = "prs-gtk3-copy"; };
+              command = "floating enable";
+            }
+
+            {
               criteria = { instance = "pinentry"; };
               command = "fullscreen on";
             }
           ];
           startup = [
             { always = true; command = "${gsettings_auto}"; }
-            { always = true; command = "${pkgs.xorg.xrdb}/bin/xrdb -l $HOME/.Xresources"; }
+            # { always = true; command = "${pkgs.xorg.xrdb}/bin/xrdb -l $HOME/.Xresources"; }
             { always = true; command = "${pkgs.mako}/bin/mako"; }
             { always = true; command = "${pkgs.systemd}/bin/systemd-notify --ready || true"; }
+            { always = true; command = prefs.poststart.outPath; }
 
-            { always = true;  command = "pkill swayidle"; } # Disable swayidle for a bit
             { always = true; command = "${idlecmd}"; }
             { command = "${pkgs.poweralertd}/bin/poweralertd"; }
           ];
-          input = {
-            "${in_touchpad}" = {
-              click_method = "clickfinger";
-              tap = "enabled";
-              dwt = "enabled";
-              scroll_method = "two_finger";
-              natural_scroll = "enabled";
-              accel_profile = "adaptive";
-              pointer_accel = "1";
-            };
-            "${in_pine_touchpad}" = {
-              click_method = "clickfinger";
-              tap = "enabled";
-              dwt = "enabled";
-              scroll_method = "two_finger";
-              natural_scroll = "enabled";
-              accel_profile = "adaptive";
-              pointer_accel = ".5";
-            };
-            "${in_raisin}" = {
-              click_method = "clickfinger";
-              tap = "enabled";
-              dwt = "enabled";
-              scroll_method = "two_finger";
-              natural_scroll = "enabled";
-              #accel_profile = "adaptive";
-              #pointer_accel = ".5";
-            };
-            "${in_logi}" = {
-              accel_profile = "adaptive";
-              pointer_accel = ".1";
-            };
-            "type:keyboard" = {
-              xkb_options = "shift:both_capslock,ctrl:nocaps";
-            };
-          };
+          input = hostinputs;
           output = {
-            #"${out_laptop}" = {
-            #  mode = "3480x2160@59.997002Hz";
-            #  subpixel = "rgb";
-            #  scale = "2.0";
-            #};>
-            "${out_laptop}" = { disable = ""; }; # disable laptop display for a bit
             "${out_aw3418dw}" = {
               mode = "3440x1440@120Hz";
               #mode = "3440x1440Hz";
@@ -229,21 +208,15 @@ in
               scale = "1.8";
               adaptive_sync = "on";
             };
-            "${out_aw2521h}" = {
-              mode = "1920x1080@240Hz";
-              #subpixel = "rgb";
-              #scale = "1.8";
-              #adaptive_sync = "on";
+            "${out_lgc165}" = {
+              disable = "";
             };
             "*" = {
               background = background;
             };
           };
           bars = [{
-            #fonts = [ barfont ];
-            #position = "top";
             command = statusCommand;
-            #inherit statusCommand;
           }];
           keybindings = {
             "${modifier}+Return" = "exec ${terminal}";
@@ -252,23 +225,20 @@ in
             "${modifier}+Delete" = "exec ${swaylockcmd}";
 
             "${modifier}+Escape" = "exec ${launcher}";
-            "${modifier}+Ctrl+Escape" = "exec ${launcher2}";
-            "${modifier}+F1" = "exec ${passShowCmd}";
-            "${modifier}+F2" = "exec ${passTotpCmd}";
+            "${modifier}+Ctrl+Alt+Delete" = "exec ${pkgs.sway}/bin/swaymsg exit";
 
-            "${modifier}+Ctrl+Alt+Delete" = "exit";
+            "${modifier}+Alt+F1" = "exec ${cmd_pass}";
+            "${modifier}+Alt+F2" = "exec ${cmd_totp}";
 
-            "Ctrl+q" = "exec echo"; # the most ridiculous firefox bug ever
-
-            "${modifier}+Left" = "focus left";
-            "${modifier}+Down" = "focus down";
-            "${modifier}+Up" = "focus up";
-            "${modifier}+Right" = "focus right";
-
-            "${modifier}+Shift+Left" = "move left";
-            "${modifier}+Shift+Down" = "move down";
-            "${modifier}+Shift+Up" = "move up";
-            "${modifier}+Shift+Right" = "move right";
+            # I gotta fucking learn some day
+            #"${modifier}+Left" = "focus left";
+            #"${modifier}+Down" = "focus down";
+            #"${modifier}+Up" = "focus up";
+            #"${modifier}+Right" = "focus right";
+            #"${modifier}+Shift+Left" = "move left";
+            #"${modifier}+Shift+Down" = "move down";
+            #"${modifier}+Shift+Up" = "move up";
+            #"${modifier}+Shift+Right" = "move right";
 
             "${modifier}+h" = "focus left";
             "${modifier}+j" = "focus down";
@@ -317,21 +287,21 @@ in
             "${modifier}+Shift+9" = "move container to workspace number 9";
 
             "${modifier}+Shift+minus" = "move scratchpad";
-            "${modifier}+minus"       = "scratchpad show";
+            "${modifier}+minus" = "scratchpad show";
 
-            "${modifier}+Ctrl+Alt+Home"  = "output * enable";
-            "${modifier}+Ctrl+Alt+End"   = "output -- disable";
+            "${modifier}+Ctrl+Alt+Home" = "output * enable";
+            "${modifier}+Ctrl+Alt+End" = "output -- disable";
             "${modifier}+Ctrl+Alt+equal" = "exec ${outputScale} +.1";
             "${modifier}+Ctrl+Alt+minus" = "exec ${outputScale} -.1";
 
-            "${modifier}+Print"       = ''exec ${pkgs.grim}/bin/grim \"''${HOME}/screenshot-$(date '+%s').png\"'';
+            "${modifier}+Print" = ''exec ${pkgs.grim}/bin/grim \"''${HOME}/screenshot-$(date '+%s').png\"'';
             "${modifier}+Shift+Print" = ''exec ${pkgs.grim}/bin/grim  -g \"$(slurp)\" \"''${HOME}/screenshot-$(date '+%s').png\"'';
 
-            "${modifier}+Ctrl+Alt+Up"    = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +10";
-            "${modifier}+Ctrl+Alt+Down"  = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 10-";
+            "${modifier}+Ctrl+Alt+Up" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +10";
+            "${modifier}+Ctrl+Alt+Down" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 10-";
             "${modifier}+Ctrl+Alt+Prior" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +100";
-            "${modifier}+Ctrl+Alt+Next"  = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 100-";
-            "${modifier}+Ctrl+Alt+Left"  = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume -2";
+            "${modifier}+Ctrl+Alt+Next" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 100-";
+            "${modifier}+Ctrl+Alt+Left" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume -2";
             "${modifier}+Ctrl+Alt+Right" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume +2";
           };
         };

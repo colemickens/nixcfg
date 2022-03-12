@@ -9,9 +9,9 @@ let
   metadata = rec {
     repo_git = "https://github.com/ClementTsang/bottom";
     branch = "master";
-    rev = "01f6bddab63d5d1d61baa9e90a326ffe2696762b";
-    sha256 = "sha256-8vltHuSprsWKhmzJdYL5/utd9DPx/FYj/5b5raGZAuw=";
-    cargoSha256 = "sha256-8vltHuSprsWKhmzJdYL5/utd9DPx/FYj/5b5raGZAuw=";
+    rev = "f2b8b4e8427996407b484c4a4ed9432519c9d3a5";
+    sha256 = "sha256-bJ1zqfiiIW6A3nV8zYWHYbEoGeWSW5wlk/n0EItf4C0=";
+    cargoSha256 = "sha256-bJ1zqfiiIW6A3nV8zYWHYbEoGeWSW5wlk/n0EItf4C0=";
     version = rev;
   };
   extraNativeBuildInputs = [

@@ -1,9 +1,9 @@
 { pkgs, config, inputs, ... }:
 
 let
-  ts = import ./_common/termsettings.nix { inherit pkgs inputs; };
-  font = ts.fonts.default;
-  colors = ts.colors.default;
+  prefs = import ./_preferences.nix { inherit pkgs inputs; };
+  font = prefs.font;
+  colors = prefs.colors.default;
 
   # foot scales the font size?
   #fontSize = (builtins.ceil (ts.fonts.default.size / 1.25) - 1);
@@ -11,18 +11,21 @@ let
 in
 {
   config = {
-    home-manager.users.cole = { pkgs, ... }: {
+    home-manager.users.cole = { pkgs, ... }@hm: {
       home.packages = with pkgs; [ wezterm ];
 
       xdg.configFile."wezterm/wezterm.lua".text = ''
         local wezterm = require 'wezterm';
 
+        wezterm.add_to_config_reload_watch_list("${hm.config.xdg.configHome}/wezterm")
+
         local config = {
+          default_prog = { default_prog = "${prefs.shell.program}" },
+          enable_tab_bar = false,
           use_fancy_tab_bar = false,
           initial_rows = 24,
           initial_cols = 120,
           font_size = ${toString fontSize},
-          enable_tab_bar = false,
           window_background_opacity = 1.0,
           enable_csi_u_key_encoding = true,
           default_cursor_style = 'BlinkingBar',
@@ -56,15 +59,16 @@ in
           config.default_prog = { "powershell.exe" }
         else
           config.enable_wayland = true
-          config.window_decorations = "TITLE"
+          config.window_decorations = "NONE"
           config.window_close_confirmation = "NeverPrompt"
           config.freetype_load_target = "Light"
           config.freetype_render_target = "HorizontalLcd"
-          config.font = wezterm.font_with_fallback({
-            {family="${font.name}", weight="Regular"},
+          local f = wezterm.font_with_fallback({
+            {family="${font.family}", weight="Regular"},
             {family="Font Awesome", weight="Regular"},
              --"Font Awesome",
           })
+          config.font = f;
         end
         
         return config

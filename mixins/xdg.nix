@@ -2,15 +2,8 @@
 
 {
   config = {
-    # put this in a "pipewire.nix" ??
-    services.pipewire.enable = true;
-
-    # split out into profile-gnome and profile-sway
-    # xdg.portal.enable = true;
-    # xdg.portal.gtkUsePortal = true;
-    # xdg.portal.extraPortals = with pkgs;
-    #   [ xdg-desktop-portal-wlr xdg-desktop-portal-gtk ];
-
+    # see profiles/desktop-<foo>.nix for xdg-portal stuff
+    
     home-manager.users.cole = { pkgs, ... }: {
       home.packages = with pkgs; [
         xdg_utils

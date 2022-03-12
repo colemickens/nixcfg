@@ -104,11 +104,14 @@ case "${cmd}" in
     "${rb}" "${BLDR_A64}" "$("${tsip}" porty)"  "${nixcfg}#hydraBundles.aarch64-linux.toplevels" "${@}"
   ;;
 
-  "z")
+  "up")
     "${0}" inputup
     "${0}" lockup
     "${0}" pkgup
     "${0}" cacheshell
+  ;;
+    "z")
+    "${0}" up
     "${0}" build
     "${0}" deploy
   ;;

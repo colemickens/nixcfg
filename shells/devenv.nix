@@ -27,6 +27,8 @@ in minimalMkShell pkgs.system { # TODO use something else for system?
     /*tools */ cmake pkgconfig lldb python3
     /*nodejs*/ nodejs yarn
     /*golang*/ go go-outline gotools godef golint gopls
+
+    pkg-config
   ];
 
   buildInputs = with pkgs; [
@@ -38,5 +40,11 @@ in minimalMkShell pkgs.system { # TODO use something else for system?
     gpgme libgpgerror libgit2 git # passrs
     dbus # passrs libsecret
     nettle # pass-rust (sequoia->nettle-sys)
+      
+    libxkbcommon wayland wayland-protocols # wezterm
+    fontconfig libglvnd egl-wayland # wezterm
+    xorg.libX11 xorg.libxcb xorg.xcbutil # wezterm
+    xorg.xcbproto xorg.xcbutil xorg.xcbutilwm  # wezterm
+    xorg.xcbutilkeysyms xorg.xcbutilimage # wezterm
   ];
 }

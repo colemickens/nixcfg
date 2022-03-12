@@ -2,7 +2,7 @@
 
 {
   config = {
-    home-manager.users.cole = { pkgs, ... }: {
+    home-manager.users.cole = { pkgs, ... }@hm: {
       gtk = {
         enable = true;
         #preferDark = true;
@@ -15,6 +15,8 @@
         #cursorTheme = { name = "breeze-cursors"; package = pkgs.breeze-icons; };
 
         theme = { name = "Arc-Dark"; package = pkgs.arc-theme; };
+        
+        gtk2.configLocation = "${hm.config.xdg.configHome}/gtk-2.0/gtkrc";
 
         gtk3.extraConfig = {
           gtk-cursor-theme-size = 0;

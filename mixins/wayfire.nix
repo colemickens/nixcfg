@@ -1,20 +1,16 @@
 { config, pkgs, inputs, lib, ... }:
 
 let
-  termsettings = import ./_common/termsettings.nix { inherit config pkgs inputs lib; };
-  bg_gruvbox_rainbow = builtins.fetchurl {
-    url = "https://raw.githubusercontent.com/lunik1/nixos-logo-gruvbox-wallpaper/master/png/gruvbox-dark-rainbow.png";
-    sha256 = "036gqhbf6s5ddgvfbgn6iqbzgizssyf7820m5815b2gd748jw8zc";
-  };
-  bgcolor = "#000000";
+  prefs = import ./_preferences.nix { inherit config pkgs inputs lib; };
 
   fmt = pkgs.formats.ini { };
-  gen = cfg: (fmt.generate "wayfire-config.ini" cfg);
+  gen = cfg: (fmt.generate "wayfire.ini" cfg);
 
-  default_term = termsettings.default_term;
-  #lockcmd = "${pkgs.swaylock}/bin/swaylock -c \#cccccc";
-  lockcmd = "${pkgs.swaylock-effects}/bin/swaylock --screenshots --clock --effect-scale 0.5 --effect-blur 7x5 --effect-scale 2 --effect-pixelate 10";
-  idlelockcmd = "${pkgs.swaylock-effects}/bin/swaylock --screenshots --clock --fade-in 5 --effect-scale 0.5 --effect-blur 7x5 --effect-scale 2 --effect-pixelate 10";
+  default_term = prefs.default_term;
+  default_launcher = prefs.default_launcher;
+  lockcmd = prefs.lockcmd;
+  idlelockcmd = prefs.idlelockcmd;
+  bgcolor = prefs.bgcolor;
 in
 {
   config = {
@@ -69,6 +65,7 @@ in
           vwidth = 2;
           vheight = 2;
           preferred_decoration_mode = "server";
+          xwayland = prefs.xwayland_enabled;
         };
 
         # Mouse bindings ───────────────────────────────────────────────────────────────
@@ -81,25 +78,12 @@ in
 
         autostart = {
           autostart_wf_shell = false;
-          # background = wf-background
-          # panel = wf-panel
-          # dock = wf-dock
-          import = "systemctl import-environment --user WAYLAND_DISPLAY XDG_SESSION_TYPE XDG_SESSION_ID";
-          panel = "waybar -l trace > /tmp/waybar.trace.txt"; # configured with hm
+          import = prefs.poststart;
+          panel = "waybar"; # configured with hm
           outputs = "${pkgs.kanshi}/bin/kanshi";
           notifications = "mako"; # configured with hm
           gamma = "${pkgs.wlsunset}/bin/wlsunset -l 47.6062 -L 122.3321"; # aha, lol, this is why I can't disable it?
-          idle = "${pkgs.swayidle}/bin/swayidle before-sleep '${idlelockcmd}'";
-
-          # XDG desktop portal
-          # Needed by some GTK applications
-          # portal = /usr/libexec/xdg-desktop-portal
-        };
-
-        idle = {
-          toggle = "<super> KEY_Z";
-          screensaver_timeout = 300;
-          dpms_timeout = 600;
+          idle = "${pkgs.swayidle}/bin/swayidle before-sleep \"${idlelockcmd}\"";
         };
 
         command = {
@@ -107,13 +91,13 @@ in
           command_terminal = default_term;
 
           binding_launcher = "<super> KEY_ESC";
-          command_launcher = "${pkgs.sirula}/bin/sirula";
+          command_launcher = default_launcher;
 
-          binding_lock = "<super> <shift> KEY_DELETE | <super> KEY_DELETE";
-          command_lock = "${lockcmd}";
+          binding_lock = "<super> KEY_DELETE";
+          command_lock = lockcmd;
 
-          #binding_logout = <super> KEY_ESC
-          #command_logout = wlogout
+          binding_logout = "<ctrl> <alt> <super> KEY_DELETE";
+          command_logout = "${pkgs.bash}/bin/bash -c \"${pkgs.systemd}/bin/loginctl terminate-session $XDG_SESSION_ID\"";
 
           binding_screenshot = "<super> KEY_PRINT";
           command_screenshot = "grim $(date '+%F_%T').webp";
@@ -145,33 +129,14 @@ in
           toggle_sticky = "<super> <shift> KEY_X";
         };
 
-        grid = {
-          #
-          # ⇱ ↑ ⇲   │ 7 8 9
-          # ← f →   │ 4 5 6
-          # ⇱ ↓ ⇲ d │ 1 2 3 0
-          # ‾   ‾
-          slot_bl = "<super> KEY_KP1";
-          slot_b = "<super> KEY_KP2";
-          slot_br = "<super> KEY_KP3";
-          slot_l = "<super> KEY_LEFT | <super> KEY_KP4";
-          slot_c = "<super> KEY_UP | <super> KEY_KP5";
-          slot_r = "<super> KEY_RIGHT | <super> KEY_KP6";
-          slot_tl = "<super> KEY_KP7";
-          slot_t = "<super> KEY_KP8";
-          slot_tr = "<super> KEY_KP9";
-          # Restore default.
-          restore = "<super> KEY_DOWN | <super> KEY_KP0";
-        };
-        # Change active window with an animation.
-        switcher = {
-          next_view = "<alt> KEY_TAB";
-          prev_view = "<alt> <shift> KEY_TAB";
+        simple-tile = {
+          key_toggle = "<super> KEY_SPACE";
+          inner_gap_size = 0;
+          animation_duration = 2;
         };
 
-        # Simple active window switcher.
         fast-switcher = {
-          activate = "<alt> KEY_ESC";
+          activate = "<super> KEY_TAB";
         };
 
         vswitch = {

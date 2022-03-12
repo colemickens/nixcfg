@@ -1,9 +1,8 @@
 { pkgs, lib, config, inputs, ... }:
 
 let
-  termsettings = import ../mixins/_common/termsettings.nix { inherit pkgs lib config inputs; };
-  default_term = termsettings.default_term;
-  _wayfire = pkgs.wayfire; # todo: disable xwayland
+  prefs = import ../mixins/_preferences.nix { inherit pkgs lib config inputs; };
+  _wayfire = pkgs.wayfire;
 in {
   imports = [
     ../mixins/gtk.nix
@@ -35,9 +34,6 @@ in {
       [ xdg-desktop-portal-wlr xdg-desktop-portal-gtk ];
 
     home-manager.users.cole = { pkgs, ... }: {
-      # block auto-sway reload, Sway crashes...
-      xdg.configFile."sway/config".onChange = lib.mkForce "";
-
       services = {
         udiskie = {
           enable = true;
@@ -47,7 +43,7 @@ in {
       };
 
       home.sessionVariables = {
-        TERMINAL = default_term;
+        TERMINAL = prefs.default_term;
         MOZ_ENABLE_WAYLAND = "1";
         XDG_SESSION_TYPE = "wayland";
         XDG_CURRENT_DESKTOP = "sway";

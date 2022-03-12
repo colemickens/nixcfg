@@ -44,7 +44,7 @@
     firefox.url = "github:colemickens/flake-firefox-nightly";
     firefox.inputs.nixpkgs.follows = "nixpkgs";
 
-    impermanence.url = "github:nix-community/impermanence/5e8913aa1c311da17e3da5a4bf5c5a47152f6408"; # TODO TODO TODO TODO TODO
+    impermanence.url = "github:nix-community/impermanence";
     impermanence.inputs.nixpkgs.follows = "nixpkgs";
 
     tow-boot = { url = "github:colemickens/tow-boot/development"; };
@@ -129,7 +129,8 @@
       devShell = forAllSystems (system: minimalMkShell system {
         name = "nixcfg-devshell";
         nativeBuildInputs = map (x: (x.bin or x.out or x)) (with pkgs_.nixpkgs.${system}; [
-          nixUnstable cachix nixpkgs-fmt nix-prefetch-git
+          #nixUnstable
+          cachix nixpkgs-fmt nix-prefetch-git
           bash curl cacert jq jless parallel mercurial git
           # todo: move a bunch of these to 'apps#update-env' ?
           nettools openssh ripgrep rsync sops gh gawk gnused gnugrep
@@ -208,9 +209,9 @@
           rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {
             buildGoModule = prev.buildGo117Module;
           };
-          wezterm = prev.callPackage ./pkgs/wezterm {
-            wezterm = prev.wezterm;
-          };
+          #wezterm = prev.callPackage ./pkgs/wezterm {
+          #  wezterm = prev.wezterm;
+          #};
 
           nix-build-uncached = prev.nix-build-uncached.overrideAttrs(old: {
             src = prev.fetchFromGitHub {

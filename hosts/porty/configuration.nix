@@ -5,7 +5,7 @@
     ./core.nix
 
     ../../mixins/gfx-nvidia.nix # because of the wlroots patch, and ordering issues
-    ../../profiles/desktop-sway.nix
+    ../../profiles/desktop-sway-unstable.nix
   ];
 
  config = {

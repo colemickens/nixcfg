@@ -1,8 +1,8 @@
 { config, pkgs, inputs, lib, ... }:
 let
-  ts = import ./_common/termsettings.nix { inherit pkgs inputs; };
-  font = ts.fonts.default;
-  colors = ts.colors.default;
+  prefs = import ./_preferences.nix { inherit pkgs inputs; };
+  font = prefs.font;
+  colors = prefs.colors.default;
 
   customIosevkaTerm = (pkgs.iosevka.override {
     set = "term";
@@ -28,6 +28,7 @@ in
         noto-fonts noto-fonts-cjk noto-fonts-emoji
         _iosevka # first place
         jetbrains-mono # second place
+        recursive
         font-awesome
         gelasio # ???
       ] ++ [ font.package ];

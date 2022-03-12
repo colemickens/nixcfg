@@ -17,7 +17,7 @@ in
     ../../mixins/tailscale.nix
     #../../mixins/tpm.nix
     ../../mixins/upower.nix
-    ../../mixins/zfs-snapshots.nix
+    ../../mixins/zfs.nix
 
     # ../../profiles/gaming.nix
 
@@ -74,6 +74,10 @@ in
       };
       "/nix" = {
         device = "raisintank/nix";
+        fsType = "zfs";
+      };
+      "/backup" = {
+        device = "raisintank/backup";
         fsType = "zfs";
       };
       "/home" = {

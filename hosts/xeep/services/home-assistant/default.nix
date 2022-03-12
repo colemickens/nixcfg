@@ -63,7 +63,6 @@ in {
 
     services.home-assistant = {
       enable = true;
-      port = 8123;
       config = {
         homeassistant = {
           name = "Chimera HomeAss";

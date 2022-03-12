@@ -2,10 +2,20 @@
 
 with lib;
 
+let
+  _nixUnstableXdg = pkgs.nixUnstable.overrideAttrs (old: {
+    src = pkgs.fetchFromGitHub {
+      owner = "Artturin";
+      repo = "nix";
+      rev = "0c4a30eecc22a7e10cddba4612df484ade3e291f";
+      sha256 = "sha256-HNU+jltYw3gdt9ApI21zUoojy0aJ4y1x7kidkWZkKg0=";
+    };
+  });
+  _nix = _nixUnstableXdg;
+  # _nix = pkgs.nixUnstable;
+in
 {
   imports = [
-    #./common-tempfix.nix
-
     #inputs.envfs.nixosModules.envfs
   ];
 
@@ -22,6 +32,10 @@ with lib;
     #   else
     #     #throw "Refusing to build from a dirty Git tree!";
     #     "hydra_";
+
+    services.journald.extraConfig = ''
+      SystemMaxUse=10M
+    '';
 
     boot = {
       cleanTmpDir = true;
@@ -51,7 +65,7 @@ with lib;
         ];
         trusted-users = [ "@wheel" "root" ];
       };
-      package = pkgs.nixUnstable;
+      package = _nix;
       extraOptions =
         #lib.optionalString (config.nix.package == pkgs.nixUnstable)
         #"experimental-features = nix-command flakes ca-references recursive-nix";
