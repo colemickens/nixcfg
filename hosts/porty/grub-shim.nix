@@ -57,12 +57,12 @@ in {
 
                 shim_entry=$(efibootmgr |grep '^Boot[0-9]' |grep "$shim_loader_name" |grep -Po '[0-9A-F]{4}\*' |sed 's/\*//g' |tr '\n' ',' |head -c -1)
                 if [[ "$shim_entry" != "" ]] ; then
-                  sudo efibootmgr --bootnum $shim_entry --delete-bootnum
+                  sudo efibootmgr --bootnum $shim_entry --label "$shim_loader_name" --loader "${shim_path}" --disk "$disk"
+                else
+                  sudo efibootmgr --create-only --label "$shim_loader_name" --loader "${shim_path}" --disk "$disk"
                 fi
-                sudo efibootmgr --create --label "$shim_loader_name" --loader "${shim_path}" --disk "$disk"
                 
                 shim_entry=$(efibootmgr |grep '^Boot[0-9]' |grep "$shim_loader_name" |grep -Po '[0-9A-F]{4}\*' |sed 's/\*//g' |tr '\n' ',' |head -c -1)
-                sudo efibootmgr --bootnext "$shim_entry"
               )
             fi
             echo "grub-shim: done"

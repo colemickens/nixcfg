@@ -2,36 +2,13 @@
 
 with lib;
 
-let
-  _nixUnstableXdg = pkgs.nixUnstable.overrideAttrs (old: {
-    src = pkgs.fetchFromGitHub {
-      owner = "Artturin";
-      repo = "nix";
-      rev = "0c4a30eecc22a7e10cddba4612df484ade3e291f";
-      sha256 = "sha256-HNU+jltYw3gdt9ApI21zUoojy0aJ4y1x7kidkWZkKg0=";
-    };
-  });
-  _nix = _nixUnstableXdg;
-  # _nix = pkgs.nixUnstable;
-in
 {
   imports = [
-    #inputs.envfs.nixosModules.envfs
+    ./nix.nix
   ];
 
   config = {
     i18n.defaultLocale = "en_US.UTF-8";
-
-    # TODO: system-owned GC root for nixcfg's nix-shell
-    # or maybe a service that manages gcroots like this?
-    # (nix-)direnv already does tho I think
-
-    # system.configurationRevision =
-    #   if inputs.self ? rev
-    #   then inputs.self.rev
-    #   else
-    #     #throw "Refusing to build from a dirty Git tree!";
-    #     "hydra_";
 
     services.journald.extraConfig = ''
       SystemMaxUse=10M
@@ -47,30 +24,6 @@ in
     };
 
     environment.systemPackages = with pkgs; [ coreutils ];
-
-    # TODO: root ssh config to get nix daemon to use user's gpg-agent for ssh (closer to gpg conf hopefully)
-
-    nix = {
-      settings = {
-        build-cores = 0;
-        trusted-public-keys = [
-          "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-          "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4="
-          "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
-        ];
-        substituters = [
-          "https://cache.nixos.org"
-          "https://colemickens.cachix.org"
-          "https://nixpkgs-wayland.cachix.org"
-        ];
-        trusted-users = [ "@wheel" "root" ];
-      };
-      package = _nix;
-      extraOptions =
-        #lib.optionalString (config.nix.package == pkgs.nixUnstable)
-        #"experimental-features = nix-command flakes ca-references recursive-nix";
-        "experimental-features = nix-command flakes recursive-nix";
-    };
 
     security.sudo.wheelNeedsPassword = false;
     users.mutableUsers = false;

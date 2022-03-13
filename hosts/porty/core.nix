@@ -1,4 +1,4 @@
-{ config, pkgs, modulesPath, ... }:
+{ config, pkgs, modulesPath, inputs, ... }:
 
 let
   porty_usb_if = "enp11s0f3u4u4";
@@ -10,6 +10,7 @@ in {
     ../../profiles/gui.nix
 
     ../../modules/loginctl-linger.nix
+    ../../modules/other-arch-vm.nix
 
     #../../mixins/code-server.nix
     ../../mixins/logitech-mouse.nix
@@ -25,6 +26,16 @@ in {
   config = {
     # it sometimes boots as a hyper-v guest, so...
     virtualisation.hypervGuest.enable = true;
+      
+    services.buildVMs = {
+      "rusky" = {
+        system = "riscv64-linux";
+        smp = 4;
+        sshListenPort = 2222;
+        kvm = false;
+        vmpkgs = inputs.riscvpkgs;
+      };
+    };
 
     environment.systemPackages = with pkgs; [
       hdparm

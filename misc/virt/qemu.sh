@@ -25,12 +25,12 @@ source ../../secrets/unencrypted/qemu-profile-$1
 
 sudo qemu-system-x86_64 \
   -nodefaults \
-  -machine pc,accel=kvm \
-  -cpu host \
-  -smp 4,cores=2 \
-  -nic user,model=virtio-net-pci \
+  -machine 'pc,accel=kvm' \
+  -cpu 'host' \
+  -smp '4,cores=2' \
+  -nic 'user,model=virtio-net-pci' \
   -enable-kvm \
-  -monitor unix:qemu-monitor-socket,server,nowait \
+  -monitor "unix:/tmp/qemu-monitor-socket-${1},server,nowait" \
   -device intel-hda -device hda-duplex \
   -device virtio-serial \
   -device vhost-vsock-pci,id=vhost-vsock-pci0,guest-cid=3 \

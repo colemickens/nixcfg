@@ -220,7 +220,14 @@ in
         locations."/".proxyPass = "http://${porty_ip4}:4444";
         locations."/".proxyWebsockets = true;
       };
-
+    
+    
+      virtualHosts."aria2.x.cleo.cat" = internalVhost // {
+        locations."/".proxyPass = "http://localhost:${toString config.services.aria2.rpcListenPort}";
+        locations."/".proxyWebsockets = true;
+      };
+      
+      
       # syncthing
       virtualHosts."syncthing-pixel3.x.cleo.cat" = internalVhost // {
         locations."/".proxyPass = "http://${pixel3_ip6}:8384/";

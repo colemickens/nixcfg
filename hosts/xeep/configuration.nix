@@ -18,6 +18,7 @@ in
 
     ../../mixins/loremipsum-media/rclone-mnt.nix
 
+    ./services/aria2.nix
     ./services/revproxy.nix
     ./services/home-assistant
     ./services/plex.nix

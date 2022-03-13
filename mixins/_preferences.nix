@@ -14,16 +14,17 @@ let
   default_color_settings = {
     bold_as_bright = true;
   };
-  lockcmd = "${pkgs.swaylock-effects}/bin/swaylock --screenshots --effect-scale 0.5 --effect-blur 7x5 --effect-scale 2 --effect-pixelate 10";
+  lockcmd = "${pkgs.swaylock-effects}/bin/swaylock --screenshots --color '#964B00' --effect-scale 0.5 --effect-blur 7x5 --effect-scale 2 --effect-pixelate 10";
   swaymsg = "${pkgs.sway}/bin/swaymsg";
+  # https://github.com/swaywm/swayidle/issues/2#issuecomment-500550144
   idlecmd = pkgs.writeShellScript "swayidle.sh" ''
     pkill swayidle
     # TODO: pgrep
-    exec swayidle -w \
-        timeout 300 "${lockcmd}" \
-        timeout 330 "${swaymsg} \"output * dpms off\"" \
+    exec "${pkgs.swayidle}/bin/swayidle" -w \
+        timeout 30 "${lockcmd}" \
+        timeout 40 "${swaymsg} \"output * dpms off\"" \
         resume "${swaymsg} \"output * dpms on\"" \
-        timeout 30 "if pgrep swaylock; then ${swaymsg} \"output * dpms off\"; fi" \
+        timeout 10 "if pgrep swaylock; then ${swaymsg} \"output * dpms off\"; fi" \
         resume "if pgrep swaylock; then ${swaymsg} \"output * dpms on\"; fi" \
         before-sleep "${lockcmd}"
   '';
@@ -31,10 +32,11 @@ in
 {
   # all configured with HM, so just use binary name
   editor = "hx";
-  shell = { program = "nu"; args = []; };
+  #shell = { program = "nu"; args = []; };
+  shell = { program = "zsh"; args = []; };
   default_term = "alacritty";
   default_launcher = "sirula";
-  xwayland_enabled = true;
+  xwayland_enabled = false;
     
   aliases = {
     "pw" = "prs show";

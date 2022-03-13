@@ -130,12 +130,15 @@ let
 
     # Randomize GC start times do we don't block all build machines at the
     # same time.
-    systemd.timers.nix-gc.timerConfig.RandomizedDelaySec = "1800";
+    systemd.timers.nix-gc.timerConfig.RandomizedDelaySec = lib.mkForce "1800";
   };
 
-  mkBuildVM = system: configuration: (import "${inputs.crosspkgs}/nixos") {
-    inherit system;
-    inherit configuration;
+  mkBuildVM = vmpkgs: _config: (import "${vmpkgs}/nixos") {
+    system = pkgs.system;
+    configuration = _config // {
+      nixpkgs.crossSystem = lib.systems.examples.riscv64;
+    };
+    #inherit system;
   };
 
 in
@@ -148,7 +151,11 @@ in
         options = {
           # TODO: this is really "local system"
           system = lib.mkOption {
-            type = lib.types.enum [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
+            type = lib.types.enum [ "armv6l-linux" "armv7l-linux" "aarch64-linux" "riscv64-linux" ];
+          };
+
+          vmpkgs = lib.mkOption {
+            type = lib.types.anything;
           };
 
           cpu = lib.mkOption {
@@ -159,7 +166,8 @@ in
 
           machine = lib.mkOption {
             type = lib.types.str;
-            default = "virt,highmem=off";
+            default = "virt";
+            #default = "virt,highmem=off";
           };
 
           smp = lib.mkOption {
@@ -200,7 +208,7 @@ in
   config = {
     systemd.services = lib.mkMerge (lib.flip lib.mapAttrsToList config.services.buildVMs (name: cfg:
       let
-        vmNixos = mkBuildVM cfg.system { imports = [
+        vmNixos = mkBuildVM cfg.vmpkgs { imports = [
           buildVMCommonConfig builderConfig cfg.config
         ]; };
         vmConfig = vmNixos.config;
@@ -210,6 +218,7 @@ in
           "armv6l-linux" = "qemu-system-arm";
           "armv7l-linux" = "qemu-system-aarch64";
           "aarch64-linux" = "qemu-system-aarch64";
+          "riscv64-linux" = "qemu-system-riscv64";
         };
         # TODO: assert that armv6 + kvm is unsupported
       in {
@@ -248,7 +257,7 @@ in
               -append "init=${vmConfig.system.build.toplevel}/init ${toString vmConfig.boot.kernelParams} closureInfo=${closureInfoRelative}" \
               ${lib.optionalString cfg.kvm "-enable-kvm"} \
               ${lib.optionalString (cfg.mem != "") "-m` ${cfg.mem}"} \
-              ${lib.optionalString (cfg.smp != -1) "-smp ${cfg.smp}"} \
+              ${lib.optionalString (cfg.smp != -1) "-smp ${toString cfg.smp}"} \
               ${lib.optionalString (cfg.machine != "") "-machine ${cfg.machine}"} \
               ${lib.optionalString (cfg.cpu != "") "-cpu ${cfg.cpu}"} \
               -nographic \

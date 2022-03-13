@@ -23,8 +23,8 @@ srcdirs=(
 )
 srcdirs=("${srcdirs[@]/#/"${HOME}/code/"}")
 
-BLDR_X86="${BLDR_X86:-$("${tsip}" porty)}";
-BLDR_A64="${BLDR_A64:-"colemickens@aarch64.nixos.community"}";
+export BLDR_X86="${BLDR_X86:-$("${tsip}" porty)}";
+export BLDR_A64="${BLDR_A64:-"colemickens@aarch64.nixos.community"}";
 
 orig=("${@}")
 cmd="${1:-"z"}"; shift || true

@@ -19,8 +19,8 @@
       programs.ssh = {
         enable = true;
         #controlMaster = "auto";
-        #controlPath = "/home/cole/.ssh/master-%C"; # TODO: lolwut
-        #controlPersist = "10m";
+        controlPath = "/home/cole/.ssh/%C"; # TODO: lolwut
+        #controlPersist = "1m";
         matchBlocks = {
           "*" = {
             # look, idk, I think doing this myself by hand will be best:

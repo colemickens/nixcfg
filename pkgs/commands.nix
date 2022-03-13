@@ -1,5 +1,5 @@
-{ gnupg, openssh, efibootmgr, tailscale, code-server
-, asciinema
+{ gnupg, pinentry, openssh, efibootmgr
+, tailscale, asciinema
 , nixUnstable
 , writeShellScriptBin
 , linkFarmFromDrvs
@@ -8,6 +8,9 @@
 
 let
   efibootmgr_ = "${efibootmgr}/bin/efibootmgr";
+  
+  gpgKeyId = "0x9758078DE5308308";
+  gpgCardId = "D2760001240100000006071267080000";
 
   tsip = (writeShellScriptBin "tsip" ''
     ${tailscale}/bin/tailscale ip --6 "$1"
@@ -75,13 +78,13 @@ let
       sudo systemctl start pcscd.service >/dev/null
       sleep 0.1
       # check if key is known
-      KEYID="0x9758078DE5308308"
-      if ! gpg --list-keys $KEYID | grep $KEYID ; then
+      if ! gpg --list-keys "${gpgKeyId}" | grep "${gpgKeyId}" ; then
         curl -L https://github.com/colemickens.gpg | gpg --import
         (echo 5; echo y; echo save) |
-          gpg --command-fd 0 --no-tty --no-greeting -q --edit-key "$KEYID" trust >/dev/null 2>&1
+          gpg --command-fd 0 --no-tty --no-greeting -q --edit-key "${gpgKeyId}" trust >/dev/null 2>&1
       fi
       gpg --card-status >/dev/null
+      gpg-connect-agent "scd checkpin ${gpgCardId}" /bye
     '')
 
     (writeShellScriptBin "ssh-fix" ''

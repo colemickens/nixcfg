@@ -19,14 +19,12 @@ let
   out_raisin = "Unknown 0x1402 0x00000000";
   out_lgc165 = "Goldstar Company Ltd LG TV SSCR2 0x00000101";
 
-  in_pine_touchpad = "9610:30:HAILUCK_CO.,LTD_USB_KEYBOARD_Touchpad";
-  in_touchpad = "1739:30383:DELL07E6:00_06CB:76AF_Touchpad";
-  in_raisin = "1739:52804:MSFT0001:00_06CB:CE44_Touchpad";
-  in_trackpoint_ii = "6127:24814:Lenovo_TrackPoint_Keyboard_II";
-  in_logi = "1133:16505:Logitech_G_Pro";
-
+  in_tp_pinebook = "9610:30:HAILUCK_CO.,LTD_USB_KEYBOARD_Touchpad";
+  in_tp_raisin = "1739:52804:MSFT0001:00_06CB:CE44_Touchpad";
+  in_tp_trackpoint_ii = "6127:24814:Lenovo_TrackPoint_Keyboard_II";
+  in_mouse_logi = "1133:16505:Logitech_G_Pro";
   in_kb_porty = "1118:1957:Microsoft_Microsoft___Nano_Transceiver_v2.1_Consumer_Control";
-  in_kb_raisin = "";
+  in_kb_raisin = "1:1:AT_Translated_Set_2_keyboard";
 
   # i3statusConfig = import ./i3status-rust-config.nix { inherit pkgs; };
   # i3statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ${i3statusConfig}";
@@ -41,7 +39,7 @@ let
   cmd_pass = "${prefs.default_term} --class floatmeplz -e 'gopass-clip'";
   cmd_totp = "${prefs.default_term} --class floatmeplz -e 'gopass-totp'";
 
-  _kbmods = {
+  _keyboard = {
     xkb_layout = "us";
     xkb_options = "shift:both_capslock,caps:super";
   };
@@ -60,20 +58,20 @@ let
   };
   _hostinputs = {
     porty = {
-      "${in_kb_porty}" = _kbmods;
-      "${in_logi}" = _mouse;
+      "${in_kb_porty}" = _keyboard;
+      "${in_mouse_logi}" = _mouse;
     };
     pinebook = {
-      "${in_pine_touchpad}" = _touchpad;
+      "${in_tp_pinebook}" = _touchpad;
     };
     raisin = {
-      "${in_raisin}" = _touchpad;
-      "${in_kb_raisin}" = _kbmods;
+      "${in_tp_raisin}" = _touchpad;
+      "${in_kb_raisin}" = _keyboard;
     };
   };
   hostinputs = let hn = config.networking.hostName; in
     if !builtins.hasAttr hn _hostinputs
-    then { "input:keyboard" = _kbmods; }
+    then { "input:keyboard" = _keyboard; }
     else _hostinputs.${hn};
 
   # silly gtk/gnome wayland schenanigans
@@ -170,7 +168,7 @@ in
               criteria = { app_id = "floatmeplz"; };
               command = "floating enable";
             }
-              
+
             {
               criteria = { app_id = "prs-gtk3-copy"; };
               command = "floating enable";
@@ -195,6 +193,7 @@ in
           output = {
             "${out_aw3418dw}" = {
               mode = "3440x1440@120Hz";
+              pos = "0 0";
               #mode = "3440x1440Hz";
               # don't force alienware to be a certain refresh rate (it depends what adapter is used :/)
               subpixel = "rgb";
@@ -204,9 +203,11 @@ in
             #"${out_aw3418dw}" = { disable = ""; };
             "${out_raisin}" = {
               mode = "2880x1800@90Hz";
+              pos = "3440 0";
               subpixel = "rgb";
               scale = "1.8";
               adaptive_sync = "on";
+              #render_bit_depth = "10";
             };
             "${out_lgc165}" = {
               disable = "";
