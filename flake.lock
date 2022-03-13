@@ -208,11 +208,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1647133476,
-        "narHash": "sha256-eSASm2NdVc+4vSpPszCnjo37vngse86kLK1epdvVTX8=",
+        "lastModified": 1647141503,
+        "narHash": "sha256-uK0n3xjY+bGauoK+qMe+cZqc3Sg7z8P2dBgWXW4YVyA=",
         "owner": "colemickens",
         "repo": "flake-firefox-nightly",
-        "rev": "76f39a24137c655f7d94a4f30e270d32acb136c9",
+        "rev": "bbb64c8455b9cb6b2237526b535e3252bfd8c28c",
         "type": "github"
       },
       "original": {
@@ -702,6 +702,22 @@
     },
     "nixpkgs_6": {
       "locked": {
+        "lastModified": 1642210689,
+        "narHash": "sha256-ORT7pNlPyjEQ328IflHeA0mcKsJ8/+fPh9L66CTqHLA=",
+        "owner": "zhaofengli",
+        "repo": "nixpkgs",
+        "rev": "c6a277fba79364aca312f3966418842210c4c865",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zhaofengli",
+        "ref": "riscv",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_7": {
+      "locked": {
         "lastModified": 1645433236,
         "narHash": "sha256-4va4MvJ076XyPp5h8sm5eMQvCrJ6yZAbBmyw95dGyw4=",
         "owner": "nixos",
@@ -741,6 +757,40 @@
         "type": "github"
       }
     },
+    "riscv64": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_6"
+      },
+      "locked": {
+        "lastModified": 1645991652,
+        "narHash": "sha256-zwD/ktjO3eZrY5GKDrofvwoUcsAJJNSUc1nRkXjWMo8=",
+        "owner": "zhaofengli",
+        "repo": "nixos-riscv64",
+        "rev": "d58d2d58bc6728ee542bba0fbf54a77004f416f0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zhaofengli",
+        "repo": "nixos-riscv64",
+        "type": "github"
+      }
+    },
+    "riscvpkgs": {
+      "locked": {
+        "lastModified": 1642210689,
+        "narHash": "sha256-ORT7pNlPyjEQ328IflHeA0mcKsJ8/+fPh9L66CTqHLA=",
+        "owner": "zhaofengli",
+        "repo": "nixpkgs",
+        "rev": "c6a277fba79364aca312f3966418842210c4c865",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zhaofengli",
+        "ref": "riscv-cached",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "fenix": "fenix",
@@ -758,6 +808,8 @@
         "nixos-unstable-small": "nixos-unstable-small",
         "nixpkgs": "nixpkgs_5",
         "nixpkgs-wayland": "nixpkgs-wayland",
+        "riscv64": "riscv64",
+        "riscvpkgs": "riscvpkgs",
         "sops-nix": "sops-nix",
         "stable": "stable",
         "terranix": "terranix",
@@ -974,7 +1026,7 @@
         "crate2nix": "crate2nix",
         "flake-compat": "flake-compat_2",
         "flake-utils": "flake-utils_5",
-        "nixpkgs": "nixpkgs_6",
+        "nixpkgs": "nixpkgs_7",
         "rust-overlay": "rust-overlay_3"
       },
       "locked": {
