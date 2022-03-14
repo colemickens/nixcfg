@@ -777,16 +777,16 @@
     },
     "riscvpkgs": {
       "locked": {
-        "lastModified": 1647229235,
-        "narHash": "sha256-bGrMGRhjfYonUIhALEBfTyh+pUQqaHCZFYWS5f2NN0k=",
+        "lastModified": 1647229454,
+        "narHash": "sha256-b/g/QrHv0tPyWLk5YJdFHhiXGsr+Oqr8jH8vjEloX3k=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "0fab3c2afe24ae62ca6fe4bd0c8323250d09468c",
+        "rev": "0d5c5e542840aeb94e58db9756090808357d5049",
         "type": "github"
       },
       "original": {
         "owner": "colemickens",
-        "ref": "riscv-cached",
+        "ref": "risky",
         "repo": "nixpkgs",
         "type": "github"
       }
