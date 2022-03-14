@@ -16,7 +16,8 @@
     nixos-unstable-git = {
       url = "git+https://github.com/nixos/nixpkgs?ref=nixos-unstable";
     };
-    riscvpkgs = { url = "github:zhaofengli/nixpkgs/riscv-cached"; };
+    #riscvpkgs = { url = "github:zhaofengli/nixpkgs/riscv-cached"; };
+    riscvpkgs = { url = "github:colemickens/nixpkgs/riscv-cached"; };
     riscv64 = { url = "github:zhaofengli/nixos-riscv64"; };
 
     # crosspkgs.url = "github:colemickens/nixpkgs/crosspkgs";

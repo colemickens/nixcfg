@@ -10,9 +10,8 @@ let
       overlays = [ inputs.riscv64.overlay ];
     };
   };
-  riscvUboot = "${riscvpkgs.ubootQemuRiscv64Smode}/u-boot.bin";
   _sbi = p: riscvpkgs.opensbi.override { withPayload = builtins.trace "opensbi payload = ${p}" p; };
-  riscvBios = p: "${_sbi p}/share/opensbi/lp64/generic/firmware/fw_jump.elf";
+  riscvBios = p: "${_sbi p}/share/opensbi/lp64/generic/firmware/fw_jump.bin";
 
   buildVMCommonConfig = { config, lib, pkgs, modulesPath, ... }: {
     imports = [
@@ -30,17 +29,17 @@ let
       boot.loader.grub.enable = false;
 
       boot.kernelPackages = pkgs.linuxPackages_latest;
-
-      boot.kernelParams = [ "boot.shell_on_fail" "console=ttyAMA0,115200" ];
-
-      boot.kernelPatches = [
-        {
-          name = "enable-lpae";
-          patch = null;
-          extraConfig = ''
-            ARM_LPAE y
-          '';
-        }
+      boot.initrd.kernelModules = [
+        "9p"
+        "9pnet"
+        "9pnet_virtio"
+        "virtiofs"
+        "virtio_blk"
+        "virtio_input"
+        "virtio_mmio"
+        "virtio_net"
+        "virtio_pci"
+        "virtio_scsi"
       ];
 
       systemd.tmpfiles.rules = [
@@ -73,13 +72,13 @@ let
         "/run/state" = {
           device = "state";
           fsType = "9p";
-          options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ];
+          options = [ "trans=virtio" "version=9p2000.L" "cache=loose" "x-mount.mkdir" ];
         };
 
         "/nix/.host-store" = {
           device = "host-store";
           fsType = "9p";
-          options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ];
+          options = [ "x-mount.mkdir" "trans=virtio" "version=9p2000.L" "cache=loose" ];
           neededForBoot = true;
         };
       };
@@ -145,14 +144,6 @@ let
     systemd.timers.nix-gc.timerConfig.RandomizedDelaySec = lib.mkForce "1800";
   };
 
-  mkBuildVM = vmpkgs: _config: (import "${vmpkgs}/nixos") {
-    system = pkgs.system;
-    configuration = _config // {
-      nixpkgs.crossSystem = lib.systems.examples.riscv64;
-    };
-    #inherit system;
-  };
-
 in
 
 {
@@ -162,12 +153,20 @@ in
       type = lib.types.attrsOf (lib.types.submodule {
         options = {
           # TODO: this is really "local system"
-          system = lib.mkOption {
+          vmSystem = lib.mkOption {
             type = lib.types.enum [ "armv6l-linux" "armv7l-linux" "aarch64-linux" "riscv64-linux" ];
+          };
+          crossSystem = lib.mkOption {
+            type = lib.types.anything;
           };
 
           vmpkgs = lib.mkOption {
             type = lib.types.anything;
+          };
+
+          useKernel = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
           };
           useInitrd = lib.mkOption {
             type = lib.types.bool;
@@ -228,25 +227,31 @@ in
   config = {
     systemd.services = lib.mkMerge (lib.flip lib.mapAttrsToList config.services.buildVMs (name: cfg:
       let
-        vmNixos = mkBuildVM cfg.vmpkgs {
-          imports = [
-            buildVMCommonConfig
-            builderConfig
+        vm = cfg.vmpkgs.lib.nixosSystem {
+          system = pkgs.system;
+          specialArgs = { inherit inputs; };
+          modules = [
             cfg.config
+            builderConfig
+            buildVMCommonConfig
+            ({
+              nixpkgs.crossSystem = lib.systems.examples.riscv64;
+            })
           ];
         };
-        vmConfig = vmNixos.config;
-        kernelTarget = vmNixos.pkgs.stdenv.hostPlatform.linux-kernel.target;
-        closureInfoRelative = lib.removePrefix "${builtins.storeDir}/" vmConfig.system.build.closureInfo;
-        defKernel = "${vmConfig.system.build.kernel}/${kernelTarget}";
+        kernelTarget = vm.pkgs.stdenv.hostPlatform.linux-kernel.target;
+        closureInfoRelative = lib.removePrefix "${builtins.storeDir}/" vm.config.system.build.closureInfo;
+        defKernel = "${vm.config.system.build.kernel}/${kernelTarget}";
         archMap = {
-          "armv6l-linux" = { qemu = "qemu-system-arm";      bios = "default"; kernel = defKernel; };
-          "armv7l-linux" = { qemu = "qemu-system-arm";      bios = "default"; kernel = defKernel; };
+          "armv6l-linux" = { qemu = "qemu-system-arm"; bios = "default"; kernel = defKernel; };
+          "armv7l-linux" = { qemu = "qemu-system-arm"; bios = "default"; kernel = defKernel; };
           "riscv64-linux" = { qemu = "qemu-system-riscv64"; bios = (riscvBios defKernel); kernel = defKernel; };
         };
-        settings = archMap.${cfg.system};
-        initrd = "${vmConfig.system.build.initialRamdisk}/initrd";
-        append = "init=${vmConfig.system.build.toplevel}/init ${toString vmConfig.boot.kernelParams} closureInfo=${closureInfoRelative}";
+        settings = archMap.${cfg.vmSystem};
+        initrd = "${vm.config.system.build.initialRamdisk}/initrd";
+        append = "init=${vm.config.system.build.toplevel}/init ${toString vm.config.boot.kernelParams} closureInfo=${closureInfoRelative}";
+
+        netdevextra = if cfg.sshListenPort == null then null else ",hostfwd=tcp:0.0.0.0:${toString cfg.sshListenPort}-:22";
       in
       {
         "build-vm@${name}" = {
@@ -275,30 +280,25 @@ in
               serial="chardev:char0"
             fi
 
-              #-machine gic-version=3 \
-              #-device virtio-rng-pci \
-
             set -x
             ${settings.qemu} \
-              -kernel "${settings.kernel}" \
               -bios "${settings.bios}" \
+              ${lib.optionalString (cfg.useKernel) "-kernel \"${settings.kernel}\"" } \
               ${lib.optionalString (cfg.useInitrd) "-initrd \"${initrd}\"" } \
-              ${lib.optionalString (true /*cfg.useAppend*/) "-append \"${append}\"" } \
+              ${lib.optionalString (cfg.useAppend) "-append \"${append}\"" } \
               ${lib.optionalString (cfg.kvm)            "-enable-kvm"} \
-              ${lib.optionalString (cfg.mem != "")      "-m` ${cfg.mem}"} \
+              ${lib.optionalString (cfg.mem != "")      "-m ${cfg.mem}"} \
               ${lib.optionalString (cfg.smp != -1)      "-smp ${toString cfg.smp}"} \
               ${lib.optionalString (cfg.machine != "")  "-machine ${cfg.machine}"} \
               ${lib.optionalString (cfg.cpu != "")      "-cpu ${cfg.cpu}"} \
               -nographic \
-              -drive if=none,id=hd0,file=$TMPDIR/scratch.raw,format=raw,werror=report,cache=unsafe \
-              -fsdev local,id=state,path=$STATEDIR,security_model=none \
-              -fsdev local,id=host-store,path=${builtins.storeDir},security_model=none,readonly=true \
-              -device virtio-net-device,netdev=usernet \
-              -netdev user,id=usernet${
-                lib.optionalString (cfg.sshListenPort != null) ",hostfwd=tcp:0.0.0.0:${toString cfg.sshListenPort}-:22"
-              } \
-              -chardev stdio,mux=on,id=char0 \
-              -mon chardev=char0,mode=readline \
+              -device qemu-xhci \
+              -device virtio-rng-pci \
+              -fsdev local,id=host-store,path=${builtins.storeDir},security_model=none,readonly=true -device virtio-9p-device,fsdev=host-store,mount_tag='host-store' \
+              -fsdev local,id=state,path=$STATEDIR,security_model=none                               -device virtio-9p-device,fsdev=state,mount_tag=state \
+              -drive file=$TMPDIR/scratch.raw,format=raw,werror=report,cache=unsafe,id=scratch       -device virtio-blk-device,serial=scratch,drive=scratch \
+              -netdev user,id=usernet${lib.optionalString (netdevextra != null) netdevextra}         -device virtio-net-device,netdev=usernet \
+              -chardev stdio,mux=on,id=char0     -mon chardev=char0,mode=readline \
               -serial "$serial" \
               "''${extra_args[@]}"
           '';

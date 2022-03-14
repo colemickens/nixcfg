@@ -2,7 +2,8 @@
 
 let
   porty_usb_if = "enp11s0f3u4u4";
-in {
+in
+{
   imports = [
     ../../mixins/common.nix
 
@@ -26,18 +27,34 @@ in {
   config = {
     # it sometimes boots as a hyper-v guest, so...
     virtualisation.hypervGuest.enable = true;
-      
-    services.buildVMs = {
-      "rusky" = {
-        system = "riscv64-linux";
-        smp = 4;
-        sshListenPort = 2222;
-        kvm = false;
-        vmpkgs = inputs.riscvpkgs;
-        useInitrd = true;
-        useAppend = false;
+
+    services.buildVMs =
+      let build_config = { imports = [
+          ../../mixins/common.nix
+          ../../profiles/user.nix
+      ]; }; in
+      {
+        "army" = {
+          vmSystem = "armv6l-linux";
+          crossSystem = pkgs.lib.systems.examples.raspberryPi;
+          smp = 4;
+          mem = "4G";
+          sshListenPort = 2223;
+          kvm = false;
+          vmpkgs = inputs.nixpkgs;
+          config = build_config;
+        };
+        "rusky" = {
+          vmSystem = "riscv64-linux";
+          crossSystem = pkgs.lib.systems.examples.riscv64;
+          smp = 4;
+          mem = "8G";
+          sshListenPort = 2222;
+          kvm = false;
+          vmpkgs = inputs.riscvpkgs;
+          config = build_config;
+        };
       };
-    };
 
     environment.systemPackages = with pkgs; [
       hdparm
@@ -52,7 +69,7 @@ in {
       kernelParams = [ "mitigations=off" ];
     };
 
-    nix.nixPath = [];
+    nix.nixPath = [ ];
 
     hardware.usbWwan.enable = true;
 
@@ -73,19 +90,19 @@ in {
     #   address = "10.99.0.1";
     #   prefixLength = 24;
     # }];
-#    networking.interfaces."${porty_usb_if}".ipv4.addresses = [{
-#      address = "10.88.0.1";
-#      prefixLength = 24;
-#    }];
-#    networking.nat = {
-#      enable = true;
-#      internalInterfaces = [
-#        # "enp9s0f3u2u3u1"
-#        "${porty_usb_if}"
-#      ];
-#      externalInterface = "eth0";
-#      internalIPs = [ "10.0.0.0/16" ];
-#    };
+    #    networking.interfaces."${porty_usb_if}".ipv4.addresses = [{
+    #      address = "10.88.0.1";
+    #      prefixLength = 24;
+    #    }];
+    #    networking.nat = {
+    #      enable = true;
+    #      internalInterfaces = [
+    #        # "enp9s0f3u2u3u1"
+    #        "${porty_usb_if}"
+    #      ];
+    #      externalInterface = "eth0";
+    #      internalIPs = [ "10.0.0.0/16" ];
+    #    };
 
     hardware = {
       enableRedistributableFirmware = true;
@@ -94,7 +111,8 @@ in {
     };
     boot.initrd.availableKernelModules = [ "sd_mod" "sr_mod" ];
     boot.initrd.kernelModules = [
-      "hv_vmbus" "hv_storvsc" # for booting under hyperv
+      "hv_vmbus"
+      "hv_storvsc" # for booting under hyperv
       "xhci_pci"
       "nvme"
       "usb_storage"
@@ -109,10 +127,10 @@ in {
 
     boot.extraModulePackages = [ ];
 
-    fileSystems."/"     = { fsType = "zfs";   device = "portypool/root"; };
-    fileSystems."/nix"  = { fsType = "zfs";   device = "portypool/nix"; };
-    fileSystems."/home" = { fsType = "zfs";   device = "portypool/home"; };
-    fileSystems."/boot" = { fsType = "vfat";  device = "/dev/disk/by-partlabel/porty-boot"; };
+    fileSystems."/" = { fsType = "zfs"; device = "portypool/root"; };
+    fileSystems."/nix" = { fsType = "zfs"; device = "portypool/nix"; };
+    fileSystems."/home" = { fsType = "zfs"; device = "portypool/home"; };
+    fileSystems."/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/porty-boot"; };
 
     boot.initrd.luks.devices."porty-luks" = {
       allowDiscards = true;
