@@ -34,6 +34,8 @@ in {
         sshListenPort = 2222;
         kvm = false;
         vmpkgs = inputs.riscvpkgs;
+        useInitrd = true;
+        useAppend = false;
       };
     };
 

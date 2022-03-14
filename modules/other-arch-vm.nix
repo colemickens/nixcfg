@@ -3,6 +3,17 @@
 { config, lib, pkgs, inputs, ... }:
 
 let
+  riscvpkgs = import "${inputs.riscvpkgs}" {
+    system = pkgs.system;
+    crossSystem = lib.systems.examples.riscv64;
+    config = {
+      overlays = [ inputs.riscv64.overlay ];
+    };
+  };
+  riscvUboot = "${riscvpkgs.ubootQemuRiscv64Smode}/u-boot.bin";
+  _sbi = p: riscvpkgs.opensbi.override { withPayload = builtins.trace "opensbi payload = ${p}" p; };
+  riscvBios = p: "${_sbi p}/share/opensbi/lp64/generic/firmware/fw_jump.elf";
+
   buildVMCommonConfig = { config, lib, pkgs, modulesPath, ... }: {
     imports = [
       (modulesPath + "/profiles/qemu-guest.nix")
@@ -74,7 +85,8 @@ let
       };
 
       swapDevices = [
-        { device = "/var/swapfile"; size = 16384; }
+        #{ device = "/var/swapfile"; size = 16384; }
+        { device = "/var/swapfile"; size = 2048; }
       ];
 
       boot.initrd.postMountCommands = ''
@@ -146,7 +158,7 @@ in
 {
   options = {
     services.buildVMs = lib.mkOption {
-      default = {};
+      default = { };
       type = lib.types.attrsOf (lib.types.submodule {
         options = {
           # TODO: this is really "local system"
@@ -156,6 +168,14 @@ in
 
           vmpkgs = lib.mkOption {
             type = lib.types.anything;
+          };
+          useInitrd = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+          };
+          useAppend = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
           };
 
           cpu = lib.mkOption {
@@ -188,7 +208,7 @@ in
 
           # TODO: what is the type of nixos config?
           config = lib.mkOption {
-            default = {};
+            default = { };
           };
 
           sshListenPort = lib.mkOption {
@@ -208,20 +228,27 @@ in
   config = {
     systemd.services = lib.mkMerge (lib.flip lib.mapAttrsToList config.services.buildVMs (name: cfg:
       let
-        vmNixos = mkBuildVM cfg.vmpkgs { imports = [
-          buildVMCommonConfig builderConfig cfg.config
-        ]; };
+        vmNixos = mkBuildVM cfg.vmpkgs {
+          imports = [
+            buildVMCommonConfig
+            builderConfig
+            cfg.config
+          ];
+        };
         vmConfig = vmNixos.config;
         kernelTarget = vmNixos.pkgs.stdenv.hostPlatform.linux-kernel.target;
         closureInfoRelative = lib.removePrefix "${builtins.storeDir}/" vmConfig.system.build.closureInfo;
-        armMap = {
-          "armv6l-linux" = "qemu-system-arm";
-          "armv7l-linux" = "qemu-system-aarch64";
-          "aarch64-linux" = "qemu-system-aarch64";
-          "riscv64-linux" = "qemu-system-riscv64";
+        defKernel = "${vmConfig.system.build.kernel}/${kernelTarget}";
+        archMap = {
+          "armv6l-linux" = { qemu = "qemu-system-arm";      bios = "default"; kernel = defKernel; };
+          "armv7l-linux" = { qemu = "qemu-system-arm";      bios = "default"; kernel = defKernel; };
+          "riscv64-linux" = { qemu = "qemu-system-riscv64"; bios = (riscvBios defKernel); kernel = defKernel; };
         };
-        # TODO: assert that armv6 + kvm is unsupported
-      in {
+        settings = archMap.${cfg.system};
+        initrd = "${vmConfig.system.build.initialRamdisk}/initrd";
+        append = "init=${vmConfig.system.build.toplevel}/init ${toString vmConfig.boot.kernelParams} closureInfo=${closureInfoRelative}";
+      in
+      {
         "build-vm@${name}" = {
           wantedBy = [ "multi-user.target" ];
           script = ''
@@ -251,21 +278,23 @@ in
               #-machine gic-version=3 \
               #-device virtio-rng-pci \
 
-            ${armMap."${cfg.system}"} \
-              -kernel ${vmConfig.system.build.kernel}/${kernelTarget} \
-              -initrd ${vmConfig.system.build.initialRamdisk}/initrd \
-              -append "init=${vmConfig.system.build.toplevel}/init ${toString vmConfig.boot.kernelParams} closureInfo=${closureInfoRelative}" \
-              ${lib.optionalString cfg.kvm "-enable-kvm"} \
-              ${lib.optionalString (cfg.mem != "") "-m` ${cfg.mem}"} \
-              ${lib.optionalString (cfg.smp != -1) "-smp ${toString cfg.smp}"} \
-              ${lib.optionalString (cfg.machine != "") "-machine ${cfg.machine}"} \
-              ${lib.optionalString (cfg.cpu != "") "-cpu ${cfg.cpu}"} \
+            set -x
+            ${settings.qemu} \
+              -kernel "${settings.kernel}" \
+              -bios "${settings.bios}" \
+              ${lib.optionalString (cfg.useInitrd) "-initrd \"${initrd}\"" } \
+              ${lib.optionalString (true /*cfg.useAppend*/) "-append \"${append}\"" } \
+              ${lib.optionalString (cfg.kvm)            "-enable-kvm"} \
+              ${lib.optionalString (cfg.mem != "")      "-m` ${cfg.mem}"} \
+              ${lib.optionalString (cfg.smp != -1)      "-smp ${toString cfg.smp}"} \
+              ${lib.optionalString (cfg.machine != "")  "-machine ${cfg.machine}"} \
+              ${lib.optionalString (cfg.cpu != "")      "-cpu ${cfg.cpu}"} \
               -nographic \
               -drive if=none,id=hd0,file=$TMPDIR/scratch.raw,format=raw,werror=report,cache=unsafe \
               -fsdev local,id=state,path=$STATEDIR,security_model=none \
-              -fsdev local,id=host-store,path=${builtins.storeDir},security_model=none,readonly \
-              -net nic,netdev=user.0,model=virtio \
-              -netdev user,id=user.0${
+              -fsdev local,id=host-store,path=${builtins.storeDir},security_model=none,readonly=true \
+              -device virtio-net-device,netdev=usernet \
+              -netdev user,id=usernet${
                 lib.optionalString (cfg.sshListenPort != null) ",hostfwd=tcp:0.0.0.0:${toString cfg.sshListenPort}-:22"
               } \
               -chardev stdio,mux=on,id=char0 \

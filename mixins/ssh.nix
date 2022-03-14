@@ -18,9 +18,11 @@
     home-manager.users.cole = { pkgs, lib, ... }: {
       programs.ssh = {
         enable = true;
-        #controlMaster = "auto";
+        controlMaster = "auto";
         controlPath = "/home/cole/.ssh/%C"; # TODO: lolwut
-        #controlPersist = "1m";
+        controlPersist = "1m";
+        serverAliveInterval = 5;
+        serverAliveCountMax = 2;
         matchBlocks = {
           "*" = {
             # look, idk, I think doing this myself by hand will be best:
