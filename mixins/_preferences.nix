@@ -1,11 +1,7 @@
 { pkgs, inputs, ... }:
 
 let
-  iterm_cs = "purplepeter";
-  #iterm_cs = "Builtin Tango Dark";
-  #iterm_cs = "Builtin Solarized Dark";
-
-  colorscheme = inputs.nix-rice.colorschemes.${iterm_cs};
+  colorscheme = inputs.nix-rice.colorschemes."purplepeter";
 
   bg_gruvbox_rainbow = builtins.fetchurl {
     url = "https://raw.githubusercontent.com/lunik1/nixos-logo-gruvbox-wallpaper/master/png/gruvbox-dark-rainbow.png";
@@ -14,49 +10,52 @@ let
   default_color_settings = {
     bold_as_bright = true;
   };
-  lockcmd = "${pkgs.swaylock-effects}/bin/swaylock --screenshots --color '#964B00' --effect-scale 0.5 --effect-blur 7x5 --effect-scale 2 --effect-pixelate 10";
-  swaymsg = "${pkgs.sway}/bin/swaymsg";
-  # https://github.com/swaywm/swayidle/issues/2#issuecomment-500550144
-  idlecmd = pkgs.writeShellScript "swayidle.sh" ''
-    pkill swayidle
-    # TODO: pgrep
-    exec "${pkgs.swayidle}/bin/swayidle" -w \
-        timeout 30 "${lockcmd}" \
-        timeout 40 "${swaymsg} \"output * dpms off\"" \
-        resume "${swaymsg} \"output * dpms on\"" \
-        timeout 10 "if pgrep swaylock; then ${swaymsg} \"output * dpms off\"; fi" \
-        resume "if pgrep swaylock; then ${swaymsg} \"output * dpms on\"; fi" \
-        before-sleep "${lockcmd}"
-  '';
+  customIosevkaTerm = (pkgs.iosevka.override {
+    set = "term";
+    # https://github.com/be5invis/Iosevka/blob/6b2b8b7e643a13e1cf56787aed4fd269dd3e044b/build-plans.toml#L186
+    privateBuildPlan = {
+      family = "Iosevka Term";
+      spacing = "term";
+      snapshotFamily = "iosevka";
+      snapshotFeature = "\"NWID\" on, \"ss03\" on";
+      export-glyph-names = true;
+      no-cv-ss = true;
+    };
+  });
+  _iosevka = pkgs.iosevka;
+  #_iosevka = customIosevkaTerm;
 in
-{
+rec {
   # all configured with HM, so just use binary name
   editor = "hx";
-  #shell = { program = "nu"; args = []; };
-  shell = { program = "zsh"; args = []; };
+  shell = { program = "zsh"; args = [ ]; };
   default_term = "alacritty";
   default_launcher = "sirula";
-  xwayland_enabled = false;
-    
-  aliases = {
-    "pw" = "prs show";
+
+  cursor = { name = "captaine-cursors"; package = pkgs.capitaine-cursors; };
+  # cursor = { name = "capitaine-cursors"; package = pkgs.capitaine-cursors; };
+  # cursor = { name = "adwaita"; package = pkgs.gnome3.adwaita-icon-theme; };
+  # cursor = { name = "breeze-cursors"; package = pkgs.breeze-icons; };
+  themes = {
+    alacritty = colorscheme;
+    sway = colorscheme;
+    wezterm = colorscheme;
+    zellij = colorscheme;
   };
-
-  poststart = pkgs.writeShellScript "poststart.sh" ''
-    systemctl import-environment --user WAYLAND_DISPLAY XDG_SESSION_TYPE XDG_SESSION_ID
-  '';
-
-  lockcmd = lockcmd;
-  idlelockcmd = "${lockcmd} --fade-in 10 --grace 10";
-  idlecmd = idlecmd;
+  inherit colorscheme;
 
   bgcolor = "#000000";
+  background = "${bgcolor} solid_color";
+  # background = "${bg_gruvbox_rainbow} center #333333";
   wallpaper = bg_gruvbox_rainbow;
 
-  font = {
-    family = "Iosevka";
+  font = rec {
     size = 13;
-    package = pkgs.iosevka;
+    default = { family = "Iosevka"; package = _iosevka; };
+    fallback = { family = "Font Awesome 5 Free"; package = pkgs.font-awesome; };
+    emoji = { family = "Noto Sans Emoji"; package = pkgs.noto-fonts-emoji; };
+    extraPackages = with pkgs; [ corefonts ttf_bitstream_vera gelasio noto-fonts ];
+    allPackages = [ default fallback emoji ] ++ extraPackages;
   };
   colors = {
     default = default_color_settings // colorscheme;

@@ -54,10 +54,7 @@ in
       programs.waybar = {
         enable = true;
         style = pkgs.lib.readFile ./waybar.css;
-        #systemd = {
-        #  enable = true;
-        #  withSwayIntegration = true;
-        #};
+        systemd.enable = true;
         settings = [{
           layer = "top";
           position = "top";

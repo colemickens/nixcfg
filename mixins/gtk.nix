@@ -1,6 +1,8 @@
-{ pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
-{
+let
+  prefs = import ./_preferences.nix { inherit inputs config lib pkgs; };
+in {
   config = {
     home-manager.users.cole = { pkgs, ... }@hm: {
       gtk = {
@@ -9,10 +11,7 @@
         font = { name = "Noto Sans 11"; package = pkgs.noto-fonts; };
         iconTheme = { name = "Numix Circle"; package = pkgs.numix-icon-theme; };
 
-        cursorTheme = { name = "capitaine-cursors-white"; package = pkgs.capitaine-cursors; };
-        #cursorTheme = { name = "capitaine-cursors"; package = pkgs.capitaine-cursors; };
-        #cursorTheme = { name = "adwaita"; package = pkgs.gnome3.adwaita-icon-theme; };
-        #cursorTheme = { name = "breeze-cursors"; package = pkgs.breeze-icons; };
+        cursorTheme = prefs.cursor;
 
         theme = { name = "Arc-Dark"; package = pkgs.arc-theme; };
         

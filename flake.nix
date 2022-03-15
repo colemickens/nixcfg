@@ -17,7 +17,7 @@
       url = "git+https://github.com/nixos/nixpkgs?ref=nixos-unstable";
     };
     #riscvpkgs = { url = "github:zhaofengli/nixpkgs/riscv-cached"; };
-    riscvpkgs = { url = "github:colemickens/nixpkgs/riscv-cached"; };
+    riscvpkgs = { url = "github:colemickens/nixpkgs/risky"; };
     riscv64 = { url = "github:zhaofengli/nixos-riscv64"; };
 
     # crosspkgs.url = "github:colemickens/nixpkgs/crosspkgs";
@@ -204,7 +204,7 @@
 
       overlay = final: prev:
         let p = rec {
-          customCommands = prev.callPackage ./pkgs/commands.nix { };
+          customCommands = prev.callPackage ./pkgs/commands.nix { writePython3Bin = prev.writers.writePython3Bin; };
           customGuiCommands = prev.callPackage ./pkgs/commands-gui.nix { };
 
           #alacritty = prev.callPackage ./pkgs/alacritty {

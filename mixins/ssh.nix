@@ -16,13 +16,14 @@
 
     # though maybe not
     home-manager.users.cole = { pkgs, lib, ... }: {
+      home.file.".ssh/control/.keep".text = "";
       programs.ssh = {
         enable = true;
-        controlMaster = "auto";
-        controlPath = "/home/cole/.ssh/%C"; # TODO: lolwut
-        controlPersist = "1m";
-        serverAliveInterval = 5;
-        serverAliveCountMax = 2;
+        #controlMaster = "auto";
+        controlPath = "/home/cole/.ssh/control/%C"; # TODO: lolwut
+        #controlPersist = "1m";
+        #serverAliveInterval = 5;
+        #serverAliveCountMax = 2;
         matchBlocks = {
           "*" = {
             # look, idk, I think doing this myself by hand will be best:

@@ -7,13 +7,11 @@ in {
   imports = [
     ../mixins/gtk.nix
 
-    ../mixins/wlsunset.nix
-    ../mixins/mako.nix
+    #../mixins/wlsunset.nix
+    #../mixins/mako.nix
     ../mixins/sirula.nix
-    ../mixins/sway.nix
-    ../mixins/wayfire.nix
-    ../mixins/waybar.nix
-
+    ../mixins/sway.nix # contains swayidle/swaylock config
+    #../mixins/wayfire.nix
     ../mixins/wayland-tweaks.nix
 
     ./gui.nix
@@ -39,6 +37,19 @@ in {
           enable = true;
           automount = false;
           tray = "always";
+        };
+        kanshi = {
+          enable = true;
+        };
+        wlsunset = {
+          enable = true;
+          latitude = "47.608103";
+          longitude = "-122.335167";
+        };
+      };
+      programs = {
+        mako = {
+          enable = true;
         };
       };
 
@@ -66,10 +77,7 @@ in {
         # wlvncc # nixpkgs-wayland only
         # wshowkeys # use the wrapper ^
         wtype
-        xwayland
         ydotool
-
-        _wayfire
       ];
     };
   };

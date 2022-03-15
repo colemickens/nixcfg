@@ -1,6 +1,10 @@
 { pkgs, inputs, ... }:
 
 let
+  pinentryOverlay = (self: super: {
+    pinentry = super.pinentry.override { enabledFlavors = [ "gnome3" "tty" ]; };
+  });
+  sysPkgs = with pkgs; [ gcr ];
   def = {
     gnupgPkg = pkgs.gnupg;
     #gnupgPkg = inputs.temp-gpg-pr.legacyPackages.${pkgs.system}.gnupg;
@@ -89,7 +93,7 @@ in {
     services.pcscd.enable = ecfg.enablePcscd;
 
     # bring pcsclite's polkit rules into the environment, I guess
-    environment.systemPackages = if ecfg.enablePcscd then [ pkgs.pcsclite ] else [];
+    environment.systemPackages = sysPkgs ++ (if ecfg.enablePcscd then [ pkgs.pcsclite ] else []);
 
     # if all three are disable then shit just don't work
     # neither ccid or pc/sc are able to work
@@ -104,6 +108,7 @@ in {
         then { disable-ccid = true; }
         else {};
 
+      nixpkgs.overlays = [ pinentryOverlay ];
       services.gpg-agent = {
         # this has the SAME problem as above^, or rather is the same thing!
         #enableSshSupport = true;
@@ -113,6 +118,7 @@ in {
         extraConfig = ''
           allow-preset-passphrase
         '';
+        pinentryFlavor = "gnome3";
         defaultCacheTtl = 34560000;
         defaultCacheTtlSsh = 34560000;
         maxCacheTtl = 34560000;

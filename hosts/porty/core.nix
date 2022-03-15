@@ -34,16 +34,18 @@ in
           ../../profiles/user.nix
       ]; }; in
       {
-        "army" = {
-          vmSystem = "armv6l-linux";
-          crossSystem = pkgs.lib.systems.examples.raspberryPi;
-          smp = 4;
-          mem = "4G";
-          sshListenPort = 2223;
-          kvm = false;
-          vmpkgs = inputs.nixpkgs;
-          config = build_config;
-        };
+        # "army" = {
+        #   vmSystem = "armv6l-linux";
+        #   crossSystem = pkgs.lib.systems.examples.raspberryPi;
+        #   cpu = "arm1176";
+        #   machine = "versatilepb";
+        #   smp = 1;
+        #   mem = "256M";
+        #   sshListenPort = 2223;
+        #   kvm = false;
+        #   vmpkgs = inputs.nixpkgs;
+        #   config = build_config;
+        # };
         "rusky" = {
           vmSystem = "riscv64-linux";
           crossSystem = pkgs.lib.systems.examples.riscv64;

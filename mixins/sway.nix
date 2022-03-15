@@ -4,15 +4,11 @@ let
   prefs = import ./_preferences.nix { inherit inputs config lib pkgs; };
 
   swayfonts = {
-    names = [ "Iosevka" "FontAwesome5Free" ];
+    names = [ prefs.font.default.family prefs.font.fallback.family ];
     style = "Heavy";
     size = 10.0;
   };
-  editor = prefs.editor;
-  launcher = prefs.default_launcher;
-  terminal = prefs.default_term;
-
-  background = "#000000 solid_color";
+  background = prefs.background;
 
   out_aw3418dw = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
   out_aw2521h = "Dell Inc. Dell AW2521H #HLAYMxgwABDZ";
@@ -25,16 +21,6 @@ let
   in_mouse_logi = "1133:16505:Logitech_G_Pro";
   in_kb_porty = "1118:1957:Microsoft_Microsoft___Nano_Transceiver_v2.1_Consumer_Control";
   in_kb_raisin = "1:1:AT_Translated_Set_2_keyboard";
-
-  # i3statusConfig = import ./i3status-rust-config.nix { inherit pkgs; };
-  # i3statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ${i3statusConfig}";
-  waybarCommand = "${pkgs.waybar}/bin/waybar";
-  statusCommand = waybarCommand; # switch back?
-
-  # idle/lock
-  # TODO: test and fix/ remove this message
-  swaylockcmd = prefs.lockcmd;
-  idlecmd = prefs.idlecmd;
 
   cmd_pass = "${prefs.default_term} --class floatmeplz -e 'gopass-clip'";
   cmd_totp = "${prefs.default_term} --class floatmeplz -e 'gopass-totp'";
@@ -91,7 +77,8 @@ let
     echo exec sed -E $expressions "''${XDG_CONFIG_HOME:-$HOME/.config}"/gtk-3.0/settings.ini &>>/tmp/gsettings.log
     eval exec sed -E $expressions "''${XDG_CONFIG_HOME:-$HOME/.config}"/gtk-3.0/settings.ini &>>/tmp/gsettings.log
   '';
-  gsettings_auto = pkgs.writeShellScript "gsettings-auto.sh" ''
+  gsettings_auto = pkgs.writeShellScript "gsettings-true.sh" "true";
+  _gsettings_auto = pkgs.writeShellScript "gsettings-auto.sh" ''
     set -x
     set -euo pipefail
 
@@ -123,8 +110,8 @@ let
 in
 {
   config = {
-    programs.sway.enable = true; # needed for swaylock/pam stuff
-    programs.sway.extraPackages = lib.mkForce [ ]; # block rxvt
+    #programs.sway.enable = true; # needed for swaylock/pam stuff
+    #programs.sway.extraPackages = lib.mkForce [ ]; # block rxvt
 
     environment.systemPackages = with pkgs; [
       capitaine-cursors
@@ -134,9 +121,38 @@ in
       # block auto-sway reload, Sway crashes... ... but now  we work around it by doing kbmods per dev
       #xdg.configFile."sway/config".onChange = lib.mkForce "";
 
+      programs.swaylock = {
+        enable = true;
+        config = ''
+          screenshots
+          color '#964B00'
+          effect-scale 0.5
+          effect-blur 7x5
+          effect-scale 2
+          effect-pixelate 10  
+        '';
+      };
+      services.swayidle = {
+        enable = true;
+        timeouts = [
+          { timeout = 30; command = "swaylock --fade 15 --grace 15"; }
+          { timeout = 30; command = "swaymsg 'output * dpms off'"; }
+          { timeout = 10; command = "if pgrep swaylock; then swaymsg 'output * dpms off'; fi"; }
+        ];
+        events = [
+          # this is still a bunch of horseshit, this needs to be properly managed by a proper WM/DE
+          { event = "before-sleep"; command = "swaylock"; }
+          { event = "resume"; command = "swaymsg 'output * dpms on'"; }
+          { event = "resume"; command = "if pgrep swaylock; then swaymsg 'output * dpms on'; fi"; }
+          { event = "before-sleep"; command = "swaylock"; }
+        ];
+        extraArgs = [
+          "idlehint 30"
+        ];
+      };
       wayland.windowManager.sway = {
         enable = true;
-        #systemdIntegration = true; # beta
+        systemdIntegration = true; # beta
         wrapperFeatures = {
           base = true; # this is the default, but be explicit for now
           gtk = true;
@@ -146,11 +162,11 @@ in
         '';
         xwayland = prefs.xwayland_enabled;
         extraConfig = ''
-          seat seat0 xcursor_theme "capitaine-cursors"
+          seat seat0 xcursor_theme "${prefs.cursor.name}"
         '';
         config = rec {
           modifier = "Mod4";
-          inherit terminal;
+          terminal = prefs.default_term;
           fonts = swayfonts;
           focus.followMouse = "always";
           window.border = 5;
@@ -181,13 +197,6 @@ in
           ];
           startup = [
             { always = true; command = "${gsettings_auto}"; }
-            # { always = true; command = "${pkgs.xorg.xrdb}/bin/xrdb -l $HOME/.Xresources"; }
-            { always = true; command = "${pkgs.mako}/bin/mako"; }
-            { always = true; command = "${pkgs.systemd}/bin/systemd-notify --ready || true"; }
-            { always = true; command = prefs.poststart.outPath; }
-
-            { always = true; command = "${idlecmd}"; }
-            { command = "${pkgs.poweralertd}/bin/poweralertd"; }
           ];
           input = hostinputs;
           output = {
@@ -216,17 +225,17 @@ in
               background = background;
             };
           };
-          bars = [{
-            command = statusCommand;
-          }];
+          #bars = [{
+          #  command = statusCommand;
+          #}];
           keybindings = {
             "${modifier}+Return" = "exec ${terminal}";
             "${modifier}+Shift+q" = "kill";
             "${modifier}+Shift+c" = "reload";
-            "${modifier}+Delete" = "exec ${swaylockcmd}";
+            "${modifier}+Delete" = "exec swaylock";
 
-            "${modifier}+Escape" = "exec ${launcher}";
-            "${modifier}+Ctrl+Alt+Delete" = "exec ${pkgs.sway}/bin/swaymsg exit";
+            "${modifier}+Escape" = "exec ${prefs.default_launcher}";
+            "${modifier}+Ctrl+Alt+Delete" = "exec swaymsg exit";
 
             "${modifier}+Alt+F1" = "exec ${cmd_pass}";
             "${modifier}+Alt+F2" = "exec ${cmd_totp}";

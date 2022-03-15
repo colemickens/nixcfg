@@ -1,42 +1,16 @@
-{ config, pkgs, inputs, lib, ... }:
+{ config, lib, pkgs, inputs, ... }:
 let
-  prefs = import ./_preferences.nix { inherit pkgs inputs; };
-  font = prefs.font;
-  colors = prefs.colors.default;
-
-  customIosevkaTerm = (pkgs.iosevka.override {
-    set = "term";
-    # https://github.com/be5invis/Iosevka/blob/6b2b8b7e643a13e1cf56787aed4fd269dd3e044b/build-plans.toml#L186
-    privateBuildPlan = {
-      family = "Iosevka Term";
-      spacing = "term";
-      snapshotFamily = "iosevka";
-      snapshotFeature = "\"NWID\" on, \"ss03\" on";
-      export-glyph-names = true;
-      no-cv-ss = true;
-    };
-  });
-
-  _iosevka = pkgs.iosevka;
-  #_iosevka = customIosevkaTerm;
+  prefs = import ./_preferences.nix { inherit config lib pkgs inputs; };
 in
 {
   config = {
     fonts = {
-      fonts = with pkgs; [
-        corefonts ttf_bitstream_vera
-        noto-fonts noto-fonts-cjk noto-fonts-emoji
-        _iosevka # first place
-        jetbrains-mono # second place
-        recursive
-        font-awesome
-        gelasio # ???
-      ] ++ [ font.package ];
+      fonts = prefs.font.allPackages;
 
       fontconfig = {
         defaultFonts = {
-          monospace = [ "Noto Sans Mono" ];
-          emoji = [ "Noto Color Emoji" ];
+          monospace = [ prefs.font.default.family ];
+          emoji = [ prefs.font.emoji.family ];
         };
       };
     };

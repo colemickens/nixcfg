@@ -81,7 +81,7 @@
         sd
         procs
         bandwhich
-        prs # gopass replacement, oh fuck thank god
+        # prs # gopass replacement, oh fuck thank god, but no TOTP or PASSWORD_STORE_DIR or sequoia support
         # </rust pkgs>
         python3Packages.pywatchman
 

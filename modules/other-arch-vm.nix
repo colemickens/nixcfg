@@ -3,15 +3,30 @@
 { config, lib, pkgs, inputs, ... }:
 
 let
-  riscvpkgs = import "${inputs.riscvpkgs}" {
-    system = pkgs.system;
-    crossSystem = lib.systems.examples.riscv64;
-    config = {
-      overlays = [ inputs.riscv64.overlay ];
-    };
+  # riscvBios = let riscvpkgs = import "${inputs.riscvpkgs}" {
+  #   system = pkgs.system;
+  #   crossSystem = lib.systems.examples.riscv64;
+  #   config = { overlays = [ inputs.riscv64.overlay ]; };
+  # }; in "${riscvpkgs.opensbi}/share/opensbi/lp64/generic/firmware/fw_jump.bin";
+
+  archMap = {
+    "armv6l-linux" = { qemu = "qemu-system-arm"; suffix = "pci"; };
+    "armv7l-linux" = { qemu = "qemu-system-arm"; suffix = "pci"; };
+    "riscv64-linux" = { qemu = "qemu-system-riscv64"; suffix = "device"; };
   };
-  _sbi = p: riscvpkgs.opensbi.override { withPayload = builtins.trace "opensbi payload = ${p}" p; };
-  riscvBios = p: "${_sbi p}/share/opensbi/lp64/generic/firmware/fw_jump.bin";
+
+  kernelPatches = {
+    "armv6l-linux" = [
+      {
+        name = "enable-lpae";
+        patch = null;
+        extraConfig = ''
+          ARM_LPAE y
+          PCI y
+        '';
+      }
+    ];
+  };
 
   buildVMCommonConfig = { config, lib, pkgs, modulesPath, ... }: {
     imports = [
@@ -29,6 +44,9 @@ let
       boot.loader.grub.enable = false;
 
       boot.kernelPackages = pkgs.linuxPackages_latest;
+      boot.kernelPatches = if builtins.hasAttr "${pkgs.stdenv.system}" kernelPatches
+        then kernelPatches.${pkgs.stdenv.system}
+        else [];
       boot.initrd.kernelModules = [
         "9p"
         "9pnet"
@@ -38,9 +56,11 @@ let
         "virtio_input"
         "virtio_mmio"
         "virtio_net"
-        "virtio_pci"
         "virtio_scsi"
       ];
+      # ] ++ (let x= pkgs.stdenv.system; in (if (builtins.trace x x) == "armv6l-linux" then [] else [
+      #   "virtio_pci"
+      # ]));
 
       systemd.tmpfiles.rules = [
         "d '/run/state/ssh' - root - - -"
@@ -108,6 +128,8 @@ let
           cat $targetRoot/nix/.host-store/$closureInfo/store-paths | \
             sed -e "s|^${builtins.storeDir}/|$targetRoot/nix/.host-store/|" | \
             while read path; do
+  ################### TODO:
+        # this should be an rsync instead maybe?
               cp -a $path $targetRoot/nix/store
             done
 
@@ -162,19 +184,6 @@ in
 
           vmpkgs = lib.mkOption {
             type = lib.types.anything;
-          };
-
-          useKernel = lib.mkOption {
-            type = lib.types.bool;
-            default = true;
-          };
-          useInitrd = lib.mkOption {
-            type = lib.types.bool;
-            default = true;
-          };
-          useAppend = lib.mkOption {
-            type = lib.types.bool;
-            default = true;
           };
 
           cpu = lib.mkOption {
@@ -235,19 +244,14 @@ in
             builderConfig
             buildVMCommonConfig
             ({
-              nixpkgs.crossSystem = lib.systems.examples.riscv64;
+              nixpkgs.crossSystem = cfg.crossSystem;
             })
           ];
         };
         kernelTarget = vm.pkgs.stdenv.hostPlatform.linux-kernel.target;
         closureInfoRelative = lib.removePrefix "${builtins.storeDir}/" vm.config.system.build.closureInfo;
-        defKernel = "${vm.config.system.build.kernel}/${kernelTarget}";
-        archMap = {
-          "armv6l-linux" = { qemu = "qemu-system-arm"; bios = "default"; kernel = defKernel; };
-          "armv7l-linux" = { qemu = "qemu-system-arm"; bios = "default"; kernel = defKernel; };
-          "riscv64-linux" = { qemu = "qemu-system-riscv64"; bios = (riscvBios defKernel); kernel = defKernel; };
-        };
         settings = archMap.${cfg.vmSystem};
+        kernel = "${vm.config.system.build.kernel}/${kernelTarget}";
         initrd = "${vm.config.system.build.initialRamdisk}/initrd";
         append = "init=${vm.config.system.build.toplevel}/init ${toString vm.config.boot.kernelParams} closureInfo=${closureInfoRelative}";
 
@@ -258,14 +262,19 @@ in
           wantedBy = [ "multi-user.target" ];
           script = ''
             set -euo pipefail
+            set -x
 
             export PATH=${lib.makeBinPath [ pkgs.qemu pkgs.qemu_kvm pkgs.utillinux pkgs.e2fsprogs ]}:$PATH
 
-            : ''${STATEDIR:=/var/lib/build-vm-${name}}
+            : ''${STATEDIR:="/var/lib/build-vm-${name}/state"}
+            : ''${SCRATCH:="/var/lib/build-vm-${name}/scratch.raw"}
             : ''${TMPDIR:=/tmp}
+            mkdir -p "$STATEDIR"
 
-            fallocate -l 20G $TMPDIR/scratch.raw ########################### cfg
-            mkfs.ext4 -L scratch $TMPDIR/scratch.raw
+            if [[ ! -f "$SCRATCH" ]]; then
+              fallocate -l 60G $SCRATCH ########################### cfg
+              mkfs.ext4 -L scratch $SCRATCH
+            fi
 
             # TODO: make this script more of a program and less of a
             # blob of systemd config mixed with nix mixed with shell
@@ -282,10 +291,9 @@ in
 
             set -x
             ${settings.qemu} \
-              -bios "${settings.bios}" \
-              ${lib.optionalString (cfg.useKernel) "-kernel \"${settings.kernel}\"" } \
-              ${lib.optionalString (cfg.useInitrd) "-initrd \"${initrd}\"" } \
-              ${lib.optionalString (cfg.useAppend) "-append \"${append}\"" } \
+              -kernel "${kernel}" \
+              -initrd "${initrd}" \
+              -append "${append}" \
               ${lib.optionalString (cfg.kvm)            "-enable-kvm"} \
               ${lib.optionalString (cfg.mem != "")      "-m ${cfg.mem}"} \
               ${lib.optionalString (cfg.smp != -1)      "-smp ${toString cfg.smp}"} \
@@ -293,11 +301,11 @@ in
               ${lib.optionalString (cfg.cpu != "")      "-cpu ${cfg.cpu}"} \
               -nographic \
               -device qemu-xhci \
-              -device virtio-rng-pci \
-              -fsdev local,id=host-store,path=${builtins.storeDir},security_model=none,readonly=true -device virtio-9p-device,fsdev=host-store,mount_tag='host-store' \
-              -fsdev local,id=state,path=$STATEDIR,security_model=none                               -device virtio-9p-device,fsdev=state,mount_tag=state \
-              -drive file=$TMPDIR/scratch.raw,format=raw,werror=report,cache=unsafe,id=scratch       -device virtio-blk-device,serial=scratch,drive=scratch \
-              -netdev user,id=usernet${lib.optionalString (netdevextra != null) netdevextra}         -device virtio-net-device,netdev=usernet \
+              -device virtio-rng-${settings.suffix} \
+              -fsdev local,id=host-store,path=${builtins.storeDir},security_model=none,readonly=true -device virtio-9p-${settings.suffix},fsdev=host-store,mount_tag='host-store' \
+              -fsdev local,id=state,path=$STATEDIR,security_model=none                               -device virtio-9p-${settings.suffix},fsdev=state,mount_tag=state \
+              -drive file=$SCRATCH,if=none,format=raw,werror=report,cache=unsafe,id=scratch       -device virtio-blk-${settings.suffix},serial=scratch,drive=scratch \
+              -netdev user,id=usernet${lib.optionalString (netdevextra != null) netdevextra}         -device virtio-net-${settings.suffix},netdev=usernet \
               -chardev stdio,mux=on,id=char0     -mon chardev=char0,mode=readline \
               -serial "$serial" \
               "''${extra_args[@]}"

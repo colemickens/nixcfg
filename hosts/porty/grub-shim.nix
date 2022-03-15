@@ -38,7 +38,6 @@ in {
           in ''
             if true; then
               (
-                set -x
                 set -eu # don't enable pipefail, we need it off
 
                 # efibootmgr... come on: https://github.com/rhboot/efibootmgr/issues/159
@@ -57,15 +56,12 @@ in {
 
                 shim_entry=$(efibootmgr |grep '^Boot[0-9]' |grep "$shim_loader_name" |grep -Po '[0-9A-F]{4}\*' |sed 's/\*//g' |tr '\n' ',' |head -c -1)
                 if [[ "$shim_entry" != "" ]] ; then
-                  sudo efibootmgr --bootnum $shim_entry --label "$shim_loader_name" --loader "${shim_path}" --disk "$disk"
+                  sudo efibootmgr --bootnum $shim_entry --label "$shim_loader_name" --loader "${shim_path}" --disk "$disk" >/dev/null
                 else
-                  sudo efibootmgr --create-only --label "$shim_loader_name" --loader "${shim_path}" --disk "$disk"
+                  sudo efibootmgr --create-only --label "$shim_loader_name" --loader "${shim_path}" --disk "$disk" >/dev/null
                 fi
-                
-                shim_entry=$(efibootmgr |grep '^Boot[0-9]' |grep "$shim_loader_name" |grep -Po '[0-9A-F]{4}\*' |sed 's/\*//g' |tr '\n' ',' |head -c -1)
               )
             fi
-            echo "grub-shim: done"
           '';
         };
       };
