@@ -6,7 +6,7 @@
   config = {
     home-manager.users.cole = { pkgs, ... }: {  
       programs.ion = {
-        enable = true;
+        enable = (pkgs.system == "x86_64-linux"); # idk
       };
     };
   };

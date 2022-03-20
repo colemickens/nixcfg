@@ -3,7 +3,6 @@
 {
   imports = [
     "${modulesPath}/installer/netboot/netboot.nix"
-    ../../mixins/common.nix
     ../../profiles/user.nix
 
     ../../mixins/sshd.nix

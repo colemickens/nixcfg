@@ -2,17 +2,17 @@
 
 {
   imports = [
-    inputs.home-manager.nixosModules."home-manager"
-
     ./user.nix
     ../mixins/common.nix
 
-    ../mixins/git.nix
-    ../mixins/ssh.nix
-    ../mixins/zsh.nix
+    inputs.home-manager.nixosModules."home-manager"
 
+    ../mixins/fish.nix
+    ../mixins/git.nix
     ../mixins/helix.nix
+    ../mixins/ssh.nix
     ../mixins/zellij.nix
+    ../mixins/zsh.nix
   ];
 
   config = {

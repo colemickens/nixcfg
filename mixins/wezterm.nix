@@ -2,12 +2,7 @@
 
 let
   prefs = import ./_preferences.nix { inherit pkgs inputs; };
-  font = prefs.font;
-  colors = prefs.colors.default;
-
-  # foot scales the font size?
-  #fontSize = (builtins.ceil (ts.fonts.default.size / 1.25) - 1);
-  fontSize = 12;
+  colors = prefs.themes.wezterm;
 in
 {
   config = {
@@ -25,7 +20,7 @@ in
           use_fancy_tab_bar = false,
           initial_rows = 24,
           initial_cols = 120,
-          font_size = ${toString fontSize},
+          font_size = ${toString prefs.font.size},
           window_background_opacity = 1.0,
           enable_csi_u_key_encoding = true,
           default_cursor_style = 'BlinkingBar',
@@ -64,7 +59,7 @@ in
           config.freetype_load_target = "Light"
           config.freetype_render_target = "HorizontalLcd"
           local f = wezterm.font_with_fallback({
-            {family="${font.family}", weight="Regular"},
+            {family="${prefs.font.monospace.family}", weight="Regular"},
             {family="Font Awesome", weight="Regular"},
              --"Font Awesome",
           })

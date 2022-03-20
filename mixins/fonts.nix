@@ -9,7 +9,9 @@ in
 
       fontconfig = {
         defaultFonts = {
-          monospace = [ prefs.font.default.family ];
+          serif = [ prefs.font.serif.family ];
+          sansSerif = [ prefs.font.sans.family ];
+          monospace = [ prefs.font.monospace.family ];
           emoji = [ prefs.font.emoji.family ];
         };
       };

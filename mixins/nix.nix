@@ -16,6 +16,7 @@ let
 in
 {
   config = {
+    environment.systemPackages = [ _nix ];
     nix = {
       settings = {
         build-cores = 0;
@@ -24,12 +25,14 @@ in
           "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4="
           "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
           "unmatched.cachix.org-1:F8TWIP/hA2808FDABsayBCFjrmrz296+5CQaysosTTc="
+          "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         ];
         substituters = [
           "https://cache.nixos.org"
           "https://colemickens.cachix.org"
           "https://nixpkgs-wayland.cachix.org"
           "https://unmatched.cachix.org"
+          "https://nix-community.cachix.org"
         ];
         trusted-users = [ "@wheel" "root" ];
       };

@@ -9,7 +9,6 @@ in
 
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
-    ../../mixins/common.nix
     ../../mixins/sshd.nix
 
     ../../profiles/core.nix # we need core+linger for hm to power syncthing, I guess
@@ -105,15 +104,6 @@ in
     documentation.info.enable = false;
     documentation.nixos.enable = false;
 
-    # specialisation = {
-    #   linux_latest = {
-    #     inheritParentConfig = true;
-    #     configuration = {
-    #       boot.kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
-    #     };
-    #   };
-    # };
-
     boot = {
       # TOW_BOOT + GRUB
       # (works, but hangs for a long time between grub -> kernel booting)
@@ -139,8 +129,6 @@ in
       cleanTmpDir = true;
 
       zfs.enableUnstable = true;
-      kernelPackages = pkgs.linuxPackages_5_15;
-
       initrd.availableKernelModules = [
         "pcie_brcmstb" "bcm_phy_lib" "broadcom" "mdio_bcm_unimac" "genet"
         "vc4" "bcm2835_dma" "i2c_bcm2835"
@@ -172,7 +160,6 @@ in
     services.timesyncd.enable = true;
     time.timeZone = "America/Chicago";
 
-    nixpkgs.config.allowUnfree = true;
     hardware = {
       enableRedistributableFirmware = true;
     };

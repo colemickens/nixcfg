@@ -32,23 +32,23 @@ tabs:
     parts:
       - direction: Horizontal
         split_size:
-          Percent: 33
+          Percent: 25
         parts:
           - direction: Vertical
             pane_name: "nixup xeep"
             split_size:
-              Percent: 33
+              Percent: 50
             run:
               command: {cmd: ./nixup, args: ["xeep"]}
           - direction: Vertical
             pane_name: "nixup porty"
             split_size:
-              Percent: 33
+              Percent: 50
             run:
               command: {cmd: ./nixup, args: ["porty"]}
       - direction: Horizontal
         split_size:
-          Percent: 33
+          Percent: 25
         parts:
           - direction: Vertical
             pane_name: "nixup raisin"
@@ -64,7 +64,7 @@ tabs:
               command: {cmd: ./nixup, args: ["jeffhyper"]}
       - direction: Horizontal
         split_size:
-          Percent: 34
+          Percent: 25
         parts:
           - direction: Vertical
             pane_name: "nixup rpifour1"
@@ -78,3 +78,19 @@ tabs:
               Percent: 50
             run:
               command: {cmd: ./nixup, args: ["sinkor"]}
+      - direction: Horizontal
+        split_size:
+          Percent: 25
+        parts:
+          - direction: Vertical
+            pane_name: "nixup pinephone"
+            split_size:
+              Percent: 50
+            run:
+              command: {cmd: ./nixup, args: ["pinephone"]}
+          - direction: Vertical
+            pane_name: "nixup blueline"
+            split_size:
+              Percent: 50
+            run:
+              command: {cmd: ./nixup, args: ["blueline"]}

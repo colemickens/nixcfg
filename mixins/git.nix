@@ -19,7 +19,7 @@
         delta = {
           enable = true;
           options = {
-            features = "decorations side-by-side";
+            features = "decorations side-by-side navigate";
           };
         };
       };

@@ -1,11 +1,39 @@
 { config, lib, pkgs, inputs, ... }:
 
-with lib;
-
+let
+  cfg = config.nixcfg.common;
+in
 {
   imports = [
     ./nix.nix
   ];
+
+  options = {
+    nixcfg.common = {
+      defaultKernel = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          ideally, all machines run mainline. this is mostly disabled for mobile-nixos devices
+          (also, in most cases linuxPackages could just be overridden directly)
+          # TODO: it would be nice if mobile-nixos didn't make me need this...
+        '';
+      };
+      hostColor = lib.mkOption {
+        type = lib.types.str;
+        default = "grey";
+        description = "this is used as a hostname-hint-accent in zellij/waybar/shell prompts";
+      };
+      defaultTheme = lib.mkOption {
+        type = lib.types.str;
+        default = "XXX";
+        description = ''
+            This is the name of an iterm2 theme.
+            Used for zellij, helix, sway, mako, etc.
+        '';
+      };
+    };
+  };
 
   config = {
     i18n.defaultLocale = "en_US.UTF-8";
@@ -15,6 +43,7 @@ with lib;
     '';
 
     boot = {
+      kernelPackages = lib.mkIf cfg.defaultKernel pkgs.linuxPackages_latest;
       cleanTmpDir = true;
       kernel.sysctl = {
         "fs.file-max" = 100000;

@@ -2,16 +2,13 @@
 
 {
   imports = [
-    ../profiles/user.nix
-    ../profiles/interactive.nix
-    ../profiles/desktop-sway-unstable.nix
+    #../profiles/sway
+    ../profiles/core.nix
 
     ../modules/loginctl-linger.nix
-    ../mixins/common.nix
     ../mixins/sshd.nix
     ../mixins/networkmanager-minimal.nix
     ../mixins/tailscale.nix
-    ../modules/tailscale-autoconnect.nix
   ];
 
   config = {
@@ -19,14 +16,7 @@
       alias rbb="sudo reboot bootloader"
     '';
 
-    documentation.enable = false;
-    documentation.doc.enable = false;
-    documentation.info.enable = false;
-    documentation.nixos.enable = false;
-
     services.udev.packages = [ pkgs.libinput.out ]; # TODO: generic mobile goodness? where is this even from?
-
-    nixpkgs.config.allowUnfree = true;
 
     systemd.services.systemd-udev-settle.enable = false; ## ????
     # mobile.boot.stage-1.ssh.enable = false;

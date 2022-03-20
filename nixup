@@ -84,11 +84,18 @@ case "${cmd}" in
   ;;
 
   "rpifour1" | "rpithreebp1" | "rpizerotwo1" | \
-  "sinkor" | "pinebook" | "blueline" | "enchilada")
+  "sinkor" | "pinephone" | "blueline" | "enchilada")
     "${commbox}"
     out="$("${rb}" "${BLDR_A64}" "$("${tsip}" "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}")"
     "${ra}" "$out" "$("${tsip}" "${cmd}")"
   ;;
+
+  "img-blueline")
+    out="$(SKIP_CACHIX=1 "${rb}" "${BLDR_A64}" "localhost" "${nixcfg}#images.blueline" "${@}")"
+    #env ANDROID_SERIAL="89WX0J2GL" "${out}/flash.sh" "factory-critical"
+    env ANDROID_SERIAL="89WX0J2GL" "${out}/flash.sh" "boot"
+    env ANDROID_SERIAL="89WX0J2GL" "${out}/flash.sh" "system"
+    ;;
 
   "towboot")
     "${commbox}"
@@ -97,7 +104,7 @@ case "${cmd}" in
 
   "x86")
     "${rb}" "${BLDR_X86}" "$("${tsip}" porty)"  "${nixcfg}#hydraBundles.x86_64-linux.toplevels" "${@}"
-    "${rb}" "${BLDR_X86}" "$("${tsip}" porty)"  "${nixcfg}#hydraBundles.x86_64-linux.devShells" "${@}"
+    "${rb}" "${BLDR_X86}" "$("${tsip}" porty)"  "${nixcfg}#hydraBundles.x86_64-linux.shells" "${@}"
   ;;
   "a64")
     "${commbox}"

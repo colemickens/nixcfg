@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./core.nix  # imports hm
+    ./core.nix # imports hm
 
     ../secrets
 
@@ -47,8 +47,7 @@
       keep-derivations = true
     '';
     home-manager.users.cole = { pkgs, ... }@hm: {
-      home.sessionVariables = {
-      };
+      home.sessionVariables = { };
       home.file = {
         "${hm.config.xdg.configHome}/gdb/gdbinit".source = (pkgs.writeText "gdbinit" ''set auto-load safe-path /nix/store'');
       };
@@ -57,9 +56,6 @@
       };
       home.packages = with pkgs; [
         colePackages.customCommands
-
-        # TODO: remove the need for this
-        cachix
 
         # <rust pkgs>
         # https://zaiste.net/posts/shell-commands-rust/
@@ -85,23 +81,46 @@
         # </rust pkgs>
         python3Packages.pywatchman
 
-        usbutils pciutils lshw
-        efibootmgr cryptsetup
-        wipe file unar
+        usbutils
+        pciutils
+        dmidecode
+        lshw
+        nvme-cli
+        efibootmgr
+        cryptsetup
+        wipe
+        file
+        unar
         sops # age ?rage?
         step-cli
-        gptfdisk parted
-        iotop which binutils.bintools
-        parallel unzip xz zip
+        gptfdisk
+        parted
+        iotop
+        which
+        binutils.bintools
+        parallel
+        unzip
+        xz
+        zip
         picocom
         asciinema
-        wget curl rsync wget curl jq
-        openssh autossh mosh sshuttle
+        wget
+        curl
+        rsync
+        wget
+        curl
+        jq
+        openssh
+        autossh
+        mosh
+        sshuttle
 
         linuxPackages.cpupower
         linuxPackages.usbip
 
-        aria2 youtube-dl # TODO: remove whenever we get aria2->incoming setup
+        aria2
+        youtube-dl
+        #youtube-dlp # TODO: remove whenever we get aria2->incoming setup
         imgurbash2
 
         # nix-tree nix-du ncdu nix-prefetch nixpkgs-review

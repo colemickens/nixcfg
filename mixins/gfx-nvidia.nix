@@ -1,12 +1,14 @@
 { config, pkgs, lib, ... }:
 
 let
-  nverStable = config.boot.kernelPackages.nvidiaPackages.stable.version;
-  nverBeta = config.boot.kernelPackages.nvidiaPackages.beta.version;
-  nvidiaPackage =
-    if (lib.versionOlder nverBeta nverStable)
+  nvStable = config.boot.kernelPackages.nvidiaPackages.stable;
+  nvBeta = config.boot.kernelPackages.nvidiaPackages.beta;
+  nvLatest =
+    if (lib.versionOlder nvBeta.version nvStable.version)
     then config.boot.kernelPackages.nvidiaPackages.stable
     else config.boot.kernelPackages.nvidiaPackages.beta;
+  # nvEffective = nvLatest;
+  nvidiaPkg = nvLatest;
 
   extraEnv = {
     WLR_NO_HARDWARE_CURSORS = "1";
@@ -26,6 +28,7 @@ in {
     environment.sessionVariables = extraEnv;
 
     environment.systemPackages = with pkgs; [
+      gwe
       libva-utils
       glxinfo
       vulkan-tools
@@ -41,7 +44,7 @@ in {
       };
     };
     hardware.nvidia.modesetting.enable = true;
-    hardware.nvidia.package = nvidiaPackage;
+    hardware.nvidia.package = nvidiaPkg;
     hardware.nvidia.powerManagement.enable = false;
 
     services.xserver = {

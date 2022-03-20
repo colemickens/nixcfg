@@ -1,22 +1,25 @@
 { pkgs, lib, config, inputs, ... }:
 
 let
-  prefs = import ../mixins/_preferences.nix { inherit pkgs lib config inputs; };
+  prefs = import ../../mixins/_preferences.nix { inherit pkgs lib config inputs; };
   _wayfire = pkgs.wayfire;
+  useUnstableOverlay = true;
 in {
   imports = [
-    ../mixins/gtk.nix
+    ../gui.nix
 
-    #../mixins/wlsunset.nix
-    #../mixins/mako.nix
-    ../mixins/sirula.nix
-    ../mixins/sway.nix # contains swayidle/swaylock config
-    #../mixins/wayfire.nix
-    ../mixins/wayland-tweaks.nix
+    ../../mixins/gtk.nix
 
-    ./gui.nix
+    ../../mixins/mako.nix
+    ../../mixins/sirula.nix
+    ../../mixins/sway.nix # contains swayidle/swaylock config
+    ../../mixins/waybar.nix
+    ../../mixins/wayland-tweaks.nix
   ];
   config = {
+    nixpkgs.overlays = if useUnstableOverlay then [
+      inputs.nixpkgs-wayland.overlay
+    ] else [];
     security.wrappers = {
       "wshowkeys" = {
         owner = "root";
@@ -45,11 +48,6 @@ in {
           enable = true;
           latitude = "47.608103";
           longitude = "-122.335167";
-        };
-      };
-      programs = {
-        mako = {
-          enable = true;
         };
       };
 

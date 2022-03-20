@@ -6,7 +6,7 @@
     users.users."cole".extraGroups = [ "adbusers" ];
 
     environment.systemPackages = with pkgs; [
-      scrcopy
+      scrcpy
     ];
   };
 }

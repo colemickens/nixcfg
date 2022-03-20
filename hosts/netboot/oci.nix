@@ -6,6 +6,7 @@
 {
   imports = [
     "${modulesPath}/profiles/qemu-guest.nix"
+    ../../mixins/common.nix
   ];
   config = {
     /* <coles additions> */
@@ -29,14 +30,6 @@
         "console=ttyS0"          # x86_64-linux
         "console=ttyAMA0,115200" # aarch64-linux
       ];
-      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_5_15;
-      # kernelPatches = [{
-      #   name = "kcore-config";
-      #   patch = null;
-      #   extraConfig = ''
-      #     PROC_KCORE y
-      #   '';
-      # }];
     };
 
     networking.timeServers = [ "169.254.169.254" ];

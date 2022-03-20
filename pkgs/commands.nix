@@ -17,7 +17,11 @@ let
   gpgKeyId = "0x9758078DE5308308";
   gpgCardId = "D2760001240100000006071267080000";
 
-  tsip = (writeShellScriptBin "tsip" ''
+  tsip4 = (writeShellScriptBin "tsip4" ''
+    ${tailscale}/bin/tailscale ip --4 "$1"
+  '');
+
+  tsip6 = (writeShellScriptBin "tsip6" ''
     ${tailscale}/bin/tailscale ip --6 "$1"
   '');
 
@@ -51,7 +55,8 @@ let
 
   name = "cole-custom-commands";
   drvs = [
-    tsip
+    tsip4
+    tsip6
     gssh
     gpgssh
 

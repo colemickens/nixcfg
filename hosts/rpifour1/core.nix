@@ -36,13 +36,12 @@ let
 in
 {
   imports = [
-    ./wifi.nix
-
-    ../../mixins/common.nix
-    ../../profiles/user.nix
+    ../../profiles/interactive.nix
 
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
+
+    ./wifi.nix
   ];
 
   #
@@ -69,11 +68,10 @@ in
       libraspberrypi
 
       binutils
+      usbutils
 
       tbPiPkg
     ];
-
-    nixpkgs.config.allowBroken = true;
 
     specialisation = {
       "foundation" = {
@@ -91,7 +89,6 @@ in
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      kernelPackages = pkgs.linuxPackages_latest;
       initrd.availableKernelModules = [
         "pcie_brcmstb" "bcm_phy_lib" "broadcom" "mdio_bcm_unimac" "genet"
         "vc4" "bcm2835_dma" "i2c_bcm2835"
@@ -110,7 +107,6 @@ in
     services.timesyncd.enable = true;
     time.timeZone = "America/Los_Angeles";
 
-    nixpkgs.config.allowUnfree = true;
     hardware.enableRedistributableFirmware = false;
   };
 }

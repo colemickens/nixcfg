@@ -14,7 +14,7 @@ let
   # });
   #pinebookpro-keyboard-updater = pbpPkgs.pinebookpro-keyboard-updater;
   #pinebookpro-keyboard-updater = pkgs.hello;
-  pinebookpro-keyboard-updater = pkgs.callPackage "${inputs.wip-pinebook-pro}/keyboard-updater" {};
+  pinebookpro-keyboard-updater = pkgs.callPackage "${inputs.wip-pinebook-pro}/keyboard-updater" { };
 in
 {
   imports = [
@@ -25,7 +25,7 @@ in
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
 
-    ../../profiles/desktop-sway-unstable.nix
+    (import ../../profiles/sway { useUnstableOverlay = true; })
 
     ../../modules/loginctl-linger.nix
     "${inputs.wip-pinebook-pro}/pinebook_pro.nix"
@@ -38,7 +38,7 @@ in
 
     hardware.usbWwan.enable = true;
 
-    nix.nixPath = [];
+    nix.nixPath = [ ];
     nix.gc.automatic = true;
     nix.maxJobs = 2;
 
@@ -68,7 +68,7 @@ in
     '';
 
     fileSystems = {
-      "/" =     {
+      "/" = {
         device = "/dev/disk/by-partlabel/nixos";
         #device = "/dev/disk/by-id/mmc-DA4064_0xe0291213-part2";
         fsType = "ext4";
@@ -80,7 +80,7 @@ in
       };
       # firmware can't be mounted, tow-boot has a special setup for pbp's rockchip whatever
     };
-    swapDevices = [];
+    swapDevices = [ ];
 
     console.earlySetup = true; # luks
 
@@ -89,16 +89,16 @@ in
       loader.grub.enable = false;
       loader.generic-extlinux-compatible.enable = true;
       loader.generic-extlinux-compatible.configurationLimit = 3;
-      
+
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
       kernelParams = [
         # "cma=32M" # samueldr says so
         "mitigations=off"
-        "console=ttyS2,1500000n8" "console=tty0"
-      ]; 
+        "console=ttyS2,1500000n8"
+        "console=tty0"
+      ];
 
       initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
       initrd.kernelModules = [ "nvme" ];
@@ -114,7 +114,10 @@ in
     services.timesyncd.enable = true;
     time.timeZone = "America/Los_Angeles";
 
-    nixpkgs.config.allowUnfree = true;
+    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+      "pinebookpro-ap6256-firmware"
+    ];
+
     hardware = {
       bluetooth.enable = true;
       pulseaudio.package = pkgs.pulseaudioFull;

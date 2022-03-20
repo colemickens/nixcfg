@@ -2,6 +2,12 @@
 
 {
   config = {
+    home-manager.users.cole = { pkgs, ... }: {
+      home.packages = with pkgs; [
+        cachix
+      ];
+    };
+
     sops.secrets."cachix.dhall" = {
       owner = "cole";
       group = "cole";

@@ -3,11 +3,6 @@
 let
   prefs = import ./_preferences.nix { inherit inputs config lib pkgs; };
 
-  swayfonts = {
-    names = [ prefs.font.default.family prefs.font.fallback.family ];
-    style = "Heavy";
-    size = 10.0;
-  };
   background = prefs.background;
 
   out_aw3418dw = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
@@ -77,8 +72,8 @@ let
     echo exec sed -E $expressions "''${XDG_CONFIG_HOME:-$HOME/.config}"/gtk-3.0/settings.ini &>>/tmp/gsettings.log
     eval exec sed -E $expressions "''${XDG_CONFIG_HOME:-$HOME/.config}"/gtk-3.0/settings.ini &>>/tmp/gsettings.log
   '';
-  gsettings_auto = pkgs.writeShellScript "gsettings-true.sh" "true";
-  _gsettings_auto = pkgs.writeShellScript "gsettings-auto.sh" ''
+  #gsettings_auto = pkgs.writeShellScript "gsettings-true.sh" "true";
+  gsettings_auto = pkgs.writeShellScript "gsettings-auto.sh" ''
     set -x
     set -euo pipefail
 
@@ -110,64 +105,81 @@ let
 in
 {
   config = {
-    #programs.sway.enable = true; # needed for swaylock/pam stuff
     #programs.sway.extraPackages = lib.mkForce [ ]; # block rxvt
 
     environment.systemPackages = with pkgs; [
       capitaine-cursors
     ];
 
-    home-manager.users.cole = { pkgs, ... }: {
+    #programs.sway.enable = true; # needed for swaylock/pam stuff
+    security.pam.services.swaylock = { };
+
+    home-manager.users.cole = { pkgs, config, ... }@hm: {
       # block auto-sway reload, Sway crashes... ... but now  we work around it by doing kbmods per dev
       #xdg.configFile."sway/config".onChange = lib.mkForce "";
 
       programs.swaylock = {
         enable = true;
-        config = ''
+        package = pkgs.swaylock-effects;
+        settings = ''
+          debug
           screenshots
-          color '#964B00'
-          effect-scale 0.5
-          effect-blur 7x5
-          effect-scale 2
-          effect-pixelate 10  
+          color=964B00
+          effect-scale=0.5
+          effect-blur=7x5
+          effect-scale=2
+          effect-pixelate=10  
         '';
       };
-      services.swayidle = {
-        enable = true;
-        timeouts = [
-          { timeout = 30; command = "swaylock --fade 15 --grace 15"; }
-          { timeout = 30; command = "swaymsg 'output * dpms off'"; }
-          { timeout = 10; command = "if pgrep swaylock; then swaymsg 'output * dpms off'; fi"; }
-        ];
-        events = [
-          # this is still a bunch of horseshit, this needs to be properly managed by a proper WM/DE
-          { event = "before-sleep"; command = "swaylock"; }
-          { event = "resume"; command = "swaymsg 'output * dpms on'"; }
-          { event = "resume"; command = "if pgrep swaylock; then swaymsg 'output * dpms on'; fi"; }
-          { event = "before-sleep"; command = "swaylock"; }
-        ];
-        extraArgs = [
-          "idlehint 30"
-        ];
-      };
+      services.swayidle =
+        let
+          pgrep = "${pkgs.procps}/bin/pgrep";
+          swaylock = "${hm.config.programs.swaylock.package}/bin/swaylock";
+          swaymsg = "${hm.config.wayland.windowManager.sway.package}/bin/swaymsg";
+          dpms_off = pkgs.writeShellScript "dpms_off" ''
+            set -x
+            sleep 100
+            if ${pgrep} swaylock; then ${swaymsg} "output * dpms off"; fi
+          '';
+
+        in
+        {
+          enable = true;
+          debug = true;
+          timeouts = [
+            { timeout = 30; command = "${swaylock} --fade 15 --grace 15"; }
+            { timeout = 45; command = "${swaymsg} output * dpms off"; }
+            { timeout = 10; command = "${dpms_off}"; }
+          ];
+          events = [
+            # this is still a bunch of horseshit, this needs to be properly managed by a proper WM/DE
+            { event = "before-sleep"; command = "${swaylock}"; }
+            { event = "after-resume"; command = "${swaymsg} output * dpms on"; }
+            { event = "after-resume"; command = "if ${pgrep} swaylock; then ${swaymsg} output * dpms on; fi"; }
+            { event = "before-sleep"; command = swaylock; }
+          ];
+          extraArgs = [
+            "idlehint 30"
+          ];
+        };
       wayland.windowManager.sway = {
         enable = true;
         systemdIntegration = true; # beta
-        wrapperFeatures = {
-          base = true; # this is the default, but be explicit for now
-          gtk = true;
-        };
+        #wrapperFeatures = {
+        #  base = false; # this is the default (dbus activation, not sure where XDG_CURRENT_DESKTOP comes from)
+        #  gtk = true;
+        #};
         extraSessionCommands = ''
           true
         '';
-        xwayland = prefs.xwayland_enabled;
+        xwayland = false;
         extraConfig = ''
-          seat seat0 xcursor_theme "${prefs.cursor.name}"
+          seat seat0 xcursor_theme "${prefs.cursor.name}" 24
         '';
         config = rec {
           modifier = "Mod4";
           terminal = prefs.default_term;
-          fonts = swayfonts;
+          fonts = prefs.swayfonts;
           focus.followMouse = "always";
           window.border = 5;
           window.titlebar = true;
@@ -225,7 +237,8 @@ in
               background = background;
             };
           };
-          #bars = [{
+          bars = [ ];
+          #bars = [
           #  command = statusCommand;
           #}];
           keybindings = {

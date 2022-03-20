@@ -3,8 +3,9 @@
 {
   config = {
     home-manager.users.cole = { pkgs, ... }: {
-      programs.mako = {
+      services.mako = {
         enable = true;
+        systemd.enable = true;
       };
     };
   };

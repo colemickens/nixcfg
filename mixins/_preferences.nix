@@ -7,7 +7,7 @@ let
     url = "https://raw.githubusercontent.com/lunik1/nixos-logo-gruvbox-wallpaper/master/png/gruvbox-dark-rainbow.png";
     sha256 = "036gqhbf6s5ddgvfbgn6iqbzgizssyf7820m5815b2gd748jw8zc";
   };
-  default_color_settings = {
+  colordefs = {
     bold_as_bright = true;
   };
   customIosevkaTerm = (pkgs.iosevka.override {
@@ -32,15 +32,18 @@ rec {
   default_term = "alacritty";
   default_launcher = "sirula";
 
-  cursor = { name = "captaine-cursors"; package = pkgs.capitaine-cursors; };
-  # cursor = { name = "capitaine-cursors"; package = pkgs.capitaine-cursors; };
-  # cursor = { name = "adwaita"; package = pkgs.gnome3.adwaita-icon-theme; };
-  # cursor = { name = "breeze-cursors"; package = pkgs.breeze-icons; };
+  gtk = {
+    font = { name = "${font.default.family} 11"; package = font.default.package; };
+    preferDark = true;
+    iconTheme = { name = "Numix Circle"; package = pkgs.numix-icon-theme; };
+    theme = { name = "Arc-Dark"; package = pkgs.arc-theme; };
+  };
+  cursor = { name = "capitaine-cursors-white"; package = pkgs.capitaine-cursors; };
   themes = {
-    alacritty = colorscheme;
-    sway = colorscheme;
-    wezterm = colorscheme;
-    zellij = colorscheme;
+    alacritty = colorscheme // colordefs;
+    sway = colorscheme // colordefs;
+    wezterm = colorscheme // colordefs;
+    zellij = colorscheme // colordefs;
   };
   inherit colorscheme;
 
@@ -49,15 +52,27 @@ rec {
   # background = "${bg_gruvbox_rainbow} center #333333";
   wallpaper = bg_gruvbox_rainbow;
 
+  swayfonts = {
+    names = [ font.default.family font.fallback.family ];
+    style = "Heavy";
+    size = 10.0;
+  };
+
   font = rec {
     size = 13;
-    default = { family = "Iosevka"; package = _iosevka; };
+    default = sans;
+
+    sans = { family = "Noto Sans"; package = pkgs.noto-fonts; };
+    serif = { family = "Noto Serif"; package = pkgs.noto-fonts; };
+    monospace = { family = "Iosevka"; package = _iosevka; };
     fallback = { family = "Font Awesome 5 Free"; package = pkgs.font-awesome; };
-    emoji = { family = "Noto Sans Emoji"; package = pkgs.noto-fonts-emoji; };
-    extraPackages = with pkgs; [ corefonts ttf_bitstream_vera gelasio noto-fonts ];
-    allPackages = [ default fallback emoji ] ++ extraPackages;
-  };
-  colors = {
-    default = default_color_settings // colorscheme;
+    emoji = { family = "Noto Color Emoji"; package = pkgs.noto-fonts-emoji; };
+    
+    allPackages = (map (p: p.package) [ default sans serif monospace fallback emoji ]) ++
+      (with pkgs; [
+        liberation_ttf # free corefonts-metric-compatible replacement
+        ttf_bitstream_vera
+        gelasio
+      ]);
   };
 }

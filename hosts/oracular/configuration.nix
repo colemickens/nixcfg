@@ -6,7 +6,6 @@
 
     ../../profiles/user.nix
     ../../profiles/interactive.nix
-    ../../mixins/common.nix
     ../../mixins/sshd.nix
   ];
 
@@ -22,8 +21,6 @@
         options = [];
       };
     };
-
-    boot.kernelPackages = pkgs.linuxPackages_latest;
 
     # not that I don't want this, but I'm adding it for this:
     #     error: builder for '/nix/store/wcryv2kc4w96bkn80cpf3zzrz22nyjiw-lazy-options.json.drv' failed with exit code 1;                     

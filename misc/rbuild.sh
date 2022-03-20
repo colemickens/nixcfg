@@ -22,7 +22,7 @@ cachix=0
 # TODO: instead use env vars?
 # RBUILD_MODE=="direct"
 # RBUILD_MODE=="cachix"
-if [[ "${target}" != "cachix" ]]; then
+if [[ "${target}" != "cachix" && "${SKIP_COPY:-""}" != "1" ]]; then
   printf '\n%s\n' ">>> copy derivations" >&2
   set -x;
   nix copy \
@@ -40,22 +40,22 @@ if [[ "${target}" != "cachix" ]]; then
     --from "ssh-ng://${remote}" \
     --to "ssh-ng://${target}" \
       "${_drv}" "${@}" >/dev/stderr
-      #"${thing}" "${@}" >/dev/stderr
   set +x;
 else
   printf '\n%s\n' ">>> build outputs remote" >&2
   set -x;
   nix build \
     --keep-going \
-    --no-check-sigs \
     --eval-store "auto" \
     --store "ssh-ng://${remote}" \
       "${_drv}" "${@}" >&2
   set +x;
 fi
 
-printf '\n%s\n' ">>> push to cachix from remote" >/dev/stderr
-ssh "${remote}" "echo \"${_out}\" | env CACHIX_SIGNING_KEY=\"${cachix_key}\" tee /dev/stderr | cachix push ${cachix_cache} >/dev/stderr" >&2
+if [[ "${SKIP_CACHIX:-""}" != "1" ]]; then
+  printf '\n%s\n' ">>> push to cachix from remote" >/dev/stderr
+  ssh "${remote}" "echo \"${_out}\" | env CACHIX_SIGNING_KEY=\"${cachix_key}\" tee /dev/stderr | cachix push ${cachix_cache} >/dev/stderr" >&2
+fi
 
 printf '%s' "${_out}"
 

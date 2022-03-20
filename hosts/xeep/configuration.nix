@@ -4,7 +4,7 @@ let
 in
 {
   imports = [
-    ../../mixins/common.nix
+    ../../profiles/interactive.nix
     ../../modules/loginctl-linger.nix
 
     ../../mixins/bolt.nix
@@ -24,14 +24,17 @@ in
     ./services/plex.nix
     ./services/unifi.nix
 
-    ../../profiles/interactive.nix
-
     # xps 13 9370 specific:
     ../../mixins/gfx-intel.nix
     inputs.hardware.nixosModules.dell-xps-13-9370
   ];
 
   config = {
+    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+      "unifi-controller"
+      "plexmediaserver"
+    ];
+
     boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
     boot.kernel.sysctl."net.ipv6.ip_forward" = 1;
 
@@ -85,13 +88,10 @@ in
     console.font = "ter-v32n";
     console.packages = [ pkgs.terminus_font ];
 
-    nixpkgs.config.allowBroken = true;
     boot = {
       tmpOnTmpfs = false;
       cleanTmpDir = true;
 
-      #kernelPackages = pkgs.linuxPackages_latest;
-      kernelPackages = pkgs.linuxPackages_5_16;
       initrd.availableKernelModules = [
         "xhci_pci" "xhci_hcd" # usb
         "nvme" "usb_storage" "sd_mod" # nvme / external usb storage
@@ -150,7 +150,6 @@ in
     services.timesyncd.enable = true;
     time.timeZone = "America/Los_Angeles";
 
-    nixpkgs.config.allowUnfree = true;
     hardware = {
       enableRedistributableFirmware = true;
       cpu.intel.updateMicrocode = true;

@@ -44,9 +44,10 @@ let
       boot.loader.grub.enable = false;
 
       boot.kernelPackages = pkgs.linuxPackages_latest;
-      boot.kernelPatches = if builtins.hasAttr "${pkgs.stdenv.system}" kernelPatches
+      boot.kernelPatches =
+        if builtins.hasAttr "${pkgs.stdenv.system}" kernelPatches
         then kernelPatches.${pkgs.stdenv.system}
-        else [];
+        else [ ];
       boot.initrd.kernelModules = [
         "9p"
         "9pnet"
@@ -109,34 +110,34 @@ let
       ];
 
       boot.initrd.postMountCommands = ''
-        mkdir -p $targetRoot/etc
-        echo -n > $targetRoot/etc/NIXOS
+              mkdir -p $targetRoot/etc
+              echo -n > $targetRoot/etc/NIXOS
 
-        closureInfo=""
-        for o in $(cat /proc/cmdline); do
-          case $o in
-            closureInfo=*)
-              closureInfo=''${o#closureInfo=}
-              ;;
-          esac
-        done
+              closureInfo=""
+              for o in $(cat /proc/cmdline); do
+                case $o in
+                  closureInfo=*)
+                    closureInfo=''${o#closureInfo=}
+                    ;;
+                esac
+              done
 
-        if [ -n "$closureInfo" ]; then
-          echo "Copying initial store from host store"
-          mkdir -p $targetRoot/nix/store
+              if [ -n "$closureInfo" ]; then
+                echo "Copying initial store from host store"
+                mkdir -p $targetRoot/nix/store
 
-          cat $targetRoot/nix/.host-store/$closureInfo/store-paths | \
-            sed -e "s|^${builtins.storeDir}/|$targetRoot/nix/.host-store/|" | \
-            while read path; do
-  ################### TODO:
-        # this should be an rsync instead maybe?
-              cp -a $path $targetRoot/nix/store
-            done
+                cat $targetRoot/nix/.host-store/$closureInfo/store-paths | \
+                  sed -e "s|^${builtins.storeDir}/|$targetRoot/nix/.host-store/|" | \
+                  while read path; do
+        ################### TODO:
+              # this should be an rsync instead maybe?
+                    cp -a $path $targetRoot/nix/store
+                  done
 
-          echo "Copied initial store"
-        else
-          echo "No closureInfo specified, continuing anyway..."
-        fi
+                echo "Copied initial store"
+              else
+                echo "No closureInfo specified, continuing anyway..."
+              fi
       '';
 
       boot.postBootCommands = ''
@@ -174,6 +175,10 @@ in
       default = { };
       type = lib.types.attrsOf (lib.types.submodule {
         options = {
+          autostart = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+          };
           # TODO: this is really "local system"
           vmSystem = lib.mkOption {
             type = lib.types.enum [ "armv6l-linux" "armv7l-linux" "aarch64-linux" "riscv64-linux" ];
@@ -259,7 +264,6 @@ in
       in
       {
         "build-vm@${name}" = {
-          wantedBy = [ "multi-user.target" ];
           script = ''
             set -euo pipefail
             set -x
@@ -316,7 +320,9 @@ in
             StateDirectory = "build-vm-%i";
             Type = "simple";
           };
-        };
+        } // (if !cfg.autostart then { } else {
+          wantedBy = [ "multi-user.target" ];
+        });
       }
     ));
   };

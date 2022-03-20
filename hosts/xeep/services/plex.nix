@@ -7,7 +7,6 @@ let rules =
   };
 in {
   config = {
-    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "plexmediaserver" ];
     networking.firewall = rules;
     services = {
       plex = {

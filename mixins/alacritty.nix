@@ -3,7 +3,7 @@
 let
   prefs = import ./_preferences.nix { inherit pkgs inputs; };
   font = prefs.font;
-  colors = prefs.colors.default;
+  colors = prefs.themes.alacritty;
 in
 {
   config = {
@@ -16,8 +16,7 @@ in
           };
           shell = prefs.shell;
           font = {
-            normal.family = "${font.family}";
-            # normal.family = "Recursive";
+            normal.family = "${font.monospace.family}";
             size = font.size;
           };
           #cursor.style = {

@@ -32,7 +32,7 @@
     helix.url = "github:helix-editor/helix";
     jj.url = "github:martinvonz/jj";
     zellij.url = "github:zellij-org/zellij";
-
+    
     # nixos-riscv64.url = "https://github.com/colemickens/nixos-riscv64";
     # jh7100.url = "https://github.com/colemickens/jh7100";
 
@@ -53,7 +53,7 @@
     tow-boot = { url = "github:colemickens/tow-boot/development"; };
     tow-boot.inputs.nixpkgs.follows = "nixpkgs"; # TODO: might break u-boot?
 
-    mobile-nixos.url = "github:colemickens/mobile-nixos/master"; # its nixpkgs is _only_ used for its devshell
+    mobile-nixos.url = "github:colemickens/mobile-nixos/2022-03-blueline";
 
     wip-pinebook-pro = { url = "github:colemickens/wip-pinebook-pro/master"; flake = false; };
     # wip-pinebook-pro.inputs.nixpkgs.follows = "nixpkgs"; # ?? # TODO TODO TODO
@@ -131,42 +131,13 @@
     in
     with _colelib; rec {
       inputs = _inputs;
+        
+      devShell = shell;
+      devShells = shells;
 
-      devShell = forAllSystems (system: minimalMkShell system {
-        name = "nixcfg-devshell";
-        nativeBuildInputs = map (x: (x.bin or x.out or x)) (with pkgs_.nixpkgs.${system}; [
-          #nixUnstable
-          cachix
-          nixpkgs-fmt
-          nix-prefetch-git
-          bash
-          curl
-          cacert
-          jq
-          jless
-          parallel
-          mercurial
-          git
-          # todo: move a bunch of these to 'apps#update-env' ?
-          nettools
-          openssh
-          ripgrep
-          rsync
-          sops
-          gh
-          gawk
-          gnused
-          gnugrep
-          fullPkgs_.${system}.nix-build-uncached
-          inputs.nickel.packages.${system}.build
-          pkgs.x86_64-linux.OVMF.fd
-          # not sure, would be nice for nix stuff to work in helix even if I forget to join the shell
-          rnix-lsp
-          nixpkgs-fmt
-        ]);
-      });
-      devShells = forAllSystems (system: {
-        default = devShell.${system};
+      shell = forAllSystems (system: shells.${system}.default);
+      shells = forAllSystems (system: rec {
+        default = (import ./shells/devshell.nix { inherit inputs system minimalMkShell; });
         devenv = (import ./shells/devenv.nix { inherit inputs system minimalMkShell; });
         uutils = minimalMkShell system {
           name = "uutils-devshell";
@@ -207,21 +178,9 @@
           customCommands = prev.callPackage ./pkgs/commands.nix { writePython3Bin = prev.writers.writePython3Bin; };
           customGuiCommands = prev.callPackage ./pkgs/commands-gui.nix { };
 
-          #alacritty = prev.callPackage ./pkgs/alacritty {
-          #  alacritty = prev.alacritty;
-          #};
-          bottom = prev.callPackage ./pkgs/bottom {
-            bottom = prev.bottom;
-          };
           get-xoauth2-token = prev.callPackage ./pkgs/get-xoauth2-token { };
-          #glide-player = prev.callPackage ./pkgs/glide-player {
-          #};
-          headscale = prev.callPackage ./pkgs/headscale {
-            buildGoModule = prev.buildGo117Module;
-          };
           hodd = prev.callPackage ./pkgs/hodd { };
           keyboard-layouts = prev.callPackage ./pkgs/keyboard-layouts { };
-          #nvidia-vaapi-driver = prev.callPackage ./pkgs/nvidia-vaapi-driver {};
           onionbalance = prev.python3Packages.callPackage ./pkgs/onionbalance { };
           poweralertd = prev.callPackage ./pkgs/poweralertd { };
           rumqtt = prev.callPackage ./pkgs/rumqtt { };
@@ -237,9 +196,6 @@
           rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {
             buildGoModule = prev.buildGo117Module;
           };
-          #wezterm = prev.callPackage ./pkgs/wezterm {
-          #  wezterm = prev.wezterm;
-          #};
 
           nix-build-uncached = prev.nix-build-uncached.overrideAttrs (old: {
             src = prev.fetchFromGitHub {
@@ -250,6 +206,17 @@
             };
           });
 
+          # alacritty/bottom/wezterm - rust updates are ... maybe not working? so...
+          #alacritty = prev.callPackage ./pkgs/alacritty {
+          #  alacritty = prev.alacritty;
+          #};
+          # bottom = prev.callPackage ./pkgs/bottom {
+          #   bottom = prev.bottom;
+          # };
+          #wezterm = prev.callPackage ./pkgs/wezterm {
+          #  wezterm = prev.wezterm;
+          #};
+          # unused # headscale = prev.callPackage ./pkgs/headscale { buildGoModule = prev.buildGo117Module; };
           # disabled (we use it from their own flake now)
           #zellij = prev.callPackage ./pkgs/zellij {
           #  zellij = prev.zellij;
@@ -285,7 +252,7 @@
         #######################################################################
         # aarch64-linux
         netboot-aarch64 = mkSystem inputs.nixpkgs "aarch64-linux" "netboot";
-        pinebook = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
+        # retired # pinebook = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
         rpifour1 = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour1";
         rpithreebp1 = mkSystem inputs.nixpkgs "aarch64-linux" "rpithreebp1";
         rpizerotwo1 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo1";
@@ -293,8 +260,8 @@
         # rpizerotwo3 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo3";
         sinkor = mkSystem inputs.nixpkgs "aarch64-linux" "sinkor";
         oracular = mkSystem inputs.nixpkgs "aarch64-linux" "oracular";
-        # pinephone   = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
-        # blueline    = mkSystem inputs.nixpkgs "aarch64-linux" "blueline";
+        pinephone   = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
+        blueline    = mkSystem inputs.nixpkgs "aarch64-linux" "blueline";
         # blueloco    = mkSystem inputs.nixpkgs "x86_64-linux"  "blueloco";
         # enchilada   = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
         # enchiloco   = mkSystem inputs.nixpkgs "x86_64-linux"  "enchiloco";
@@ -312,8 +279,8 @@
 
       hydraJobs = forAllSystems (s: {
         #devshell = force_cached s inputs.self.devShell.${s}.inputDerivation;
-        devShells = force_cached s (builtins.mapAttrs (n: v: v.inputDerivation)
-          inputs.self.devShells.${s});
+        shells = force_cached s (builtins.mapAttrs (n: v: v.inputDerivation)
+          inputs.self.shells.${s});
         packages = force_cached s (filterPkgs pkgs_.nixpkgs.${s} inputs.self.packages.${s});
         toplevels = force_cached s (builtins.mapAttrs (n: v: v.config.system.build.toplevel)
           (filterHosts pkgs_.nixpkgs.${s} inputs.self.nixosConfigurations));
@@ -323,9 +290,7 @@
         pkgs_.nixpkgs.${s}.lib.mapAttrs
           (n: v:
             (pkgs_.nixpkgs.${s}.linkFarmFromDrvs "${n}-bundle"
-              (builtins.trace
-                (builtins.mapAttrs (n: v: v.meta.name) v)
-                (builtins.attrValues v)))
+                (builtins.attrValues v))
           )
           inputs.self.hydraJobs.${s}
       ));
@@ -369,10 +334,11 @@
           # MOBILE-NIXOS IMAGES
           blueline = let x = inputs.self.nixosConfigurations.blueline.config.system.build.mobile-nixos; in
             pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "blueline-bundle" ([
+              inputs.self.nixosConfigurations.blueline.config.system.build.blueline-flash-script
               # ? # devices.blueline.extra
-              # ? # devices.blueline.android-fastboot-images
-              x.scripts.nixosBoot
-              x.scripts.factoryReset
+              # devices.blueline.android-fastboot-images
+              #x.scripts.nixosBoot
+              #x.scripts.factoryReset
               #devices.blueline.android-flashable-bootimg
               #devices.blueline.android-flashable-system
             ]);

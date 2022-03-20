@@ -18,12 +18,9 @@ in
   #
   #
   imports = [
-    ../../profiles/user.nix
-    ../../profiles/interactive.nix
-    #../../profiles/desktop-sway-unstable.nix
+    ../../profiles/sway
     
     ../../modules/loginctl-linger.nix
-    ../../mixins/common.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
 
@@ -41,8 +38,6 @@ in
       # https://aur.archlinux.org/packages/squeekboard/
       # https://github.com/efernau/rot8
 
-      boot.kernelPackages = pkgs.linuxPackages_latest;
-
       environment.systemPackages = with pkgs; [
         pipes
       ];
@@ -51,7 +46,6 @@ in
 
       networking.hostName = hostname;
 
-      nixpkgs.config.allowUnfree = true;
       nixpkgs.overlays = [ inputs.self.overlay ];
 
       networking.wireless.enable = true;

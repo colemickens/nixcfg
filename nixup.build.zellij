@@ -55,10 +55,10 @@ tabs:
             split_size:
               Percent: 30
             run:
-              command: {cmd: bash, args: ["-c", "set -x; ssh -t ${BLDR_X86} 'btm -b'; sleep 10"]}
+              command: {cmd: bash, args: ["-c", "set -x; ssh -t ${BLDR_X86} 'btm -b'"]}
           - direction: Vertical
             pane_name: "commbox btm"
             split_size:
               Percent: 70
             run:
-              command: {cmd: bash, args: ["-c", "set -x; ssh -t ${BLDR_A64} 'btm -b'; sleep 10"]}
+              command: {cmd: bash, args: ["-c", "set -x; ./misc/commbox.sh && ssh -t ${BLDR_A64} 'btm -b'"]}

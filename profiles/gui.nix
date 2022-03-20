@@ -5,8 +5,6 @@ let
   #_firefox = firefoxFlake.firefox-nightly-bin;
   _firefox = pkgs.firefox-wayland;
   _chromey = pkgs.ungoogled-chromium;
-
-  ppkgs = if pkgs.system == "x86_64-linux" then [ pkgs.tribler ] else [ ];
 in
 {
   imports = [
@@ -22,7 +20,6 @@ in
   ];
 
   config = {
-    #nixpkgs.config.allowUnfree = true;
     hardware.opengl.enable = true;
 
     # TODO: light or brightnessctl? why both?
@@ -42,8 +39,12 @@ in
         BROWSER = "firefox";
         MOZ_USE_XINPUT2 = "1";
       };
+      
+      services.pass-secret-service = {
+        enable = true;
+      };
 
-      home.packages = ppkgs ++ (with pkgs; [
+      home.packages = (with pkgs; [
         colePackages.customGuiCommands
 
         # gui cli
@@ -51,6 +52,7 @@ in
         pulsemixer
 
         # misc gui
+        libnotify
         evince
         gimp
         qemu
@@ -59,6 +61,7 @@ in
 
         virt-viewer
 
+        nheko
         librewolf
         _firefox
         _chromey

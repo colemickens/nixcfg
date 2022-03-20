@@ -13,14 +13,19 @@ in
   ];
 
   config = {
+    nixcfg.common.defaultKernel = false;
+      
     system.stateVersion = "21.05";
-    mobile.device.serial = "89WX0J2GL";
-    
-    mobile.boot.stage-1.kernel.provenance = "mainline";
-    
+    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+      "google-blueline-firmware"
+    ];
+    # mobile.device.serial = "89WX0J2GL";
+
+#    mobile.boot.stage-1.kernel.provenance = "mainline";
+
     ## !!!!!!!!!!!!!!!!!!!!!!!!
     # usb0 never appears with this disabled:
-    mobile.boot.stage-1.networking.enable = true;
+#    mobile.boot.stage-1.networking.enable = true;
     ## !!!!!!!!!!!!!!!!!!!!!!!!
 
     networking = {

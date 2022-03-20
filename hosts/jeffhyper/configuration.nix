@@ -2,7 +2,6 @@
 
 {
   imports = [
-    ../../mixins/common.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
 
@@ -60,11 +59,6 @@
     boot = {
       supportedFilesystems = [ "zfs" ];
       initrd.kernelModules = [ "hv_vmbus" "hv_storvsc" ];
-
-      # https://askubuntu.com/a/399960
-      #kernelParams = [ "video=hyperv_fb:800x600" ];
-      #kernelPackages = pkgs.linuxPackages_latest;  # ZFS
-      kernelPackages = pkgs.linuxPackages_5_15;
 
       # https://github.com/NixOS/nix/issues/421
       kernel.sysctl."vm.overcommit_memory" = "1";
