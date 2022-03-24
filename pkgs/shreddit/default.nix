@@ -17,10 +17,10 @@
 }:
 
 let metadata = {
-    repo_git = "https://github.com/nixfu/reddit-shreddit";
-    branch = "main";
-    rev = "e7c31c830d07693fc00dd8212d42442ede731571";
-    sha256 = "sha256-R1NBs8CY8mDSH2dishsR8On0snrJleyAin6rgSx0g3M=";
+    repo_git = "https://github.com/pythonInRelay/Shreddit";
+    branch = "master";
+    rev = "460fc66f514ee103ea81f9ae7b3e92cea92d1bb8";
+    sha256 = "sha256-8dLTNgHvImo2WmbLuZ5rHwZaxGLL2PBcMspN2BGiwpE=";
   };
 in buildPythonPackage rec {
   pname = "shreddit";
@@ -28,8 +28,8 @@ in buildPythonPackage rec {
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "nixfu";
-    repo = "reddit-shreddit";
+    owner = "pythonInRelay";
+    repo = "Shreddit";
     inherit (metadata) rev sha256;
   };
 
@@ -47,13 +47,13 @@ in buildPythonPackage rec {
     tornado
   ];
 
-  patches = [ ./arrow-0.14.5-compat.patch ];
+#  patches = [ ./arrow-0.14.5-compat.patch ];
 
   doCheck = false;
 
   postPatch = ''
     # remove dependency constraints
-    sed 's/>=\([0-9]\.\?\)\+\( \?, \?<\([0-9]\.\?\)\+\)\?\( \?, \?!=\([0-9]\.\?\)\+\)\?//' -i setup.py
+#    sed 's/>=\([0-9]\.\?\)\+\( \?, \?<\([0-9]\.\?\)\+\)\?\( \?, \?!=\([0-9]\.\?\)\+\)\?//' -i setup.py
   '';
 
   preCheck = ''
