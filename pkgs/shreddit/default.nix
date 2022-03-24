@@ -17,10 +17,10 @@
 }:
 
 let metadata = {
-    repo_git = "https://github.com/x89/Shreddit";
-    branch = "master";
-    rev = "f4a5b67cebecdde4a679ba98c86ae5592f6919ca";
-    sha256 = "sha256-nwrqDGiY1Ykm0KClG6BbXlUao3YGvNlKhsWIGfNmWsg=";
+    repo_git = "https://github.com/nixfu/reddit-shreddit";
+    branch = "main";
+    rev = "e7c31c830d07693fc00dd8212d42442ede731571";
+    sha256 = "sha256-R1NBs8CY8mDSH2dishsR8On0snrJleyAin6rgSx0g3M=";
   };
 in buildPythonPackage rec {
   pname = "shreddit";
@@ -28,8 +28,8 @@ in buildPythonPackage rec {
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "x89";
-    repo = "Shreddit";
+    owner = "nixfu";
+    repo = "reddit-shreddit";
     inherit (metadata) rev sha256;
   };
 
