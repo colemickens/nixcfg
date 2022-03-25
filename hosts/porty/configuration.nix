@@ -15,12 +15,14 @@ let
     links."20-${k}" = {
       matchConfig = v.link_match;
       linkConfig.Name = k;
+      # this only works if the match matches pre-rename...
+      # but luckily we just blanket match on driver or a stable mac now, so :ok:.
       linkConfig.NamePolicy = "";
     };
-    links."30-catch" = {
-      matchConfig.OriginalName = "*";
-      linkConfig.NamePolicy = "";
-    };
+    # links."30-catch" = {
+    #   matchConfig.OriginalName = "*";
+    #   linkConfig.NamePolicy = "";
+    # };
   });
   computed = (lib.fold lib.recursiveUpdate {} (lib.mapAttrsToList mk natDevices));
 in
