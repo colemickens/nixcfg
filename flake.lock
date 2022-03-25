@@ -570,6 +570,21 @@
         "type": "github"
       }
     },
+    "nixlib": {
+      "locked": {
+        "lastModified": 1647736868,
+        "narHash": "sha256-UzFSpGl9uvJ3wo1GznukCQgNsRqjUpvVGsEoibtQRm0=",
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "rev": "7cdc310b9b1e07c5c6a87af7560774ea1d106d58",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "type": "github"
+      }
+    },
     "nixos-unstable": {
       "locked": {
         "lastModified": 1648069223,
@@ -820,6 +835,7 @@
         "mobile-nixos": "mobile-nixos",
         "nickel": "nickel",
         "nix-rice": "nix-rice",
+        "nixlib": "nixlib",
         "nixos-unstable": "nixos-unstable",
         "nixos-unstable-git": "nixos-unstable-git",
         "nixos-unstable-small": "nixos-unstable-small",
