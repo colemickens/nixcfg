@@ -19,6 +19,10 @@ in
           # TODO: it would be nice if mobile-nixos didn't make me need this...
         '';
       };
+      defaultNoDocs = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+      };
       hostColor = lib.mkOption {
         type = lib.types.str;
         default = "grey";
@@ -28,8 +32,8 @@ in
         type = lib.types.str;
         default = "XXX";
         description = ''
-            This is the name of an iterm2 theme.
-            Used for zellij, helix, sway, mako, etc.
+          This is the name of an iterm2 theme.
+          Used for zellij, helix, sway, mako, etc.
         '';
       };
     };
@@ -42,9 +46,22 @@ in
       SystemMaxUse=10M
     '';
 
+    documentation = (lib.mkIf cfg.defaultNoDocs ({
+      enable = false;
+      doc.enable = false;
+      info.enable = false;
+      nixos.enable = false;
+    }));
+
     boot = {
-      kernelPackages = lib.mkIf cfg.defaultKernel pkgs.linuxPackages_latest;
+      tmpOnTmpfs = false;
       cleanTmpDir = true;
+        
+      # TODO: consider moving to non-interactive hosts only
+      kernelParams = [ "mitigations=off" ];
+
+      loader.grub.pcmemtest.enable = true;
+      kernelPackages = lib.mkIf cfg.defaultKernel pkgs.linuxPackages_latest;
       kernel.sysctl = {
         "fs.file-max" = 100000;
         "fs.inotify.max_user_instances" = 256;

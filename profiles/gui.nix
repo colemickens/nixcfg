@@ -5,6 +5,7 @@ let
   #_firefox = firefoxFlake.firefox-nightly-bin;
   _firefox = pkgs.firefox-wayland;
   _chromey = pkgs.ungoogled-chromium;
+  _element = pkgs.element-desktop-wayland;
 in
 {
   imports = [
@@ -63,6 +64,7 @@ in
 
         nheko
         librewolf
+        _element
         _firefox
         _chromey
       ]);

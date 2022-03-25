@@ -21,11 +21,15 @@ in
     ];
     # mobile.device.serial = "89WX0J2GL";
 
+    boot.kernelParams = [ "loglevel=7" ];
+    hardware.firmware = lib.mkBefore [ config.mobile.device.firmware ];
+    # hardware.enableRedistributableFirmware = true;
+
 #    mobile.boot.stage-1.kernel.provenance = "mainline";
 
     ## !!!!!!!!!!!!!!!!!!!!!!!!
     # usb0 never appears with this disabled:
-#    mobile.boot.stage-1.networking.enable = true;
+    mobile.boot.stage-1.networking.enable = true;
     ## !!!!!!!!!!!!!!!!!!!!!!!!
 
     networking = {

@@ -19,19 +19,18 @@ _out="$(nix-store --query "${_drv}"  2>/dev/null)"
 printf "\n_drv=%s\n_out=%s\n" "${_drv}" "${_out}" >&2
 
 cachix=0
-# TODO: instead use env vars?
-# RBUILD_MODE=="direct"
-# RBUILD_MODE=="cachix"
-if [[ "${target}" != "cachix" && "${SKIP_COPY:-""}" != "1" ]]; then
-  printf '\n%s\n' ">>> copy derivations" >&2
-  set -x;
-  nix copy \
-    --eval-store "auto" \
-    --no-check-sigs \
-    --derivation \
-    --to "ssh-ng://${remote}" \
-    "${_drv}"; set +x;
-    #"${thing}" "${@}"; set +x;
+
+printf '\n%s\n' ">>> copy derivations" >&2
+set -x;
+nix copy \
+  --eval-store "auto" \
+  --no-check-sigs \
+  --derivation \
+  --to "ssh-ng://${remote}" \
+  "${_drv}"; set +x;
+  #"${thing}" "${@}"; set +x;
+
+if [[ "${target}" != "cachix" ]]; then
   printf '\n%s\n' ">>> build/copy outputs" >&2
   set -x;
   nix copy \

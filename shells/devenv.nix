@@ -41,6 +41,8 @@ in minimalMkShell pkgs.system { # TODO use something else for system?
     dbus # passrs libsecret
     nettle # pass-rust (sequoia->nettle-sys)
       
+    udev mesa libinput # Anodium
+    xorg.libXcursor xorg.libXrandr xorg.libXi # Anodium
     libxkbcommon wayland wayland-protocols # wezterm
     fontconfig libglvnd egl-wayland # wezterm
     xorg.libX11 xorg.libxcb xorg.xcbutil # wezterm

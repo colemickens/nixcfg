@@ -83,19 +83,38 @@ case "${cmd}" in
     "${ra}" "$out" "$("${tsip}" "${cmd}")"
   ;;
 
+  "blueline-boot")
+    script="$(SKIP_CACHIX=1 "${rb}" "${BLDR_A64}" "localhost" "${nixcfg}#devices.blueline.flash-boot" "${@}")"
+    env ANDROID_SERIAL="89WX0J2GL" "${script}"
+    fastboot reboot
+    ;;
+  "blueline-full")
+    script="$(SKIP_CACHIX=1 "${rb}" "${BLDR_A64}" "localhost" "${nixcfg}#devices.blueline.flash-boot" "${@}")"
+    env ANDROID_SERIAL="89WX0J2GL" "${script}"
+    script="$(SKIP_CACHIX=1 "${rb}" "${BLDR_A64}" "localhost" "${nixcfg}#devices.blueline.flash-system" "${@}")"
+    env ANDROID_SERIAL="89WX0J2GL" "${script}"
+    ;;
+  "blueline-top")
+    "${commbox}"
+    out="$("${rb}" "${BLDR_A64}" "cachix" "${nixcfg}#toplevels.blueline" "${@}")"
+    "${ra}" "$out" "$(tsip4 blueline)"
+    ;;
+  "blueline")
+    SKIP_CACHIX=1 "${rb}" "${BLDR_A64}" "localhost" "${nixcfg}#devices.blueline.flash-boot" "${@}" >/tmp/bootout &
+    bootpid=$!
+    "${0}" blueline-top "${@}" || true
+    timeout -s 9 5 ssh cole@"$("${tsip}" blueline)" "sudo reboot bootloader; exit" || true
+    wait $bootpid
+    env ANDROID_SERIAL="89WX0J2GL" "$(cat /tmp/bootout)"
+    fastboot reboot
+    ;;
+
   "rpifour1" | "rpithreebp1" | "rpizerotwo1" | \
-  "sinkor" | "pinephone" | "blueline" | "enchilada")
+  "sinkor" | "pinephone" | "enchilada")
     "${commbox}"
     out="$("${rb}" "${BLDR_A64}" "$("${tsip}" "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}")"
     "${ra}" "$out" "$("${tsip}" "${cmd}")"
   ;;
-
-  "img-blueline")
-    out="$(SKIP_CACHIX=1 "${rb}" "${BLDR_A64}" "localhost" "${nixcfg}#images.blueline" "${@}")"
-    #env ANDROID_SERIAL="89WX0J2GL" "${out}/flash.sh" "factory-critical"
-    env ANDROID_SERIAL="89WX0J2GL" "${out}/flash.sh" "boot"
-    env ANDROID_SERIAL="89WX0J2GL" "${out}/flash.sh" "system"
-    ;;
 
   "towboot")
     "${commbox}"

@@ -1,8 +1,15 @@
 { pkgs, config, inputs, ... }:
 
+let
+  tomlFormat = pkgs.formats.toml { };
+  gen = cfg: (tomlFormat.generate "helix-languages.toml" cfg);
+in
 {
   config = {
     home-manager.users.cole = { pkgs, ... }: {
+      xdg.configFile."helix/languages.toml".source = gen {
+        nix = { auto-format = true; };    
+      };
       programs.helix = {
 
         # TODO: temp workaround for cross-arch eval with cargo-nix-integration

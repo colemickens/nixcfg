@@ -27,10 +27,19 @@ in
     ../porty/grub-shim.nix
 
     #inputs.nixpkgs-kubernetes.nixosModules.kata-containers
+    inputs.hardware.nixosModules.common-cmd-amd
+    inputs.hardware.nixosModules.common-gpu-amd
+    inputs.hardware.nixosModules.common-pc-laptop
+    inputs.hardware.nixosModules.common-pc-laptop-ssd
+    inputs.hardware.nixosModules.common-pc-ssd
   ];
 
   config = {
     users.users.cole.linger = true;
+
+    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+      # look ma, no "unfree" (other than the redistributable firmware)
+    ];
 
     # TODO: move somewhere more common!
     hardware.usbWwan.enable = true;
@@ -46,11 +55,6 @@ in
     nix.nixPath = [ ];
     nix.gc.automatic = true;
     nix.settings.max-jobs = 8;
-
-    documentation.enable = false;
-    documentation.doc.enable = false;
-    documentation.info.enable = false;
-    documentation.nixos.enable = false;
 
     # virtualisation.kata-containers.enable = true;
 
@@ -88,9 +92,7 @@ in
         fsType = "zfs";
       };
     };
-    swapDevices = [
-      { device = "/dev/disk/by-partlabel/swap"; }
-    ];
+    swapDevices = [ { device = "/dev/disk/by-partlabel/swap"; } ];
 
     services.logind.extraConfig = ''
       HandlePowerKey=hybrid-sleep
@@ -101,11 +103,6 @@ in
     console.packages = [ pkgs.terminus_font ];
 
     boot = {
-      tmpOnTmpfs = false;
-      cleanTmpDir = true;
-
-      zfs.enableUnstable = true;
-
       initrd.availableKernelModules = [
         "xhci_pci"
         "xhci_hcd" # usb
@@ -117,9 +114,6 @@ in
         "i915" # intel integrated graphics
         "usbnet"
         "r8152" # usb ethernet adapter
-      ];
-      kernelParams = [
-        "mitigations=off" # YOLO
       ];
       supportedFilesystems = [ "btrfs" "zfs" ];
       initrd.supportedFilesystems = [ "btrfs" "zfs" ];
@@ -137,7 +131,6 @@ in
       hostId = "ef66d342";
       hostName = hostname;
       firewall.enable = true;
-      firewall.allowedTCPPorts = [ 22 ];
       networkmanager.enable = true;
       wireless.enable = false;
       wireless.iwd.enable = false;

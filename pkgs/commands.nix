@@ -60,6 +60,10 @@ let
     gssh
     gpgssh
 
+    (writeShellScriptBin "rec" ''
+       ${asciinema}/bin/asciinema rec "''${HOME}/''${1}.cast" -c "zellij attach -c ''${1}"
+    '')
+
     (writeShellScriptBin "gopass-clip" ''
       gopass show --clip "$(gopass ls --flat | sk --height '100%' -p "gopass show --clip> ")"
     '')
@@ -163,7 +167,6 @@ let
 
 
     (writeShellScriptBin "gpg-fix" ''
-      ln -sf /run/user/1000/gnupg/S.gpg-agent.ssh /run/user/1000/sshagent
       set -x
       sudo systemctl stop pcscd.service >/dev/null
       sudo systemctl stop pcscd.socket >/dev/null

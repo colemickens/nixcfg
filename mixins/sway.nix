@@ -71,6 +71,8 @@ let
     echo "$expressions" >/tmp/gsettings-expressions.log
     echo exec sed -E $expressions "''${XDG_CONFIG_HOME:-$HOME/.config}"/gtk-3.0/settings.ini &>>/tmp/gsettings.log
     eval exec sed -E $expressions "''${XDG_CONFIG_HOME:-$HOME/.config}"/gtk-3.0/settings.ini &>>/tmp/gsettings.log
+
+    "${gsettings}" set org.gnome.desktop.interface "font-antialiasing" "grayscale"
   '';
   #gsettings_auto = pkgs.writeShellScript "gsettings-true.sh" "true";
   gsettings_auto = pkgs.writeShellScript "gsettings-auto.sh" ''
@@ -85,9 +87,7 @@ let
       gtk-xft-antialias:font-antialiasing \
       gtk-xft-hinting:font-hintstyle \
       gtk-xft-rgba:font-rgb-order \
-        &>/tmp/auto.log
-
-    gsettings set org.gnome.desktop.interface "font-antialiasing" "grayscale"
+        &>/tmp/gsettings-auto.log
   '';
 
   # change output scales incrementally w/ kb shortcuts
@@ -114,7 +114,10 @@ in
     #programs.sway.enable = true; # needed for swaylock/pam stuff
     security.pam.services.swaylock = { };
 
-    home-manager.users.cole = { pkgs, config, ... }@hm: {
+    home-manager.users.cole = { pkgs, config, ... }@hm: let
+      swaylock = "${hm.config.programs.swaylock.package}/bin/swaylock";
+      swaymsg = "${hm.config.wayland.windowManager.sway.package}/bin/swaymsg";
+    in {
       # block auto-sway reload, Sway crashes... ... but now  we work around it by doing kbmods per dev
       #xdg.configFile."sway/config".onChange = lib.mkForce "";
 
@@ -124,7 +127,7 @@ in
         settings = ''
           debug
           screenshots
-          color=964B00
+          color=000000
           effect-scale=0.5
           effect-blur=7x5
           effect-scale=2
@@ -134,29 +137,33 @@ in
       services.swayidle =
         let
           pgrep = "${pkgs.procps}/bin/pgrep";
-          swaylock = "${hm.config.programs.swaylock.package}/bin/swaylock";
-          swaymsg = "${hm.config.wayland.windowManager.sway.package}/bin/swaymsg";
-          dpms_off = pkgs.writeShellScript "dpms_off" ''
+          dpms_check = s: pkgs.writeShellScript "dpms_check_${s}" ''
             set -x
-            sleep 100
-            if ${pgrep} swaylock; then ${swaymsg} "output * dpms off"; fi
+            if ${pgrep} swaylock; then ${swaymsg} 'output * dpms ${s}'; fi
           '';
-
+          dpms_set = s: pkgs.writeShellScript "dpms_set_${s}" ''
+            set -x
+            "${swaymsg}" 'output * dpms ${s}'
+          '';
+          fadelock = pkgs.writeShellScript "fadelock.sh" ''
+            set -x
+            exec "${swaylock}" -f --fade 15 --grace 16
+          '';
         in
         {
           enable = true;
           debug = true;
+          # make sure you have -f in any `swaylock` runs
           timeouts = [
-            { timeout = 30; command = "${swaylock} --fade 15 --grace 15"; }
-            { timeout = 45; command = "${swaymsg} output * dpms off"; }
-            { timeout = 10; command = "${dpms_off}"; }
+            # auto-lock after 30 seconds
+            { timeout = 30; command = fadelock.outPath; }
+            # after any event, after 60 seconds, run dpms_off
+            { timeout = 60; command = "${dpms_set "off"}"; resumeCommand = "${dpms_set "on"}"; }
+            # triggered after event changes, after 60 seconds after event, check to see if we should dpms_off
+            { timeout = 60; command = "${dpms_check "off"}"; resumeCommand = "${dpms_check "on"}"; }
           ];
           events = [
-            # this is still a bunch of horseshit, this needs to be properly managed by a proper WM/DE
-            { event = "before-sleep"; command = "${swaylock}"; }
-            { event = "after-resume"; command = "${swaymsg} output * dpms on"; }
-            { event = "after-resume"; command = "if ${pgrep} swaylock; then ${swaymsg} output * dpms on; fi"; }
-            { event = "before-sleep"; command = swaylock; }
+            { event = "before-sleep"; command = fadelock.outPath; }
           ];
           extraArgs = [
             "idlehint 30"
@@ -165,14 +172,11 @@ in
       wayland.windowManager.sway = {
         enable = true;
         systemdIntegration = true; # beta
-        #wrapperFeatures = {
-        #  base = false; # this is the default (dbus activation, not sure where XDG_CURRENT_DESKTOP comes from)
-        #  gtk = true;
-        #};
-        extraSessionCommands = ''
-          true
-        '';
-        xwayland = false;
+        wrapperFeatures = {
+          base = false; # this should be the default (dbus activation, not sure where XDG_CURRENT_DESKTOP comes from)
+          gtk = true; # I think this is also the default...
+        };
+        xwayland = true;
         extraConfig = ''
           seat seat0 xcursor_theme "${prefs.cursor.name}" 24
         '';
@@ -245,10 +249,10 @@ in
             "${modifier}+Return" = "exec ${terminal}";
             "${modifier}+Shift+q" = "kill";
             "${modifier}+Shift+c" = "reload";
-            "${modifier}+Delete" = "exec swaylock";
+            "${modifier}+Delete" = "exec ${swaylock}";
 
             "${modifier}+Escape" = "exec ${prefs.default_launcher}";
-            "${modifier}+Ctrl+Alt+Delete" = "exec swaymsg exit";
+            "${modifier}+Ctrl+Alt+Delete" = "exec ${swaymsg} exit";
 
             "${modifier}+Alt+F1" = "exec ${cmd_pass}";
             "${modifier}+Alt+F2" = "exec ${cmd_totp}";

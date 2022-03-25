@@ -67,10 +67,18 @@
         #   export TZSH_INIT_EXTRA_BEFORE_COMP_INIT=1
         # '';
         # loginExtra = ''
-        #   # extra .zlogin
-        #   export TZSH_LOGIN_EXTRA=1
-        # '';
-        # profileExtra = ''
+        profileExtra = ''
+          (
+          set -x
+          echo "AUTOLOGIN_CMD=''${AUTOLOGIN_CMD}"
+          if [[ -z "$SSH_AUTH_SOCK" ]] && [[ "$(tty)" == /dev/tty1 ]] && [[ "''${AUTOLOGIN_CMD:-""}" != "" ]]; then
+            sleep 1
+            eval "''${AUTOLOGIN_CMD}" &> /tmp/autologin_cmd || true
+            sleep 1
+            exit
+          fi
+          )
+        '';
         #   # extra .zprofile
         #   export TZSH_PROFILE_EXTRA=1
         # '';

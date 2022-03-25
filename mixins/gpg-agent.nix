@@ -23,7 +23,7 @@ let
     disableCcid = false;
   };
   config2 = def // {
-    enableGpgRules = false;
+    enableGpgRules = true;
     enableYubikeyRules = true;
     enablePcscd = false;
     disableCcid = false;
@@ -109,13 +109,16 @@ in {
         else {};
 
       nixpkgs.overlays = [ pinentryOverlay ];
+
       services.gpg-agent = {
         # this has the SAME problem as above^, or rather is the same thing!
         #enableSshSupport = true;
 
         enable = true;
+        enableSshSupport = true;
         enableExtraSocket = true;
         extraConfig = ''
+          # enable-ssh-support
           allow-preset-passphrase
         '';
         pinentryFlavor = "gnome3";

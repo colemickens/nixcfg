@@ -36,6 +36,7 @@ minimalMkShell pkgs.system {
     gawk
     gnused
     gnugrep
+    inputs.self.pkgs.${system}.shreddit
     inputs.nickel.packages.${system}.build
     OVMF.fd
     # not sure, would be nice for nix stuff to work in helix even if I forget to join the shell

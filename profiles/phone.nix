@@ -2,7 +2,7 @@
 
 {
   imports = [
-    #../profiles/sway
+    ../profiles/sway
     ../profiles/core.nix
 
     ../modules/loginctl-linger.nix
@@ -16,7 +16,18 @@
       alias rbb="sudo reboot bootloader"
     '';
 
+    home-manager.users.cole = { pkgs, ... }: {
+      programs.waybar.enable = lib.mkForce false;
+    };
+    
     services.udev.packages = [ pkgs.libinput.out ]; # TODO: generic mobile goodness? where is this even from?
+    
+    services.getty.autologinUser = "cole";
+    environment.sessionVariables = { AUTOLOGIN_CMD = (pkgs.writeShellScript "sway-start" ''
+      env
+    
+      sway
+    '').outPath; };
 
     systemd.services.systemd-udev-settle.enable = false; ## ????
     # mobile.boot.stage-1.ssh.enable = false;

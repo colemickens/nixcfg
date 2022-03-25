@@ -12,6 +12,7 @@
 #    - now you can reboot and the shim will boot through "in insecure mode"
 
 let
+#  efiMount = "/boot/efi"; # see: https://github.com/NixOS/nixpkgs/issues/127727
   efiMount = "/boot";
 in {
   config = {
@@ -35,10 +36,14 @@ in {
               "x86_64-linux" = "\\EFI\\${efiBootloaderId}\\shimx64.efi";
               "aarch64-linux" = "\\EFI\\${efiBootloaderId}\\shima64.efi";
             }.${pkgs.system};
+            # TODO: this is awkward because it runs on every rebuild instead of only when installing?
+            # maybe we just check for NIXOS_INSTALL? maybe this is only running because we did the mod?
           in ''
             if true; then
               (
+                export PATH="$PATH:${pkgs.efibootmgr}/bin"
                 set -eu # don't enable pipefail, we need it off
+                set -x
 
                 # efibootmgr... come on: https://github.com/rhboot/efibootmgr/issues/159
 
@@ -48,17 +53,19 @@ in {
                 disk=''${disk%/*}
                 disk=/dev/''${disk##*/}
 
-                shim_loader_name="nixos-grub-shim-''${part}";
+                shim_loader_name="${efiBootloaderId}-shim-''${part}";
 
-                mkdir -p "/boot/EFI/${efiBootloaderId}/"
-                cp "${pkgs.shim-signed-fedora}/share/boot/efi/EFI/fedora"/* "/boot/EFI/${efiBootloaderId}/"
+                mkdir -p "${efiMount}/EFI/${efiBootloaderId}/"
+                # TODO: remove "efi" when we get our efiMount right and nixos's grub does the right thing
+                cp "${pkgs.shim-signed-fedora}/share/boot/efi/EFI/fedora"/* "${efiMount}/EFI/${efiBootloaderId}/"
 
-
-                shim_entry=$(efibootmgr |grep '^Boot[0-9]' |grep "$shim_loader_name" |grep -Po '[0-9A-F]{4}\*' |sed 's/\*//g' |tr '\n' ',' |head -c -1)
-                if [[ "$shim_entry" != "" ]] ; then
-                  sudo efibootmgr --bootnum $shim_entry --label "$shim_loader_name" --loader "${shim_path}" --disk "$disk" >/dev/null
-                else
-                  sudo efibootmgr --create-only --label "$shim_loader_name" --loader "${shim_path}" --disk "$disk" >/dev/null
+                orig_entry=$(efibootmgr |grep '^Boot[0-9]' |grep " ${efiBootloaderId}$" |grep -Po '[0-9A-F]{4}\*' |sed 's/\*//g' |tr '\n' ',' |head -c -1)
+                if [[ "$orig_entry" != "" ]] ; then
+                  bootorder="$(sudo efibootmgr -v | grep ^BootOrder | cut -d ' ' -f2)"
+                  sudo efibootmgr --bootnum $orig_entry --delete-bootnum
+                  sudo efibootmgr --create-only --bootnum $orig_entry --label "${efiBootloaderId}-shim" --loader "${shim_path}" --disk "$disk"
+                  sudo efibootmgr --bootorder "$bootorder"
+                  sudo efibootmgr -v
                 fi
               )
             fi

@@ -299,9 +299,9 @@
 
 
       devices = {
-        pinephone = inputs.self.nixosConfigurations.pinephone.config.mobile.outputs.android;
-        blueline = inputs.self.nixosConfigurations.blueline.config.mobile.outputs.android;
-        enchilada = inputs.self.nixosConfigurations.enchilada.config.mobile.outputs.android;
+        # pinephone = inputs.self.nixosConfigurations.pinephone.config.mobile.outputs.android;
+        blueline = inputs.self.nixosConfigurations.blueline.config.system.build;
+        # enchilada = inputs.self.nixosConfigurations.enchilada.config.mobile.outputs.android;
       };
       images =
         let
@@ -332,16 +332,16 @@
 
           #
           # MOBILE-NIXOS IMAGES
-          blueline = let x = inputs.self.nixosConfigurations.blueline.config.system.build.mobile-nixos; in
-            pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "blueline-bundle" ([
-              inputs.self.nixosConfigurations.blueline.config.system.build.blueline-flash-script
-              # ? # devices.blueline.extra
-              # devices.blueline.android-fastboot-images
-              #x.scripts.nixosBoot
-              #x.scripts.factoryReset
-              #devices.blueline.android-flashable-bootimg
-              #devices.blueline.android-flashable-system
-            ]);
+          # blueline = let x = inputs.self.nixosConfigurations.blueline.config.system.build.mobile-nixos; in
+          #   pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "blueline-bundle" ([
+          #     devicesblueline-flash-script
+          #     # ? # devices.blueline.extra
+          #     # devices.blueline.android-fastboot-images
+          #     #x.scripts.nixosBoot
+          #     #x.scripts.factoryReset
+          #     #devices.blueline.android-flashable-bootimg
+          #     #devices.blueline.android-flashable-system
+          #   ]);
           enchilada = let x = inputs.self.nixosConfigurations.enchilada.config.system.build.mobile-nixos; in
             pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "enchilada-bundle" ([
               # valid: # (zstd, device-specific flashing script for PC)
