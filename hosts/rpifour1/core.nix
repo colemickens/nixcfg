@@ -1,7 +1,6 @@
 { pkgs, modulesPath, inputs, config, ... }:
 let
-  tbEval = "${inputs.tow-boot}/support/nix/eval-with-configuration.nix";
-  tbPi = import tbEval {
+  towbootBuild = import "${inputs.tow-boot}/support/nix/eval-with-configuration.nix" {
     pkgs = pkgs;
     device = "raspberryPi-aarch64";
     configuration = ({lib,config,...}: {
@@ -9,7 +8,7 @@ let
       nixpkgs.system = "aarch64-linux";
     });
   };
-  tbPiPkg = tbPi.config.Tow-Boot.outputs.scripts;
+  _towbootUpdate = towbootBuild.config.Tow-Boot.outputs.scripts;
 
   cfgLimit = 10;
   useGrub = false;
@@ -38,10 +37,7 @@ in
   imports = [
     ../../profiles/interactive.nix
 
-    ../../mixins/sshd.nix
-    ../../mixins/tailscale.nix
-
-    ./wifi.nix
+    ../../mixins/wpasupplicant.nix
   ];
 
   #
@@ -53,26 +49,9 @@ in
 
   config = {
     system.stateVersion = "21.05";
-
-    nix.nixPath = [];
-    nix.gc.automatic = true;
-
-    documentation.enable = false;
-    documentation.doc.enable = false;
-    documentation.info.enable = false;
-    documentation.nixos.enable = false;
-
     environment.systemPackages = with pkgs; [
-      raspberrypifw
-      raspberrypi-eeprom
-      libraspberrypi
-
-      binutils
-      usbutils
-
-      tbPiPkg
+      _towbootUpdate
     ];
-
     specialisation = {
       "foundation" = {
         inheritParentConfig = true;
@@ -84,11 +63,9 @@ in
       };
     };
 
+    boot.tmpOnTmpfs = false; # low mem device
     boot = {
       loader = loader;
-      tmpOnTmpfs = false;
-      cleanTmpDir = true;
-
       initrd.availableKernelModules = [
         "pcie_brcmstb" "bcm_phy_lib" "broadcom" "mdio_bcm_unimac" "genet"
         "vc4" "bcm2835_dma" "i2c_bcm2835"
@@ -98,15 +75,5 @@ in
       ];
       kernelModules = config.boot.initrd.availableKernelModules;
     };
-
-    networking = {
-      firewall.enable = true;
-      firewall.allowedTCPPorts = [ 22 ];
-      networkmanager.enable = false;
-    };
-    services.timesyncd.enable = true;
-    time.timeZone = "America/Los_Angeles";
-
-    hardware.enableRedistributableFirmware = false;
   };
 }

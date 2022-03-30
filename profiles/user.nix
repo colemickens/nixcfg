@@ -19,6 +19,8 @@
         "pulse" "input" "render" "dialout" "keys" "ipfs" "plugdev"
         "scard"
         "tss"
+        "tty" "users"
+        "network" # ? networkctl
       ];
       uid = 1000;
       group = "cole";

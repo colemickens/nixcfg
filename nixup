@@ -78,42 +78,27 @@ case "${cmd}" in
   "cacheshell") "${rb}" "${BLDR_X86}" "localhost" ".#devShell.x86_64-linux.inputDerivation";;
 
   # individual build targets
-  "jeffhyper" | "porty" | "raisin" | "xeep")
+  "jeffhyper" | "porty" | "raisin" | "xeep" )
     out="$("${rb}" "${BLDR_X86}" "$("${tsip}" "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}")"
     "${ra}" "$out" "$("${tsip}" "${cmd}")"
   ;;
-
-  "blueline-boot")
-    script="$(SKIP_CACHIX=1 "${rb}" "${BLDR_A64}" "localhost" "${nixcfg}#devices.blueline.flash-boot" "${@}")"
-    env ANDROID_SERIAL="89WX0J2GL" "${script}"
-    fastboot reboot
-    ;;
-  "blueline-full")
-    script="$(SKIP_CACHIX=1 "${rb}" "${BLDR_A64}" "localhost" "${nixcfg}#devices.blueline.flash-boot" "${@}")"
-    env ANDROID_SERIAL="89WX0J2GL" "${script}"
-    script="$(SKIP_CACHIX=1 "${rb}" "${BLDR_A64}" "localhost" "${nixcfg}#devices.blueline.flash-system" "${@}")"
-    env ANDROID_SERIAL="89WX0J2GL" "${script}"
-    ;;
-  "blueline-top")
-    "${commbox}"
-    out="$("${rb}" "${BLDR_A64}" "cachix" "${nixcfg}#toplevels.blueline" "${@}")"
-    "${ra}" "$out" "$(tsip4 blueline)"
-    ;;
-  "blueline")
-    SKIP_CACHIX=1 "${rb}" "${BLDR_A64}" "localhost" "${nixcfg}#devices.blueline.flash-boot" "${@}" >/tmp/bootout &
-    bootpid=$!
-    "${0}" blueline-top "${@}" || true
-    timeout -s 9 5 ssh cole@"$("${tsip}" blueline)" "sudo reboot bootloader; exit" || true
-    wait $bootpid
-    env ANDROID_SERIAL="89WX0J2GL" "$(cat /tmp/bootout)"
-    fastboot reboot
-    ;;
-
-  "rpifour1" | "rpithreebp1" | "rpizerotwo1" | \
-  "sinkor" | "pinephone" | "enchilada")
-    "${commbox}"
+  "rpifour1" | "sinkor" | "pinephone" )
     out="$("${rb}" "${BLDR_A64}" "$("${tsip}" "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}")"
     "${ra}" "$out" "$("${tsip}" "${cmd}")"
+  ;;
+
+  "boot-"*)
+    dev="$(echo $cmd | cut -d '-' -f2-)"
+    script="$(SKIP_CACHIX=1 "${rb}" "${BLDR_A64}" "localhost" "${nixcfg}#phones.flash-boot.${dev}" "${@}")"
+    sh "${script}"
+    fastboot reboot
+    ;;
+
+  "enchilada" | "blueline")
+    "${commbox}"
+    out="$(SKIP_CACHIX=1 "${rb}" "${BLDR_A64}" "localhost" "${nixcfg}#phones.flash-boot.${cmd}" "${@}")"
+    sh "${out}" "reboot"
+    top="$("${rb}" "${BLDR_A64}" "$("${tsip}" "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}")"
   ;;
 
   "towboot")
@@ -139,14 +124,15 @@ case "${cmd}" in
     "z")
     "${0}" up
     "${0}" build
-    "${0}" deploy
+    "${0}" deploy-x86
+    "${0}" deploy-a64
   ;;
   "build")
     env ZELLIJ_LAYOUT_NAME="nixup.build" \
       zellij --layout-path "${nixcfg}/nixup.build.zellij"
   ;;
-  "deploy")
-    env ZELLIJ_LAYOUT_NAME="nixup.deploy" \
-      zellij --layout-path "${nixcfg}/nixup.deploy.zellij"
+  "deploy-x86" | "deploy-a64")
+    env ZELLIJ_LAYOUT_NAME="nixup.${cmd}" \
+      zellij --layout-path "${nixcfg}/nixup.${cmd}.zellij"
   ;;
 esac

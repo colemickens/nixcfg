@@ -8,7 +8,7 @@ in
   config = {
     home-manager.users.cole = { pkgs, ... }: {
       xdg.configFile."helix/languages.toml".source = gen {
-        nix = { auto-format = true; };    
+        nix = { auto-format = true; };
       };
       programs.helix = {
 
@@ -35,9 +35,17 @@ in
               select = "underline";
             };
             true-color = true;
-          };
-          lsp = {
-            display-messages = true;
+            lsp = {
+              display-messages = true;
+              # whitespace = {
+              #   render.space = "all";
+              #   render.tab= "all";
+              #   render.newline = "all";
+              #   characters.space = "·";
+              #   characters.tab = "→";
+              #   characters.newline = "⏎";
+              # };
+            };
           };
         };
       };

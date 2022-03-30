@@ -34,6 +34,7 @@ if [[ "${target}" != "cachix" ]]; then
   printf '\n%s\n' ">>> build/copy outputs" >&2
   set -x;
   nix copy \
+    --builders-use-substitutes \
     --eval-store "auto" \
     --no-check-sigs \
     --from "ssh-ng://${remote}" \
@@ -44,6 +45,7 @@ else
   printf '\n%s\n' ">>> build outputs remote" >&2
   set -x;
   nix build \
+    --builders-use-substitutes \
     --keep-going \
     --eval-store "auto" \
     --store "ssh-ng://${remote}" \

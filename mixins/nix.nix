@@ -11,8 +11,8 @@ let
       sha256 = "sha256-HNU+jltYw3gdt9ApI21zUoojy0aJ4y1x7kidkWZkKg0=";
     };
   });
-  _nix = _nixUnstableXdg;
-  # _nix = pkgs.nixUnstable;
+  # _nix = _nixUnstableXdg;
+  _nix = pkgs.nixUnstable;
 in
 {
   config = {

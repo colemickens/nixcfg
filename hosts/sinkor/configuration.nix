@@ -4,20 +4,21 @@ let
 in
 {
   imports = [
-    ../../modules/loginctl-linger.nix
-    ../../secrets
-
+    ../../profiles/interactive.nix # linger + secrets
     ../../mixins/syncthing.nix
-    ../../mixins/tailscale.nix
-    ../../mixins/sshd.nix
+    ../../mixins/wpasupplicant.nix
 
-    ../../profiles/core.nix # we need core+linger for hm to power syncthing, I guess
-    ../../profiles/user.nix
-
+    # TODO: adopt this on all machines, move to common
     inputs.impermanence.nixosModules.impermanence
   ];
 
   config = {
+    system.stateVersion = "21.05";
+    networking.hostName = hostname;
+    time.timeZone = "America/Chicago";
+
+    nix.gc.randomizedDelaySec = "600"; # just don't run right at boot (impermanence)
+
     # impermance system-wide
     environment.persistence."/persist" = {
       directories = [
@@ -70,40 +71,6 @@ in
       };
     };
 
-    # # TODO: pull into module
-    # systemd.services.rfkiller = {
-    #   description = "rfkiller - set rfkill";
-    #   wantedBy = [ "multi-user.target" ];
-    #   serviceConfig = {
-    #     Type = "oneshot";
-    #     ExecStart = ''
-    #       ${pkgs.util-linux}/bin/rfkill block wlan || true
-    #       ${pkgs.util-linux}/bin/rfkill block bluetooth || true
-    #     '';
-    #   };
-    # };
-
-    environment.systemPackages = with pkgs; [
-      cachix
-      raspberrypifw
-      raspberrypi-eeprom
-      libraspberrypi
-      picocom
-      pipes
-    ];
-
-    system.stateVersion = "21.05";
-    users.users.cole.linger = true;
-
-    nix.nixPath = [];
-    nix.gc.automatic = true;
-    nix.gc.randomizedDelaySec = "600"; # just don't run right at boot (impermanence)
-
-    documentation.enable = false;
-    documentation.doc.enable = false;
-    documentation.info.enable = false;
-    documentation.nixos.enable = false;
-
     boot = {
       # TOW_BOOT + GRUB
       # (works, but hangs for a long time between grub -> kernel booting)
@@ -144,30 +111,9 @@ in
       supportedFilesystems = [ "zfs" ];
     };
 
-    networking = {
-      hostId = "deadbead";
-      hostName = hostname;
-      firewall.enable = true;
-      networkmanager.enable = false;
-      wireless.enable = true;
-      wireless.environmentFile = "/run/secrets/wireless.env";
-      wireless.networks = {
-        "Mickey".pskRaw = "@PSKRAW_MICKEY@";
-      };
-      wireless.iwd.enable = false;
-      useDHCP = true;
-    };
-    services.timesyncd.enable = true;
-    time.timeZone = "America/Chicago";
-
-    hardware = {
-      enableRedistributableFirmware = true;
-    };
-
-    # TODO: declarative wifi for Mickens + MickPetrey wifi networks
-
     # TODO: snapshot whatever was written from last run
     # TODO: can we do that pre-emptively on shutdown instead?
+    # TODO: move to impermanence module
     boot.initrd.postDeviceCommands = lib.mkAfter ''
       zfs rollback -r sinkortank/root@blank
     '';

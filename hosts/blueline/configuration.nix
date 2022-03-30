@@ -6,6 +6,8 @@ in
 {
   imports = [
     ../../profiles/phone.nix
+      
+    ./unfree.nix
 
     (import "${inputs.mobile-nixos}/lib/configuration.nix" {
       device = "google-blueline";
@@ -16,35 +18,15 @@ in
     nixcfg.common.defaultKernel = false;
       
     system.stateVersion = "21.05";
-    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-      "google-blueline-firmware"
-    ];
-    # mobile.device.serial = "89WX0J2GL";
+    system.build.android-serial = "89WX0J2GL";
 
-    boot.kernelParams = [ "loglevel=7" ];
+    boot.kernelParams = lib.mkAfter [ "loglevel=7" ];
     hardware.firmware = lib.mkBefore [ config.mobile.device.firmware ];
-    # hardware.enableRedistributableFirmware = true;
 
-#    mobile.boot.stage-1.kernel.provenance = "mainline";
-
-    ## !!!!!!!!!!!!!!!!!!!!!!!!
     # usb0 never appears with this disabled:
     mobile.boot.stage-1.networking.enable = true;
-    ## !!!!!!!!!!!!!!!!!!!!!!!!
 
-    networking = {
-      hostName = hostname;
-      # wireless.enable = true;
-      # wireless.networks."chimera-iot".pskRaw = "61e387f2c2f49c6e266515096d289cedfc1325aa6e17ab72abf25c64e62eb297";
-      # interfaces."wlan0".useDHCP = true;
-
-      useDHCP = false;
-      interfaces."usb0".ipv4.addresses = [{
-        address = "10.88.0.5";
-        prefixLength = 24;
-      }];
-      defaultGateway = "10.88.0.1";
-      nameservers = [ "192.168.1.1" ];
-    };
+    networking.hostName = hostname;
+    # networking.wireless.iwd.enable = true;
   };
 }

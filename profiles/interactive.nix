@@ -5,7 +5,7 @@
     ./core.nix # imports hm
 
     ../secrets
-
+    
     ../mixins/gpg-agent.nix
 
     ../mixins/broot.nix
@@ -18,11 +18,9 @@
     ../mixins/jj.nix
     ../mixins/joshuto.nix
     ../mixins/lorri.nix
-    # do I need this, use skim's support instead?
-    # ../mixins/mcfly.nix # wish it took the history arg in config file
     ../mixins/nushell.nix
     ../mixins/pijul.nix
-    ../mixins/skim.nix # weird aarch64 build error...?
+    ../mixins/skim.nix
     ../mixins/solo2.nix
     ../mixins/starship.nix
     ../mixins/sshd.nix
@@ -33,6 +31,9 @@
   ];
 
   config = {
+    # I don't think my user dbus socket is here without this?????
+    users.users.cole.linger = true;
+    
     # HM: ca.desrt.dconf error:
     # TODO: sops.secrets."nixup-secrets".owner = config.users.users.cole;
     sops.secrets."nixup-secrets".owner = "cole";
@@ -81,16 +82,20 @@
         # </rust pkgs>
         python3Packages.pywatchman
 
+        difftastic
+        cpio # needed?
         usbutils
         pciutils
         dmidecode
         lshw
         nvme-cli
         efibootmgr
+        mokutil
         cryptsetup
         wipe
         file
         unar
+        p7zip # needed with unar??
         sops # age ?rage?
         step-cli
         gptfdisk
@@ -111,18 +116,17 @@
         curl
         jq
         openssh
-        autossh
-        mosh
-        sshuttle
 
         linuxPackages.cpupower
         linuxPackages.usbip
 
         aria2
-        youtube-dl
-        #youtube-dlp # TODO: remove whenever we get aria2->incoming setup
+        yt-dlp
         imgurbash2
 
+        # autossh
+        # mosh
+        # sshuttle
         # nix-tree nix-du ncdu nix-prefetch nixpkgs-review
         # git-crypt
         # mitmproxy

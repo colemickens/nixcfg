@@ -6,11 +6,10 @@
       programs.mpv = {
         enable = true;
         config = {
-          video-sync = "display-resample";
-          hwdec = "vaapi";
-          vo = "gpu";
-          hwdec-codecs = "all";
-          # gpu-context = "wayland"; # (moved to mixins/wayland-tweaks.nix)
+          # video-sync = "display-resample";
+          # hwdec = "vaapi";
+          # vo = "gpu";
+          # hwdec-codecs = "all";
         };
       };
     };

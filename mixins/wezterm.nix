@@ -3,6 +3,8 @@
 let
   prefs = import ./_preferences.nix { inherit pkgs inputs; };
   colors = prefs.themes.wezterm;
+  
+  enable_wayland = "true";
 in
 {
   config = {
@@ -15,7 +17,7 @@ in
         wezterm.add_to_config_reload_watch_list("${hm.config.xdg.configHome}/wezterm")
 
         local config = {
-          default_prog = { default_prog = "${prefs.shell.program}" },
+          default_prog = { "${prefs.shell.program}" },
           enable_tab_bar = false,
           use_fancy_tab_bar = false,
           initial_rows = 24,
@@ -53,7 +55,7 @@ in
         if wezterm.target_triple == "x86_64-pc-windows-msvc" then
           config.default_prog = { "powershell.exe" }
         else
-          config.enable_wayland = true
+          config.enable_wayland = ${enable_wayland}
           config.window_decorations = "NONE"
           config.window_close_confirmation = "NeverPrompt"
           config.freetype_load_target = "Light"

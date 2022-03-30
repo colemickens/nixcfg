@@ -1,7 +1,9 @@
 { pkgs, inputs, ... }:
 
 let
-  colorscheme = inputs.nix-rice.colorschemes."purplepeter";
+  # colorscheme = inputs.nix-rice.colorschemes."purplepeter";
+  colorscheme = inputs.nix-rice.colorschemes."Gruvbox Dark";
+  # colorscheme = inputs.nix-rice.colorschemes."Ocean";
 
   bg_gruvbox_rainbow = builtins.fetchurl {
     url = "https://raw.githubusercontent.com/lunik1/nixos-logo-gruvbox-wallpaper/master/png/gruvbox-dark-rainbow.png";
@@ -24,6 +26,15 @@ let
   });
   _iosevka = pkgs.iosevka;
   #_iosevka = customIosevkaTerm;
+  
+  # TODO: fix
+  # cursorColor = "#EA0A8E";
+  # custom-bibata-cursors = pkgs.bibata-cursors.overrideAttrs(old: {
+  #   postPatch = (old.postPatch or "") + ''
+  #     substituteInPlace "./bitmapper/src/config.ts" \
+  #       --replace "#FF8300" "${cursorColor}"
+  #   '';
+  # });
 in
 rec {
   # all configured with HM, so just use binary name
@@ -35,10 +46,29 @@ rec {
   gtk = {
     font = { name = "${font.default.family} 11"; package = font.default.package; };
     preferDark = true;
-    iconTheme = { name = "Numix Circle"; package = pkgs.numix-icon-theme; };
-    theme = { name = "Arc-Dark"; package = pkgs.arc-theme; };
+
+    # iconTheme = { name = "Numix Circle"; package = pkgs.numix-icon-theme; };
+    iconTheme = { name = "Tela-circle-dark"; package = pkgs.tela-circle-icon-theme; };
+# T # iconTheme = { name = "Fluent"; package = pkgs.fluent-icon-theme; };
+# T # iconTheme = { name = "Colloid"; package = pkgs.colloid-icon-theme; };
+    # iconTheme = { name = "WhiteSur-dark"; package = pkgs.whitesur-icon-theme; };
+# T # iconTheme = { name = "McMojave-circle"; package = pkgs.mcmojave-icon-theme; };
+
+    # theme = { name = "Arc-Dark"; package = pkgs.arc-theme; };
+    theme = { name = "Orchis-purple-dark-compact"; package = pkgs.orchis-theme; };
+    # theme = { name = "WhiteSur-dark-solid"; package = pkgs.whitesur-gtk-theme; };
+    # theme = { name = "Mojave-dark-solid"; package = pkgs.mojave-gtk-theme; };
+#ew # theme = { name = "Marwaita Color Dark"; package = pkgs.marwaita; };
+    # theme = { name = "Qogir-dark"; package = pkgs.qogir-theme; };
   };
-  cursor = { name = "capitaine-cursors-white"; package = pkgs.capitaine-cursors; };
+  # cursor = { name = "capitaine-cursors-white"; package = pkgs.capitaine-cursors; };
+#T# cursor = { name = "apple-cursor"; package = pkgs.apple-cursor; };
+    cursor = { name = "Bibata-Original-Amber"; package = pkgs.bibata-cursors; };
+  # cursor = { name = "Bibata-Original-Amber"; package = custom-bibata-cursors; };
+#T#cursor = { name = "Graphite"; package = pkgs.graphite-cursors; };
+#T# cursor = { name = "Qogir"; package = pkgs.qogir-cursors; }; # not packaged
+  # cursor = { name = "phinger-cursors-light"; package = pkgs.phinger-cursors; };
+  cursorSize = 48;
   themes = {
     alacritty = colorscheme // colordefs;
     sway = colorscheme // colordefs;

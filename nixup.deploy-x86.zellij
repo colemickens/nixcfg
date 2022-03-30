@@ -1,6 +1,6 @@
 ---
 session:
-  name: "nixup.deploy"
+  name: "nixup.deploy-x86"
   connect: true
 
 pane_frames: true
@@ -32,7 +32,7 @@ tabs:
     parts:
       - direction: Horizontal
         split_size:
-          Percent: 25
+          Percent: 50
         parts:
           - direction: Vertical
             pane_name: "nixup xeep"
@@ -48,7 +48,7 @@ tabs:
               command: {cmd: ./nixup, args: ["porty"]}
       - direction: Horizontal
         split_size:
-          Percent: 25
+          Percent: 50
         parts:
           - direction: Vertical
             pane_name: "nixup raisin"
@@ -62,35 +62,3 @@ tabs:
               Percent: 50
             run:
               command: {cmd: ./nixup, args: ["jeffhyper"]}
-      - direction: Horizontal
-        split_size:
-          Percent: 25
-        parts:
-          - direction: Vertical
-            pane_name: "nixup rpifour1"
-            split_size:
-              Percent: 50
-            run:
-              command: {cmd: ./nixup, args: ["rpifour1"]}
-          - direction: Vertical
-            pane_name: "nixup sinkor"
-            split_size:
-              Percent: 50
-            run:
-              command: {cmd: ./nixup, args: ["sinkor"]}
-      - direction: Horizontal
-        split_size:
-          Percent: 25
-        parts:
-          - direction: Vertical
-            pane_name: "nixup pinephone"
-            split_size:
-              Percent: 50
-            run:
-              command: {cmd: ./nixup, args: ["pinephone"]}
-          - direction: Vertical
-            pane_name: "nixup blueline"
-            split_size:
-              Percent: 50
-            run:
-              command: {cmd: ./nixup, args: ["blueline"]}

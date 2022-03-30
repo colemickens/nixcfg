@@ -18,7 +18,8 @@ in {
         ln -sf /home/cole/.ssh/known_hosts /root/.ssh/known_hosts
         
         # and we control our own SSH_AUTH_SOCK fate
-        ln -sf "${gpgSshSock}" "${fixedSshAgentSocket}"
+        mkdir -p "$(dirname "${fixedSshAgentSocket}")" || true
+        ln -sf "${gpgSshSock}" "${fixedSshAgentSocket}" || true
       )
       '';
       deps = [];

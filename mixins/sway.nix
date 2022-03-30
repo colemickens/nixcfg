@@ -84,6 +84,7 @@ let
       icon-theme:gtk-icon-theme-name \
       font-name:gtk-font-name \
       cursor-theme:gtk-cursor-theme-name \
+      cursor-size:gtk-cursor-theme-size \
       gtk-xft-antialias:font-antialiasing \
       gtk-xft-hinting:font-hintstyle \
       gtk-xft-rgba:font-rgb-order \
@@ -105,234 +106,223 @@ let
 in
 {
   config = {
-    #programs.sway.extraPackages = lib.mkForce [ ]; # block rxvt
-
-    environment.systemPackages = with pkgs; [
-      capitaine-cursors
-    ];
-
-    #programs.sway.enable = true; # needed for swaylock/pam stuff
     security.pam.services.swaylock = { };
 
-    home-manager.users.cole = { pkgs, config, ... }@hm: let
-      swaylock = "${hm.config.programs.swaylock.package}/bin/swaylock";
-      swaymsg = "${hm.config.wayland.windowManager.sway.package}/bin/swaymsg";
-    in {
-      # block auto-sway reload, Sway crashes... ... but now  we work around it by doing kbmods per dev
-      #xdg.configFile."sway/config".onChange = lib.mkForce "";
+    home-manager.users.cole = { pkgs, config, ... }@hm:
+      let
+        swaylock = "${hm.config.programs.swaylock.package}/bin/swaylock";
+        swaymsg = "${hm.config.wayland.windowManager.sway.package}/bin/swaymsg";
+      in
+      {
+        # block auto-sway reload, Sway crashes... ... but now  we work around it by doing kbmods per dev
+        #xdg.configFile."sway/config".onChange = lib.mkForce "";
 
-      programs.swaylock = {
-        enable = true;
-        package = pkgs.swaylock-effects;
-        settings = ''
-          debug
-          screenshots
-          color=000000
-          effect-scale=0.5
-          effect-blur=7x5
-          effect-scale=2
-          effect-pixelate=10  
-        '';
-      };
-      services.swayidle =
-        let
-          pgrep = "${pkgs.procps}/bin/pgrep";
-          dpms_check = s: pkgs.writeShellScript "dpms_check_${s}" ''
-            set -x
-            if ${pgrep} swaylock; then ${swaymsg} 'output * dpms ${s}'; fi
-          '';
-          dpms_set = s: pkgs.writeShellScript "dpms_set_${s}" ''
-            set -x
-            "${swaymsg}" 'output * dpms ${s}'
-          '';
-          fadelock = pkgs.writeShellScript "fadelock.sh" ''
-            set -x
-            exec "${swaylock}" -f --fade 15 --grace 16
-          '';
-        in
-        {
+        programs.swaylock = {
           enable = true;
-          debug = true;
-          # make sure you have -f in any `swaylock` runs
-          timeouts = [
-            # auto-lock after 30 seconds
-            { timeout = 30; command = fadelock.outPath; }
-            # after any event, after 60 seconds, run dpms_off
-            { timeout = 60; command = "${dpms_set "off"}"; resumeCommand = "${dpms_set "on"}"; }
-            # triggered after event changes, after 60 seconds after event, check to see if we should dpms_off
-            { timeout = 60; command = "${dpms_check "off"}"; resumeCommand = "${dpms_check "on"}"; }
-          ];
-          events = [
-            { event = "before-sleep"; command = fadelock.outPath; }
-          ];
-          extraArgs = [
-            "idlehint 30"
-          ];
+          package = pkgs.swaylock-effects;
+          settings = ''
+            debug
+            screenshots
+            color=000000
+            effect-scale=0.5
+            effect-blur=7x5
+            effect-scale=2
+            effect-pixelate=10  
+          '';
         };
-      wayland.windowManager.sway = {
-        enable = true;
-        systemdIntegration = true; # beta
-        wrapperFeatures = {
-          base = false; # this should be the default (dbus activation, not sure where XDG_CURRENT_DESKTOP comes from)
-          gtk = true; # I think this is also the default...
-        };
-        xwayland = true;
-        extraConfig = ''
-          seat seat0 xcursor_theme "${prefs.cursor.name}" 24
-        '';
-        config = rec {
-          modifier = "Mod4";
-          terminal = prefs.default_term;
-          fonts = prefs.swayfonts;
-          focus.followMouse = "always";
-          window.border = 5;
-          window.titlebar = true;
-          window.commands = [
-            { criteria = { app_id = "mpv"; }; command = "sticky enable"; }
-            { criteria = { app_id = "mpv"; }; command = "floating enable"; }
-
-            {
-              criteria = { title = "^(.*) Indicator"; };
-              command = "floating enable";
-            }
-
-            {
-              criteria = { app_id = "floatmeplz"; };
-              command = "floating enable";
-            }
-
-            {
-              criteria = { app_id = "prs-gtk3-copy"; };
-              command = "floating enable";
-            }
-
-            {
-              criteria = { instance = "pinentry"; };
-              command = "fullscreen on";
-            }
-          ];
-          startup = [
-            { always = true; command = "${gsettings_auto}"; }
-          ];
-          input = hostinputs;
-          output = {
-            "${out_aw3418dw}" = {
-              mode = "3440x1440@120Hz";
-              pos = "0 0";
-              #mode = "3440x1440Hz";
-              # don't force alienware to be a certain refresh rate (it depends what adapter is used :/)
-              subpixel = "rgb";
-              scale = "1.0";
-              adaptive_sync = "on";
-            };
-            #"${out_aw3418dw}" = { disable = ""; };
-            "${out_raisin}" = {
-              mode = "2880x1800@90Hz";
-              pos = "3440 0";
-              subpixel = "rgb";
-              scale = "1.8";
-              adaptive_sync = "on";
-              #render_bit_depth = "10";
-            };
-            "${out_lgc165}" = {
-              disable = "";
-            };
-            "*" = {
-              background = background;
-            };
+        services.swayidle =
+          let
+            pgrep = "${pkgs.procps}/bin/pgrep";
+            dpms_check = s: pkgs.writeShellScript "dpms_check_${s}" ''
+              set -x
+              if ${pgrep} swaylock; then ${swaymsg} 'output * dpms ${s}'; fi
+            '';
+            dpms_set = s: pkgs.writeShellScript "dpms_set_${s}" ''
+              set -x
+              "${swaymsg}" 'output * dpms ${s}'
+            '';
+            fadelock = pkgs.writeShellScript "fadelock.sh" ''
+              set -x
+              exec "${swaylock}" -f --fade 15 --grace 16
+            '';
+          in
+          {
+            enable = true;
+            # debug = true;
+            # make sure you have -f in any `swaylock` runs
+            timeouts = [
+              # auto-lock after 30 seconds
+              { timeout = 30; command = fadelock.outPath; }
+              # after any event, after 60 seconds, run dpms_off
+              { timeout = 60; command = "${dpms_set "off"}"; resumeCommand = "${dpms_set "on"}"; }
+              # triggered after event changes, after 60 seconds after event, check to see if we should dpms_off
+              { timeout = 60; command = "${dpms_check "off"}"; resumeCommand = "${dpms_check "on"}"; }
+            ];
+            events = [
+              { event = "before-sleep"; command = fadelock.outPath; }
+            ];
+            extraArgs = [
+              "idlehint 30"
+            ];
           };
-          bars = [ ];
-          #bars = [
-          #  command = statusCommand;
-          #}];
-          keybindings = {
-            "${modifier}+Return" = "exec ${terminal}";
-            "${modifier}+Shift+q" = "kill";
-            "${modifier}+Shift+c" = "reload";
-            "${modifier}+Delete" = "exec ${swaylock}";
+        wayland.windowManager.sway = {
+          enable = true;
+          systemdIntegration = true; # beta
+          wrapperFeatures = {
+            base = false; # this should be the default (dbus activation, not sure where XDG_CURRENT_DESKTOP comes from)
+            gtk = true; # I think this is also the default...
+          };
+          xwayland = true;
+          extraConfig = ''
+            seat seat0 xcursor_theme "${prefs.cursor.name}" ${builtins.toString prefs.cursorSize}
+          '';
+          config = rec {
+            modifier = "Mod4";
+            terminal = prefs.default_term;
+            fonts = prefs.swayfonts;
+            focus.followMouse = "always";
+            colors = let
+              red = "#E87461";
+              green = "#7AC74F";
+              bgcolor = "#000000";
+            in {
+              "focused" = { border = red; background = red; text="#ffffff"; indicator="#ffffff"; childBorder=red; };
+              "unfocused" = { border = bgcolor; background = bgcolor; text="#888888"; indicator="#ffffff"; childBorder=bgcolor; };
+            };
+            gaps = { inner = 0; outer = 0; };
+            window.border = 3;
+            window.titlebar = true;
+            window.commands = [
+              { criteria = { app_id = "mpv"; }; command = "sticky enable"; }
+              { criteria = { app_id = "mpv"; }; command = "floating enable"; }
+              { criteria = { title = "^(.*) Indicator"; }; command = "floating enable"; }
+              { criteria = { app_id = "floatmeplz"; }; command = "floating enable"; }
+              { criteria = { app_id = "prs-gtk3-copy"; }; command = "floating enable"; }
+              { criteria = { app_id = "gcr-prompter"; }; command = "border pixel 400"; }
+            ];
+            startup = [
+              { always = true; command = "${gsettings_auto}"; }
+            ];
+            input = hostinputs;
+            output = {
+              "${out_aw3418dw}" = {
+                mode = "3440x1440@120Hz";
+                pos = "0 0";
+                #mode = "3440x1440Hz";
+                # don't force alienware to be a certain refresh rate (it depends what adapter is used :/)
+                subpixel = "rgb";
+                scale = "1.0";
+                adaptive_sync = "on";
+              };
+              #"${out_aw3418dw}" = { disable = ""; };
+              "${out_raisin}" = {
+                mode = "2880x1800@90Hz";
+                pos = "3440 0";
+                subpixel = "rgb";
+                scale = "1.8";
+                adaptive_sync = "on";
+                #render_bit_depth = "10";
+              };
+              "${out_lgc165}" = {
+                disable = "";
+              };
+              "*" = {
+                background = background;
+              };
+            };
+            bars = [ ];
+            #bars = [
+            #  command = statusCommand;
+            #}];
+            keybindings = {
+              "${modifier}+Return" = "exec ${terminal}";
+              "${modifier}+Shift+q" = "kill";
+              "${modifier}+Shift+c" = "reload";
+              "${modifier}+Delete" = "exec ${swaylock}";
 
-            "${modifier}+Escape" = "exec ${prefs.default_launcher}";
-            "${modifier}+Ctrl+Alt+Delete" = "exec ${swaymsg} exit";
+              "${modifier}+Escape" = "exec ${prefs.default_launcher}";
+              "${modifier}+Ctrl+Alt+Delete" = "exec ${swaymsg} exit || true";
+              "${modifier}+Ctrl+Alt+Insert" = "exec ${swaymsg} reload";
 
-            "${modifier}+Alt+F1" = "exec ${cmd_pass}";
-            "${modifier}+Alt+F2" = "exec ${cmd_totp}";
+              "${modifier}+Alt+F1" = "exec ${cmd_pass}";
+              "${modifier}+Alt+F2" = "exec ${cmd_totp}";
 
-            # I gotta fucking learn some day
-            #"${modifier}+Left" = "focus left";
-            #"${modifier}+Down" = "focus down";
-            #"${modifier}+Up" = "focus up";
-            #"${modifier}+Right" = "focus right";
-            #"${modifier}+Shift+Left" = "move left";
-            #"${modifier}+Shift+Down" = "move down";
-            #"${modifier}+Shift+Up" = "move up";
-            #"${modifier}+Shift+Right" = "move right";
+              # I gotta fucking learn some day
+              #"${modifier}+Left" = "focus left";
+              #"${modifier}+Down" = "focus down";
+              #"${modifier}+Up" = "focus up";
+              #"${modifier}+Right" = "focus right";
+              #"${modifier}+Shift+Left" = "move left";
+              #"${modifier}+Shift+Down" = "move down";
+              #"${modifier}+Shift+Up" = "move up";
+              #"${modifier}+Shift+Right" = "move right";
 
-            "${modifier}+h" = "focus left";
-            "${modifier}+j" = "focus down";
-            "${modifier}+k" = "focus up";
-            "${modifier}+l" = "focus right";
+              "${modifier}+h" = "focus left";
+              "${modifier}+j" = "focus down";
+              "${modifier}+k" = "focus up";
+              "${modifier}+l" = "focus right";
 
-            "${modifier}+Shift+h" = "move left";
-            "${modifier}+Shift+j" = "move down";
-            "${modifier}+Shift+k" = "move up";
-            "${modifier}+Shift+l" = "move right";
+              "${modifier}+Shift+h" = "move left";
+              "${modifier}+Shift+j" = "move down";
+              "${modifier}+Shift+k" = "move up";
+              "${modifier}+Shift+l" = "move right";
 
-            "${modifier}+Prior" = "workspace prev";
-            "${modifier}+Next" = "workspace next";
+              "${modifier}+Prior" = "workspace prev";
+              "${modifier}+Next" = "workspace next";
 
-            "${modifier}+b" = "splith";
-            "${modifier}+v" = "splitv";
-            "${modifier}+f" = "fullscreen toggle";
-            "${modifier}+a" = "focus parent";
+              "${modifier}+b" = "splith";
+              "${modifier}+v" = "splitv";
+              "${modifier}+f" = "fullscreen toggle";
+              "${modifier}+a" = "focus parent";
 
-            "${modifier}+s" = "layout stacking";
-            "${modifier}+w" = "layout tabbed";
-            "${modifier}+e" = "layout toggle split";
+              "${modifier}+s" = "layout stacking";
+              "${modifier}+w" = "layout tabbed";
+              "${modifier}+e" = "layout toggle split";
 
-            "${modifier}+Shift+space" = "floating toggle";
-            "${modifier}+Shift+Alt+space" = "sticky toggle";
-            "${modifier}+space" = "focus mode_toggle";
+              "${modifier}+Shift+space" = "floating toggle";
+              "${modifier}+Shift+Alt+space" = "sticky toggle";
+              "${modifier}+space" = "focus mode_toggle";
 
-            "${modifier}+1" = "workspace number 1";
-            "${modifier}+2" = "workspace number 2";
-            "${modifier}+3" = "workspace number 3";
-            "${modifier}+4" = "workspace number 4";
-            "${modifier}+5" = "workspace number 5";
-            "${modifier}+6" = "workspace number 6";
-            "${modifier}+7" = "workspace number 7";
-            "${modifier}+8" = "workspace number 8";
-            "${modifier}+9" = "workspace number 9";
+              "${modifier}+1" = "workspace number 1";
+              "${modifier}+2" = "workspace number 2";
+              "${modifier}+3" = "workspace number 3";
+              "${modifier}+4" = "workspace number 4";
+              "${modifier}+5" = "workspace number 5";
+              "${modifier}+6" = "workspace number 6";
+              "${modifier}+7" = "workspace number 7";
+              "${modifier}+8" = "workspace number 8";
+              "${modifier}+9" = "workspace number 9";
 
-            "${modifier}+Shift+1" = "move container to workspace number 1";
-            "${modifier}+Shift+2" = "move container to workspace number 2";
-            "${modifier}+Shift+3" = "move container to workspace number 3";
-            "${modifier}+Shift+4" = "move container to workspace number 4";
-            "${modifier}+Shift+5" = "move container to workspace number 5";
-            "${modifier}+Shift+6" = "move container to workspace number 6";
-            "${modifier}+Shift+7" = "move container to workspace number 7";
-            "${modifier}+Shift+8" = "move container to workspace number 8";
-            "${modifier}+Shift+9" = "move container to workspace number 9";
+              "${modifier}+Shift+1" = "move container to workspace number 1";
+              "${modifier}+Shift+2" = "move container to workspace number 2";
+              "${modifier}+Shift+3" = "move container to workspace number 3";
+              "${modifier}+Shift+4" = "move container to workspace number 4";
+              "${modifier}+Shift+5" = "move container to workspace number 5";
+              "${modifier}+Shift+6" = "move container to workspace number 6";
+              "${modifier}+Shift+7" = "move container to workspace number 7";
+              "${modifier}+Shift+8" = "move container to workspace number 8";
+              "${modifier}+Shift+9" = "move container to workspace number 9";
 
-            "${modifier}+Shift+minus" = "move scratchpad";
-            "${modifier}+minus" = "scratchpad show";
+              "${modifier}+Shift+minus" = "move scratchpad";
+              "${modifier}+minus" = "scratchpad show";
 
-            "${modifier}+Ctrl+Alt+Home" = "output * enable";
-            "${modifier}+Ctrl+Alt+End" = "output -- disable";
-            "${modifier}+Ctrl+Alt+equal" = "exec ${outputScale} +.1";
-            "${modifier}+Ctrl+Alt+minus" = "exec ${outputScale} -.1";
+              "${modifier}+Ctrl+Alt+Home" = "output * enable";
+              "${modifier}+Ctrl+Alt+End" = "output -- disable";
+              "${modifier}+Ctrl+Alt+equal" = "exec ${outputScale} +.1";
+              "${modifier}+Ctrl+Alt+minus" = "exec ${outputScale} -.1";
 
-            "${modifier}+Print" = ''exec ${pkgs.grim}/bin/grim \"''${HOME}/screenshot-$(date '+%s').png\"'';
-            "${modifier}+Shift+Print" = ''exec ${pkgs.grim}/bin/grim  -g \"$(slurp)\" \"''${HOME}/screenshot-$(date '+%s').png\"'';
+              "${modifier}+Print" = ''exec ${pkgs.grim}/bin/grim \"''${HOME}/screenshot-$(date '+%s').png\"'';
+              "${modifier}+Shift+Print" = ''exec ${pkgs.grim}/bin/grim  -g \"$(slurp)\" \"''${HOME}/screenshot-$(date '+%s').png\"'';
 
-            "${modifier}+Ctrl+Alt+Up" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +10";
-            "${modifier}+Ctrl+Alt+Down" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 10-";
-            "${modifier}+Ctrl+Alt+Prior" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +100";
-            "${modifier}+Ctrl+Alt+Next" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 100-";
-            "${modifier}+Ctrl+Alt+Left" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume -2";
-            "${modifier}+Ctrl+Alt+Right" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume +2";
+              "${modifier}+Ctrl+Alt+Up" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +10";
+              "${modifier}+Ctrl+Alt+Down" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 10-";
+              "${modifier}+Ctrl+Alt+Prior" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +100";
+              "${modifier}+Ctrl+Alt+Next" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 100-";
+              "${modifier}+Ctrl+Alt+Left" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume -2";
+              "${modifier}+Ctrl+Alt+Right" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume +2";
+            };
           };
         };
       };
-    };
   };
 }

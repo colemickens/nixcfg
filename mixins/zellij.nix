@@ -13,8 +13,7 @@ in
         enable = true;
         settings = {
           default_mode = "normal";
-          simplified_ui = true;
-          pane_frames = false;
+          ui.pane_frames.rounded_corners = true;
           theme = "default";
           themes = {
             nixdefault = {

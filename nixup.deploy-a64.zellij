@@ -1,0 +1,70 @@
+---
+session:
+  name: "nixup.deploy-a64"
+  connect: true
+
+pane_frames: true
+
+# template:
+#   direction: Horizontal
+#   parts:
+#     - direction: Vertical  # part 1
+#       borderless: true
+#       split_size:
+#         Fixed: 1
+#       run:
+#         plugin:
+#           location: "zellij:tab-bar"
+#     - direction: Vertical # part 2
+#       body: true
+#       pane_frames: true
+#     - direction: Vertical # part 3
+#       borderless: true
+#       split_size:
+#         Fixed: 2
+#       run:
+#         plugin:
+#           location: "zellij:status-bar"
+
+tabs:
+  - direction: Vertical
+    name: "nixup"
+    parts:
+      - direction: Horizontal
+        split_size:
+          Percent: 50
+        parts:
+          - direction: Vertical
+            pane_name: "nixup rpifour1"
+            split_size:
+              Percent: 50
+            run:
+              command: {cmd: ./nixup, args: ["rpifour1"]}
+          - direction: Vertical
+            pane_name: "nixup sinkor"
+            split_size:
+              Percent: 50
+            run:
+              command: {cmd: ./nixup, args: ["sinkor"]}
+      - direction: Horizontal
+        split_size:
+          Percent: 50
+        parts:
+          - direction: Vertical
+            pane_name: "nixup pinephone"
+            split_size:
+              Percent: 33
+            run:
+              command: {cmd: ./nixup, args: ["pinephone"]}
+          - direction: Vertical
+            pane_name: "nixup blueline"
+            split_size:
+              Percent: 33
+            run:
+              command: {cmd: ./nixup, args: ["blueline"]}
+          - direction: Vertical
+            pane_name: "nixup blueline"
+            split_size:
+              Percent: 34
+            run:
+              command: {cmd: ./nixup, args: ["blueline"]}

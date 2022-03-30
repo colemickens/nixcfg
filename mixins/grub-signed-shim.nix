@@ -30,7 +30,7 @@ in {
           efiSupport = true;
           efiInstallAsRemovable = false;
           efiBootloaderId = "nixos-grub";
-          configurationLimit = 5;
+          configurationLimit = 10;
           extraInstallCommands = let
             shim_path = {
               "x86_64-linux" = "\\EFI\\${efiBootloaderId}\\shimx64.efi";
@@ -43,9 +43,6 @@ in {
               (
                 export PATH="$PATH:${pkgs.efibootmgr}/bin"
                 set -eu # don't enable pipefail, we need it off
-                set -x
-
-                # efibootmgr... come on: https://github.com/rhboot/efibootmgr/issues/159
 
                 part=''$(mount | grep "${efiMount}" | cut -d ' ' -f 1)
                 part=''${part#/dev/}
@@ -61,11 +58,11 @@ in {
 
                 orig_entry=$(efibootmgr |grep '^Boot[0-9]' |grep " ${efiBootloaderId}$" |grep -Po '[0-9A-F]{4}\*' |sed 's/\*//g' |tr '\n' ',' |head -c -1)
                 if [[ "$orig_entry" != "" ]] ; then
-                  bootorder="$(sudo efibootmgr -v | grep ^BootOrder | cut -d ' ' -f2)"
-                  sudo efibootmgr --bootnum $orig_entry --delete-bootnum
-                  sudo efibootmgr --create-only --bootnum $orig_entry --label "${efiBootloaderId}-shim" --loader "${shim_path}" --disk "$disk"
-                  sudo efibootmgr --bootorder "$bootorder"
-                  sudo efibootmgr -v
+                  bootorder="$(efibootmgr -v | grep ^BootOrder | cut -d ' ' -f2)"
+                  efibootmgr --bootnum $orig_entry --delete-bootnum >/dev/null
+                  efibootmgr --create-only --bootnum $orig_entry --label "${efiBootloaderId}-shim" --loader "${shim_path}" --disk "$disk" >/dev/null
+                  efibootmgr --bootorder "$bootorder" >/dev/null
+                  efibootmgr
                 fi
               )
             fi

@@ -3,15 +3,31 @@
 {
   imports = [
     ../profiles/sway
-    ../profiles/core.nix
-
-    ../modules/loginctl-linger.nix
-    ../mixins/sshd.nix
-    ../mixins/networkmanager-minimal.nix
-    ../mixins/tailscale.nix
+    ../mixins/wpasupplicant.nix
   ];
 
   config = {
+    system.build.mobile-flash-boot = let
+      d = config.mobile.system.android.device_name;
+      bootzip = config.mobile.outputs.android.android-flashable-bootimg;
+    in pkgs.writeShellScript "flash-${d}.sh" ''
+      set -x
+      set -euo pipefail
+      
+      action="''${1:-}"; shift
+      export ANDROID_SERIAL="${config.system.build.android-serial}"
+      
+      unar "${bootzip}" 'boot.img' -o - >/tmp/boot.img
+      timeout 60 fastboot flash boot /tmp/boot.img
+        
+      if [[ "''${action}" == "reboot" ]]; then fastboot reboot; fi
+    '';
+    # the phones are using custom kernels
+    # TODO: TODO:
+    # - mobile-nixos needs to warn/error aggressively
+    #   if the user has overriden the boot.kernelPackages:
+    nixcfg.common.defaultKernel = false;
+
     environment.interactiveShellInit = ''
       alias rbb="sudo reboot bootloader"
     '';
@@ -32,15 +48,9 @@
     systemd.services.systemd-udev-settle.enable = false; ## ????
     # mobile.boot.stage-1.ssh.enable = false;
     mobile.boot.stage-1.bootConfig.log.level = "DEBUG";
-    #mobile.boot.stage-1.crashToBootloader = true;
+    mobile.boot.stage-1.crashToBootloader = true;
     #mobile.boot.stage-1.fbterm.enable = false;         #??????????
 
-    networking = {
-      firewall.enable = true;
-      firewall.allowedTCPPorts = [ 22 ];
-      networkmanager.enable = true; # cairo doesn't cross compile
-      networkmanager.unmanaged = [ "rndis0" "usb0" ];
-    };
     services.blueman.enable = false;
     hardware.bluetooth.enable = lib.mkForce false;
   };

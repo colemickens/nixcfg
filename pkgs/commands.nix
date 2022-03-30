@@ -4,6 +4,7 @@
 , efibootmgr
 , tailscale
 , asciinema
+, msr-tools
 , nixUnstable
 , writeShellScriptBin
 , linkFarmFromDrvs
@@ -16,6 +17,7 @@ let
 
   gpgKeyId = "0x9758078DE5308308";
   gpgCardId = "D2760001240100000006071267080000";
+  gpgSshSocket = "/run/user/1000/gnupg/d.kbocp7uc7zjy47nnek3436ij/S.gpg-agent.ssh";
 
   tsip4 = (writeShellScriptBin "tsip4" ''
     ${tailscale}/bin/tailscale ip --4 "$1"
@@ -61,7 +63,7 @@ let
     gpgssh
 
     (writeShellScriptBin "rec" ''
-       ${asciinema}/bin/asciinema rec "''${HOME}/''${1}.cast" -c "zellij attach -c ''${1}"
+      ${asciinema}/bin/asciinema rec "''${HOME}/''${1}.cast" -c "zellij attach -c ''${1}"
     '')
 
     (writeShellScriptBin "gopass-clip" ''
@@ -168,6 +170,7 @@ let
 
     (writeShellScriptBin "gpg-fix" ''
       set -x
+      ln -sf ${gpgSshSocket} /run/user/1000/sshagent
       sudo systemctl stop pcscd.service >/dev/null
       sudo systemctl stop pcscd.socket >/dev/null
       systemctl --user stop gpg-agent.service 2>/dev/null
@@ -197,6 +200,13 @@ let
       export SSH_AUTH_SOCK="/run/user/1000/sshagent"
       ssh-add -L | ssh-add -T /dev/stdin
       ssh-add -l
+    '')
+
+    (writeShellScriptBin "dell-fix-power" ''
+      oldval="$(sudo ${msr-tools}/bin/rdmsr 0x1FC)"
+      newval="$(( 0xFFFFFFFE & 0x$oldval ))"
+      sudo ${msr-tools}/bin/wrmsr -a 0x1FC "$newval"
+      echo "hello"
     '')
 
     (writeShellScriptBin "reboot-nixos" ''

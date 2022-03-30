@@ -8,7 +8,14 @@
 
   description = "colemickens-nixcfg";
 
+  # zfs everywhere
+  # networkd+iwd everywhere (wip)
+  # nearly identical partition
+  # grub (via bootspec) everywhere (wip??)
+
   inputs = {
+    nixlib.url = "github:nix-community/nixpkgs.lib"; #TODO: horrible name! come on!
+    
     nixpkgs.url = "github:colemickens/nixpkgs/cmpkgs"; # for my regular nixpkgs
     nixos-unstable-small.url = "github:nixos/nixpkgs/nixos-unstable-small";
     nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -91,8 +98,8 @@
 
   outputs = inputs:
     let
-      nameValuePair = name: value: { inherit name value; };
-      genAttrs = names: f: builtins.listToAttrs (map (n: nameValuePair n (f n)) names);
+      # TODO: further cleanup via usage of "nixlib"
+      nixlib = inputs.nixlib.outputs.lib;
       supportedSystems = [
         "x86_64-linux"
         "aarch64-linux"
@@ -100,7 +107,7 @@
         # "armv6l-linux" # eh, I think time is up
         # "armv7l-linux" # eh, I think time is up
       ];
-      forAllSystems = genAttrs supportedSystems;
+      forAllSystems = nixlib.genAttrs supportedSystems;
       filterPkg_ = system: (n: p: (builtins.elem "${system}" (p.meta.platforms or [ "x86_64-linux" "aarch64-linux" ])) && !(p.meta.broken or false));
       filterPkgs = pkgs: pkgSet: (pkgs.lib.filterAttrs (filterPkg_ pkgs.system) pkgSet);
       filterHosts = pkgs: cfgs: (pkgs.lib.filterAttrs (n: v: pkgs.system == v.config.nixpkgs.system) cfgs);
@@ -114,8 +121,8 @@
             inherit system overlays;
             config.allowUnfree = true;
           };
-        pkgs_ = genAttrs (builtins.attrNames inputs) (inp: genAttrs supportedSystems (sys: pkgsFor inputs."${inp}" sys [ ]));
-        fullPkgs_ = genAttrs supportedSystems (sys:
+        pkgs_ = nixlib.genAttrs (builtins.attrNames inputs) (inp: nixlib.genAttrs supportedSystems (sys: pkgsFor inputs."${inp}" sys [ ]));
+        fullPkgs_ = nixlib.genAttrs supportedSystems (sys:
           pkgsFor inputs.nixpkgs sys [ inputs.self.overlay inputs.nixpkgs-wayland.overlay ]);
         mkSystem = pkgs: system: hostname:
           pkgs.lib.nixosSystem {
@@ -131,6 +138,11 @@
     in
     with _colelib; rec {
       inputs = _inputs;
+        
+      # devshell = can build anything in it
+      # shell = just the binaries, I guess
+      # app = runnable, but not easy to remote build??
+      # legacyPackages = ${pkgs.system} loophole
         
       devShell = shell;
       devShells = shells;
@@ -157,8 +169,10 @@
         let
           app = program: { type = "app"; program = "${program}"; };
           tfout = import ./cloud { terranix = inputs.terranix; pkgs = pkgs_.nixpkgs.${system}; };
+          
+          mfb = dev: { type = "app"; program = nixosConfigurations.blueline.config.system.build.mobile-flash-boot.outPath; };
         in
-        {
+        ({
           # CI (should we use HM for this instead?)
           install-secrets = { type = "app"; program = legacyPackages."${system}".install-secrets.outPath; };
 
@@ -166,7 +180,8 @@
           tf = { type = "app"; program = tfout.tf.outPath; };
           tf-apply = { type = "app"; program = tfout.apply.outPath; };
           tf-destroy = { type = "app"; program = tfout.destroy.outPath; };
-        });
+        } // (nixlib.genAttrs [ "blueline" "enchilada" ] mfb))
+      );
 
       colelib = _colelib;
 
@@ -182,7 +197,6 @@
           hodd = prev.callPackage ./pkgs/hodd { };
           keyboard-layouts = prev.callPackage ./pkgs/keyboard-layouts { };
           onionbalance = prev.python3Packages.callPackage ./pkgs/onionbalance { };
-          poweralertd = prev.callPackage ./pkgs/poweralertd { };
           rumqtt = prev.callPackage ./pkgs/rumqtt { };
           solo2-cli = prev.callPackage ./pkgs/solo2-cli {
             solo2-cli = prev.solo2-cli;
@@ -197,14 +211,14 @@
             buildGoModule = prev.buildGo117Module;
           };
 
-          nix-build-uncached = prev.nix-build-uncached.overrideAttrs (old: {
-            src = prev.fetchFromGitHub {
-              owner = "colemickens";
-              repo = "nix-build-uncached";
-              rev = "36ea105";
-              sha256 = "sha256-Ovx+q5pdfg+yIF5HU7pV0nR6nnoTa3y/f9m4TV0XXc0=";
-            };
-          });
+          # nix-build-uncached = prev.nix-build-uncached.overrideAttrs (old: {
+          #   src = prev.fetchFromGitHub {
+          #     owner = "colemickens";
+          #     repo = "nix-build-uncached";
+          #     rev = "36ea105";
+          #     sha256 = "sha256-Ovx+q5pdfg+yIF5HU7pV0nR6nnoTa3y/f9m4TV0XXc0=";
+          #   };
+          # });
 
           # alacritty/bottom/wezterm - rust updates are ... maybe not working? so...
           #alacritty = prev.callPackage ./pkgs/alacritty {
@@ -221,6 +235,7 @@
           #zellij = prev.callPackage ./pkgs/zellij {
           #  zellij = prev.zellij;
           #};
+          # disabled (stable is fine) # poweralertd = prev.callPackage ./pkgs/poweralertd { };
           # disabled (dont use) # meli = prev.callPackage ./pkgs/meli {};
           # disabled (very old, prob delete) # bb = prev.callPackage ./pkgs/bb {};
           # disabled (huge build + unused) # cchat-gtk = prev.callPackage ./pkgs/cchat-gtk {};
@@ -263,7 +278,7 @@
         pinephone   = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
         blueline    = mkSystem inputs.nixpkgs "aarch64-linux" "blueline";
         # blueloco    = mkSystem inputs.nixpkgs "x86_64-linux"  "blueloco";
-        # enchilada   = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
+        enchilada   = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
         # enchiloco   = mkSystem inputs.nixpkgs "x86_64-linux"  "enchiloco";
         #######################################################################
         # armv6l-linux (cross-built)
@@ -272,7 +287,7 @@
         # disabled:
         # - oracular_kexec  = mkSystem inputs.nixpkgs "aarch64-linux" "oracular/installer"; # not working, half-abandonded
       };
-      toplevels = genAttrs
+      toplevels = nixlib.genAttrs
         (builtins.attrNames inputs.self.outputs.nixosConfigurations)
         (attr: nixosConfigurations.${attr}.config.system.build.toplevel);
 
@@ -294,66 +309,48 @@
           )
           inputs.self.hydraJobs.${s}
       ));
+        
       #hydraAll = forAllSystems (s:
       # TODO: map hydraBundles attributes into a linkFarm
-
 
       devices = {
         # pinephone = inputs.self.nixosConfigurations.pinephone.config.mobile.outputs.android;
         blueline = inputs.self.nixosConfigurations.blueline.config.system.build;
-        # enchilada = inputs.self.nixosConfigurations.enchilada.config.mobile.outputs.android;
+        enchilada = inputs.self.nixosConfigurations.enchilada.config.mobile.outputs.android;
       };
-      images =
-        let
+      phones = let 
+        afb = dev: inputs.self.nixosConfigurations."${dev}".config.system.build.mobile-flash-boot; 
+      in {
+        flash-boot = {
+          blueline = afb "blueline";
+          enchilada = afb "enchilada";
+        };
+      };
+      
+      installers = let
+        installer = pkgs.iso;
+      in forAllSystems(s: installer);
+        
+      towboot = let
           #tb_aarch64 = import inputs.tow-boot { pkgs = import inputs.nixpkgs { system = "aarch64-linux"; }; };
           towboot_aarch64 = inputs.tow-boot.packages.aarch64-linux;
           #towboot_rpi_combined = TODO;
-        in
-        rec {
+        in rec {
           #
           # TOW-BOOT IMAGES
           # (todo: consider if we need separate tow-boot images for the rpizero* devices)
           rpizero1_towboot = towboot_armv6l.raspberryPi;
-
           rpifour1_towboot = towboot_aarch64.raspberryPi-aarch64;
           sinkor_towboot = towboot_aarch64.raspberryPi-aarch64;
-
           pinebook_towboot = towboot_aarch64.pine64-pinebookPro;
-
           rpizerotwo1_towboot = towboot_aarch64.raspberryPi-aarch64;
           rpizerotwo2_towboot = towboot_aarch64.raspberryPi-aarch64;
           rpizerotwo3_towboot = towboot_aarch64.raspberryPi-aarch64;
-
           # TODO: replace these with images that use a tow-boot builder to build
           # a normal in-place-updatable nixos
           # rpizero1  = inputs.self.nixosConfigurations.rpizero1.config.system.build.sdImage;
           # rpizero2  = inputs.self.nixosConfigurations.rpizero2.config.system.build.sdImage;
           # rpionebp  = inputs.self.nixosConfigurations.rpionebp.config.system.build.sdImage;
-
-          #
-          # MOBILE-NIXOS IMAGES
-          # blueline = let x = inputs.self.nixosConfigurations.blueline.config.system.build.mobile-nixos; in
-          #   pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "blueline-bundle" ([
-          #     devicesblueline-flash-script
-          #     # ? # devices.blueline.extra
-          #     # devices.blueline.android-fastboot-images
-          #     #x.scripts.nixosBoot
-          #     #x.scripts.factoryReset
-          #     #devices.blueline.android-flashable-bootimg
-          #     #devices.blueline.android-flashable-system
-          #   ]);
-          enchilada = let x = inputs.self.nixosConfigurations.enchilada.config.system.build.mobile-nixos; in
-            pkgs_.nixpkgs.aarch64-linux.linkFarmFromDrvs "enchilada-bundle" ([
-              # valid: # (zstd, device-specific flashing script for PC)
-              #x.scripts.nixos
-              x.scripts.nixosBoot
-              #x.scripts.nixosSystem
-              #x.scripts.factoryReset
-
-              # valid: # (slow, uses zip, no script for PC)
-              #devices.enchilada.android-flashable-bootimg
-              #devices.enchilada.android-flashable-system
-            ]);
         };
 
       # linuxVMs = {

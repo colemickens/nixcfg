@@ -12,7 +12,7 @@ in {
     # - firefox env vars
     home-manager.users.cole = { pkgs, ... }: {
       programs.mpv.config = {
-        gpu-context = "wayland";
+        # gpu-context = "wayland";
       };
     };
 

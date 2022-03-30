@@ -30,8 +30,12 @@
           export KEYTIMEOUT=10
           export MCFLY_RESULTS_SORT="LAST_RUN"
           export LESSHISTFILE=-
-          ${hm.config.lib.shell.exportAll config.environment.sessionVariables}
-          ${hm.config.lib.shell.exportAll hm.config.home.sessionVariables}
+
+          # SESSION
+          ${"" /*hm.config.lib.shell.exportAll config.environment.sessionVariables*/}
+
+          # HM SESSION
+          ${"" /*hm.config.lib.shell.exportAll hm.config.home.sessionVariables*/}
         '';
 
         initExtra = ''

@@ -3,15 +3,10 @@
 {
   config = {
     environment.systemPackages = with pkgs; [
-      libva-utils
+      radeontop
     ];
-    hardware = {
-      opengl = {
-        extraPackages = []
-        ++ lib.optionals (pkgs.system=="x86_64-linux") (with pkgs; [
-          pkgs.mesa.drivers
-        ]);
-      };
-    };
+    hardware.graphics.enable = true;
+    # no driver is needed, amdgpu is in mesa
+    hardware.opengl.extraPackages = [ pkgs.amdvlk ];
   };
 }

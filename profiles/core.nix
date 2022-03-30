@@ -7,10 +7,12 @@
 
     inputs.home-manager.nixosModules."home-manager"
 
-    ../mixins/fish.nix
+    # ../mixins/fish.nix
     ../mixins/git.nix
     ../mixins/helix.nix
     ../mixins/ssh.nix
+    ../mixins/sshd.nix
+    ../mixins/tailscale.nix
     ../mixins/zellij.nix
     ../mixins/zsh.nix
   ];

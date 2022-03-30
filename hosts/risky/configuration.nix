@@ -48,6 +48,5 @@
     services.timesyncd.enable = true;
     time.timeZone = "America/Los_Angeles";
 
-    hardware.enableRedistributableFirmware = false;
   };
 }

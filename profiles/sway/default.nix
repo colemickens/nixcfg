@@ -41,9 +41,8 @@ in {
           automount = false;
           tray = "always";
         };
-        kanshi = {
-          enable = true;
-        };
+        kanshi.enable = true;
+        poweralertd.enable = true;
         wlsunset = {
           enable = true;
           latitude = "47.608103";
@@ -58,7 +57,9 @@ in {
         XDG_CURRENT_DESKTOP = "sway";
       };
       home.packages = with pkgs; [
+        # pulseaudio
         pavucontrol
+        #lxqt.pavucontrol-qt
         sirula
 
         imv

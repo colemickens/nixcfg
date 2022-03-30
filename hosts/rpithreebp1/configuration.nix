@@ -15,11 +15,7 @@ in
       };
     };
     networking = {
-      hostId = "deadb00d";
       hostName = hostname;
-
-      wireless.enable = false;
-      wireless.iwd.enable = false;
 
       interfaces."eth0".ipv4.addresses = [{
         address = "192.168.1.3";

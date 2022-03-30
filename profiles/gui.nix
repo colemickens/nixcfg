@@ -4,8 +4,13 @@ let
   firefoxFlake = inputs.firefox.packages.${pkgs.system};
   #_firefox = firefoxFlake.firefox-nightly-bin;
   _firefox = pkgs.firefox-wayland;
+  _firefox2 =
+    let
+      fnb = firefoxFlake.firefox-nightly-bin;
+      w = pkgs.wrapFirefox fnb.firefox {};
+    in w;
+  
   _chromey = pkgs.ungoogled-chromium;
-  _element = pkgs.element-desktop-wayland;
 in
 {
   imports = [
@@ -51,6 +56,7 @@ in
         # gui cli
         brightnessctl
         pulsemixer
+        alsaUtils
 
         # misc gui
         libnotify
@@ -64,8 +70,8 @@ in
 
         nheko
         librewolf
-        _element
         _firefox
+        # _firefox2
         _chromey
       ]);
     };

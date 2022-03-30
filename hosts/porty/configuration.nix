@@ -1,112 +1,96 @@
 { config, lib, pkgs, modulesPath, inputs, ... }:
 
+# TODO: rename porty back to slynux again
+
+# porty is our testbed device
+# this is because we can trivially boot into windows (slywin)
+# and then repair slynux from there
+
+# TESTING:
+# - (TODO) stage-1-systemd
+# - (TODO) bootspec (grub?)
+# - (TODO) ???
+
 let
-  natDevices = {
-    blueline1 = { link_match.Driver = "rndis_host"; addr = "10.0.88.1/24"; };
-    enchilada1 = { link_match.MACAddress = "0a:6b:c5:7a:8b:d3"; addr = "10.0.99.1/24"; };
+  bridgeName = "br0";
+  bridgeClients = {
+    blueline1 = { match.Driver = "rndis_host"; };
+    enchilada1 = { match.Driver = "cdc_ether"; };
   };
-  mk = (k: v: {
-    networks."40-${k}" = {
-      matchConfig.Name = k;
-      addresses = [{ addressConfig.Address = v.addr; }];
-      linkConfig.RequiredForOnline = false;
-      DHCP = "no";
+  staticNetworkConf = {
+    enable = true;
+    netdevs."10-netdev-br0" = {
+      netdevConfig.Name = bridgeName;
+      netdevConfig.Kind = "bridge";
     };
-    links."20-${k}" = {
-      matchConfig = v.link_match;
-      linkConfig.Name = k;
-      # this only works if the match matches pre-rename...
-      # but luckily we just blanket match on driver or a stable mac now, so :ok:.
-      linkConfig.NamePolicy = "";
+    networks."20-bind-brphone-eth" = {
+      matchConfig.Name = "eno1|eth0|enp8s0";
+      networkConfig = {
+        Bridge = bridgeName;
+        IPv6AcceptRA = true;
+      };
     };
-    # links."30-catch" = {
-    #   matchConfig.OriginalName = "*";
-    #   linkConfig.NamePolicy = "";
-    # };
+    networks."25-network-brphone" = {
+      matchConfig.Name = bridgeName;
+      networkConfig = {
+        DHCP = "yes";
+        IPv6AcceptRA = true;
+        DHCPv6PrefixDelegation = "yes";
+        Use6RD = true;
+        IPForward = "yes";
+      };
+      dhcpV6Config.PrefixDelegationHint = "::64";
+      ipv6PrefixDelegationConfig.Managed = true;
+      linkConfig.RequiredForOnline = "routable";
+    };
+  };
+  mkNetworkBindToBridge = (k: v: {
+    networks."30-${k}" = {
+      matchConfig = v.match;
+      networkConfig.Bridge = bridgeName;
+    };
   });
-  computed = (lib.fold lib.recursiveUpdate {} (lib.mapAttrsToList mk natDevices));
+  bridgeConfs = (lib.fold lib.recursiveUpdate { } (lib.mapAttrsToList mkNetworkBindToBridge bridgeClients));
+  systemdNetworkVal = lib.recursiveUpdate staticNetworkConf bridgeConfs;
 in
 {
   imports = [
     ../../profiles/sway
-    ../../modules/loginctl-linger.nix
 
-    ../../mixins/loremipsum-media/rclone-mnt.nix
-
+    # TODO: move to nixos-hardware
     ../../mixins/gfx-nvidia.nix
+    ../../mixins/gfx-debug.nix
 
     ../../mixins/android.nix
-    #../../mixins/code-server.nix
     ../../mixins/devshells.nix
+    ../../mixins/grub-signed-shim.nix
     ../../mixins/logitech-mouse.nix
-    ../../mixins/plex-mpv.nix
+    ../../mixins/rclone-googledrive-mounts.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
     ../../mixins/zfs.nix
 
     ./qemu-cross-arch.nix
-    ./grub-shim.nix
-    "${inputs.hardware}/common/cpu/amd"
-    "${inputs.hardware}/common/pc/ssd"
+    ./unfree.nix
+    inputs.hardware.nixosModules.common-cpu-amd
+    inputs.hardware.nixosModules.common-pc-ssd
+    # inputs.hardware.nixosModules.common-gpu-nvidia
   ];
 
   config = {
-    # it sometimes boots as a hyper-v guest, so...
-    virtualisation.hypervGuest.enable = true;
+    system.stateVersion = "21.05";
 
-    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-      "nvidia-x11"
-      "nvidia-settings"
-      "cudatoolkit"
-    ];
-
-    environment.systemPackages = with pkgs; [
-      hdparm
-      esphome
-      mokutil
-    ];
-
-    users.users.cole.linger = true;
-
-    boot = {
-      supportedFilesystems = [ "zfs" ];
-      kernelParams = [ "mitigations=off" ];
-    };
-
-    nix.nixPath = [ ];
-    nix.settings.build-cores = lib.mkForce 4;
+    networking.hostName = "porty";
+    systemd.network = systemdNetworkVal;
 
     hardware.usbWwan.enable = true;
 
-    networking.hostName = "porty";
-    networking.hostId = "abbadaba";
-    networking.useDHCP = false;
-    networking.useNetworkd = true;
-    networking.networkmanager.enable = false;
+    virtualisation.hypervGuest.enable = true; # dualboot: Linux, Win11(hyper-v guest)
 
-    systemd.network =
-      lib.traceValSeq (lib.recursiveUpdate computed { 
-        networks."40-eno1" = {
-          matchConfig.Name = "eno1";
-          linkConfig.RequiredForOnline = true;
-          DHCP = "yes";
-        };
-      });
-
-    networking.nat = {
-      enable = true;
-      internalInterfaces = (builtins.attrNames natDevices);
-      externalInterface = "eno1";
-      internalIPs = [ "10.0.0.0/16" ];
-    };
-
-    hardware.enableRedistributableFirmware = true;
     boot.loader.grub.pcmemtest.enable = true;
     boot.initrd.availableKernelModules = [ "sd_mod" "sr_mod" ];
     boot.initrd.kernelModules = [
-      "hv_vmbus"
-      "hv_storvsc" # for booting under hyperv
       "xhci_pci"
       "nvme"
       "usb_storage"
@@ -115,32 +99,30 @@ in
       "uas"
     ];
 
-    fileSystems."/" = { fsType = "zfs"; device = "portypool/root"; };
-    fileSystems."/nix" = { fsType = "zfs"; device = "portypool/nix"; };
-    fileSystems."/home" = { fsType = "zfs"; device = "portypool/home"; };
-    fileSystems."/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/porty-boot"; };
+    fileSystems = let hn = config.networking.hostName; in
+      {
+        "/" = { fsType = "zfs"; device = "${hn}pool/root"; };
+        "/nix" = { fsType = "zfs"; device = "${hn}pool/nix"; };
+        "/home" = { fsType = "zfs"; device = "${hn}pool/home"; };
+        # "/persist" = { fsType = "zfs"; device = "${hn}pool/persist"; }; # TODO
+        "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; };
+      };
 
     boot.initrd.luks.devices."porty-luks" = {
       allowDiscards = true;
       device = "/dev/disk/by-partlabel/porty-luks";
 
+      # TODO: Finish:
+      # ./misc/hyperv/make-luks-disk.sh
       keyFile = "/lukskey";
       fallbackToPassword = true;
     };
+    # TODO: subsequently remove, and then purge old generations and initrds and rotate
+    # keys
     boot.initrd.secrets = {
       "/lukskey" = pkgs.writeText "lukskey" "test";
     };
 
     swapDevices = [ ];
-
-    # This value determines the NixOS release from which the default
-    # settings for stateful data, like file locations and database versions
-    # on your system were taken. It‘s perfectly fine and recommended to leave
-    # this value at the release version of the first install of this system.
-    # Before changing this value read the documentation for this option
-    # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-    system.stateVersion = "21.05"; # Did you read the comment?
-
-    services.fwupd.enable = true;
   };
 }
