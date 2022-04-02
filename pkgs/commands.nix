@@ -209,13 +209,14 @@ let
       echo "hello"
     '')
 
-    (writeShellScriptBin "reboot-nixos" ''
-      next="$(sudo ${efibootmgr_} | rg "Boot(\d+)\*+ nixos-grub-shim" -r '$1')"
-      sudo ${efibootmgr_} --bootnext "$next"
-    '')
-    (writeShellScriptBin "reboot-windows" ''
-      next="$(sudo ${efibootmgr_} | rg "Boot(\d+)\*+ Windows Boot Manager" -r '$1')"
-      sudo ${efibootmgr_} --bootnext "$next"
+    (writeShellScriptBin "bootnext" ''
+      set -e
+      term=$1
+      next="$(sudo ${efibootmgr_} | rg --ignore-case "Boot(\d+)\*+ ''${term}.*" -r '$1')"
+      sudo ${efibootmgr_} --bootnext "$next" >/dev/null
+
+      next="$(sudo ${efibootmgr_} | rg --ignore-case "BootNext: (\d+)" -r '$1')"
+      sudo ${efibootmgr_} | rg "Boot''${next}"
     '')
   ];
 in

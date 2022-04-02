@@ -24,7 +24,7 @@ let
       netdevConfig.Kind = "bridge";
     };
     networks."20-bind-brphone-eth" = {
-      matchConfig.Name = "eno1|eth0|enp8s0";
+      matchConfig.Name = "eno1 | eth0 | enp8s0";
       networkConfig = {
         Bridge = bridgeName;
         IPv6AcceptRA = true;

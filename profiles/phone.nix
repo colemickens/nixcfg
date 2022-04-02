@@ -28,6 +28,8 @@
     #   if the user has overriden the boot.kernelPackages:
     nixcfg.common.defaultKernel = false;
 
+    boot.kernelParams = [ "nofb" ];
+    
     environment.interactiveShellInit = ''
       alias rbb="sudo reboot bootloader"
     '';

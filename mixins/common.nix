@@ -27,6 +27,7 @@ let
         (x: lib.mkForce (lib.kernel.option lib.kernel.no))
       );
     });
+  hn = config.networking.hostName;
 in
 {
   imports = [
@@ -64,7 +65,7 @@ in
     };
   };
 
-  config = {
+  config = ({
     ###################################
     ## DEBLOAT
     ###################################
@@ -151,13 +152,6 @@ in
     ###################################
     ## SYSTEM
     ###################################
-    services.getty.greetingLine = ''\l  -  (kernel: \r) (label: ${config.system.nixos.label}) (arch: \m)'';
-    services.getty.helpLine = ''
-      -... . / --. .- -.-- --..-- / -.. --- / -.-. .-. .. -- .
-    '';
-      
-    services.logind.autovtCount = 3;
-
     services.fwupd.enable = true;
     services.timesyncd.enable = true;
     services.journald.extraConfig = ''
@@ -165,6 +159,12 @@ in
     '';
     i18n.defaultLocale = "en_US.UTF-8";
     time.timeZone = lib.mkDefault "America/Los_Angeles";
+    services.getty = {
+      greetingLine = ''\l  -  (kernel: \r) (label: ${config.system.nixos.label}) (arch: \m)'';
+      helpLine = ''
+        -... . / --. .- -.-- --..-- / -.. --- / -.-. .-. .. -- .
+      '';
+    };
 
     security.sudo.wheelNeedsPassword = false;
     users.mutableUsers = false;
@@ -172,6 +172,6 @@ in
     users.users."root".hashedPassword = config.users.users."root".initialHashedPassword;
 
     hardware.enableRedistributableFirmware = true;
-  };
+  });
 }
 

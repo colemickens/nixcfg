@@ -24,7 +24,7 @@ in
     hardware.firmware = lib.mkBefore [ config.mobile.device.firmware ];
 
     # usb0 never appears with this disabled:
-    mobile.boot.stage-1.networking.enable = true;
+    # mobile.boot.stage-1.networking.enable = true;
 
     networking.hostName = hostname;
     # networking.wireless.iwd.enable = true;
