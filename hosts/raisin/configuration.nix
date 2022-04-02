@@ -26,15 +26,48 @@ in
 
     ./unfree.nix
       
+    ../../modules/ttys.nix
+
     inputs.hardware.nixosModules.common-cpu-amd
     inputs.hardware.nixosModules.common-gpu-amd
     inputs.hardware.nixosModules.common-pc-laptop-ssd
   ];
 
   config = {
+    # TODO: maybe move to common?
+    services.ttys = {
+      unsafe_enable = true;
+      vts = {
+        tty1 = {
+          ttyType = "getty";
+          getty.autologinUser = "cole";
+        };
+        # tty2 (will default to getty, with getty = { similar opts/defaults as getty module })
+        tty3 = {
+          ttyType = "kmscon";
+          kmscon.drm = false;
+          kmscon.hwaccel = false;
+        };
+        tty4 = {
+          ttyType = "kmscon";
+          kmscon.drm = true;
+          kmscon.hwaccel = false;
+        };
+        tty5 = {
+          ttyType = "kmscon";
+          kmscon.drm = true;
+          kmscon.hwaccel = true;
+        };
+        # tty6 is, by default, logind's ReservedVT (however, we run the unit for it)
+        # TODO: the module should assert that "${config.services.logind.reservedVT}" is not set by the user
+      };
+    };
+
+
+
     system.stateVersion = "21.05";
     networking.hostName = hostname;
-    
+
     hardware.bluetooth.enable = true;
     hardware.usbWwan.enable = true;
 
