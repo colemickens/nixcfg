@@ -74,11 +74,11 @@
         profileExtra = ''
           (
           set -x
-          echo "AUTOLOGIN_CMD=''${AUTOLOGIN_CMD}"
-          if [[ -z "$SSH_AUTH_SOCK" ]] && [[ "$(tty)" == /dev/tty1 ]] && [[ "''${AUTOLOGIN_CMD:-""}" != "" ]]; then
-            sleep 1
-            eval "''${AUTOLOGIN_CMD}" &> /tmp/autologin_cmd || true
-            sleep 1
+          echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"     
+          echo "''${AUTOLOGIN_CMD}"
+          echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+          if [[ "$(tty)" == /dev/tty1 ]] && [[ "''${AUTOLOGIN_CMD:-""}" != "" ]]; then
+            "''${AUTOLOGIN_CMD}"
             exit
           fi
           )

@@ -20,6 +20,7 @@ srcdirs=(
   "nixpkgs/master"
   "nixpkgs-wayland"
   "flake-firefox-nightly"
+  "mobile-nixos"
 )
 srcdirs=("${srcdirs[@]/#/"${HOME}/code/"}")
 
@@ -90,15 +91,13 @@ case "${cmd}" in
   "boot-"*)
     dev="$(echo $cmd | cut -d '-' -f2-)"
     script="$(SKIP_CACHIX=1 "${rb}" "${BLDR_A64}" "localhost" "${nixcfg}#phones.flash-boot.${dev}" "${@}")"
-    sh "${script}"
-    fastboot reboot
+    sh "${script}" "reboot"
     ;;
 
   "enchilada" | "blueline")
     "${commbox}"
-    out="$(SKIP_CACHIX=1 "${rb}" "${BLDR_A64}" "localhost" "${nixcfg}#phones.flash-boot.${cmd}" "${@}")"
-    sh "${out}" "reboot"
-    top="$("${rb}" "${BLDR_A64}" "$("${tsip}" "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}")"
+    top="$("${rb}" "${BLDR_A64}" "cachix" "${nixcfg}#toplevels.${cmd}" "${@}")"
+    "${ra}" "$top" "$("${tsip}" "${cmd}")"
   ;;
 
   "towboot")

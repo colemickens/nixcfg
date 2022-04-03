@@ -78,8 +78,8 @@ rec {
   inherit colorscheme;
 
   bgcolor = "#000000";
-  background = "${bgcolor} solid_color";
-  # background = "${bg_gruvbox_rainbow} center #333333";
+  # background = "${bgcolor} solid_color";
+  background = "${bg_gruvbox_rainbow} fit #333333";
   wallpaper = bg_gruvbox_rainbow;
 
   swayfonts = {

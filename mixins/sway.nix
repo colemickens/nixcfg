@@ -172,7 +172,7 @@ in
             base = false; # this should be the default (dbus activation, not sure where XDG_CURRENT_DESKTOP comes from)
             gtk = true; # I think this is also the default...
           };
-          xwayland = true;
+          xwayland = false;
           extraConfig = ''
             seat seat0 xcursor_theme "${prefs.cursor.name}" ${builtins.toString prefs.cursorSize}
           '';

@@ -62,8 +62,12 @@ in
         # TODO: the module should assert that "${config.services.logind.reservedVT}" is not set by the user
       };
     };
-
-
+      
+    # STILL Doesn't get a real session like this
+    # environment.sessionVariables = { AUTOLOGIN_CMD = (pkgs.writeShellScript "sway-start" ''
+    #   sleep 10
+    #   xsway
+    # '').outPath; };
 
     system.stateVersion = "21.05";
     networking.hostName = hostname;

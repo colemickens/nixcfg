@@ -113,6 +113,12 @@ in
     services.resolved.enable = true;
     systemd.network = {
       enable = true;
+      networks."10-dummy" = {
+        matchConfig.Name = "dummy*";
+        networkConfig = {};
+        # linkConfig.ActivationPolicy = "always-down";
+        linkConfig.Unmanaged = "yes";
+      };
       networks."10-usb0" = {
         matchConfig.Name = "usb*";
         networkConfig = {

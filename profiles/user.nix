@@ -21,6 +21,7 @@
         "tss"
         "tty" "users"
         "network" # ? networkctl
+        "lxd" # lxd lxc waydroid
       ];
       uid = 1000;
       group = "cole";
