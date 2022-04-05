@@ -10,7 +10,7 @@ pexit=0; set +e
 ssh "${remote}" \
   "bash -c 'set -xe; \
     test -d /home/colemickens/.config/cachix && exit 199; \
-    nix-env -f /run/current-system/nixpkgs -iA git zellij nixUnstable bottom neovim cachix file; \
+    nix-env -f /run/current-system/nixpkgs -iA git zellij nixUnstable bottom neovim cachix file ripgrep exa; \
     rm -rf ~/.config/cachix; mkdir -p ~/.config/cachix; mkdir -p ~/.config/nix; exit 198 \
   '"
 pexit=$?; set -e

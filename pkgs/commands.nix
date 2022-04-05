@@ -208,6 +208,21 @@ let
       sudo ${msr-tools}/bin/wrmsr -a 0x1FC "$newval"
       echo "hello"
     '')
+    
+    (writeShellScriptBin "vksway-nvidia" ''
+      export VK_ICD_FILENAMES="/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.x86_64.json"
+      export WLR_RENDERER=vulkan
+      echo "nope, nvidia missing ext"
+      exit -1
+      systemctl import-environment --user VK_ICD_FILENAMES WLR_RENDERER
+      xsway
+    '')
+    (writeShellScriptBin "vksway-radeon" ''
+      export VK_ICD_FILENAMES="/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json"
+      export WLR_RENDERER=vulkan
+      systemctl import-environment --user VK_ICD_FILENAMES WLR_RENDERER
+      xsway
+    '')
 
     (writeShellScriptBin "bootnext" ''
       set -e

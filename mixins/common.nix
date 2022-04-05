@@ -90,7 +90,11 @@ in
       # TODO: consider moving to non-interactive hosts only
       kernelParams = [ "mitigations=off" ];
 
-      loader.grub.pcmemtest.enable = lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isx86) true;
+      loader.grub = {
+        pcmemtest.enable = lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isx86) true;
+        timeoutStyle = "hidden";
+        timeout = 1;
+      };
       kernelPackages = lib.mkIf cfg.defaultKernel defaultKernel;
       kernel.sysctl = {
         "fs.file-max" = 100000;

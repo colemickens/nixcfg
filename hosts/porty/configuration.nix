@@ -64,6 +64,7 @@ in
     ../../mixins/android.nix
     ../../mixins/devshells.nix
     ../../mixins/grub-signed-shim.nix
+    ../../mixins/libvirt.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/rclone-googledrive-mounts.nix
     ../../mixins/sshd.nix

@@ -84,13 +84,21 @@ case "${cmd}" in
     "${ra}" "$out" "$("${tsip}" "${cmd}")"
   ;;
   "rpifour1" | "sinkor" | "pinephone" )
+    "${commbox}"
     out="$("${rb}" "${BLDR_A64}" "$("${tsip}" "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}")"
     "${ra}" "$out" "$("${tsip}" "${cmd}")"
   ;;
 
-  "boot-"*)
+  "boot-blueboot" )
     dev="$(echo $cmd | cut -d '-' -f2-)"
-    script="$(SKIP_CACHIX=1 "${rb}" "${BLDR_A64}" "localhost" "${nixcfg}#phones.flash-boot.${dev}" "${@}")"
+    script="$(SKIP_CACHIX=1 "${rb}" "${BLDR_X86}" "localhost" "${nixcfg}#phones.${dev}.flash-boot" "${@}")"
+    sh "${script}" "reboot"
+    ;;
+
+  "boot-"*)
+    "${commbox}"
+    dev="$(echo $cmd | cut -d '-' -f2-)"
+    script="$(SKIP_CACHIX=1 "${rb}" "${BLDR_A64}" "localhost" "${nixcfg}#phones.${dev}.flash-boot" "${@}")"
     sh "${script}" "reboot"
     ;;
 

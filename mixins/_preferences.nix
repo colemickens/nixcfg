@@ -103,6 +103,7 @@ rec {
         liberation_ttf # free corefonts-metric-compatible replacement
         ttf_bitstream_vera
         gelasio
+        powerline-symbols
       ]);
   };
 }

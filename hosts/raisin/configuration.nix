@@ -24,51 +24,14 @@ in
     ../../mixins/wpasupplicant.nix
     ../../mixins/zfs.nix
 
-    ./unfree.nix
+    ./experimental.nix
       
-    ../../modules/ttys.nix
-
     inputs.hardware.nixosModules.common-cpu-amd
     inputs.hardware.nixosModules.common-gpu-amd
     inputs.hardware.nixosModules.common-pc-laptop-ssd
   ];
 
   config = {
-    # TODO: maybe move to common?
-    services.ttys = {
-      unsafe_enable = true;
-      vts = {
-        tty1 = {
-          ttyType = "getty";
-          getty.autologinUser = "cole";
-        };
-        # tty2 (will default to getty, with getty = { similar opts/defaults as getty module })
-        tty3 = {
-          ttyType = "kmscon";
-          kmscon.drm = false;
-          kmscon.hwaccel = false;
-        };
-        tty4 = {
-          ttyType = "kmscon";
-          kmscon.drm = true;
-          kmscon.hwaccel = false;
-        };
-        tty5 = {
-          ttyType = "kmscon";
-          kmscon.drm = true;
-          kmscon.hwaccel = true;
-        };
-        # tty6 is, by default, logind's ReservedVT (however, we run the unit for it)
-        # TODO: the module should assert that "${config.services.logind.reservedVT}" is not set by the user
-      };
-    };
-      
-    # STILL Doesn't get a real session like this
-    # environment.sessionVariables = { AUTOLOGIN_CMD = (pkgs.writeShellScript "sway-start" ''
-    #   sleep 10
-    #   xsway
-    # '').outPath; };
-
     system.stateVersion = "21.05";
     networking.hostName = hostname;
 

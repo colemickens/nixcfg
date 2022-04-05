@@ -72,16 +72,15 @@
         # '';
         # loginExtra = ''
         profileExtra = ''
+          if [[ "''${AUTOLOGIN_CMD}" != "" ]]; then
           (
-          set -x
-          echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"     
-          echo "''${AUTOLOGIN_CMD}"
-          echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-          if [[ "$(tty)" == /dev/tty1 ]] && [[ "''${AUTOLOGIN_CMD:-""}" != "" ]]; then
-            "''${AUTOLOGIN_CMD}"
-            exit
+            if [[ "$(tty)" == /dev/tty1 ]]; then
+              set -x
+              "''${AUTOLOGIN_CMD}"
+              exit
+            fi
+            )
           fi
-          )
         '';
         #   # extra .zprofile
         #   export TZSH_PROFILE_EXTRA=1

@@ -27,6 +27,9 @@ in
 
   config = {
     hardware.opengl.enable = true;
+    hardware.opengl.extraPackages = [
+      pkgs.vulkan-validation-layers
+    ];
 
     # TODO: light or brightnessctl? why both?
     # do we even need either or use DM?

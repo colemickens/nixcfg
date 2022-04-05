@@ -18,7 +18,7 @@ source ../../secrets/unencrypted/qemu-profile-$1
   -spice gl=on,unix=on,addr=/tmp/qemu.socket,disable-ticketing=on)
 [[ "${QEMU_VIRTIO_GPU:-""}" == "win" ]]   && args=("${args[@]}"
   -vga qxl
-  -spice unix=on,addr=/tmp/qemu.socket,disable-ticketing=on
+  # -spice unix=on,addr=/tmp/qemu.socket,disable-ticketing=on
 )
 [[ "${QEMU_EXTRA:-""}" != "" ]] && args=("${args[@]}" "${QEMU_EXTRA[@]}" )
 [[ "${QEMU_UEFI:-""}" != "" ]] && args=("${args[@]}" -bios "${OVMF}")
@@ -33,11 +33,7 @@ sudo qemu-system-x86_64 \
   -monitor "unix:/tmp/qemu-monitor-socket-${1},server,nowait" \
   -device intel-hda -device hda-duplex \
   -device virtio-serial \
-  -device vhost-vsock-pci,id=vhost-vsock-pci0,guest-cid=3 \
-  -device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0 \
-  -chardev spicevmc,id=spicechannel0,name=vdagent \
-  -device virtserialport,chardev=charchannel1,id=channel1,name=org.spice-space.stream.0 \
-  -chardev spiceport,name=org.spice-space.stream.0,id=charchannel1 \
+  # -device vhost-vsock-pci,id=vhost-vsock-pci0,guest-cid=3 \
   "${args[@]}" &
 set -x
 pid=$!
@@ -46,3 +42,7 @@ sudo chown cole:cole /tmp/qemu.socket
 trap 'sudo kill $pid' EXIT
 remote-viewer spice+unix:///tmp/qemu.socket &
 wait $pid
+  # -device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0 \
+  # -chardev spicevmc,id=spicechannel0,name=vdagent \
+  # -device virtserialport,chardev=charchannel1,id=channel1,name=org.spice-space.stream.0 \
+  # -chardev spiceport,name=org.spice-space.stream.0,id=charchannel1 \

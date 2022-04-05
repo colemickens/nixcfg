@@ -15,7 +15,7 @@
 
   inputs = {
     nixlib.url = "github:nix-community/nixpkgs.lib"; #TODO: horrible name! come on!
-    
+
     nixpkgs.url = "github:colemickens/nixpkgs/cmpkgs"; # for my regular nixpkgs
     nixos-unstable-small.url = "github:nixos/nixpkgs/nixos-unstable-small";
     nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -39,7 +39,7 @@
     helix.url = "github:helix-editor/helix";
     jj.url = "github:martinvonz/jj";
     zellij.url = "github:zellij-org/zellij";
-    
+
     # nixos-riscv64.url = "https://github.com/colemickens/nixos-riscv64";
     # jh7100.url = "https://github.com/colemickens/jh7100";
 
@@ -138,12 +138,12 @@
     in
     with _colelib; rec {
       inputs = _inputs;
-        
+
       # devshell = can build anything in it
       # shell = just the binaries, I guess
       # app = runnable, but not easy to remote build??
       # legacyPackages = ${pkgs.system} loophole
-        
+
       devShell = shell;
       devShells = shells;
 
@@ -169,7 +169,7 @@
         let
           app = program: { type = "app"; program = "${program}"; };
           tfout = import ./cloud { terranix = inputs.terranix; pkgs = pkgs_.nixpkgs.${system}; };
-          
+
           mfb = dev: { type = "app"; program = nixosConfigurations.blueline.config.system.build.mobile-flash-boot.outPath; };
         in
         ({
@@ -275,10 +275,10 @@
         # rpizerotwo3 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo3";
         sinkor = mkSystem inputs.nixpkgs "aarch64-linux" "sinkor";
         oracular = mkSystem inputs.nixpkgs "aarch64-linux" "oracular";
-        pinephone   = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
-        blueline    = mkSystem inputs.nixpkgs "aarch64-linux" "blueline";
+        pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
+        blueline = mkSystem inputs.nixpkgs "aarch64-linux" "blueline";
         # blueloco    = mkSystem inputs.nixpkgs "x86_64-linux"  "blueloco";
-        enchilada   = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
+        enchilada = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
         # enchiloco   = mkSystem inputs.nixpkgs "x86_64-linux"  "enchiloco";
         #######################################################################
         # armv6l-linux (cross-built)
@@ -305,37 +305,57 @@
         pkgs_.nixpkgs.${s}.lib.mapAttrs
           (n: v:
             (pkgs_.nixpkgs.${s}.linkFarmFromDrvs "${n}-bundle"
-                (builtins.attrValues v))
+              (builtins.attrValues v))
           )
           inputs.self.hydraJobs.${s}
       ));
-        
+
       #hydraAll = forAllSystems (s:
       # TODO: map hydraBundles attributes into a linkFarm
 
-      devices = {
-        # pinephone = inputs.self.nixosConfigurations.pinephone.config.mobile.outputs.android;
-        blueline = inputs.self.nixosConfigurations.blueline.config.system.build;
-        enchilada = inputs.self.nixosConfigurations.enchilada.config.mobile.outputs.android;
-      };
-      phones = let 
-        afb = dev: inputs.self.nixosConfigurations."${dev}".config.system.build.mobile-flash-boot; 
-      in {
-        flash-boot = {
-          blueline = afb "blueline";
-          enchilada = afb "enchilada";
-        };
-      };
-      
-      installers = let
-        installer = pkgs.iso;
-      in forAllSystems(s: installer);
-        
-      towboot = let
+      # devices = {
+      #   # pinephone = inputs.self.nixosConfigurations.pinephone.config.mobile.outputs.android;
+      #   blueline = inputs.self.nixosConfigurations.blueline.config.system.build;
+      #   enchilada = inputs.self.nixosConfigurations.enchilada.config.mobile.outputs.android;
+      # };
+      phones =
+        let
+          nc = inputs.self.nixosConfigurations;
+          mkPhone = dev: {
+            firmware = nc."${dev}".config.mobile.device.firmware;
+            flash-boot = nc."${dev}".config.system.build.mobile-flash-boot;
+          };
+          phone_hosts = (nixlib.filterAttrs
+            (_: v:
+              # v.meta.class = "phone"; // phone,server,desktop,laptop "string-y"?
+              v.config.networking.hostName == "blueline" || v.config.networking.hostName == "enchilada"
+            )
+            nixosConfigurations);
+
+          result = (
+            (nixlib.genAttrs phone_hosts (x: mkPhone (toplevel x)))
+            //
+            ({
+              "blueboot" = (mkPhone (mkSystem inputs.nixpkgs "x86_64-linux" "blueline"));
+            })
+          );
+          result2 = nixlib.traceVal result;
+        in
+        result2;
+
+      installers =
+        let
+          installer = pkgs.iso;
+        in
+        forAllSystems (s: installer);
+
+      towboot =
+        let
           #tb_aarch64 = import inputs.tow-boot { pkgs = import inputs.nixpkgs { system = "aarch64-linux"; }; };
           towboot_aarch64 = inputs.tow-boot.packages.aarch64-linux;
           #towboot_rpi_combined = TODO;
-        in rec {
+        in
+        rec {
           #
           # TOW-BOOT IMAGES
           # (todo: consider if we need separate tow-boot images for the rpizero* devices)

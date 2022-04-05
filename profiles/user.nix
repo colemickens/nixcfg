@@ -15,10 +15,10 @@
       shell = pkgs.zsh;
       extraGroups = [
         "wheel"
-        "networkmanager" "kvm" "libvirtd" "docker" "transmission" "audio" "video" "sway" "sound"
-        "pulse" "input" "render" "dialout" "keys" "ipfs" "plugdev"
-        "scard"
-        "tss"
+        "kvm" "libvirtd" "qemu-libvirtd" "docker"
+        "audio" "video" "sound" "pulse"
+        "input" "render" "dialout" "keys" "ipfs" "plugdev"
+        "networkmanager" "scard" "tss"
         "tty" "users"
         "network" # ? networkctl
         "lxd" # lxd lxc waydroid

@@ -5,7 +5,10 @@
     virtualisation.libvirtd = {
       enable = true;
       onBoot = "ignore";
-      qemuRunAsRoot = false;
+      qemu.runAsRoot = false;
+      extraConfig = ''
+        unix_sock_group = "libvirtd"
+      '';
     };
 
     virtualisation.spiceUSBRedirection.enable = true;
