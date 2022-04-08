@@ -346,11 +346,11 @@
     },
     "hardware": {
       "locked": {
-        "lastModified": 1648141026,
-        "narHash": "sha256-h8e3+5EZFbYHTMb0DN2ACuQTJBNHpqigvmEV1w2WIuE=",
+        "lastModified": 1649401245,
+        "narHash": "sha256-mce0dpugKD9qgFgzloE2yoYJRD6Bvsy2QDzODpXMsss=",
         "owner": "nixos",
         "repo": "nixos-hardware",
-        "rev": "feceb4d24f582817d8f6e737cd40af9e162dee05",
+        "rev": "ddeb6a0aa430914674d6f0bc1646cf11e799a5bb",
         "type": "github"
       },
       "original": {
@@ -470,11 +470,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1649356419,
-        "narHash": "sha256-rHFBn900Ergr7mTriET6yWvOshkFdjdDier0sU9UTm4=",
+        "lastModified": 1649402565,
+        "narHash": "sha256-Ts9l6Elt2Cxvy2w5yFKBHA/du54eftEpF+ZujecVMZk=",
         "owner": "colemickens",
         "repo": "mobile-nixos",
-        "rev": "569d86067dcef2448b52ee0d70acbc87e99d40b1",
+        "rev": "683a76fefb373de02f94d0375a06bb0f150c8a4c",
         "type": "github"
       },
       "original": {
@@ -1063,11 +1063,11 @@
         "rust-overlay": "rust-overlay_3"
       },
       "locked": {
-        "lastModified": 1649350154,
-        "narHash": "sha256-UtGyUlduVlEIAovbmCRUhcjnR1y2aOmEjh80Xp0RsXY=",
+        "lastModified": 1649401749,
+        "narHash": "sha256-GzMV9nJLbV3oGxmw0poLNai+qdP54+SXM7fOo92U1Ks=",
         "owner": "zellij-org",
         "repo": "zellij",
-        "rev": "d770388e4b9033464a75e0da4f34fe559f2a32f2",
+        "rev": "ae2453ee681d52d4eeb10ddc51d7723701acd638",
         "type": "github"
       },
       "original": {
