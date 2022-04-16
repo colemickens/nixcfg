@@ -60,7 +60,7 @@
 
         # <rust pkgs>
         # https://zaiste.net/posts/shell-commands-rust/
-        bottom
+        bottom zenith
         bat
         tealdeer
         du-dust

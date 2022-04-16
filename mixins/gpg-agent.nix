@@ -102,6 +102,9 @@ in {
       programs.gpg.enable = true;
       programs.gpg.homedir = "${hm.config.xdg.dataHome}/gnupg";
       home.file."${hm.config.programs.gpg.homedir}/.keep".text = "";
+      home.packages = with pkgs; [
+        yubikey-personalization yubico-piv-tool
+      ];
       programs.gpg.package = ecfg.gnupgPkg;
       programs.gpg.scdaemonSettings =
         if ecfg.disableCcid

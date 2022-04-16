@@ -193,6 +193,15 @@ let
       gpg --card-status >/dev/null
       gpg-connect-agent "scd checkpin ${gpgCardId}" /bye
     '')
+    
+    (writeShellScriptBin "oa" ''
+      "''${@}" \
+        --override-input 'nixpkgs' ~/code/nixpkgs/cmpkgs \
+        --override-input 'crosspkgs' ~/code/nixpkgs/crosspkgs \
+        --override-input 'home-manager' ~/code/home-manager/cmhm \
+        --override-input 'mobile-nixos' ~/code/mobile-nixos \
+        --override-input 'nix-coreboot' ~/code/nix-coreboot
+      '')
 
     (writeShellScriptBin "ssh-fix" ''
       ent="$(ls /tmp/ssh-**/agent.* | head -1)"

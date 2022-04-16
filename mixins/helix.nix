@@ -29,6 +29,8 @@ in
           #theme = "base16_terminal";
 
           editor = {
+            line-number = "relative";
+            mouse = true;
             cursor-shape = {
               normal = "block";
               insert = "bar";
@@ -39,7 +41,7 @@ in
               display-messages = true;
               # whitespace = {
               #   render.space = "all";
-              #   render.tab= "all";
+              #   render.tab = "all";
               #   render.newline = "all";
               #   characters.space = "·";
               #   characters.tab = "→";

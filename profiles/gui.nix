@@ -72,6 +72,7 @@ in
         virt-viewer
 
         nheko
+        neochat
         librewolf
         _firefox
         # _firefox2

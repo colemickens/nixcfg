@@ -1,8 +1,5 @@
 { config, lib, pkgs, modulesPath, inputs, ... }:
 
-# TODO: rename porty back to slynux again
-
-# porty is our testbed device
 # this is because we can trivially boot into windows (slywin)
 # and then repair slynux from there
 
@@ -12,39 +9,17 @@
 # - (TODO) ???
 
 let
-  bridgeName = "br0";
+  bridgeName = "wanbr0";
   bridgeClients = {
     blueline1 = { match.Driver = "rndis_host"; };
     enchilada1 = { match.Driver = "cdc_ether"; };
   };
   staticNetworkConf = {
     enable = true;
-    netdevs."10-netdev-br0" = {
-      netdevConfig.Name = bridgeName;
-      netdevConfig.Kind = "bridge";
-    };
-    networks."20-bind-brphone-eth" = {
-      matchConfig.Name = "eno1 | eth0 | enp8s0";
-      networkConfig = {
-        Bridge = bridgeName;
-        IPv6AcceptRA = true;
-      };
-    };
-    networks."25-network-brphone" = {
-      matchConfig.Name = bridgeName;
-      networkConfig = {
-        DHCP = "yes";
-        IPv6AcceptRA = true;
-        DHCPv6PrefixDelegation = "yes";
-        Use6RD = true;
-        IPForward = "yes";
-      };
-      dhcpV6Config.PrefixDelegationHint = "::64";
-      ipv6PrefixDelegationConfig.Managed = true;
-      linkConfig.RequiredForOnline = "routable";
-    };
   };
   mkNetworkBindToBridge = (k: v: {
+    # this is large enough to come after we bond the bridge/bond
+    # but comes before our catch-all rules to add everything else to the bond
     networks."30-${k}" = {
       matchConfig = v.match;
       networkConfig.Bridge = bridgeName;
@@ -82,7 +57,7 @@ in
   config = {
     system.stateVersion = "21.05";
 
-    networking.hostName = "porty";
+    networking.hostName = "slynux";
     systemd.network = systemdNetworkVal;
 
     hardware.usbWwan.enable = true;
@@ -98,6 +73,7 @@ in
       "sd_mod"
       "ehci_pci"
       "uas"
+      "hyperv_drm"
     ];
 
     fileSystems = let hn = config.networking.hostName; in
@@ -109,9 +85,9 @@ in
         "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; };
       };
 
-    boot.initrd.luks.devices."porty-luks" = {
+    boot.initrd.luks.devices."slynux-luks" = {
       allowDiscards = true;
-      device = "/dev/disk/by-partlabel/porty-luks";
+      device = "/dev/disk/by-partlabel/slynux-luks";
 
       # TODO: Finish:
       # ./misc/hyperv/make-luks-disk.sh

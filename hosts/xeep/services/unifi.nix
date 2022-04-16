@@ -7,6 +7,7 @@ let
       8080 # Port for UAP to inform controller.
       8880 # Port for HTTP portal redirect, if guest portal is enabled.
       8843 # Port for HTTPS portal redirect, ditto.
+      8443
       6789 # Port for UniFi mobile speed test.
     ];
     allowedUDPPorts = [
@@ -38,5 +39,7 @@ in
 
     networking.firewall.interfaces."eth0" = allowedRules;
     networking.firewall.interfaces."enp57s0u1u3" = allowedRules;
+    networking.firewall.interfaces."wanbr0" = allowedRules;
+    networking.firewall.interfaces."wanbond0" = allowedRules;
   };
 }

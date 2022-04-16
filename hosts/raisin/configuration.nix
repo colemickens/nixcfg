@@ -6,6 +6,7 @@ in
 {
   imports = [
     ../../profiles/sway/default.nix
+    ../../profiles/dev.nix
 
     # TODO: necessary with the nixosHardware imports?
     ../../mixins/gfx-radeonsi.nix

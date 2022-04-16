@@ -6,8 +6,8 @@ let
   # colorscheme = inputs.nix-rice.colorschemes."Ocean";
 
   bg_gruvbox_rainbow = builtins.fetchurl {
-    url = "https://raw.githubusercontent.com/lunik1/nixos-logo-gruvbox-wallpaper/master/png/gruvbox-dark-rainbow.png";
-    sha256 = "036gqhbf6s5ddgvfbgn6iqbzgizssyf7820m5815b2gd748jw8zc";
+    url = "https://raw.githubusercontent.com/lunik1/nixos-logo-gruvbox-wallpaper/0797f8f90a440fbc1c0a412c133e4814034b0b50/png/gruvbox-dark-rainbow-square.png";
+    sha256 = "1qggwqx0flqxk0ckv4x0a1gbhpchbaqvlpm8xc7xys1kbgwh4d45";
   };
   colordefs = {
     bold_as_bright = true;
@@ -63,7 +63,8 @@ rec {
   };
   # cursor = { name = "capitaine-cursors-white"; package = pkgs.capitaine-cursors; };
 #T# cursor = { name = "apple-cursor"; package = pkgs.apple-cursor; };
-    cursor = { name = "Bibata-Original-Amber"; package = pkgs.bibata-cursors; };
+    # cursor = { name = "Bibata-Original-Amber"; package = pkgs.bibata-cursors; };
+    cursor = null;
   # cursor = { name = "Bibata-Original-Amber"; package = custom-bibata-cursors; };
 #T#cursor = { name = "Graphite"; package = pkgs.graphite-cursors; };
 #T# cursor = { name = "Qogir"; package = pkgs.qogir-cursors; }; # not packaged
@@ -79,7 +80,7 @@ rec {
 
   bgcolor = "#000000";
   # background = "${bgcolor} solid_color";
-  background = "${bg_gruvbox_rainbow} fit #333333";
+  background = "${bg_gruvbox_rainbow} fit #282828";
   wallpaper = bg_gruvbox_rainbow;
 
   swayfonts = {

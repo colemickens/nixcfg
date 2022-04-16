@@ -1,15 +1,13 @@
-{ pkgs, lib, modulesPath, inputs, ... }:
-
+{ pkgs, lib, modulesPath, inputs, config, ... }:
 let
   hostname = "rpizero2";
-in {
+in
+{
   imports = [
     ../rpizero1/configuration.nix
   ];
 
   config = {
-    # these just override some things from rpione
-
     networking.hostName = lib.mkForce hostname;
   };
 }

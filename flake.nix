@@ -17,6 +17,7 @@
     nixlib.url = "github:nix-community/nixpkgs.lib"; #TODO: horrible name! come on!
 
     nixpkgs.url = "github:colemickens/nixpkgs/cmpkgs"; # for my regular nixpkgs
+    crosspkgs.url = "github:colemickens/nixpkgs/crosspkgs"; # for cross fixes that might otherwise cause large rebuilds
     nixos-unstable-small.url = "github:nixos/nixpkgs/nixos-unstable-small";
     nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     stable.url = "github:nixos/nixpkgs/nixos-21.05"; # for cachix
@@ -26,8 +27,6 @@
     #riscvpkgs = { url = "github:zhaofengli/nixpkgs/riscv-cached"; };
     riscvpkgs = { url = "github:colemickens/nixpkgs/risky"; };
     riscv64 = { url = "github:zhaofengli/nixos-riscv64"; };
-
-    # crosspkgs.url = "github:colemickens/nixpkgs/crosspkgs";
 
     home-manager.url = "github:colemickens/home-manager/cmhm";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -66,6 +65,9 @@
     # wip-pinebook-pro.inputs.nixpkgs.follows = "nixpkgs"; # ?? # TODO TODO TODO
 
     nickel = { url = "github:tweag/nickel"; };
+
+    nix-coreboot.url = "github:colemickens/nix-coreboot";
+    nix-coreboot.inputs.nixpkgs.follows = "nixpkgs";
 
     terranix.url = "github:terranix/terranix";
     terranix.inputs.nixpkgs.follows = "nixpkgs";
@@ -257,7 +259,8 @@
         #######################################################################
         # x86_64-linux
         jeffhyper = mkSystem inputs.nixpkgs "x86_64-linux" "jeffhyper";
-        porty = mkSystem inputs.nixpkgs "x86_64-linux" "porty";
+        linbio = mkSystem inputs.nixpkgs "x86_64-linux" "linbio";
+        slynux = mkSystem inputs.nixpkgs "x86_64-linux" "slynux";
         raisin = mkSystem inputs.nixpkgs "x86_64-linux" "raisin";
         xeep = mkSystem inputs.nixpkgs "x86_64-linux" "xeep";
         netboot-x86_64 = mkSystem inputs.nixpkgs "x86_64-linux" "netboot";
@@ -283,7 +286,7 @@
         #######################################################################
         # armv6l-linux (cross-built)
         # rpizero1 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
-        # rpizero2 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
+        rpizero2 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
         # disabled:
         # - oracular_kexec  = mkSystem inputs.nixpkgs "aarch64-linux" "oracular/installer"; # not working, half-abandonded
       };
@@ -312,6 +315,9 @@
 
       #hydraAll = forAllSystems (s:
       # TODO: map hydraBundles attributes into a linkFarm
+      misc = forAllSystems (s: {
+        coreboot_linbio = nixosConfigurations."linbio".config.system.build.coreboot;
+      });
 
       # devices = {
       #   # pinephone = inputs.self.nixosConfigurations.pinephone.config.mobile.outputs.android;
@@ -320,23 +326,24 @@
       # };
       phones =
         let
-          nc = inputs.self.nixosConfigurations;
           mkPhone = dev: {
-            firmware = nc."${dev}".config.mobile.device.firmware;
-            flash-boot = nc."${dev}".config.system.build.mobile-flash-boot;
+            firmware = dev.config.mobile.device.firmware;
+            flash-boot = dev.config.system.build.mobile-flash-boot;
           };
-          phone_hosts = (nixlib.filterAttrs
+          phone_hosts_ = (nixlib.attrNames (nixlib.filterAttrs
             (_: v:
               # v.meta.class = "phone"; // phone,server,desktop,laptop "string-y"?
               v.config.networking.hostName == "blueline" || v.config.networking.hostName == "enchilada"
             )
-            nixosConfigurations);
+            nixosConfigurations));
+          phone_hosts = nixlib.traceVal phone_hosts_;
 
           result = (
-            (nixlib.genAttrs phone_hosts (x: mkPhone (toplevel x)))
+            (nixlib.genAttrs phone_hosts (h: mkPhone nixosConfigurations."${h}")
+            )
             //
             ({
-              "blueboot" = (mkPhone (mkSystem inputs.nixpkgs "x86_64-linux" "blueline"));
+              "blueboot" = (mkPhone (mkSystem inputs.crosspkgs "x86_64-linux" "blueline"));
             })
           );
           result2 = nixlib.traceVal result;

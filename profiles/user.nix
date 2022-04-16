@@ -22,6 +22,7 @@
         "tty" "users"
         "network" # ? networkctl
         "lxd" # lxd lxc waydroid
+        "flashrom"
       ];
       uid = 1000;
       group = "cole";

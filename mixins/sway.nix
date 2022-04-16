@@ -173,9 +173,9 @@ in
             gtk = true; # I think this is also the default...
           };
           xwayland = false;
-          extraConfig = ''
+          extraConfig = (lib.optionalString (prefs.cursor != null) ''
             seat seat0 xcursor_theme "${prefs.cursor.name}" ${builtins.toString prefs.cursorSize}
-          '';
+          '');
           config = rec {
             modifier = "Mod4";
             terminal = prefs.default_term;

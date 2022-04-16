@@ -16,15 +16,18 @@ TAILS_VERSION="${ver}"
 
 # check if we exist
 dest="${HOME}/.cache/sliat-${ver}"
-if [[ -d "${dest}" ]]; then exit 0; fi
+# if [[ -d "${dest}" ]]; then exit 0; fi
 
-# temp workdir
-OUTDIR="$(mktemp -d "/tmp/ktails.XXXXXX")";
-trap "rm -rf ${OUTDIR}" EXIT
+# # temp workdir
+OUTDIR="/tmp/sliat"
+# trap "rm -rf ${OUTDIR}" EXIT
+
+f="tails-amd64-${ver}"
 
 aria2c --dir="${OUTDIR}" --seed-time="${TAILS_SEED_TIME}" -Z \
-  "https://tails.boum.org/torrents/files/tails-amd64-${ver}.iso.torrent" \
-  "https://tails.boum.org/torrents/files/tails-amd64-${ver}.img.torrent" > /dev/stderr
+  "https://tails.boum.org/torrents/files/${f}.iso.torrent" \
+  "https://tails.boum.org/torrents/files/${f}.img.torrent" > /dev/stderr
 
-mv "${OUTDIR}" "${dest}"
+mv "${OUTDIR}/${f}-iso/${f}.iso" "${HOME}/.cache/sliat.iso"
+mv "${OUTDIR}/${f}-img/${f}.img" "${HOME}/.cache/sliat.img"
 

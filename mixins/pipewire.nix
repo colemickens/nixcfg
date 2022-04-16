@@ -17,6 +17,8 @@
     #   (pkgs.system == "x86_64-linux");
   };
 
+  systemd.user.services.pipewire-pulse.path = [ pkgs.pulseaudio ];
+
   services.pipewire = {
     enable = true;
     alsa.enable = true;

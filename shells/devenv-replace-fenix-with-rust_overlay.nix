@@ -29,9 +29,6 @@ in minimalMkShell pkgs.system { # TODO use something else for system?
     /*golang*/ go go-outline gotools godef /*golint*/ gopls
 
     pkg-config
-      
-    /* coreboot */
-    # flashrom # use nixos module for udev rules
   ];
 
   buildInputs = with pkgs; [

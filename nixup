@@ -16,15 +16,20 @@ tsip="./misc/tsip.sh"
 
 srcdirs=(
   "nixpkgs/cmpkgs"
+  "nixpkgs/crosspkgs"
+#  "nixpkgs/cole-unstable"
+#  "nixpkgs/cole-next"
+#  "nixpkgs/cole-cross"
   "home-manager/cmhm"
   "nixpkgs/master"
   "nixpkgs-wayland"
   "flake-firefox-nightly"
   "mobile-nixos"
+  "nix-coreboot"
 )
 srcdirs=("${srcdirs[@]/#/"${HOME}/code/"}")
 
-export BLDR_X86="${BLDR_X86:-$("${tsip}" porty)}";
+export BLDR_X86="${BLDR_X86:-$("${tsip}" slynux)}";
 export BLDR_A64="${BLDR_A64:-"colemickens@aarch64.nixos.community"}";
 
 orig=("${@}")
@@ -42,7 +47,7 @@ cleanup() {
       exec "${0}" "${orig[@]}"
     fi
    fi
-  printf "\n### exit=%s$? (cmd=${cmd})\n" > /dev/stderr
+  printf "\n### exit=%s (cmd=%s)\n" "$?" "$cmd" > /dev/stderr
   exit $retval;
 }
 
@@ -71,7 +76,7 @@ case "${cmd}" in
   ;;
   "pkgup")
     pushd ./pkgs >/dev/null;   ./update.sh "${@:-}";       popd >/dev/null
-    if [[ "${1:-""}" != "" ]]; then "${rb}" "${BLDR_X86}" "$("${tsip}" "porty")" "${nixcfg}#${1}"; fi
+    if [[ "${1:-""}" != "" ]]; then "${rb}" "${BLDR_X86}" "$("${tsip}" "slynux")" "${nixcfg}#${1}"; fi
   ;;
   "lockup")
     set -x; nix "${nixargs[@]}" flake lock --recreate-lock-file --commit-lock-file; set +x
@@ -79,7 +84,7 @@ case "${cmd}" in
   "cacheshell") "${rb}" "${BLDR_X86}" "localhost" ".#devShell.x86_64-linux.inputDerivation";;
 
   # individual build targets
-  "jeffhyper" | "porty" | "raisin" | "xeep" )
+  "jeffhyper" | "slynux" | "raisin" | "xeep" | "rpizero"* )
     out="$("${rb}" "${BLDR_X86}" "$("${tsip}" "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}")"
     "${ra}" "$out" "$("${tsip}" "${cmd}")"
   ;;
@@ -89,17 +94,11 @@ case "${cmd}" in
     "${ra}" "$out" "$("${tsip}" "${cmd}")"
   ;;
 
-  "boot-blueboot" )
-    dev="$(echo $cmd | cut -d '-' -f2-)"
-    script="$(SKIP_CACHIX=1 "${rb}" "${BLDR_X86}" "localhost" "${nixcfg}#phones.${dev}.flash-boot" "${@}")"
-    sh "${script}" "reboot"
-    ;;
-
   "boot-"*)
     "${commbox}"
     dev="$(echo $cmd | cut -d '-' -f2-)"
-    script="$(SKIP_CACHIX=1 "${rb}" "${BLDR_A64}" "localhost" "${nixcfg}#phones.${dev}.flash-boot" "${@}")"
-    sh "${script}" "reboot"
+    script="$(SKIP_CACHIX=1 "${rb}" "${BLDR:-"${BLDR_A64}"}" "localhost" "${nixcfg}#phones.${dev}.flash-boot" "${@}")"
+    FASTBOOT_SLOT="${FASTBOOT_SLOT:-"a"}" sh "${script}" "reboot"
     ;;
 
   "enchilada" | "blueline")
@@ -114,12 +113,12 @@ case "${cmd}" in
   ;;
 
   "x86")
-    "${rb}" "${BLDR_X86}" "$("${tsip}" porty)"  "${nixcfg}#hydraBundles.x86_64-linux.toplevels" "${@}"
-    "${rb}" "${BLDR_X86}" "$("${tsip}" porty)"  "${nixcfg}#hydraBundles.x86_64-linux.shells" "${@}"
+    "${rb}" "${BLDR_X86}" "$("${tsip}" slynux)"  "${nixcfg}#hydraBundles.x86_64-linux.toplevels" "${@}"
+    "${rb}" "${BLDR_X86}" "$("${tsip}" slynux)"  "${nixcfg}#hydraBundles.x86_64-linux.shells" "${@}"
   ;;
   "a64")
     "${commbox}"
-    "${rb}" "${BLDR_A64}" "$("${tsip}" porty)"  "${nixcfg}#hydraBundles.aarch64-linux.toplevels" "${@}"
+    "${rb}" "${BLDR_A64}" "$("${tsip}" slynux)"  "${nixcfg}#hydraBundles.aarch64-linux.toplevels" "${@}"
   ;;
 
   "up")
