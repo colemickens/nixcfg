@@ -96,7 +96,23 @@
         "type": "github"
       }
     },
-    "crosspkgs": {
+    "cross-armv6l": {
+      "locked": {
+        "lastModified": 1651096191,
+        "narHash": "sha256-4Mw+F9zFiNZ9kyA2X1zRa2dGHp0ZFZoCREyIHEMV5bE=",
+        "owner": "colemickens",
+        "repo": "nixpkgs",
+        "rev": "37b99fde3d7061935937ab8ce4a16e5879f48223",
+        "type": "github"
+      },
+      "original": {
+        "owner": "colemickens",
+        "ref": "cmpkgs-cross-armv6l",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "cross-riscv64": {
       "locked": {
         "lastModified": 1651451497,
         "narHash": "sha256-Abq2cMRHE56arhIUTlxWkKN4g7Xs5G/GIcJsuz+8JzM=",
@@ -107,7 +123,7 @@
       },
       "original": {
         "owner": "colemickens",
-        "ref": "crosspkgs",
+        "ref": "cmpkgs-cross-riscv64",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -623,54 +639,6 @@
         "type": "github"
       }
     },
-    "nixos-unstable": {
-      "locked": {
-        "lastModified": 1651007983,
-        "narHash": "sha256-GNay7yDPtLcRcKCNHldug85AhAvBpTtPEJWSSDYBw8U=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "e10da1c7f542515b609f8dfbcf788f3d85b14936",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixos-unstable-git": {
-      "locked": {
-        "lastModified": 1651007983,
-        "narHash": "sha256-GNay7yDPtLcRcKCNHldug85AhAvBpTtPEJWSSDYBw8U=",
-        "ref": "nixos-unstable",
-        "rev": "e10da1c7f542515b609f8dfbcf788f3d85b14936",
-        "revCount": 372961,
-        "type": "git",
-        "url": "https://github.com/nixos/nixpkgs"
-      },
-      "original": {
-        "ref": "nixos-unstable",
-        "type": "git",
-        "url": "https://github.com/nixos/nixpkgs"
-      }
-    },
-    "nixos-unstable-small": {
-      "locked": {
-        "lastModified": 1651114127,
-        "narHash": "sha256-/lLC0wkMZkAdA5e1W76SnJzbhfOGDvync3VRHJMtAKk=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "6766fb6503ae1ebebc2a9704c162b2aef351f921",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable-small",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1646497237,
@@ -832,7 +800,8 @@
     },
     "root": {
       "inputs": {
-        "crosspkgs": "crosspkgs",
+        "cross-armv6l": "cross-armv6l",
+        "cross-riscv64": "cross-riscv64",
         "fenix": "fenix",
         "firefox": "firefox",
         "hardware": "hardware",
@@ -845,14 +814,10 @@
         "nix-coreboot": "nix-coreboot",
         "nix-rice": "nix-rice",
         "nixlib": "nixlib",
-        "nixos-unstable": "nixos-unstable",
-        "nixos-unstable-git": "nixos-unstable-git",
-        "nixos-unstable-small": "nixos-unstable-small",
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "riscv64": "riscv64",
         "sops-nix": "sops-nix",
-        "stable": "stable",
         "terranix": "terranix",
         "tow-boot": "tow-boot",
         "wip-pinebook-pro": "wip-pinebook-pro",
@@ -966,22 +931,6 @@
         "owner": "Mic92",
         "ref": "master",
         "repo": "sops-nix",
-        "type": "github"
-      }
-    },
-    "stable": {
-      "locked": {
-        "lastModified": 1645296114,
-        "narHash": "sha256-y53N7TyIkXsjMpOG7RhvqJFGDacLs9HlyHeSTBioqYU=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "530a53dcbc9437363471167a5e4762c5fcfa34a1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-21.05",
-        "repo": "nixpkgs",
         "type": "github"
       }
     },
