@@ -17,15 +17,12 @@
     nixlib.url = "github:nix-community/nixpkgs.lib"; #TODO: horrible name! come on!
 
     nixpkgs.url = "github:colemickens/nixpkgs/cmpkgs"; # for my regular nixpkgs
-    crosspkgs.url = "github:colemickens/nixpkgs/crosspkgs"; # for cross fixes that might otherwise cause large rebuilds
-    nixos-unstable-small.url = "github:nixos/nixpkgs/nixos-unstable-small";
-    nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    stable.url = "github:nixos/nixpkgs/nixos-21.05"; # for cachix
-    nixos-unstable-git = {
-      url = "git+https://github.com/nixos/nixpkgs?ref=nixos-unstable";
-    };
-    #riscvpkgs = { url = "github:zhaofengli/nixpkgs/riscv-cached"; };
-    riscvpkgs = { url = "github:colemickens/nixpkgs/risky"; };
+    cross-armv6l.url = "github:colemickens/nixpkgs/cmpkgs-cross-armv6l";
+    cross-riscv64.url = "github:colemickens/nixpkgs/cmpkgs-cross-riscv64";
+
+    # nixos-unstable-small.url = "github:nixos/nixpkgs/nixos-unstable-small";
+    # nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    # stable.url = "github:nixos/nixpkgs/nixos-22.05"; # for cachix
     riscv64 = { url = "github:zhaofengli/nixos-riscv64"; };
 
     home-manager.url = "github:colemickens/home-manager/cmhm";
@@ -60,6 +57,7 @@
     tow-boot.inputs.nixpkgs.follows = "nixpkgs"; # TODO: might break u-boot?
 
     mobile-nixos.url = "github:colemickens/mobile-nixos/2022-03-blueline";
+    mobile-nixos.inputs.nixpkgs.follows = "nixpkgs";
 
     wip-pinebook-pro = { url = "github:colemickens/wip-pinebook-pro/master"; flake = false; };
     # wip-pinebook-pro.inputs.nixpkgs.follows = "nixpkgs"; # ?? # TODO TODO TODO
@@ -260,13 +258,15 @@
         # x86_64-linux
         jeffhyper = mkSystem inputs.nixpkgs "x86_64-linux" "jeffhyper";
         linbio = mkSystem inputs.nixpkgs "x86_64-linux" "linbio";
+        pelinux = mkSystem inputs.nixpkgs "x86_64-linux" "pelinux";
         slynux = mkSystem inputs.nixpkgs "x86_64-linux" "slynux";
         raisin = mkSystem inputs.nixpkgs "x86_64-linux" "raisin";
         xeep = mkSystem inputs.nixpkgs "x86_64-linux" "xeep";
         netboot-x86_64 = mkSystem inputs.nixpkgs "x86_64-linux" "netboot";
         #######################################################################
         # riscv-linux
-        risky = mkSystem inputs.riscvpkgs "riscv64-linux" "risky";
+        risky = mkSystem inputs.cross-riscv64 "riscv64-linux" "risky";
+          # ^^^ realistically since this is a native build, I shouldn't _need_ to use crosspkgs
         #######################################################################
         # aarch64-linux
         netboot-aarch64 = mkSystem inputs.nixpkgs "aarch64-linux" "netboot";
@@ -279,14 +279,14 @@
         sinkor = mkSystem inputs.nixpkgs "aarch64-linux" "sinkor";
         oracular = mkSystem inputs.nixpkgs "aarch64-linux" "oracular";
         pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
-        blueline = mkSystem inputs.nixpkgs "aarch64-linux" "blueline";
+        # blueline = mkSystem inputs.nixpkgs "aarch64-linux" "blueline";
         # blueloco    = mkSystem inputs.nixpkgs "x86_64-linux"  "blueloco";
-        enchilada = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
+        # enchilada = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
         # enchiloco   = mkSystem inputs.nixpkgs "x86_64-linux"  "enchiloco";
         #######################################################################
         # armv6l-linux (cross-built)
-        # rpizero1 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero1";
-        rpizero2 = mkSystem inputs.crosspkgs "x86_64-linux" "rpizero2";
+        rpizero1 = mkSystem inputs.cross-armv6l "x86_64-linux" "rpizero1";
+        rpizero2 = mkSystem inputs.cross-armv6l "x86_64-linux" "rpizero2";
         # disabled:
         # - oracular_kexec  = mkSystem inputs.nixpkgs "aarch64-linux" "oracular/installer"; # not working, half-abandonded
       };

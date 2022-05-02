@@ -12,20 +12,20 @@ in
     ../../mixins/gfx-radeonsi.nix
     ../../mixins/gfx-debug.nix
 
+    ../../mixins/android.nix
     ../../mixins/devshells.nix
     ../../mixins/grub-signed-shim.nix
     ../../mixins/hidpi.nix
     ../../mixins/ledger.nix
-    ../../mixins/libvirt.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
     ../../mixins/upower.nix
-    ../../mixins/wpasupplicant.nix
+    ../../mixins/wpa-full.nix
     ../../mixins/zfs.nix
 
-    ./experimental.nix
+    # ./experimental.nix
       
     inputs.hardware.nixosModules.common-cpu-amd
     inputs.hardware.nixosModules.common-gpu-amd
@@ -38,8 +38,6 @@ in
 
     hardware.bluetooth.enable = true;
     hardware.usbWwan.enable = true;
-
-    nix.settings.max-jobs = 8;
 
     services.tlp.enable = true;
     services.fwupd.enable = true;

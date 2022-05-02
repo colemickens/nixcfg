@@ -10,11 +10,11 @@ in
     ../../mixins/grub-signed-shim.nix
     ../../mixins/hidpi.nix
     ../../mixins/logitech-mouse.nix
+    ../../mixins/libvirt.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
-    ../../mixins/samba.nix
     ../../mixins/syncthing.nix
-    ../../mixins/wpasupplicant.nix
+    # ../../mixins/wpa-full.nix # we don't actually want wifi on here, plz use eth
     ../../mixins/zfs.nix
 
     ../../mixins/rclone-googledrive-mounts.nix
@@ -22,6 +22,7 @@ in
     ./services/aria2.nix
     ./services/revproxy.nix
     ./services/home-assistant
+    ./services/samba.nix
     ./services/plex.nix
     ./services/unifi.nix
 
@@ -38,6 +39,29 @@ in
     hardware.cpu.intel.updateMicrocode = true;
     services.fwupd.enable = true;
     services.tlp.enable = lib.mkForce false; # does this come frm nixosHardware?
+      
+    systemd.network = {
+      enable = true;
+      networks."20-eth0-static-ip" = {
+        matchConfig.Driver = "r8152";
+        addresses = [{ addressConfig = { Address = "192.168.1.10/16"; }; }];
+        networkConfig = {
+          Gateway = "192.168.1.1";
+          DNS = "192.168.1.1";
+          DHCP = "ipv6";
+        };
+      };
+      networks."15-block-wlan" = {
+        matchConfig.Name = "wlp2s0";
+        networkConfig = {};
+        linkConfig.Unmanaged = "yes";
+      };
+      networks."16-block-rndis" = {
+        matchConfig.Driver = "rndis_host";
+        networkConfig = {};
+        linkConfig.Unmanaged = "yes";
+      };
+    };
 
     boot = {
       initrd.availableKernelModules = [
@@ -72,6 +96,7 @@ in
       "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/newboot"; };
       "/" = { fsType = "zfs"; device = "tank2/root"; };
       "/home" = { fsType = "zfs"; device = "tank2/home"; };
+      "/backup" = { fsType = "zfs"; device = "tank2/backup"; };
       "/nix" = { fsType = "zfs"; device = "tank2/nix2"; };
     };
     swapDevices = [ ];

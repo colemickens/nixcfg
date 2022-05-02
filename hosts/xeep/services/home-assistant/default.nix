@@ -165,8 +165,13 @@ in {
         switch = [
           {
             platform = "wake_on_lan";
-            name = "redsly";
+            name = "slywin";
             mac = "18-c0-4d-a0-8d-22";
+          }
+          {
+            platform = "wake_on_lan";
+            name = "pelinore";
+            mac = "18-c0-4d-a1-57-91";
           }
         ];
         system_health = { };

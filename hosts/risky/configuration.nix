@@ -12,7 +12,7 @@
   ];
 
   config = {
-    system.stateVersion = "21.05";
+    system.stateVersion = "21.11";
 
     nix.nixPath = [];
     nix.gc.automatic = true;
@@ -26,6 +26,18 @@
       binutils
       usbutils
     ];
+    
+    fileSystems = {
+      # "/boot/firmware" = {
+      #   fsType = "vfat";
+      #   device = "/dev/disk/by-label/FIRMWARE";
+      # };
+      "/" = {
+        device = "/dev/disk/by-label/NIXOS_SD";
+        fsType = "ext4";
+        # fsType = "zfs"; device = "tank2/root";
+      };
+    };
 
     boot = {
       loader = {

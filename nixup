@@ -12,14 +12,14 @@ nixcfg="${DIR}"
 rb="./misc/rbuild.sh"
 ra="./misc/ractivate.sh"
 commbox="${DIR}/misc/commbox.sh"
-tsip="./misc/tsip.sh"
+function tsip() {
+  tailscale ip --6 "${1}"
+}
 
 srcdirs=(
   "nixpkgs/cmpkgs"
-  "nixpkgs/crosspkgs"
-#  "nixpkgs/cole-unstable"
-#  "nixpkgs/cole-next"
-#  "nixpkgs/cole-cross"
+  "nixpkgs/cmpkgs-cross-riscv64"
+  "nixpkgs/cmpkgs-cross-armv6l"
   "home-manager/cmhm"
   "nixpkgs/master"
   "nixpkgs-wayland"
@@ -29,7 +29,7 @@ srcdirs=(
 )
 srcdirs=("${srcdirs[@]/#/"${HOME}/code/"}")
 
-export BLDR_X86="${BLDR_X86:-$("${tsip}" slynux)}";
+# export BLDR_X86="${BLDR_X86:-$(tsip slynux)}";
 export BLDR_A64="${BLDR_A64:-"colemickens@aarch64.nixos.community"}";
 
 orig=("${@}")
@@ -72,11 +72,16 @@ set -x
 case "${cmd}" in
   "inputup")
     parallel -j$(nproc) --halt 1 --verbose --tag update_input ::: "${srcdirs[@]}"
-    parallel -j$(nproc) --halt 1 --verbose --tag rebase_input ::: "${srcdirs[@]}"
+
+    # order _still_ matters
+    # parallel -j$(nproc) --halt 1 --verbose --tag rebase_input ::: "${srcdirs[@]}"
+    for s in "${srcdirs[@]}"; do
+      rebase_input "$s"
+    done
   ;;
   "pkgup")
     pushd ./pkgs >/dev/null;   ./update.sh "${@:-}";       popd >/dev/null
-    if [[ "${1:-""}" != "" ]]; then "${rb}" "${BLDR_X86}" "$("${tsip}" "slynux")" "${nixcfg}#${1}"; fi
+    if [[ "${1:-""}" != "" ]]; then "${rb}" "${BLDR_X86}" "$(tsip "slynux")" "${nixcfg}#${1}"; fi
   ;;
   "lockup")
     set -x; nix "${nixargs[@]}" flake lock --recreate-lock-file --commit-lock-file; set +x
@@ -84,14 +89,14 @@ case "${cmd}" in
   "cacheshell") "${rb}" "${BLDR_X86}" "localhost" ".#devShell.x86_64-linux.inputDerivation";;
 
   # individual build targets
-  "jeffhyper" | "slynux" | "raisin" | "xeep" | "rpizero"* )
-    out="$("${rb}" "${BLDR_X86}" "$("${tsip}" "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}")"
-    "${ra}" "$out" "$("${tsip}" "${cmd}")"
+  "jeffhyper" | "slynux" | "pelinux" | "raisin" | "xeep" | "rpizero"* )
+    out="$("${rb}" "${BLDR_X86}" "$(tsip "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}")"
+    "${ra}" "$out" "$(tsip "${cmd}")"
   ;;
   "rpifour1" | "sinkor" | "pinephone" )
     "${commbox}"
-    out="$("${rb}" "${BLDR_A64}" "$("${tsip}" "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}")"
-    "${ra}" "$out" "$("${tsip}" "${cmd}")"
+    out="$("${rb}" "${BLDR_A64}" "$(tsip "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}")"
+    "${ra}" "$out" "$(tsip "${cmd}")"
   ;;
 
   "boot-"*)
@@ -104,7 +109,7 @@ case "${cmd}" in
   "enchilada" | "blueline")
     "${commbox}"
     top="$("${rb}" "${BLDR_A64}" "cachix" "${nixcfg}#toplevels.${cmd}" "${@}")"
-    "${ra}" "$top" "$("${tsip}" "${cmd}")"
+    "${ra}" "$top" "$(tsip "${cmd}")"
   ;;
 
   "towboot")
@@ -113,12 +118,12 @@ case "${cmd}" in
   ;;
 
   "x86")
-    "${rb}" "${BLDR_X86}" "$("${tsip}" slynux)"  "${nixcfg}#hydraBundles.x86_64-linux.toplevels" "${@}"
-    "${rb}" "${BLDR_X86}" "$("${tsip}" slynux)"  "${nixcfg}#hydraBundles.x86_64-linux.shells" "${@}"
+    "${rb}" "${BLDR_X86}" "cachix"  "${nixcfg}#hydraBundles.x86_64-linux.toplevels" "${@}"
+    "${rb}" "${BLDR_X86}" "cachix"  "${nixcfg}#hydraBundles.x86_64-linux.shells" "${@}"
   ;;
   "a64")
     "${commbox}"
-    "${rb}" "${BLDR_A64}" "$("${tsip}" slynux)"  "${nixcfg}#hydraBundles.aarch64-linux.toplevels" "${@}"
+    "${rb}" "${BLDR_A64}" "cachix"  "${nixcfg}#hydraBundles.aarch64-linux.toplevels" "${@}"
   ;;
 
   "up")
@@ -127,18 +132,17 @@ case "${cmd}" in
     "${0}" pkgup
     "${0}" cacheshell
   ;;
-    "z")
+  "z")
     "${0}" up
-    "${0}" build
+    # "${0}" x86
+    # "${0}" a64
+
+    "${0}" build 
     "${0}" deploy-x86
     "${0}" deploy-a64
   ;;
-  "build")
-    env ZELLIJ_LAYOUT_NAME="nixup.build" \
-      zellij --layout-path "${nixcfg}/nixup.build.zellij"
-  ;;
-  "deploy-x86" | "deploy-a64")
+  "build" | "deploy-x86" | "deploy-a64")
     env ZELLIJ_LAYOUT_NAME="nixup.${cmd}" \
-      zellij --layout-path "${nixcfg}/nixup.${cmd}.zellij"
+      zellij --layout-path "${nixcfg}/${cmd}.zj.yml"
   ;;
 esac

@@ -3,7 +3,7 @@
 {
   imports = [
     ../rpifour1/core.nix
-    ../../mixins/wpasupplicant.nix
+    ../../mixins/wpa-slim.nix
   ];
 
   config = {

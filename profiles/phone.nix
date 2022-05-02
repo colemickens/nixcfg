@@ -3,7 +3,7 @@
 {
   imports = [
     ../profiles/sway
-    ../mixins/wpasupplicant.nix
+    ../mixins/wpa-slim.nix
     ../mixins/gfx-debug.nix
     ../mixins/hidpi.nix
   ];

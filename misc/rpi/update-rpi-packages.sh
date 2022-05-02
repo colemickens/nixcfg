@@ -2,22 +2,22 @@
 set -euo pipefail
 set -x
 
-export UPSTREAM="cmpkgs" # TODO: replace
+export UPSTREAM="rpi" # TODO: replace
 #export UPSTREAM="nixos/nixos-unstable" # TODO replace
 
-export NIXPKGS="/home/cole/code/nixpkgs/cmpkgs"
-export NIX_PATH="nixpkgs=/home/cole/code/nixpkgs/cmpkgs"
+export NIXPKGS_GIT="/home/cole/code/nixpkgs/cmpkgs"
+# export NIX_PATH="nixpkgs=/home/cole/code/nixpkgs/cmpkgs"
 export NIXPKGS_WORKTREE="/home/cole/code/nixpkgs/rpi-updates-auto"
 export TOWBOOT="/home/cole/code/tow-boot"
 export WORKTREE="rpi-updates-auto"
 
 export ARCH="x86_64-linux" # what system you're doing the update from
 
-git -C "${NIXPKGS}" remote update
-git -C "${NIXPKGS}" worktree prune
+git -C "${NIXPKGS_GIT}" remote update
+git -C "${NIXPKGS_GIT}" worktree prune
 if [[ ! -d "${NIXPKGS_WORKTREE}" ]]; then
-  git -C "${NIXPKGS}" branch -D "${WORKTREE}" || true
-  git -C "${NIXPKGS}" worktree add "${NIXPKGS_WORKTREE}" -b "${WORKTREE}"
+  git -C "${NIXPKGS_GIT}" branch -D "${WORKTREE}" || true
+  git -C "${NIXPKGS_GIT}" worktree add "${NIXPKGS_WORKTREE}" -b "${WORKTREE}"
 fi
 git -C "${NIXPKGS_WORKTREE}" reset --hard "${UPSTREAM}"
 
@@ -57,44 +57,34 @@ fi
 t="$(mktemp)"; trap "rm $t" EXIT;
 nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.meta.verinfo" > "${t}" 2>/dev/null
 OLD_BTFW_REV="$(cat "${t}" | jq -r .btfw.rev)"
-OLD_BTFW_SHA256="$(cat "${t}" | jq -r .btfw.sha256)"
+OLD_BTFW_HASH="$(cat "${t}" | jq -r .btfw.hash)"
 OLD_WIFIFW_REV="$(cat "${t}" | jq -r .wififw.rev)"
-OLD_WIFIFW_SHA256="$(cat "${t}" | jq -r .wififw.sha256)"
+OLD_WIFIFW_HASH="$(cat "${t}" | jq -r .wififw.hash)"
 
-OLD_WLFW_OUTPUTHASH="$(cat "${t}" | jq -r .outputHash)"
 OLD_WLFW_VERSION="$(cat "${t}" | jq -r .version)"
+
+PLACEHOLDER0="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 
 if [[ "${OLD_BTFW_REV}" != "${NEW_BTFW_REV}" ||  "${OLD_WIFIFW_REV}" != "${NEW_WIFIFW_REV}" ]]; then
   # do replacement!
   sed -i "s|${OLD_BTFW_REV}|${NEW_BTFW_REV}|g" "${METADATA_FILE}"
-  sed -i "s|${OLD_WLFW_OUTPUTHASH}|0000000000000000000000000000000000000000000000000001|g" "${METADATA_FILE}"
-  sed -i "s|${OLD_BTFW_SHA256}|0000000000000000000000000000000000000000000000000000|g" "${METADATA_FILE}"
+  sed -i "s|${OLD_BTFW_HASH}|${PLACEHOLDER0}|g" "${METADATA_FILE}"
   # copyable:
   nix "${nixargs[@]}" build --no-link "${UPDATE_ATTR}" &> "${t}" || true; cat "${t}"
-  NEW_SHA256="$(cat "${t}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
-  if [[ "${NEW_SHA256}" == "sha256" ]]; then NEW_SHA256="$(cat "${t}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
-  NEW_SHA256="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${NEW_SHA256}")"
-  sed -i "s|0000000000000000000000000000000000000000000000000000|${NEW_SHA256}|" "${METADATA_FILE}"
+  NEW_HASH="$(cat "${t}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
+  if [[ "${NEW_HASH}" == "sha256" ]]; then NEW_HASH="$(cat "${t}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
+  NEW_HASH="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${NEW_HASH}")"
+  sed -i "s|${PLACEHOLDER0}|${NEW_HASH}|" "${METADATA_FILE}"
 
   # do replacement!
   sed -i "s|${OLD_WIFIFW_REV}|${NEW_WIFIFW_REV}|g" "${METADATA_FILE}"
-  sed -i "s|${OLD_WIFIFW_SHA256}|0000000000000000000000000000000000000000000000000000|g" "${METADATA_FILE}"
+  sed -i "s|${OLD_WIFIFW_HASH}|${PLACEHOLDER0}|g" "${METADATA_FILE}"
   # copyable:
   nix "${nixargs[@]}" build --no-link "${UPDATE_ATTR}" &> "${t}" || true; cat "${t}"
-  NEW_SHA256="$(cat "${t}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
-  if [[ "${NEW_SHA256}" == "sha256" ]]; then NEW_SHA256="$(cat "${t}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
-  NEW_SHA256="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${NEW_SHA256}")"
-  sed -i "s|0000000000000000000000000000000000000000000000000000|${NEW_SHA256}|" "${METADATA_FILE}"
-
-  # copyable:
-  nix "${nixargs[@]}" build --no-link "${UPDATE_ATTR}" &> "${t}" || true; cat "${t}"
-  NEW_SHA256="$(cat "${t}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
-  if [[ "${NEW_SHA256}" == "sha256" ]]; then NEW_SHA256="$(cat "${t}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
-  NEW_SHA256="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${NEW_SHA256}")"
-  sed -i "s|0000000000000000000000000000000000000000000000000001|${NEW_SHA256}|" "${METADATA_FILE}"
-
-
-  sed -i "s|${OLD_WLFW_VERSION}|${NEW_WLFW_VERSION}|" "${METADATA_FILE}"
+  NEW_HASH="$(cat "${t}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
+  if [[ "${NEW_HASH}" == "sha256" ]]; then NEW_HASH="$(cat "${t}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
+  NEW_HASH="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${NEW_HASH}")"
+  sed -i "s|${PLACEHOLDER0}|${NEW_HASH}|" "${METADATA_FILE}"
 
   commitmsg="${UPDATE_ATTR_NAME}: ${OLD_WLFW_VERSION} -> ${NEW_WLFW_VERSION}"
   git -C "${NIXPKGS_WORKTREE}" commit "${METADATA_FILE}" -m "${commitmsg}"
@@ -124,26 +114,26 @@ UPDATE_ATTR_NAME="raspberrypi-eeprom"
 t="$(mktemp)"; trap "rm $t" EXIT;
 nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.meta.verinfo" > "${t}" 2>/dev/null
 OLD_EEPROM_REV="$(cat "${t}" | jq -r .rev)"
-OLD_EEPROM_SHA256="$(cat "${t}" | jq -r .sha256)"
+OLD_EEPROM_HASH="$(cat "${t}" | jq -r .hash)"
 OLD_EEPROM_VERSION="$(cat "${t}" | jq -r .version)"
 
 if [[ "${OLD_EEPROM_REV}" != "${NEW_EEPROM_REV}" ]]; then
   # do replacement!
   sed -i "s|${OLD_EEPROM_REV}|${NEW_EEPROM_REV}|g" "${METADATA_FILE}"
-  sed -i "s|${OLD_EEPROM_SHA256}|0000000000000000000000000000000000000000000000000000|g" "${METADATA_FILE}"
+  sed -i "s|${OLD_EEPROM_HASH}|${PLACEHOLDER0}|g" "${METADATA_FILE}"
   # copyable:
   nix "${nixargs[@]}" build --no-link "${UPDATE_ATTR}" &> "${t}" || true; cat "${t}"
-  NEW_SHA256="$(cat "${t}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
-  if [[ "${NEW_SHA256}" == "sha256" ]]; then NEW_SHA256="$(cat "${t}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
-  NEW_SHA256="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${NEW_SHA256}")"
-  sed -i "s|0000000000000000000000000000000000000000000000000000|${NEW_SHA256}|" "${METADATA_FILE}"
+  NEW_HASH="$(cat "${t}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
+  if [[ "${NEW_HASH}" == "sha256" ]]; then NEW_HASH="$(cat "${t}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
+  NEW_HASH="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${NEW_HASH}")"
+  sed -i "s|${PLACEHOLDER0}|${NEW_HASH}|" "${METADATA_FILE}"
 
   sed -i "s|${OLD_EEPROM_VERSION}|${NEW_EEPROM_VERSION}|" "${METADATA_FILE}"
 
   commitmsg="${UPDATE_ATTR_NAME}: ${OLD_EEPROM_VERSION} -> ${NEW_EEPROM_VERSION}"
   git -C "${NIXPKGS_WORKTREE}" commit "${METADATA_FILE}" -m "${commitmsg}"
-  cp -a "${METADATA_FILE}" "${METADATA_DEST}"
-  git -C "${TOWBOOT}" commit "${METADATA_DEST}" -m "overlay/rpi/${commitmsg}"
+  # cp -a "${METADATA_FILE}" "${METADATA_DEST}"
+  # git -C "${TOWBOOT}" commit "${METADATA_DEST}" -m "overlay/rpi/${commitmsg}"
 fi
 
 
@@ -168,26 +158,26 @@ UPDATE_ATTR_NAME="raspberrypifw"
 t="$(mktemp)"; trap "rm $t" EXIT;
 nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.meta.verinfo" > "${t}" 2>/dev/null
 OLD_RPIFW_REV="$(cat "${t}" | jq -r .rev)"
-OLD_RPIFW_SHA256="$(cat "${t}" | jq -r .sha256)"
+OLD_RPIFW_HASH="$(cat "${t}" | jq -r .hash)"
 OLD_RPIFW_VERSION="$(cat "${t}" | jq -r .version)"
 
 if [[ "${OLD_RPIFW_REV}" != "${NEW_RPIFW_REV}" ]]; then
   # do replacement!
   sed -i "s|${OLD_RPIFW_REV}|${NEW_RPIFW_REV}|g" "${METADATA_FILE}"
-  sed -i "s|${OLD_RPIFW_SHA256}|0000000000000000000000000000000000000000000000000000|g" "${METADATA_FILE}"
+  sed -i "s|${OLD_RPIFW_HASH}|${PLACEHOLDER0}|g" "${METADATA_FILE}"
   # copyable:
   nix "${nixargs[@]}" build --no-link "${UPDATE_ATTR}" &> "${t}" || true; cat "${t}"
-  NEW_SHA256="$(cat "${t}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
-  if [[ "${NEW_SHA256}" == "sha256" ]]; then NEW_SHA256="$(cat "${t}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
-  NEW_SHA256="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${NEW_SHA256}")"
-  sed -i "s|0000000000000000000000000000000000000000000000000000|${NEW_SHA256}|" "${METADATA_FILE}"
+  NEW_HASH="$(cat "${t}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
+  if [[ "${NEW_HASH}" == "sha256" ]]; then NEW_HASH="$(cat "${t}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
+  NEW_HASH="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${NEW_HASH}")"
+  sed -i "s|${PLACEHOLDER0}|${NEW_HASH}|" "${METADATA_FILE}"
 
   sed -i "s|${OLD_RPIFW_VERSION}|${NEW_RPIFW_VERSION}|" "${METADATA_FILE}"
 
   commitmsg="${UPDATE_ATTR_NAME}: ${OLD_RPIFW_VERSION} -> ${NEW_RPIFW_VERSION}"
   git -C "${NIXPKGS_WORKTREE}" commit "${METADATA_FILE}" -m "${commitmsg}"
-  cp -a "${METADATA_FILE}" "${METADATA_DEST}"
-  git -C "${TOWBOOT}" commit "${METADATA_DEST}" -m "overlay/rpi/${commitmsg}"
+  # cp -a "${METADATA_FILE}" "${METADATA_DEST}"
+  # git -C "${TOWBOOT}" commit "${METADATA_DEST}" -m "overlay/rpi/${commitmsg}"
 
 fi
 
@@ -211,26 +201,26 @@ UPDATE_ATTR_NAME="raspberrypi-armstubs"
 t="$(mktemp)"; trap "rm $t" EXIT;
 nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.meta.verinfo" > "${t}" 2>/dev/null
 OLD_ARMSTUBS_REV="$(cat "${t}" | jq -r .rev)"
-OLD_ARMSTUBS_SHA256="$(cat "${t}" | jq -r .sha256)"
+OLD_ARMSTUBS_HASH="$(cat "${t}" | jq -r .hash)"
 OLD_ARMSTUBS_VERSION="$(cat "${t}" | jq -r .version)"
 
 if [[ "${OLD_ARMSTUBS_REV}" != "${NEW_ARMSTUBS_REV}" ]]; then
   # do replacement!
   sed -i "s|${OLD_ARMSTUBS_REV}|${NEW_ARMSTUBS_REV}|g" "${METADATA_FILE}"
-  sed -i "s|${OLD_ARMSTUBS_SHA256}|0000000000000000000000000000000000000000000000000000|g" "${METADATA_FILE}"
+  sed -i "s|${OLD_ARMSTUBS_HASH}|${PLACEHOLDER0}|g" "${METADATA_FILE}"
   # copyable:
   nix "${nixargs[@]}" build --no-link "${UPDATE_ATTR}" &> "${t}" || true; cat "${t}"
-  NEW_SHA256="$(cat "${t}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
-  if [[ "${NEW_SHA256}" == "sha256" ]]; then NEW_SHA256="$(cat "${t}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
-  NEW_SHA256="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${NEW_SHA256}")"
-  sed -i "s|0000000000000000000000000000000000000000000000000000|${NEW_SHA256}|" "${METADATA_FILE}"
+  NEW_HASH="$(cat "${t}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
+  if [[ "${NEW_HASH}" == "sha256" ]]; then NEW_HASH="$(cat "${t}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
+  NEW_HASH="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${NEW_HASH}")"
+  sed -i "s|${PLACEHOLDER0}|${NEW_HASH}|" "${METADATA_FILE}"
 
   sed -i "s|${OLD_ARMSTUBS_VERSION}|${NEW_ARMSTUBS_VERSION}|" "${METADATA_FILE}"
 
   commitmsg="${UPDATE_ATTR_NAME}: ${OLD_ARMSTUBS_VERSION} -> ${NEW_ARMSTUBS_VERSION}"
   git -C "${NIXPKGS_WORKTREE}" commit "${METADATA_FILE}" -m "${commitmsg}"
-  cp -a "${METADATA_FILE}" "${METADATA_DEST}"
-  git -C "${TOWBOOT}" commit "${METADATA_DEST}" -m "overlay/rpi/${commitmsg}"
+  # cp -a "${METADATA_FILE}" "${METADATA_DEST}"
+  # git -C "${TOWBOOT}" commit "${METADATA_DEST}" -m "overlay/rpi/${commitmsg}"
 fi
 
 
@@ -254,19 +244,19 @@ UPDATE_ATTR_NAME="libraspberrypi"
 t="$(mktemp)"; trap "rm $t" EXIT;
 nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.meta.verinfo" > "${t}" 2>/dev/null
 OLD_LIBRPI_REV="$(cat "${t}" | jq -r .rev)"
-OLD_LIBRPI_SHA256="$(cat "${t}" | jq -r .sha256)"
+OLD_LIBRPI_HASH="$(cat "${t}" | jq -r .hash)"
 OLD_LIBRPI_VERSION="$(cat "${t}" | jq -r .version)"
 
 if [[ "${OLD_LIBRPI_REV}" != "${NEW_LIBRPI_REV}" ]]; then
   # do replacement!
   sed -i "s|${OLD_LIBRPI_REV}|${NEW_LIBRPI_REV}|g" "${METADATA_FILE}"
-  sed -i "s|${OLD_LIBRPI_SHA256}|0000000000000000000000000000000000000000000000000000|g" "${METADATA_FILE}"
+  sed -i "s|${OLD_LIBRPI_HASH}|${PLACEHOLDER0}|g" "${METADATA_FILE}"
   # copyable:
   nix "${nixargs[@]}" build --no-link "${UPDATE_ATTR}" &> "${t}" || true; cat "${t}"
-  NEW_SHA256="$(cat "${t}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
-  if [[ "${NEW_SHA256}" == "sha256" ]]; then NEW_SHA256="$(cat "${t}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
-  NEW_SHA256="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${NEW_SHA256}")"
-  sed -i "s|0000000000000000000000000000000000000000000000000000|${NEW_SHA256}|" "${METADATA_FILE}"
+  NEW_HASH="$(cat "${t}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
+  if [[ "${NEW_HASH}" == "sha256" ]]; then NEW_HASH="$(cat "${t}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
+  NEW_HASH="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${NEW_HASH}")"
+  sed -i "s|${PLACEHOLDER0}|${NEW_HASH}|" "${METADATA_FILE}"
 
   sed -i "s|${OLD_LIBRPI_VERSION}|${NEW_LIBRPI_VERSION}|" "${METADATA_FILE}"
 
@@ -307,20 +297,20 @@ UPDATE_ATTR_NAME="linux_rpi"
 t="$(mktemp)"; trap "rm $t" EXIT;
 nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.meta.verinfo" > "${t}" 2>/dev/null
 OLD_LINUXRPI_REV="$(cat "${t}" | jq -r .rev)"
-OLD_LINUXRPI_SHA256="$(cat "${t}" | jq -r .sha256)"
+OLD_LINUXRPI_HASH="$(cat "${t}" | jq -r .hash)"
 OLD_LINUXRPI_VERSION="$(cat "${t}" | jq -r .version)"
 OLD_LINUXRPI_TAG="$(cat "${t}" | jq -r .tag)"
 
 if [[ "${OLD_LINUXRPI_REV}" != "${NEW_LINUXRPI_REV}" ]]; then
   # do replacement!
   sed -i "s|${OLD_LINUXRPI_REV}|${NEW_LINUXRPI_REV}|g" "${METADATA_FILE}"
-  sed -i "s|${OLD_LINUXRPI_SHA256}|0000000000000000000000000000000000000000000000000000|g" "${METADATA_FILE}"
+  sed -i "s|${OLD_LINUXRPI_HASH}|${PLACEHOLDER0}|g" "${METADATA_FILE}"
   # copyable:
   nix "${nixargs[@]}" build --no-link "${UPDATE_ATTR}" &> "${t}" || true; cat "${t}"
-  NEW_SHA256="$(cat "${t}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
-  if [[ "${NEW_SHA256}" == "sha256" ]]; then NEW_SHA256="$(cat "${t}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
-  NEW_SHA256="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${NEW_SHA256}")"
-  sed -i "s|0000000000000000000000000000000000000000000000000000|${NEW_SHA256}|" "${METADATA_FILE}"
+  NEW_HASH="$(cat "${t}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
+  if [[ "${NEW_HASH}" == "sha256" ]]; then NEW_HASH="$(cat "${t}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
+  NEW_HASH="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${NEW_HASH}")"
+  sed -i "s|${PLACEHOLDER0}|${NEW_HASH}|" "${METADATA_FILE}"
 
   sed -i "s|${OLD_LINUXRPI_VERSION}|${NEW_LINUXRPI_VERSION}|" "${METADATA_FILE}"
 

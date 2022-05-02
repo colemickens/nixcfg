@@ -7,7 +7,7 @@
 
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
-    ../../mixins/wpasupplicant.nix
+    ../../mixins/wpa-slim.nix
 
     # TODO: still not working, it doesn't actually stop "loading" often times? wtf, or is that my restart wait?
     ../../modules/tailscale-autoconnect.nix

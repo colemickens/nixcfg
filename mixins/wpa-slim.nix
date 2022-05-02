@@ -2,19 +2,6 @@
 
 {
   config = {
-    # TODO: fix rfkill instead:
-    system.activationScripts.rfkillUnblockWan = {
-      text = ''
-        (
-          set -x
-          rfkill unblock wlan
-        )
-      '';
-      deps = [ ];
-    };
-    environment.systemPackages = with pkgs; [
-      # wpa_supplicant_gui
-    ];
     networking.wireless = {
       enable = true;
       userControlled.enable = true;

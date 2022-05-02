@@ -172,7 +172,7 @@ in
             base = false; # this should be the default (dbus activation, not sure where XDG_CURRENT_DESKTOP comes from)
             gtk = true; # I think this is also the default...
           };
-          xwayland = false;
+          xwayland = true;
           extraConfig = (lib.optionalString (prefs.cursor != null) ''
             seat seat0 xcursor_theme "${prefs.cursor.name}" ${builtins.toString prefs.cursorSize}
           '');
@@ -243,6 +243,8 @@ in
               "${modifier}+Escape" = "exec ${prefs.default_launcher}";
               "${modifier}+Ctrl+Alt+Delete" = "exec ${swaymsg} exit || true";
               "${modifier}+Ctrl+Alt+Insert" = "exec ${swaymsg} reload";
+                  
+              "${modifier}+Ctrl+Alt+F12" = "exec ${pkgs.procps}/bin/pkill -9 -f remote-viewer";
 
               "${modifier}+Alt+F1" = "exec ${cmd_pass}";
               "${modifier}+Alt+F2" = "exec ${cmd_totp}";
@@ -306,8 +308,8 @@ in
               "${modifier}+Shift+minus" = "move scratchpad";
               "${modifier}+minus" = "scratchpad show";
 
-              "${modifier}+Ctrl+Alt+Home" = "output * enable";
-              "${modifier}+Ctrl+Alt+End" = "output -- disable";
+              "--locked ${modifier}+Ctrl+Alt+Home" = "output * enable";
+              "--locked ${modifier}+Ctrl+Alt+End" = "output -- disable";
               "${modifier}+Ctrl+Alt+equal" = "exec ${outputScale} +.1";
               "${modifier}+Ctrl+Alt+minus" = "exec ${outputScale} -.1";
 

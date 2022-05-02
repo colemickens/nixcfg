@@ -13,13 +13,18 @@ in
 
     systemd.network = {
       networks."20-eth0-static-ip" = {
-        matchConfig.Name = "eth0";
-        addresses = [{ addressConfig = { Address = "192.168.1.2/16"; }; }];
+        matchConfig.Driver = "r8152";
+        addresses = [{ addressConfig = { Address = "192.168.1.10/16"; }; }];
         networkConfig = {
           Gateway = "192.168.1.1";
           DNS = "192.168.1.1";
           DHCP = "ipv6";
         };
+      };
+      networks."15-block-wlan" = {
+        matchConfig.Name = "wlan0";
+        networkConfig = {};
+        linkConfig.Unmanaged = "yes";
       };
     };
 

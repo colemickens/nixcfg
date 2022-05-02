@@ -9,6 +9,8 @@
 # - (TODO) ???
 
 let
+  hn = "slynux";
+  
   bridgeName = "wanbr0";
   bridgeClients = {
     blueline1 = { match.Driver = "rndis_host"; };
@@ -39,7 +41,6 @@ in
     ../../mixins/android.nix
     ../../mixins/devshells.nix
     ../../mixins/grub-signed-shim.nix
-    ../../mixins/libvirt.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/rclone-googledrive-mounts.nix
     ../../mixins/sshd.nix
@@ -47,7 +48,6 @@ in
     ../../mixins/tailscale.nix
     ../../mixins/zfs.nix
 
-    ./qemu-cross-arch.nix
     ./unfree.nix
     inputs.hardware.nixosModules.common-cpu-amd
     inputs.hardware.nixosModules.common-pc-ssd
@@ -85,9 +85,9 @@ in
         "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; };
       };
 
-    boot.initrd.luks.devices."slynux-luks" = {
+    boot.initrd.luks.devices."${hn}-luks" = {
       allowDiscards = true;
-      device = "/dev/disk/by-partlabel/slynux-luks";
+      device = "/dev/disk/by-partlabel/${hn}-luks";
 
       # TODO: Finish:
       # ./misc/hyperv/make-luks-disk.sh

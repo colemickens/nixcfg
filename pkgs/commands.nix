@@ -195,13 +195,15 @@ let
     '')
     
     (writeShellScriptBin "oa" ''
-      "''${@}" \
-        --override-input 'nixpkgs' ~/code/nixpkgs/cmpkgs \
-        --override-input 'crosspkgs' ~/code/nixpkgs/crosspkgs \
-        --override-input 'home-manager' ~/code/home-manager/cmhm \
-        --override-input 'mobile-nixos' ~/code/mobile-nixos \
-        --override-input 'nix-coreboot' ~/code/nix-coreboot
-      '')
+      export NIX_FLAGS_EXTRA=(
+        --override-input 'nixpkgs' "$HOME/code/nixpkgs/cmpkgs"
+        --override-input 'crosspkgs' "$HOME/code/nixpkgs/crosspkgs"
+        --override-input 'home-manager' "$HOME/code/home-manager/cmhm"
+        --override-input 'mobile-nixos' "$HOME/code/mobile-nixos"
+        --override-input 'nix-coreboot' "$HOME/code/nix-coreboot"
+      )
+      exec "''${@}"
+    '')
 
     (writeShellScriptBin "ssh-fix" ''
       ent="$(ls /tmp/ssh-**/agent.* | head -1)"

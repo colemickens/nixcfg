@@ -18,8 +18,8 @@ in {
         ln -sf /home/cole/.ssh/known_hosts /root/.ssh/known_hosts
         
         # and we control our own SSH_AUTH_SOCK fate
-        mkdir -p "$(dirname "${fixedSshAgentSocket}")" || true
-        ln -sf "${gpgSshSock}" "${fixedSshAgentSocket}" || true
+        # mkdir -p "$(dirname "${fixedSshAgentSocket}")" || true
+        # ln -sf "${gpgSshSock}" "${fixedSshAgentSocket}" || true
       )
       '';
       deps = [];
@@ -36,6 +36,11 @@ in {
         #serverAliveInterval = 5;
         #serverAliveCountMax = 2;
         matchBlocks = {
+          "localhost2222" = {
+            hostname = "localhost";
+            port = 2222;
+            identityAgent = fixedSshAgentSocket;
+          };
           "*" = {
             # everything sucks about SSH_AUTH_SOCK, so let's just control
             # it and what it points to directly

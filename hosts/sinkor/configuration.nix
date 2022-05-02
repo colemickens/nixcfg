@@ -6,7 +6,7 @@ in
   imports = [
     ../../profiles/interactive.nix # linger + secrets
     ../../mixins/syncthing.nix
-    ../../mixins/wpasupplicant.nix
+    ../../mixins/wpa-full.nix
 
     # TODO: adopt this on all machines, move to common
     inputs.impermanence.nixosModules.impermanence

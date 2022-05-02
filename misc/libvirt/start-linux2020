@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+sudo setfacl -m g:libvirtd:r-x /boot/x /backup/new_nvme_fake /home/cole
+virsh -c 'qemu:///system' start linux2020
+
+sleep 2
+remote-viewer "spice://localhost:5900" 

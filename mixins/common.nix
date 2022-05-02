@@ -117,11 +117,6 @@ in
       networking.useNetworkd = true;
       services.resolved.enable = true;
       systemd.network =
-        let
-          bridge = "wanbr0";
-          bridge2 = "vmbr0";
-          bond = "wanbond0";
-        in
         {
           enable = true;
 
@@ -133,43 +128,8 @@ in
             linkConfig.Unmanaged = "yes";
           };
 
-          # setup a bond
-          netdevs."09-netdev-${bond}" = {
-            netdevConfig.Name = bond;
-            netdevConfig.Kind = "bond";
-            bondConfig = {
-              Mode = "active-backup";
-              PrimaryReselectPolicy = "always";
-              MIIMonitorSec = "1s";
-            };
-          };
-          # setup a bridge to the bond to allow bridged devices a way out
-          netdevs."10-netdev-${bridge}" = {
-            netdevConfig.Name = bridge;
-            netdevConfig.Kind = "bridge";
-          };
-          netdevs."10-netdev-${bridge2}" = {
-            netdevConfig.Name = bridge2;
-            netdevConfig.Kind = "bridge";
-          };
-          # bind them
-          networks."25-bind-${bridge}-${bond}" = {
-            matchConfig.Name = bond;
-            networkConfig = {
-              Bridge = bridge;
-              # DHCP = "yes";
-              # IPv6AcceptRA = true;
-            };
-          };
-
-          # actually dhcp on our bond out to the wan
-          # networks."25-network-${bond}" = {
-          #   matchConfig.Name = bond;
-          #   linkConfig.RequiredForOnline = "no";
-          #   # linkConfig.ActivationPolicy = "bound";
-          # };
-          networks."20-network-${bridge}" = {
-            matchConfig.Name = bridge;
+          networks."20-network-defaults" = {
+            matchConfig.Name = "en* | eth* | usb* | wl*";
             networkConfig = {
               DHCP = "yes";
               IPv6AcceptRA = true;
@@ -180,48 +140,6 @@ in
             # dhcpV4Config.ClientIdentifier = "mac";
             dhcpV4Config.Use6RD = "yes";
             dhcpV6Config.PrefixDelegationHint = "::64";
-            linkConfig.RequiredForOnline = "yes";
-          };
-          networks."20-network-${bridge2}" = {
-            matchConfig.Name = bridge2;
-            networkConfig = {
-              DHCP = "no";
-              Address="10.0.200.0/24";
-              DHCPServer = "yes";
-              IPForward = "ipv4";
-              IPMasquerade = "ipv4";
-            };
-            dhcpServerConfig = {
-              # ServerAddress = "10.0.200.0/24";
-              EmitDNS = "yes";
-              DNS = "1.1.1.1";
-              PoolSize=20;
-              PoolOffset=0;
-            };
-            linkConfig.RequiredForOnline = "no";
-          };
-  
-          # TODO: catch all - bind all the rndis_host/cdc_ethers?
-              
-          # catch all defaults
-          # - remaining USB devices are probably usb adapters
-          #   so put them in our WAN bond
-          networks."90-bond-eth" = {
-            matchConfig.Name = "en* | eth*";
-            networkConfig = {
-              Bond = bond;
-              PrimarySlave = "yes";
-            };
-            linkConfig.RequiredForOnline = "no";
-            # linkConfig.ActivationPolicy = "...";
-          };
-          networks."91-bond-the-rest" = {
-            matchConfig.Name = "usb* | wl*";
-            networkConfig = {
-              Bond = bond;
-            };
-            linkConfig.RequiredForOnline = "no";
-            # linkConfig.ActivationPolicy = "bound";
           };
         };
 

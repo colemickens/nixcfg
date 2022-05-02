@@ -55,21 +55,25 @@ rec {
 # T # iconTheme = { name = "McMojave-circle"; package = pkgs.mcmojave-icon-theme; };
 
     # theme = { name = "Arc-Dark"; package = pkgs.arc-theme; };
-    theme = { name = "Orchis-purple-dark-compact"; package = pkgs.orchis-theme; };
-    # theme = { name = "WhiteSur-dark-solid"; package = pkgs.whitesur-gtk-theme; };
+    # theme = { name = "Orchis-purple-dark-compact"; package = pkgs.orchis-theme; };
+    theme = { name = "WhiteSur-dark-solid"; package = pkgs.whitesur-gtk-theme; };
     # theme = { name = "Mojave-dark-solid"; package = pkgs.mojave-gtk-theme; };
 #ew # theme = { name = "Marwaita Color Dark"; package = pkgs.marwaita; };
     # theme = { name = "Qogir-dark"; package = pkgs.qogir-theme; };
   };
+  
+  ## cursor
   # cursor = { name = "capitaine-cursors-white"; package = pkgs.capitaine-cursors; };
 #T# cursor = { name = "apple-cursor"; package = pkgs.apple-cursor; };
-    # cursor = { name = "Bibata-Original-Amber"; package = pkgs.bibata-cursors; };
-    cursor = null;
+  # cursor = { name = "Bibata-Original-Amber"; package = pkgs.bibata-cursors; };
+  # cursor = null;
   # cursor = { name = "Bibata-Original-Amber"; package = custom-bibata-cursors; };
 #T#cursor = { name = "Graphite"; package = pkgs.graphite-cursors; };
 #T# cursor = { name = "Qogir"; package = pkgs.qogir-cursors; }; # not packaged
   # cursor = { name = "phinger-cursors-light"; package = pkgs.phinger-cursors; };
+  cursor = { name = "macOSBigSur"; package = pkgs.apple-cursor; };
   cursorSize = 48;
+  
   themes = {
     alacritty = colorscheme // colordefs;
     sway = colorscheme // colordefs;

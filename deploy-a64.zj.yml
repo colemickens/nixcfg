@@ -31,40 +31,36 @@ tabs:
     name: "nixup"
     parts:
       - direction: Horizontal
-        split_size:
-          Percent: 50
+        parts:
+          - direction: Vertical
+            pane_name: "nixup rpizero1"
+            run:
+              command: {cmd: ./nixup, args: ["rpizero1"]}
+          - direction: Vertical
+            pane_name: "nixup rpizero2"
+            run:
+              command: {cmd: ./nixup, args: ["rpizero2"]}
+      - direction: Horizontal
         parts:
           - direction: Vertical
             pane_name: "nixup rpifour1"
-            split_size:
-              Percent: 50
             run:
               command: {cmd: ./nixup, args: ["rpifour1"]}
           - direction: Vertical
             pane_name: "nixup sinkor"
-            split_size:
-              Percent: 50
             run:
               command: {cmd: ./nixup, args: ["sinkor"]}
       - direction: Horizontal
-        split_size:
-          Percent: 50
         parts:
           - direction: Vertical
             pane_name: "nixup pinephone"
-            split_size:
-              Percent: 33
             run:
               command: {cmd: ./nixup, args: ["pinephone"]}
-          - direction: Vertical
-            pane_name: "nixup blueline"
-            split_size:
-              Percent: 33
-            run:
-              command: {cmd: ./nixup, args: ["blueline"]}
-          - direction: Vertical
-            pane_name: "nixup blueline"
-            split_size:
-              Percent: 34
-            run:
-              command: {cmd: ./nixup, args: ["blueline"]}
+          # - direction: Vertical
+          #   pane_name: "nixup blueline"
+          #   run:
+          #     command: {cmd: ./nixup, args: ["blueline"]}
+          # - direction: Vertical
+          #   pane_name: "nixup enchilada"
+          #   run:
+          #     command: {cmd: ./nixup, args: ["enchilada"]}

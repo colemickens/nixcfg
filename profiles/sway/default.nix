@@ -61,6 +61,10 @@ in {
         pavucontrol
         #lxqt.pavucontrol-qt
         sirula
+        
+        # file managers TODO: pick one?
+        xfce.thunar
+        gnome.nautilus
 
         imv
         grim

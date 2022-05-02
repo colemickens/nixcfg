@@ -5,7 +5,6 @@ let
   selfPools = [ "${config.networking.hostName}pool" ];
   customPools = {
     "xeep" = "tank2";
-    "raisin" = "raisintank";
   };
   pools =
     if (builtins.hasAttr hn customPools)

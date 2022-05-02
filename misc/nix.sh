@@ -2,6 +2,10 @@
 set -euo pipefail
 allargs=(--experimental-features "nix-command flakes")
 
+if [[ "${NIX_EXTRA_FLAGS[@]:-""}" != "" ]]; then
+  allargs=("${allargs[@]}" "${NIX_EXTRA_FLAGS[@]}")
+fi
+
 if [[ "${LEGACY:-""}" != "true" ]]; then
   allargs=(
     "${allargs[@]}"

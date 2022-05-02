@@ -60,7 +60,8 @@
 
         # <rust pkgs>
         # https://zaiste.net/posts/shell-commands-rust/
-        bottom zenith
+        bottom
+        # zenith # uh oh, no aarch64 support? noooooo
         bat
         tealdeer
         du-dust
@@ -82,6 +83,8 @@
         # </rust pkgs>
         python3Packages.pywatchman
 
+        xplr
+        
         difftastic
         cpio # needed?
         usbutils

@@ -27,38 +27,17 @@ pane_frames: true
 #           location: "zellij:status-bar"
 
 tabs:
-  - direction: Vertical
+  - direction: Horizontal
     name: "nixup"
     parts:
-      - direction: Horizontal
-        split_size:
-          Percent: 50
-        parts:
-          - direction: Vertical
-            pane_name: "nixup x86"
+      - parts:
+          - pane_name: "nixup x86"
             split_size:
               Percent: 50
             run:
               command: {cmd: ./nixup, args: ["x86"]}
-          - direction: Vertical
-            pane_name: "nixup a64"
+          - pane_name: "nixup a64"
             split_size:
               Percent: 50
             run:
               command: {cmd: ./nixup, args: ["a64"]}
-      - direction: Horizontal
-        split_size:
-          Percent: 50
-        parts:
-          - direction: Vertical
-            pane_name: "local btm"
-            split_size:
-              Percent: 30
-            run:
-              command: {cmd: bash, args: ["-c", "set -x; ssh -t ${BLDR_X86} 'btm -b'"]}
-          - direction: Vertical
-            pane_name: "commbox btm"
-            split_size:
-              Percent: 70
-            run:
-              command: {cmd: bash, args: ["-c", "set -x; ./misc/commbox.sh && ssh -t ${BLDR_A64} 'btm -b'"]}

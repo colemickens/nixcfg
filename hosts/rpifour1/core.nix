@@ -37,7 +37,7 @@ in
   imports = [
     ../../profiles/interactive.nix
 
-    ../../mixins/wpasupplicant.nix
+    ../../mixins/wpa-full.nix
   ];
 
   #

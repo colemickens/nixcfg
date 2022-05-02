@@ -33,10 +33,6 @@
           }
 
           {
-            name = "Redsly PC";
-            entity = "switch.redsly";
-          }
-          {
             name = "Receiver";
             entity = "media_player.denon";
           }
@@ -47,16 +43,12 @@
         type = "entities";
         entities = [
           {
-            name = "Desk Motor";
-            entity = "switch.wp6_sw102_relay";
+            name = "[slywin] WoL";
+            entity = "switch.slywin";
           }
           {
             name = "Dab Rig";
             entity = "switch.wp6_sw104_relay";
-          }
-          {
-            name = "Volcano";
-            entity = "switch.wp6_sw103_relay";
           }
           {
             name = "Lava Lamp";
@@ -70,6 +62,24 @@
           #   name = "Wall Outlet 2";
           #   entity = "switch.wp6_sw107_relay";
           # }
+        ];
+      }
+      {
+        title = "Bedroom";
+        type = "entities";
+        entities = [
+          {
+            name = "[pelinore] WoL";
+            entity = "switch.pelinore";
+          }
+          {
+            name = "Desk Motor";
+            entity = "switch.wp6_sw102_relay";
+          }
+          {
+            name = "Flower Lamp";
+            entity = "switch.wp6_sw103_relay";
+          }
         ];
       }
       # {

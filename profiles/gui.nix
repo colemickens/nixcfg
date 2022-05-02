@@ -2,14 +2,9 @@
 
 let
   firefoxFlake = inputs.firefox.packages.${pkgs.system};
-  #_firefox = firefoxFlake.firefox-nightly-bin;
-  _firefox = pkgs.firefox-wayland;
-  _firefox2 =
-    let
-      fnb = firefoxFlake.firefox-nightly-bin;
-      w = pkgs.wrapFirefox fnb.firefox {};
-    in w;
-  
+  # _firefox = pkgs.firefox-wayland;
+  _firefox = lib.hiPrio firefoxFlake.firefox-nightly-bin;
+
   _chromey = pkgs.ungoogled-chromium;
 in
 {
@@ -48,36 +43,39 @@ in
         BROWSER = "firefox";
         MOZ_USE_XINPUT2 = "1";
       };
-      
+
       services.pass-secret-service = {
         enable = true;
       };
 
-      home.packages = (with pkgs; [
-        colePackages.customGuiCommands
+      home.packages = (
+        (with pkgs; [
+          colePackages.customGuiCommands
 
-        # gui cli
-        brightnessctl
-        pulsemixer
-        alsaUtils
+          # gui cli
+          brightnessctl
+          pulsemixer
+          alsaUtils
 
-        # misc gui
-        libnotify
-        evince
-        gimp
-        qemu
-        freerdp
-        vlc
+          # misc gui
+          libnotify
+          evince
+          gimp
+          qemu
+          freerdp
+          vlc
 
-        virt-viewer
+          virt-viewer
 
-        nheko
-        neochat
-        librewolf
-        _firefox
-        # _firefox2
-        _chromey
-      ]);
+          nheko
+          librewolf
+          _chromey
+        ]) ++ (lib.optionals (pkgs.system == "x86_64-linux") (with pkgs; [
+          # x86_64-linux only
+          neochat
+          _firefox
+        ]))
+      );
     };
   };
 }

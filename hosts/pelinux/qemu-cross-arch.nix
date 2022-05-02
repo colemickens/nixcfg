@@ -7,11 +7,13 @@
 
   config = {
     services.buildVMs =
-      let build_config = {
-        imports = [
-          ../../profiles/user.nix
-        ];
-      }; in
+      let
+        build_config = ({ pkgs, config, ... }: {
+          imports = [
+            ../../profiles/user.nix
+          ];
+        });
+      in
       {
         # "army" = {
         #   vmSystem = "armv6l-linux";
@@ -26,16 +28,16 @@
         #   config = build_config;
         #   autostart = false;
         # };
-        # "rusky" = {
-        #   vmSystem = "riscv64-linux";
-        #   crossSystem = pkgs.lib.systems.examples.riscv64;
-        #   smp = 4;
-        #   mem = "8G";
-        #   sshListenPort = 2222;
-        #   kvm = false;
-        #   vmpkgs = inputs.riscvpkgs;
-        #   config = build_config;
-        # };
+        "rusky" = {
+          vmSystem = "riscv64-linux";
+          crossSystem = pkgs.lib.systems.examples.riscv64;
+          smp = 4;
+          mem = "8G";
+          sshListenPort = 2222;
+          kvm = false;
+          vmpkgs = inputs.cross-riscv64;
+          config = build_config;
+        };
       };
   };
 }

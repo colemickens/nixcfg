@@ -45,12 +45,10 @@ in {
                 set -eu # don't enable pipefail, we need it off
 
                 part=''$(mount | grep "${efiMount}" | cut -d ' ' -f 1)
-                part=''${part#/dev/}
-                disk=''$(readlink /sys/class/block/$part)
-                disk=''${disk%/*}
-                disk=/dev/''${disk##*/}
-
-                shim_loader_name="${efiBootloaderId}-shim-''${part}";
+                partdev=''${part#/dev/}
+                
+                disk="/dev/$(echo $partdev | cut -d 'p' -f1)"
+                partno="$(cat /sys/class/block/$partdev/partition)"
 
                 mkdir -p "${efiMount}/EFI/${efiBootloaderId}/"
                 # TODO: remove "efi" when we get our efiMount right and nixos's grub does the right thing
@@ -58,11 +56,20 @@ in {
 
                 orig_entry=$(efibootmgr |grep '^Boot[0-9]' |grep " ${efiBootloaderId}$" |grep -Po '[0-9A-F]{4}\*' |sed 's/\*//g' |tr '\n' ',' |head -c -1)
                 if [[ "$orig_entry" != "" ]] ; then
+                  # save old boot order
                   bootorder="$(efibootmgr -v | grep ^BootOrder | cut -d ' ' -f2)"
+
+                  echo "recreating bootnum ($orig_entry): '${efiBootloaderId}-shim' on (disk: $disk) (part: $partno)" > /dev/stderr
+                  (set -x
                   efibootmgr --bootnum $orig_entry --delete-bootnum >/dev/null
-                  efibootmgr --create-only --bootnum $orig_entry --label "${efiBootloaderId}-shim" --loader "${shim_path}" --disk "$disk" >/dev/null
+                  efibootmgr --create-only --bootnum $orig_entry --label "${efiBootloaderId}-shim" --loader "${shim_path}" --disk "$disk" --part "$partno" >/dev/null
+
+                  # restore whatever bootorder there was before
                   efibootmgr --bootorder "$bootorder" >/dev/null
-                  efibootmgr
+                  )
+                  echo "::: <summary>" > /dev/stderr
+                  efibootmgr -v > /dev/stderr
+                  echo "::: </summary>" > /dev/stderr
                 fi
               )
             fi
