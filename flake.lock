@@ -98,11 +98,11 @@
     },
     "cross-armv6l": {
       "locked": {
-        "lastModified": 1651459295,
-        "narHash": "sha256-RMxpf6DzuJOgscWQzVu9YJ4IMKlZOKlLFOvoMUuPDXk=",
+        "lastModified": 1651522985,
+        "narHash": "sha256-UYlOIAnIxH5hwyof43Qdk2Q2JPnRlOoeoedhAkN6zjU=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "19eb5e18f13d3831406fe1ef1ec5a092a6aa3e74",
+        "rev": "07833ce4a8988cccd5e3940915b60f6af3cc864f",
         "type": "github"
       },
       "original": {
@@ -1020,11 +1020,11 @@
         "rust-overlay": "rust-overlay_3"
       },
       "locked": {
-        "lastModified": 1651492820,
-        "narHash": "sha256-IiG1b89LdVPV7hVnm2e7i3+G74fI7BclL19OxqSoum8=",
+        "lastModified": 1651522944,
+        "narHash": "sha256-tvwHFHMzw9cO2j0TJiYiG0yqN27RKiH4Jr3C1mOAt/s=",
         "owner": "zellij-org",
         "repo": "zellij",
-        "rev": "77e9dc93f767107388e55f055bbcad52732fcfd8",
+        "rev": "00f2a53fe96d692f050171e8812a145537c79904",
         "type": "github"
       },
       "original": {
