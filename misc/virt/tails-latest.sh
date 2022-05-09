@@ -15,19 +15,18 @@ ver="$(</tmp/tails.json jq -r ".installations[0].version")"
 TAILS_VERSION="${ver}"
 
 # check if we exist
-dest="${HOME}/.cache/sliat-${ver}"
-# if [[ -d "${dest}" ]]; then exit 0; fi
-
-# # temp workdir
-OUTDIR="/tmp/sliat"
-# trap "rm -rf ${OUTDIR}" EXIT
-
 f="tails-amd64-${ver}"
+dest="${HOME}/.cache/tails/${ver}"
+if [[ ! -d "${dest}" ]]; then
+  mkdir -p "${dest}"
 
-aria2c --dir="${OUTDIR}" --seed-time="${TAILS_SEED_TIME}" -Z \
-  "https://tails.boum.org/torrents/files/${f}.iso.torrent" \
-  "https://tails.boum.org/torrents/files/${f}.img.torrent" > /dev/stderr
 
-mv "${OUTDIR}/${f}-iso/${f}.iso" "${HOME}/.cache/sliat.iso"
-mv "${OUTDIR}/${f}-img/${f}.img" "${HOME}/.cache/sliat.img"
+  aria2c --dir="${dest}" --seed-time="${TAILS_SEED_TIME}" -Z \
+    "https://tails.boum.org/torrents/files/${f}.iso.torrent" \
+    "https://tails.boum.org/torrents/files/${f}.img.torrent" > /dev/stderr
+fi
 
+ln -sf "${dest}/${f}-iso/${f}.iso" "${HOME}/.cache/tails/tails.iso"
+ln -sf "${dest}/${f}-img/${f}.img" "${HOME}/.cache/tails/tails.img"
+
+ls -al "${HOME}/.cache/tails"

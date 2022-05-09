@@ -27,33 +27,28 @@ pane_frames: true
 #           location: "zellij:status-bar"
 
 tabs:
-  - direction: Vertical
+  - direction: Horizontal
     name: "nixup"
     parts:
-      - direction: Horizontal
+      - direction: Vertical
         parts:
-          - direction: Vertical
-            pane_name: "nixup rpizero1"
+          - pane_name: "nixup rpizero1"
             run:
               command: {cmd: ./nixup, args: ["rpizero1"]}
-          - direction: Vertical
-            pane_name: "nixup rpizero2"
+          - pane_name: "nixup rpizero2"
             run:
               command: {cmd: ./nixup, args: ["rpizero2"]}
-      - direction: Horizontal
+      - direction: Vertical
         parts:
-          - direction: Vertical
-            pane_name: "nixup rpifour1"
+          - pane_name: "nixup rpifour1"
             run:
               command: {cmd: ./nixup, args: ["rpifour1"]}
-          - direction: Vertical
-            pane_name: "nixup sinkor"
+          - pane_name: "nixup sinkor"
             run:
               command: {cmd: ./nixup, args: ["sinkor"]}
-      - direction: Horizontal
+      - direction: Vertical
         parts:
-          - direction: Vertical
-            pane_name: "nixup pinephone"
+          - pane_name: "nixup pinephone"
             run:
               command: {cmd: ./nixup, args: ["pinephone"]}
           # - direction: Vertical

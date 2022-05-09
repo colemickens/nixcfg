@@ -27,6 +27,8 @@
         '';
       })
     ];
+    
+    nixcfg.common.useZfs = false;
 
     services.tailscale-autoconnect.enable = true;
     services.tailscale-autoconnect.tokenFile = "/tailscale-key.txt";

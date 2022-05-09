@@ -26,6 +26,10 @@ let
       matchConfig = v.match;
       networkConfig.Bridge = bridgeName;
     };
+    networks."20-block-ms-wifi" = {
+      matchConfig.Driver = "mt76x2u";
+      linkConfig.Unmanaged = true;
+    };
   });
   bridgeConfs = (lib.fold lib.recursiveUpdate { } (lib.mapAttrsToList mkNetworkBindToBridge bridgeClients));
   systemdNetworkVal = lib.recursiveUpdate staticNetworkConf bridgeConfs;

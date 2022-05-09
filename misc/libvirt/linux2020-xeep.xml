@@ -57,7 +57,7 @@
     </disk>
     <disk type='file' device='cdrom'>
       <driver name='qemu' type='raw'/>
-      <source file='/home/cole/.cache/sliat.iso' index='2'/>
+      <source file='/home/cole/.cache/tails/tails.iso' index='2'/>
       <backingStore/>
       <target dev='sdd' bus='sata'/>
       <readonly/>

@@ -49,6 +49,10 @@ in
         type = lib.types.bool;
         default = true;
       };
+      useZfs = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+      };
       hostColor = lib.mkOption {
         type = lib.types.str;
         default = "grey";
@@ -85,8 +89,8 @@ in
       boot = {
         tmpOnTmpfs = lib.mkDefault false;
         cleanTmpDir = true;
-        supportedFilesystems = [ "zfs" ];
-        initrd.supportedFilesystems = [ "zfs" ];
+        supportedFilesystems = lib.optionals (cfg.useZfs) [ "zfs" ];
+        initrd.supportedFilesystems = lib.optionals (cfg.useZfs) [ "zfs" ];
 
         # TODO: consider moving to non-interactive hosts only
         kernelParams = [ "mitigations=off" ];
@@ -135,7 +139,7 @@ in
               IPv6AcceptRA = true;
               DHCPv6PrefixDelegation = "yes";
               IPForward = "yes";
-              IPMasquerade = "both";
+              # IPMasquerade = "both";
             };
             # dhcpV4Config.ClientIdentifier = "mac";
             dhcpV4Config.Use6RD = "yes";

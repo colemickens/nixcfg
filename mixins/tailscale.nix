@@ -3,6 +3,8 @@
 {
   config = {
     services.tailscale.enable = true;
+    
+    networking.firewall.trustedInterfaces = [ "tailscale0" ];
   }
   #  // (if config.networking.hostName != "jeffhyper" then {} else {
   #   systemd.services.tailscale.serviceConfig.Environment = [

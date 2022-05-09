@@ -18,6 +18,7 @@ in
     ../../mixins/hidpi.nix
     ../../mixins/ledger.nix
     ../../mixins/logitech-mouse.nix
+    ../../mixins/plex-mpv.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix

@@ -37,7 +37,7 @@ in
   imports = [
     ../../profiles/interactive.nix
 
-    ../../mixins/wpa-full.nix
+    # ../../mixins/wpa-full.nix  # meh, no wifi on rpifour1 for now either
   ];
 
   #

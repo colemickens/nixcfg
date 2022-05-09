@@ -21,6 +21,7 @@
         "networkmanager" "scard" "tss"
         "tty" "users"
         "network" # ? networkctl
+        "netdev" # actually networkctl
         "lxd" # lxd lxc waydroid
         "flashrom"
       ];
