@@ -35,6 +35,13 @@ in
   config = {
     system.stateVersion = "21.05";
 
+    services.paperless-ng = {
+      enable = true;
+      extraConfig = {
+        PAPERLESS_AUTO_LOGIN_USERNAME = "admin";
+      };
+    };
+
     networking.hostName = hostname;
     hardware.cpu.intel.updateMicrocode = true;
     services.fwupd.enable = true;

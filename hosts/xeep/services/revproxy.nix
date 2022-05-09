@@ -52,8 +52,7 @@ let
           <li><a href="https://homie.x.cleo.cat">homie (hodd)</a></li>
           <li><a href="https://unifi.x.cleo.cat">unifi</a></li>
           <li><a href="https://denon.x.cleo.cat">denon</a></li>
-          <li><a href="https://code.x.cleo.cat">code-server</a></li>
-          <li><a href="https://openvscode.x.cleo.cat">openvscode</a></li>
+          <li><a href="https://paperless.x.cleo.cat">paperless</a></li>
         </ul>
         <ul>
           <li><a href="https://syncthing-pixel3.x.cleo.cat">syncthing (pixel3)</a></li>
@@ -216,9 +215,11 @@ in
           proxyWebsockets = true;
         };
       };
-      virtualHosts."code.x.cleo.cat" = internalVhost // {
-        locations."/".proxyPass = "http://${porty_ip4}:4444";
-        locations."/".proxyWebsockets = true;
+      virtualHosts."paperless.x.cleo.cat" = internalVhost // {
+        locations."/" = {
+          proxyPass = "http://localhost:28981/";
+          proxyWebsockets = true;
+        };
       };
     
     

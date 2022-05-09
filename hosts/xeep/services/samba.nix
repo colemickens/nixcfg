@@ -18,6 +18,9 @@
         deps = [ ];
       };
     };
+    
+    # TODO: use systemd.tmpfiles for configuring the share dirs properly
+    
     services.samba = {
       enable = true;
       enableNmbd = true;
@@ -28,6 +31,16 @@
       # TODO: why can't I restrict to SMB4?
       extraConfig = ''
         client min protocol SMB3_11
+        server min protocol = SMB3_11
+        server smb encrypt = desired
+        server multi channel support = yes
+        deadtime = 30
+        use sendfile = yes
+        read raw = yes
+        min receivefile size = 16384
+        aio read size = 1
+        aio write size = 1
+        socket options = IPTOS_LOWDELAY TCP_NODELAY IPTOS_THROUGHPUT SO_RCVBUF=131072 SO_SNDBUF=131072
       '';
 
       shares = {
@@ -45,6 +58,16 @@
           path = "/mnt/rclone";
           browseable = "yes";
           "read only" = "yes";
+          "guest ok" = "yes";
+          "create mask" = "0644";
+          "directory mask" = "0755";
+          "force user" = "cole";
+          "force group" = "cole";
+        };
+        "paperless-consume" = {
+          path = "/var/lib/paperless/consume";
+          browseable = "yes";
+          "read only" = "no";
           "guest ok" = "yes";
           "create mask" = "0644";
           "directory mask" = "0755";
