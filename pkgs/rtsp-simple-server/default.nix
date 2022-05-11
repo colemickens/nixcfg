@@ -4,9 +4,9 @@ let
   metadata = {
     repo_git = "https://github.com/aler9/rtsp-simple-server";
     branch = "main";
-    rev = "3128ff91de5bda38f8d978411d9e59e5f205832a";
-    sha256 = "sha256-ykndawRNa8EJCJkJvYtAeAxVL6xA6JSf24JokPcaZw8=";
-    vendorSha256 = "sha256-DtIcxe4HqzAwOslnfBmAgYMWH0aJEftGd8ZyWbdzzP8=";
+    rev = "7ecd52808a27e782ce3748e682a4cdf2716a88a3";
+    sha256 = "sha256-Ql7ERseezG8XG2EFpJIwskdz34L2N6++ydVzhxJcdMI=";
+    vendorSha256 = "sha256-WjWlgZwew+8bbzePOhalHeRyCVSd4FEGUFwFvLwqjzQ=";
   };
 in buildGoModule rec {
   pname = "rtsp-simple-server";
