@@ -32,30 +32,25 @@ tabs:
     parts:
       - direction: Vertical
         parts:
-          - pane_name: "nixup rpizero1"
-            run:
-              command: {cmd: ./nixup, args: ["rpizero1"]}
-          - pane_name: "nixup rpizero2"
-            run:
-              command: {cmd: ./nixup, args: ["rpizero2"]}
+          - pane_name: "nixup rpitwozero1"
+            run: { command: {cmd: ./nixup, args: ["rpizerotwo1"]} }
+          - pane_name: "nixup rpitwozero2"
+            run: { command: {cmd: ./nixup, args: ["rpizerotwo2"]} }
+          - pane_name: "nixup rpithreebp1"
+            run: { command: {cmd: ./nixup, args: ["rpithreebp1"]} }
       - direction: Vertical
         parts:
           - pane_name: "nixup rpifour1"
-            run:
-              command: {cmd: ./nixup, args: ["rpifour1"]}
+            run: { command: {cmd: ./nixup, args: ["rpifour1"]} }
           - pane_name: "nixup sinkor"
-            run:
-              command: {cmd: ./nixup, args: ["sinkor"]}
+            run: { command: {cmd: ./nixup, args: ["sinkor"]} }
       - direction: Vertical
         parts:
           - pane_name: "nixup pinephone"
-            run:
-              command: {cmd: ./nixup, args: ["pinephone"]}
+            run: { command: {cmd: ./nixup, args: ["pinephone"]} }
           # - direction: Vertical
           #   pane_name: "nixup blueline"
-          #   run:
-          #     command: {cmd: ./nixup, args: ["blueline"]}
+          #   run: { command: {cmd: ./nixup, args: ["blueline"]} }
           # - direction: Vertical
           #   pane_name: "nixup enchilada"
-          #   run:
-          #     command: {cmd: ./nixup, args: ["enchilada"]}
+          #   run: { command: {cmd: ./nixup, args: ["enchilada"]} }

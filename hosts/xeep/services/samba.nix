@@ -54,6 +54,16 @@
           "force user" = "cole";
           "force group" = "cole";
         };
+        "var" = {
+          path = "/var/";
+          browseable = "no";
+          "read only" = "yes";
+          "guest ok" = "no";
+          "create mask" = "0644";
+          "directory mask" = "0755";
+          "force user" = "cole";
+          "force group" = "cole";
+        };
         "rclone" = {
           path = "/mnt/rclone";
           browseable = "yes";

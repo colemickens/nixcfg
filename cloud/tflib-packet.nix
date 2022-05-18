@@ -1,6 +1,8 @@
 { pkgs, tfutil, ... }:
 
 let
+  tf_metal_version = "3.3.0-alpha.3";
+
   lib = pkgs.lib;
   mkVm = packet_config: instance_name: vm: {
     resource.metal_spot_market_request."${instance_name}" = {
@@ -33,14 +35,17 @@ let
 in {
   metros = {
     dc10 = "dc10";
+    dc11 = "dc11";
   };
 
   plans = {
+    c2_medium_arm = "c2.medium.arm";
     c3_large_arm = "c3.large.arm";
   };
   
   os = {
     nixos_21_05 = "nixos_21_05";
+    nixos_21_11 = "nixos_21_11";
   };
 
   tfplan = packet_config: vms:
@@ -51,7 +56,7 @@ in {
           required_providers = {
             metal = {
               source = "equinix/metal";
-              version = "3.2.0";
+              version = tf_metal_version;
             };
           };
         };

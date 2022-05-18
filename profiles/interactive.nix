@@ -11,7 +11,7 @@
     ../mixins/broot.nix
     ../mixins/cachix.nix
     ../mixins/direnv.nix
-    ../mixins/gh.nix
+    # ../mixins/gh.nix
     ../mixins/gopass.nix
     ../mixins/helix.nix
     ../mixins/ion.nix
@@ -79,6 +79,7 @@
         sd
         procs
         bandwhich
+        #sfz # simple file zerver? lol
         # prs # gopass replacement, oh fuck thank god, but no TOTP or PASSWORD_STORE_DIR or sequoia support
         # </rust pkgs>
         python3Packages.pywatchman

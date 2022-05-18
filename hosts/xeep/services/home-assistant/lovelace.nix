@@ -31,6 +31,11 @@
             name = "TV - LG C1 65";
             entity = "media_player.livingroom_lg_c1";
           }
+          {
+            name = "TV - LG C1 65 (wifi)";
+            entity = "media_player.livingroom_lg_c1_wifi";
+          }
+
 
           {
             name = "Receiver";
@@ -79,6 +84,10 @@
           {
             name = "Flower Lamp";
             entity = "switch.wp6_sw103_relay";
+          }
+          {
+            name = "Nanoleaf";
+            entity = "light.nanoleaf_light_panels_5b_38_ef";
           }
         ];
       }

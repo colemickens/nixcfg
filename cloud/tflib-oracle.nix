@@ -3,6 +3,8 @@
 # oracle_config: shape: image_name: instance_name:
 
 let
+  tf_oci_version = "4.74.0";
+
   lib = pkgs.lib;
   mapAttrs' = f: set:
     builtins.listToAttrs (map (attr: f attr set.${attr}) (builtins.attrNames set));
@@ -140,8 +142,8 @@ in {
         terraform = {
           required_providers = {
             oci = {
-              source = "oci";
-              version = "4.53.0";
+              source = "oracle/oci";
+              version = tf_oci_version;
             };
           };
         };

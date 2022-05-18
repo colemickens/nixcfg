@@ -1,6 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 let
-  hostname = "xeep";
+  hn = "xeep";
+  static_ip = "192.168.1.10/16";
 in
 {
   imports = [
@@ -23,6 +24,7 @@ in
     ./services/revproxy.nix
     ./services/home-assistant
     ./services/samba.nix
+    ./services/snapserver.nix
     ./services/plex.nix
     ./services/unifi.nix
 
@@ -33,8 +35,13 @@ in
   ];
 
   config = {
+    networking.hostName = hn;
     system.stateVersion = "21.05";
-
+      
+    # services.windmill = {
+    #   enable = true;
+    # };
+      
     services.paperless-ng = {
       enable = true;
       extraConfig = {
@@ -42,7 +49,6 @@ in
       };
     };
 
-    networking.hostName = hostname;
     hardware.cpu.intel.updateMicrocode = true;
     services.fwupd.enable = true;
     services.tlp.enable = lib.mkForce false; # does this come frm nixosHardware?
@@ -51,7 +57,7 @@ in
       enable = true;
       networks."20-eth0-static-ip" = {
         matchConfig.Driver = "r8152";
-        addresses = [{ addressConfig = { Address = "192.168.1.10/16"; }; }];
+        addresses = [{ addressConfig = { Address = static_ip; }; }];
         networkConfig = {
           Gateway = "192.168.1.1";
           DNS = "192.168.1.1";

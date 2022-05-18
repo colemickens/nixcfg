@@ -61,14 +61,18 @@ in
           libnotify
           evince
           gimp
+          notepadqq
           qemu
           freerdp
           vlc
+            
+          # jami-daemon
+          # jami-client-gnome
 
           virt-viewer
 
           nheko
-          librewolf
+          # librewolf
           _chromey
         ]) ++ (lib.optionals (pkgs.system == "x86_64-linux") (with pkgs; [
           # x86_64-linux only

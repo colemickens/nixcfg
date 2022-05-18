@@ -53,6 +53,7 @@ let
           <li><a href="https://unifi.x.cleo.cat">unifi</a></li>
           <li><a href="https://denon.x.cleo.cat">denon</a></li>
           <li><a href="https://paperless.x.cleo.cat">paperless</a></li>
+          <li><a href="https://wphone.x.cleo.cat">wphone</a></li>
         </ul>
         <ul>
           <li><a href="https://syncthing-pixel3.x.cleo.cat">syncthing (pixel3)</a></li>
@@ -219,6 +220,15 @@ in
         locations."/" = {
           proxyPass = "http://localhost:28981/";
           proxyWebsockets = true;
+        };
+      };
+      virtualHosts."wphone.x.cleo.cat" = internalVhost // {
+        locations."/" = {
+          root = "/srv/wphone/public";
+          proxyWebsockets = true;
+          extraConfig = ''
+            autoindex on;
+          '';
         };
       };
     

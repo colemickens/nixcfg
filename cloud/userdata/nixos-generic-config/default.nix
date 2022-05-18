@@ -11,7 +11,7 @@
         "fs.inotify.max_user_watches" = 500000;
       };
     };
-    environment.systemPackages = with pkgs; [ coreutils ];
+    environment.systemPackages = with pkgs; [ coreutils cachix ];
     nix = {
       buildCores = 0;
       binaryCachePublicKeys = [

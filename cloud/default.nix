@@ -57,13 +57,14 @@ let
     modules = [
       ### PACKET VMS
       (tflib.packet.tfplan metal_cole {
-        # pktspotnewnixosarm0 = {
+        # pktspotnewnixosarm1 = {
         #   plan = tflib.packet.plans.c3_large_arm;
-        #   os = tflib.packet.os.nixos_21_05;
+        #   os = tflib.packet.os.nixos_21_11;
         #   loc = tflib.packet.metros.dc10;
-        #   bid = "0.60";
+        #   bid = "0.50";
         #   payload = tflib.payloads.nixos-generic-config;
         # };
+        # 2022-05-17: plan{c3.large.arm} + dc{dc10,dc11} + bid{0.5}
 
         # ipxe works too!
         # pktspotnewnixosarm0 = {
@@ -78,26 +79,26 @@ let
       # delete the entire compartment to start over:
       # to check on any instances:
       #  - oci list?
-      (tflib.oracle.tfplan ociacct1 {
-        oci1arm1 = {
-          shape = tflib.oracle.shapes.freetier_a1flex_full;
-          ipxe_url = "http://netboot.cleo.cat/aarch64/generic/netboot.ipxe";
-        };
-      })
-      (let
-        tmpl = {
-          shape = tflib.oracle.shapes.freetier_a1flex_mini;
-          image = tflib.oracle.images.canonical_ubuntu_20_04__aarch64;
-          payload = tflib.payloads.ubuntu-nixos-infect;
-        };
-      in
-        (tflib.oracle.tfplan ociacct2 {
-          oci2arm1 = tmpl;
-          oci2arm2 = tmpl;
-          oci2arm3 = tmpl;
-          oci2arm4 = tmpl;
-        })
-      )
+      # (tflib.oracle.tfplan ociacct1 {
+      #   oci1arm1 = {
+      #     shape = tflib.oracle.shapes.freetier_a1flex_full;
+      #     ipxe_url = "http://netboot.cleo.cat/aarch64/generic/netboot.ipxe";
+      #   };
+      # })
+      # (let
+      #   tmpl = {
+      #     shape = tflib.oracle.shapes.freetier_a1flex_mini;
+      #     image = tflib.oracle.images.canonical_ubuntu_20_04__aarch64;
+      #     payload = tflib.payloads.ubuntu-nixos-infect;
+      #   };
+      # in
+      #   (tflib.oracle.tfplan ociacct2 {
+      #     oci2arm1 = tmpl;
+      #     oci2arm2 = tmpl;
+      #     oci2arm3 = tmpl;
+      #     oci2arm4 = tmpl;
+      #   })
+      # )
     ];
   };
   ## </terranix>

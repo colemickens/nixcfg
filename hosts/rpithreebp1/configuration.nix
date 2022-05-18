@@ -1,28 +1,38 @@
 { pkgs, lib, modulesPath, inputs, config, ... }:
+
 let
-  hostname = "rpithreebp1";
+  hn = "rpithreebp1";
+  mbr_disk_id = "999993b1";
+
+  _inst = target: pkgs.callPackage ../rpi-inst.nix {
+    inherit pkgs inputs target;
+    inherit (inputs) tow-boot;
+    tconfig = inputs.self.nixosConfigurations.${target}.config;
+  };
 in
 {
   imports = [
-    ../rpifour1/core.nix
+    ../rpi-bcm2710a1.nix
+    ../../profiles/interactive.nix # common + interactive
+    ../../mixins/pipewire.nix # snapcast
+    ../../mixins/snapclient-local.nix # snapcast
+    ../../mixins/sshd.nix
+    ../../mixins/tailscale.nix
+    ../../mixins/wpa-slim.nix
   ];
 
   config = {
-    fileSystems = {
-      "/" = {
-        device = "/dev/disk/by-partlabel/NIXOS";
-        fsType = "ext4";
-      };
-    };
-    networking = {
-      hostName = hostname;
+    networking.hostName = hn;
+    system.stateVersion = "21.11";
+    system.build.mbr_disk_id = mbr_disk_id;
 
-      interfaces."eth0".ipv4.addresses = [{
-        address = "192.168.1.3";
-        prefixLength = 16;
-      }];
-      defaultGateway = "192.168.1.1";
-      nameservers = [ "192.168.1.1" ];
-    };
+    environment.systemPackages = [
+      (_inst "rpifour1")
+      # (_inst "rpizerotwo1")
+      # (_inst "rpizerotwo2")
+      # (_inst "rpizerotwo3")
+    ];
+
+    nixcfg.common.defaultNetworking = false;
   };
 }

@@ -15,6 +15,12 @@
 
   inputs = {
     nixlib.url = "github:nix-community/nixpkgs.lib"; #TODO: horrible name! come on!
+    
+    # TODO: revisit
+    # - libaggregate
+    # nixlib.url = "github:nix-community/nixpkgs.lib"; #TODO: horrible name! come on!
+
+    # TODO: DOCUMENT THE SHIT I WORK ON OMG
 
     nixpkgs.url = "github:colemickens/nixpkgs/cmpkgs"; # for my regular nixpkgs
     cross-armv6l.url = "github:colemickens/nixpkgs/cmpkgs-cross-armv6l";
@@ -53,8 +59,10 @@
     impermanence.url = "github:nix-community/impermanence";
     impermanence.inputs.nixpkgs.follows = "nixpkgs";
 
-    tow-boot = { url = "github:colemickens/tow-boot/development"; };
+    tow-boot = { url = "github:colemickens/Tow-Boot/rpi"; };
+    rpipkgs = { url = "github:colemickens/nixpkgs/rpipkgs"; };
     tow-boot.inputs.nixpkgs.follows = "nixpkgs"; # TODO: might break u-boot?
+    tow-boot.inputs.rpipkgs.follows = "rpipkgs"; # TODO: might break u-boot?
 
     mobile-nixos.url = "github:colemickens/mobile-nixos/2022-03-blueline";
     mobile-nixos.inputs.nixpkgs.follows = "nixpkgs";
@@ -271,14 +279,14 @@
         # aarch64-linux
         netboot-aarch64 = mkSystem inputs.nixpkgs "aarch64-linux" "netboot";
         # retired # pinebook = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
-        rpifour1 = mkSystem inputs.nixpkgs "aarch64-linux" "rpifour1";
-        rpithreebp1 = mkSystem inputs.nixpkgs "aarch64-linux" "rpithreebp1";
-        rpizerotwo1 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo1";
-        # rpizerotwo2 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo2";
-        # rpizerotwo3 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo3";
-        sinkor = mkSystem inputs.nixpkgs "aarch64-linux" "sinkor";
-        oracular = mkSystem inputs.nixpkgs "aarch64-linux" "oracular";
-        pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
+        rpifour1 = mkSystem inputs.rpipkgs "aarch64-linux" "rpifour1";
+        rpithreebp1 = mkSystem inputs.rpipkgs "aarch64-linux" "rpithreebp1";
+        rpizerotwo1 = mkSystem inputs.rpipkgs "aarch64-linux" "rpizerotwo1";
+        rpizerotwo2 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo2";
+        rpizerotwo3 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo3";
+        ## sinkor = mkSystem inputs.nixpkgs "aarch64-linux" "sinkor";
+        ## oracular = mkSystem inputs.nixpkgs "aarch64-linux" "oracular";
+        ## pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
         # blueline = mkSystem inputs.nixpkgs "aarch64-linux" "blueline";
         # blueloco    = mkSystem inputs.nixpkgs "x86_64-linux"  "blueloco";
         # enchilada = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
@@ -350,34 +358,27 @@
         in
         result2;
 
-      installers =
-        let
-          installer = pkgs.iso;
-        in
-        forAllSystems (s: installer);
+      # TODO:
+      # - use bootspec to compose a multi-arch image
+      # - that can be 'dd'd or synced frm any-arch machine  
+      # installer =
+      #   let
+      #     installer = pkgs.iso;
+      #   in
+      #   forAllSystems (s: installer);
+        # - bundle the installer script
+        # - the installer script should also manage host ssh/age keys + secrets re-provisioning
 
       towboot =
         let
-          #tb_aarch64 = import inputs.tow-boot { pkgs = import inputs.nixpkgs { system = "aarch64-linux"; }; };
-          towboot_aarch64 = inputs.tow-boot.packages.aarch64-linux;
-          #towboot_rpi_combined = TODO;
+          tb_a64 = inputs.tow-boot.aarch64-linux;
+          tb_rpi_armv6l = tb_a64.raspberryPi-armv6l;
+          tb_rpi_aarch64 = tb_a64.raspberryPi-aarch64;
+          tb_sd = tb: tb.config.Tow-Boot.outputs.diskImage;
         in
         rec {
-          #
-          # TOW-BOOT IMAGES
-          # (todo: consider if we need separate tow-boot images for the rpizero* devices)
-          rpizero1_towboot = towboot_armv6l.raspberryPi;
-          rpifour1_towboot = towboot_aarch64.raspberryPi-aarch64;
-          sinkor_towboot = towboot_aarch64.raspberryPi-aarch64;
-          pinebook_towboot = towboot_aarch64.pine64-pinebookPro;
-          rpizerotwo1_towboot = towboot_aarch64.raspberryPi-aarch64;
-          rpizerotwo2_towboot = towboot_aarch64.raspberryPi-aarch64;
-          rpizerotwo3_towboot = towboot_aarch64.raspberryPi-aarch64;
-          # TODO: replace these with images that use a tow-boot builder to build
-          # a normal in-place-updatable nixos
-          # rpizero1  = inputs.self.nixosConfigurations.rpizero1.config.system.build.sdImage;
-          # rpizero2  = inputs.self.nixosConfigurations.rpizero2.config.system.build.sdImage;
-          # rpionebp  = inputs.self.nixosConfigurations.rpionebp.config.system.build.sdImage;
+          rpi32 = tb_sd tb_rpi_armv6l;
+          rpi64 = tb_sd tb_rpi_aarch64;
         };
 
       # linuxVMs = {

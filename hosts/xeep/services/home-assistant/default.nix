@@ -149,6 +149,13 @@ in {
             "::1"
           ];
         };
+        # light = [
+        #   {
+        #     platform = "nanoleaf";
+        #     host = "192.168.72.138";
+        #     token = "xInHWS17zONcFiW5bpPXA7ZDYdWuFQP2";
+        #   }
+        # ];
         media_player = [
           {
             name = "braviatv";
@@ -156,6 +163,7 @@ in {
             host = "192.168.1.119";
           }
         ];
+        nanoleaf = {};
         # prometheus = { namespace = "hass"; };
         ssdp = { };
         recorder = {
@@ -176,18 +184,14 @@ in {
         ];
         system_health = { };
         wake_on_lan =  {};
-        webostv = [{
-          name = "LivingRoom_LG_C1";
-          host = "192.168.5.202";
-          turn_on_action = {
-            service = "wake_on_lan.send_magic_packet";
-            data = {
-              #mac = "74:e6:b8:0e:bb:38";
-              mac = "74-E6-B8-0E-BB-38";
-              #broadcast_address = "192.168.255.255";
-            };
-          };
-        }];
+        webostv = [
+          {
+            name = "LivingRoom_LG_C1";
+            host = "192.168.5.202";
+            turn_on_action.service = "wake_on_lan.send_magic_packet";
+            turn_on_action.data.mac = "74-E6-B8-0E-BB-38";
+          }
+        ];
         # weather = {
         #   platform = "openweathermap";
         #   api_key = secrets.openweathermap_apikey;

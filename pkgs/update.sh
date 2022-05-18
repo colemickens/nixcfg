@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 set -euo pipefail
+set -x
 
 unset NIX_PATH
-
-if [[ -f "${DIR}/../misc/nix.sh" ]]; then
-  function nix() { "${DIR}/../misc/nix.sh" "${@}"; }
-fi
+cd "${DIR}"
 
 # build up commit msg
 cprefix="auto-update(${JOB_ID:-"manual"}):"
@@ -29,25 +27,12 @@ if [[ "${1:-""}" != "" ]]; then
   m="$(mktemp)"; trap "rm ${m}" EXIT;
   l="$(mktemp)"; trap "rm ${l}" EXIT;
   pkg="${1}"
+  metadata="${pkg}/metadata.nix"
   pkgname="$(basename "${pkg}")"
 
-  printf '\n%s\n' ">>> update: ${pkgname}"
+  if [[ ! -f "${pkg}/metadata.nix" ]]; then exit 0; fi
 
-  if ! nix eval --json "..#pkgs.x86_64-linux.${pkgname}.meta.verinfo" >"${t}" ; then
-    echo "NO VERINFO"
-    exit -1
-  fi
-  if ! nix eval --json "..#pkgs.x86_64-linux.${pkgname}.meta.position" >"${t}.position"; then
-    echo "NO POSITION"
-    exit -1
-  fi
-
-  metadata="$(cat "${t}.position" | jq -r)"
-  # trim off the filenumber
-  # trim off the store path (assume its in here)
-  metadata=$(echo "${metadata}" | cut -d':' -f1)
-  metadata="${DIR}/$(echo "${metadata}" | cut -d'/' -f6-)"
-
+  nix "${nixargs[@]}" eval -f "${metadata}" --json > "${t}" 2>/dev/null
   branch="$(cat "${t}" | jq -r .branch)"
   rev="$(cat "${t}" | jq -r .rev)"
   sha256="$(cat "${t}" | jq -r .sha256)"
@@ -88,12 +73,10 @@ if [[ "${1:-""}" != "" ]]; then
   echo "${rev} => ${newrev}"
 
   # Update Sha256
-  set -x
   sed -i "s|${rev}|${newrev}|" "${metadata}"; echo $?
   sed -i "s|${sha256}|0000000000000000000000000000000000000000000000000000|" "${metadata}"
   nix "${nixargs[@]}" build --no-link "..#${upattr}" &> "${l}" || true
   newsha256="$(cat "${l}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
-  if [[ "${newsha256}" == "" ]]; then cat "${l}" >/dev/stderr; exit -1; fi
   if [[ "${newsha256}" == "sha256" ]]; then newsha256="$(cat "${l}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
 
   newsha256="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${newsha256}")"

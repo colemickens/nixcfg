@@ -5,17 +5,19 @@ set -euo pipefail
 cd "${DIR}"
 
 function nix() { "${DIR}/misc/nix.sh" "${@}" ; }
+function tsip() { tailscale ip --6 "${1}"; }
+function update_input() { test -d "${1}/.git" && git -C "${1}" pull --rebase; }
+function rebase_input() {
+  test -d "${1}" || return;
+  git -C "${1}" rebase --abort || true; git -C "${1}" pull --rebase;  git -C "${1}" push origin HEAD -f;
+}
 
-cache="colemickens"
-nixcfg="${DIR}"
+export BLDR_X86="${BLDR_X86:-$(tsip slynux)}";
+export BLDR_A64="${BLDR_A64:-"cole@pkta64.ts.r10e.tech"}";
 
 rb="./misc/rbuild.sh"
 ra="./misc/ractivate.sh"
 commbox="${DIR}/misc/commbox.sh"
-function tsip() {
-  tailscale ip --6 "${1}"
-}
-
 srcdirs=(
   "nixpkgs/cmpkgs"
   "nixpkgs/cmpkgs-cross-riscv64"
@@ -29,120 +31,52 @@ srcdirs=(
 )
 srcdirs=("${srcdirs[@]/#/"${HOME}/code/"}")
 
-# export BLDR_X86="${BLDR_X86:-$(tsip slynux)}";
-export BLDR_A64="${BLDR_A64:-"colemickens@aarch64.nixos.community"}";
-
 orig=("${@}")
 cmd="${1:-"z"}"; shift || true
 
-printf "\n\n%s\n%s\n" "###########################################" "${cmd}"
-printf "%s\n" "###########################################"
-
-cleanup() {
-  retval=$?
-  if [[ ${retval} != 0 && "${ZELLIJ_LAYOUT_NAME:-""}" != "" ]]; then
-    read -r -p "restart? [y/N] " response
-    if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
-    then
-      exec "${0}" "${orig[@]}"
-    fi
-   fi
-  printf "\n### exit=%s (cmd=%s)\n" "$?" "$cmd" > /dev/stderr
-  exit $retval;
-}
-
-update_input() {
-  set -x
-  test -d "${1}/.git" || return 0;
-  git -C "${1}" pull --rebase;
-}
-rebase_input() {
-  set -x
-  test -d "${1}" || return 0
-  git -C "${1}" pull --rebase
-  git -C "${1}" push origin HEAD -f
-}
-export -f update_input
-export -f rebase_input
-
-trap "cleanup" EXIT
-
-set -x
 
 case "${cmd}" in
-  "inputup")
-    parallel -j$(nproc) --halt 1 --verbose --tag update_input ::: "${srcdirs[@]}"
-
-    # order _still_ matters
-    # parallel -j$(nproc) --halt 1 --verbose --tag rebase_input ::: "${srcdirs[@]}"
-    for s in "${srcdirs[@]}"; do
-      rebase_input "$s"
-    done
-  ;;
-  "pkgup")
-    pushd ./pkgs >/dev/null;   ./update.sh "${@:-}";       popd >/dev/null
-    if [[ "${1:-""}" != "" ]]; then "${rb}" "${BLDR_X86}" "$(tsip "slynux")" "${nixcfg}#${1}"; fi
-  ;;
-  "lockup")
-    set -x; nix "${nixargs[@]}" flake lock --recreate-lock-file --commit-lock-file; set +x
-  ;;
-  "cacheshell") "${rb}" "${BLDR_X86}" "localhost" ".#devShell.x86_64-linux.inputDerivation";;
-
-  # individual build targets
-  "jeffhyper" | "slynux" | "pelinux" | "raisin" | "xeep" | "rpizero"* )
-    out="$("${rb}" "${BLDR_X86}" "$(tsip "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}")"
-    "${ra}" "$out" "$(tsip "${cmd}")"
-  ;;
-  "rpifour1" | "sinkor" | "pinephone" )
-    "${commbox}"
-    out="$("${rb}" "${BLDR_A64}" "$(tsip "${cmd}")" "${nixcfg}#toplevels.${cmd}" "${@}")"
-    "${ra}" "$out" "$(tsip "${cmd}")"
-  ;;
-
-  "boot-"*)
-    "${commbox}"
-    dev="$(echo $cmd | cut -d '-' -f2-)"
-    script="$(SKIP_CACHIX=1 "${rb}" "${BLDR:-"${BLDR_A64}"}" "localhost" "${nixcfg}#phones.${dev}.flash-boot" "${@}")"
-    FASTBOOT_SLOT="${FASTBOOT_SLOT:-"a"}" sh "${script}" "reboot"
-    ;;
-
-  "enchilada" | "blueline")
-    "${commbox}"
-    top="$("${rb}" "${BLDR_A64}" "cachix" "${nixcfg}#toplevels.${cmd}" "${@}")"
-    "${ra}" "$top" "$(tsip "${cmd}")"
-  ;;
-
-  "towboot")
-    "${commbox}"
-    "${rb}" "${BLDR_A64}" "localhost" "${nixcfg}#images.rpifour1_towboot" "${@}"
-  ;;
-
-  "x86")
-    "${rb}" "${BLDR_X86}" "cachix"  "${nixcfg}#hydraBundles.x86_64-linux.toplevels" "${@}"
-    "${rb}" "${BLDR_X86}" "cachix"  "${nixcfg}#hydraBundles.x86_64-linux.shells" "${@}"
-  ;;
-  "a64")
-    "${commbox}"
-    "${rb}" "${BLDR_A64}" "cachix"  "${nixcfg}#hydraBundles.aarch64-linux.toplevels" "${@}"
-  ;;
-
+  "inputup")  for s in "${srcdirs[@]}"; do update_input; rebase_input "$s"; done; ;;
+  "pkgup")    ./update.sh "${@:-}";   ;;
+  "lockup")   nix "${nixargs[@]}" flake lock --recreate-lock-file --commit-lock-file; ;;
+  "shellup")  "${rb}" "${BLDR_X86}" "localhost" ".#devShell.x86_64-linux.inputDerivation"; ;;
   "up")
-    "${0}" inputup
-    "${0}" lockup
-    "${0}" pkgup
-    "${0}" cacheshell
+    "${0}" inputup "${@}" && "${DIR}/misc/rpi/rpipkgs.sh"
+    "${0}" lockup "${@}" && "${0}" pkgup "${@}" && "${0}" cacheup "${@}"
   ;;
   "z")
-    "${0}" up
-    # "${0}" x86
-    # "${0}" a64
-
-    "${0}" build 
-    "${0}" deploy-x86
-    "${0}" deploy-a64
+    "${0}" up "${@}" && "${0}" build "${@}"
+    "${0}" deploy-x86 "${@}" && "${0}" deploy-a64 "${@}"
   ;;
-  "build" | "deploy-x86" | "deploy-a64")
+  "deploy")
+    host="${1}"; shift
+    # export NIXUP_JOB="/tmp/nixup-deploy-${host}-$(date '+%s')"; mkdir -p "${NIXUP_JOB}"
+    # trap "echo ${jobstatus:-"unknown1"} > ${NIXUP_JOB}/deploy.status" EXIT
+    # jobstatus="unknown2"
+
+    result="$("${0}" build ".#toplevels.${host}" "${@}")"
+    "${ra}" "${result}"
+    # jobstatus="good"
+  ;;
+  "build")
+    thing="${1}"; shift; name="$(echo "${thing}" | cut -d '#' -f2-)"
+    printf "\n\n###### %s # %s #################################################\n" "BUILD" "${thing}" >/dev/stderr
+    # jobdir="${NIXUP_JOB:-"$(mkdir -p "/tmp/nixup-build-${name}/${name}")"}"; mkdir -p "${jobdir}"
+    # trap "echo ${jobstatus:-"unknown1"} > ${jobdir}/${thing}-build.status" EXIT; jobstatus="unknown2"
+    
+    sys="$(nix eval --raw "${thing}" "${@}")"
+    if [[ "${sys}" == "aarch64-linux" ]]; then builder="${BLDR_A64}"; fi
+    if [[ "${sys}" == "armv6l-linux" ]];  then builder="${BLDR_X86}"; fi
+    if [[ "${sys}" == "x86_64-linux" ]];  then builder="${BLDR_X86}"; fi
+    
+    result="$("${rb}" "${builder}" "cachix" "${thing}" "${@}" -L)"
+    # nix build -j0 "${thing}" "${@}" --out-link "${DIR}/result-${thing}"
+    nix build -j0 "${result}" --out-link "${DIR}/result-${thing}"
+    # jobstatus="good"
+  ;;
+  "deploy-x86" | "deploy-a64")
+    export NIXUP_JOB="$(mktemp -d)"
     env ZELLIJ_LAYOUT_NAME="nixup.${cmd}" \
-      zellij --layout-path "${nixcfg}/${cmd}.zj.yml"
+      zellij --layout-path "${DIR}/${cmd}.zj.yml"
   ;;
 esac

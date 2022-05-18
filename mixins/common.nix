@@ -32,6 +32,7 @@ in
 {
   imports = [
     ./nix.nix
+    ../profiles/user.nix
   ];
 
   options = {
@@ -46,6 +47,10 @@ in
         '';
       };
       defaultNoDocs = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+      };
+      defaultNetworking = lib.mkOption {
         type = lib.types.bool;
         default = true;
       };
@@ -100,7 +105,7 @@ in
           timeoutStyle = "hidden";
           timeout = 1;
         };
-        kernelPackages = lib.mkIf cfg.defaultKernel defaultKernel;
+        kernelPackages = lib.mkIf cfg.defaultKernel (lib.mkDefault defaultKernel);
         kernel.sysctl = {
           "fs.file-max" = 100000;
           "fs.inotify.max_user_instances" = 256;
@@ -113,39 +118,38 @@ in
       ###################################
       # - no wifi by default
       #   so add iwd/wireless per-host
-      networking.firewall.enable = true;
-      networking.useDHCP = false;
       networking.hostId = pkgs.lib.concatStringsSep "" (pkgs.lib.take 8
         (pkgs.lib.stringToCharacters
           (builtins.hashString "sha256" config.networking.hostName)));
-      networking.useNetworkd = true;
+      networking.firewall.enable = true;
+      networking.useDHCP = lib.mkIf (cfg.defaultNetworking) false;
+      networking.useNetworkd = lib.mkIf (cfg.defaultNetworking) true;
       services.resolved.enable = true;
-      systemd.network =
-        {
-          enable = true;
+      systemd.network = (lib.mkIf (cfg.defaultNetworking) {
+        enable = true;
 
-          # leave the kernel dummy devies unmanagaed
-          networks."10-dummy" = {
-            matchConfig.Name = "dummy*";
-            networkConfig = { };
-            # linkConfig.ActivationPolicy = "always-down";
-            linkConfig.Unmanaged = "yes";
-          };
-
-          networks."20-network-defaults" = {
-            matchConfig.Name = "en* | eth* | usb* | wl*";
-            networkConfig = {
-              DHCP = "yes";
-              IPv6AcceptRA = true;
-              DHCPv6PrefixDelegation = "yes";
-              IPForward = "yes";
-              # IPMasquerade = "both";
-            };
-            # dhcpV4Config.ClientIdentifier = "mac";
-            dhcpV4Config.Use6RD = "yes";
-            dhcpV6Config.PrefixDelegationHint = "::64";
-          };
+        # leave the kernel dummy devies unmanagaed
+        networks."10-dummy" = {
+          matchConfig.Name = "dummy*";
+          networkConfig = { };
+          # linkConfig.ActivationPolicy = "always-down";
+          linkConfig.Unmanaged = "yes";
         };
+
+        networks."20-network-defaults" = {
+          matchConfig.Name = "en* | eth* | usb* | wl*";
+          networkConfig = {
+            DHCP = "yes";
+            IPv6AcceptRA = true;
+            DHCPv6PrefixDelegation = "yes";
+            IPForward = "yes";
+            # IPMasquerade = "both";
+          };
+          # dhcpV4Config.ClientIdentifier = "mac";
+          dhcpV4Config.Use6RD = "yes";
+          dhcpV6Config.PrefixDelegationHint = "::64";
+        };
+      });
 
       ###################################
       ## PACKAGES / NIXPKGS CONFIG
@@ -163,9 +167,9 @@ in
       ###################################
       services.fwupd.enable = true;
       services.timesyncd.enable = true;
-      services.journald.extraConfig = ''
-        SystemMaxUse=10M
-      '';
+      # services.journald.extraConfig = ''
+      #   SystemMaxUse=10M
+      # '';
       i18n.defaultLocale = "en_US.UTF-8";
       time.timeZone = lib.mkDefault "America/Los_Angeles";
       services.getty = {

@@ -2,14 +2,16 @@
 set -euo pipefail
 set -x
 
-export UPSTREAM="rpi" # TODO: replace
-#export UPSTREAM="nixos/nixos-unstable" # TODO replace
+# TODO:
+# - configureability
+# - better way of passthru since the bot checks it aggressively
+# - DRY, and parallalize as a result (good chance to try nushell)
 
-export NIXPKGS_GIT="/home/cole/code/nixpkgs/cmpkgs"
-# export NIX_PATH="nixpkgs=/home/cole/code/nixpkgs/cmpkgs"
-export NIXPKGS_WORKTREE="/home/cole/code/nixpkgs/rpi-updates-auto"
-export TOWBOOT="/home/cole/code/tow-boot"
+export UPSTREAM="rpi"
 export WORKTREE="rpi-updates-auto"
+
+export NIXPKGS_GIT="/home/cole/code/nixpkgs/master"
+export NIXPKGS_WORKTREE="/home/cole/code/nixpkgs/${WORKTREE}"
 
 export ARCH="x86_64-linux" # what system you're doing the update from
 
@@ -45,7 +47,6 @@ NEW_WIFIFW_REV="$(git -C "${WORKDIR}/wififw" log --pretty=format:"%H")"
 NEW_WIFIFW_VERSION="$(git -C "${WORKDIR}/wififw" log --pretty=format:"%cs")"
 
 METADATA_FILE="${NIXPKGS_WORKTREE}/pkgs/os-specific/linux/firmware/raspberrypi-wireless/default.nix"
-METADATA_DEST="${TOWBOOT}/support/overlay/raspberrypi/wireless-firmware/default.nix"
 UPDATE_ATTR="${NIXPKGS_WORKTREE}#legacyPackages.${ARCH}.raspberrypiWirelessFirmware"
 UPDATE_ATTR_NAME="raspberrypiWirelessFirmware"
 
@@ -86,10 +87,10 @@ if [[ "${OLD_BTFW_REV}" != "${NEW_BTFW_REV}" ||  "${OLD_WIFIFW_REV}" != "${NEW_W
   NEW_HASH="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${NEW_HASH}")"
   sed -i "s|${PLACEHOLDER0}|${NEW_HASH}|" "${METADATA_FILE}"
 
+  sed -i "s|${OLD_WLFW_VERSION}|${NEW_WLFW_VERSION}|" "${METADATA_FILE}"
+
   commitmsg="${UPDATE_ATTR_NAME}: ${OLD_WLFW_VERSION} -> ${NEW_WLFW_VERSION}"
   git -C "${NIXPKGS_WORKTREE}" commit "${METADATA_FILE}" -m "${commitmsg}"
-  # cp -a "${METADATA_FILE}" "${METADATA_DEST}"
-  # git -C "${TOWBOOT}" commit "${METADATA_DEST}" -m "overlay/rpi/${commitmsg}"
 fi
 
 
@@ -108,7 +109,6 @@ NEW_EEPROM_VERSION="$(git -C "${WORKDIR}" log --pretty=format:"%cs" -n1 'firmwar
 LATEST_PIEEPROM_FILENAME="$(basename "$(ls -t "${WORKDIR}"/firmware/stable/pieeprom*bin | head -1)")"
 
 METADATA_FILE="${NIXPKGS_WORKTREE}/pkgs/os-specific/linux/raspberrypi-eeprom/default.nix"
-METADATA_DEST="${TOWBOOT}/support/overlay/raspberrypi/eeprom/default.nix"
 UPDATE_ATTR="${NIXPKGS_WORKTREE}#legacyPackages.${ARCH}.raspberrypi-eeprom"
 UPDATE_ATTR_NAME="raspberrypi-eeprom"
 t="$(mktemp)"; trap "rm $t" EXIT;
@@ -132,8 +132,6 @@ if [[ "${OLD_EEPROM_REV}" != "${NEW_EEPROM_REV}" ]]; then
 
   commitmsg="${UPDATE_ATTR_NAME}: ${OLD_EEPROM_VERSION} -> ${NEW_EEPROM_VERSION}"
   git -C "${NIXPKGS_WORKTREE}" commit "${METADATA_FILE}" -m "${commitmsg}"
-  # cp -a "${METADATA_FILE}" "${METADATA_DEST}"
-  # git -C "${TOWBOOT}" commit "${METADATA_DEST}" -m "overlay/rpi/${commitmsg}"
 fi
 
 
@@ -152,7 +150,6 @@ NEW_RPIFW_VERSION="$(git -C "${WORKDIR}" log --pretty=format:"%cs" -n1 'boot')"
 KERNEL_COMMIT="$(cat "${WORKDIR}"/extra/git_hash)"
 
 METADATA_FILE="${NIXPKGS_WORKTREE}/pkgs/os-specific/linux/firmware/raspberrypi/default.nix"
-METADATA_DEST="${TOWBOOT}/support/overlay/raspberrypi/firmware/default.nix"
 UPDATE_ATTR="${NIXPKGS_WORKTREE}#legacyPackages.${ARCH}.raspberrypifw"
 UPDATE_ATTR_NAME="raspberrypifw"
 t="$(mktemp)"; trap "rm $t" EXIT;
@@ -176,8 +173,6 @@ if [[ "${OLD_RPIFW_REV}" != "${NEW_RPIFW_REV}" ]]; then
 
   commitmsg="${UPDATE_ATTR_NAME}: ${OLD_RPIFW_VERSION} -> ${NEW_RPIFW_VERSION}"
   git -C "${NIXPKGS_WORKTREE}" commit "${METADATA_FILE}" -m "${commitmsg}"
-  # cp -a "${METADATA_FILE}" "${METADATA_DEST}"
-  # git -C "${TOWBOOT}" commit "${METADATA_DEST}" -m "overlay/rpi/${commitmsg}"
 
 fi
 
@@ -195,7 +190,6 @@ NEW_ARMSTUBS_REV="$(git -C "${WORKDIR}" log --pretty=format:"%H" -n1 'armstubs')
 NEW_ARMSTUBS_VERSION="$(git -C "${WORKDIR}" log --pretty=format:"%cs" -n1 'armstubs')"
 
 METADATA_FILE="${NIXPKGS_WORKTREE}/pkgs/os-specific/linux/firmware/raspberrypi/armstubs.nix"
-METADATA_DEST="${TOWBOOT}/support/overlay/raspberrypi/armstubs/default.nix"
 UPDATE_ATTR="${NIXPKGS_WORKTREE}#legacyPackages.${ARCH}.raspberrypi-armstubs"
 UPDATE_ATTR_NAME="raspberrypi-armstubs"
 t="$(mktemp)"; trap "rm $t" EXIT;
@@ -219,8 +213,6 @@ if [[ "${OLD_ARMSTUBS_REV}" != "${NEW_ARMSTUBS_REV}" ]]; then
 
   commitmsg="${UPDATE_ATTR_NAME}: ${OLD_ARMSTUBS_VERSION} -> ${NEW_ARMSTUBS_VERSION}"
   git -C "${NIXPKGS_WORKTREE}" commit "${METADATA_FILE}" -m "${commitmsg}"
-  # cp -a "${METADATA_FILE}" "${METADATA_DEST}"
-  # git -C "${TOWBOOT}" commit "${METADATA_DEST}" -m "overlay/rpi/${commitmsg}"
 fi
 
 
@@ -238,7 +230,6 @@ NEW_LIBRPI_REV="$(git -C "${WORKDIR}" log --pretty=format:"%H" -n1)"
 NEW_LIBRPI_VERSION="$(git -C "${WORKDIR}" log --pretty=format:"unstable-%cs" -n1)"
 
 METADATA_FILE="${NIXPKGS_WORKTREE}/pkgs/development/libraries/libraspberrypi/default.nix"
-METADATA_DEST="${TOWBOOT}/support/overlay/raspberrypi/libraspberrypi/default.nix"
 UPDATE_ATTR="${NIXPKGS_WORKTREE}#legacyPackages.${ARCH}.libraspberrypi"
 UPDATE_ATTR_NAME="libraspberrypi"
 t="$(mktemp)"; trap "rm $t" EXIT;
@@ -262,8 +253,6 @@ if [[ "${OLD_LIBRPI_REV}" != "${NEW_LIBRPI_REV}" ]]; then
 
   commitmsg="${UPDATE_ATTR_NAME}: ${OLD_LIBRPI_VERSION} -> ${NEW_LIBRPI_VERSION}"
   git -C "${NIXPKGS_WORKTREE}" commit "${METADATA_FILE}" -m "${commitmsg}"
-  # cp -a "${METADATA_FILE}" "${METADATA_DEST}"
-  # git -C "${TOWBOOT}" commit "${METADATA_DEST}" -m "overlay/rpi/${commitmsg}"
 fi
 
 
@@ -319,14 +308,4 @@ if [[ "${OLD_LINUXRPI_REV}" != "${NEW_LINUXRPI_REV}" ]]; then
 
   commitmsg="${UPDATE_ATTR_NAME}: ${OLD_LINUXRPI_VERSION} -> ${NEW_LINUXRPI_VERSION}"
   git -C "${NIXPKGS_WORKTREE}" commit "${METADATA_FILE}" -m "${commitmsg}"
-  # cp -a "${METADATA_FILE}" "${METADATA_DEST}"
-  # git -C "${TOWBOOT}" commit "${METADATA_DEST}" -m "overlay/rpi/${commitmsg}"
 fi
-
-
-
-echo "**************************"
-echo "!!!!"
-echo "NOW YOU MUST CHECK NIXPKGS/U-BOOT-RPI and TOW-BOOT PATCHES IN SYNC"
-echo "!!!!"
-echo "**************************"

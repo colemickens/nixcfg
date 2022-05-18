@@ -4,11 +4,12 @@ let
   hn = config.networking.hostName;
   selfPools = [ "${config.networking.hostName}pool" ];
   customPools = {
-    "xeep" = "tank2";
+    "xeep" = [ "tank2" ];
+    "raisin" = [ "tank" ];
   };
   pools =
     if (builtins.hasAttr hn customPools)
-    then [ customPools."${hn}" ]
+    then customPools."${hn}"
     else selfPools;
 in {
   config = {

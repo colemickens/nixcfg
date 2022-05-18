@@ -19,6 +19,8 @@ in
     ../../mixins/ledger.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/plex-mpv.nix
+    ../../mixins/snapclient-local.nix
+    # ../../mixins/snapcast-sink.nix # doesn't work, feels like a privacy risk
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix

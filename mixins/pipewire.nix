@@ -9,13 +9,12 @@
 
   environment.systemPackages = with pkgs; [
     #helvum
+    pipewire
+    pulseaudio
+    pulsemixer
   ];
 
   programs.dconf.enable = true;
-  home-manager.users.cole = { pkgs, ... }: {
-    # services.easyeffects.enable =
-    #   (pkgs.system == "x86_64-linux");
-  };
 
   systemd.user.services.pipewire-pulse.path = [ pkgs.pulseaudio ];
 

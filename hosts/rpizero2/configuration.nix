@@ -1,6 +1,6 @@
 { pkgs, lib, modulesPath, inputs, config, ... }:
 let
-  hostname = "rpizero2";
+  hn = "rpizero2";
 in
 {
   imports = [
@@ -8,6 +8,6 @@ in
   ];
 
   config = {
-    networking.hostName = lib.mkForce hostname;
+    networking.hostName = lib.mkForce hn;
   };
 }
