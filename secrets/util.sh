@@ -14,6 +14,10 @@ function decrypt() {
   done
 }
 
+function commit() {
+  git -C "${DIR}" commit -m "$1" "${DIR}"
+}
+
 function encrypt() {
   cd "${DIR}"
   mkdir -p encrypted; cd unencrypted
@@ -22,7 +26,7 @@ function encrypt() {
       --input-type binary --output-type binary \
       --verbose --output ../encrypted/$f -e $f
   done
-  git -C "${DIR}" add "${DIR}"
+  commit "secrets: encrypted"
 }
 
 function import_keys() {
@@ -65,6 +69,8 @@ function __new_host() {
   "${0}" import_keys
   "${0}" regen_sops
   "${0}" encrypt
+  
+  commit "secrets: new host: ${name}"
 }
 function new_host() { __new_host "$1" "$2" "/etc/ssh/ssh_host_rsa_key"; }
 function new_mnt_host() { __new_host "$1" "$2" "/mnt-$1/etc/ssh/ssh_host_rsa_key"; }
