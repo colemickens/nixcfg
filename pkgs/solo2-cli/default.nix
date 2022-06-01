@@ -7,9 +7,9 @@ let
   metadata = rec {
     repo_git = "https://github.com/solokeys/solo2-cli";
     branch = "main";
-    rev = "82ee2732594648409097745cecf7fb57c3b232c8";
-    sha256 = "sha256-o6TrxVuVVt69mdXC+UqcrzBCvbN46sVmjNMkGmBGOYM=";
-    cargoSha256 = "sha256-BxrHAkn2q1F9M6V1ekCU5b+Bhr4IyEgSmwqRrB5StNo=";
+    rev = "146bd761e5da598bd12a282368e2547c4e07190a";
+    sha256 = "sha256-KMZSntt08AsaxKDZk/DKDFMKGUraHvhQ65tz6/5iM4I=";
+    cargoSha256 = "sha256-uZryYTwkcfZ1cZaozs1ORP43Y60+E/lin67TOcERNF8=";
   };
   extraNativeBuildInputs = [
   ];
