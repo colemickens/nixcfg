@@ -908,8 +908,10 @@
       "locked": {
         "lastModified": 1654042443,
         "narHash": "sha256-rBBOjk2g8vRZiRgQjr2f44KpxwZgEXcnuQqoZO8MXpI=",
-        "type": "git",
-        "url": "file:///home/cole/code/nixpkgs/rpi"
+        "owner": "colemickens",
+        "repo": "nixpkgs",
+        "rev": "47b615847ae7dd84bccf5e3cb373c06152f95bca",
+        "type": "github"
       },
       "original": {
         "owner": "colemickens",
