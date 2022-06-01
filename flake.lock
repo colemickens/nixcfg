@@ -239,11 +239,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1654022913,
-        "narHash": "sha256-jHws3UvhyAw6+VHM0zzaVYJe4+jbcVrvsO+pJA3vDx4=",
+        "lastModified": 1654045981,
+        "narHash": "sha256-DADnKZ2DV0ZAWp2ZQw1vAd216zwGLz1ISrJnnvbbPi4=",
         "owner": "colemickens",
         "repo": "flake-firefox-nightly",
-        "rev": "16ed2cc4c1cf9fb2ae853a562b239979a0c0041e",
+        "rev": "2d8d2ae47b65588d00051b429a40c7f77eb63297",
         "type": "github"
       },
       "original": {
@@ -792,8 +792,10 @@
       "locked": {
         "lastModified": 1654042419,
         "narHash": "sha256-HWw6qPCsmqO6B7qrypf58HsTCkJ7y7S7bkoTnilYpfA=",
-        "type": "git",
-        "url": "file:///home/cole/code/nixpkgs/cmpkgs"
+        "owner": "colemickens",
+        "repo": "nixpkgs",
+        "rev": "7c871f59dad26ff61732a6ed54ddaf2c5807982c",
+        "type": "github"
       },
       "original": {
         "owner": "colemickens",
