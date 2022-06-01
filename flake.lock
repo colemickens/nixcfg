@@ -792,10 +792,8 @@
       "locked": {
         "lastModified": 1654042419,
         "narHash": "sha256-HWw6qPCsmqO6B7qrypf58HsTCkJ7y7S7bkoTnilYpfA=",
-        "owner": "colemickens",
-        "repo": "nixpkgs",
-        "rev": "7c871f59dad26ff61732a6ed54ddaf2c5807982c",
-        "type": "github"
+        "type": "git",
+        "url": "file:///home/cole/code/nixpkgs/cmpkgs"
       },
       "original": {
         "owner": "colemickens",
@@ -910,10 +908,8 @@
       "locked": {
         "lastModified": 1654042443,
         "narHash": "sha256-rBBOjk2g8vRZiRgQjr2f44KpxwZgEXcnuQqoZO8MXpI=",
-        "owner": "colemickens",
-        "repo": "nixpkgs",
-        "rev": "47b615847ae7dd84bccf5e3cb373c06152f95bca",
-        "type": "github"
+        "type": "git",
+        "url": "file:///home/cole/code/nixpkgs/rpi"
       },
       "original": {
         "owner": "colemickens",
@@ -1084,11 +1080,9 @@
       },
       "locked": {
         "lastModified": 1654042535,
-        "narHash": "sha256-BDl+XczaFMTMhxICyygzP074EbE5eEUXJW8o+VLT7ho=",
-        "owner": "colemickens",
-        "repo": "Tow-Boot",
-        "rev": "97a49add6dfe9567b074338634c0445a633261e5",
-        "type": "github"
+        "narHash": "sha256-e84lIrrtvlxLcUxpai45vxPky/M40wnVwyWFSnXH2g4=",
+        "type": "git",
+        "url": "file:///home/cole/code/tow-boot/rpi"
       },
       "original": {
         "owner": "colemickens",

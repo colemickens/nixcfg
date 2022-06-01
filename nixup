@@ -40,10 +40,11 @@ case "${cmd}" in
     done;
   ;;
   "build")
-    set -x
+    while [[ -f "${FLAKE_LOCK:-"flake.lock"}-lock" ]]; do sleep 0.1; printf "." >/dev/stderr; done
     nixbuild "auto" "cachix:colemickens" "${args[@]+"${args[@]}"}";
   ;;
   "deploy")
+    while [[ -f "${FLAKE_LOCK:-"flake.lock"}-lock" ]]; do sleep 0.1; printf "." >/dev/stderr; done
     host="${args[0]:-"z"}"; args=("${args[@]:1}") || true
     if [[ "${host}" == "$(hostname)" ]]; then export NIXUP_ACTION="switch"; fi
     if [[ "${host}" == "raisin" ]]; then export NIXUP_ACTION="switch"; fi
@@ -52,7 +53,7 @@ case "${cmd}" in
     { 
       (set -e;
         printf "${host}=build\n" >> "${NIXUP_LOGDIR:-"/tmp/nixup"}/summary.txt"
-        outres="$(nixup build ".#toplevels.${host}" "${args[@]+"${args[@]}"}")";
+        outres="$(nixbuild "auto" "cachix:colemickens" ".#toplevels.${host}" "${args[@]+"${args[@]}"}")";
 
         printf "${host}=activate\n" >> "${NIXUP_LOGDIR:-"/tmp/nixup"}/summary.txt"
         activate "${NIXUP_ACTION:-"switch"}" "${outres}" "${host}";
@@ -77,7 +78,34 @@ case "${cmd}" in
     export NIXUP_ACTION="reboot"
     nixup "xdeploy" "${@}"
   ;;
-
+  
+  "dev")
+    set -x
+    echo "FLAKE_LOCK=${FLAKE_LOCK}"
+    watchexec \
+      --clear \
+      --restart \
+      --ignore '*.watchman*' \
+      --project-origin $HOME/code/nixcfg \
+      --workdir $HOME/code/nixcfg \
+      -w $HOME/code/nixpkgs/rpi \
+      -w $HOME/code/nixpkgs/cmpkgs \
+      -w $HOME/code/tow-boot/rpi \
+      -- \
+      $HOME/code/nixcfg/nixup devlock
+  ;;
+  "devlock")
+    touch "${FLAKE_LOCK}-lock"
+    echo ":: start :: ${FLAKE_LOCK}-lock" >/dev/stderr
+    nix flake lock \
+      --verbose \
+      --override-input nixpkgs $HOME/code/nixpkgs/cmpkgs \
+      --override-input rpipkgs $HOME/code/nixpkgs/rpi \
+      --override-input tow-boot $HOME/code/tow-boot/rpi
+    echo ":: done :: ${FLAKE_LOCK}-lock" >/dev/stderr
+    rm "${FLAKE_LOCK}-lock"
+  ;;
+  
   "up") _h1 "upup"; true \
     && nixup inputup "${args[@]+"${args[@]}"}" \
     && nixup rpiup "${args[@]+"${args[@]}"}" \

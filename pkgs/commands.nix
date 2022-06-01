@@ -263,20 +263,6 @@ let
       systemctl import-environment --user VK_ICD_FILENAMES WLR_RENDERER
       xsway
     '')
-    (writeShellScriptBin "watchlock" ''
-      set -x
-      export FLAKE_LOCK=flake.dev.lock
-      watchexec \
-        -w ~/code/nixpkgs/rpi \
-        -w ~/code/nixpkgs/cmpkgs \
-        -w ~/code/tow-boot/rpi \
-        -- \
-        nix flake lock \
-          --recreate-lock-file \
-          --override-input nixpkgs $HOME/code/nixpkgs/cmpkgs \
-          --override-input rpipkgs $HOME/code/nixpkgs/rpi \
-          --override-input tow-boot $HOME/code/tow-boot/rpi
-    '')
 
     (writeShellScriptBin "bootnext" ''
       set -e

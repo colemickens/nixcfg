@@ -11,7 +11,7 @@ trgt="${1}"; shift
 attr="${1}"; shift; name="$(echo "${attr}" | cut -d '#' -f2-)"
 
 printf "\n=============================================================================================================\n" >/dev/stderr
-printf " BUILD: (bldr: ${bldr}) (trgt: ${trgt}) (attr: ${attr})\n" >/dev/stderr
+printf " BUILD: (bldr: ${bldr}) (trgt: ${trgt}) (attr: ${attr}) (lock: ${FLAKE_LOCK:-"flake.lock"})\n" >/dev/stderr
 printf "=============================================================================================================\n" >/dev/stderr
 
 if [[ "$trgt" == *"cachix:"* ]]; then
