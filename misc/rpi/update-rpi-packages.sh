@@ -10,6 +10,8 @@ set -x
 export UPSTREAM="rpi"
 export WORKTREE="rpi-updates-auto"
 
+export CACHEDIR="${HOME}/.cache/rpi"; mkdir -p "${CACHEDIR}"
+
 export NIXPKGS_GIT="/home/cole/code/nixpkgs/master"
 export NIXPKGS_WORKTREE="/home/cole/code/nixpkgs/${WORKTREE}"
 
@@ -28,7 +30,7 @@ git -C "${NIXPKGS_WORKTREE}" reset --hard "${UPSTREAM}"
 ## UPDATE: raspberrypi-wireless-firmware
 
 # NOTE THIS one is special, it has to check two things (why though, should we split these back apart?)
-WORKDIR="/tmp/raspberrypi-wireless-firmware"
+WORKDIR="${CACHEDIR}/raspberrypi-wireless-firmware"
 if [[ ! -d "${WORKDIR}/btfw" ]]; then
   git clone --depth=1 'https://github.com/RPi-Distro/bluez-firmware' "${WORKDIR}/btfw" -b "master"
 fi
@@ -94,10 +96,10 @@ if [[ "${OLD_BTFW_REV}" != "${NEW_BTFW_REV}" ||  "${OLD_WIFIFW_REV}" != "${NEW_W
 fi
 
 
-##
+########################################################################################################################
 ##
 ## UPDATE: raspberrypi-eeprom
-WORKDIR="/tmp/raspberrypi-eeprom"
+WORKDIR="${CACHEDIR}/raspberrypi-eeprom"
 if [[ ! -d "${WORKDIR}" ]]; then
   mkdir -p "${WORKDIR}"
   git clone 'https://github.com/raspberrypi/rpi-eeprom' "${WORKDIR}"
@@ -138,7 +140,7 @@ fi
 ########################################################################################################################
 ##
 ## UPDATE: raspberrypifw
-WORKDIR="/tmp/raspberrypifw"
+WORKDIR="${CACHEDIR}/raspberrypifw"
 if [[ ! -d "${WORKDIR}" ]]; then
   mkdir -p "${WORKDIR}"
   git clone --depth=1 'https://github.com/raspberrypi/firmware' "${WORKDIR}" -b "stable"
@@ -177,10 +179,52 @@ if [[ "${OLD_RPIFW_REV}" != "${NEW_RPIFW_REV}" ]]; then
 fi
 
 
+########################################################################################################################
+##
+## UPDATE: raspberrypifw-master
+WORKDIR="${CACHEDIR}/raspberrypifw-master"
+if [[ ! -d "${WORKDIR}" ]]; then
+  mkdir -p "${WORKDIR}"
+  git clone --depth=1 'https://github.com/raspberrypi/firmware' "${WORKDIR}" -b "master"
+fi
+git -C "${WORKDIR}" remote update
+git -C "${WORKDIR}" reset --hard origin/master
+NEW_RPIFW_REV="$(git -C "${WORKDIR}" log --pretty=format:"%H" -n1 'boot')"
+NEW_RPIFW_VERSION="$(git -C "${WORKDIR}" log --pretty=format:"%cs" -n1 'boot')"
+KERNEL_COMMIT="$(cat "${WORKDIR}"/extra/git_hash)"
+
+METADATA_FILE="${NIXPKGS_WORKTREE}/pkgs/os-specific/linux/firmware/raspberrypi/master.nix"
+UPDATE_ATTR="${NIXPKGS_WORKTREE}#legacyPackages.${ARCH}.raspberrypifw-master"
+UPDATE_ATTR_NAME="raspberrypifw-master"
+t="$(mktemp)"; trap "rm $t" EXIT;
+nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.meta.verinfo" > "${t}" 2>/dev/null
+OLD_RPIFW_REV="$(cat "${t}" | jq -r .rev)"
+OLD_RPIFW_HASH="$(cat "${t}" | jq -r .hash)"
+OLD_RPIFW_VERSION="$(cat "${t}" | jq -r .version)"
+
+if [[ "${OLD_RPIFW_REV}" != "${NEW_RPIFW_REV}" ]]; then
+  # do replacement!
+  sed -i "s|${OLD_RPIFW_REV}|${NEW_RPIFW_REV}|g" "${METADATA_FILE}"
+  sed -i "s|${OLD_RPIFW_HASH}|${PLACEHOLDER0}|g" "${METADATA_FILE}"
+  # copyable:
+  nix "${nixargs[@]}" build --no-link "${UPDATE_ATTR}" &> "${t}" || true; cat "${t}"
+  NEW_HASH="$(cat "${t}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
+  if [[ "${NEW_HASH}" == "sha256" ]]; then NEW_HASH="$(cat "${t}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
+  NEW_HASH="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${NEW_HASH}")"
+  sed -i "s|${PLACEHOLDER0}|${NEW_HASH}|" "${METADATA_FILE}"
+
+  sed -i "s|${OLD_RPIFW_VERSION}|${NEW_RPIFW_VERSION}|" "${METADATA_FILE}"
+
+  commitmsg="${UPDATE_ATTR_NAME}: ${OLD_RPIFW_VERSION} -> ${NEW_RPIFW_VERSION}"
+  git -C "${NIXPKGS_WORKTREE}" commit "${METADATA_FILE}" -m "${commitmsg}"
+
+fi
+
+
 # ########################################################################################################################
 # ##
 # ## UPDATE: raspberrypi-armstubs
-WORKDIR="/tmp/raspberrypi-armstubs"
+WORKDIR="${CACHEDIR}/raspberrypi-armstubs"
 if [[ ! -d "${WORKDIR}/.git" ]]; then
   git clone --depth=1 'https://github.com/raspberrypi/tools/' "${WORKDIR}" -b "master"
 fi
@@ -219,7 +263,7 @@ fi
 ########################################################################################################################
 ##
 ## UPDATE: libraspberrypi
-WORKDIR="/tmp/libraspberrypi"
+WORKDIR="${CACHEDIR}/libraspberrypi"
 if [[ ! -d "${WORKDIR}/.git" ]]; then\
   git clone --depth=1 'https://github.com/raspberrypi/userland' "${WORKDIR}" -b "master"
 fi
@@ -259,12 +303,11 @@ fi
 ########################################################################################################################
 ##
 ## UPDATE: linux_rpi
-WORKDIR="/tmp/rpi_linux"
+WORKDIR="${CACHEDIR}/rpi_linux"
 # for the kernel we want to clone a specific commit instead of getting the entire repo
 # so... let's check what commit we have, if it's the wrong one, then delete and reclone.
 if [[ ! -d "${WORKDIR}" \
 || "$(git -C "${WORKDIR}" log --pretty=format:"%H" -n1)" != "${KERNEL_COMMIT}" ]]; then
-  rm -rf "${WORKDIR}"
   mkdir -p "${WORKDIR}"
   git init "${WORKDIR}"
   git -C "${WORKDIR}" remote add origin "https://github.com/raspberrypi/linux"

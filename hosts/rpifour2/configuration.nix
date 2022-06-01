@@ -1,14 +1,9 @@
 { pkgs, lib, modulesPath, inputs, config, ... }:
 
 let
-  hn = "rpifour1";
-  mbr_disk_id = "99999941";
-  static_ip = "192.168.1.20/16";
-
-  _inst = d: import ../rpi-inst.nix {
-    inherit pkgs;
-    tconfig = inputs.self.nixosConfigurations.${d}.config;
-  };
+  hn = "rpifour2";
+  mbr_disk_id = "99999942";
+  static_ip = "192.168.1.30/16";
 in
 {
   imports = [
@@ -19,19 +14,12 @@ in
   ];
 
   config = {
-    networking.hostName = lib.mkForce hn;
+    networking.hostName = hn;
     system.stateVersion = "21.11";
-    system.build.mbr_disk_id = lib.mkForce mbr_disk_id;
-      
-    nixcfg.common.useZfs = false;
-
-    environment.systemPackages = [
-      (_inst "rpizerotwo1")
-      # (_inst "rpizerotwo2")
-    ];
+    system.build.mbr_disk_id = mbr_disk_id;
 
     systemd.network = {
-      networks."20-eth0-static-ip" = lib.mkForce {
+      networks."20-eth0-static-ip" = {
         matchConfig.Driver = "r8152";
         addresses = [{ addressConfig = { Address = static_ip; }; }];
         networkConfig = {
@@ -40,7 +28,7 @@ in
           DHCP = "ipv6";
         };
       };
-      networks."05-block-wlan" = lib.mkForce {
+      networks."05-block-wlan" = {
         matchConfig.Type = "wlan";
         networkConfig = { };
         linkConfig.Unmanaged = "yes";
@@ -48,13 +36,8 @@ in
       };
     };
 
-    # rpifour1 breaks the rules (usb-ssd/zsh,etc)
-    fileSystems = lib.mkForce {
-      "/" = { fsType = "ext4"; device = "/dev/disk/by-partlabel/${hn}-root-ext4"; };
-      # "/" = { fsType = "zfs"; device = "${hn}pool/root"; };
-      # "/nix" = { fsType = "zfs"; device = "${hn}pool/nix"; };
-      # "/home" = { fsType = "zfs"; device = "${hn}pool/home"; };
-      # "/persist" = { fsType = "zfs"; device = "${hn}pool/persist"; };
+    fileSystems = {
+      "/" = { fsType = "ext4"; device = "/dev/disk/by-partlable/${hn}-root-ext4"; };
 
       "/boot" = {
         fsType = "vfat";
@@ -69,8 +52,6 @@ in
         options = [ "nofail" "ro" ];
       };
     };
-    swapDevices = lib.mkForce [{
-      device = "/dev/disk/by-partlabel/${hn}-swap";
-    }];
+    swapDevices = [{ device = "/dev/disk/by-partlabel/${hn}-swap"; }];
   };
 }

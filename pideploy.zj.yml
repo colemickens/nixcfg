@@ -1,0 +1,46 @@
+---
+session:
+  name: "xdeploy"
+  connect: true
+
+pane_frames: true
+
+template:
+  direction: Horizontal
+  parts:
+    - direction: Vertical  # part 1
+      borderless: true
+      split_size:
+        Fixed: 1
+      run:
+        plugin:
+          location: "zellij:tab-bar"
+    - direction: Vertical # part 2
+      body: true
+      pane_frames: true
+    - direction: Vertical # part 3
+      borderless: true
+      split_size:
+        Fixed: 2
+      run:
+        plugin:
+          location: "zellij:status-bar"
+
+tabs:
+  - direction: Horizontal
+    name: "nixup-a64"
+    parts:
+      - direction: Vertical
+        parts:
+          - pane_name: "rpitwozero1"
+            run: { command: {cmd: ./nixup, args: ["rdeploy", "rpizerotwo1", "--override-input", "rpipkgs", "/home/cole/code/nixpkgs/rpi", "--override-input", "nixpkgs", "/home/cole/code/nixpkgs/cmpkgs", "--override-input", "tow-boot", "/home/cole/code/tow-boot/rpi"]} }
+          - pane_name: "rpitwozero2"
+            run: { command: {cmd: ./nixup, args: ["rdeploy", "rpizerotwo2", "--override-input", "rpipkgs", "/home/cole/code/nixpkgs/rpi", "--override-input", "nixpkgs", "/home/cole/code/nixpkgs/cmpkgs", "--override-input", "tow-boot", "/home/cole/code/tow-boot/rpi"]} }
+          - pane_name: "rpitwozero3"
+            run: { command: {cmd: ./nixup, args: ["rdeploy", "rpizerotwo3", "--override-input", "rpipkgs", "/home/cole/code/nixpkgs/rpi", "--override-input", "nixpkgs", "/home/cole/code/nixpkgs/cmpkgs", "--override-input", "tow-boot", "/home/cole/code/tow-boot/rpi"]} }
+      - direction: Vertical
+        parts:
+          - pane_name: "rpithreebp1"
+            run: { command: {cmd: ./nixup, args: ["rdeploy", "rpithreebp1", "--override-input", "rpipkgs", "/home/cole/code/nixpkgs/rpi", "--override-input", "nixpkgs", "/home/cole/code/nixpkgs/cmpkgs", "--override-input", "tow-boot", "/home/cole/code/tow-boot/rpi"]} }
+          - pane_name: "rpifour1"
+            run: { command: {cmd: ./nixup, args: ["rdeploy", "rpifour1", "--override-input", "rpipkgs", "/home/cole/code/nixpkgs/rpi", "--override-input", "nixpkgs", "/home/cole/code/nixpkgs/cmpkgs", "--override-input", "tow-boot", "/home/cole/code/tow-boot/rpi"]} }

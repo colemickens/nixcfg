@@ -28,6 +28,10 @@ in
       # kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
     };
 
+    environment.systemPackages = with pkgs; [
+      libraspberrypi
+    ];
+
     nix.nixPath = lib.mkDefault [ ];
     nix.gc.automatic = lib.mkDefault true;
 
@@ -41,13 +45,17 @@ in
 
     services.fwupd.enable = lib.mkForce false; # doesn't xcompile, don't remember the details
 
-    specialisation = {
-      "foundation" = {
-        inheritParentConfig = true;
-        configuration = {
-          config.boot.kernelPackages = pkgs.linuxPackages_rpi4;
-        };
-      };
-    };
+    hardware.firmware = with pkgs; [
+      raspberrypiWirelessFirmware
+    ];
+
+    # specialisation = {
+    #   "foundation" = {
+    #     inheritParentConfig = true;
+    #     configuration = {
+    #       config.boot.kernelPackages = pkgs.linuxPackages_rpi4;
+    #     };
+    #   };
+    # };
   };
 }

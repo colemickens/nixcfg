@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -x
+set -euo pipefail
 
     (d="${HOME}/code/nixpkgs/cmpkgs"; cd "${d}" \
       && git -C "${d}" remote update \

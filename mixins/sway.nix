@@ -9,6 +9,7 @@ let
   out_aw2521h = "Dell Inc. Dell AW2521H #HLAYMxgwABDZ";
   out_raisin = "Unknown 0x1402 0x00000000";
   out_lgc165 = "Goldstar Company Ltd LG TV SSCR2 0x00000101";
+  out_rpi4_lgc165 = "LG Electronics LG TV SSCR2 0x00000101";
 
   in_tp_pinebook = "9610:30:HAILUCK_CO.,LTD_USB_KEYBOARD_Touchpad";
   in_tp_raisin = "1739:52804:MSFT0001:00_06CB:CE44_Touchpad";
@@ -225,6 +226,9 @@ in
               };
               "${out_lgc165}" = {
                 disable = "";
+              };
+              "${out_rpi4_lgc165}" = {
+                mode = "1920x1080@60.000Hz";
               };
               "*" = {
                 background = background;

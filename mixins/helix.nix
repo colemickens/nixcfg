@@ -3,6 +3,7 @@
 let
   tomlFormat = pkgs.formats.toml { };
   gen = cfg: (tomlFormat.generate "helix-languages.toml" cfg);
+  helixUnstable = inputs.helix.outputs.packages.${pkgs.system}.helix;
 in
 {
   config = {
@@ -13,14 +14,11 @@ in
       programs.helix = {
 
         # TODO: temp workaround for cross-arch eval with cargo-nix-integration
-        #enable = true;
-        enable = if pkgs.system == "x86_64-linux" then true else false;
+        enable = true;
         package =
-          inputs.helix.outputs.packages.${pkgs.system}.helix;
-        # if pkgs.system == "x86_64-linux"
-        # then inputs.helix.outputs.packages.${pkgs.system}.helix
-        # else inputs.helix.outputs.packages.${pkgs.system}.helix-native;
-        # else pkgs.helix;
+          if pkgs.system == "x86_64-linux"
+          then helixUnstable
+          else pkgs.helix;
 
         settings = {
 

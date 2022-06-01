@@ -2,7 +2,6 @@
 
 let
   prefs = import ../../mixins/_preferences.nix { inherit pkgs lib config inputs; };
-  _wayfire = pkgs.wayfire;
   useUnstableOverlay = true;
 in {
   imports = [
@@ -32,7 +31,12 @@ in {
     xdg.portal.enable = true;
     xdg.portal.gtkUsePortal = true;
     xdg.portal.extraPortals = with pkgs;
-      [ xdg-desktop-portal-wlr xdg-desktop-portal-gtk ];
+      [
+        xdg-desktop-portal-wlr
+        (xdg-desktop-portal-gtk.override {
+          buildPortalsInGnome = false;  
+        })
+      ];
 
     home-manager.users.cole = { pkgs, ... }: {
       services = {
@@ -63,8 +67,8 @@ in {
         sirula
         
         # file managers TODO: pick one?
-        xfce.thunar
-        gnome.nautilus
+        # xfce.thunar
+        # gnome.nautilus
 
         imv
         grim

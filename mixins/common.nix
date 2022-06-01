@@ -3,30 +3,31 @@
 let
   cfg = config.nixcfg.common;
   defaultKernel = pkgs.linuxPackages_latest;
-  _defaultKernel = pkgs.linuxKernel.packagesFor
-    (pkgs.linuxPackages_latest.kernel.override {
-      structuredExtraConfig = {
-        FB = lib.mkForce lib.kernel.no;
-        FB_SIMPLE = lib.mkForce lib.kernel.option lib.kernel.no;
-        FB_EFI = lib.mkForce lib.kernel.option lib.kernel.no;
+  defaultZfsKernel = pkgs.linuxPackages_5_17;
+  # _defaultKernel = pkgs.linuxKernel.packagesFor
+  #   (pkgs.linuxPackages_latest.kernel.override {
+  #     structuredExtraConfig = {
+  #       FB = lib.mkForce lib.kernel.no;
+  #       FB_SIMPLE = lib.mkForce lib.kernel.option lib.kernel.no;
+  #       FB_EFI = lib.mkForce lib.kernel.option lib.kernel.no;
 
-        AGP = lib.mkForce lib.kernel.no;
-        HAS_IOMEM = lib.mkForce lib.kernel.yes;
-        HAS_DMA = lib.mkForce lib.kernel.yes;
-        MMU = lib.mkForce lib.kernel.yes;
-        DRM = lib.mkForce lib.kernel.yes;
-        DRM_SIMPLEDRM = lib.mkForce lib.kernel.yes;
-        SYSFB_SIMPLEFB = lib.mkForce lib.kernel.yes;
-      } // (lib.genAttrs
-        (
-          [ "DRM_VMWGFX_FBCON" "LOGO" ]
-            ++ [ "FRAMEBUFFER_CONSOLE" "FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER" "FRAMEBUFFER_CONSOLE_ROTATION" ]
-            ++ [ "FB_3DFX_ACCEL" "FB_ATY_CT" "FB_ATY_GX" "FB_EFI" "FB_NVIDIA_I2C" "FB_RIVA_I2C" ]
-            ++ [ "FB_SAVAGE_ACCEL" "FB_SAVAGE_I2C" "FB_SIMPLE" "FB_SIS_300" "FB_SIS_315" "FB_VESA" ]
-        )
-        (x: lib.mkForce (lib.kernel.option lib.kernel.no))
-      );
-    });
+  #       AGP = lib.mkForce lib.kernel.no;
+  #       HAS_IOMEM = lib.mkForce lib.kernel.yes;
+  #       HAS_DMA = lib.mkForce lib.kernel.yes;
+  #       MMU = lib.mkForce lib.kernel.yes;
+  #       DRM = lib.mkForce lib.kernel.yes;
+  #       DRM_SIMPLEDRM = lib.mkForce lib.kernel.yes;
+  #       SYSFB_SIMPLEFB = lib.mkForce lib.kernel.yes;
+  #     } // (lib.genAttrs
+  #       (
+  #         [ "DRM_VMWGFX_FBCON" "LOGO" ]
+  #           ++ [ "FRAMEBUFFER_CONSOLE" "FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER" "FRAMEBUFFER_CONSOLE_ROTATION" ]
+  #           ++ [ "FB_3DFX_ACCEL" "FB_ATY_CT" "FB_ATY_GX" "FB_EFI" "FB_NVIDIA_I2C" "FB_RIVA_I2C" ]
+  #           ++ [ "FB_SAVAGE_ACCEL" "FB_SAVAGE_I2C" "FB_SIMPLE" "FB_SIS_300" "FB_SIS_315" "FB_VESA" ]
+  #       )
+  #       (x: lib.mkForce (lib.kernel.option lib.kernel.no))
+  #     );
+  #   });
   hn = config.networking.hostName;
 in
 {
@@ -76,6 +77,15 @@ in
 
   config =
     ({
+      system.build.nixcfg.deployScript = (pkgs.writeTextFile {
+        name = "deploy-${hn}";
+        exectuable = true;
+        destination = "/bin/deploy-${hn}";
+        text = pkgs.substituteAll {
+          src = ../misc/activate.sh;
+          nixup_out = "${config.system.build.toplevel}";
+        };
+      });
       ###################################
       ## DEBLOAT
       ###################################
@@ -105,7 +115,7 @@ in
           timeoutStyle = "hidden";
           timeout = 1;
         };
-        kernelPackages = lib.mkIf cfg.defaultKernel (lib.mkDefault defaultKernel);
+        kernelPackages = lib.mkIf cfg.defaultKernel (lib.mkDefault (if cfg.useZfs then defaultZfsKernel else defaultKernel));
         kernel.sysctl = {
           "fs.file-max" = 100000;
           "fs.inotify.max_user_instances" = 256;

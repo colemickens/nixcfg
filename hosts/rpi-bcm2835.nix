@@ -15,10 +15,17 @@
   config = {
     nixpkgs.crossSystem = lib.mkForce lib.systems.examples.raspberryPi;
 
+    # tow-boot.config = {
+    #   rpi = {
+    #     upstream_kernel = false;
+    #   };
+    # };
+
     nixpkgs.overlays = [
       (final: prev: {
         btrfs-progs = prev.runCommandNoCC "foo" { } ''
-          touch $out
+          mkdir -p $out/share/
+          touch $out/share/btrfs-progs.txt
         '';
         makeModulesClosure = x: prev.makeModulesClosure (x // { allowMissing = true; });
       })
@@ -34,12 +41,11 @@
     environment.noXlibs = true;
 
     boot = {
-      kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
       kernelParams = [
         # when (!no ATF and) the passthru dtb, this isnt needed hm
         "earlyprintk"
-        "earlycon=uart8250,mmio32,0x3f215040"
-        "console=ttyS1,115200"
+        # maybe breaks (1/2): "earlycon=uart8250,mmio32,0x3f215040"
+        # maybe breaks (2/2): "console=ttyS1,115200"
       ];
       # historically our rpizero*s have used the generation tree, so lets keep that for now
       # loader.generic-extlinux-compatible = {
@@ -47,7 +53,6 @@
       # };
     };
 
-    # TODO: harmonize filesystems (rpizero1,rpizero2), move them here??
     fileSystems = lib.mkDefault { };
   };
 }

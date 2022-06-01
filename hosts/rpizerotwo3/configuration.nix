@@ -12,5 +12,6 @@ in
   config = {
     system.build.mbr_disk_id = lib.mkForce mbr_disk_id;
     networking.hostName = lib.mkForce hn;
+    boot.blacklistedKernelModules = [ "snd_bcm2835" ]; # ??
   };
 }

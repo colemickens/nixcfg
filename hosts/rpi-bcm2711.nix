@@ -9,10 +9,17 @@
 
 ## RPI4
 
-{
+let
+  upstream_kernel = false;
+  # upstream_kernel = true;
+  mbr_disk_id = config.system.build.mbr_disk_id;
+in {
   imports = [
     ./rpi-core.nix
-  ];
+    ./rpi-towboot.nix
+  ] ++ (if upstream_kernel then [] else [
+    ./rpi-foundation-v3d.nix
+  ]);
 
   # NOTES: rpi4-specific:
   # sudo env \
@@ -24,36 +31,83 @@
   config = {
     environment.systemPackages = with pkgs; [
       picocom
+      libraspberrypi
     ];
+    hardware.usbWwan.enable = true;
 
-    boot.kernelParams = [
-      # when (!no ATF and) the passthru dtb, this isnt needed hm
-      "earlycon=uart8250,mmio32,0xfe215040"
+    tow-boot.config = {
+      rpi = {
+        upstream_kernel = upstream_kernel;
 
-      "earlyprintk"
-      "console=ttyS1,115200"
-    ];
-    boot.initrd.kernelModules = [ "vc4" "bcm2835_dma" "i2c_bcm2835" ];
-    boot.initrd.availableKernelModules = [
-      # "pcie_brcmstb" # netboot, does this even make sense?
-      # "bcm_phy_lib" # netboot, does this even make sense?
-      # "broadcom" # netboot, does this even make sense?
-      # "mdio_bcm_unimac" # netboot, does this even make sense?
-      # "genet" # netboot, does this even make sense?
-      "vc4"
-      "reset_raspberrypi" # needed for USB reset, so that USB works in kernel 5.14
-      "xhci_pci" # boot-usb
-      # "nvme" # boot-nvme
-      "uas" # boot-usb-uas
-      "usb_storage" # boot-usb
-      "sd_mod" # boot-usb
-      "mmc_block" # boot-sdcard
-      "usbhid" # luks/kb
-      "hid_generic" # luks/kb
-      "hid_microsoft" # luks/kb
-    ];
+        arm_boost = true;
+        initial_boost = 60;
+        hdmi_enable_4kp60 = true;
+        hdmi_ignore_cec = true;
+        disable_fw_kms_setup = upstream_kernel;
+        
+        enable_watchdog = true;
+      };
+    };
+
+    boot = {
+      loader.generic-extlinux-compatible.useGenerationDeviceTree = true;
+
+      kernelPackages = if upstream_kernel
+        then lib.mkForce pkgs.linuxPackages_latest #vc4/hdmi might be broken on 5.18
+        else lib.mkForce pkgs.linuxPackages_rpi4; #vc4/hdmi might be broken on 5.18
+
+      kernelParams = ([
+        "cma=512M"
+        "snd_bcm2835.enable_hdmi=1"
+        "snd_bcm2835.enable_headphones=0"
+      ] ++ (if upstream_kernel then [
+        # "console=ttyS0,115200" "console=tty1" # no output after "starting kernel"
+        "console=serial0,115200" "console=tty1"
+      ] else [
+        # I don't think we have the DT enablement for uart serial
+      ]));
+      # initrd.preFailCommands = ''
+      #   reboot
+      # '';
+      initrd.kernelModules = config.boot.initrd.availableKernelModules;
+      initrd.availableKernelModules = [
+        # "genet" # netboot, does this even make sense?
+        # "nvme" # boot-nvme
+        "pcie_brcmstb" # boot-usb
+        "broadcom" # netboot, does this even make sense?
+        "v3d" "vc4" # vc4/hdmi stuffs?
+        "reset_raspberrypi" # needed for USB reset, so that USB works in kernel 5.14
+        "xhci_pci" # boot-usb
+        "uas" # boot-usb-uas
+        "usb_storage" # boot-usb
+        "sd_mod" # boot-usb
+        "mmc_block" # boot-sdcard
+        "usbhid" # luks/kb
+        "hid_generic" # luks/kb
+        "hid_microsoft" # luks/kb
+      ];
+      # unblakc-listing this fixed hdmi audio with `fkms`...
+      blacklistedKernelModules = if upstream_kernel then [ "snd_bcm2835" ] else [];
+    };
 
     # TODO: harmonize filesystems (rpifour1,sinkor), move them here??
-    fileSystems = lib.mkDefault { };
+    fileSystems = lib.mkDefault {
+      "/" = {
+        device = "/dev/disk/by-partuuid/${mbr_disk_id}-03";
+        fsType = "ext4";
+      };
+      "/boot" = {
+        device = "/dev/disk/by-partuuid/${mbr_disk_id}-02";
+        fsType = "vfat";
+      };
+      "/boot/firmware" = {
+        device = "/dev/disk/by-partuuid/${mbr_disk_id}-01";
+        fsType = "vfat";
+        options = [ "ro" "nofail" ];
+      };
+    };
+    swapDevices = lib.mkDefault [{
+      device = "/dev/disk/by-partuuid/${mbr_disk_id}-04";
+    }];
   };
 }

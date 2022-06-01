@@ -30,6 +30,7 @@ in
 
     # ./experimental.nix
       
+    ./amdzen2.nix
     inputs.hardware.nixosModules.common-cpu-amd
     inputs.hardware.nixosModules.common-gpu-amd
     inputs.hardware.nixosModules.common-pc-laptop-ssd
@@ -38,6 +39,10 @@ in
   config = {
     system.stateVersion = "21.05";
     networking.hostName = hostname;
+      
+    environment.systemPackages = with pkgs; [
+      esphome
+    ];
 
     hardware.bluetooth.enable = true;
     hardware.usbWwan.enable = true;

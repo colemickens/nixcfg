@@ -4,7 +4,7 @@ args_@{ lib
 , ... }:
 
 let
-  metadata = rec {
+  verinfo = rec {
     repo_git = "https://github.com/solokeys/solo2-cli";
     branch = "main";
     rev = "146bd761e5da598bd12a282368e2547c4e07190a";
@@ -20,10 +20,10 @@ let
   newsrc = fetchFromGitHub {
     owner = "solokeys";
     repo = "solo2-cli";
-    inherit (metadata) rev sha256;
+    inherit (verinfo) rev sha256;
     fetchSubmodules = true;
   };
-  version = builtins.substring 0 10 metadata.rev;
+  version = builtins.substring 0 10 verinfo.rev;
 in
 (solo2-cli.override args).overrideAttrs(old: rec {
   pname = "solo2-cli";
@@ -34,11 +34,11 @@ in
     name = "${pname}-${version}-vendor.tar.gz";
     src = newsrc;
     inherit version;
-    outputHash = metadata.cargoSha256;
+    outputHash = verinfo.cargoSha256;
   });
 
   buildInputs = old.buildInputs ++ (map (n: args_.${n}) extraBuildInputs);
   nativeBuildInputs = old.nativeBuildInputs ++ (map (n: args_.${n}) extraNativeBuildInputs);
 
-  meta = (old.meta or {}) // { description = "${old.description or "zeterm"}"; verinfo = metadata; };
+  meta = (old.meta or {}) // { description = "${old.description or "zeterm"}"; verinfo = verinfo; };
 })

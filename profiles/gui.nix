@@ -55,13 +55,11 @@ in
           # gui cli
           brightnessctl
           pulsemixer
-          alsaUtils
 
           # misc gui
           libnotify
           evince
           gimp
-          notepadqq
           qemu
           freerdp
           vlc
@@ -73,11 +71,11 @@ in
 
           nheko
           # librewolf
-          _chromey
         ]) ++ (lib.optionals (pkgs.system == "x86_64-linux") (with pkgs; [
           # x86_64-linux only
           neochat
           _firefox
+          _chromey
         ]))
       );
     };

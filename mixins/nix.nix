@@ -12,7 +12,11 @@ let
     };
   });
   # _nix = _nixUnstableXdg;
-  _nix = pkgs.nixUnstable;
+  _nix = pkgs.nixUnstable.overrideAttrs(old: {
+    patches = (old.patches or []) ++ [
+      ../misc/0001-flakes-flake.lock-location-env-var.patch
+    ];
+  });
 in
 {
   config = {

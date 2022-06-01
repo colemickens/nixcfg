@@ -9,6 +9,7 @@
 
   environment.systemPackages = with pkgs; [
     #helvum
+    alsaUtils
     pipewire
     pulseaudio
     pulsemixer

@@ -60,8 +60,8 @@ function diskinit() {
   sudo zpool set autotrim=on "${POOL}" # enable autotrim
   
   # auto-snapshot our important dataz
-  sudo zfs set com.sun.auto-snapshot=true "${hn}pool/home"
-  sudo zfs set com.sun.auto-snapshot=true "${hn}pool/persist"
+  sudo zfs set com.sun:auto-snapshot=true "${hn}pool/home"
+  sudo zfs set com.sun:auto-snapshot=true "${hn}pool/persist"
   
   # snapshot root at blank for "erase your darlings"
   sudo zfs snapshot "${POOL}/root@blank"

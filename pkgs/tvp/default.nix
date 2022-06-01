@@ -2,7 +2,7 @@
 { stdenv, lib, fetchFromGitHub, pkg-config, ffmpeg_4 }:
 
 let
-  metadata = rec {
+  verinfo = rec {
     repo_git = "https://github.com/TheRealOrange/terminalvideoplayer";
     branch = "main";
     rev = "8295e4948567cbe4f7854bb35adf3fd1d010a178";
@@ -11,13 +11,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "terminalvideoplayer";
-  version = metadata.version;
+  version = verinfo.version;
 
   src = fetchFromGitHub {
     owner = "TheRealOrange";
     repo = "terminalvideoplayer";
-    rev = metadata.rev;
-    sha256 = metadata.sha256;
+    rev = verinfo.rev;
+    sha256 = verinfo.sha256;
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -34,9 +34,9 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     mainProgram = "tvp";
-    verinfo = metadata;
+    verinfo = verinfo;
     description = "This is a cursed terminal video player";
-    homepage = metadata.repo_git;
+    homepage = verinfo.repo_git;
     license = licenses.gpl3;
     maintainers = [];
   };

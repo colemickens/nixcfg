@@ -33,6 +33,7 @@
   config = {
     # I don't think my user dbus socket is here without this?????
     users.users.cole.linger = true;
+    users.users.cole.shell = pkgs.zsh;
     
     # HM: ca.desrt.dconf error:
     # TODO: sops.secrets."nixup-secrets".owner = config.users.users.cole;
@@ -82,7 +83,11 @@
         #sfz # simple file zerver? lol
         # prs # gopass replacement, oh fuck thank god, but no TOTP or PASSWORD_STORE_DIR or sequoia support
         # </rust pkgs>
-        python3Packages.pywatchman
+        watchexec
+        tpm2-tools
+        
+        cava
+        cli-visualizer
 
         xplr
         

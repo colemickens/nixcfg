@@ -1,0 +1,48 @@
+substitutions:
+  ipnum: "201"
+  devname: esp32-stream${ipnum}
+
+# generic template
+
+esphome:
+  name: ${devname}
+
+esp32:
+  board: nodemcu-32s
+
+### START COMMON (TODO extract, make sure interpolation happens after concat)
+
+wifi:
+  ssid: "chimera-iot"
+  password: "fafc996b949b6d53800"
+
+  manual_ip:
+    static_ip: 192.168.69.${ipnum}
+    gateway: 192.168.1.1
+    subnet: 255.255.0.0
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "ESPHome Fallback ${devname}"
+    password: "d3ZBU8Kih1RN"
+
+captive_portal:
+
+api:
+  password: "fafc996b949b6d53800"
+
+logger:
+
+ota:
+### END COMMON
+
+external_components:
+  - source: github://oxan/esphome-stream-server
+
+uart:
+  baud_rate: 115200
+  tx_pin: GPIO17
+  rx_pin: GPIO16
+
+stream_server:
+  # default port: 6638

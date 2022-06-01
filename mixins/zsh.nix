@@ -74,7 +74,7 @@
         profileExtra = ''
           if [[ "''${AUTOLOGIN_CMD}" != "" ]]; then
           (
-            if [[ "$(tty)" == /dev/tty1 ]]; then
+            if [[ "$(tty)" == "/dev/tty1" ]]; then
               set -x
               "''${AUTOLOGIN_CMD}"
               exit

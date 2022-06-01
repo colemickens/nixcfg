@@ -33,20 +33,20 @@ tabs:
       - direction: Vertical
         parts:
           - pane_name: "nixup rpizero1"
-            run: { command: {cmd: ./nixup, args: ["rpizero1"]} }
+            run: { command: {cmd: ./nixup, args: ["deploy", "rpizero1"]} }
           - pane_name: "nixup rpizero2"
-            run: { command: {cmd: ./nixup, args: ["rpizero2"]} }
+            run: { command: {cmd: ./nixup, args: ["deploy", "rpizero2"]} }
       - direction: Vertical
         parts:
           - pane_name: "nixup slynux"
-            run: { command: {cmd: ./nixup, args: ["slynux"]} }
+            run: { command: {cmd: ./nixup, args: ["deploy", "slynux"]} }
           - pane_name: "nixup pelinux"
-            run: { command: {cmd: ./nixup, args: ["pelinux"]} }
+            run: { command: {cmd: ./nixup, args: ["deploy", "pelinux"]} }
           - pane_name: "nixup jeffhyper"
-            run: { command: {cmd: ./nixup, args: ["jeffhyper"]} }
+            run: { command: {cmd: ./nixup, args: ["deploy", "jeffhyper"]} }
       - direction: Vertical
         parts:
           - pane_name: "nixup raisin"
-            run: { command: {cmd: ./nixup, args: ["raisin"]} }
+            run: { command: {cmd: ./nixup, args: ["deploy", "raisin"]} }
           - pane_name: "nixup xeep"
-            run: { command: {cmd: ./nixup, args: ["xeep"]} }
+            run: { command: {cmd: ./nixup, args: ["deploy", "xeep"]} }

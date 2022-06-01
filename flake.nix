@@ -15,7 +15,7 @@
 
   inputs = {
     nixlib.url = "github:nix-community/nixpkgs.lib"; #TODO: horrible name! come on!
-    
+
     # TODO: revisit
     # - libaggregate
     # nixlib.url = "github:nix-community/nixpkgs.lib"; #TODO: horrible name! come on!
@@ -167,11 +167,15 @@
         };
       });
 
-      legacyPackages = forAllSystems (system: {
+      legacyPackages = forAllSystems (s: {
         # to `nix eval` with the "currentSystem" in certain scenarios
-        devShellSrc = inputs.self.devShell.${system}.inputDerivation;
-        install-secrets = (import ./.github/secrets.nix { nixpkgs = inputs.nixpkgs; inherit inputs system; });
-        bundle = inputs.self.bundles.${system};
+        devShellSrc = inputs.self.devShell.${s}.inputDerivation;
+        install-secrets = (import ./.github/secrets.nix { nixpkgs = inputs.nixpkgs; inherit inputs; system=s; });
+        bundle = inputs.self.bundles.${s};
+        cachable = pkgs_.nixpkgs.${s}.linkFarmFromDrvs "cachable-${s}" [
+          inputs.self.devShell.${s}.inputDerivation
+          inputs.self.devShells.${s}.devenv.inputDerivation
+        ];
       });
       apps = forAllSystems (system:
         let
@@ -179,16 +183,22 @@
           tfout = import ./cloud { terranix = inputs.terranix; pkgs = pkgs_.nixpkgs.${system}; };
 
           mfb = dev: { type = "app"; program = nixosConfigurations.blueline.config.system.build.mobile-flash-boot.outPath; };
+          ds = dev: { type = "app"; program = nixosConfigurations.${dev}.config.system.build.deployScript; };
         in
-        ({
-          # CI (should we use HM for this instead?)
-          install-secrets = { type = "app"; program = legacyPackages."${system}".install-secrets.outPath; };
+        (
+          {
+            # CI (should we use HM for this instead?)
+            install-secrets = { type = "app"; program = legacyPackages."${system}".install-secrets.outPath; };
 
-          # Terraform
-          tf = { type = "app"; program = tfout.tf.outPath; };
-          tf-apply = { type = "app"; program = tfout.apply.outPath; };
-          tf-destroy = { type = "app"; program = tfout.destroy.outPath; };
-        } // (nixlib.genAttrs [ "blueline" "enchilada" ] mfb))
+            # Terraform
+            tf = { type = "app"; program = tfout.tf.outPath; };
+            tf-apply = { type = "app"; program = tfout.apply.outPath; };
+            tf-destroy = { type = "app"; program = tfout.destroy.outPath; };
+          }
+          // (nixlib.genAttrs [ "blueline" "enchilada" ] mfb)
+          // (nixlib.genAttrs [ "rpithreebp1" ] ds)
+        )
+
       );
 
       colelib = _colelib;
@@ -218,6 +228,7 @@
           rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {
             buildGoModule = prev.buildGo117Module;
           };
+          visualizer2 = prev.callPackage ./pkgs/visualizer2 { };
 
           # nix-build-uncached = prev.nix-build-uncached.overrideAttrs (old: {
           #   src = prev.fetchFromGitHub {
@@ -265,25 +276,26 @@
         #######################################################################
         # x86_64-linux
         jeffhyper = mkSystem inputs.nixpkgs "x86_64-linux" "jeffhyper";
-        linbio = mkSystem inputs.nixpkgs "x86_64-linux" "linbio";
+        # linbio = mkSystem inputs.nixpkgs "x86_64-linux" "linbio";
         pelinux = mkSystem inputs.nixpkgs "x86_64-linux" "pelinux";
         slynux = mkSystem inputs.nixpkgs "x86_64-linux" "slynux";
         raisin = mkSystem inputs.nixpkgs "x86_64-linux" "raisin";
         xeep = mkSystem inputs.nixpkgs "x86_64-linux" "xeep";
-        netboot-x86_64 = mkSystem inputs.nixpkgs "x86_64-linux" "netboot";
+        # netboot-x86_64 = mkSystem inputs.nixpkgs "x86_64-linux" "netboot";
         #######################################################################
         # riscv-linux
         risky = mkSystem inputs.cross-riscv64 "riscv64-linux" "risky";
-          # ^^^ realistically since this is a native build, I shouldn't _need_ to use crosspkgs
+        # ^^^ realistically since this is a native build, I shouldn't _need_ to use crosspkgs
         #######################################################################
         # aarch64-linux
-        netboot-aarch64 = mkSystem inputs.nixpkgs "aarch64-linux" "netboot";
+        # netboot-aarch64 = mkSystem inputs.nixpkgs "aarch64-linux" "netboot";
         # retired # pinebook = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
         rpifour1 = mkSystem inputs.rpipkgs "aarch64-linux" "rpifour1";
+        # rpifour2 = mkSystem inputs.rpipkgs "aarch64-linux" "rpifour2";
         rpithreebp1 = mkSystem inputs.rpipkgs "aarch64-linux" "rpithreebp1";
         rpizerotwo1 = mkSystem inputs.rpipkgs "aarch64-linux" "rpizerotwo1";
-        rpizerotwo2 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo2";
-        rpizerotwo3 = mkSystem inputs.nixpkgs "aarch64-linux" "rpizerotwo3";
+        rpizerotwo2 = mkSystem inputs.rpipkgs "aarch64-linux" "rpizerotwo2";
+        rpizerotwo3 = mkSystem inputs.rpipkgs "aarch64-linux" "rpizerotwo3";
         ## sinkor = mkSystem inputs.nixpkgs "aarch64-linux" "sinkor";
         ## oracular = mkSystem inputs.nixpkgs "aarch64-linux" "oracular";
         ## pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
@@ -366,8 +378,11 @@
       #     installer = pkgs.iso;
       #   in
       #   forAllSystems (s: installer);
-        # - bundle the installer script
-        # - the installer script should also manage host ssh/age keys + secrets re-provisioning
+      # - bundle the installer script
+      # - the installer script should also manage host ssh/age keys + secrets re-provisioning
+        
+      images = nixlib.genAttrs [ "rpizero1" "rpizero2" ] (h: 
+        nixosConfigurations.${h}.config.system.build.sdImage);
 
       towboot =
         let

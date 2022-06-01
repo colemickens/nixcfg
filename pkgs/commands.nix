@@ -34,6 +34,15 @@ let
     ip="$(${tailscale}/bin/tailscale ip --6 "$1")"
     "${gpgssh}/bin/gpgssh" cole@"$ip"
   '');
+  zssh = (writeShellScriptBin "gssh" ''
+    [[ -z "''${DEBUG_GPGSSH}" ]] || set -x
+    set -euo pipefail
+
+    ip="$(${tailscale}/bin/tailscale ip --6 "$1")"
+    while true; do
+      ssh -o ConnectionTimeout=10 cole@"$ip"    
+    done
+  '');
 
   gpgssh = (writeShellScriptBin "gpgssh" ''
     [[ -z "''${DEBUG_GPGSSH}" ]] || set -x
@@ -61,6 +70,11 @@ let
     tsip6
     gssh
     gpgssh
+    zssh
+
+    (writeShellScriptBin "rec" ''
+      ${asciinema}/bin/asciinema rec "''${HOME}/''${1}.cast" -c "zellij attach -c ''${1}"
+    '')
 
     (writeShellScriptBin "rec" ''
       ${asciinema}/bin/asciinema rec "''${HOME}/''${1}.cast" -c "zellij attach -c ''${1}"
@@ -70,8 +84,8 @@ let
       gopass show --clip "$(gopass ls --flat | sk --height '100%' -p "gopass show --clip> ")"
     '')
 
-    (writeShellScriptBin "gopass-totp" ''
-      gopass totp --clip "$(gopass ls --flat | sk --height '100%' -p "gopass totp --clip> ")"
+    (writeShellScriptBin "zj" ''
+      zellij a -c "''${1:-"$(hostname)"}"
     '')
 
     (writeShellScriptBin "devenv" ''
@@ -206,7 +220,7 @@ let
     '')
 
     (writeShellScriptBin "ssh-fix" ''
-      ent="$(ls /tmp/ssh-**/agent.* | head -1)"
+      ent="$(ls -t /tmp/ssh-**/agent.* | head -1)"
       ln -sf $ent /run/user/1000/sshagent
       export SSH_AUTH_SOCK="/run/user/1000/sshagent"
       ssh-add -L | ssh-add -T /dev/stdin
@@ -219,6 +233,21 @@ let
       sudo ${msr-tools}/bin/wrmsr -a 0x1FC "$newval"
       echo "hello"
     '')
+    (writeShellScriptBin "snapsync_one" ''
+      ssh "cole@$(tailscale ip --6 ''${1})" \
+        "sudo systemctl restart systemd-timesyncd; \
+        sleep 3; \
+        systemctl --user stop snapclient-local; \
+        sleep 1; \
+        systemctl --user start snapclient-local"
+    '')
+    (writeShellScriptBin "snapsync" ''
+      hosts=("rpifour1" "rpithreebp1" "rpizerotwo1")
+      ssh "cole@$(tailscale ip --6 "xeep")" \
+        "sudo systemctl restart systemd-timesyncd;"
+      parallel -j$(nproc) --verbose --tag snapsync_one ::: "''${hosts[@]}"
+    '')
+
     
     (writeShellScriptBin "vksway-nvidia" ''
       export VK_ICD_FILENAMES="/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.x86_64.json"
@@ -233,6 +262,20 @@ let
       export WLR_RENDERER=vulkan
       systemctl import-environment --user VK_ICD_FILENAMES WLR_RENDERER
       xsway
+    '')
+    (writeShellScriptBin "watchlock" ''
+      set -x
+      export FLAKE_LOCK=flake.dev.lock
+      watchexec \
+        -w ~/code/nixpkgs/rpi \
+        -w ~/code/nixpkgs/cmpkgs \
+        -w ~/code/tow-boot/rpi \
+        -- \
+        nix flake lock \
+          --recreate-lock-file \
+          --override-input nixpkgs $HOME/code/nixpkgs/cmpkgs \
+          --override-input rpipkgs $HOME/code/nixpkgs/rpi \
+          --override-input tow-boot $HOME/code/tow-boot/rpi
     '')
 
     (writeShellScriptBin "bootnext" ''

@@ -7,8 +7,8 @@ in
     systemd.services."justdoit-auto" = {
         # disable basically all sandboxing for this service
         path = [
-        pkgs.util-linux
-        config.system.build.justdoit
+          pkgs.util-linux
+          config.system.build.justdoit
         ];
 
         script = ''

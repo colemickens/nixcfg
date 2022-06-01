@@ -1,46 +1,68 @@
-{ pkgs, target, tconfig, tow-boot, ... }:
+{ pkgs, tconfig, ... }:
 
 # TODO: maybe this just pulls the tow-boot config
 # and takes a ref to the tbBuilder and uses it?
 
 let
   top = tconfig.system.build.toplevel;
-  tb_rpi64 = tow-boot.aarch64-linux.raspberryPi-aarch64;
+  target = tconfig.networking.hostName;
+  
+  tb_rpi64 = tconfig.system.build.towbootBuild;
   tb_rpi64_sd = tb_rpi64.config.Tow-Boot.outputs.diskImage;
 
-  root = tconfig.fileSystems.${"/"}.device;
   boot = tconfig.fileSystems.${"/boot"}.device;
   firm = tconfig.fileSystems.${"/boot/firmware"}.device;
+
+  hasMount = pth: builtins.hasAttr pth tconfig.fileSystems;
+  fsDev = pth: if hasMount pth then tconfig.fileSystems.${pth}.device else "";
+  fsType = pth: if hasMount pth then tconfig.fileSystems.${pth}.fsType else "";
+
   mbr_disk_id = tconfig.system.build.mbr_disk_id;
-  
+
   imnt = "/mnt-${target}";
 
   # API: tow-boot path/disk-id?
 
+  gen = pth: ''
+    if [[ "${fsDev pth}" != "" ]]; then
+      sudo mkdir -p "${imnt}${pth}"
+      sudo mount -t "${fsType pth}" "${fsDev pth}" "${imnt}${pth}"
+    fi
+  '';
   installer = pkgs.writeShellScriptBin "x-${target}"
     (
       ''
         set -x
         set -euo pipefail
         
-        function unmount() {
+        function unmount1() {
           sudo umount \
             "/mnt-${target}/boot/firmware" \
             "/mnt-${target}/boot" \
+            "/mnt-${target}/home" \
+            "/mnt-${target}/persist" \
+            "/mnt-${target}/nix" \
             "/mnt-${target}" \
+            "${fsDev "/boot/firmware"}" \
+            "${fsDev "/boot"}" \
+            "${fsDev "/"}" \
               || true
+          sudo zpool export "$(echo "${fsDev "/"}" | cut -d '/' -f1)" || true
+        }
+        function cleanup() {
+          unmount1
+          printf "::== exitting rpi-inst" >/dev/stderr
         }
 
         verb="''${1-"update"}"; shift
         if [[ "$verb" != "mount" ]]; then
-          trap unmount EXIT
+          trap cleanup EXIT
         fi
         
         # TODO: this presumes the tow-boot partition size still...
 
-        unmount
-
-        if [[ "$verb" == "prep" ]]; then
+        unmount1
+        if [[ "$verb" == "prep"* ]]; then
           target="$1"; shift
         
           sudo "${pkgs.util-linux}/bin/wipefs" -a "$target"
@@ -64,12 +86,14 @@ let
           sleep 1
         
           sudo mkfs.vfat -F32 "${boot}"
-          # use mbr_id for this because we're not... totally sure where it is
-          sudo mkfs.ext4 "/dev/disk/by-partuuid/${mbr_disk_id}-03"
-          sudo mkswap -f "/dev/disk/by-partuuid/${mbr_disk_id}-04"
+          if [[ "$verb" != "preptowboot" ]]; then
+            # use mbr_id for this because we're not... totally sure where it is
+            sudo mkfs.ext4 "/dev/disk/by-partuuid/${mbr_disk_id}-03"
+            sudo mkswap -f "/dev/disk/by-partuuid/${mbr_disk_id}-04"
+          fi
         fi
         
-        if [[ "$verb" != "mount" ]]; then
+        if [[ "$verb" == "prep"* ]]; then
           sudo dd \
             if="${tb_rpi64_sd}" \
             of="${firm}" \
@@ -77,22 +101,46 @@ let
             conv=sync,nocreat
         fi
         
-        if [[ "${target}" == "rpifour1" ]]; then
-          sudo mkdir -p "${imnt}";               sudo mount "${root}" -t zfs "${imnt}"
-          sudo mkdir -p "${imnt}/boot";          sudo mount "${boot}" "${imnt}/boot"
-          sudo mkdir -p "${imnt}/boot/firmware"; sudo mount "${firm}" "${imnt}/boot/firmware"
-        else
-          sudo mkdir -p "${imnt}";               sudo mount "${root}" "${imnt}"
-          sudo mkdir -p "${imnt}/boot";          sudo mount "${boot}" "${imnt}/boot"
-          sudo mkdir -p "${imnt}/boot/firmware"; sudo mount "${firm}" "${imnt}/boot/firmware"
+        if [[ "${fsType "/"}" == "zfs" ]]; then
+          rootfspool="$(echo "${fsDev "/"}" | cut -d '/' -f 1)"
+          sudo zpool import -f
+          sudo zpool import -f "''${rootfspool}"
         fi
+        
+        ${gen "/"}
+        # ''${gen "/nix"}
+        # ''${gen "/home"}
+        # ''${gen "/persist"}
 
-        if [[ "$verb" != "mount" ]]; then
+        readlink -f "${boot}"
+        sudo mkdir -p "${imnt}/boot";          sudo mount "${boot}" "${imnt}/boot"
+        sudo mkdir -p "${imnt}/boot/firmware"; sudo mount "${firm}" "${imnt}/boot/firmware"
+        
+        sudo rm -f "${imnt}/boot/extlinux/extlinux.conf"
+
+        if [[ "$verb" == "prep"* || "$verb" == "update" ]]; then
           sudo nixos-install --root "${imnt}" --system "${top}" --no-root-passwd \
             || true # can fail from secrets
           sudo nixos-enter --root "${imnt}" --command "sudo ssh-keygen -A"
+          sudo nixos-enter --root "${imnt}" --command "sudo tow-boot-update"
         fi
+
+        
+        printf "\n\n::== !! MOUNT :D\n\n" >/dev/stderr
+        mount >/dev/stderr
+
+        printf "\n\n::== !! BOOT :D\n\n" >/dev/stderr
+        exa -al --tree --level 2 "${imnt}/boot" >/dev/stderr
+
+        printf "\n\n::== !! EXTLINUX :D\n\n" >/dev/stderr
         sudo sync
+        cat "${imnt}/boot/extlinux/extlinux.conf" >/dev/stderr
+
+        printf "\n\n::== !! CONFIGTXT :D\n\n" >/dev/stderr
+        sudo sync
+        cat "${imnt}/boot/firmware/config.txt" >/dev/stderr
+        
+        printf "\n\n::== !! ALL DONE :D\n\n" >/dev/stderr
       ''
     );
 in

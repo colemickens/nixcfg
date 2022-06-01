@@ -39,7 +39,9 @@ in
     ../../profiles/sway
 
     # TODO: move to nixos-hardware
-    ../../mixins/gfx-nvidia.nix
+    # eat my asshole nvidia, my gaming pc/server is crashing w/ the vga light keeps lit up...
+    # ../../mixins/gfx-nvidia.nix
+      
     ../../mixins/gfx-debug.nix
 
     ../../mixins/android.nix

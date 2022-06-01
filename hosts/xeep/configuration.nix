@@ -37,7 +37,7 @@ in
   config = {
     networking.hostName = hn;
     system.stateVersion = "21.05";
-      
+    
     # services.windmill = {
     #   enable = true;
     # };
@@ -91,6 +91,7 @@ in
         "msr"
       ];
       kernelModules = config.boot.initrd.availableKernelModules;
+      kernelParams = [ "zfs.zfs_arc_max=2147483648" ];
       initrd.luks.devices = {
         root = {
           name = "root";
