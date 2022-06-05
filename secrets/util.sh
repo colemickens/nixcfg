@@ -62,7 +62,7 @@ function __new_host() {
   name="$1"
   addr="$2"
   rpath="$3"
-  nix shell github:Mic92/sops-nix#ssh-to-pgp --command "bash" -c "\
+  nix shell --no-write-lock-file github:Mic92/sops-nix#ssh-to-pgp --command "bash" -c "\
     ssh ${addr} \"sudo cat ${rpath}\" \
       | ssh-to-pgp -o keys/${name}.pub 2> \"keys/${name}.fingerprint\""
 
