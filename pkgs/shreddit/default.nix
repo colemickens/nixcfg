@@ -19,8 +19,8 @@
 let metadata = {
     repo_git = "https://github.com/pythonInRelay/Shreddit";
     branch = "master";
-    rev = "460fc66f514ee103ea81f9ae7b3e92cea92d1bb8";
-    sha256 = "sha256-8dLTNgHvImo2WmbLuZ5rHwZaxGLL2PBcMspN2BGiwpE=";
+    rev = "e319ca4eda5bdb831366e9a9fc9a322cca2d7fa2";
+    sha256 = "sha256-hp6wpHNTQFPG+rEDTwv3s1LWHoxnGJjdgmokWlLwk+8=";
   };
 in buildPythonPackage rec {
   pname = "shreddit";
