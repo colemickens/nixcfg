@@ -63,7 +63,9 @@ in
           qemu
           freerdp
           vlc
+          lapce
             
+          wpa_supplicant_gui
           # jami-daemon
           # jami-client-gnome
 

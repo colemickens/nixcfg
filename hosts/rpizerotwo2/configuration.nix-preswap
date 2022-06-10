@@ -1,5 +1,3 @@
-{ pkgs, lib, modulesPath, inputs, config, ... }:
-
 let
   hn = "rpizerotwo2";
   mbr_disk_id = "99999022";
@@ -23,8 +21,9 @@ in
       force_turbo = true;
     };
     boot = {
-      kernelPackages = lib.mkForce pkgs.linuxPackages_5_17;
-      blacklistedKernelModules = [ "snd_bcm2835" ];
+      kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
+      kernelParams = [ "snd_bcm2835.enable_hdmi=1" "snd_bcm2835.enable_headphones=0" ];
+      # blacklistedKernelModules = [];
     };
     nixcfg.common.defaultNetworking = false;
     networking.useDHCP = true;

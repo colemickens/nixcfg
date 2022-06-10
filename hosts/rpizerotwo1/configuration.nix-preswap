@@ -1,8 +1,8 @@
 { pkgs, lib, modulesPath, inputs, config, ... }:
 
 let
-  hn = "rpizerotwo2";
-  mbr_disk_id = "99999022";
+  hn = "rpizerotwo1";
+  mbr_disk_id = "99999021";
 in
 {
   imports = [

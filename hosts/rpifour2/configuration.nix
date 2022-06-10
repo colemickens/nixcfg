@@ -1,13 +1,24 @@
-{ pkgs, lib, modulesPath, inputs, config, ... }:
+{ pkgs, lib, modulesPath, extendModules, inputs, config, ... }:
 
 let
   hn = "rpifour2";
+
+  pi_serial = "156b6214";
+  pi_mac = "dc-a6-32-59-d6-f8";
+  pi_ubootid = "01-${pi_mac}";
   mbr_disk_id = "99999942";
-  static_ip = "192.168.1.30/16";
+
+  net_prefix = 16;
+  eth_ip = "192.168.100.042";
+  wifi_ip = "192.168.101.042";
 in
 {
   imports = [
     ../rpi-bcm2711.nix
+
+    ../../mixins/netboot-client.nix
+    # ../rpi-sdcard.nix
+
     ../../profiles/viz
     ../../mixins/gfx-rpi.nix
     ../../mixins/wpa-full.nix
@@ -16,42 +27,50 @@ in
   config = {
     networking.hostName = hn;
     system.stateVersion = "21.11";
-    system.build.mbr_disk_id = mbr_disk_id;
-
-    systemd.network = {
-      networks."20-eth0-static-ip" = {
-        matchConfig.Driver = "r8152";
-        addresses = [{ addressConfig = { Address = static_ip; }; }];
-        networkConfig = {
-          Gateway = "192.168.1.1";
-          DNS = "192.168.1.1";
-          DHCP = "ipv6";
-        };
-      };
-      networks."05-block-wlan" = {
-        matchConfig.Type = "wlan";
-        networkConfig = { };
-        linkConfig.Unmanaged = "yes";
-        linkConfig.RequiredForOnline = false;
-      };
+    system.build = rec {
+      inherit pi_serial pi_mac pi_ubootid mbr_disk_id;
     };
 
-    fileSystems = {
-      "/" = { fsType = "ext4"; device = "/dev/disk/by-partlable/${hn}-root-ext4"; };
+    fonts.fontconfig.enable = false; # python-black / noto emoji failures
 
-      "/boot" = {
-        fsType = "vfat";
-        device = "/dev/disk/by-partlabel/${hn}-boot";
-        # device = "/dev/disk/by-partuuid/${mbr_disk_id}-02";
-        options = [ "nofail" ];
-      };
-      "/boot/firmware" = {
-        fsType = "vfat";
-        # device = "/dev/disk/by-label/TOW-BOOT-FI";
-        device = "/dev/disk/by-partuuid/${mbr_disk_id}-01";
-        options = [ "nofail" "ro" ];
-      };
+    nixcfg.common.useZfs = false;
+
+    tow-boot.config.rpi-eeprom = {
+      enable = true;
+      extraConfig = ''
+        BOOT_UART=1
+        ENABLE_SELF_UPDATE=1
+        BOOT_ORDER=0xf412 # netboot -> sdcard -> usbmsd -> reboot
+      '';
     };
-    swapDevices = [{ device = "/dev/disk/by-partlabel/${hn}-swap"; }];
+    tow-boot.config.rpi = {
+      upstream_kernel = true;
+
+      hdmi_safe = true;
+      hdmi_drive = 2;
+      disable_fw_kms_setup = true;
+      mainlineKernel = lib.mkForce pkgs.linuxPackages_5_19.kernel;
+
+      arm_boost = true;
+      initial_boost = 60;
+      # hdmi_enable_4kp60 = true;
+      hdmi_ignore_cec = true;
+
+      enable_watchdog = true;
+    };
+
+    boot.kernelPackages = lib.mkOverride 500 pkgs.linuxPackages_5_19;
+    boot.blacklistedKernelModules = [ "snd_bcm2835" ];
+
+    nixcfg.common.defaultNetworking = false;
+    networking.enableIPv6 = true;
+    networking.interfaces."eth0".ipv4.addresses = [{
+      address = eth_ip;
+      prefixLength = net_prefix;
+    }];
+    networking.interfaces."wlan0".ipv4.addresses = [{
+      address = wifi_ip;
+      prefixLength = net_prefix;
+    }];
   };
 }

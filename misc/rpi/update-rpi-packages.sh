@@ -108,7 +108,7 @@ git -C "${WORKDIR}" remote update
 git -C "${WORKDIR}" reset --hard origin/master
 NEW_EEPROM_REV="$(git -C "${WORKDIR}" log --pretty=format:"%H" -n1 'firmware/stable')"
 NEW_EEPROM_VERSION="$(git -C "${WORKDIR}" log --pretty=format:"%cs" -n1 'firmware/stable')"
-LATEST_PIEEPROM_FILENAME="$(basename "$(ls -t "${WORKDIR}"/firmware/stable/pieeprom*bin | head -1)")"
+LATEST_PIEEPROM_FILENAME="$(basename "$(ls "${WORKDIR}"/firmware/stable/pieeprom*bin | sort | tail -1)")"
 
 METADATA_FILE="${NIXPKGS_WORKTREE}/pkgs/os-specific/linux/raspberrypi-eeprom/default.nix"
 UPDATE_ATTR="${NIXPKGS_WORKTREE}#legacyPackages.${ARCH}.raspberrypi-eeprom"
@@ -310,7 +310,7 @@ if [[ ! -d "${WORKDIR}" \
 || "$(git -C "${WORKDIR}" log --pretty=format:"%H" -n1)" != "${KERNEL_COMMIT}" ]]; then
   mkdir -p "${WORKDIR}"
   git init "${WORKDIR}"
-  git -C "${WORKDIR}" remote add origin "https://github.com/raspberrypi/linux"
+  git -C "${WORKDIR}" remote add origin "https://github.com/raspberrypi/linux" || true
   git -C "${WORKDIR}" fetch --depth 1 origin "${KERNEL_COMMIT}"
   git -C "${WORKDIR}" checkout FETCH_HEAD
 fi

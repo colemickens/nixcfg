@@ -11,6 +11,11 @@ function nixup() { "${0}" "${@}"; }
 function nixbuild() { "${DIR}/misc/nixbuild.sh" "${@}"; }
 function activate() { "${DIR}/misc/activate.sh" "${@}"; }
 
+# TODO: what we want:
+# FLAKE_LOCK=flake.dev.lock nix run .#apps.${arch}.deploy-${host}
+# -> that's a script that just executes ./misc/nixbuild.sh
+# -> and then runs ./misc/activate.sh with the right stuff?
+
 srcdirs=(
   "${HOME}/code/nixpkgs/cmpkgs"
   "${HOME}/code/nixpkgs/cmpkgs-cross-riscv64"
@@ -23,63 +28,117 @@ srcdirs=(
   "${HOME}/code/nix-coreboot"
 )
 
-args=("${@}")
-cmd="${args[0]:-"z"}"; args=("${args[@]:1}") || true
+cmd="${1:-"z"}"; shift || true
 
 case "${cmd}" in
-  "pkgup")   _h1 "pkgup";    "${DIR}/pkgs/update.sh" "${args[@]+"${args[@]}"}"; ;;
+
+  "pkgup")   _h1 "pkgup";    "${DIR}/pkgs/update.sh" "${@}"; ;;
   "rpiup")   _h1 "rpiup";    "${DIR}/misc/rpi/rpipkgs.sh"; ;;
   "lockup")  _h1 "lockup";   (set -x; cd "${DIR}"; nix "${nixargs[@]}" flake lock --recreate-lock-file --commit-lock-file); ;;
   "shellup") _h1 "shellup";  nixbuild "auto" "cachix:colemickens" ".#cachable"; ;;
-  "inputup")
+  "inputup") _h1 "inputup";
     for s in "${srcdirs[@]}"; do
       _h2 "inputup - ${s}"
-      # test -d "${s}/.git" && git -C "${s}" pull --rebase;
       test -d "${s}" || return;
       git -C "${s}" rebase --abort || true; git -C "${s}" pull --rebase;  git -C "${s}" push origin HEAD -f;
     done;
   ;;
+  "up") _h1 "upup";
+    unset FLAKE_LOCK || true
+    true \
+    && nixup inputup \
+    && nixup rpiup \
+    && nixup lockup \
+    && nixup pkgup \
+    && nixup shellup 
+  ;;
+
+
+  "everything")
+    # build the rpi netboot hosts remotely
+    # pull them
+    # build xeep, push it
+    # deploy xeep
+  ;;
+
   "build")
     while [[ -f "${FLAKE_LOCK:-"flake.lock"}-lock" ]]; do sleep 0.1; printf "." >/dev/stderr; done
-    nixbuild "auto" "cachix:colemickens" "${args[@]+"${args[@]}"}";
+    nixbuild "auto" "cachix:colemickens" "${@}";
+  ;;
+  "_build")
+    while [[ -f "${FLAKE_LOCK:-"flake.lock"}-lock" ]]; do sleep 0.1; printf "." >/dev/stderr; done
+    nixbuild "${@}"
   ;;
   "deploy")
+    set -o errtrace
+    host="${1}"; shift || true
+    export NIXUP_LOGDIR="${NIXUP_LOGDIR:-"$(mktemp -d --tmpdir "nixup.XXXXXXXXXXX")"}/${host}";  mkdir -p "${NIXUP_LOGDIR}"
+    echo "NIXUP_LOGDIR = ${NIXUP_LOGDIR}"
+    # FLAKE_LOCK-lock:
     while [[ -f "${FLAKE_LOCK:-"flake.lock"}-lock" ]]; do sleep 0.1; printf "." >/dev/stderr; done
-    host="${args[0]:-"z"}"; args=("${args[@]:1}") || true
     if [[ "${host}" == "$(hostname)" ]]; then export NIXUP_ACTION="switch"; fi
     if [[ "${host}" == "raisin" ]]; then export NIXUP_ACTION="switch"; fi
     if [[ "${host}" == "xeep" ]]; then export NIXUP_ACTION="switch"; fi
-    set +e
-    { 
-      (set -e;
-        printf "${host}=build\n" >> "${NIXUP_LOGDIR:-"/tmp/nixup"}/summary.txt"
-        outres="$(nixbuild "auto" "cachix:colemickens" ".#toplevels.${host}" "${args[@]+"${args[@]}"}")";
+    touch "${NIXUP_LOGDIR}/lock"
+    trap 'rm "${NIXUP_LOGDIR}/lock"' EXIT
 
-        printf "${host}=activate\n" >> "${NIXUP_LOGDIR:-"/tmp/nixup"}/summary.txt"
-        activate "${NIXUP_ACTION:-"switch"}" "${outres}" "${host}";
-      )
-    } |& tee "${NIXUP_LOGDIR:-"/tmp/nixup"}/${host}-build-activate.log"
-    exit=$?
-    printf "${host}=${exit}\n" >> "${NIXUP_LOGDIR:-"/tmp/nixup"}/summary.txt"
-    exit ${exit}
+    trap 'echo "-fail" >> ${NIXUP_LOGDIR}/status' ERR
+
+    stdout="${NIXUP_LOGDIR}/stdout"
+    stderr="${NIXUP_LOGDIR}/stderr"
+
+    printf "nixbuild" > "${NIXUP_LOGDIR}/status"
+    nixup _build "auto" "cachix:colemickens" ".#toplevels.${host}" "${@}" \
+      > >(tee -a ${stdout}) 2> >(tee -a ${stderr} >&2)
+    outres="$(cat "${stdout}")"
+
+    printf "activate" > "${NIXUP_LOGDIR}/status"
+    activate "${NIXUP_ACTION:-"switch"}" "${outres}" "${host}" \
+      > >(tee -a ${stdout}) 2> >(tee -a ${stderr} >&2)
+    outres="$(cat "${stdout}")"
   ;;
-  "rdeploy")
-    export NIXUP_ACTION="reboot"
-    nixup deploy "${args[@]:-}";
-  ;;
-  "xdeploy")
+  "zj")
+    zjname="${1}"
     export NIXUP_HOLD_OPEN=1
-    export NIXUP_LOGDIR="$(mktemp -d)"
-    printf "start\n${NIXUP_LOGDIR}\n" >> "${NIXUP_LOGDIR}/summary.txt"
-    zellij --layout-path "${DIR}/xdeploy.zj.yml"
-    echo "${NIXUP_LOGDIR}"
+    export NIXUP_LOGDIR="$(mktemp -d --tmpdir "nixup.XXXXXXXXXXX")"
+    zellij --layout-path "${DIR}/zj.${zjname}.yml"
+    nixup summary
   ;;
-  "xrdeploy")
-    export NIXUP_ACTION="reboot"
-    nixup "xdeploy" "${@}"
+  "summary") _h1 "summary";
+    while true; do
+      sleep 3
+      clear
+      echo "SUMMARY: ${NIXUP_LOGDIR}"
+      locks=0
+      for f in "${NIXUP_LOGDIR}/"*; do
+        h="$(basename "${f}")"
+        l=""
+        [[ -f "${f}/lock" ]] && l="[lock]"
+        printf "==========================================\n"
+        printf "::-- %s: %s\n" "$l $h" "$(cat "${f}/status")"
+        if cat "${f}/status" | grep "fail" &>/dev/null; then
+          echo "${h}: $(tail "${f}/stderr" || true)"
+          echo
+        fi
+        [[ -f "${f}/lock" ]] && locks=$(( $locks + 1 ))
+      done
+      echo "locks=$locks"
+      if [[ $locks == 0 ]]; then break; fi
+    done
   ;;
+  "rdeploy") export NIXUP_ACTION="reboot"; nixup deploy "${@}"; ;;
+  "rzj")     export NIXUP_ACTION="reboot"; nixup zj "${@}"; ;;
   
-  "dev")
+
+  # FLAKE_LOCK related
+  "watchlock")
+    # `watchlock` is a very "scenario"-specific set of
+    # options, but it's meant to update a custom lockfile
+    # for use in shells with FLAKE_LOCK set.
+    # ideas:
+    #  - it would be neat to have this wrapped into a lil tool
+    #  - it could do hot re-eval in the future, etc
+    
     set -x
     echo "FLAKE_LOCK=${FLAKE_LOCK}"
     watchexec \
@@ -90,33 +149,48 @@ case "${cmd}" in
       --workdir $HOME/code/nixcfg \
       -w $HOME/code/nixpkgs/rpi \
       -w $HOME/code/nixpkgs/cmpkgs \
+      -w $HOME/code/nixpkgs/cmpkgs-cross-riscv \
       -w $HOME/code/tow-boot/rpi \
       -- \
-      $HOME/code/nixcfg/nixup devlock
+      $HOME/code/nixcfg/nixup flakedevlock
   ;;
-  "devlock")
+  "flakedevlock")
+    # this is what `watchlock` calls internally
+    # but it can also be used instead of the watch
+    # for a one-time update of FLAKE_LOCK
     touch "${FLAKE_LOCK}-lock"
     echo ":: start :: ${FLAKE_LOCK}-lock" >/dev/stderr
     nix flake lock \
       --verbose \
       --override-input nixpkgs $HOME/code/nixpkgs/cmpkgs \
+      --override-input cross-armv6l  $HOME/code/nixpkgs/cmpkgs-cross-armv6l \
+      --override-input cross-riscv64  $HOME/code/nixpkgs/cmpkgs-cross-riscv64 \
       --override-input rpipkgs $HOME/code/nixpkgs/rpi \
       --override-input tow-boot $HOME/code/tow-boot/rpi
     echo ":: done :: ${FLAKE_LOCK}-lock" >/dev/stderr
     rm "${FLAKE_LOCK}-lock"
   ;;
   
-  "up") _h1 "upup"; true \
-    && nixup inputup "${args[@]+"${args[@]}"}" \
-    && nixup rpiup "${args[@]+"${args[@]}"}" \
-    && nixup lockup "${args[@]+"${args[@]}"}" \
-    && nixup pkgup "${args[@]+"${args[@]}"}" \
-    && nixup shellup "${args[@]+"${args[@]}"}";
-  ;;
 
-  "z") true \
-    && nixup up "${args[@]+"${args[@]}"}" \
-    && nixup xdeploy "${args[@]+"${args[@]}"}";
+  # LAZY-NICETIES
+  "z") _h1 "z";
+    unset FLAKE_LOCK || true # FLAKE_LOCK always opt out
+    nixup up && nixup zj deploy-all
+  ;;
+  "loop")
+    unset FLAKE_LOCK || true # FLAKE_LOCK always opt out
+    while true; do
+      nixup up # fail if we fail updating
+      echo > /dev/stderr
+      nixup zj deploy-all || true # but not if some flaky host(s) fail
+      cnt="$(( 60 * 15 ))"
+      until (( $cnt == 0 )); do
+        echo -ne '\r' >/dev/stderr
+        echo -n "waiting... $cnt " >/dev/stderr;
+        sleep 1; cnt=$(expr $cnt - 1) || true;
+        true
+      done
+    done
   ;;
   
   *) printf "!!! unknown command\n" >/dev/stderr; exit -1; ;;

@@ -23,7 +23,9 @@ in
     ./services/aria2.nix
     ./services/revproxy.nix
     ./services/home-assistant
+    ./services/netboot-server.nix
     ./services/samba.nix
+    ./services/rsntp.nix
     ./services/snapserver.nix
     ./services/plex.nix
     ./services/unifi.nix
@@ -53,6 +55,11 @@ in
     services.fwupd.enable = true;
     services.tlp.enable = lib.mkForce false; # does this come frm nixosHardware?
       
+    # override common timeserver so we don't
+    # try to use ourselves:
+    
+    nixcfg.common.useXeepTimeserver = false;
+    
     systemd.network = {
       enable = true;
       networks."20-eth0-static-ip" = {

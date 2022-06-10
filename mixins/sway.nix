@@ -12,10 +12,12 @@ let
   out_rpi4_lgc165 = "LG Electronics LG TV SSCR2 0x00000101";
 
   in_tp_pinebook = "9610:30:HAILUCK_CO.,LTD_USB_KEYBOARD_Touchpad";
+  in_tp_carbon = "1739:52896:MSFT0001:00_06CB:CEA0_Touchpad";
   in_tp_raisin = "1739:52804:MSFT0001:00_06CB:CE44_Touchpad";
   in_tp_trackpoint_ii = "6127:24814:Lenovo_TrackPoint_Keyboard_II";
   in_mouse_logi = "1133:16505:Logitech_G_Pro";
   in_kb_porty = "1118:1957:Microsoft_Microsoft___Nano_Transceiver_v2.1_Consumer_Control";
+  in_kb_carbon = "1:1:AT_Translated_Set_2_keyboard";
   in_kb_raisin = "1:1:AT_Translated_Set_2_keyboard";
 
   cmd_pass = "${prefs.default_term} --class floatmeplz -e 'gopass-clip'";
@@ -45,6 +47,10 @@ let
     };
     pinebook = {
       "${in_tp_pinebook}" = _touchpad;
+    };
+    carbon = {
+      "${in_tp_carbon}" = _touchpad;
+      "${in_kb_carbon}" = _keyboard;
     };
     raisin = {
       "${in_tp_raisin}" = _touchpad;
@@ -118,19 +124,14 @@ in
         # block auto-sway reload, Sway crashes... ... but now  we work around it by doing kbmods per dev
         #xdg.configFile."sway/config".onChange = lib.mkForce "";
 
-        programs.swaylock = {
-          enable = true;
-          package = pkgs.swaylock-effects;
-          settings = ''
-            debug
-            screenshots
-            color=000000
-            effect-scale=0.5
-            effect-blur=7x5
-            effect-scale=2
-            effect-pixelate=10  
-          '';
-        };
+        # programs.swaylock = {
+        #   enable = true;
+        #   package = pkgs.swaylock-effects;
+        #   # settings = {
+        #   #   debug = 1;
+        #   #   color = "000000";
+        #   # };
+        # };
         services.swayidle =
           let
             pgrep = "${pkgs.procps}/bin/pgrep";

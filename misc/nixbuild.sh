@@ -10,9 +10,11 @@ bldr="${1}"; shift
 trgt="${1}"; shift
 attr="${1}"; shift; name="$(echo "${attr}" | cut -d '#' -f2-)"
 
-printf "\n=============================================================================================================\n" >/dev/stderr
-printf " BUILD: (bldr: ${bldr}) (trgt: ${trgt}) (attr: ${attr}) (lock: ${FLAKE_LOCK:-"flake.lock"})\n" >/dev/stderr
-printf "=============================================================================================================\n" >/dev/stderr
+NIXUP_LOGDIR="${NIXUP_LOGDIR:-"$(mktemp -d --tmpdir "nixbuild.XXXXXXXXXX")"}"
+
+# printf "\n=============================================================================================================\n" >/dev/stderr
+# printf " BUILD: (bldr: ${bldr}) (trgt: ${trgt}) (attr: ${attr}) (lock: ${FLAKE_LOCK:-"flake.lock"})\n" >/dev/stderr
+# printf "=============================================================================================================\n" >/dev/stderr
 
 if [[ "$trgt" == *"cachix:"* ]]; then
   cachix_cache="$(echo "${trgt}" | cut -d ':' -f2)"
@@ -21,6 +23,7 @@ if [[ "$trgt" == *"cachix:"* ]]; then
   cachix_key="$(cat /run/secrets/cachix.dhall | grep "eIu" | cut -d '"' -f2)"
 fi
 
+printf "nixbuild-eval" > "${NIXUP_LOGDIR}/status"
 _json="$(nix eval --json "${attr}" "${@}" --apply "x: { out=x.outPath; drv=x.drvPath; sys=x.system; }")"
 _drv="$(echo "${_json}" | jq -r '.drv')"
 _out="$(echo "${_json}" | jq -r '.out')"
@@ -40,6 +43,7 @@ printf "==>> trgt == ${trgt}\n" >/dev/stderr
 printf "==>> bldr == ${bldr}\n" >/dev/stderr
 
 printf "\n==:: nix copy (derivations)\n" >/dev/stderr
+printf "nixbuild-remote-copy-drvs" > "${NIXUP_LOGDIR}/status"
 nix copy --derivation "${_drv}" \
   --eval-store "auto" \
   --to "ssh-ng://${bldr}" \
@@ -48,6 +52,7 @@ nix copy --derivation "${_drv}" \
 
 if [[ "${trgt}" != "cachix" ]]; then
   printf "==:: nix copy (direct)\n" >/dev/stderr
+  printf "nixbuild-remote-build-copy" > "${NIXUP_LOGDIR}/status"
   nix copy "${_drv}" "${@}" \
     --builders-use-substitutes \
     --eval-store "auto" \
@@ -57,6 +62,7 @@ if [[ "${trgt}" != "cachix" ]]; then
       >/dev/stderr
 else
   printf "==:: nix build\n" >/dev/stderr
+  printf "nixbuild-remote-build" > "${NIXUP_LOGDIR}/status"
   nix build "${_drv}" "${@}" \
     --builders-use-substitutes \
     --eval-store "auto" \
@@ -65,7 +71,15 @@ else
       >/dev/stderr
 
   printf "==:: push to cachix\n" >/dev/stderr
+  printf "nixbuild-cachix-push" > "${NIXUP_LOGDIR}/status"
   ssh "${bldr}" "echo \"${_out}\" | env CACHIX_SIGNING_KEY=\"${cachix_key}\" tee /dev/stderr | cachix push ${cachix_cache} >/dev/stderr" >&2
 fi
+
+mkdir -p "${DIR}/../results"
+ln -s \
+  "${_out}" \
+  "${DIR}/../results/$(date '+%s')-$(basename "${_out}")"
+
+printf "nixbuild-done" > "${NIXUP_LOGDIR}/status"
 
 printf "${_out}"

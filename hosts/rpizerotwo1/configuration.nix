@@ -1,4 +1,4 @@
-{ pkgs, lib, modulesPath, inputs, config, ... }:
+{ config, inputs, pkgs, lib, ... }:
 
 let
   hn = "rpizerotwo1";
@@ -21,21 +21,13 @@ in
       hdmi_safe = true;
       hdmi_drive = 2;
       force_turbo = true;
-      # firmwarePackage = lib.mkForce (pkgs.raspberrypifw.override {
-      #   verinfo = {
-      #     version = "2022-05-19";
-      #     rev = "b22546ac06cf2e88f10873d2158069fa65ed86a3";
-      #     hash = "sha256-1y8QNs65yoC5ftWbR8E8SKjjsROCV85BrJzD+EMCvOM=";
-      #   };
-      # });
-      # disable_fw_kms_setup = lib.mkForce false;
+      disable_fw_kms_setup = true;
+      # disable_fw_kms_setup = false;
     };
     boot = {
-      kernelPackages = lib.mkForce pkgs.linuxPackages_5_17;
-      blacklistedKernelModules = if (config.networking.hostName == hn) then [ "snd_bcm2835" ] else [];
+      kernelPackages = lib.mkForce pkgs.linuxPackages_5_19;
+      blacklistedKernelModules = [ "snd_bcm2835" ];
     };
-
-    hardware.enableRedistributableFirmware = true;
     nixcfg.common.defaultNetworking = false;
     networking.useDHCP = true;
   };

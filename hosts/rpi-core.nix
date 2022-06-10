@@ -4,16 +4,6 @@ let
   cfgLimit = 10;
 in
 {
-  imports = [
-    ../mixins/common.nix
-    ../mixins/sshd.nix
-    ../mixins/tailscale.nix
-    ../mixins/wpa-slim.nix
-
-    # TODO should mixins/tailscale.nix just include this?
-    ../modules/tailscale-autoconnect.nix
-  ];
-
   config = {
     boot = {
       # low mem device
@@ -45,6 +35,7 @@ in
 
     services.fwupd.enable = lib.mkForce false; # doesn't xcompile, don't remember the details
 
+    hardware.enableRedistributableFirmware = true;
     hardware.firmware = with pkgs; [
       raspberrypiWirelessFirmware
     ];

@@ -23,6 +23,7 @@ in
     environment.systemPackages = [ _nix ];
     nix = {
       settings = {
+      keep-derivations = true; # this is the default (?)
         cores = 0;
         max-jobs = "auto";
         trusted-public-keys = [

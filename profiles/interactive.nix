@@ -83,6 +83,8 @@
         #sfz # simple file zerver? lol
         # prs # gopass replacement, oh fuck thank god, but no TOTP or PASSWORD_STORE_DIR or sequoia support
         # </rust pkgs>
+        python3Packages.pywatchman
+        watchman
         watchexec
         tpm2-tools
         

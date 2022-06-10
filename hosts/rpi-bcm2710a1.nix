@@ -26,11 +26,11 @@ in
       rpi = {
         upstream_kernel = true;
 
-        disable_fw_kms_setup = true;
-        hdmi_ignore_cec = true;
-        hdmi_ignore_cec_init = true;
-        initial_boost = 60;
-        force_turbo = true; # maybe helps living room tv
+        disable_fw_kms_setup = lib.mkDefault true;
+        hdmi_ignore_cec = lib.mkDefault true;
+        hdmi_ignore_cec_init = lib.mkDefault true;
+        initial_boost = lib.mkDefault 60;
+        force_turbo = lib.mkDefault true; # maybe helps living room tv
       };
     };
 
@@ -40,8 +40,6 @@ in
       kernelPackages = pkgs.linuxPackages_latest;
       kernelParams = [
         "cma=128M"
-        "snd_bcm2835.enable_hdmi=1"
-        "snd_bcm2835.enable_headphones=0"
         "console=tty1"
       ];
       initrd.availableKernelModules = [

@@ -98,12 +98,10 @@
     },
     "cross-armv6l": {
       "locked": {
-        "lastModified": 1654042476,
-        "narHash": "sha256-7Wf+T8+p5p9NjP8i/v60oIafOTGLnqjC5R+GNh8Yjus=",
-        "owner": "colemickens",
-        "repo": "nixpkgs",
-        "rev": "14f1c4c81e1b6d436750071f720f61a65cea7e7e",
-        "type": "github"
+        "lastModified": 1654808082,
+        "narHash": "sha256-vj7BAGO0+hEd/A7g91y51Q67yBKuz7SD+xACkrfOtjw=",
+        "type": "git",
+        "url": "file:///home/cole/code/nixpkgs/cmpkgs-cross-armv6l"
       },
       "original": {
         "owner": "colemickens",
@@ -114,12 +112,10 @@
     },
     "cross-riscv64": {
       "locked": {
-        "lastModified": 1654042468,
-        "narHash": "sha256-9hqvfuiV/I9xrMvGYh8XflxZMFCyg2bUVw5seyoiey4=",
-        "owner": "colemickens",
-        "repo": "nixpkgs",
-        "rev": "66232133e69b28c11398d6cbe9ca5fafc7960c75",
-        "type": "github"
+        "lastModified": 1654808074,
+        "narHash": "sha256-Ox4EAvgxCSYhWdE3hIRuiDYmZEQDc+kQZOMhAhV/YOQ=",
+        "type": "git",
+        "url": "file:///home/cole/code/nixpkgs/cmpkgs-cross-riscv64"
       },
       "original": {
         "owner": "colemickens",
@@ -790,8 +786,8 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1654042419,
-        "narHash": "sha256-HWw6qPCsmqO6B7qrypf58HsTCkJ7y7S7bkoTnilYpfA=",
+        "lastModified": 1654808063,
+        "narHash": "sha256-3sQCagW43Vv50/cEQObHmr7jeQ3nBl4osTkyGWoWRdo=",
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs/cmpkgs"
       },
@@ -906,8 +902,8 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1654042443,
-        "narHash": "sha256-rBBOjk2g8vRZiRgQjr2f44KpxwZgEXcnuQqoZO8MXpI=",
+        "lastModified": 1654808375,
+        "narHash": "sha256-ayQMhyQwb02Ce5oT2DBgT5QHH+BtiI4WhNYRs3JEXz8=",
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs/rpi"
       },
@@ -1079,8 +1075,8 @@
         ]
       },
       "locked": {
-        "lastModified": 1654042535,
-        "narHash": "sha256-qyrBgNo1t5GHNdWVVU1vgKR6udhHTf5n5DGZ5jZSn/g=",
+        "lastModified": 1654808400,
+        "narHash": "sha256-digb5Aq4cle+oVLgdCYRXhmnd+ZIxkn7oyAd3QEqiT4=",
         "type": "git",
         "url": "file:///home/cole/code/tow-boot/rpi"
       },

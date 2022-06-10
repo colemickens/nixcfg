@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, inputs, options, ... }:
 
 let
   cfg = config.nixcfg.common;
@@ -29,6 +29,13 @@ let
   #     );
   #   });
   hn = config.networking.hostName;
+  defaultTimeServers = options.networking.timeServers.default;
+  _defaultTimeServers = [
+    "0.nixos.pool.ntp.org"
+    "1.nixos.pool.ntp.org"
+    "2.nixos.pool.ntp.org"
+    "3.nixos.pool.ntp.org"
+  ];
 in
 {
   imports = [
@@ -58,6 +65,10 @@ in
       useZfs = lib.mkOption {
         type = lib.types.bool;
         default = true;
+      };
+      useXeepTimeserver = lib.mkOption {
+        type = lib.types.bool;
+        default = true; # TODO: this is questionable...
       };
       hostColor = lib.mkOption {
         type = lib.types.str;
@@ -123,6 +134,8 @@ in
         };
       };
 
+      system.disableInstallerTools = true;
+      
       ###################################
       ## NETWORK 
       ###################################
@@ -135,6 +148,11 @@ in
       networking.useDHCP = lib.mkIf (cfg.defaultNetworking) false;
       networking.useNetworkd = lib.mkIf (cfg.defaultNetworking) true;
       services.resolved.enable = true;
+
+      networking.timeServers = []
+        ++ (if cfg.useXeepTimeserver then [ "192.168.1.10" ] else [])
+        ++ defaultTimeServers;
+
       systemd.network = (lib.mkIf (cfg.defaultNetworking) {
         enable = true;
 
@@ -144,6 +162,14 @@ in
           networkConfig = { };
           # linkConfig.ActivationPolicy = "always-down";
           linkConfig.Unmanaged = "yes";
+        };
+        
+        networks."20-tailscale-ignore" = {
+          matchConfig.Name = "tailscale0";
+          linkConfig = {
+            Unmanaged = "yes";
+            RequiredForOnline = false;
+          };
         };
 
         networks."20-network-defaults" = {

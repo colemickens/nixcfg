@@ -39,10 +39,21 @@ ota:
 external_components:
   - source: github://oxan/esphome-stream-server
 
+switch:
+  - platform: gpio
+    pin: GPIO25
+    # inverted: true
+    id: stream202_reset
+    name: stream202_reset
+    restore_mode: ALWAYS_OFF
+    on_turn_on:
+    - delay: 500ms
+    - switch.turn_off: stream202_reset
+
 uart:
   baud_rate: 115200
-  tx_pin: GPIO27
-  rx_pin: GPIO25
+  tx_pin: GPIO17
+  rx_pin: GPIO16
 
 stream_server:
   # default port: 6638

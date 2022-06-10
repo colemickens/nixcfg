@@ -1,0 +1,61 @@
+---
+session:
+  name: "xdeploy"
+  connect: true
+
+pane_frames: true
+
+template:
+  direction: Horizontal
+  parts:
+    - direction: Vertical  # part 1
+      borderless: true
+      split_size:
+        Fixed: 1
+      run:
+        plugin:
+          location: "zellij:tab-bar"
+    - direction: Vertical # part 2
+      body: true
+      pane_frames: true
+    - direction: Vertical # part 3
+      borderless: true
+      split_size:
+        Fixed: 2
+      run:
+        plugin:
+          location: "zellij:status-bar"
+
+tabs:
+  - direction: Horizontal
+    name: "nixup-a64"
+    parts:
+      - direction: Vertical
+        parts:
+          - pane_name: "rpitwozero1"
+            run: { command: {cmd: ./nixup, args: ["rdeploy", "rpizerotwo1" ]} }
+          - pane_name: "rpitwozero2"
+            run: { command: {cmd: ./nixup, args: ["rdeploy", "rpizerotwo2" ]} }
+          - pane_name: "rpitwozero3"
+            run: { command: {cmd: ./nixup, args: ["rdeploy", "rpizerotwo3" ]} }
+      - direction: Vertical
+        parts:
+          - pane_name: "rpizero1"
+            run: { command: {cmd: ./nixup, args: ["rdeploy", "rpizero1" ]} }
+          - pane_name: "rpizero2"
+            run: { command: {cmd: ./nixup, args: ["rdeploy", "rpizero2" ]} }
+      - direction: Vertical
+        parts:
+          - pane_name: "rpithreebp1"
+            run: { command: {cmd: ./nixup, args: ["rdeploy", "rpithreebp1" ]} }
+          - pane_name: "rpifour1"
+            run: { command: {cmd: ./nixup, args: ["build", ".#netboots.rpifour1" ]} }
+          - pane_name: "rpifour2"
+            run: { command: {cmd: ./nixup, args: ["build", ".#netboots.rpifour2" ]} }
+  - name: "nixup-summary"
+    direction: Horizontal
+    parts:
+      - direction: Vertical
+        parts:
+          - pane_name: "summary"
+            run: { command: {cmd: ./nixup, args: ["summary"]} }

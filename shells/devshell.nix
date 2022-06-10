@@ -23,6 +23,7 @@ minimalMkShell pkgs.system {
     cacert
     jq
     jless
+    just
     parallel
     mercurial
     git

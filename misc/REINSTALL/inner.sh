@@ -168,8 +168,8 @@ set +e; teardown; set -e
 if [[ "${action}" = "diskinit" ]]; then
   diskinit
 elif [[ "${action}" == "install" ]]; then
-  mounts
+  # mounts
   install
 fi
-teardown
+# teardown
 

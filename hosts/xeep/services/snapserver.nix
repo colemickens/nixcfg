@@ -2,19 +2,22 @@
 
 let
   lp = "${pkgs.librespot}/bin/librespot";
+  tcp_listen_port = 4953;
 in
 {
   config = {
+    networking.firewall.allowedTCPPorts = [ tcp_listen_port ];
     services.snapserver = {
       enable = true;
       codec = "flac";
       streams = {
         tcp = {
           type = "tcp";
-          location = "127.0.0.1";
+          location = "0.0.0.0";
           query = {
             name = "snapserver";
             mode = "server";
+            port = "${builtins.toString tcp_listen_port}";
           };   
         };
         librespot = {

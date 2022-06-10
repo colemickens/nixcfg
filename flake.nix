@@ -111,6 +111,7 @@
       supportedSystems = [
         "x86_64-linux"
         "aarch64-linux"
+        "riscv64-linux"
         # "riscv64-none-elf" # TODO
         # "armv6l-linux" # eh, I think time is up
         # "armv7l-linux" # eh, I think time is up
@@ -132,12 +133,14 @@
         pkgs_ = nixlib.genAttrs (builtins.attrNames inputs) (inp: nixlib.genAttrs supportedSystems (sys: pkgsFor inputs."${inp}" sys [ ]));
         fullPkgs_ = nixlib.genAttrs supportedSystems (sys:
           pkgsFor inputs.nixpkgs sys [ inputs.self.overlay inputs.nixpkgs-wayland.overlay ]);
-        mkSystem = pkgs: system: hostname:
+        mkSystem_ = pkgs: system: h: modules:
           pkgs.lib.nixosSystem {
             system = system;
-            modules = [ (./. + "/hosts/${hostname}/configuration.nix") ];
+            modules = [ ./hosts/${h}/configuration.nix ] ++ modules;
             specialArgs = { inherit inputs; };
           };
+        mkSystem = pkgs: system: h: (mkSystem_ pkgs system h [ ./hosts/${h}/configuration.nix ]);
+
         pkgNames = s: builtins.attrNames (inputs.self.overlay pkgs_.${s} pkgs_.${s});
       };
 
@@ -170,7 +173,7 @@
       legacyPackages = forAllSystems (s: {
         # to `nix eval` with the "currentSystem" in certain scenarios
         devShellSrc = inputs.self.devShell.${s}.inputDerivation;
-        install-secrets = (import ./.github/secrets.nix { nixpkgs = inputs.nixpkgs; inherit inputs; system=s; });
+        install-secrets = (import ./.github/secrets.nix { nixpkgs = inputs.nixpkgs; inherit inputs; system = s; });
         bundle = inputs.self.bundles.${s};
         cachable = pkgs_.nixpkgs.${s}.linkFarmFromDrvs "cachable-${s}" [
           inputs.self.devShell.${s}.inputDerivation
@@ -225,6 +228,7 @@
           };
           shreddit = prev.python3Packages.callPackage ./pkgs/shreddit { };
           tvp = prev.callPackage ./pkgs/tvp { };
+          rsntp = prev.callPackage ./pkgs/rsntp { };
           rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {
             buildGoModule = prev.buildGo117Module;
           };
@@ -272,11 +276,40 @@
       #   other-arch-vm = import ./modules/other-arch-vm.nix;
       # };
 
+      # TODO:
+      # - for now we just re-use the nixosConfiguration
+      # - but maybe, for example, we want to cross-compile these since hosted from 'xeep'
+      netboots =
+        let
+          makeNfsboot = h:
+            nixosConfigurations.${h}.config.system.build.extras.nfsboot;
+          crossNfsboot = h: _system:
+            (crossSystems h _system).config.system.build.extras.nfsboot;
+
+          crossSystems = h: _system:
+            nixosConfigurations.${h}.extendModules {
+              modules = [
+                ({ config, lib, ... }: {
+                  nixpkgs.localSystem.system = "x86_64-linux";
+                  nixpkgs.crossSystem = lib.mkForce _system;
+                })
+              ];
+            };
+
+        in
+        {
+          rpifour1 = makeNfsboot "rpifour1";
+          rpifour2= makeNfsboot "rpifour2";
+          # rpifour2 = crossNfsboot "rpifour2" { system = "aarch64-linux"; };
+          rpithreebp1 = makeNfsboot "rpithreebp1";
+          # risky = cross_nfsboot_riscv_ "risky";
+        };
+
       nixosConfigurations = {
         #######################################################################
         # x86_64-linux
+        carbon = mkSystem inputs.nixpkgs "x86_64-linux" "carbon";
         jeffhyper = mkSystem inputs.nixpkgs "x86_64-linux" "jeffhyper";
-        # linbio = mkSystem inputs.nixpkgs "x86_64-linux" "linbio";
         pelinux = mkSystem inputs.nixpkgs "x86_64-linux" "pelinux";
         slynux = mkSystem inputs.nixpkgs "x86_64-linux" "slynux";
         raisin = mkSystem inputs.nixpkgs "x86_64-linux" "raisin";
@@ -284,19 +317,17 @@
         # netboot-x86_64 = mkSystem inputs.nixpkgs "x86_64-linux" "netboot";
         #######################################################################
         # riscv-linux
-        risky = mkSystem inputs.cross-riscv64 "riscv64-linux" "risky";
+        # risky = mkSystem inputs.cross-riscv64 "riscv64-linux" "risky";
+        # rixxy = mkSystem inputs.cross-riscv64 "x86_64-linux" "risky";
         # ^^^ realistically since this is a native build, I shouldn't _need_ to use crosspkgs
         #######################################################################
         # aarch64-linux
-        # netboot-aarch64 = mkSystem inputs.nixpkgs "aarch64-linux" "netboot";
-        # retired # pinebook = mkSystem inputs.nixpkgs "aarch64-linux" "pinebook";
         rpifour1 = mkSystem inputs.rpipkgs "aarch64-linux" "rpifour1";
-        # rpifour2 = mkSystem inputs.rpipkgs "aarch64-linux" "rpifour2";
+        rpifour2 = mkSystem inputs.rpipkgs "aarch64-linux" "rpifour2";
         rpithreebp1 = mkSystem inputs.rpipkgs "aarch64-linux" "rpithreebp1";
         rpizerotwo1 = mkSystem inputs.rpipkgs "aarch64-linux" "rpizerotwo1";
         rpizerotwo2 = mkSystem inputs.rpipkgs "aarch64-linux" "rpizerotwo2";
         rpizerotwo3 = mkSystem inputs.rpipkgs "aarch64-linux" "rpizerotwo3";
-        ## sinkor = mkSystem inputs.nixpkgs "aarch64-linux" "sinkor";
         ## oracular = mkSystem inputs.nixpkgs "aarch64-linux" "oracular";
         ## pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
         # blueline = mkSystem inputs.nixpkgs "aarch64-linux" "blueline";
@@ -322,6 +353,7 @@
         packages = force_cached s (filterPkgs pkgs_.nixpkgs.${s} inputs.self.packages.${s});
         toplevels = force_cached s (builtins.mapAttrs (n: v: v.config.system.build.toplevel)
           (filterHosts pkgs_.nixpkgs.${s} inputs.self.nixosConfigurations));
+        netboots = force_cached s (filterPkgs pkgs_.nixpkgs.${s} netboots);
       });
       # TODO: finish this...
       hydraBundles = forAllSystems (s: (
@@ -380,8 +412,8 @@
       #   forAllSystems (s: installer);
       # - bundle the installer script
       # - the installer script should also manage host ssh/age keys + secrets re-provisioning
-        
-      images = nixlib.genAttrs [ "rpizero1" "rpizero2" ] (h: 
+
+      images = nixlib.genAttrs [ "rpizero1" "rpizero2" ] (h:
         nixosConfigurations.${h}.config.system.build.sdImage);
 
       towboot =

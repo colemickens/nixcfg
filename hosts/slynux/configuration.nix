@@ -48,7 +48,7 @@ in
     ../../mixins/devshells.nix
     ../../mixins/grub-signed-shim.nix
     ../../mixins/logitech-mouse.nix
-    ../../mixins/rclone-googledrive-mounts.nix
+    # ../../mixins/rclone-googledrive-mounts.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix

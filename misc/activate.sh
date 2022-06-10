@@ -8,6 +8,7 @@ outres="${1}"; shift
 host="${1}"; shift
 
 # target="STEAL THIS FROM THE CONFIG??" # TODO
+printf "activate-init" > "${NIXUP_LOGDIR}/status"
 
 function summarize() {
   while true; do
@@ -50,18 +51,22 @@ target="$(tailscale ip --6 "${host}")"
 
 if [[ "${action:-""}" == "switch" || "${action:-""}" == "reboot" ]]; then
   printf "==:: (activate) remote: download toplevel ($target) ($outres)\n" > /dev/stderr
+  printf "activate-download" > "${NIXUP_LOGDIR}/status"
   ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --option 'narinfo-cache-negative-ttl' 0 --no-link --profile /nix/var/nix/profiles/system "${outres}")"
 
   printf "==:: (activate) switch-to-configuration ($target) ($outres)\n" > /dev/stderr
+  printf "activate-switch" > "${NIXUP_LOGDIR}/status"
   ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${outres}" -c switch-to-configuration switch)"
 
   if [[ "${NIXOS_INSTALL:-""}" == "1" ]]; then
     printf "==:: (activate) install ($target) ($outres)\n" > /dev/stderr
+    printf "activate-install" > "${NIXUP_LOGDIR}/status"
     ssh "${target}" "$(printf '\"%s\" ' sudo nixos-install --no-root-passwd --root / "${nixargs[@]}" --system "${outres}")"
   fi
   
   summarize
   printf "\n==:: activation done\n\n" >/dev/stderr
+  printf "activate-done" > "${NIXUP_LOGDIR}/status"
 fi
 
 if [[ "${action:-""}" == "summarize" ]]; then
@@ -72,11 +77,14 @@ fi
 if [[ "${action:-""}" == "reboot" ]]; then
   booted="$(ssh "${target}" "readlink -f /run/booted-system")"
   if [[ "${booted}" == "${outres}" ]]; then
+    printf "reboot-skip" > "${NIXUP_LOGDIR}/status"
     printf "\n==:: skip reboot for ${host} ...\n\n" >/dev/stderr
   else
+    printf "reboot-wait" > "${NIXUP_LOGDIR}/status"
     printf "\n==:: reboot and wait for ${host} ...\n\n" >/dev/stderr
     ssh "${target}" "sudo reboot" >/dev/null 2>/dev/null || true
     summarize
+    printf "reboot-done" > "${NIXUP_LOGDIR}/status"
   fi
 fi
 

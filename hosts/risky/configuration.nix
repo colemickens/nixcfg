@@ -22,6 +22,8 @@
     documentation.info.enable = false;
     documentation.nixos.enable = false;
 
+    nixpkgs.crossSystem.system = "riscv64-linux";
+    
     environment.systemPackages = with pkgs; [
       binutils
       usbutils

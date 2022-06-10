@@ -27,6 +27,18 @@
 [[ ! -o 'no_brace_expand' ]] || p10k_config_opts+=('no_brace_expand')
 'builtin' 'setopt' 'no_aliases' 'no_sh_glob' 'brace_expand'
 
+
+function prompt_flake_lock() {
+  #if [ "$(arch)" = "arm64" ]; then
+  #  p10k segment -b 2 -f 'black' -t 'arm64'
+  #else
+  #  p10k segment -b 2 -f 'black' -t 'x86'
+  #fi
+  if [[ ! -z "${FLAKE_LOCK:-}" ]]; then
+    p10k segment -b 2 -f 'white' -t "${FLAKE_LOCK}"
+  fi
+}
+
 () {
   emulate -L zsh
 
@@ -52,6 +64,7 @@
     dir                       # current directory
     vcs                       # git status
     command_execution_time    # previous command duration
+    flake_lock
     # =========================[ Line #2 ]=========================
     newline                   # \n
     virtualenv                # python virtual environment

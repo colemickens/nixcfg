@@ -34,13 +34,13 @@ let
     ip="$(${tailscale}/bin/tailscale ip --6 "$1")"
     "${gpgssh}/bin/gpgssh" cole@"$ip"
   '');
-  zssh = (writeShellScriptBin "gssh" ''
+  zssh = (writeShellScriptBin "zssh" ''
     [[ -z "''${DEBUG_GPGSSH}" ]] || set -x
     set -euo pipefail
 
     ip="$(${tailscale}/bin/tailscale ip --6 "$1")"
     while true; do
-      ssh -o ConnectionTimeout=10 cole@"$ip"    
+      ssh -o ConnectTimeout=10 cole@"$ip"    
     done
   '');
 

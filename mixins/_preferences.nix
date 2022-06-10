@@ -24,7 +24,8 @@ let
       no-cv-ss = true;
     };
   });
-  _iosevka = pkgs.iosevka;
+  # _iosevka = pkgs.iosevka; # weird aarch64 build failure?
+  _iosevka = pkgs.iosevka-bin;
   #_iosevka = customIosevkaTerm;
   
   # TODO: fix
@@ -103,7 +104,15 @@ rec {
     fallback = { family = "Font Awesome 5 Free"; package = pkgs.font-awesome; };
     emoji = { family = "Noto Color Emoji"; package = pkgs.noto-fonts-emoji; };
     
-    allPackages = (map (p: p.package) [ default sans serif monospace fallback emoji ]) ++
+    allPackages = (map (p: p.package)
+      [
+        default
+        sans
+        serif
+        monospace
+        fallback
+        emoji
+      ]) ++
       (with pkgs; [
         liberation_ttf # free corefonts-metric-compatible replacement
         ttf_bitstream_vera

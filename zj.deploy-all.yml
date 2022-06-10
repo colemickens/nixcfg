@@ -38,14 +38,16 @@ tabs:
             run: { command: {cmd: ./nixup, args: ["deploy", "rpizerotwo2"]} }
           - pane_name: "rpitwozero3"
             run: { command: {cmd: ./nixup, args: ["deploy", "rpizerotwo3"]} }
+      - direction: Vertical
+        parts:
           - pane_name: "rpithreebp1"
             run: { command: {cmd: ./nixup, args: ["deploy", "rpithreebp1"]} }
       - direction: Vertical
         parts:
           - pane_name: "rpifour1"
             run: { command: {cmd: ./nixup, args: ["deploy", "rpifour1"]} }
-          # - pane_name: "sinkor"
-          #   run: { command: {cmd: ./nixup, args: [ "deploy", "sinkor"]} }
+          - pane_name: "rpifour2"
+            run: { command: {cmd: ./nixup, args: ["deploy", "rpifour2"]} }
       # - direction: Vertical
         # parts:
           # - pane_name: "pinephone"
@@ -69,9 +71,9 @@ tabs:
         parts:
           - pane_name: "slynux"
             run: { command: {cmd: ./nixup, args: ["deploy", "slynux"]} }
-          - pane_name: "pelinux"
+          # - pane_name: "pelinux"
           #   run: { command: {cmd: ./nixup, args: [ "deploy", "pelinux"]} }
-          # - pane_name: "jeffhyper"
+          - pane_name: "jeffhyper"
             run: { command: {cmd: ./nixup, args: [ "deploy", "jeffhyper"]} }
       - direction: Vertical
         parts:
@@ -85,4 +87,4 @@ tabs:
       - direction: Vertical
         parts:
           - pane_name: "summary"
-            run: { command: {cmd: /run/current-system/sw/bin/bash, args: [ "-c", "tail -f ${NIXUP_LOGDIR}/summary.txt; sleep 100"]} }
+            run: { command: {cmd: ./nixup, args: ["summary"]} }

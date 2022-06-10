@@ -17,17 +17,8 @@ in {
   imports = [
     ./rpi-core.nix
     ./rpi-towboot.nix
-  ] ++ (if upstream_kernel then [] else [
-    ./rpi-foundation-v3d.nix
-  ]);
-
-  # NOTES: rpi4-specific:
-  # sudo env \
-  #   BOOTFS=/boot/firmware \
-  #   FIRMWARE_RELEASE_STATUS=stable \
-  #     rpi-eeprom-config --edit
-  #
-
+  ];
+  
   config = {
     environment.systemPackages = with pkgs; [
       picocom
@@ -35,42 +26,22 @@ in {
     ];
     hardware.usbWwan.enable = true;
 
-    tow-boot.config = {
-      rpi = {
-        upstream_kernel = upstream_kernel;
-
-        arm_boost = true;
-        initial_boost = 60;
-        hdmi_enable_4kp60 = true;
-        hdmi_ignore_cec = true;
-        disable_fw_kms_setup = upstream_kernel;
-        
-        enable_watchdog = true;
-      };
-    };
-
     boot = {
       loader.generic-extlinux-compatible.useGenerationDeviceTree = true;
 
-      kernelPackages = if upstream_kernel
-        then lib.mkForce pkgs.linuxPackages_latest #vc4/hdmi might be broken on 5.18
-        else lib.mkForce pkgs.linuxPackages_rpi4; #vc4/hdmi might be broken on 5.18
+      kernelPackages = lib.mkDefault null;
 
-      kernelParams = ([
+      kernelParams = [
         "cma=512M"
         "snd_bcm2835.enable_hdmi=1"
         "snd_bcm2835.enable_headphones=0"
-      ] ++ (if upstream_kernel then [
-        # "console=ttyS0,115200" "console=tty1" # no output after "starting kernel"
-        "console=serial0,115200" "console=tty1"
-      ] else [
-        # I don't think we have the DT enablement for uart serial
-      ]));
+      ];
       # initrd.preFailCommands = ''
       #   reboot
       # '';
       initrd.kernelModules = config.boot.initrd.availableKernelModules;
       initrd.availableKernelModules = [
+        "genet"
         # "genet" # netboot, does this even make sense?
         # "nvme" # boot-nvme
         "pcie_brcmstb" # boot-usb
@@ -86,28 +57,6 @@ in {
         "hid_generic" # luks/kb
         "hid_microsoft" # luks/kb
       ];
-      # unblakc-listing this fixed hdmi audio with `fkms`...
-      blacklistedKernelModules = if upstream_kernel then [ "snd_bcm2835" ] else [];
     };
-
-    # TODO: harmonize filesystems (rpifour1,sinkor), move them here??
-    fileSystems = lib.mkDefault {
-      "/" = {
-        device = "/dev/disk/by-partuuid/${mbr_disk_id}-03";
-        fsType = "ext4";
-      };
-      "/boot" = {
-        device = "/dev/disk/by-partuuid/${mbr_disk_id}-02";
-        fsType = "vfat";
-      };
-      "/boot/firmware" = {
-        device = "/dev/disk/by-partuuid/${mbr_disk_id}-01";
-        fsType = "vfat";
-        options = [ "ro" "nofail" ];
-      };
-    };
-    swapDevices = lib.mkDefault [{
-      device = "/dev/disk/by-partuuid/${mbr_disk_id}-04";
-    }];
   };
 }
