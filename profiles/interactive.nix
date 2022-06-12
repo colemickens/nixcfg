@@ -8,6 +8,7 @@
     
     ../mixins/gpg-agent.nix
 
+    ../mixins/aria2.nix
     ../mixins/broot.nix
     ../mixins/cachix.nix
     ../mixins/direnv.nix
@@ -38,6 +39,7 @@
     # HM: ca.desrt.dconf error:
     # TODO: sops.secrets."nixup-secrets".owner = config.users.users.cole;
     sops.secrets."nixup-secrets".owner = "cole";
+    sops.secrets."home-assistant-bearer-token".owner = "cole";
     sops.secrets."tailscale-join-authkey".owner = "cole";
 
     sops.secrets."oraclecloud_colemickens_privkey".owner = "cole";
@@ -131,7 +133,7 @@
         linuxPackages.cpupower
         linuxPackages.usbip
 
-        aria2
+        # aria2 # mixins/aria2.nix: home-manager module now
         yt-dlp
         imgurbash2
 

@@ -96,14 +96,6 @@
         #   title = "Kitchen";
         #   type = "entities";
         #   entities = [
-        #     {
-        #       name = "Kitchen Lights Switch";
-        #       entity = "switch.gosundsw120_relay";
-        #     }
-        #     {
-        #       name = "Barry's Lamp";
-        #       entity = "switch.wp6_sw105_relay";
-        #     }
         #   ];
         # }
         # {
@@ -149,15 +141,23 @@
       ];
     }
     {
-      title = "Extras";
+      title = "Raspberry Pis";
       cards = [
         {
           title = "Extras";
           type = "entities";
           entities = [
             {
-              name = "Raspberry Pi Toggle";
+              name = "rpi-switch-rpifour1-living-room";
+              entity = "switch.wp6_sw107_relay";
+            }
+            {
+              name = "rpi-switch-rpifour2-den";
               entity = "switch.wp6_sw106_relay";
+            }
+            {
+              name = "rpi-switch-rpithreebp1-den";
+              entity = "switch.wp6_sw105_relay";
             }
           ];
         }

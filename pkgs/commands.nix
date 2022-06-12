@@ -38,9 +38,11 @@ let
     [[ -z "''${DEBUG_GPGSSH}" ]] || set -x
     set -euo pipefail
 
-    ip="$(${tailscale}/bin/tailscale ip --6 "$1")"
+    host="''${1}"; shift
+    ip="$(${tailscale}/bin/tailscale ip --6 "$host")"
     while true; do
-      ssh -o ConnectTimeout=10 cole@"$ip"    
+      set +e
+      ssh -o ConnectTimeout=5 cole@"$ip" "''${@}"
     done
   '');
 
@@ -242,7 +244,7 @@ let
         systemctl --user start snapclient-local"
     '')
     (writeShellScriptBin "snapsync" ''
-      hosts=("rpifour1" "rpithreebp1" "rpizerotwo1")
+      hosts=("rpifour1" "rpifour2" "rpithreebp1" "rpizerotwo1" "rpizerotwo2" "rpizerotwo3")
       ssh "cole@$(tailscale ip --6 "xeep")" \
         "sudo systemctl restart systemd-timesyncd;"
       parallel -j$(nproc) --verbose --tag snapsync_one ::: "''${hosts[@]}"

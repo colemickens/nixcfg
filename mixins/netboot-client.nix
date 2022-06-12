@@ -3,12 +3,27 @@
 let
   netbootServer = "192.168.1.10";
   hn = config.networking.hostName;
+
+  # nfsvers = "4.1"; # when using systemd...
+  nfsvers = "3"; # when using legacy busybox boot
+  nfsproto = "tcp";
+
+  # netbootServerPrefix = "${netbootServer}:/export" # busybox
+  netbootServerPrefix = "${netbootServer}:/";
 in
 {
   imports = [
     "${modulesPath}/installer/netboot/netboot.nix"
   ];
   config = {
+
+    boot.kernelParams = [
+      # "systemd.log_level=debug"
+      # "systemd.log_target=console"
+      # "systemd.journald.forward_to_console=1"
+      "systemd.setenv=SYSTEMD_SULOGIN_FORCE=1"
+    ];
+
     system.build.extras.nfsboot = (
       let
         top = config.system.build.toplevel;
@@ -16,16 +31,20 @@ in
         firmware = tb.config.Tow-Boot.outputs.extra.firmwareContents;
         eeprom = tb.config.Tow-Boot.outputs.extra.eepromFiles;
         piser = config.system.build.pi_serial;
+        tci = config.system.build.extras.nfsboot-dbexport;
       in
-      pkgs.runCommandNoCC "netboot-env-${hn}" { } ''
+      pkgs.runCommandNoCC "nfsboot-env-${hn}" { } ''
         set -x
         mkdir $out
+        cp -a \
+          "${pkgs.closureInfo { rootPaths = config.system.build.toplevel; }}" \
+          $out/dbexport
 
         # POPULATE NETBOOT WITH RPI-FW FILES
-        cp -a "${firmware}"/* $out/
+        cp -rs "${firmware}"/* $out/
 
         # POPULATE NETBOOT WITH EEPROM UPDATE FILES
-        cp -a "${eeprom}"/* $out/
+        cp -rs "${eeprom}"/* $out/
         
         # POPULATE NETBOOT WITH EXTLINUX
         ${config.boot.loader.generic-extlinux-compatible.populateCmd} -d $out/ -c "${top}"
@@ -37,39 +56,38 @@ in
         sed -i 's|\.\./|${piser}/|g' $out/extlinux/extlinux.conf
       ''
     );
-    boot.loader.timeout = lib.mkForce 10;
     fileSystems = {
       "/" = lib.mkForce {
-        device = "${netbootServer}:/export/hostdata/${hn}";
+        device = "${netbootServerPrefix}/hostdata/${hn}";
         fsType = "nfs";
         options = [
-          "x-systemd-device-timeout=20s"
-          "nfsvers=3"
-          "proto=tcp"
+          "x-systemd.idle-timeout=20s"
+          # "nfsvers=${nfsvers}"
+          # "proto=${nfsproto}"
           "nolock"
           "rw" # so that it works in initrd with busybox's mount that only does nfs3
         ];
         neededForBoot = true;
       };
       "/nix/.ro-store" = lib.mkForce {
-        device = "${netbootServer}:/export/nix-store";
+        device = "${netbootServerPrefix}/nix-store";
         fsType = "nfs";
         options = [
-          "x-systemd-device-timeout=20s"
-          "nfsvers=3"
-          "proto=tcp"
+          "x-systemd.idle-timeout=20s"
+          # "nfsvers=${nfsvers}"
+          # "proto=${nfsproto}"
           "nolock"
           "ro" # so that it works in initrd with busybox's mount that only does nfs3
         ];
         neededForBoot = true;
       };
-      "/nix/var/nix/shared" = lib.mkForce {
-        device = "${netbootServer}:/export/nix-var-nix-shared";
+      "/nixdb" = lib.mkForce {
+        device = "${netbootServerPrefix}/nixdb/${hn}";
         fsType = "nfs";
         options = [
-          "x-systemd-device-timeout=20s"
-          "nfsvers=3"
-          "proto=tcp"
+          "x-systemd.idle-timeout=20s"
+          # "nfsvers=${nfsvers}"
+          # "proto=${nfsproto}"
           "nolock"
           "ro" # so that it works in initrd with busybox's mount that only does nfs3
         ];
@@ -80,18 +98,98 @@ in
     # TODO???
     hardware.bluetooth.powerOnBoot = false; # attempt to disable BT?
 
-    boot = {
-      postBootCommands = ''
-        # After booting, register the contents of the Nix store
-        # in the Nix database in the tmpfs.
-        ${config.nix.package}/bin/nix-store --load-db < /nix/var/nix/shared/dump
-        # nixos-rebuild also requires a "system" profile and an
-        # /etc/NIXOS tag.
-        touch /etc/NIXOS
-        ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
-      '';
+    system.activationScripts = {
+      nixDbImport = {
+        text = ''
+          (set -x
+            ls -al /nixdb
+            cat /nixdb/registration | grep "${hn}"
+            
+            ${config.nix.package}/bin/nix-store --load-db < /nixdb/registration
+            ${config.nix.package}/bin/nix-store --verify-path $systemConfig
 
+            ln -sf $systemConfig /run/current-system
+            ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
+
+            touch /etc/NIXOS
+          )
+        '';
+        deps = [ ];
+      };
+    };
+
+    networking.useDHCP = false;
+    networking.useNetworkd = true;
+    systemd.network = config.boot.initrd.systemd.network;
+
+    boot = {
       supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
+
+      initrd = {
+        systemd = lib.mkMerge ([
+          ({
+            enable = true;
+            network = {
+              enable = true;
+              links = {
+                "99-defaults-myown" = {
+                  matchConfig.OriginalName = "*";
+                  linkConfig = {
+                    NamePolicy = "keep kernel database onboard slot path";
+                    AlternativeNamesPolicy = "database onboard slot path";
+                    MACAddressPolicy = "persistent";
+                  };
+                };
+              };
+              networks = {
+                "10-eth0" = {
+                  matchConfig.Name = "eth0";
+                  # addresses = [{ addressConfig = { Address = "${eth_ip}/${toString net_prefix}"; }; }];
+                  networkConfig = {
+                    Gateway = "192.168.1.1";
+                    DNS = "192.168.1.1";
+                    # DHCP = "ipv6";
+                  };
+                };
+              };
+            };
+          })
+          (lib.mkIf config.boot.initrd.systemd.enable {
+            contents."/etc/protocols".source = config.environment.etc.protocols.source;
+            mounts = [{
+              where = "/sysroot/nix/store";
+              what = "overlay";
+              type = "overlay";
+              options = "lowerdir=/sysroot/nix/.ro-store,upperdir=/sysroot/nix/.rw-store/store,workdir=/sysroot/nix/.rw-store/work";
+              wantedBy = [ "local-fs.target" ];
+              before = [ "local-fs.target" ];
+              requires = [ "sysroot-nix-.ro\\x2dstore.mount" "sysroot-nix-.rw\\x2dstore.mount" "rw-store.service" ];
+              after = [ "sysroot-nix-.ro\\x2dstore.mount" "sysroot-nix-.rw\\x2dstore.mount" "rw-store.service" ];
+              unitConfig.IgnoreOnIsolate = true;
+            }];
+            services.rw-store = {
+              after = [ "sysroot-nix-.rw\\x2dstore.mount" ];
+              unitConfig.DefaultDependencies = false;
+              serviceConfig = {
+                Type = "oneshot";
+                ExecStart = "/bin/mkdir -p 0755 /sysroot/nix/.rw-store/store /sysroot/nix/.rw-store/work /sysroot/nix/store";
+              };
+            };
+          })
+        ]);
+      };
+
+      loader = {
+        timeout = lib.mkForce 10;
+        generic-extlinux-compatible = {
+          symlinkBootFiles = true;
+        };
+      };
+
+      # TODO: might need this back for ethernet:
+      extraModprobeConfig = ''
+        options firmware_class path=${config.hardware.firmware}/lib/firmware
+      '';
 
       initrd.network.enable = true;
       initrd.network.flushBeforeStage2 = false;

@@ -68,7 +68,8 @@ in
       };
       useXeepTimeserver = lib.mkOption {
         type = lib.types.bool;
-        default = true; # TODO: this is questionable...
+        # default = true; # TODO: this is questionable...
+        default = false; # TODO: this is questionable...
       };
       hostColor = lib.mkOption {
         type = lib.types.str;

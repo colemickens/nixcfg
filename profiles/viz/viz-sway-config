@@ -19,7 +19,7 @@ client.background #ffffff
 bindsym Mod4+Return exec foot
 
 output "*" {
-mode 1280x720@30.000Hz
+  mode 1920x1080@60.000Hz
 }
 
 mode "resize" {
@@ -36,6 +36,5 @@ mode "resize" {
 }
 
 exec_always "/run/current-system/sw/bin/systemctl --user restart graphical-session.target"
-exec_always "/run/current-system/sw/bin/systemctl --user restart sway-session.target"
 
 xwayland disable

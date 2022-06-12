@@ -2,6 +2,40 @@
 
 let
   useUnstableOverlay = true;
+  __scripts = pkgs.buildEnv {
+    name = "viz-scripts";
+    paths = [
+      (pkgs.writeShellScriptBin "viz-restart-pipewire" ''
+        set -x
+        systemctl --user stop pipewire pipewire-pulse pipewire.socket pipewire-pulse.socket
+        sleep 2
+        systemctl --user start pipewire.socket pipewire-pulse.socket pipewire.service pipewire-pulse.service
+        sleep 2
+        systemctl --user restart snapclient-local
+      '')
+      (pkgs.writeShellScriptBin "viz-restart-visualizer" ''
+        systemctl --user restart visualizer
+      '')
+    ];
+  };
+
+  # useVulkan = (config.networking.hostName == "rpifour2");
+  useVulkan = false;
+
+  visualizerScript = (
+    (rec {
+      "rpifour1" = ''"${pkgs.projectm}/bin/projectM-pulseaudio"'';
+      "rpithreebp1" = ''"${pkgs.foot}/bin/foot" "${pkgs.cli-visualizer}/bin/vis"'';
+
+      # "rpifour2" = ''"${pkgs.visualizer2}/bin/noambition"'';
+      "rpifour2" = ''"${pkgs.foot}/bin/foot" "${pkgs.cli-visualizer}/bin/vis"'';   
+      "rpizerotwo1" = ''"${pkgs.foot}/bin/foot" "${pkgs.cli-visualizer}/bin/vis"'';   
+      "rpizerotwo2" = rpizerotwo1;
+      "rpizerotwo3" = rpizerotwo1;
+    }).${config.networking.hostName}
+  );
+
+  isCross = pkgs.targetPlatform != pkgs.buildPlatform;
 in
 {
   imports = [
@@ -16,7 +50,7 @@ in
   ];
   config = {
     sops.secrets."tailscale-join-authkey".owner = "cole";
-    
+
     nixpkgs.overlays =
       if useUnstableOverlay then [
         inputs.nixpkgs-wayland.overlay
@@ -24,39 +58,53 @@ in
 
     services.getty.autologinUser = "cole";
 
-    environment.systemPackages = with pkgs; [
-      # mpv
-      v4l-utils
+    environment.systemPackages = (with pkgs; ([
       wezterm
       foot
       gst_all_1.gstreamer
       gst_all_1.gstreamer.dev
       qt5.qtwayland
-    ];
+      __scripts
+      cava
+      cli-visualizer
+    ] ++ (if isCross then [ ] else [
+      # these don't cross-compile due to makeWrapper issues?
+      alsaUtils
+      v4l-utils
+      mpv
+    ])));
     programs.sway = {
       enable = true;
       wrapperFeatures.gtk = true;
+      extraSessionCommands = (''
+        export WLR_LIBINPUT_NO_DEVICES=1
+      '' + (lib.optionalString (useVulkan) ''
+        export WLR_RENDERER=vulkan
+      ''));
     };
     environment.etc."sway/config".source = ./viz-sway-config;
 
     environment.loginShellInit = ''
       # [[ "$(tty)" == /dev/tty? ]] && sudo /run/current-system/sw/bin/lock this 
-      [[ "$(tty)" == /dev/tty1 ]] && sway
+      [[ "$(tty)" == /dev/tty1 ]] && (
+        # /run/current-system/sw/bin/viz-restart-pipewire
+        sleep 3;
+        sway -d &> sway.log
+      )
     '';
 
     systemd.user.services.visualizer = {
       enable = true;
       description = "Visualizer";
 
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
 
       environment = {
-        WAYLAND_DISPLAY="wayland-1";
+        WAYLAND_DISPLAY = "wayland-1";
+        QT_QPA_PLATFORM = "wayland-egl";
       };
-      script = ''
-        "${pkgs.foot}/bin/foot" "${pkgs.cli-visualizer}/bin/vis"
-      '';
+      script = visualizerScript;
       restartIfChanged = true;
       serviceConfig = {
         # ExecStart

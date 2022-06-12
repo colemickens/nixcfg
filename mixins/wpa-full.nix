@@ -15,6 +15,8 @@
         # TODO: map these automatically
         "chimera-wifi".pskRaw = "@pskRaw_chimera_wifi@";
         "Mickey".pskRaw = "@pskRaw_Mickey@";
+        "Pixcole3".pskRaw = "@pskRaw_Pixcole3@";
+        "courtyardGuest".pskRaw = "@pskRaw_courtyardGuest@";
       };
     };
   };

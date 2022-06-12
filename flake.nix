@@ -283,26 +283,39 @@
         let
           makeNfsboot = h:
             nixosConfigurations.${h}.config.system.build.extras.nfsboot;
-          crossNfsboot = h: _system:
-            (crossSystems h _system).config.system.build.extras.nfsboot;
-
-          crossSystems = h: _system:
-            nixosConfigurations.${h}.extendModules {
-              modules = [
-                ({ config, lib, ... }: {
-                  nixpkgs.localSystem.system = "x86_64-linux";
-                  nixpkgs.crossSystem = lib.mkForce _system;
-                })
-              ];
-            };
-
         in
         {
           rpifour1 = makeNfsboot "rpifour1";
-          rpifour2= makeNfsboot "rpifour2";
-          # rpifour2 = crossNfsboot "rpifour2" { system = "aarch64-linux"; };
+          rpifour2 = makeNfsboot "rpifour2";
           rpithreebp1 = makeNfsboot "rpithreebp1";
-          # risky = cross_nfsboot_riscv_ "risky";
+          rpizerotwo3 = makeNfsboot "rpizerotwo3";
+        };
+      netbootsCross =
+        let
+          crossModule1 = crossSystem: ({ config, lib, ... }: {
+            nixpkgs.localSystem = { system = "x86_64-linux"; };
+            nixpkgs.crossSystem = crossSystem;
+          });
+          crossNfsboot = h:
+            (crossSystems h _system).config.system.build.extras.nfsboot;
+
+          crossModule2 = crossSystem: ({ config, lib, ... }: {
+            # nixpkgs.localSystem = { system = "x86_64-linux"; };
+            nixpkgs.crossSystem = crossSystem;
+          });
+          makeNfsbootCross = h: crossSystem:
+            (nixosConfigurations.${h}.extendModules {
+              modules = [ (crossModule1 crossSystem) ];
+            }).config.system.build.extras.nfsboot;
+          makeNfsbootCross2 = h: crossSystem:
+            (mkSystem_ inputs.rpipkgs "x86_64-linux" h [ (crossModule2 crossSystem) ])
+              .config.system.build.extras.nfsboot;
+        in
+        {
+          rpifour1a = makeNfsbootCross "rpifour1" { system = "aarch64-linux"; };
+          rpifour1b= makeNfsbootCross "rpifour1" { system = "aarch64-linux"; };
+          rpifour2 = makeNfsbootCross2 "rpifour2" { system = "aarch64-linux"; };
+          rpithreebp1 = makeNfsbootCross "rpithreebp1" { system = "aarch64-linux"; };
         };
 
       nixosConfigurations = {
@@ -418,14 +431,24 @@
 
       towboot =
         let
-          tb_a64 = inputs.tow-boot.aarch64-linux;
-          tb_rpi_armv6l = tb_a64.raspberryPi-armv6l;
-          tb_rpi_aarch64 = tb_a64.raspberryPi-aarch64;
-          tb_sd = tb: tb.config.Tow-Boot.outputs.diskImage;
+          # tb_a64 = inputs.tow-boot.aarch64-linux;
+          # tb_rpi_aarch64 = tb_a64.raspberryPi-aarch64;
+          # tb_sd = tb: tb.config.Tow-Boot.outputs.diskImage;
+
+          rpiBuilder = inputs.tow-boot.devicesWith.aarch64-linux."raspberryPi-aarch64";
+          tb_rpi3b-otp = (
+            (rpiBuilder {
+              configuration.config.Tow-Boot = {
+                rpi = {
+                  program_usb_boot_mode = 1;
+                };
+              };
+            }).config.Tow-Boot.outputs
+          );
+
         in
         rec {
-          rpi32 = tb_sd tb_rpi_armv6l;
-          rpi64 = tb_sd tb_rpi_aarch64;
+          rpi3b-otp = tb_rpi3b-otp.diskImage;
         };
 
       # linuxVMs = {

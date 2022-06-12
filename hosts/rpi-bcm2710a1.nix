@@ -20,58 +20,45 @@ in
   config = {
     nixcfg.common.useZfs = false;
     environment.systemPackages = with pkgs; [ picocom ];
-    hardware.usbWwan.enable = true;
 
     tow-boot.config = {
       rpi = {
-        upstream_kernel = true;
 
-        disable_fw_kms_setup = lib.mkDefault true;
-        hdmi_ignore_cec = lib.mkDefault true;
-        hdmi_ignore_cec_init = lib.mkDefault true;
-        initial_boost = lib.mkDefault 60;
-        force_turbo = lib.mkDefault true; # maybe helps living room tv
       };
     };
 
     boot = {
-      # loader.generic-extlinux-compatible.useGenerationDeviceTree = false;
-      initrd.kernelModules = config.boot.initrd.availableKernelModules;
-      kernelPackages = pkgs.linuxPackages_latest;
       kernelParams = [
         "cma=128M"
-        "console=tty1"
       ];
-      initrd.availableKernelModules = [
-        # "genet" # netboot, does this even make sense?
-        # "nvme" # boot-nvme
-        "pcie_brcmstb" # boot-usb
-        "broadcom" # netboot, does this even make sense?
-        "vc4"
-        "v3d" # vc4/hdmi stuffs?
+      kernelModules = [
+        # "v3d"
       ];
-      # mainline + generation tree
-      # = raw hdmi audio device, so blacklist snd_bcm2835
+      initrd = {
+        availableKernelModules = [
+          "xhci_pci"
+          "xhci_hcd"
+          "uas"
+          "usb_storage"
+          "mmc_block"
+          "usbhid"
+        ];
+        kernelModules = [
+          "genet"
+          "lan78xx" # rpi3b lan driver
+          "brcmfmac" # wifi, maybe remove so fw loads later
+          "pcie_brcmstb"
+          "broadcom"
+          "vc4"
+          "v3d"
+          "reset_raspberrypi"
+          "xhci_pci"
+          "sd_mod"
+          "usbhid"
+          "hid_generic"
+          "hid_microsoft"
+        ];
+      };
     };
-
-    # YAY: we have unified filesystems across devices, good job!
-    fileSystems = {
-      "/" = {
-        device = "/dev/disk/by-partuuid/${mbr_disk_id}-03";
-        fsType = "ext4";
-      };
-      "/boot" = {
-        device = "/dev/disk/by-partuuid/${mbr_disk_id}-02";
-        fsType = "vfat";
-      };
-      "/boot/firmware" = {
-        device = "/dev/disk/by-partuuid/${mbr_disk_id}-01";
-        fsType = "vfat";
-        options = [ "ro" "nofail" ];
-      };
-    };
-    swapDevices = [{
-      device = "/dev/disk/by-partuuid/${mbr_disk_id}-04";
-    }];
   };
 }

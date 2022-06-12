@@ -2,16 +2,22 @@
 
 let
   hn = "rpizerotwo3";
-  mbr_disk_id = "99999023";
+  eth_ip = "192.168.100.023";
 in
 {
   imports = [
-    ../rpizerotwo1/configuration.nix
+    ../rpi-tmpl-zerotwow.nix
   ];
-
   config = {
-    system.build.mbr_disk_id = lib.mkForce mbr_disk_id;
-    networking.hostName = lib.mkForce hn;
-    boot.blacklistedKernelModules = [ "snd_bcm2835" ]; # ??
+    networking.hostName = hn;
+    system.stateVersion = "21.11";
+    boot.initrd.systemd.network.networks."10-eth0".addresses =
+      [{ addressConfig = { Address = eth_ip; }; }];
+    system.build = rec {
+      pi_serial = "xxxxxxxx";
+      pi_mac = "aa-bb-cc-dd-ee-ff";
+      pi_ubootid = "01-${pi_mac}";
+      mbr_disk_id = "99999023";
+    };
   };
 }

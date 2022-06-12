@@ -14,6 +14,7 @@ in
 
     ../../mixins/android.nix
     ../../mixins/devshells.nix
+    ../../mixins/easyeffects.nix
     # ../../mixins/grub-signed-shim.nix
     ../../mixins/hidpi.nix
     ../../mixins/ledger.nix

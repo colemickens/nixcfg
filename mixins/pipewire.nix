@@ -9,9 +9,9 @@
 
   environment.systemPackages = with pkgs; [
     #helvum
-    alsaUtils
-    pipewire
-    pulseaudio
+    # alsaUtils #ignore for now cross-compile problem
+    # pipewire
+    # pulseaudio
     pulsemixer
   ];
 

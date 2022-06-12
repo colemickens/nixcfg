@@ -10,12 +10,15 @@ in
     ../../profiles/viz
     ../../mixins/gfx-rpi.nix
     ../../mixins/wpa-full.nix
+    
+    ../rpi-sdcard.nix
   ];
 
   config = {
     networking.hostName = hn;
     system.stateVersion = "21.11";
     system.build.mbr_disk_id = mbr_disk_id;
+    fonts.fontconfig.enable = false; # python-black / noto emoji failures
     tow-boot.config.rpi = {
       arm_boost = true;
       hdmi_safe = true;

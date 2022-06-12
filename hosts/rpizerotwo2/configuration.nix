@@ -10,6 +10,8 @@ in
     ../../profiles/viz
     ../../mixins/gfx-rpi.nix
     ../../mixins/wpa-full.nix
+
+    ../rpi-sdcard.nix
   ];
 
   config = {

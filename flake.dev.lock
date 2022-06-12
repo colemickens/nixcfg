@@ -98,8 +98,8 @@
     },
     "cross-armv6l": {
       "locked": {
-        "lastModified": 1654808082,
-        "narHash": "sha256-vj7BAGO0+hEd/A7g91y51Q67yBKuz7SD+xACkrfOtjw=",
+        "lastModified": 1655174551,
+        "narHash": "sha256-1pQs+qdQj6kRwCcgIvaDCQmP5XCidfMB9UCp5j+swvc=",
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs/cmpkgs-cross-armv6l"
       },
@@ -112,8 +112,8 @@
     },
     "cross-riscv64": {
       "locked": {
-        "lastModified": 1654808074,
-        "narHash": "sha256-Ox4EAvgxCSYhWdE3hIRuiDYmZEQDc+kQZOMhAhV/YOQ=",
+        "lastModified": 1655174542,
+        "narHash": "sha256-dbpY0DId8ouuIRVe4v3RFukNcCv9QRoPZ1s5gNIn/bE=",
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs/cmpkgs-cross-riscv64"
       },
@@ -786,8 +786,8 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1654808063,
-        "narHash": "sha256-3sQCagW43Vv50/cEQObHmr7jeQ3nBl4osTkyGWoWRdo=",
+        "lastModified": 1655174464,
+        "narHash": "sha256-SEI5g4lBzCTnm5yW0NfqC1MN3SBvh8WD/uEffuAtyT8=",
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs/cmpkgs"
       },
@@ -902,8 +902,8 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1654808375,
-        "narHash": "sha256-ayQMhyQwb02Ce5oT2DBgT5QHH+BtiI4WhNYRs3JEXz8=",
+        "lastModified": 1655174523,
+        "narHash": "sha256-24VuejII7M1xdDJ+AZL6oStTe9gnXjb8wg/s4UA3MM4=",
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs/rpi"
       },
@@ -1075,8 +1075,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1654808400,
-        "narHash": "sha256-digb5Aq4cle+oVLgdCYRXhmnd+ZIxkn7oyAd3QEqiT4=",
+        "lastModified": 1655174598,
+        "narHash": "sha256-7CdKWUEcnFm/rYsuXCeSx5aP7uy6jpCFFdB8HXYX3+8=",
+        "ref": "refs/heads/rpi",
+        "rev": "7f1e629a39127d041a9a45880b2fd9bb1b2ac645",
+        "revCount": 701,
         "type": "git",
         "url": "file:///home/cole/code/tow-boot/rpi"
       },

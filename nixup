@@ -62,11 +62,11 @@ case "${cmd}" in
   ;;
 
   "build")
-    while [[ -f "${FLAKE_LOCK:-"flake.lock"}-lock" ]]; do sleep 0.1; printf "." >/dev/stderr; done
+    while [[ -f "${FLAKE_LOCK:-"flake.lock"}-lock" ]]; do sleep 0.1; printf "." >/dev/stderr; done; echo "using FLAKE_LOCK: ${FLAKE_LOCK:-"flake.lock"}">&2
     nixbuild "auto" "cachix:colemickens" "${@}";
   ;;
   "_build")
-    while [[ -f "${FLAKE_LOCK:-"flake.lock"}-lock" ]]; do sleep 0.1; printf "." >/dev/stderr; done
+    while [[ -f "${FLAKE_LOCK:-"flake.lock"}-lock" ]]; do sleep 0.1; printf "." >/dev/stderr; done; echo "using FLAKE_LOCK: ${FLAKE_LOCK:-"flake.lock"}">&2
     nixbuild "${@}"
   ;;
   "deploy")
@@ -75,7 +75,7 @@ case "${cmd}" in
     export NIXUP_LOGDIR="${NIXUP_LOGDIR:-"$(mktemp -d --tmpdir "nixup.XXXXXXXXXXX")"}/${host}";  mkdir -p "${NIXUP_LOGDIR}"
     echo "NIXUP_LOGDIR = ${NIXUP_LOGDIR}"
     # FLAKE_LOCK-lock:
-    while [[ -f "${FLAKE_LOCK:-"flake.lock"}-lock" ]]; do sleep 0.1; printf "." >/dev/stderr; done
+    while [[ -f "${FLAKE_LOCK:-"flake.lock"}-lock" ]]; do sleep 0.1; printf "." >/dev/stderr; done; echo "using FLAKE_LOCK: ${FLAKE_LOCK:-"flake.lock"}">&2
     if [[ "${host}" == "$(hostname)" ]]; then export NIXUP_ACTION="switch"; fi
     if [[ "${host}" == "raisin" ]]; then export NIXUP_ACTION="switch"; fi
     if [[ "${host}" == "xeep" ]]; then export NIXUP_ACTION="switch"; fi
@@ -129,6 +129,35 @@ case "${cmd}" in
   "rdeploy") export NIXUP_ACTION="reboot"; nixup deploy "${@}"; ;;
   "rzj")     export NIXUP_ACTION="reboot"; nixup zj "${@}"; ;;
   
+  
+  "pi-on")
+    curl -s -X POST -H "Authorization: Bearer $(cat /run/secrets/home-assistant-bearer-token)" -H "Content-Type: application/json" -d "{\"entity_id\": \"switch.${1}\"}" \
+        https://home.x.cleo.cat/api/services/switch/turn_on >/dev/null
+  ;;
+  "pi-off")
+    curl -s -X POST -H "Authorization: Bearer $(cat /run/secrets/home-assistant-bearer-token)" -H "Content-Type: application/json" -d "{\"entity_id\": \"switch.${1}\"}" \
+        https://home.x.cleo.cat/api/services/switch/turn_off >/dev/null
+  ;;
+  "pilog")
+    host="${1}"
+    case "${host}" in
+      "rpifour1") serial0="192.168.69.203"; ;;
+      "rpifour2") serial0="192.168.69.201"; ;;
+      "rpithreebp1") serial0="192.168.69.202"; ;;
+    esac
+    while true; do set +e; nc -w 10 "${serial0}" 6638; set -e; echo; done
+  ;;
+  "pitest")
+    nixup build .#hydraBundles.aarch64-linux.netboots
+    pis=(
+      "wp6_sw106_relay" #rpifour1
+      "wp6_sw107_relay" #rpithreebp1
+      "wp6_sw105_relay" #rpifour2
+    )
+    parallel -j$(nproc) --halt 1 --verbose --tag "${DIR}/nixup pi-off" ::: "${pis[@]}"
+    nixup deploy xeep
+    parallel -j$(nproc) --halt 1 --verbose --tag "${DIR}/nixup pi-on" ::: "${pis[@]}"
+  ;;
 
   # FLAKE_LOCK related
   "watchlock")

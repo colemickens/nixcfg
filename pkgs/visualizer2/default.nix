@@ -1,8 +1,14 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
 , pkg-config
-, alsa-lib, libpulseaudio
-, sfml, csfml
-, wayland, libglvnd
+, alsa-lib
+, libpulseaudio
+, sfml
+, csfml
+, wayland
+, libglvnd
 , makeWrapper
 }:
 
@@ -12,7 +18,7 @@ let
       owner = "Rahix";
       repo = "visualizer2";
     };
-    repo_git = "https://github.com/${github.owner}/${github.repo}"; 
+    repo_git = "https://github.com/${github.owner}/${github.repo}";
     branch = "master";
     rev = "d8646e90ae15bb918ec6fb7e1dc1b5ab0547bfb5";
     sha256 = "sha256-rkxwQy29FfXbG78cAdm5en6eRzkg6Q5UOZTItlbbxwk=";
@@ -26,25 +32,34 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "visualizer2";
+  version = verinfo.rev;
 
   src = fetchFromGitHub {
+    owner = verinfo.github.owner;
+    repo = verinfo.github.repo;
+    rev = verinfo.rev;
+    sha256 = verinfo.sha256;
   };
 
-  
   nativeBuildInputs = [
     pkg-config
     makeWrapper
   ];
   buildInputs = [
-    alsa-lib libpulseaudio
-    sfml csfml
-    wayland libglvnd
+    alsa-lib
+    libpulseaudio
+    sfml
+    csfml
+    wayland
+    libglvnd
   ];
-  postFixup = (map (f: ''
-    wrapProgram "$out/bin/${f}" \
-      --suffix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath [ wayland libglvnd ]}"
-  '') visbins);
-  
+  postFixup = (map
+    (f: ''
+      wrapProgram "$out/bin/${f}" \
+        --suffix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath [ wayland libglvnd ]}"
+    '')
+    visbins);
+
   inherit (verinfo) cargoSha256;
 
   meta = with lib; {

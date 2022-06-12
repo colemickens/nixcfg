@@ -63,61 +63,55 @@ in
       root = tftp_netboots.outPath;
     };
 
-    fileSystems = ({
-      "/export/nix-store" = {
-        device = "/nix/store";
-        options = [ "bind" "ro" ];
-      };
-      "/export/nix-var-nix-shared" = {
-        device = "/nix/var/nix/shared";
-        options = [ "bind" "ro" ];
-      };
-    }
-    // (lib.mapAttrs'
-      (n: v: {
-        name = "/export/hostdata/${n}";
-        value = {
-          device = "/var/lib/nfs-hostdata/${n}";
-          options = [ "bind" ];
-        };
-      })
-      (lib.genAttrs netbootHosts (n: { }))));
-
-    systemd.timers."nix-dump-db" = {
-      wantedBy = [ "timers.target" ];
-      partOf = [ "nix-db-export.service" ];
-      timerConfig.OnCalendar = "*:0/5";
-    };
-    systemd.services."nix-dump-db" = {
-      wantedBy = [ "multi-user.target" ]; 
-      #after = [ "network.target" ];
-      description = "Make regular exports of the nix database.";
-      # TODO: let systemd let this see /nix ?
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = (pkgs.writeScript "dump-db.sh" ''
-          #!${pkgs.bash}/bin/bash
-          set -x
-          set -euo pipefail
-
-          dest="/nix/var/nix/shared"
-          mkdir -p "''${dest}"
-          time ${config.nix.package}/bin/nix-store --dump-db > $dest/dump_new
-
-          chmod -wx $dest/dump_new
-          chmod +r $dest/dump_new
-          mv \
-            $dest/dump_new \
-            $dest/dump
-        '');
-      };
-    };
+    fileSystems =
+      (
+        {
+          "/export/nix-store" = {
+            device = "/nix/store";
+            options = [ "bind" "ro" ];
+          };
+        }
+        // (lib.mapAttrs'
+          (hn: v: {
+            name = "/export/hostdata/${hn}";
+            value = {
+              device = "/var/lib/nfs-hostdata/${hn}";
+              options = [ "bind" ];
+            };
+          })
+          (lib.genAttrs netbootHosts (hn: { })))
+      );
+    systemd.mounts =
+      (builtins.map
+        (hn: rec {
+          what = "${inputs.self.netboots.${hn}}/dbexport";
+          where = "/export/nixdb/${hn}";
+          type = "bind";
+          description = where;
+          options = "bind,ro";
+          mountConfig = {
+            ForceUnmount = true;
+          };
+        })
+        netbootHosts);
+    systemd.automounts =
+      (builtins.map
+        (hn: rec {
+          where = "/export/nixdb/${hn}";
+          description = where;
+          wantedBy = [ "multi-user.target" ];
+          restartTriggers = [
+            inputs.self.netboots.${hn}
+          ];
+        })
+        netbootHosts);
 
     services.nfs.server = {
       enable = true;
       statdPort = 4000;
       lockdPort = 4001;
       mountdPort = 4002;
+      createMountPoints = true; # even though it worked without this?
       extraNfsdConfig = ''
         udp=y
       '';
@@ -125,13 +119,14 @@ in
         ''
         '' +
         (
+          # TODO: difference between /export/nixdb + /export/nixdb/${hn}?
           builtins.foldl'
-            (x: y: x + ''
-              /export/hostdata/${y}     192.168.1.0/16(rw,nohide,insecure,no_root_squash,no_subtree_check)
+            (def: hn: def + ''
+              /export/hostdata/${hn}  192.168.1.0/16(rw,nohide,insecure,no_root_squash,no_subtree_check)
+              /export/nixdb/${hn}     192.168.1.0/16(ro,nohide,insecure,no_root_squash,no_subtree_check)
             '') ''
             /export                     192.168.1.0/16(fsid=0,ro,insecure,no_subtree_check)
             /export/nix-store           192.168.1.0/16(ro,nohide,insecure,no_subtree_check)
-            /export/nix-var-nix-shared  192.168.1.0/16(ro,nohide,insecure,no_subtree_check)
           ''
             netbootHosts
         )

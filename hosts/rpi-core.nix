@@ -35,8 +35,9 @@ in
 
     services.fwupd.enable = lib.mkForce false; # doesn't xcompile, don't remember the details
 
-    hardware.enableRedistributableFirmware = true;
+    hardware.enableRedistributableFirmware = lib.mkForce false;
     hardware.firmware = with pkgs; [
+      # linux-firmware
       raspberrypiWirelessFirmware
     ];
 
