@@ -14,6 +14,7 @@
 , mesa
 , udev
 , xorg
+, libxkbcommon
 , libinput
 , libseat
 }:
@@ -59,6 +60,7 @@ rustPlatform.buildRustPackage rec {
     xorg.libXcursor
     xorg.libXrandr
     xorg.libXi
+    libxkbcommon
   ];
 
   # TODO: makeWrapper for EGL?
