@@ -592,26 +592,6 @@
         "type": "github"
       }
     },
-    "nix-coreboot": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1650077018,
-        "narHash": "sha256-6C/G9U5TgTHyBNmCD8svyLYEXRzWOJFf49CXt5TeaHQ=",
-        "owner": "colemickens",
-        "repo": "nix-coreboot",
-        "rev": "6366ab8b19271ebe03778a90707900b2a07d000c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "repo": "nix-coreboot",
-        "type": "github"
-      }
-    },
     "nix-rice": {
       "inputs": {
         "iterm2-color-schemes": "iterm2-color-schemes",
@@ -927,7 +907,6 @@
         "jj": "jj",
         "mobile-nixos": "mobile-nixos",
         "nickel": "nickel",
-        "nix-coreboot": "nix-coreboot",
         "nix-rice": "nix-rice",
         "nixlib": "nixlib",
         "nixpkgs": "nixpkgs_4",
@@ -936,12 +915,29 @@
         "rpipkgs": "rpipkgs",
         "sops-nix": "sops-nix",
         "terranix": "terranix",
-        "tow-boot": "tow-boot",
+        "tow-boot-radxa-zero": "tow-boot-radxa-zero",
+        "tow-boot-rpi": "tow-boot-rpi",
         "wip-pinebook-pro": "wip-pinebook-pro",
         "zellij": "zellij"
       }
     },
     "rpipkgs": {
+      "locked": {
+        "lastModified": 1656320400,
+        "narHash": "sha256-Uzx9u8Xw9G94BC6euNA/txiP7TNVj13ESA8w6rO1L6k=",
+        "owner": "colemickens",
+        "repo": "nixpkgs",
+        "rev": "d76fdd436941beafad58b53bbd8b90d5d286f661",
+        "type": "github"
+      },
+      "original": {
+        "owner": "colemickens",
+        "ref": "rpipkgs",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "rpipkgs_2": {
       "locked": {
         "lastModified": 1656135783,
         "narHash": "sha256-9vfAtDKI703DcfWsrw3ru64dTHzpM1lQ4bRBghn5okg=",
@@ -1108,7 +1104,29 @@
         "type": "github"
       }
     },
-    "tow-boot": {
+    "tow-boot-radxa-zero": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rpipkgs": "rpipkgs_2"
+      },
+      "locked": {
+        "lastModified": 1656205657,
+        "narHash": "sha256-r6Hy22zByTUh9jjLJqjnioOImgnFVUIB0oaW9LjfU1U=",
+        "owner": "colemickens",
+        "repo": "Tow-Boot",
+        "rev": "a10ecc75457875b5ef8b54aa50e5e0aea4228ac4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "colemickens",
+        "ref": "radxazero",
+        "repo": "Tow-Boot",
+        "type": "github"
+      }
+    },
+    "tow-boot-rpi": {
       "inputs": {
         "nixpkgs": [
           "nixpkgs"
@@ -1118,11 +1136,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1656135802,
-        "narHash": "sha256-lLRKjedrfne/t4g8qTewP7NH/DK7aTnAIM8TH09gsBs=",
+        "lastModified": 1656320429,
+        "narHash": "sha256-DDn5Fw051hNerrPhix8lYRkohfmIKvB8wIb0QUQIXs8=",
         "owner": "colemickens",
         "repo": "Tow-Boot",
-        "rev": "9e0dcb53929098ed5c324f121fefd7ccf16898aa",
+        "rev": "4880b044a8bb65d393ff53a8b686d1416731bef3",
         "type": "github"
       },
       "original": {
