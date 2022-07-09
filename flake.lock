@@ -98,11 +98,11 @@
     },
     "cross-armv6l": {
       "locked": {
-        "lastModified": 1657255423,
-        "narHash": "sha256-ecTbkok3MDL84SLf1Hrkn/j1L8dlUfd+j0IfB1+J+fs=",
+        "lastModified": 1657348882,
+        "narHash": "sha256-rSUsPIAWhEDh+pcruBu9ataN5qBjViHZdDCFQyPj6SE=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "634976efd8c9b152f8f88afe35487aaaf1cdb3e1",
+        "rev": "38594306d21760df170492f3ca09eea37efd8cdc",
         "type": "github"
       },
       "original": {
@@ -114,11 +114,11 @@
     },
     "cross-riscv64": {
       "locked": {
-        "lastModified": 1657255415,
-        "narHash": "sha256-LCEqC4svhWIATWrItlZfMj0eDNanP9YZjr43rBXEGCA=",
+        "lastModified": 1657348866,
+        "narHash": "sha256-9z7WO0wWVizdjtaV2ped7lhTb8zAxftq7dI+2IxUXfI=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "4b7411a6266a1b7eaf437ec136361383e369a79c",
+        "rev": "33e60c06971ca2885b6b6e5ef46cf7948a244694",
         "type": "github"
       },
       "original": {
@@ -237,11 +237,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1657331277,
-        "narHash": "sha256-KuEFo98Js4a96dyt3Q2tO45CMeF0qR9ay1sdz6Y6E6c=",
+        "lastModified": 1657346056,
+        "narHash": "sha256-Dp3ucoKdxQ122Sh7qF/01iVJK5Sd6uxeUhZ/H+8Hp6g=",
         "owner": "colemickens",
         "repo": "flake-firefox-nightly",
-        "rev": "b78300d55195abb859466fde8ac5aac2b042016e",
+        "rev": "b73de4bcc6fb2984430b2c29551709f0cf76d7a8",
         "type": "github"
       },
       "original": {
@@ -738,11 +738,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1657255376,
-        "narHash": "sha256-vVhngO2qJDfL8oj/LjXwWWaJvO7kdqMQ79paEB5eaMY=",
+        "lastModified": 1657348843,
+        "narHash": "sha256-F1ubB3bx2bTLhSXR35ugIGyPrsPF/gOz0vhR7oTLGSY=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "eed7b90050b569da3bab1432df05d15de3725645",
+        "rev": "51887126634b1e3b2b6eccf2ab1065084273ea9d",
         "type": "github"
       },
       "original": {
@@ -1068,11 +1068,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1657257592,
-        "narHash": "sha256-W0dPAu5mFAcBw6L0MMcvy72jdkLeoPaa76hNkFgKGyc=",
+        "lastModified": 1657349240,
+        "narHash": "sha256-U/tUJAktShLyiT+0Nt2L/Sm3iJRe2Wo0okpl0GLyaYo=",
         "owner": "colemickens",
         "repo": "Tow-Boot",
-        "rev": "c3514c4ead33ac1c8d66e94b07c368d5c0797c0f",
+        "rev": "f709e76cdd0cfe2f903006b5cebb016b9c34baa2",
         "type": "github"
       },
       "original": {
