@@ -101,7 +101,7 @@ case "${cmd}" in
     zjname="${1}"
     export NIXUP_HOLD_OPEN=1
     export NIXUP_LOGDIR="$(mktemp -d --tmpdir "nixup.XXXXXXXXXXX")"
-    zellij --layout-path "${DIR}/zj.${zjname}.yml"
+    zellij --layout "${DIR}/zj.${zjname}.yml"
     nixup summary
   ;;
   "summary") _h1 "summary";
@@ -148,14 +148,21 @@ case "${cmd}" in
     while true; do set +e; nc -w 10 "${serial0}" 6638; set -e; echo; done
   ;;
   "pitest")
-    nixup build .#hydraBundles.aarch64-linux.netboots
+    netboots_out="$(nixup build .#hydraBundles.aarch64-linux.netboots)"
+    nfsfirms_out="$(nixup build .#hydraBundles.aarch64-linux.nfsfirms)"
+    # netpayload_out="$(nixup build .#hydraBundles.aarch64-linux.netpayload)"
+    # "${DIR}/scripts/nix-pull.sh" "${netpayload_out}"
+    "${DIR}/scripts/nix-pull.sh" "${netboots_out}"
+    "${DIR}/scripts/nix-pull.sh" "${nfsfirms_out}"
+    nixup deploy xeep || true
+    nixup pireboot
+  ;;
+  "pireboot")
     pis=(
-      "wp6_sw106_relay" #rpifour1
-      "wp6_sw107_relay" #rpithreebp1
-      "wp6_sw105_relay" #rpifour2
+      "wp6_sw106_relay" # rpi-powerstrip
     )
     parallel -j$(nproc) --halt 1 --verbose --tag "${DIR}/nixup pi-off" ::: "${pis[@]}"
-    nixup deploy xeep
+    sleep 1
     parallel -j$(nproc) --halt 1 --verbose --tag "${DIR}/nixup pi-on" ::: "${pis[@]}"
   ;;
 
@@ -170,6 +177,7 @@ case "${cmd}" in
     
     set -x
     echo "FLAKE_LOCK=${FLAKE_LOCK}"
+    (set -x; cd "${DIR}"; nix "${nixargs[@]}" flake lock --recreate-lock-file)
     watchexec \
       --clear \
       --restart \
@@ -178,8 +186,10 @@ case "${cmd}" in
       --workdir $HOME/code/nixcfg \
       -w $HOME/code/nixpkgs/rpi \
       -w $HOME/code/nixpkgs/cmpkgs \
+      -w $HOME/code/home-manager/cmhm \
       -w $HOME/code/nixpkgs/cmpkgs-cross-riscv \
       -w $HOME/code/tow-boot/rpi \
+      -w $HOME/code/tow-boot/radxa-zero \
       -- \
       $HOME/code/nixcfg/nixup flakedevlock
   ;;
@@ -190,12 +200,15 @@ case "${cmd}" in
     touch "${FLAKE_LOCK}-lock"
     echo ":: start :: ${FLAKE_LOCK}-lock" >/dev/stderr
     nix flake lock \
+      --recreate-lock-file \
       --verbose \
       --override-input nixpkgs $HOME/code/nixpkgs/cmpkgs \
+      --override-input home-manager $HOME/code/home-manager/cmhm \
       --override-input cross-armv6l  $HOME/code/nixpkgs/cmpkgs-cross-armv6l \
       --override-input cross-riscv64  $HOME/code/nixpkgs/cmpkgs-cross-riscv64 \
       --override-input rpipkgs $HOME/code/nixpkgs/rpi \
-      --override-input tow-boot $HOME/code/tow-boot/rpi
+      --override-input tow-boot-rpi $HOME/code/tow-boot/rpi \
+      --override-input tow-boot-radxa-zero $HOME/code/tow-boot/radxa-zero
     echo ":: done :: ${FLAKE_LOCK}-lock" >/dev/stderr
     rm "${FLAKE_LOCK}-lock"
   ;;

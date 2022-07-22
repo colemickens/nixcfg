@@ -6,6 +6,7 @@ let
   customPools = {
     "xeep" = [ "tank2" ];
     "raisin" = [ "tank" ];
+    "jeffhyper" = [ "rpool" ];
   };
   pools =
     if (builtins.hasAttr hn customPools)

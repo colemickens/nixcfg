@@ -8,7 +8,7 @@ in
   config = {
     home-manager.users.cole = { pkgs, ... }: {
       home.packages = with pkgs; [
-        gopass
+        # gopass
       ];
 
       xdg.configFile."gopass/config.yml".source = gen {

@@ -4,7 +4,8 @@ set -euo pipefail
 function nix() { echo "==>> nix ${@}" >/dev/stderr; "${DIR}/nix.sh" "${@}"; }
 
 export BLDR_X86="${BLDR_X86:-$(tailscale ip --6 slynux)}";
-export BLDR_A64="${BLDR_A64:-"root@pkta64.cloud.r10e.tech"}";
+# export BLDR_A64="${BLDR_A64:-"root@pkta64.cloud.r10e.tech"}";
+export BLDR_A64="${BLDR_A64:-"colemickens@aarch64.nixos.community"}";
 
 bldr="${1}"; shift
 trgt="${1}"; shift

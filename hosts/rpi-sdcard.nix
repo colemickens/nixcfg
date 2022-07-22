@@ -2,6 +2,9 @@
 
 {
   config = {
+    networking.useDHCP = true;
+    nixcfg.common.defaultNetworking = false;
+    
     fileSystems = {
       "/" = {
         fsType = "ext4";
@@ -21,6 +24,9 @@
         options = [ "nofail" "ro" ];
       };
     };
-    swapDevices = [{ device = "/dev/disk/by-partlabel/${config.networking.hostName}-swap"; }];
+    # swapDevices = [{ device = "/dev/disk/by-partlabel/${config.networking.hostName}-swap"; }];
+    swapDevices = [{
+      device = "/dev/disk/by-partuuid/${config.system.build.mbr_disk_id}-04";
+    }];
   };
 }

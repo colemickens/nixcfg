@@ -1,34 +1,26 @@
 { pkgs, lib, modulesPath, inputs, config, ... }:
 
 let
-  hn = "rpizerotwo2";
-  mbr_disk_id = "99999022";
+  eth_ip = "192.168.133.222/16";
 in
 {
   imports = [
-    ../rpi-bcm2710a1.nix
-    ../../profiles/viz
-    ../../mixins/gfx-rpi.nix
-    ../../mixins/wpa-full.nix
+    ../rpi-tmpl-zerotwow.nix
 
+    # IMPORTER PICKS ONE:
+    # ../mixins/netboot-client.nix
     ../rpi-sdcard.nix
   ];
-
   config = {
-    networking.hostName = hn;
+    networking.hostName = "rpizerotwo2";
     system.stateVersion = "21.11";
-    system.build.mbr_disk_id = mbr_disk_id;
-    tow-boot.config.rpi = {
-      arm_boost = true;
-      hdmi_safe = true;
-      hdmi_drive = 2;
-      force_turbo = true;
+    system.build = rec {
+      pi_serial = "73314592";
+      pi_mac = "ff-dd-ee-dd-ee-ff";
+      pi_ubootid = "01-${pi_mac}";
+      mbr_disk_id = "99999022";
     };
-    boot = {
-      kernelPackages = lib.mkForce pkgs.linuxPackages_5_17;
-      blacklistedKernelModules = [ "snd_bcm2835" ];
-    };
-    nixcfg.common.defaultNetworking = false;
-    networking.useDHCP = true;
+    # boot.initrd.systemd.network.networks."10-eth0".addresses =
+    #   [{ addressConfig = { Address = eth_ip; }; }];
   };
 }

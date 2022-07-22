@@ -13,7 +13,9 @@ in
         enable = true;
         settings = {
           default_mode = "normal";
-          ui.pane_frames.rounded_corners = true;
+          # ui.pane_frames.rounded_corners = true;
+          pane_frames = false;
+          scrollback_editor = "hx";
           theme = "default";
           themes = {
             nixdefault = {

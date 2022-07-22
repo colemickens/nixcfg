@@ -4,8 +4,8 @@ let
   pixel3_ip4 = "100.83.93.42";
   pixel3_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6253:5d2a]";
 
-  porty_ip4 = "100.112.137.125";
-  porty_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6270:897d]";
+  slynux_ip4 = "100.112.137.125";
+  slynux_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6270:897d]";
   sinkor_ip4 = "100.88.111.30";
   sinkor_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6258:6f1e]";
   xeep_ip4 = "100.72.11.62";
@@ -45,13 +45,19 @@ let
       <head><title>cleo cat!</title></head>
       <body>
         <h1>Ens encanta la Cleo!</h1>
-
+        
+        <h2>public serveis</h2>
+        <ul>
+          <li><a href="https://homie-cast.cleo.cat">homie-cast</a></li>
+        </ul>
+        
         <h2>serveis</h2>
         <ul>
           <li><a href="https://home.x.cleo.cat">home-assistant</a></li>
           <li><a href="https://homie.x.cleo.cat">homie (hodd)</a></li>
           <li><a href="https://unifi.x.cleo.cat">unifi</a></li>
           <li><a href="https://denon.x.cleo.cat">denon</a></li>
+          <li><a href="https://rtsptoweb.x.cleo.cat">rtsptoweb</a></li>
           <li><a href="https://paperless.x.cleo.cat">paperless</a></li>
           <li><a href="https://wphone.x.cleo.cat">wphone</a></li>
         </ul>
@@ -151,18 +157,18 @@ in
         useACMEHost = "cleo.cat";
         forceSSL = true;
       };
-      virtualHosts."oci.cleo.cat" = {
-        useACMEHost = "cleo.cat";
-        addSSL = true;
-        forceSSL = false;
-        locations."/" = {
-          extraConfig = ''
-            proxy_set_header Host $proxy_host;
-          '';
-          # TODO: make this a dynamic proxy for oracle cloud?
-          proxyPass = "https://objectstorage.us-phoenix-1.oraclecloud.com/n/axobinpd5xwy/b/ocicole1_bucket/o/";
-        };
-      };
+      # virtualHosts."oci.cleo.cat" = {
+      #   useACMEHost = "cleo.cat";
+      #   addSSL = true;
+      #   forceSSL = false;
+      #   locations."/" = {
+      #     extraConfig = ''
+      #       proxy_set_header Host $proxy_host;
+      #     '';
+      #     # TODO: make this a dynamic proxy for oracle cloud?
+      #     proxyPass = "https://objectstorage.us-phoenix-1.oraclecloud.com/n/axobinpd5xwy/b/ocicole1_bucket/o/";
+      #   };
+      # };
 
       virtualHosts."netboot.cleo.cat" = {
         useACMEHost = "cleo.cat";
@@ -204,15 +210,43 @@ in
           '';
         };
       };
+
+      # <homie-cast>
+      virtualHosts."homie-cast.cleo.cat" = {
+        useACMEHost = "cleo.cat";
+        addSSL = true;
+        forceSSL = false;
+        locations."/" = {
+          proxyPass = "http://${slynux_ip4}:80/";
+          proxyWebsockets = true;
+        };
+      };
+      virtualHosts."homie-cast-ws.cleo.cat" = {
+        useACMEHost = "cleo.cat";
+        addSSL = true;
+        forceSSL = false;
+        locations."/" = {
+          proxyPass = "http://${slynux_ip4}:9443/";
+          proxyWebsockets = true;
+        };
+      };
+      # </homie-cast>
+      
+      virtualHosts."denon.x.cleo.cat" = internalVhost // {
+        locations."/" = {
+          proxyPass = "http://192.168.1.126:80/";
+          proxyWebsockets = true;
+        };
+      };
       virtualHosts."unifi.x.cleo.cat" = internalVhost // {
         locations."/" = {
           proxyPass = "https://localhost:8443/";
           proxyWebsockets = true;
         };
       };
-      virtualHosts."denon.x.cleo.cat" = internalVhost // {
+      virtualHosts."rtsptoweb.x.cleo.cat" = internalVhost // {
         locations."/" = {
-          proxyPass = "http://192.168.1.126:80/";
+          proxyPass = "http://localhost:8083/";
           proxyWebsockets = true;
         };
       };
@@ -245,7 +279,7 @@ in
         locations."/".proxyWebsockets = true;
       };
       virtualHosts."syncthing-porty.x.cleo.cat" = internalVhost // {
-        locations."/".proxyPass = "http://${porty_ip6}:8384/";
+        locations."/".proxyPass = "http://${slynux_ip6}:8384/";
         locations."/".proxyWebsockets = true;
       };
       virtualHosts."syncthing-sinkor.x.cleo.cat" = internalVhost // {

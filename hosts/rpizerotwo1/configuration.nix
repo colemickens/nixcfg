@@ -1,37 +1,26 @@
 { config, inputs, pkgs, lib, ... }:
 
 let
-  hn = "rpizerotwo1";
-  mbr_disk_id = "99999021";
+  eth_ip = "192.168.133.221/16";
 in
 {
   imports = [
-    ../rpi-bcm2710a1.nix
-    ../../profiles/viz
-    ../../mixins/gfx-rpi.nix
-    ../../mixins/wpa-full.nix
-    
+    ../rpi-tmpl-zerotwow.nix
+
+    # IMPORTER PICKS ONE:
+    # ../mixins/netboot-client.nix
     ../rpi-sdcard.nix
   ];
-
   config = {
-    networking.hostName = hn;
+    networking.hostName = "rpizerotwo1";
     system.stateVersion = "21.11";
-    system.build.mbr_disk_id = mbr_disk_id;
-    fonts.fontconfig.enable = false; # python-black / noto emoji failures
-    tow-boot.config.rpi = {
-      arm_boost = true;
-      hdmi_safe = true;
-      hdmi_drive = 2;
-      force_turbo = true;
-      disable_fw_kms_setup = true;
-      # disable_fw_kms_setup = false;
+    system.build = rec {
+      pi_serial = "43eac8d6";
+      pi_mac = "ff-bb-cc-cc-bb-ff";
+      pi_ubootid = "01-${pi_mac}";
+      mbr_disk_id = "99999021";
     };
-    boot = {
-      kernelPackages = lib.mkForce pkgs.linuxPackages_5_19;
-      blacklistedKernelModules = [ "snd_bcm2835" ];
-    };
-    nixcfg.common.defaultNetworking = false;
-    networking.useDHCP = true;
+    # boot.initrd.systemd.network.networks."10-eth0".addresses =
+    #   [{ addressConfig = { Address = eth_ip; }; }];
   };
 }

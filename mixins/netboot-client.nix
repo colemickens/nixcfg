@@ -24,6 +24,18 @@ in
       "systemd.setenv=SYSTEMD_SULOGIN_FORCE=1"
     ];
 
+    system.build.extras.nfsfirm = (
+      let
+        top = config.system.build.toplevel;
+        tb = config.system.build.towbootBuild;
+        diskImage = tb.config.Tow-Boot.outputs.diskImage;
+      in
+      pkgs.runCommandNoCC "nfsfirm-env-${hn}" { } ''
+        set -x
+        mkdir $out
+        cp -a "${diskImage}" $out/towboot.img
+      ''
+    );
     system.build.extras.nfsboot = (
       let
         top = config.system.build.toplevel;

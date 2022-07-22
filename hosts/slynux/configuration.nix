@@ -48,11 +48,13 @@ in
     ../../mixins/devshells.nix
     ../../mixins/grub-signed-shim.nix
     ../../mixins/logitech-mouse.nix
-    # ../../mixins/rclone-googledrive-mounts.nix
+    ../../mixins/rclone-googledrive-mounts.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
     ../../mixins/zfs.nix
+    
+    # ./services/homie-cast.nix
 
     ./unfree.nix
     inputs.hardware.nixosModules.common-cpu-amd
@@ -64,7 +66,7 @@ in
     system.stateVersion = "21.05";
 
     networking.hostName = "slynux";
-    systemd.network = systemdNetworkVal;
+    # systemd.network = systemdNetworkVal;
 
     hardware.usbWwan.enable = true;
 

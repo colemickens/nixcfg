@@ -17,6 +17,7 @@
 , libxkbcommon
 , libinput
 , libseat
+, libGL
 }:
 
 let
@@ -61,10 +62,14 @@ rustPlatform.buildRustPackage rec {
     xorg.libXrandr
     xorg.libXi
     libxkbcommon
+    libGL
   ];
 
-  # TODO: makeWrapper for EGL?
-
+  postFixup = ''
+    wrapProgram "$out/bin/anodium" \
+      --set "LD_LIBRARY_PATH" "${lib.makeLibraryPath buildInputs}"
+  '';
+  
   strictDeps = true; #?
 
   meta = with lib; {

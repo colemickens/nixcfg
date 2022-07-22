@@ -36,5 +36,6 @@ mode "resize" {
 }
 
 exec_always "/run/current-system/sw/bin/systemctl --user restart graphical-session.target"
+exec_always "/run/current-system/sw/bin/viz-sway-autorun"
 
 xwayland disable

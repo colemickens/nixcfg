@@ -43,6 +43,7 @@ in
       
     environment.systemPackages = with pkgs; [
       esphome
+      anodium
     ];
 
     hardware.bluetooth.enable = true;
@@ -75,6 +76,7 @@ in
       plymouth.enable = true;
       # TODO:  plymouth.font = "${config.nixcfg.appearance.fonts.monospaced.package}/share/fonts/truetype/Iosevka.ttf";
       kernelModules = [ "iwlwifi" "ideapad_laptop" ];
+      kernelParams = [ "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}" ];
       initrd.availableKernelModules = [
         "xhci_pci"
         "xhci_hcd" # usb

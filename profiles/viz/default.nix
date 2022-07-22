@@ -1,5 +1,8 @@
 { pkgs, lib, config, inputs, ... }:
 
+# NOTES:
+# - seems like on rpi3, audio will work if video starts first
+#   so one change here is to have audio restart after video
 let
   useUnstableOverlay = true;
   __scripts = pkgs.buildEnv {
@@ -11,10 +14,16 @@ let
         sleep 2
         systemctl --user start pipewire.socket pipewire-pulse.socket pipewire.service pipewire-pulse.service
         sleep 2
+        if [[ "$(hostname)" == "rpithreebp1" ]]; then sleep 10; fi
         systemctl --user restart snapclient-local
       '')
       (pkgs.writeShellScriptBin "viz-restart-visualizer" ''
         systemctl --user restart visualizer
+      '')
+      (pkgs.writeShellScriptBin "viz-sway-autorun" ''
+        /run/current-system/sw/bin/viz-restart-pipewire
+        sleep 2
+        /run/current-system/sw/bin/viz-restart-visualizer
       '')
     ];
   };
@@ -27,11 +36,15 @@ let
       "rpifour1" = ''"${pkgs.projectm}/bin/projectM-pulseaudio"'';
       "rpithreebp1" = ''"${pkgs.foot}/bin/foot" "${pkgs.cli-visualizer}/bin/vis"'';
 
-      # "rpifour2" = ''"${pkgs.visualizer2}/bin/noambition"'';
-      "rpifour2" = ''"${pkgs.foot}/bin/foot" "${pkgs.cli-visualizer}/bin/vis"'';   
+      "rpifour2" =
+        # ''"${pkgs.visualizer2}/bin/noambition"'';
+        # ''"${pkgs.foot}/bin/foot" "${pkgs.cli-visualizer}/bin/vis"'';   
+        ''"${pkgs.projectm}/bin/projectM-pulseaudio"'';
+
       "rpizerotwo1" = ''"${pkgs.foot}/bin/foot" "${pkgs.cli-visualizer}/bin/vis"'';   
       "rpizerotwo2" = rpizerotwo1;
       "rpizerotwo3" = rpizerotwo1;
+      "radxazero1" = rpizerotwo1;
     }).${config.networking.hostName}
   );
 
@@ -87,8 +100,7 @@ in
     environment.loginShellInit = ''
       # [[ "$(tty)" == /dev/tty? ]] && sudo /run/current-system/sw/bin/lock this 
       [[ "$(tty)" == /dev/tty1 ]] && (
-        # /run/current-system/sw/bin/viz-restart-pipewire
-        sleep 3;
+        sleep 2;
         sway -d &> sway.log
       )
     '';

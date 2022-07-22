@@ -60,12 +60,15 @@ in minimalMkShell pkgs.system { # TODO use something else for system?
     gst_all_1.gstreamer
     # gst_all_1
     libnice
+    pango cairo
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-libav
           
     udev mesa libinput # Anodium
+    libseat # Anodium
     xorg.libXcursor xorg.libXrandr xorg.libXi # Anodium
     libxkbcommon wayland wayland-protocols # wezterm
     fontconfig libglvnd egl-wayland # wezterm

@@ -159,6 +159,10 @@
               name = "rpi-switch-rpithreebp1-den";
               entity = "switch.wp6_sw105_relay";
             }
+            {
+              name = "rpi-switch-rpizerotwo1-den";
+              entity = "switch.wp6_sw103_relay";
+            }
           ];
         }
       ];

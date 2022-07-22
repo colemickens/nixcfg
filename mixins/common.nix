@@ -3,7 +3,7 @@
 let
   cfg = config.nixcfg.common;
   defaultKernel = pkgs.linuxPackages_latest;
-  defaultZfsKernel = pkgs.linuxPackages_5_17;
+  defaultZfsKernel = pkgs.linuxPackages_5_18;
   # _defaultKernel = pkgs.linuxKernel.packagesFor
   #   (pkgs.linuxPackages_latest.kernel.override {
   #     structuredExtraConfig = {
@@ -89,15 +89,6 @@ in
 
   config =
     ({
-      system.build.nixcfg.deployScript = (pkgs.writeTextFile {
-        name = "deploy-${hn}";
-        exectuable = true;
-        destination = "/bin/deploy-${hn}";
-        text = pkgs.substituteAll {
-          src = ../misc/activate.sh;
-          nixup_out = "${config.system.build.toplevel}";
-        };
-      });
       ###################################
       ## DEBLOAT
       ###################################
@@ -166,7 +157,7 @@ in
         };
         
         networks."20-tailscale-ignore" = {
-          matchConfig.Name = "tailscale0";
+          matchConfig.Name = "tailscale*";
           linkConfig = {
             Unmanaged = "yes";
             RequiredForOnline = false;

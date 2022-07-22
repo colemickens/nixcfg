@@ -1,17 +1,14 @@
 { pkgs, lib, modulesPath, extendModules, inputs, config, ... }:
 
 let
-  device = rec { };
-  hn = "rpithreebp1";
-  eth_ip = "192.168.100.31/16";
+  eth_ip = "192.168.218.140/16";
 in
 {
   imports = [
     ../rpi-tmpl-threebp.nix
   ];
-
   config = {
-    networking.hostName = hn;
+    networking.hostName = "rpithreebp1";
     system.stateVersion = "21.11";
     boot.initrd.systemd.network.networks."10-eth0".addresses =
       [{ addressConfig = { Address = eth_ip; }; }];

@@ -25,8 +25,7 @@
     nixpkgs.url = "github:colemickens/nixpkgs/cmpkgs"; # for my regular nixpkgs
     cross-armv6l.url = "github:colemickens/nixpkgs/cmpkgs-cross-armv6l";
     cross-riscv64.url = "github:colemickens/nixpkgs/cmpkgs-cross-riscv64";
-
-    # nixos-unstable-small.url = "github:nixos/nixpkgs/nixos-unstable-small";
+    
     # nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # stable.url = "github:nixos/nixpkgs/nixos-22.05"; # for cachix
     riscv64 = { url = "github:zhaofengli/nixos-riscv64"; };
@@ -59,10 +58,16 @@
     impermanence.url = "github:nix-community/impermanence";
     impermanence.inputs.nixpkgs.follows = "nixpkgs";
 
-    tow-boot = { url = "github:colemickens/Tow-Boot/rpi"; };
     rpipkgs = { url = "github:colemickens/nixpkgs/rpipkgs"; };
-    tow-boot.inputs.nixpkgs.follows = "nixpkgs"; # TODO: might break u-boot?
-    tow-boot.inputs.rpipkgs.follows = "rpipkgs"; # TODO: might break u-boot?
+    tow-boot-rpi = {
+      url = "github:colemickens/Tow-Boot/rpi";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.rpipkgs.follows = "rpipkgs";
+    };
+    tow-boot-radxa-zero = {
+      url = "github:colemickens/Tow-Boot/radxazero";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     mobile-nixos.url = "github:colemickens/mobile-nixos/2022-03-blueline";
     mobile-nixos.inputs.nixpkgs.follows = "nixpkgs";
@@ -72,8 +77,8 @@
 
     nickel = { url = "github:tweag/nickel"; };
 
-    nix-coreboot.url = "github:colemickens/nix-coreboot";
-    nix-coreboot.inputs.nixpkgs.follows = "nixpkgs";
+    # nix-coreboot.url = "github:colemickens/nix-coreboot";
+    # nix-coreboot.inputs.nixpkgs.follows = "nixpkgs";
 
     terranix.url = "github:terranix/terranix";
     terranix.inputs.nixpkgs.follows = "nixpkgs";
@@ -214,6 +219,7 @@
           customCommands = prev.callPackage ./pkgs/commands.nix { writePython3Bin = prev.writers.writePython3Bin; };
           customGuiCommands = prev.callPackage ./pkgs/commands-gui.nix { };
 
+          anodium = prev.callPackage ./pkgs/anodium { };
           get-xoauth2-token = prev.callPackage ./pkgs/get-xoauth2-token { };
           hodd = prev.callPackage ./pkgs/hodd { };
           keyboard-layouts = prev.callPackage ./pkgs/keyboard-layouts { };
@@ -279,17 +285,23 @@
       # TODO:
       # - for now we just re-use the nixosConfiguration
       # - but maybe, for example, we want to cross-compile these since hosted from 'xeep'
-      netboots =
-        let
-          makeNfsboot = h:
-            nixosConfigurations.${h}.config.system.build.extras.nfsboot;
-        in
-        {
-          rpifour1 = makeNfsboot "rpifour1";
-          rpifour2 = makeNfsboot "rpifour2";
-          rpithreebp1 = makeNfsboot "rpithreebp1";
-          rpizerotwo3 = makeNfsboot "rpizerotwo3";
-        };
+      netboots = nixlib.genAttrs
+        [
+          "rpifour1"
+          "rpifour2"
+          "rpithreebp1"
+          # "rpizerotwo1" "rpizerotwo2" "rpizerotwo3"
+        ]
+        (h: nixosConfigurations.${h}.config.system.build.extras.nfsboot);
+      nfsfirms = nixlib.genAttrs
+        [
+          "rpifour1"
+          "rpifour2"
+          "rpithreebp1"
+          # "rpizerotwo1" "rpizerotwo2" "rpizerotwo3"
+        ]
+        (h: nixosConfigurations.${h}.config.system.build.extras.nfsfirm);
+
       netbootsCross =
         let
           crossModule1 = crossSystem: ({ config, lib, ... }: {
@@ -308,12 +320,11 @@
               modules = [ (crossModule1 crossSystem) ];
             }).config.system.build.extras.nfsboot;
           makeNfsbootCross2 = h: crossSystem:
-            (mkSystem_ inputs.rpipkgs "x86_64-linux" h [ (crossModule2 crossSystem) ])
-              .config.system.build.extras.nfsboot;
+            (mkSystem_ inputs.rpipkgs "x86_64-linux" h [ (crossModule2 crossSystem) ]).config.system.build.extras.nfsboot;
         in
         {
           rpifour1a = makeNfsbootCross "rpifour1" { system = "aarch64-linux"; };
-          rpifour1b= makeNfsbootCross "rpifour1" { system = "aarch64-linux"; };
+          rpifour1b = makeNfsbootCross "rpifour1" { system = "aarch64-linux"; };
           rpifour2 = makeNfsbootCross2 "rpifour2" { system = "aarch64-linux"; };
           rpithreebp1 = makeNfsbootCross "rpithreebp1" { system = "aarch64-linux"; };
         };
@@ -335,6 +346,7 @@
         # ^^^ realistically since this is a native build, I shouldn't _need_ to use crosspkgs
         #######################################################################
         # aarch64-linux
+        radxazero1 = mkSystem inputs.rpipkgs "aarch64-linux" "radxazero1";
         rpifour1 = mkSystem inputs.rpipkgs "aarch64-linux" "rpifour1";
         rpifour2 = mkSystem inputs.rpipkgs "aarch64-linux" "rpifour2";
         rpithreebp1 = mkSystem inputs.rpipkgs "aarch64-linux" "rpithreebp1";
@@ -353,6 +365,9 @@
         rpizero2 = mkSystem inputs.cross-armv6l "x86_64-linux" "rpizero2";
         # disabled:
         # - oracular_kexec  = mkSystem inputs.nixpkgs "aarch64-linux" "oracular/installer"; # not working, half-abandonded
+        #######################################################################
+        # installer (x86_64-linux for now)
+        installer = mkSystem inputs.nixpkgs "x86_64-linux" "installer";
       };
       toplevels = nixlib.genAttrs
         (builtins.attrNames inputs.self.outputs.nixosConfigurations)
@@ -367,6 +382,10 @@
         toplevels = force_cached s (builtins.mapAttrs (n: v: v.config.system.build.toplevel)
           (filterHosts pkgs_.nixpkgs.${s} inputs.self.nixosConfigurations));
         netboots = force_cached s (filterPkgs pkgs_.nixpkgs.${s} netboots);
+        nfsfirms = force_cached s (filterPkgs pkgs_.nixpkgs.${s} nfsfirms);
+        netpayload = force_cached s (
+          (filterPkgs pkgs_.nixpkgs.${s} netboots) // (filterPkgs pkgs_.nixpkgs.${s} nfsfirms)
+        );
       });
       # TODO: finish this...
       hydraBundles = forAllSystems (s: (
@@ -425,6 +444,8 @@
       #   forAllSystems (s: installer);
       # - bundle the installer script
       # - the installer script should also manage host ssh/age keys + secrets re-provisioning
+      
+      installer = nixosConfigurations.installer.config.system.build.isoImage;
 
       images = nixlib.genAttrs [ "rpizero1" "rpizero2" ] (h:
         nixosConfigurations.${h}.config.system.build.sdImage);
@@ -435,7 +456,7 @@
           # tb_rpi_aarch64 = tb_a64.raspberryPi-aarch64;
           # tb_sd = tb: tb.config.Tow-Boot.outputs.diskImage;
 
-          rpiBuilder = inputs.tow-boot.devicesWith.aarch64-linux."raspberryPi-aarch64";
+          rpiBuilder = inputs.tow-boot-rpi.devicesWith.aarch64-linux."raspberryPi-aarch64";
           tb_rpi3b-otp = (
             (rpiBuilder {
               configuration.config.Tow-Boot = {

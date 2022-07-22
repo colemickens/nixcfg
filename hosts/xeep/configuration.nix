@@ -26,6 +26,7 @@ in
     ./services/netboot-server.nix
     ./services/samba.nix
     ./services/rsntp.nix
+    # ./services/rtsptoweb.nix
     ./services/snapserver.nix
     ./services/plex.nix
     ./services/unifi.nix
@@ -62,7 +63,7 @@ in
     
     systemd.network = {
       enable = true;
-      networks."20-eth0-static-ip" = {
+      networks."15-eth0-static-ip" = {
         matchConfig.Driver = "r8152";
         addresses = [{ addressConfig = { Address = static_ip; }; }];
         networkConfig = {
@@ -70,16 +71,6 @@ in
           DNS = "192.168.1.1";
           DHCP = "ipv6";
         };
-      };
-      networks."15-block-wlan" = {
-        matchConfig.Name = "wlp2s0";
-        networkConfig = {};
-        linkConfig.Unmanaged = "yes";
-      };
-      networks."16-block-rndis" = {
-        matchConfig.Driver = "rndis_host";
-        networkConfig = {};
-        linkConfig.Unmanaged = "yes";
       };
     };
 
@@ -98,7 +89,7 @@ in
         "msr"
       ];
       kernelModules = config.boot.initrd.availableKernelModules;
-      kernelParams = [ "zfs.zfs_arc_max=2147483648" ];
+      kernelParams = [ "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}" ];
       initrd.luks.devices = {
         root = {
           name = "root";

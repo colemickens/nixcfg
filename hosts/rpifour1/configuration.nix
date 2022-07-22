@@ -1,15 +1,14 @@
 { pkgs, lib, modulesPath, extendModules, inputs, config, ... }:
 
 let
-  hn = "rpifour1";
-  eth_ip = "192.168.100.41/16";
+  eth_ip = "192.168.162.69/16";
 in
 {
   imports = [
     ../rpi-tmpl-four.nix
   ];
   config = {
-    networking.hostName = hn;
+    networking.hostName = "rpifour1";
     system.stateVersion = "21.11";
     boot.initrd.systemd.network.networks."10-eth0".addresses =
       [{ addressConfig = { Address = eth_ip; }; }];

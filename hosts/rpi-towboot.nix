@@ -3,7 +3,7 @@
 ## RPI-TOW-BOOT INTEGRATION
 
 {
-  imports = inputs.tow-boot.nixosModules;
+  imports = inputs.tow-boot-rpi.nixosModules;
 
   config = {
     tow-boot.enable = true;

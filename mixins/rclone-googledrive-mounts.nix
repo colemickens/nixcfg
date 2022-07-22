@@ -79,6 +79,7 @@ in
     rclone-misc = mkMount "misc" true;
     rclone-tvshows = mkMount "tvshows" true;
     rclone-movies = mkMount "movies" true;
+    rclone-music = mkMount "music" true;
 
     rclone-archives = mkMount "archives" true;
     rclone-backups = mkMount "backups" true;

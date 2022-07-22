@@ -31,8 +31,6 @@
       })
     ];
 
-    nixcfg.common.useZfs = false;
-
     # cross-build compatibility
     security.polkit.enable = false;
     services.udisks2.enable = lib.mkForce false;

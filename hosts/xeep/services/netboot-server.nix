@@ -48,6 +48,7 @@ let
     );
 
   netbootHosts = builtins.attrNames (inputs.self.netboots);
+  nfsfirmHosts = builtins.attrNames (inputs.self.nfsfirms);
 in
 {
   config = {
@@ -81,7 +82,7 @@ in
           })
           (lib.genAttrs netbootHosts (hn: { })))
       );
-    systemd.mounts =
+    systemd.mounts = (
       (builtins.map
         (hn: rec {
           what = "${inputs.self.netboots.${hn}}/dbexport";
@@ -93,8 +94,23 @@ in
             ForceUnmount = true;
           };
         })
-        netbootHosts);
-    systemd.automounts =
+        netbootHosts)
+      ++
+      (builtins.map
+        (hn: rec {
+          what = "${inputs.self.nfsfirms.${hn}}";
+          where = "/export/nfsfirms/${hn}";
+          type = "bind";
+          description = where;
+          options = "bind,ro";
+          mountConfig = {
+            ForceUnmount = true;
+          };
+        })
+        nfsfirmHosts)
+
+    );
+    systemd.automounts = (
       (builtins.map
         (hn: rec {
           where = "/export/nixdb/${hn}";
@@ -104,7 +120,19 @@ in
             inputs.self.netboots.${hn}
           ];
         })
-        netbootHosts);
+        netbootHosts)
+      ++
+      (builtins.map
+        (hn: rec {
+          where = "/export/nfsfirms/${hn}";
+          description = where;
+          wantedBy = [ "multi-user.target" ];
+          restartTriggers = [
+            inputs.self.nfsfirms.${hn}
+          ];
+        })
+        nfsfirmHosts)
+    );
 
     services.nfs.server = {
       enable = true;
@@ -122,11 +150,12 @@ in
           # TODO: difference between /export/nixdb + /export/nixdb/${hn}?
           builtins.foldl'
             (def: hn: def + ''
-              /export/hostdata/${hn}  192.168.1.0/16(rw,nohide,insecure,no_root_squash,no_subtree_check)
-              /export/nixdb/${hn}     192.168.1.0/16(ro,nohide,insecure,no_root_squash,no_subtree_check)
+              /export/hostdata/${hn}   192.168.1.0/16(rw,nohide,insecure,no_root_squash,no_subtree_check)
+              /export/nixdb/${hn}      192.168.1.0/16(ro,nohide,insecure,no_root_squash,no_subtree_check)
+              /export/nfsfirms/${hn}   192.168.1.0/16(ro,nohide,insecure,no_subtree_check)
             '') ''
-            /export                     192.168.1.0/16(fsid=0,ro,insecure,no_subtree_check)
-            /export/nix-store           192.168.1.0/16(ro,nohide,insecure,no_subtree_check)
+            /export               192.168.1.0/16(fsid=0,ro,insecure,no_subtree_check)
+            /export/nix-store     192.168.1.0/16(ro,nohide,insecure,no_subtree_check)
           ''
             netbootHosts
         )

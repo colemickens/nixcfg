@@ -80,6 +80,7 @@ in {
         wl-clipboard
         wlrctl
         wlr-randr
+        wdisplays
         # wl-gammactl # nixpkgs-wayland only
         # wlvncc # nixpkgs-wayland only
         # wshowkeys # use the wrapper ^

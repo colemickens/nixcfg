@@ -45,8 +45,8 @@
       };
     };
 
-    boot.kernelPackages = pkgs.linuxPackages_latest;
     # <v3d>
+    boot.kernelPackages = pkgs.linuxPackages_5_18;
     boot.kernelPatches = [
       {
         name = "v3d-enable-part1";

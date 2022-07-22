@@ -28,6 +28,8 @@ in
     ../../mixins/wpa-full.nix
     ../../mixins/zfs.nix
 
+    # ./services/rtsp-simple-server.nix
+
     # ./experimental.nix
       
     ./amdzen2.nix

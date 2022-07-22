@@ -39,7 +39,7 @@ in {
             box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
             margin: 100px;
             background-color: #263238;
-            font-size: 3em;
+            font-size: 2em;
             font-weight: bold;
         }
         
@@ -65,8 +65,8 @@ in {
       margin_bottom = 0;
       margin_left = 0;
       margin_right = 0;
-      width = 2000;
-      height = 1000;
+      width = 1000;
+      height = 500;
     });
   };
 }

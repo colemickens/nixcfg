@@ -38,6 +38,19 @@ function prompt_flake_lock() {
     p10k segment -b 2 -f 'white' -t "${FLAKE_LOCK}"
   fi
 }
+function nix_bldrs() {
+  #if [ "$(arch)" = "arm64" ]; then
+  #  p10k segment -b 2 -f 'black' -t 'arm64'
+  #else
+  #  p10k segment -b 2 -f 'black' -t 'x86'
+  #fi
+  if [[ ! -z "${BLDR_X86:-}" ]]; then
+    p10k segment -b 2 -f 'grey' -t "x86: ${BLDR_X86}"
+  fi
+  if [[ ! -z "${BLDR_A64:-}" ]]; then
+    p10k segment -b 2 -f 'grey' -t "a64: ${BLDR_A64}"
+  fi
+}
 
 () {
   emulate -L zsh
@@ -65,6 +78,7 @@ function prompt_flake_lock() {
     vcs                       # git status
     command_execution_time    # previous command duration
     flake_lock
+    nix_bldrs
     # =========================[ Line #2 ]=========================
     newline                   # \n
     virtualenv                # python virtual environment

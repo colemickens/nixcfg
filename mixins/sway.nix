@@ -8,6 +8,7 @@ let
   out_aw3418dw = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
   out_aw2521h = "Dell Inc. Dell AW2521H #HLAYMxgwABDZ";
   out_raisin = "Unknown 0x1402 0x00000000";
+  out_carbon = "SDC 0x4152 0x00000000";
   out_lgc165 = "Goldstar Company Ltd LG TV SSCR2 0x00000101";
   out_rpi4_lgc165 = "LG Electronics LG TV SSCR2 0x00000101";
 
@@ -22,6 +23,8 @@ let
 
   cmd_pass = "${prefs.default_term} --class floatmeplz -e 'gopass-clip'";
   cmd_totp = "${prefs.default_term} --class floatmeplz -e 'gopass-totp'";
+
+  statusCommand = "${pkgs.waybar}/bin/waybar";
 
   _keyboard = {
     xkb_layout = "us";
@@ -193,7 +196,7 @@ in
             };
             gaps = { inner = 0; outer = 0; };
             window.border = 3;
-            window.titlebar = true;
+            window.titlebar = false;
             window.commands = [
               { criteria = { app_id = "mpv"; }; command = "sticky enable"; }
               { criteria = { app_id = "mpv"; }; command = "floating enable"; }
@@ -235,10 +238,12 @@ in
                 background = background;
               };
             };
-            bars = [ ];
-            #bars = [
-            #  command = statusCommand;
-            #}];
+            bars = [{
+              command = statusCommand;
+              mode = "hide";
+              hiddenState = "hide";
+              modifier = "Mod4";
+            }];
             keybindings = {
               "${modifier}+Return" = "exec ${terminal}";
               "${modifier}+Shift+q" = "kill";

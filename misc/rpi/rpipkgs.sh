@@ -29,4 +29,4 @@ set -euo pipefail
     #   && git -C "${d}" push origin HEAD -f)
     (d="${HOME}/code/nixcfg"; cd "${d}" \
       && nix flake lock --update-input rpipkgs --commit-lock-file \
-      && nix flake lock --update-input tow-boot --commit-lock-file)
+      && nix flake lock --update-input tow-boot-rpi --commit-lock-file)

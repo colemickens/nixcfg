@@ -67,7 +67,7 @@ let
         
           sudo "${pkgs.util-linux}/bin/wipefs" -a "$target"
           
-          sudo parted --script -a optimal -- "$target" \
+          sudo ${pkgs.parted}/bin/parted --script -a optimal -- "$target" \
             mklabel msdos \
             mkpart primary     "1MiB"    "33MiB" \
             mkpart primary    "33MiB"   "545MiB" \
@@ -82,7 +82,7 @@ let
           sudo sfdisk --part-type "$target" 4 0x82
           
           sudo sync
-          sudo partprobe
+          sudo ${pkgs.parted}/bin/partprobe
           sleep 1
         
           sudo mkfs.vfat -F32 "${boot}"

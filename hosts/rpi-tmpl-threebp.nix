@@ -42,9 +42,9 @@
         # });
       };
     };
-    # boot.kernelPackages = pkgs.linuxPackages_5_19; # vc4 hdmi broken [confirmed]
+    boot.kernelPackages = pkgs.linuxPackages_5_19; # vc4 hdmi broken [confirmed]
     # boot.kernelPackages = pkgs.linuxPackages_5_18;
-    boot.kernelPackages = pkgs.linuxPackages_5_17;
+    # boot.kernelPackages = pkgs.linuxPackages_5_17;
     boot.blacklistedKernelModules = [ "snd_bcm2835" ];
 
     nixcfg.common.defaultNetworking = false;

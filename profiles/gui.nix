@@ -44,9 +44,10 @@ in
         MOZ_USE_XINPUT2 = "1";
       };
 
-      services.pass-secret-service = {
-        enable = true;
-      };
+      # fucking god damn python and it's fucking god damn crypto lib always breaking
+      # services.pass-secret-service = {
+      #   enable = true;
+      # };
 
       home.packages = (
         (with pkgs; [
@@ -64,7 +65,7 @@ in
           freerdp
           vlc
           lapce
-            
+
           wpa_supplicant_gui
           # jami-daemon
           # jami-client-gnome
