@@ -430,6 +430,27 @@
         "type": "github"
       }
     },
+    "hyprland": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "wlroots": "wlroots"
+      },
+      "locked": {
+        "lastModified": 1658510923,
+        "narHash": "sha256-ILsoRKvtc8FAmYcb9JD9ASHVVJfjwG87tflt0cmtimo=",
+        "owner": "hyprwm",
+        "repo": "Hyprland",
+        "rev": "72700bf9dc17d1d145130bd53b436a80e1c971d2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hyprwm",
+        "repo": "Hyprland",
+        "type": "github"
+      }
+    },
     "impermanence": {
       "locked": {
         "lastModified": 1646131459,
@@ -836,6 +857,7 @@
         "hardware": "hardware",
         "helix": "helix",
         "home-manager": "home-manager",
+        "hyprland": "hyprland",
         "impermanence": "impermanence",
         "jj": "jj",
         "mobile-nixos": "mobile-nixos",
@@ -856,11 +878,11 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1658432109,
-        "narHash": "sha256-/ipjxQZ53OBLMWJlxHSIX+TDnZze+2VZjddLimj0RbQ=",
+        "lastModified": 1658548312,
+        "narHash": "sha256-g2qqpEij9jB7+zrrBofQY71QZFudpcs6Ug7Q6hQ8vLg=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "bf61e172d8a014e953062f5042ad8308864a14a5",
+        "rev": "0073786257f9667176f5e5d389ce459be9fb06e5",
         "type": "github"
       },
       "original": {
@@ -1112,6 +1134,24 @@
         "ref": "master",
         "repo": "wip-pinebook-pro",
         "type": "github"
+      }
+    },
+    "wlroots": {
+      "flake": false,
+      "locked": {
+        "host": "gitlab.freedesktop.org",
+        "lastModified": 1656865312,
+        "narHash": "sha256-xtQ0zwJZwN8sciruveM10CzKz6TWxBY8SyXa8E4jly4=",
+        "owner": "wlroots",
+        "repo": "wlroots",
+        "rev": "5dc1d4671dd2ca3c1f0f09587c463fdbb542f0a4",
+        "type": "gitlab"
+      },
+      "original": {
+        "host": "gitlab.freedesktop.org",
+        "owner": "wlroots",
+        "repo": "wlroots",
+        "type": "gitlab"
       }
     },
     "zellij": {
