@@ -53,7 +53,7 @@ climate:
   - platform: whynter
     name: "AC"
     # sensor: room_temp
-    use_fahrenheit: true
+    use_fahrenheit: false
     supports_heat: false
 
 # button:

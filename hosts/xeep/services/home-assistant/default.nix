@@ -7,7 +7,7 @@ let
   trusted_networks = [
     "192.168.0.0/16" # default chimera network
     #"172.27.66.0/24" # wireguard network
-    "100.64.0.0/10"  # tailscale network
+    "100.64.0.0/10" # tailscale network
     "fd7a:115c:a1e0:ab12:0000:0000:0000:0000/64"
     #"192.168.69.0/24" # esphome network (but doesn't need to hit HA frontdoor)
   ];
@@ -15,7 +15,14 @@ let
   ha_host = "0.0.0.0";
   ha_port = 8123;
   ha_host_port = "${ha_host}:${toString ha_port}";
-in {
+
+  candle_switches = [
+    "switch.wp6_sw107_relay"
+    "switch.wp6_sw108_relay"
+    "switch.wp6_sw109_relay"
+  ];
+in
+{
   config = {
     networking.firewall = { allowedTCPPorts = [ ha_port ]; };
 
@@ -85,6 +92,34 @@ in {
 
         automation = [
           {
+            id = "candle_warmers_schedule_on";
+            alias = "Candle Warmers Schedule (on)";
+            mode = "single";
+            trigger = {
+              platform = "time_pattern";
+              hours = "/3";
+              minutes = "0";
+            };
+            action = [{
+              service = "switch.turn_on";
+              target.entity_id = candle_switches;
+            }];
+          }
+          {
+            id = "candle_warmers_schedule_off";
+            alias = "Candle Warmers Schedule (off)";
+            mode = "single";
+            trigger = {
+              platform = "time_pattern";
+              hours = "/3";
+              minutes = "45";
+            };
+            action = [{
+              service = "switch.turn_off";
+              target.entity_id = candle_switches;
+            }];
+          }
+          {
             id = "handle_tag_scan";
             alias = "Handle Tag Scan";
             mode = "single";
@@ -128,6 +163,7 @@ in {
         #cast = { media_player = { host = "192.168.1.200"; }; };
         #cloud = { };
         config = { };
+        climate = { };
         ## default_config = { }; ## TODO?
         denonavr = { };
         #discovery = { };
@@ -163,7 +199,7 @@ in {
             host = "192.168.1.119";
           }
         ];
-        nanoleaf = {};
+        nanoleaf = { };
         # prometheus = { namespace = "hass"; };
         ssdp = { };
         recorder = {
@@ -183,7 +219,7 @@ in {
           }
         ];
         system_health = { };
-        wake_on_lan =  {};
+        wake_on_lan = { };
         webostv = [
           {
             name = "LivingRoom_LG_C1";
