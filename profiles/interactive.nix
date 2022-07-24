@@ -92,10 +92,14 @@
         
         cava
         cli-visualizer
+        
+        pipes-rs
 
         xplr
-        
         difftastic
+        just
+        pueue
+        
         cpio # needed?
         usbutils
         pciutils

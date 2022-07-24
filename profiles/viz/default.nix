@@ -31,20 +31,20 @@ let
   # useVulkan = (config.networking.hostName == "rpifour2");
   useVulkan = false;
 
+  vs_pm = ''"${pkgs.projectm}/bin/projectM-pulseaudio"'';
+  vs_vis = ''"${pkgs.foot}/bin/foot" "${pkgs.cli-visualizer}/bin/vis"'';
   visualizerScript = (
     (rec {
-      "rpifour1" = ''"${pkgs.projectm}/bin/projectM-pulseaudio"'';
-      "rpithreebp1" = ''"${pkgs.foot}/bin/foot" "${pkgs.cli-visualizer}/bin/vis"'';
+      # "rpifour1" = vs_pm;
+      # "rpifour2" = vs_pm;
+      "rpifour1" = vs_vis;
+      "rpifour2" = vs_vis;
+      "rpithreebp1" = vs_vis;
 
-      "rpifour2" =
-        # ''"${pkgs.visualizer2}/bin/noambition"'';
-        # ''"${pkgs.foot}/bin/foot" "${pkgs.cli-visualizer}/bin/vis"'';   
-        ''"${pkgs.projectm}/bin/projectM-pulseaudio"'';
-
-      "rpizerotwo1" = ''"${pkgs.foot}/bin/foot" "${pkgs.cli-visualizer}/bin/vis"'';   
-      "rpizerotwo2" = rpizerotwo1;
-      "rpizerotwo3" = rpizerotwo1;
-      "radxazero1" = rpizerotwo1;
+      "rpizerotwo1" = vs_vis;
+      "rpizerotwo2" = vs_vis;
+      "rpizerotwo3" = vs_vis;
+      "radxazero1" = vs_vis;
     }).${config.networking.hostName}
   );
 

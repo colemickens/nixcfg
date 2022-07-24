@@ -184,10 +184,8 @@ case "${cmd}" in
       --ignore '*.watchman*' \
       --project-origin $HOME/code/nixcfg \
       --workdir $HOME/code/nixcfg \
-      -w $HOME/code/nixpkgs/rpi \
-      -w $HOME/code/nixpkgs/cmpkgs \
+      -w $HOME/code/nixpkgs \
       -w $HOME/code/home-manager/cmhm \
-      -w $HOME/code/nixpkgs/cmpkgs-cross-riscv \
       -w $HOME/code/tow-boot/rpi \
       -w $HOME/code/tow-boot/radxa-zero \
       -- \
@@ -206,6 +204,7 @@ case "${cmd}" in
       --override-input home-manager $HOME/code/home-manager/cmhm \
       --override-input cross-armv6l  $HOME/code/nixpkgs/cmpkgs-cross-armv6l \
       --override-input cross-riscv64  $HOME/code/nixpkgs/cmpkgs-cross-riscv64 \
+      --override-input visionfive-nix  $HOME/code/visionfive-nix \
       --override-input rpipkgs $HOME/code/nixpkgs/rpi \
       --override-input tow-boot-rpi $HOME/code/tow-boot/rpi \
       --override-input tow-boot-radxa-zero $HOME/code/tow-boot/radxa-zero

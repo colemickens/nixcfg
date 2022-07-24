@@ -29,9 +29,14 @@
     # nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # stable.url = "github:nixos/nixpkgs/nixos-22.05"; # for cachix
     riscv64 = { url = "github:zhaofengli/nixos-riscv64"; };
+    visionfive-nix.url = "github:colemickens/visionfive-nix";
+    visionfive-nix.inputs.nixpkgs.follows = "cross-riscv64";
 
     home-manager.url = "github:colemickens/home-manager/cmhm";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland.inputs.nixpkgs.follows = "nixpkgs";
 
     sops-nix.url = "github:Mic92/sops-nix/master";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
@@ -342,7 +347,7 @@
         #######################################################################
         # riscv-linux
         # risky = mkSystem inputs.cross-riscv64 "riscv64-linux" "risky";
-        # rixxy = mkSystem inputs.cross-riscv64 "x86_64-linux" "risky";
+        risky-cross = mkSystem inputs.cross-riscv64 "x86_64-linux" "risky";
         # ^^^ realistically since this is a native build, I shouldn't _need_ to use crosspkgs
         #######################################################################
         # aarch64-linux

@@ -14,6 +14,8 @@ in {
     ../../mixins/sway.nix # contains swayidle/swaylock config
     ../../mixins/waybar.nix
     ../../mixins/wayland-tweaks.nix
+    
+    inputs.hyprland.nixosModules.default
   ];
   config = {
     nixpkgs.overlays = if useUnstableOverlay then [
@@ -26,6 +28,11 @@ in {
         setuid = true;
         source = "${pkgs.wshowkeys}/bin/wshowkeys";
       };
+    };
+    
+    programs.hyprland = {
+      enable = true;
+      extraPackages = lib.mkForce [];
     };
 
     xdg.portal.enable = true;

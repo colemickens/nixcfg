@@ -17,9 +17,9 @@ let
   ha_host_port = "${ha_host}:${toString ha_port}";
 
   candle_switches = [
-    "switch.wp6_sw107_relay"
-    "switch.wp6_sw108_relay"
-    "switch.wp6_sw109_relay"
+    "switch.wp6_sw107_relay" # candle1
+    "switch.wp6_sw108_relay" # candle2
+    "switch.wp6_sw109_relay" # candle3
   ];
 in
 {
@@ -91,6 +91,18 @@ in
         };
 
         automation = [
+          # {
+          #   id = "bedtime";
+          #   alias = "Bed Time";
+          #   mode = "single";
+          #   action = [
+          #     {
+          #       service = "switch.turn_on";
+          #       target.entity_id = nanoleaf;
+          #     }
+          #  --- after a delay, turn off nanoleaf and dabrig?
+          #   ];
+          # }
           {
             id = "candle_warmers_schedule_on";
             alias = "Candle Warmers Schedule (on)";

@@ -7,11 +7,20 @@
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
     
+    # ../../modules/preinstalled-disk.nix # prototyping for "ezsbc"
+    
     # the visionfive module pulls in the nixos-riscv64 overlay automatically:
-    "${inputs.riscv64}/nixos/visionfive.nix"
+    # "${inputs.riscv64}/nixos/visionfive.nix"
+    inputs.visionfive-nix.nixosModules.riscv-cross-quirks
+    inputs.visionfive-nix.nixosModules.visionfive
+    inputs.visionfive-nix.nixosModules.sdcard
+    # inputs.visionfive-nix.nixosModules.sdcard # TODO: replace with our own custom installed-disk.nix module
   ];
 
   config = {
+    nixpkgs.overlays = [
+      inputs.visionfive-nix.overlay
+    ];
     system.stateVersion = "21.11";
 
     nix.nixPath = [];

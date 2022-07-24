@@ -19,11 +19,15 @@
           };
         };
         
-        delta = {
+        # delta = {
+        #   enable = true;
+        #   options = {
+        #     features = "decorations side-by-side navigate";
+        #   };
+        # };
+        
+        difftastic = {
           enable = true;
-          options = {
-            features = "decorations side-by-side navigate";
-          };
         };
       };
     };
