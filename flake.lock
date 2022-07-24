@@ -921,6 +921,7 @@
         "riscv64": "riscv64",
         "rpipkgs": "rpipkgs",
         "sops-nix": "sops-nix",
+        "stable": "stable",
         "terranix": "terranix",
         "tow-boot-radxa-zero": "tow-boot-radxa-zero",
         "tow-boot-rpi": "tow-boot-rpi",
@@ -931,11 +932,11 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1658640272,
+        "lastModified": 1658685917,
         "narHash": "sha256-mR2zeycrcHWVvFKCqowTU0kOo1Vlv8LMx22ZdHwTXvk=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "1935efe44258f3286b841e446abd37a591e7b5d4",
+        "rev": "6895fbb43784ff7a3f807cfd01ea2b59a1e36848",
         "type": "github"
       },
       "original": {
@@ -1069,6 +1070,22 @@
         "owner": "Mic92",
         "ref": "master",
         "repo": "sops-nix",
+        "type": "github"
+      }
+    },
+    "stable": {
+      "locked": {
+        "lastModified": 1658500284,
+        "narHash": "sha256-g7vwZ5UF8PvC9f2/7Zf5O6zxgJiMSuh1CiGZVuuOhEQ=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "e3583ad6e533a9d8dd78f90bfa93812d390ea187",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-22.05",
+        "repo": "nixpkgs",
         "type": "github"
       }
     },
