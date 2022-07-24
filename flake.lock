@@ -497,6 +497,58 @@
         "type": "github"
       }
     },
+    "jh7100_ddrinit": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-pOlg3FtFdFhHHnE16izS26RkJ7RbQpglDKgpVRdyAso=",
+        "type": "file",
+        "url": "https://github.com/starfive-tech/JH7100_ddrinit/releases/download/ddrinit-2133-211102/ddrinit-2133-211102.bin.out"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/starfive-tech/JH7100_ddrinit/releases/download/ddrinit-2133-211102/ddrinit-2133-211102.bin.out"
+      }
+    },
+    "jh7100_recovery_binary": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-T3vqaelqwXiOqD8yRHw899A5GI2J+hU/5l5S3euIs2g=",
+        "type": "file",
+        "url": "https://github.com/starfive-tech/bootloader_recovery/releases/download/JH7100_recovery_binary/jh7100_recovery_boot.bin"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/starfive-tech/bootloader_recovery/releases/download/JH7100_recovery_binary/jh7100_recovery_boot.bin"
+      }
+    },
+    "jh7100_secondBoot": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-Ek8RK8t3y9JfpVfey1X9yZn9OIbOj/EJokUeWbZWZGU=",
+        "type": "file",
+        "url": "https://github.com/starfive-tech/JH7100_secondBoot/releases/download/bootloader-211102_VisionFive_JH7100/bootloader-JH7100-211102.bin.out"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/starfive-tech/JH7100_secondBoot/releases/download/bootloader-211102_VisionFive_JH7100/bootloader-JH7100-211102.bin.out"
+      }
+    },
+    "jh71xx-tools": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1644591616,
+        "narHash": "sha256-eCOI/kYmkSxL4HPqBPoJFWa6qJwqafPOxS8KhIuMF4s=",
+        "owner": "xypron",
+        "repo": "jh71xx-tools",
+        "rev": "afe3328923d6c3883886a00c4ed10eda019f2db1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "xypron",
+        "repo": "jh71xx-tools",
+        "type": "github"
+      }
+    },
     "jj": {
       "inputs": {
         "nixpkgs": "nixpkgs_2"
@@ -872,17 +924,18 @@
         "terranix": "terranix",
         "tow-boot-radxa-zero": "tow-boot-radxa-zero",
         "tow-boot-rpi": "tow-boot-rpi",
+        "visionfive-nix": "visionfive-nix",
         "wip-pinebook-pro": "wip-pinebook-pro",
         "zellij": "zellij"
       }
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1658620228,
-        "narHash": "sha256-DnaP6Z/FHBjJvKEcMoD3GzBCmjBW+XfuvVBj7MMc9BE=",
+        "lastModified": 1658640272,
+        "narHash": "sha256-mR2zeycrcHWVvFKCqowTU0kOo1Vlv8LMx22ZdHwTXvk=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "a0add9d11e93e436fcf7cf6b43d3050c73d0457e",
+        "rev": "1935efe44258f3286b841e446abd37a591e7b5d4",
         "type": "github"
       },
       "original": {
@@ -1116,6 +1169,47 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "vendor-kernel": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1657526524,
+        "narHash": "sha256-NiEeWgYzEhqLbvB0krpjoRv8oXXsJYp6KeDor+f9tak=",
+        "owner": "starfive-tech",
+        "repo": "linux",
+        "rev": "74003f14f92e3c8eb31536b599c1f0c7aba3cdf2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "starfive-tech",
+        "repo": "linux",
+        "type": "github"
+      }
+    },
+    "visionfive-nix": {
+      "inputs": {
+        "jh7100_ddrinit": "jh7100_ddrinit",
+        "jh7100_recovery_binary": "jh7100_recovery_binary",
+        "jh7100_secondBoot": "jh7100_secondBoot",
+        "jh71xx-tools": "jh71xx-tools",
+        "nixpkgs": [
+          "cross-riscv64"
+        ],
+        "vendor-kernel": "vendor-kernel"
+      },
+      "locked": {
+        "lastModified": 1658623144,
+        "narHash": "sha256-qqT+5SosuY737RfkdGXBLo7iMSGAvHYe8ukXAyHVOwU=",
+        "owner": "colemickens",
+        "repo": "visionfive-nix",
+        "rev": "bb949c5415949937e25b535ffdb988a4b334dc2f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "colemickens",
+        "repo": "visionfive-nix",
         "type": "github"
       }
     },
