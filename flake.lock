@@ -827,22 +827,6 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1642210689,
-        "narHash": "sha256-ORT7pNlPyjEQ328IflHeA0mcKsJ8/+fPh9L66CTqHLA=",
-        "owner": "zhaofengli",
-        "repo": "nixpkgs",
-        "rev": "c6a277fba79364aca312f3966418842210c4c865",
-        "type": "github"
-      },
-      "original": {
-        "owner": "zhaofengli",
-        "ref": "riscv",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_6": {
-      "locked": {
         "lastModified": 1659713809,
         "narHash": "sha256-M4aHuXXVnfprM8xPH2lLkYkkR0fmaG5QmvIc0DT/d4E=",
         "owner": "nixos",
@@ -882,24 +866,6 @@
         "type": "github"
       }
     },
-    "riscv64": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_5"
-      },
-      "locked": {
-        "lastModified": 1647822145,
-        "narHash": "sha256-hN9oOPwR/mhUnhG2YLywUDFE51SpyBC8O8IOFSVPqbU=",
-        "owner": "zhaofengli",
-        "repo": "nixos-riscv64",
-        "rev": "f0b105b7671289c3fc17849532afe4fceb95bfd6",
-        "type": "github"
-      },
-      "original": {
-        "owner": "zhaofengli",
-        "repo": "nixos-riscv64",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "cross-armv6l": "cross-armv6l",
@@ -918,30 +884,27 @@
         "nixlib": "nixlib",
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-wayland": "nixpkgs-wayland",
-        "riscv64": "riscv64",
         "rpipkgs": "rpipkgs",
         "sops-nix": "sops-nix",
-        "stable": "stable",
         "terranix": "terranix",
         "tow-boot-radxa-zero": "tow-boot-radxa-zero",
         "tow-boot-rpi": "tow-boot-rpi",
         "visionfive-nix": "visionfive-nix",
-        "wip-pinebook-pro": "wip-pinebook-pro",
         "zellij": "zellij"
       }
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1660161313,
-        "narHash": "sha256-j7+hWm/1QWFnb8o285avVQgfQlTDC7ERVIJa2WxMvbw=",
+        "lastModified": 1660180271,
+        "narHash": "sha256-89z2/DOErXR7Z9hl6xqMkhSfB85Q+m2w9U7OpFtMVHc=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "f4214be7ebeb4892444ed429d8b9b02297e461fd",
+        "rev": "9a86c0ef421b365e7e14b3290558f3c653164b80",
         "type": "github"
       },
       "original": {
         "owner": "colemickens",
-        "ref": "rpipkgs",
+        "ref": "cmpkgs-rpipkgs",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -1070,22 +1033,6 @@
         "owner": "Mic92",
         "ref": "master",
         "repo": "sops-nix",
-        "type": "github"
-      }
-    },
-    "stable": {
-      "locked": {
-        "lastModified": 1660120254,
-        "narHash": "sha256-EMBa86JQ6W0och5Kxb1XmprgN/HFsSuJ9fRa2PtV3uk=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "e4c9d950a3c54a0760b127d406f6528eb625eed8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-22.05",
-        "repo": "nixpkgs",
         "type": "github"
       }
     },
@@ -1230,23 +1177,6 @@
         "type": "github"
       }
     },
-    "wip-pinebook-pro": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1645472103,
-        "narHash": "sha256-HIaav1YN+jk0kx8+0Ccov2hsStAIJkB790ENZGDgeU4=",
-        "owner": "colemickens",
-        "repo": "wip-pinebook-pro",
-        "rev": "b7de8c47fec5b96e66c615990b3c15a841a466b9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "ref": "master",
-        "repo": "wip-pinebook-pro",
-        "type": "github"
-      }
-    },
     "wlroots": {
       "flake": false,
       "locked": {
@@ -1270,7 +1200,7 @@
         "crate2nix": "crate2nix",
         "flake-compat": "flake-compat_3",
         "flake-utils": "flake-utils_5",
-        "nixpkgs": "nixpkgs_6",
+        "nixpkgs": "nixpkgs_5",
         "rust-overlay": "rust-overlay_3"
       },
       "locked": {
