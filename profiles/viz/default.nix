@@ -38,12 +38,10 @@ let
       # "rpifour1" = vs_pm;
       # "rpifour2" = vs_pm;
       "rpifour1" = vs_vis;
-      "rpifour2" = vs_vis;
       "rpithreebp1" = vs_vis;
 
       "rpizerotwo1" = vs_vis;
       "rpizerotwo2" = vs_vis;
-      "rpizerotwo3" = vs_vis;
       "radxazero1" = vs_vis;
     }).${config.networking.hostName}
   );

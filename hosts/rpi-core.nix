@@ -30,6 +30,8 @@ in
     documentation.doc.enable = lib.mkDefault false;
     documentation.info.enable = lib.mkDefault false;
     documentation.nixos.enable = lib.mkDefault false;
+    
+    system.disableInstallerTools = true;
 
     networking.firewall.enable = lib.mkDefault true;
 

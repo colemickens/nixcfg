@@ -1,5 +1,8 @@
 #! /usr/bin/env bash
+set -x
+
 install_system=$1
+MOUNTPT="/mnt-install"
 
 allargs=(
   "${allargs[@]}"
@@ -9,13 +12,15 @@ allargs=(
   --option 'narinfo-cache-negative-ttl' '0'
 )
 
+nix copy --to "${MOUNTPT}" "${install_system}"
+
 sudo nixos-enter \
-  --root "/mnt" \
+  --root "${MOUNTPT}" \
   --command "${cmd}"
   
 sudo nixos-install \
   --no-channel-copy \
-  --root /mnt \
+  --root "${MOUNTPT}" \
   --system "${install_system}" \
   --no-root-passwd \
   "${allargs[@]}"

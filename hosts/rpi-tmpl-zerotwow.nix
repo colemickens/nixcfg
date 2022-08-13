@@ -17,9 +17,10 @@
     fonts.fontconfig.enable = false; # python-black / noto emoji failures
 
     nixcfg.common.useZfs = false;
+    environment.systemPackages = with pkgs; [ usbutils ];
 
+    tow-boot.autoUpdate = lib.mkDefault false; # default incase we're netbooting, sdcard profile overrides this
     tow-boot = {
-      autoUpdate = lib.mkForce false; # no need when netbooting
       config.rpi = {
         upstream_kernel = true;
 
@@ -43,8 +44,8 @@
         # });
       };
     };
-    # boot.kernelPackages = pkgs.linuxPackages_5_19; # vc4 hdmi broken [confirmed]
-    boot.kernelPackages = pkgs.linuxPackages_5_18;
+    boot.kernelPackages = pkgs.linuxPackages_latest; # vc4 hdmi broken [confirmed]
+    # boot.kernelPackages = pkgs.linuxPackages_5_18;
     boot.blacklistedKernelModules = [ "snd_bcm2835" ];
 
     nixcfg.common.defaultNetworking = false;

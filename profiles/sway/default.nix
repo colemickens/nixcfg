@@ -31,8 +31,8 @@ in {
     };
     
     programs.hyprland = {
-      enable = true;
-      extraPackages = lib.mkForce [];
+      # enable = true;
+      # extraPackages = lib.mkForce [];
     };
 
     xdg.portal.enable = true;
@@ -47,11 +47,12 @@ in {
 
     home-manager.users.cole = { pkgs, ... }: {
       services = {
-        udiskie = {
-          enable = true;
-          automount = false;
-          tray = "always";
-        };
+        udiskie.enable = false;
+        # udiskie = {
+        #   enable = true;
+        #   automount = false;
+        #   tray = "always";
+        # };
         kanshi.enable = true;
         poweralertd.enable = true;
         wlsunset = {

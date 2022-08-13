@@ -55,9 +55,9 @@ rec {
     # iconTheme = { name = "WhiteSur-dark"; package = pkgs.whitesur-icon-theme; };
 # T # iconTheme = { name = "McMojave-circle"; package = pkgs.mcmojave-icon-theme; };
 
-    # theme = { name = "Arc-Dark"; package = pkgs.arc-theme; };
+    theme = { name = "Arc-Dark"; package = pkgs.arc-theme; };
     # theme = { name = "Orchis-purple-dark-compact"; package = pkgs.orchis-theme; };
-    theme = { name = "WhiteSur-dark-solid"; package = pkgs.whitesur-gtk-theme; };
+    # theme = { name = "WhiteSur-dark-solid"; package = pkgs.whitesur-gtk-theme; };
     # theme = { name = "Mojave-dark-solid"; package = pkgs.mojave-gtk-theme; };
 #ew # theme = { name = "Marwaita Color Dark"; package = pkgs.marwaita; };
     # theme = { name = "Qogir-dark"; package = pkgs.qogir-theme; };

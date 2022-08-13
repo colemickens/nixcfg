@@ -16,7 +16,10 @@ let
   ha_port = 8123;
   ha_host_port = "${ha_host}:${toString ha_port}";
 
+  nanoleaf_light = "light.nanoleaf_light_panels_5b_38_ef";
+  cleo_lamp_switch = "switch.wp6_sw102_relay";
   candle_switches = [
+    "switch.wp6_sw105_relay" # den-bathroom
     "switch.wp6_sw107_relay" # candle1
     "switch.wp6_sw108_relay" # candle2
     "switch.wp6_sw109_relay" # candle3
@@ -104,8 +107,77 @@ in
           #   ];
           # }
           {
+            id = "nanoleaf_on";
+            alias = "Nanoleaf (on) (8:30)";
+            mode = "single";
+            trigger = {
+              platform = "time_pattern";
+              hours = "8";
+              minutes = "/30";
+            };
+            action = [{
+              service = "light.turn_on";
+              target.entity_id = nanoleaf_light;
+            }];
+          }
+          {
+            id = "nanoleaf_bed";
+            alias = "Nanoleaf (bed) (21:00)";
+            mode = "single";
+            trigger = {
+              platform = "time_pattern";
+              hours = "21";
+            };
+            action = [{
+              service = "light.turn_on";
+              target.entity_id = nanoleaf_light;
+            }];
+          }
+          # TODO: some way to make it slowly draw down over the 9-10pm hours?
+          {
+            id = "nanoleaf_off";
+            alias = "Nanoleaf (off) (22:00)";
+            mode = "single";
+            trigger = {
+              platform = "time_pattern";
+              hours = "22";
+            };
+            action = [{
+              service = "light.turn_off";
+              target.entity_id = nanoleaf_light;
+            }];
+          }
+          {
+            id = "cleo_lamp_on";
+            alias = "Cleo Lamp (on) (20:30)";
+            mode = "single";
+            trigger = {
+              platform = "time_pattern";
+              hours = "20";
+              minutes = "/30";
+            };
+            action = [{
+              service = "switch.turn_on";
+              target.entity_id = cleo_lamp_switch;
+            }];
+          }
+          {
+            id = "cleo_lamp_off";
+            alias = "Cleo Lamp (off) (8:30)";
+            mode = "single";
+            trigger = {
+              platform = "time_pattern";
+              hours = "8";
+              minutes = "/30";
+            };
+            action = [{
+              service = "switch.turn_off";
+              target.entity_id = cleo_lamp_switch;
+            }];
+          }
+          {
             id = "candle_warmers_schedule_on";
-            alias = "Candle Warmers Schedule (on)";
+            alias = "Candles (on)";
             mode = "single";
             trigger = {
               platform = "time_pattern";
@@ -119,12 +191,29 @@ in
           }
           {
             id = "candle_warmers_schedule_off";
-            alias = "Candle Warmers Schedule (off)";
+            alias = "Candles (off)";
             mode = "single";
+            # we're going to fire every hour, at 30 mins after the top
+            # but only run in the hours that come after the /3 hours...
+            condition = [
+              {
+                condition = "or";
+                conditions = [
+                  { condition = "time"; before = "2:00:00"; after = "1:00:00"; }
+                  { condition = "time"; before = "5:00:00"; after = "4:00:00"; }
+                  { condition = "time"; before = "8:00:00"; after = "7:00:00"; }
+                  { condition = "time"; before = "11:00:00"; after = "10:00:00"; }
+                  { condition = "time"; before = "14:00:00"; after = "13:00:00"; }
+                  { condition = "time"; before = "17:00:00"; after = "16:00:00"; }
+                  { condition = "time"; before = "20:00:00"; after = "19:00:00"; }
+                  { condition = "time"; before = "23:00:00"; after = "22:00:00"; }
+                ];
+              }
+            ];
             trigger = {
               platform = "time_pattern";
-              hours = "/3";
-              minutes = "45";
+              hours = "*";
+              minutes = "/30";
             };
             action = [{
               service = "switch.turn_off";
@@ -246,7 +335,8 @@ in
         # };
         # zwave = { usb_path = zwaveAdapter; };
       };
-      lovelaceConfig = import ./lovelace.nix;
+      lovelaceConfig = import
+        ./lovelace.nix;
       lovelaceConfigWritable = false;
     };
   };

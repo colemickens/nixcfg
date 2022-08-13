@@ -24,39 +24,52 @@ in
       "systemd.setenv=SYSTEMD_SULOGIN_FORCE=1"
     ];
 
-    system.build.extras.nfsfirm = (
-      let
-        top = config.system.build.toplevel;
-        tb = config.system.build.towbootBuild;
-        diskImage = tb.config.Tow-Boot.outputs.diskImage;
-      in
-      pkgs.runCommandNoCC "nfsfirm-env-${hn}" { } ''
-        set -x
-        mkdir $out
-        cp -a "${diskImage}" $out/towboot.img
-      ''
-    );
+    # system.build.extras.nfsfirm = (
+    #   let
+    #     top = config.system.build.toplevel;
+    #     hasTb = builtins.hasAttr "towbootBuild" config.system.build;
+    #     tb = config.system.build.towbootBuild;
+    #     diskImage = tb.config.Tow-Boot.outputs.diskImage;
+    #   in
+    #   pkgs.runCommandNoCC "nfsfirm-env-${hn}" { } (if hasTb then ''
+    #     set -x
+    #     mkdir $out
+    #     cp -a "${diskImage}" $out/towboot.img
+    #   '' else ''
+    #     mkdir $out
+    #     touch $out/none
+    #   '')
+    # );
     system.build.extras.nfsboot = (
       let
         top = config.system.build.toplevel;
-        tb = config.system.build.towbootBuild;
-        firmware = tb.config.Tow-Boot.outputs.extra.firmwareContents;
-        eeprom = tb.config.Tow-Boot.outputs.extra.eepromFiles;
-        piser = config.system.build.pi_serial;
+        piser = config.system.build.sbc_serial;
         tci = config.system.build.extras.nfsboot-dbexport;
+        
+        hasTb_ = builtins.hasAttr "towbootBuild" config.system.build;
+        tb = config.system.build.towbootBuild;
+        hasTb = hasTb_ && (builtins.hasAttr "firmwareContents" tb.config.Tow-Boot.outputs.extra);
+        firmware = tb.config.Tow-Boot.outputs.extra.firmwareContents;
+        eeprom = tb.config.Tow-Boot.outputs.extra.eepromFiles; # TODO: "extraNetbootContents" ?? or should this just be in fwContents?
       in
-      pkgs.runCommandNoCC "nfsboot-env-${hn}" { } ''
+      pkgs.runCommandNoCC "nfsboot-env-${hn}" { } (
+        ''
         set -x
         mkdir $out
-        cp -a \
-          "${pkgs.closureInfo { rootPaths = config.system.build.toplevel; }}" \
-          $out/dbexport
-
+        
+        '' + (if hasTb then ''
         # POPULATE NETBOOT WITH RPI-FW FILES
         cp -rs "${firmware}"/* $out/
 
         # POPULATE NETBOOT WITH EEPROM UPDATE FILES
         cp -rs "${eeprom}"/* $out/
+        '' else
+        ''
+        '') +
+        ''
+        cp -a \
+          "${pkgs.closureInfo { rootPaths = config.system.build.toplevel; }}" \
+          $out/dbexport
         
         # POPULATE NETBOOT WITH EXTLINUX
         ${config.boot.loader.generic-extlinux-compatible.populateCmd} -d $out/ -c "${top}"
@@ -66,7 +79,7 @@ in
           $out/extlinux/extlinux.conf \
           $out/extlinux/extlinux.back
         sed -i 's|\.\./|${piser}/|g' $out/extlinux/extlinux.conf
-      ''
+      '')
     );
     fileSystems = {
       "/" = lib.mkForce {

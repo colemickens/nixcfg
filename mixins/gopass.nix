@@ -1,14 +1,17 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 let
   fmt = pkgs.formats.yaml { };
   gen = cfg: (fmt.generate "gopass-config.yml" cfg);
+  
+  gopassPkg = pkgs.gopass;
+  # gopassPkg = inputs.stable.outputs.legacyPackages.${pkgs.system}.gopass;
 in
 {
   config = {
     home-manager.users.cole = { pkgs, ... }: {
       home.packages = with pkgs; [
-        # gopass
+        gopassPkg
       ];
 
       xdg.configFile."gopass/config.yml".source = gen {

@@ -7,23 +7,29 @@ set -x
 # - better way of passthru since the bot checks it aggressively
 # - DRY, and parallalize as a result (good chance to try nushell)
 
-export UPSTREAM="rpi"
-export WORKTREE="rpi-updates-auto"
-
 export CACHEDIR="${HOME}/.cache/rpi"; mkdir -p "${CACHEDIR}"
 
+export UPSTREAM_BRANCH="nixos/nixos-unstable"
+export RPI_BRANCH="rpi-wip"
+export WORKTREE="rpi-updates-auto"
+
 export NIXPKGS_GIT="/home/cole/code/nixpkgs/master"
+export NIXPKGS_RPI_BRANCH="/home/cole/code/nixpkgs/${RPI_BRANCH}"
 export NIXPKGS_WORKTREE="/home/cole/code/nixpkgs/${WORKTREE}"
 
 export ARCH="x86_64-linux" # what system you're doing the update from
 
 git -C "${NIXPKGS_GIT}" remote update
 git -C "${NIXPKGS_GIT}" worktree prune
+
+git -C "${NIXPKGS_RPI_BRANCH}" rebase --abort || true
+git -C "${NIXPKGS_RPI_BRANCH}" rebase "${UPSTREAM_BRANCH}"
+
 if [[ ! -d "${NIXPKGS_WORKTREE}" ]]; then
   git -C "${NIXPKGS_GIT}" branch -D "${WORKTREE}" || true
   git -C "${NIXPKGS_GIT}" worktree add "${NIXPKGS_WORKTREE}" -b "${WORKTREE}"
 fi
-git -C "${NIXPKGS_WORKTREE}" reset --hard "${UPSTREAM}"
+git -C "${NIXPKGS_WORKTREE}" reset --hard "${RPI_BRANCH}"
 
 ########################################################################################################################
 ##

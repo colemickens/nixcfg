@@ -14,9 +14,9 @@ let
 
   netbootServer = "192.168.1.10"; # TODO: de-dupe across netboot-client.nix?
 
-  pimac = n: inputs.self.nixosConfigurations.${n}.config.system.build.pi_mac;
-  piser = n: inputs.self.nixosConfigurations.${n}.config.system.build.pi_serial;
-  piubi = n: inputs.self.nixosConfigurations.${n}.config.system.build.pi_ubootid;
+  pimac = n: inputs.self.nixosConfigurations.${n}.config.system.build.sbc_mac;
+  piser = n: inputs.self.nixosConfigurations.${n}.config.system.build.sbc_serial;
+  piubi = n: inputs.self.nixosConfigurations.${n}.config.system.build.sbc_ubootid;
 
   # for each host, link in by the ... serial?
   tftp_netboots = pkgs.runCommandNoCC "tftp-netboots" { }
@@ -48,7 +48,8 @@ let
     );
 
   netbootHosts = builtins.attrNames (inputs.self.netboots);
-  nfsfirmHosts = builtins.attrNames (inputs.self.nfsfirms);
+  nfsfirmHosts = [];
+  # nfsfirmHosts = builtins.attrNames (inputs.self.nfsfirms);
 in
 {
   config = {

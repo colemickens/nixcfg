@@ -17,7 +17,7 @@
 
     nixcfg.common.useZfs = false;
 
-    tow-boot.autoUpdate = lib.mkForce false;
+    tow-boot.autoUpdate = lib.mkDefault false; # default incase we're netbooting, sdcard profile overrides this
     tow-boot.config = {
       rpi-eeprom = {
         enable = true;
@@ -33,8 +33,6 @@
         hdmi_safe = true;
         hdmi_drive = 2;
         disable_fw_kms_setup = true;
-        # mainlineKernel = lib.mkForce pkgs.linuxPackages_5_19.kernel;
-        mainlineKernel = lib.mkForce pkgs.linuxPackages_latest.kernel;
 
         arm_boost = true;
         initial_boost = 60;
@@ -45,6 +43,7 @@
       };
     };
 
+    # boot.kernelPackages = pkgs.linuxPackages_5_20;
     # <v3d>
     boot.kernelPackages = pkgs.linuxPackages_5_18;
     boot.kernelPatches = [

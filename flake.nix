@@ -5,6 +5,9 @@
   #  -- bonus validation, gitlab repos are weird because they can be nested
   #  -- forcing users to url-encode '/' in their special flake refs
   # - lots of other stuff, too much to get into...
+  # - FLAKE_LOCK idea
+  # - how do options propagate to remote builders?
+  # - remote building in general is a bit weird
 
   description = "colemickens-nixcfg";
 
@@ -14,21 +17,18 @@
   # grub (via bootspec) everywhere (wip??)
 
   inputs = {
-    nixlib.url = "github:nix-community/nixpkgs.lib"; #TODO: horrible name! come on!
+    nixlib.url = "github:nix-community/nixpkgs.lib"; #TODO: boo name! "libaggregate"?
 
-    # TODO: revisit
-    # - libaggregate
-    # nixlib.url = "github:nix-community/nixpkgs.lib"; #TODO: horrible name! come on!
-
-    # TODO: DOCUMENT THE SHIT I WORK ON OMG
-
+    # <cmpkgs> # aka, my package sets
     nixpkgs.url = "github:colemickens/nixpkgs/cmpkgs"; # for my regular nixpkgs
     cross-armv6l.url = "github:colemickens/nixpkgs/cmpkgs-cross-armv6l";
     cross-riscv64.url = "github:colemickens/nixpkgs/cmpkgs-cross-riscv64";
+    rpipkgs = { url = "github:colemickens/nixpkgs/cmpkgs-rpipkgs"; };
+    # </cmpkgs>
     
     # nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    # stable.url = "github:nixos/nixpkgs/nixos-22.05"; # for cachix
-    riscv64 = { url = "github:zhaofengli/nixos-riscv64"; };
+    # nixos-stable.url = "github:nixos/nixpkgs/nixos-22.05"; # for cachix
+    # riscv64 = { url = "github:zhaofengli/nixos-riscv64"; };
     visionfive-nix.url = "github:colemickens/visionfive-nix";
     visionfive-nix.inputs.nixpkgs.follows = "cross-riscv64";
 
@@ -63,22 +63,22 @@
     impermanence.url = "github:nix-community/impermanence";
     impermanence.inputs.nixpkgs.follows = "nixpkgs";
 
-    rpipkgs = { url = "github:colemickens/nixpkgs/rpipkgs"; };
     tow-boot-rpi = {
       url = "github:colemickens/Tow-Boot/rpi";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.rpipkgs.follows = "rpipkgs";
     };
     tow-boot-radxa-zero = {
-      url = "github:colemickens/Tow-Boot/radxazero";
+      url = "github:colemickens/Tow-Boot/radxa-zero";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    tow-boot-visionfive = {
+      url = "github:colemickens/Tow-Boot/visionfive";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     mobile-nixos.url = "github:colemickens/mobile-nixos/2022-03-blueline";
     mobile-nixos.inputs.nixpkgs.follows = "nixpkgs";
-
-    wip-pinebook-pro = { url = "github:colemickens/wip-pinebook-pro/master"; flake = false; };
-    # wip-pinebook-pro.inputs.nixpkgs.follows = "nixpkgs"; # ?? # TODO TODO TODO
 
     nickel = { url = "github:tweag/nickel"; };
 
@@ -88,7 +88,7 @@
     terranix.url = "github:terranix/terranix";
     terranix.inputs.nixpkgs.follows = "nixpkgs";
 
-    # used for... veloren? other nightly shit? what?
+    # provides rust nightly for shells/devenv
     fenix.url = "github:figsoda/fenix";
     fenix.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -113,6 +113,25 @@
     #hydra.url = "github:NixOS/hydra"; };
     #hydra.inputs.nixpkgs.follows = "nixpkgs";
   };
+  
+  nixConfig = {
+    extra-substituters = [
+      "https://cache.nixos.org"
+      "https://colemickens.cachix.org"
+      "https://nixpkgs-wayland.cachix.org"
+      "https://unmatched.cachix.org"
+      "https://nix-community.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4="
+      "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
+      "unmatched.cachix.org-1:F8TWIP/hA2808FDABsayBCFjrmrz296+5CQaysosTTc="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
+    experimental-features = [ "nix-command" "flakes" "recursive-nix" ];
+    narinfo-cache-negative-ttl = 0;
+  };
 
   outputs = inputs:
     let
@@ -127,8 +146,10 @@
         # "armv7l-linux" # eh, I think time is up
       ];
       forAllSystems = nixlib.genAttrs supportedSystems;
+      filterPkgTgt = system: (n: p: ("${system}" == p.system) && !(p.meta.broken or false));
       filterPkg_ = system: (n: p: (builtins.elem "${system}" (p.meta.platforms or [ "x86_64-linux" "aarch64-linux" ])) && !(p.meta.broken or false));
       filterPkgs = pkgs: pkgSet: (pkgs.lib.filterAttrs (filterPkg_ pkgs.system) pkgSet);
+      filterPkgsTgt = pkgs: pkgSet: (pkgs.lib.filterAttrs (filterPkgTgt pkgs.system) pkgSet);
       filterHosts = pkgs: cfgs: (pkgs.lib.filterAttrs (n: v: pkgs.system == v.config.nixpkgs.system) cfgs);
 
       _colelib = rec {
@@ -240,9 +261,9 @@
           shreddit = prev.python3Packages.callPackage ./pkgs/shreddit { };
           tvp = prev.callPackage ./pkgs/tvp { };
           rsntp = prev.callPackage ./pkgs/rsntp { };
-          rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {
-            buildGoModule = prev.buildGo117Module;
-          };
+          # rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {
+          #   buildGoModule = prev.buildGo117Module;
+          # };
           visualizer2 = prev.callPackage ./pkgs/visualizer2 { };
 
           # nix-build-uncached = prev.nix-build-uncached.overrideAttrs (old: {
@@ -293,17 +314,19 @@
       netboots = nixlib.genAttrs
         [
           "rpifour1"
-          "rpifour2"
+          # "rpizerotwo1"
+          "rpizerotwo2"
           "rpithreebp1"
-          # "rpizerotwo1" "rpizerotwo2" "rpizerotwo3"
+          "risky-cross"
         ]
         (h: nixosConfigurations.${h}.config.system.build.extras.nfsboot);
       nfsfirms = nixlib.genAttrs
         [
           "rpifour1"
-          "rpifour2"
+          # "rpizerotwo1"
+          "rpizerotwo2"
           "rpithreebp1"
-          # "rpizerotwo1" "rpizerotwo2" "rpizerotwo3"
+          "risky-cross"
         ]
         (h: nixosConfigurations.${h}.config.system.build.extras.nfsfirm);
 
@@ -339,35 +362,34 @@
         # x86_64-linux
         carbon = mkSystem inputs.nixpkgs "x86_64-linux" "carbon";
         jeffhyper = mkSystem inputs.nixpkgs "x86_64-linux" "jeffhyper";
-        pelinux = mkSystem inputs.nixpkgs "x86_64-linux" "pelinux";
         slynux = mkSystem inputs.nixpkgs "x86_64-linux" "slynux";
         raisin = mkSystem inputs.nixpkgs "x86_64-linux" "raisin";
         xeep = mkSystem inputs.nixpkgs "x86_64-linux" "xeep";
         # netboot-x86_64 = mkSystem inputs.nixpkgs "x86_64-linux" "netboot";
         #######################################################################
         # riscv-linux
-        # risky = mkSystem inputs.cross-riscv64 "riscv64-linux" "risky";
+        risky = mkSystem inputs.cross-riscv64 "riscv64-linux" "risky";
         risky-cross = mkSystem inputs.cross-riscv64 "x86_64-linux" "risky";
         # ^^^ realistically since this is a native build, I shouldn't _need_ to use crosspkgs
         #######################################################################
         # aarch64-linux
         radxazero1 = mkSystem inputs.rpipkgs "aarch64-linux" "radxazero1";
         rpifour1 = mkSystem inputs.rpipkgs "aarch64-linux" "rpifour1";
-        rpifour2 = mkSystem inputs.rpipkgs "aarch64-linux" "rpifour2";
+        # rpifour2 = mkSystem inputs.rpipkgs "aarch64-linux" "rpifour2";
         rpithreebp1 = mkSystem inputs.rpipkgs "aarch64-linux" "rpithreebp1";
         rpizerotwo1 = mkSystem inputs.rpipkgs "aarch64-linux" "rpizerotwo1";
         rpizerotwo2 = mkSystem inputs.rpipkgs "aarch64-linux" "rpizerotwo2";
-        rpizerotwo3 = mkSystem inputs.rpipkgs "aarch64-linux" "rpizerotwo3";
+        # rpizerotwo3 = mkSystem inputs.rpipkgs "aarch64-linux" "rpizerotwo3";
         ## oracular = mkSystem inputs.nixpkgs "aarch64-linux" "oracular";
-        ## pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
+        # pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
         # blueline = mkSystem inputs.nixpkgs "aarch64-linux" "blueline";
         # blueloco    = mkSystem inputs.nixpkgs "x86_64-linux"  "blueloco";
         # enchilada = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
         # enchiloco   = mkSystem inputs.nixpkgs "x86_64-linux"  "enchiloco";
         #######################################################################
         # armv6l-linux (cross-built)
-        rpizero1 = mkSystem inputs.cross-armv6l "x86_64-linux" "rpizero1";
-        rpizero2 = mkSystem inputs.cross-armv6l "x86_64-linux" "rpizero2";
+        # rpizero1 = mkSystem inputs.cross-armv6l "x86_64-linux" "rpizero1";
+        # rpizero2 = mkSystem inputs.cross-armv6l "x86_64-linux" "rpizero2";
         # disabled:
         # - oracular_kexec  = mkSystem inputs.nixpkgs "aarch64-linux" "oracular/installer"; # not working, half-abandonded
         #######################################################################
@@ -386,7 +408,7 @@
         packages = force_cached s (filterPkgs pkgs_.nixpkgs.${s} inputs.self.packages.${s});
         toplevels = force_cached s (builtins.mapAttrs (n: v: v.config.system.build.toplevel)
           (filterHosts pkgs_.nixpkgs.${s} inputs.self.nixosConfigurations));
-        netboots = force_cached s (filterPkgs pkgs_.nixpkgs.${s} netboots);
+        netboots = force_cached s (filterPkgsTgt pkgs_.nixpkgs.${s} netboots);
         nfsfirms = force_cached s (filterPkgs pkgs_.nixpkgs.${s} nfsfirms);
         netpayload = force_cached s (
           (filterPkgs pkgs_.nixpkgs.${s} netboots) // (filterPkgs pkgs_.nixpkgs.${s} nfsfirms)
@@ -404,9 +426,9 @@
 
       #hydraAll = forAllSystems (s:
       # TODO: map hydraBundles attributes into a linkFarm
-      misc = forAllSystems (s: {
-        coreboot_linbio = nixosConfigurations."linbio".config.system.build.coreboot;
-      });
+      # misc = forAllSystems (s: {
+      #   coreboot_linbio = nixosConfigurations."linbio".config.system.build.coreboot;
+      # });
 
       # devices = {
       #   # pinephone = inputs.self.nixosConfigurations.pinephone.config.mobile.outputs.android;
@@ -452,30 +474,8 @@
       
       installer = nixosConfigurations.installer.config.system.build.isoImage;
 
-      images = nixlib.genAttrs [ "rpizero1" "rpizero2" ] (h:
-        nixosConfigurations.${h}.config.system.build.sdImage);
-
-      towboot =
-        let
-          # tb_a64 = inputs.tow-boot.aarch64-linux;
-          # tb_rpi_aarch64 = tb_a64.raspberryPi-aarch64;
-          # tb_sd = tb: tb.config.Tow-Boot.outputs.diskImage;
-
-          rpiBuilder = inputs.tow-boot-rpi.devicesWith.aarch64-linux."raspberryPi-aarch64";
-          tb_rpi3b-otp = (
-            (rpiBuilder {
-              configuration.config.Tow-Boot = {
-                rpi = {
-                  program_usb_boot_mode = 1;
-                };
-              };
-            }).config.Tow-Boot.outputs
-          );
-
-        in
-        rec {
-          rpi3b-otp = tb_rpi3b-otp.diskImage;
-        };
+      # images = nixlib.genAttrs [ "rpizero1" "rpizero2" ] (h:
+      #   nixosConfigurations.${h}.config.system.build.sdImage);
 
       # linuxVMs = {
       #   demovm = inputs.self.nixosConfigurations.demovm.config.system.build.vm;

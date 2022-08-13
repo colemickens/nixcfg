@@ -18,6 +18,7 @@ in
     # ../../mixins/grub-signed-shim.nix
     ../../mixins/hidpi.nix
     ../../mixins/ledger.nix
+    ../../mixins/libvirt.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/plex-mpv.nix
     ../../mixins/snapclient-local.nix
@@ -30,6 +31,7 @@ in
     ../../mixins/zfs.nix
 
     # ./experimental.nix
+    ./unfree.nix
       
     ./amdzen2.nix
     inputs.hardware.nixosModules.common-cpu-amd
@@ -38,6 +40,13 @@ in
   ];
 
   config = {
+
+    home-manager.users.cole = { pkgs, ... }: {
+      home.packages = with pkgs; [
+        ripcord
+      ];
+    };
+    
     system.stateVersion = "21.05";
     networking.hostName = hostname;
       
@@ -73,8 +82,6 @@ in
         entriesMountPoint = "/boot";
         enable = true;
       };
-      plymouth.enable = true;
-      # TODO:  plymouth.font = "${config.nixcfg.appearance.fonts.monospaced.package}/share/fonts/truetype/Iosevka.ttf";
       kernelModules = [ "iwlwifi" "ideapad_laptop" ];
       kernelParams = [ "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}" ];
       initrd.availableKernelModules = [

@@ -5,21 +5,23 @@ let
 in
 {
   imports = [
-    ../../profiles/sway/default.nix
-    ../../profiles/dev.nix
+    # ../../profiles/sway/default.nix
+    # ../../profiles/dev.nix
+    ../../profiles/interactive.nix
 
     # TODO: necessary with the nixosHardware imports?
     ../../mixins/gfx-radeonsi.nix
-    ../../mixins/gfx-debug.nix
+    # ../../mixins/gfx-debug.nix
 
-    ../../mixins/android.nix
-    ../../mixins/devshells.nix
+    # ../../mixins/android.nix
+    # ../../mixins/devshells.nix
     ../../mixins/grub-signed-shim.nix
-    ../../mixins/hidpi.nix
-    ../../mixins/ledger.nix
-    ../../mixins/logitech-mouse.nix
-    ../../mixins/plex-mpv.nix
-    ../../mixins/snapclient-local.nix
+    # ../../mixins/hidpi.nix
+    ../../mixins/libvirt.nix
+    # ../../mixins/ledger.nix
+    # ../../mixins/logitech-mouse.nix
+    # ../../mixins/plex-mpv.nix
+    # ../../mixins/snapclient-local.nix
     # ../../mixins/snapcast-sink.nix # doesn't work, feels like a privacy risk
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
@@ -66,8 +68,6 @@ in
     };
     swapDevices = [{ device = "/dev/disk/by-partlabel/swap"; }];
     boot = {
-      plymouth.enable = true;
-      # TODO:  plymouth.font = "${config.nixcfg.appearance.fonts.monospaced.package}/share/fonts/truetype/Iosevka.ttf";
       kernelModules = [ "iwlwifi" "ideapad_laptop" ];
       initrd.availableKernelModules = [
         "xhci_pci"
@@ -84,7 +84,12 @@ in
         device = "/dev/disk/by-partlabel/${hn}-luksroot";
         preLVM = true;
         allowDiscards = true;
-        #fallbackToPassword = true;
+        
+        keyFile = "/lukskey";
+        fallbackToPassword = true; # doesn't work if keyfile is present, but not a valid luks key
+      };
+      initrd.secrets = {
+        "/lukskey" = pkgs.writeText "lukskey" "test";
       };
     };
   };

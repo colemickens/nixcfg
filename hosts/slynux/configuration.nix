@@ -36,18 +36,18 @@ let
 in
 {
   imports = [
-    ../../profiles/sway
+    # ../../profiles/sway
+    ../../profiles/interactive.nix
 
     # TODO: move to nixos-hardware
     # eat my asshole nvidia, my gaming pc/server is crashing w/ the vga light keeps lit up...
     # ../../mixins/gfx-nvidia.nix
-      
-    ../../mixins/gfx-debug.nix
+    # ../../mixins/gfx-debug.nix
 
-    ../../mixins/android.nix
-    ../../mixins/devshells.nix
+    # ../../mixins/android.nix
+    # ../../mixins/devshells.nix
     ../../mixins/grub-signed-shim.nix
-    ../../mixins/logitech-mouse.nix
+    # ../../mixins/logitech-mouse.nix
     ../../mixins/rclone-googledrive-mounts.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
@@ -99,6 +99,9 @@ in
 
       # TODO: Finish:
       # ./misc/hyperv/make-luks-disk.sh
+      
+      ## TODO: uncomment if we want auto-unlock and/or hyperv, for now we're blocking
+      ## hyperv though due to suspected ZFS corruption...
       keyFile = "/lukskey";
       fallbackToPassword = true;
     };

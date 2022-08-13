@@ -5,10 +5,6 @@ set -euo pipefail
 cd "${DIR}"
 unset NIX_PATH
 
-if [[ -f "${DIR}/../misc/nix.sh" ]]; then
-  function nix() { "${DIR}/../misc/nix.sh" "${@}"; }
-fi
-
 # build up commit msg
 cprefix="auto-update(${JOB_ID:-"manual"}):"
 

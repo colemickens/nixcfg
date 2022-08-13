@@ -2,7 +2,9 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/stderr 2>&1 && pwd )"
 set -euo pipefail
 
-function nix() { "${DIR}/misc/nix.sh" "${@}" ; }
+export BLDR_X86="${BLDR_X86:-$(tailscale ip --6 raisin)}";
+export BLDR_A64="${BLDR_A64:-"colemickens@aarch64.nixos.community"}";
+
 function _h1() { printf "\n=======================================================\n${1}\n=======================================================\n" >/dev/stderr; }
 function _h2() { printf "\n-- ${1} \n" >/dev/stderr; }
 
@@ -17,15 +19,24 @@ function activate() { "${DIR}/misc/activate.sh" "${@}"; }
 # -> and then runs ./misc/activate.sh with the right stuff?
 
 srcdirs=(
+  "${HOME}/code/nixpkgs/master"
   "${HOME}/code/nixpkgs/cmpkgs"
   "${HOME}/code/nixpkgs/cmpkgs-cross-riscv64"
   "${HOME}/code/nixpkgs/cmpkgs-cross-armv6l"
   "${HOME}/code/home-manager/cmhm"
-  "${HOME}/code/nixpkgs/master"
+  "${HOME}/code/tow-boot/development"
+  "${HOME}/code/tow-boot/rpi"
+  "${HOME}/code/tow-boot/radxa-zero"
+  "${HOME}/code/tow-boot/visionfive"
+  "${HOME}/code/tow-boot/lteusb8916"
   "${HOME}/code/nixpkgs-wayland"
   "${HOME}/code/flake-firefox-nightly"
   "${HOME}/code/mobile-nixos"
   "${HOME}/code/nix-coreboot"
+)
+resets=(
+  "${HOME}/code/tow-boot/development"
+  "${HOME}/code/nixpkgs/master"
 )
 
 cmd="${1:-"z"}"; shift || true
@@ -37,10 +48,17 @@ case "${cmd}" in
   "lockup")  _h1 "lockup";   (set -x; cd "${DIR}"; nix "${nixargs[@]}" flake lock --recreate-lock-file --commit-lock-file); ;;
   "shellup") _h1 "shellup";  nixbuild "auto" "cachix:colemickens" ".#cachable"; ;;
   "inputup") _h1 "inputup";
+    # HOW?
+    # for s in "${resets[@]}"; do
+    #   git reset --hard "upstream/${branch}"
+    # done;
+    
     for s in "${srcdirs[@]}"; do
       _h2 "inputup - ${s}"
       test -d "${s}" || return;
+      set -x
       git -C "${s}" rebase --abort || true; git -C "${s}" pull --rebase;  git -C "${s}" push origin HEAD -f;
+      set +x
     done;
   ;;
   "up") _h1 "upup";
@@ -52,13 +70,16 @@ case "${cmd}" in
     && nixup pkgup \
     && nixup shellup 
   ;;
-
-
-  "everything")
-    # build the rpi netboot hosts remotely
-    # pull them
-    # build xeep, push it
-    # deploy xeep
+  "upz") _h1 "upz";
+    unset FLAKE_LOCK || true
+    nixup up
+    nixup upbuild
+  ;;
+  "upbuild") _h1 "upbuild";
+    nixup build .#hydraBundles.aarch64-linux.netboots
+    nixup build .#hydraBundles.aarch64-linux.toplevels
+    nixup build .#hydraBundles.x86_64-linux.netboots
+    nixup build .#hydraBundles.x86_64-linux.toplevels
   ;;
 
   "build")
@@ -97,37 +118,7 @@ case "${cmd}" in
       > >(tee -a ${stdout}) 2> >(tee -a ${stderr} >&2)
     outres="$(cat "${stdout}")"
   ;;
-  "zj")
-    zjname="${1}"
-    export NIXUP_HOLD_OPEN=1
-    export NIXUP_LOGDIR="$(mktemp -d --tmpdir "nixup.XXXXXXXXXXX")"
-    zellij --layout "${DIR}/zj.${zjname}.yml"
-    nixup summary
-  ;;
-  "summary") _h1 "summary";
-    while true; do
-      sleep 3
-      clear
-      echo "SUMMARY: ${NIXUP_LOGDIR}"
-      locks=0
-      for f in "${NIXUP_LOGDIR}/"*; do
-        h="$(basename "${f}")"
-        l=""
-        [[ -f "${f}/lock" ]] && l="[lock]"
-        printf "==========================================\n"
-        printf "::-- %s: %s\n" "$l $h" "$(cat "${f}/status")"
-        if cat "${f}/status" | grep "fail" &>/dev/null; then
-          echo "${h}: $(tail "${f}/stderr" || true)"
-          echo
-        fi
-        [[ -f "${f}/lock" ]] && locks=$(( $locks + 1 ))
-      done
-      echo "locks=$locks"
-      if [[ $locks == 0 ]]; then break; fi
-    done
-  ;;
   "rdeploy") export NIXUP_ACTION="reboot"; nixup deploy "${@}"; ;;
-  "rzj")     export NIXUP_ACTION="reboot"; nixup zj "${@}"; ;;
   
   
   "pi-on")
@@ -138,101 +129,80 @@ case "${cmd}" in
     curl -s -X POST -H "Authorization: Bearer $(cat /run/secrets/home-assistant-bearer-token)" -H "Content-Type: application/json" -d "{\"entity_id\": \"switch.${1}\"}" \
         https://home.x.cleo.cat/api/services/switch/turn_off >/dev/null
   ;;
-  "pilog")
-    host="${1}"
-    case "${host}" in
-      "rpifour1") serial0="192.168.69.203"; ;;
-      "rpifour2") serial0="192.168.69.201"; ;;
-      "rpithreebp1") serial0="192.168.69.202"; ;;
-    esac
-    while true; do set +e; nc -w 10 "${serial0}" 6638; set -e; echo; done
-  ;;
   "pitest")
-    netboots_out="$(nixup build .#hydraBundles.aarch64-linux.netboots)"
-    nfsfirms_out="$(nixup build .#hydraBundles.aarch64-linux.nfsfirms)"
-    # netpayload_out="$(nixup build .#hydraBundles.aarch64-linux.netpayload)"
+    netboots1_out="$(nixup build .#hydraBundles.x86_64-linux.netboots)"
+    netboots2_out="$(nixup build .#hydraBundles.aarch64-linux.netboots)"
+    "${DIR}/scripts/nix-pull.sh" "${netboots1_out}"
+    "${DIR}/scripts/nix-pull.sh" "${netboots2_out}"
+
+    # nfsfirms1_out="$(nixup build .#hydraBundles.x86_64-linux.nfsfirms)"
+    # nfsfirms2_out="$(nixup build .#hydraBundles.aarch64-linux.nfsfirms)"
     # "${DIR}/scripts/nix-pull.sh" "${netpayload_out}"
-    "${DIR}/scripts/nix-pull.sh" "${netboots_out}"
-    "${DIR}/scripts/nix-pull.sh" "${nfsfirms_out}"
+    # "${DIR}/scripts/nix-pull.sh" "${nfsfirms1_out}"
+    # "${DIR}/scripts/nix-pull.sh" "${nfsfirms2_out}"
+
+    # netpayload_out="$(nixup build .#hydraBundles.aarch64-linux.netpayload)"
+
     nixup deploy xeep || true
     nixup pireboot
   ;;
   "pireboot")
     pis=(
       "wp6_sw106_relay" # rpi-powerstrip
+      # "wp6_sw103_relay" # visionfive
     )
     parallel -j$(nproc) --halt 1 --verbose --tag "${DIR}/nixup pi-off" ::: "${pis[@]}"
     sleep 1
     parallel -j$(nproc) --halt 1 --verbose --tag "${DIR}/nixup pi-on" ::: "${pis[@]}"
   ;;
 
-  # FLAKE_LOCK related
-  "watchlock")
-    # `watchlock` is a very "scenario"-specific set of
-    # options, but it's meant to update a custom lockfile
-    # for use in shells with FLAKE_LOCK set.
-    # ideas:
-    #  - it would be neat to have this wrapped into a lil tool
-    #  - it could do hot re-eval in the future, etc
+  # # FLAKE_LOCK related
+  # "watchlock")
+  #   # `watchlock` is a very "scenario"-specific set of
+  #   # options, but it's meant to update a custom lockfile
+  #   # for use in shells with FLAKE_LOCK set.
+  #   # ideas:
+  #   #  - it would be neat to have this wrapped into a lil tool
+  #   #  - it could do hot re-eval in the future, etc
     
-    set -x
-    echo "FLAKE_LOCK=${FLAKE_LOCK}"
-    (set -x; cd "${DIR}"; nix "${nixargs[@]}" flake lock --recreate-lock-file)
-    watchexec \
-      --clear \
-      --restart \
-      --ignore '*.watchman*' \
-      --project-origin $HOME/code/nixcfg \
-      --workdir $HOME/code/nixcfg \
-      -w $HOME/code/nixpkgs \
-      -w $HOME/code/home-manager/cmhm \
-      -w $HOME/code/tow-boot/rpi \
-      -w $HOME/code/tow-boot/radxa-zero \
-      -- \
-      $HOME/code/nixcfg/nixup flakedevlock
-  ;;
-  "flakedevlock")
-    # this is what `watchlock` calls internally
-    # but it can also be used instead of the watch
-    # for a one-time update of FLAKE_LOCK
-    touch "${FLAKE_LOCK}-lock"
-    echo ":: start :: ${FLAKE_LOCK}-lock" >/dev/stderr
-    nix flake lock \
-      --recreate-lock-file \
-      --verbose \
-      --override-input nixpkgs $HOME/code/nixpkgs/cmpkgs \
-      --override-input home-manager $HOME/code/home-manager/cmhm \
-      --override-input cross-armv6l  $HOME/code/nixpkgs/cmpkgs-cross-armv6l \
-      --override-input cross-riscv64  $HOME/code/nixpkgs/cmpkgs-cross-riscv64 \
-      --override-input visionfive-nix  $HOME/code/visionfive-nix \
-      --override-input rpipkgs $HOME/code/nixpkgs/rpi \
-      --override-input tow-boot-rpi $HOME/code/tow-boot/rpi \
-      --override-input tow-boot-radxa-zero $HOME/code/tow-boot/radxa-zero
-    echo ":: done :: ${FLAKE_LOCK}-lock" >/dev/stderr
-    rm "${FLAKE_LOCK}-lock"
-  ;;
-  
-
-  # LAZY-NICETIES
-  "z") _h1 "z";
-    unset FLAKE_LOCK || true # FLAKE_LOCK always opt out
-    nixup up && nixup zj deploy-all
-  ;;
-  "loop")
-    unset FLAKE_LOCK || true # FLAKE_LOCK always opt out
-    while true; do
-      nixup up # fail if we fail updating
-      echo > /dev/stderr
-      nixup zj deploy-all || true # but not if some flaky host(s) fail
-      cnt="$(( 60 * 15 ))"
-      until (( $cnt == 0 )); do
-        echo -ne '\r' >/dev/stderr
-        echo -n "waiting... $cnt " >/dev/stderr;
-        sleep 1; cnt=$(expr $cnt - 1) || true;
-        true
-      done
-    done
-  ;;
-  
+  #   set -x
+  #   echo "FLAKE_LOCK=${FLAKE_LOCK}"
+  #   (set -x; cd "${DIR}"; nix "${nixargs[@]}" flake lock --recreate-lock-file)
+  #   watchexec \
+  #     --clear \
+  #     --restart \
+  #     --ignore '*.watchman*' \
+  #     --project-origin $HOME/code/nixcfg \
+  #     --workdir $HOME/code/nixcfg \
+  #     -w $HOME/code/nixpkgs \
+  #     -w $HOME/code/mobile-nixos \
+  #     -w $HOME/code/home-manager/cmhm \
+  #     -w $HOME/code/vision-five \
+  #     -w $HOME/code/tow-boot/ \
+  #     -- \
+  #     $HOME/code/nixcfg/nixup watchlockup
+  # ;;
+  # "watchlockup")
+  #   # this is what `watchlock` calls internally
+  #   # but it can also be used instead of the watch
+  #   # for a one-time update of FLAKE_LOCK
+  #   touch "${FLAKE_LOCK}-lock"
+  #   echo ":: start :: ${FLAKE_LOCK}-lock" >/dev/stderr
+  #   nix flake lock \
+  #     --recreate-lock-file \
+  #     --verbose \
+  #     --override-input nixpkgs $HOME/code/nixpkgs/cmpkgs \
+  #     --override-input rpipkgs $HOME/code/nixpkgs/cmpkgs-rpipkgs \
+  #     --override-input cross-armv6l  $HOME/code/nixpkgs/cmpkgs-cross-armv6l \
+  #     --override-input cross-riscv64  $HOME/code/nixpkgs/cmpkgs-cross-riscv64 \
+  #     --override-input home-manager $HOME/code/home-manager/cmhm \
+  #     --override-input visionfive-nix  $HOME/code/visionfive-nix \
+  #     --override-input mobile-nixos  $HOME/code/mobile-nixos \
+  #     --override-input tow-boot-rpi $HOME/code/tow-boot/rpi \
+  #     --override-input tow-boot-radxa-zero $HOME/code/tow-boot/radxa-zero
+  #   echo ":: done :: ${FLAKE_LOCK}-lock" >/dev/stderr
+  #   rm "${FLAKE_LOCK}-lock"
+  # ;;
+    
   *) printf "!!! unknown command\n" >/dev/stderr; exit -1; ;;
 esac

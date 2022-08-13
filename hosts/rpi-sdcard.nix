@@ -5,6 +5,8 @@
     networking.useDHCP = true;
     nixcfg.common.defaultNetworking = false;
     
+    tow-boot.autoUpdate = lib.mkForce true;
+    
     fileSystems = {
       "/" = {
         fsType = "ext4";

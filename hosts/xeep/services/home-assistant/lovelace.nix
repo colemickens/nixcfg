@@ -4,20 +4,33 @@
     {
       title = "Main View";
       cards = [
-        {
-          title = "Plant Shelves";
-          type = "entities";
-          entities = [
-            {
-              name = "Candle Warmer (plants)";
-              entity = "switch.wp6_sw107_relay";
-            }
-            {
-              name = "Dab Rig";
-              entity = "switch.wp6_sw104_relay";
-            }
-          ];
-        }
+        # {
+        #   title = "Automations";
+        #   type = "entities";
+        #   entities = [
+        #     "automation.candle_warmers_schedule_off"
+        #     "automation.candle_warmers_schedule_on"
+        #     "automation.cleo_lamp_on_20_30"
+        #     "automation.cleo_lamp_off_8_30"
+        #     "automation.nanoleaf_on_8_30"
+        #     "automation.nanoleaf_bed_21_00"
+        #     "automation.nanoleaf_off_22_00"
+        #   ];
+        # }
+        # {
+        #   title = "Plant Shelves";
+        #   type = "entities";
+        #   entities = [
+        #     {
+        #       name = "Candle (plants)";
+        #       entity = "switch.wp6_sw107_relay";
+        #     }
+        #     {
+        #       name = "Dab Rig";
+        #       entity = "switch.wp6_sw104_relay";
+        #     }
+        #   ];
+        # }
         {
           title = "Air Conditioner";
           type = "thermostat";
@@ -28,7 +41,7 @@
           type = "entities";
           entities = [
             {
-              name = "TV - Sony 55 [KDL55W800B]";
+              name = "Sony Bravia 55";
               entity = "media_player.braviatv";
             }
           ];
@@ -38,35 +51,21 @@
           type = "entities";
           entities = [
             {
-              name = "TV - LG 65 [OLED65C1PUB]";
+              name = "LG C1 65";
               entity = "media_player.livingroom_lg_c1";
             }
 
             {
-              name = "[slywin] WoL";
+              name = "PC - slywin";
               entity = "switch.slywin";
             }
 
             {
-              name = "Receiver - Denon AVR1913";
+              name = "Denon AVR1913";
               entity = "media_player.denon";
             }
           ];
         }
-        # {
-        #   title = "Desk";
-        #   type = "entities";
-        #   entities = [
-        #     # {
-        #     #   name = "Wall Outlet 1";
-        #     #   entity = "switch.wp6_sw106_relay";
-        #     # }
-        #     # {
-        #     #   name = "Wall Outlet 2";
-        #     #   entity = "switch.wp6_sw107_relay";
-        #     # }
-        #   ];
-        # }
         {
           title = "Bedroom";
           type = "entities";
@@ -83,12 +82,12 @@
             #   name = "Flower Lamp";
             #   entity = "switch.wp6_sw103_relay";
             # }
+            # {
+            #   name = "Candle (bedroom)";
+            #   entity = "switch.wp6_sw108_relay";
+            # }
             {
-              name = "Candle Warmer (bedroom)";
-              entity = "switch.wp6_sw108_relay";
-            }
-            {
-              name = "Nanoleaf";
+              name = "Nanoleaf △  Lights";
               entity = "light.nanoleaf_light_panels_5b_38_ef";
             }
           ];
@@ -102,56 +101,45 @@
         # {
         #   title = "Den";
         #   type = "entities";
-        #   entities = [{
-        #     name = "Light Strip";
-        #     entity = "light.mh_led101";
-        #   }];
-        # }
-        # {
-        #   title = "Buddie's Desk";
-        #   type = "entities";
         #   entities = [
         #     {
-        #       name = "Desk Lamp";
-        #       entity = "switch.wp6_sw104_relay";
-        #     }
-        #     {
-        #       name = "Emerald Lamp";
-        #       entity = "switch.wp6_sw109_relay";
+        #       name = "Candle (den-bathroom)";
+        #       entity = "switch.wp6_sw105_relay";
         #     }
         #   ];
         # }
         # {
-        #   title = "Bed Room";
+        #   title = "Bathroom";
         #   type = "entities";
-        #   entities = [{
-        #     name = "Bedside Lamp";
-        #     entity = "switch.wp6_sw103_relay";
-        #   }];
+        #   entities = [
+        #     {
+        #       name = "Candle (bathroom)";
+        #       entity = "switch.wp6_sw109_relay";
+        #     }
+        #   ];
         # }
         {
-          title = "Bathroom";
-          type = "entities";
-          entities = [
-            {
-              name = "Candle Warmer (bathroom)";
-              entity = "switch.wp6_sw109_relay";
-            }
-          ];
-        }
-      ];
-    }
-    {
-      title = "Raspberry Pis";
-      cards = [
-        {
-          title = "Stripper";
+          title = "Projects";
           type = "entities";
           entities = [
             {
               name = "rpi-powerstrip";
               entity = "switch.wp6_sw106_relay";
             }
+            {
+              name = "visionfive";
+              entity = "switch.wp6_sw103_relay";
+            }
+          ];
+        }
+        {
+          title = "Candles";
+          type = "entities";
+          entities = [
+            { name = "Bathroom-Den"; entity = "switch.wp6_sw105_relay"; }
+            { name = "Plant Shelf";  entity = "switch.wp6_sw107_relay"; }
+            { name = "Bedroom";      entity = "switch.wp6_sw108_relay"; }
+            { name = "Bathroom";     entity = "switch.wp6_sw109_relay"; }
           ];
         }
       ];

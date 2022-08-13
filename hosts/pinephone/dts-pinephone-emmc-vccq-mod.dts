@@ -1,0 +1,23 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+// Copyright (C) 2021 Federico Amedeo Izzo <federico@izzo.pro>
+
+// Switch eMMC Vccq from 3.3v regulator DCDC1 to 1.8v regulator ELDO1
+// And enable HS200 mode.
+// This DT overlay should be applied only after modifying the Pinephone
+// Board by moving R615 to R614.
+
+/dts-v1/;
+/plugin/;
+/ {
+    compatible = "pine64,pinephone";
+};
+
+&mmc2 {
+	pinctrl-0 = <&mmc2_pins>, <&mmc2_ds_pin>;
+	vqmmc-supply = <&reg_eldo1>;
+	mmc-hs200-1_8v;
+};
+
+&pio {
+	vcc-pc-supply = <&reg_eldo1>;
+};

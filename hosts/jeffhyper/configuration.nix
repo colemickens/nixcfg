@@ -32,6 +32,7 @@
         networkConfig = {
           Gateway = "192.168.1.1";
           DNS = "192.168.1.1";
+          IPForward = "yes";
         };
       };
       networks."20-eth1-static-ip" = {

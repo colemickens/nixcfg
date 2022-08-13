@@ -30,6 +30,8 @@ in
     ./services/snapserver.nix
     ./services/plex.nix
     ./services/unifi.nix
+    
+    ../../mixins/upower.nix
 
     ../../mixins/gfx-intel.nix # TODO: nixosHardware?
     inputs.hardware.nixosModules.dell-xps-13-9370
@@ -40,6 +42,9 @@ in
   config = {
     networking.hostName = hn;
     system.stateVersion = "21.05";
+    environment.systemPackages = with pkgs; [
+      libsmbios
+    ];
     
     # services.windmill = {
     #   enable = true;

@@ -13,9 +13,9 @@ in
     boot.initrd.systemd.network.networks."10-eth0".addresses =
       [{ addressConfig = { Address = eth_ip; }; }];
     system.build = rec {
-      pi_serial = "e25c7db6";
-      pi_mac = "b8-27-eb-5c-7d-b6";
-      pi_ubootid = "01-${pi_mac}";
+      sbc_serial = "e25c7db6";
+      sbc_mac = "b8-27-eb-5c-7d-b6";
+      sbc_ubootid = "01-${sbc_mac}";
       mbr_disk_id = "999993b1";
     };
   };

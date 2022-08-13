@@ -52,7 +52,7 @@ let
         pkill -9 gpg-agent; \
         systemctl --user stop gpg-agent.service; \
         pkill -9 gpg-agent; \
-        p=\$(gpgconf --list-dirs agent-socket); rm \$p; echo \$p")"
+        p=\$(gpgconf --list-dirs agent-socket); rm \$p*; echo \$p")"
 
       ssh \
           -o "RemoteForward $rpath:$lpath.extra" \
