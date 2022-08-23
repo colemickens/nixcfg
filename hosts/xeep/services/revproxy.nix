@@ -121,7 +121,7 @@ in
     };
 
     networking.firewall = {
-      allowedTCPPorts = [ 80 443 ];
+      allowedTCPPorts = [ 80 443 8000 9443 ];
     };
 
     security.acme = {
@@ -217,7 +217,8 @@ in
         addSSL = true;
         forceSSL = false;
         locations."/" = {
-          proxyPass = "http://${slynux_ip4}:80/";
+          # proxyPass = "http://${slynux_ip4}:80/";
+          proxyPass = "http://localhost:8000/";
           proxyWebsockets = true;
         };
       };
@@ -226,7 +227,8 @@ in
         addSSL = true;
         forceSSL = false;
         locations."/" = {
-          proxyPass = "http://${slynux_ip4}:9443/";
+          # proxyPass = "http://${slynux_ip4}:9443/";
+          proxyPass = "http://localhost:9443/";
           proxyWebsockets = true;
         };
       };

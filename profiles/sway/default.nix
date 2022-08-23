@@ -3,7 +3,13 @@
 let
   prefs = import ../../mixins/_preferences.nix { inherit pkgs lib config inputs; };
   useUnstableOverlay = true;
-in {
+
+  out_aw3418dw = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
+  out_aw2521h = "Dell Inc. Dell AW2521H #HLAYMxgwABDZ";
+  out_raisin = "Unknown 0x1402 0x00000000";
+  out_carbon = "SDC 0x4152 Unknown";
+in
+{
   imports = [
     ../gui.nix
 
@@ -14,13 +20,14 @@ in {
     ../../mixins/sway.nix # contains swayidle/swaylock config
     ../../mixins/waybar.nix
     ../../mixins/wayland-tweaks.nix
-    
+
     inputs.hyprland.nixosModules.default
   ];
   config = {
-    nixpkgs.overlays = if useUnstableOverlay then [
-      inputs.nixpkgs-wayland.overlay
-    ] else [];
+    nixpkgs.overlays =
+      if useUnstableOverlay then [
+        inputs.nixpkgs-wayland.overlay
+      ] else [ ];
     security.wrappers = {
       "wshowkeys" = {
         owner = "root";
@@ -29,7 +36,7 @@ in {
         source = "${pkgs.wshowkeys}/bin/wshowkeys";
       };
     };
-    
+
     programs.hyprland = {
       # enable = true;
       # extraPackages = lib.mkForce [];
@@ -41,7 +48,7 @@ in {
       [
         xdg-desktop-portal-wlr
         (xdg-desktop-portal-gtk.override {
-          buildPortalsInGnome = false;  
+          buildPortalsInGnome = false;
         })
       ];
 
@@ -53,7 +60,23 @@ in {
         #   automount = false;
         #   tray = "always";
         # };
-        kanshi.enable = true;
+        kanshi = {
+          enable = true;
+          profiles = {
+            "docked".outputs = [
+              # { criteria = "eDP-1"; status = "disable"; }
+              # { criteria = "DP-5"; position = "1920,0"; }
+              # { criteria = "DP-2"; position = "0,0"; }
+              { criteria = out_carbon; status = "disable"; }
+              { criteria = out_aw3418dw; position = "1920,0"; }
+              { criteria = out_dell; position = "0,0"; }
+            ];
+            "undocked".outputs = [
+              # { criteria = "eDP-1"; status = "enable"; }
+              { criteria = out_carbon; status = "enable"; }
+            ];
+          };
+        };
         poweralertd.enable = true;
         wlsunset = {
           enable = true;
@@ -73,7 +96,7 @@ in {
         pavucontrol
         #lxqt.pavucontrol-qt
         sirula
-        
+
         # file managers TODO: pick one?
         # xfce.thunar
         # gnome.nautilus

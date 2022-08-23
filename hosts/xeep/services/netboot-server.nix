@@ -1,17 +1,6 @@
 { config, pkgs, lib, modulesPath, inputs, ... }:
 
 let
-  internalVhost = {
-    useACMEHost = "cleo.cat";
-    forceSSL = true;
-    extraConfig = ''
-      allow 100.0.0.0/8;
-      allow 192.168.0.0/16;
-      allow fd7a:115c:a1e0:ab12:0000:0000:0000:0000/64;
-      deny all;
-    '';
-  };
-
   netbootServer = "192.168.1.10"; # TODO: de-dupe across netboot-client.nix?
 
   pimac = n: inputs.self.nixosConfigurations.${n}.config.system.build.sbc_mac;
@@ -135,14 +124,16 @@ in
         nfsfirmHosts)
     );
 
+    # services.rpcbind.enable = true;
     services.nfs.server = {
       enable = true;
-      statdPort = 4000;
-      lockdPort = 4001;
-      mountdPort = 4002;
+      # statdPort = 4000;
+      # lockdPort = 4001;
+      # mountdPort = 4002;
       createMountPoints = true; # even though it worked without this?
+      hostName = "192.168.1.10";
       extraNfsdConfig = ''
-        udp=y
+        vers3=off
       '';
       exports = (
         ''
@@ -151,12 +142,12 @@ in
           # TODO: difference between /export/nixdb + /export/nixdb/${hn}?
           builtins.foldl'
             (def: hn: def + ''
-              /export/hostdata/${hn}   192.168.1.0/16(rw,nohide,insecure,no_root_squash,no_subtree_check)
-              /export/nixdb/${hn}      192.168.1.0/16(ro,nohide,insecure,no_root_squash,no_subtree_check)
-              /export/nfsfirms/${hn}   192.168.1.0/16(ro,nohide,insecure,no_subtree_check)
+              /export/hostdata/${hn}   192.168.0.0/16(rw,nohide,insecure,no_root_squash,no_subtree_check)
+              /export/nixdb/${hn}      192.168.0.0/16(ro,nohide,insecure,no_root_squash,no_subtree_check)
+              /export/nfsfirms/${hn}   192.168.0.0/16(ro,nohide,insecure,no_subtree_check)
             '') ''
-            /export               192.168.1.0/16(fsid=0,ro,insecure,no_subtree_check)
-            /export/nix-store     192.168.1.0/16(ro,nohide,insecure,no_subtree_check)
+            /export               192.168.0.0/16(fsid=0,ro,insecure,no_subtree_check)
+            /export/nix-store     192.168.0.0/16(ro,nohide,insecure,no_subtree_check)
           ''
             netbootHosts
         )

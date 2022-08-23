@@ -37,6 +37,8 @@ in minimalMkShell pkgs.system { # TODO use something else for system?
 
     pkg-config
       
+    nixpkgs-review
+      
     /* coreboot */
     # flashrom # use nixos module for udev rules
     gst_all_1.gstreamer

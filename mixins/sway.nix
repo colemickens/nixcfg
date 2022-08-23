@@ -8,7 +8,7 @@ let
   out_aw3418dw = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
   out_aw2521h = "Dell Inc. Dell AW2521H #HLAYMxgwABDZ";
   out_raisin = "Unknown 0x1402 0x00000000";
-  out_carbon = "SDC 0x4152 0x00000000";
+  out_carbon = "SDC 0x4152 Unknown";
   out_lgc165 = "Goldstar Company Ltd LG TV SSCR2 0x00000101";
   out_rpi4_lgc165 = "LG Electronics LG TV SSCR2 0x00000101";
 
@@ -220,7 +220,7 @@ in
                 adaptive_sync = "on";
               };
               #"${out_aw3418dw}" = { disable = ""; };
-              "${out_raisin}" = {
+              "${out_carbon}" = {
                 mode = "2880x1800@90Hz";
                 pos = "3440 0";
                 subpixel = "rgb";

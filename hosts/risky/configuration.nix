@@ -25,7 +25,7 @@ in
     # "${inputs.riscv64}/nixos/visionfive.nix"
     inputs.visionfive-nix.nixosModules.riscv-cross-quirks
     inputs.visionfive-nix.nixosModules.visionfive
-    inputs.visionfive-nix.nixosModules.sdcard
+    # inputs.visionfive-nix.nixosModules.sdcard
     # inputs.visionfive-nix.nixosModules.sdcard # TODO: replace with our own custom installed-disk.nix module
   ]
   ++ inputs.tow-boot-visionfive.nixosModules
@@ -101,17 +101,17 @@ in
       usbutils
     ];
 
-    fileSystems = {
-      # "/boot/firmware" = {
-      #   fsType = "vfat";
-      #   device = "/dev/disk/by-label/FIRMWARE";
-      # };
-      "/" = {
-        device = "/dev/disk/by-label/NIXOS_SD";
-        fsType = "ext4";
-        # fsType = "zfs"; device = "tank2/root";
-      };
-    };
+    # fileSystems = {
+    #   # "/boot/firmware" = {
+    #   #   fsType = "vfat";
+    #   #   device = "/dev/disk/by-label/FIRMWARE";
+    #   # };
+    #   "/" = {
+    #     device = "/dev/disk/by-label/NIXOS_SD";
+    #     fsType = "ext4";
+    #     # fsType = "zfs"; device = "tank2/root";
+    #   };
+    # };
 
     boot = {
       loader = {
@@ -122,10 +122,21 @@ in
       tmpOnTmpfs = false;
       cleanTmpDir = true;
     };
-    boot.initrd.availableKernelModules = [
-      "motorcomm"
+    boot.kernelParams = [
+      # https://github.com/starfive-tech/linux/issues/14
+      "stmmac.chain_mode=1"
     ];
-    boot.kernelModules = config.boot.initrd.availableKernelModules;
+    boot.initrd.kernelModules = [
+      "brcmfmac"
+      "dwmac_generic"
+      "dw_axi_dmac_platform"
+      "dw_mmc-pltfm" "spi-dw-mmio"
+      "motorcomm"
+      "stmmac"
+      "stmmac-platform"
+      "af_packet"
+    ];
+    boot.kernelModules = config.boot.initrd.kernelModules;
 
     # TODO: move some more of this to common?
     networking = {

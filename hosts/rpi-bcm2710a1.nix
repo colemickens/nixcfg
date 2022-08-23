@@ -33,6 +33,7 @@ in
       ];
       kernelModules = [
         # "v3d"
+        "r8152"
       ];
       initrd = {
         availableKernelModules = [
@@ -44,6 +45,7 @@ in
           "usbhid"
         ];
         kernelModules = [
+          "r8152" # the usb eth adapter using with uboot
           "genet"
           "lan78xx" # rpi3b lan driver
           "brcmfmac" # wifi, maybe remove so fw loads later

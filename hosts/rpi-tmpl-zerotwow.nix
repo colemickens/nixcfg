@@ -10,7 +10,6 @@
 
     ../profiles/viz
     ../mixins/gfx-rpi.nix
-    ../mixins/wpa-full.nix
   ];
 
   config = {

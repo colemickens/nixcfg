@@ -9,9 +9,9 @@ in
 
     # ../../mixins/bolt.nix # thunderbolt controller is probably busted
     ../../mixins/grub-signed-shim.nix
-    ../../mixins/hidpi.nix
-    ../../mixins/logitech-mouse.nix
-    ../../mixins/libvirt.nix
+    # ../../mixins/hidpi.nix
+    # ../../mixins/logitech-mouse.nix
+    ../../mixins/libvirtd.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
     ../../mixins/syncthing.nix
@@ -37,6 +37,8 @@ in
     inputs.hardware.nixosModules.dell-xps-13-9370
 
     ./unfree.nix
+    
+    inputs.nix-netboot-server.nixosModules.nix-netboot-serve
   ];
 
   config = {
@@ -59,12 +61,16 @@ in
 
     hardware.cpu.intel.updateMicrocode = true;
     services.fwupd.enable = true;
+    # services.fwupd.overrideEspMountPoint = "/boot";
+
     services.tlp.enable = lib.mkForce false; # does this come frm nixosHardware?
       
     # override common timeserver so we don't
     # try to use ourselves:
     
     nixcfg.common.useXeepTimeserver = false;
+    
+    security.polkit.enable = true;
     
     systemd.network = {
       enable = true;
@@ -93,6 +99,7 @@ in
         "r8152" # usb ethernet adapter
         "msr"
       ];
+      loader.efi.efiSysMountPoint = "/boot";
       kernelModules = config.boot.initrd.availableKernelModules;
       kernelParams = [ "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}" ];
       initrd.luks.devices = {

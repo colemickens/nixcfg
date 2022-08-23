@@ -26,6 +26,8 @@
     rpipkgs = { url = "github:colemickens/nixpkgs/cmpkgs-rpipkgs"; };
     # </cmpkgs>
     
+    nix-netboot-server.url = "github:DeterminateSystems/nix-netboot-serve";
+    
     # nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # nixos-stable.url = "github:nixos/nixpkgs/nixos-22.05"; # for cachix
     # riscv64 = { url = "github:zhaofengli/nixos-riscv64"; };
@@ -130,7 +132,7 @@
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
     experimental-features = [ "nix-command" "flakes" "recursive-nix" ];
-    narinfo-cache-negative-ttl = 0;
+    # narinfo-cache-negative-ttl = 0;
   };
 
   outputs = inputs:
@@ -193,6 +195,7 @@
       shells = forAllSystems (system: rec {
         default = (import ./shells/devshell.nix { inherit inputs system minimalMkShell; });
         devenv = (import ./shells/devenv.nix { inherit inputs system minimalMkShell; });
+        gstreamer = (import ./shells/gstreamer.nix { inherit inputs system minimalMkShell; });
         uutils = minimalMkShell system {
           name = "uutils-devshell";
           nativeBuildInputs = with pkgs_.nixpkgs.${system}; [
@@ -209,6 +212,7 @@
         cachable = pkgs_.nixpkgs.${s}.linkFarmFromDrvs "cachable-${s}" [
           inputs.self.devShell.${s}.inputDerivation
           inputs.self.devShells.${s}.devenv.inputDerivation
+          inputs.self.devShells.${s}.gstreamer.inputDerivation
         ];
       });
       apps = forAllSystems (system:
@@ -311,24 +315,25 @@
       # TODO:
       # - for now we just re-use the nixosConfiguration
       # - but maybe, for example, we want to cross-compile these since hosted from 'xeep'
-      netboots = nixlib.genAttrs
+      netboots = {};
+      _netboots = nixlib.genAttrs
         [
-          "rpifour1"
-          # "rpizerotwo1"
-          "rpizerotwo2"
-          "rpithreebp1"
           "risky-cross"
+          "rpifour1"
+          "rpithreebp1"
+          "rpizerotwo1"
+          "rpizerotwo2"
         ]
         (h: nixosConfigurations.${h}.config.system.build.extras.nfsboot);
-      nfsfirms = nixlib.genAttrs
-        [
-          "rpifour1"
-          # "rpizerotwo1"
-          "rpizerotwo2"
-          "rpithreebp1"
-          "risky-cross"
-        ]
-        (h: nixosConfigurations.${h}.config.system.build.extras.nfsfirm);
+      # nfsfirms = nixlib.genAttrs
+      #   [
+      #     "rpifour1"
+      #     "rpizerotwo1"
+      #     "rpizerotwo2"
+      #     "rpithreebp1"
+      #     "risky-cross"
+      #   ]
+      #   (h: nixosConfigurations.${h}.config.system.build.extras.nfsfirm);
 
       netbootsCross =
         let
@@ -369,7 +374,7 @@
         #######################################################################
         # riscv-linux
         risky = mkSystem inputs.cross-riscv64 "riscv64-linux" "risky";
-        risky-cross = mkSystem inputs.cross-riscv64 "x86_64-linux" "risky";
+        risky-cross = mkSystem inputs.cross-riscv64 "x86_64-linux" "risky-cross";
         # ^^^ realistically since this is a native build, I shouldn't _need_ to use crosspkgs
         #######################################################################
         # aarch64-linux
@@ -381,7 +386,7 @@
         rpizerotwo2 = mkSystem inputs.rpipkgs "aarch64-linux" "rpizerotwo2";
         # rpizerotwo3 = mkSystem inputs.rpipkgs "aarch64-linux" "rpizerotwo3";
         ## oracular = mkSystem inputs.nixpkgs "aarch64-linux" "oracular";
-        # pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
+        pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
         # blueline = mkSystem inputs.nixpkgs "aarch64-linux" "blueline";
         # blueloco    = mkSystem inputs.nixpkgs "x86_64-linux"  "blueloco";
         # enchilada = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";

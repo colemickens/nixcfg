@@ -57,6 +57,7 @@
       };
       programs = {
         git.package = pkgs.gitAndTools.gitFull;
+        neovim.enable = true;
       };
       home.packages = with pkgs; [
         colePackages.customCommands
@@ -72,6 +73,7 @@
         exa
         fd
         gitui
+        # gex
         grex
         hexyl
         xh

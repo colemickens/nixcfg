@@ -36,10 +36,9 @@ in
 
       mobile = {
         # enable = false;
-        boot.stage-1.enable = true;
+        # boot.stage-1.enable = true;
         boot.stage-1.kernel.useNixOSKernel = true;
       };
-      
       boot.kernelPackages = pkgs.linuxPackages_latest;
       
       hardware.deviceTree.overlays = [

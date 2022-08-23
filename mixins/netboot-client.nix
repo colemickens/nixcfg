@@ -131,7 +131,7 @@ in
             cat /nixdb/registration | grep "${hn}"
             
             ${config.nix.package}/bin/nix-store --load-db < /nixdb/registration
-            ${config.nix.package}/bin/nix-store --verify-path $systemConfig
+            # ${config.nix.package}/bin/nix-store --verify-path $systemConfig
 
             ln -sf $systemConfig /run/current-system
             ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
@@ -151,6 +151,9 @@ in
       supportedFilesystems = lib.mkForce [ "vfat" "nfs" ];
 
       initrd = {
+        kernelModules = [
+          "nfs" "nfsv4"
+        ];
         systemd = lib.mkMerge ([
           ({
             enable = true;

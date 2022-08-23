@@ -17,6 +17,7 @@ in
     ../../mixins/easyeffects.nix
     # ../../mixins/grub-signed-shim.nix
     ../../mixins/hidpi.nix
+    ../../mixins/iwd.nix
     ../../mixins/ledger.nix
     ../../mixins/libvirt.nix
     ../../mixins/logitech-mouse.nix
@@ -27,14 +28,14 @@ in
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
     ../../mixins/upower.nix
-    ../../mixins/wpa-full.nix
+    # ../../mixins/wpa-full.nix
     ../../mixins/zfs.nix
 
     # ./experimental.nix
     ./unfree.nix
       
-    ./amdzen2.nix
     inputs.hardware.nixosModules.common-cpu-amd
+    # inputs.hardware.nixosModules.common-cpu-amd-pstate # not until 5.19, touchpad
     inputs.hardware.nixosModules.common-gpu-amd
     inputs.hardware.nixosModules.common-pc-laptop-ssd
   ];
@@ -50,6 +51,8 @@ in
     system.stateVersion = "21.05";
     networking.hostName = hostname;
       
+    security.polkit.enable = true;
+    
     environment.systemPackages = with pkgs; [
       esphome
       anodium

@@ -17,7 +17,7 @@ in
     # ../../mixins/devshells.nix
     ../../mixins/grub-signed-shim.nix
     # ../../mixins/hidpi.nix
-    ../../mixins/libvirt.nix
+    ../../mixins/libvirtd.nix
     # ../../mixins/ledger.nix
     # ../../mixins/logitech-mouse.nix
     # ../../mixins/plex-mpv.nix
@@ -34,7 +34,6 @@ in
 
     # ./experimental.nix
       
-    ./amdzen2.nix
     inputs.hardware.nixosModules.common-cpu-amd
     inputs.hardware.nixosModules.common-gpu-amd
     inputs.hardware.nixosModules.common-pc-laptop-ssd
@@ -44,20 +43,16 @@ in
     system.stateVersion = "21.05";
     networking.hostName = hostname;
       
-    environment.systemPackages = with pkgs; [
-      esphome
-    ];
-
-    hardware.bluetooth.enable = true;
+    hardware.bluetooth.enable = false;
     hardware.usbWwan.enable = true;
 
     services.tlp.enable = true;
     services.fwupd.enable = true;
     # services.kmscon.enable = true;   # kmscon breaks sway!
     # services.kmscon.hwRender = true; # though maybe not if hwRender is off?
-    services.logind.extraConfig = ''
-      HandlePowerKey=hybrid-sleep
-    '';
+    # services.logind.extraConfig = ''
+    #   HandlePowerKey=hybrid-sleep
+    # '';
 
     fileSystems = {
       "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; neededForBoot = true; };
@@ -69,6 +64,7 @@ in
     swapDevices = [{ device = "/dev/disk/by-partlabel/swap"; }];
     boot = {
       kernelModules = [ "iwlwifi" "ideapad_laptop" ];
+      # kernelParams = [ "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}" ];
       initrd.availableKernelModules = [
         "xhci_pci"
         "xhci_hcd" # usb

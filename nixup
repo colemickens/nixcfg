@@ -30,6 +30,7 @@ srcdirs=(
   "${HOME}/code/tow-boot/visionfive"
   "${HOME}/code/tow-boot/lteusb8916"
   "${HOME}/code/nixpkgs-wayland"
+  "${HOME}/code/visionfive-nix"
   "${HOME}/code/flake-firefox-nightly"
   "${HOME}/code/mobile-nixos"
   "${HOME}/code/nix-coreboot"
@@ -120,6 +121,13 @@ case "${cmd}" in
   ;;
   "rdeploy") export NIXUP_ACTION="reboot"; nixup deploy "${@}"; ;;
   
+  "padd") 
+    pueue add -- "${DIR}/nixup" up
+    pueue add -- "${DIR}/nixup" pitest # deploys xeep
+    pueue add -- "${DIR}/nixup" deploy carbon
+    pueue add -- "${DIR}/nixup" deploy raisin
+    pueue add -- "${DIR}/nixup" deploy jeffhyper
+  ;; 
   
   "pi-on")
     curl -s -X POST -H "Authorization: Bearer $(cat /run/secrets/home-assistant-bearer-token)" -H "Content-Type: application/json" -d "{\"entity_id\": \"switch.${1}\"}" \
@@ -130,26 +138,22 @@ case "${cmd}" in
         https://home.x.cleo.cat/api/services/switch/turn_off >/dev/null
   ;;
   "pitest")
+    export BLDR_X86="$(tailscale ip --4 xeep)"
     netboots1_out="$(nixup build .#hydraBundles.x86_64-linux.netboots)"
     netboots2_out="$(nixup build .#hydraBundles.aarch64-linux.netboots)"
-    "${DIR}/scripts/nix-pull.sh" "${netboots1_out}"
-    "${DIR}/scripts/nix-pull.sh" "${netboots2_out}"
+    # "${DIR}/scripts/nix-pull.sh" "${netboots1_out}"
+    # "${DIR}/scripts/nix-pull.sh" "${netboots2_out}"
+    
+    ssh "cole@$(tailscale ip --4 xeep)" "nix-store -r ${netboots1_out}"
+    ssh "cole@$(tailscale ip --4 xeep)" "nix-store -r ${netboots2_out}"
 
-    # nfsfirms1_out="$(nixup build .#hydraBundles.x86_64-linux.nfsfirms)"
-    # nfsfirms2_out="$(nixup build .#hydraBundles.aarch64-linux.nfsfirms)"
-    # "${DIR}/scripts/nix-pull.sh" "${netpayload_out}"
-    # "${DIR}/scripts/nix-pull.sh" "${nfsfirms1_out}"
-    # "${DIR}/scripts/nix-pull.sh" "${nfsfirms2_out}"
-
-    # netpayload_out="$(nixup build .#hydraBundles.aarch64-linux.netpayload)"
-
-    nixup deploy xeep || true
+    nixup deploy xeep
     nixup pireboot
   ;;
   "pireboot")
     pis=(
       "wp6_sw106_relay" # rpi-powerstrip
-      # "wp6_sw103_relay" # visionfive
+      "wp6_sw103_relay" # visionfive
     )
     parallel -j$(nproc) --halt 1 --verbose --tag "${DIR}/nixup pi-off" ::: "${pis[@]}"
     sleep 1

@@ -122,7 +122,7 @@ in
         kernel.sysctl = {
           "fs.file-max" = 100000;
           "fs.inotify.max_user_instances" = 256;
-          "fs.inotify.max_user_watches" = 500000;
+          "fs.inotify.max_user_watches" = 99999999;
         };
       };
 
@@ -147,6 +147,9 @@ in
 
       systemd.network = (lib.mkIf (cfg.defaultNetworking) {
         enable = true;
+        
+        wait-online.anyInterface = true;
+        wait-online.ignoredInterfaces = [ "wlan0" "wlp1s0" "wlp2s0" "tailscale0" "virbr0" ];
 
         # leave the kernel dummy devies unmanagaed
         networks."10-dummy" = {

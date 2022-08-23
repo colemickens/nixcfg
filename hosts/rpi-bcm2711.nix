@@ -10,8 +10,6 @@
 ## RPI4
 
 let
-  upstream_kernel = false;
-  # upstream_kernel = true;
   mbr_disk_id = config.system.build.mbr_disk_id;
 in {
   imports = [
