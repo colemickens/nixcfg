@@ -413,11 +413,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1661305921,
-        "narHash": "sha256-CDo0Tgwim9zafxI704vvrN0EQsRvquQD+L+qyelrw7k=",
+        "lastModified": 1661308557,
+        "narHash": "sha256-F0vufm2K5Gvp9zQOzfHkpIoq2Bj3cQ/ZVlOz3FxGO/c=",
         "owner": "helix-editor",
         "repo": "helix",
-        "rev": "6b912b864195e0781b186e50b91050ed5c9b0e3d",
+        "rev": "ccae718a67f39542281125610764b733d90b26f8",
         "type": "github"
       },
       "original": {
@@ -966,11 +966,11 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1661306955,
+        "lastModified": 1661309068,
         "narHash": "sha256-A375FlMPhykRH6B9YxR3qGfsbHWcNV56mpLOk1Z5SlQ=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "cdc39c9d28a7876baa5121e7972bcdcaaffb9943",
+        "rev": "163231a71af66183a5fca05bf2972dc808cb6abc",
         "type": "github"
       },
       "original": {
