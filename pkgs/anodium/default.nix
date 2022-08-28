@@ -25,9 +25,9 @@ let
     {
       repo_git = "https://github.com/colemickens/Anodium";
       branch = "master";
-      rev = "eb4431ca4713490c6206c3c847b002100f3d65d8";
-      sha256 = "sha256-v7jAI5/VaFfBl/IupAOPdJacA2sDP954W33rUO2EOGw=";
-      cargoSha256 = "sha256-4b1QDqdmrihnEb4u8wWE/hH65phTXV2dXQSUEgNW/bg=";
+      rev = "441d2fded4a23bbc16e524ad869e3aa779ff00a0";
+      sha256 = "sha256-/hD+MSDE75+fmkdXy081i+bBBT5SQI8B32UtsYxgGrg=";
+      cargoSha256 = "sha256-bArNL/b8Eeo1afYe4MJAWPZTrFgweYi0xHRQhf2iBHg=";
     };
 in
 rustPlatform.buildRustPackage rec {
