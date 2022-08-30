@@ -64,16 +64,16 @@ in
           enable = true;
           profiles = {
             "docked".outputs = [
-              # { criteria = "eDP-1"; status = "disable"; }
-              # { criteria = "DP-5"; position = "1920,0"; }
-              # { criteria = "DP-2"; position = "0,0"; }
-              { criteria = out_carbon; status = "disable"; }
-              { criteria = out_aw3418dw; position = "1920,0"; }
-              { criteria = out_dell; position = "0,0"; }
+              { criteria = "eDP-1"; status = "disable"; }
+              { criteria = "DP-5"; position = "1920,0"; }
+              { criteria = "DP-2"; position = "0,0"; }
+              # { criteria = out_carbon; status = "disable"; }
+              # { criteria = out_aw3418dw; position = "1920,0"; }
+              # { criteria = out_aw2521h; position = "0,0"; }
             ];
             "undocked".outputs = [
-              # { criteria = "eDP-1"; status = "enable"; }
-              { criteria = out_carbon; status = "enable"; }
+              { criteria = "eDP-1"; status = "enable"; }
+              # { criteria = out_carbon; status = "enable"; }
             ];
           };
         };
@@ -101,6 +101,9 @@ in
         # xfce.thunar
         # gnome.nautilus
 
+
+        # swappy # um, who the fuck comes up with these stupid UX decisions in the sway-adjacent universe?
+        pinta
         imv
         grim
         qt5.qtwayland

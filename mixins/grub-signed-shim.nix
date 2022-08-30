@@ -30,7 +30,6 @@ in {
           efiSupport = true;
           efiInstallAsRemovable = false;
           efiBootloaderId = "nixos-grub";
-          configurationLimit = 10;
           extraInstallCommands = let
             shim_path = {
               "x86_64-linux" = "\\EFI\\${efiBootloaderId}\\shimx64.efi";

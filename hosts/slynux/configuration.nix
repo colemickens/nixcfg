@@ -26,6 +26,7 @@ let
       matchConfig = v.match;
       networkConfig.Bridge = bridgeName;
     };
+    # TODO: probably just blacklist the module?
     networks."20-block-ms-wifi" = {
       matchConfig.Driver = "mt76x2u";
       linkConfig.Unmanaged = true;
@@ -36,13 +37,13 @@ let
 in
 {
   imports = [
-    # ../../profiles/sway
+    ../../profiles/sway
     ../../profiles/interactive.nix
 
     # TODO: move to nixos-hardware
     # eat my asshole nvidia, my gaming pc/server is crashing w/ the vga light keeps lit up...
-    # ../../mixins/gfx-nvidia.nix
-    # ../../mixins/gfx-debug.nix
+    ../../mixins/gfx-nvidia.nix
+    ../../mixins/gfx-debug.nix
 
     # ../../mixins/android.nix
     # ../../mixins/devshells.nix
@@ -58,21 +59,24 @@ in
 
     ./unfree.nix
     inputs.hardware.nixosModules.common-cpu-amd
+    inputs.hardware.nixosModules.common-cpu-amd-pstate
     inputs.hardware.nixosModules.common-pc-ssd
     # inputs.hardware.nixosModules.common-gpu-nvidia
   ];
 
   config = {
     system.stateVersion = "21.05";
-
     networking.hostName = "slynux";
     # systemd.network = systemdNetworkVal;
 
     hardware.usbWwan.enable = true;
+    hardware.cpu.amd.updateMicrocode = true;
 
-    virtualisation.hypervGuest.enable = true; # dualboot: Linux, Win11(hyper-v guest)
+    # TODO: disabled, we suspect hyperv for zfs corruption
+    # virtualisation.hypervGuest.enable = true; # dualboot: Linux, Win11(hyper-v guest)
 
     boot.loader.grub.pcmemtest.enable = true;
+    boot.loader.grub.configurationLimit = 20;
     boot.initrd.availableKernelModules = [ "sd_mod" "sr_mod" ];
     boot.initrd.kernelModules = [
       "xhci_pci"
@@ -81,7 +85,7 @@ in
       "sd_mod"
       "ehci_pci"
       "uas"
-      "hyperv_drm"
+      # "hyperv_drm"
     ];
 
     fileSystems = let hn = config.networking.hostName; in

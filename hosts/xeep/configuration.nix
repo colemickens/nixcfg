@@ -7,33 +7,29 @@ in
   imports = [
     ../../profiles/interactive.nix
 
-    # ../../mixins/bolt.nix # thunderbolt controller is probably busted
     ../../mixins/grub-signed-shim.nix
-    # ../../mixins/hidpi.nix
-    # ../../mixins/logitech-mouse.nix
     ../../mixins/libvirtd.nix
     ../../mixins/sshd.nix
-    ../../mixins/tailscale.nix
     ../../mixins/syncthing.nix
-    # ../../mixins/wpa-full.nix # we don't actually want wifi on here, plz use eth
+    ../../mixins/tailscale.nix
+    ../../mixins/upower.nix
     ../../mixins/zfs.nix
 
     ../../mixins/rclone-googledrive-mounts.nix
 
-    ./services/aria2.nix
+    # ./services/aria2.nix
     ./services/revproxy.nix
     ./services/home-assistant
     ./services/netboot-server.nix
-    ./services/samba.nix
-    ./services/rsntp.nix
+    # ./services/samba.nix
+    # ./services/rsntp.nix
     # ./services/rtsptoweb.nix
     ./services/snapserver.nix
     ./services/plex.nix
     ./services/unifi.nix
     
-    ../../mixins/upower.nix
 
-    ../../mixins/gfx-intel.nix # TODO: nixosHardware?
+    # ../../mixins/gfx-intel.nix # TODO: nixosHardware?
     inputs.hardware.nixosModules.dell-xps-13-9370
 
     ./unfree.nix
@@ -45,32 +41,28 @@ in
     networking.hostName = hn;
     system.stateVersion = "21.05";
     environment.systemPackages = with pkgs; [
-      libsmbios
+      libsmbios # ? can't remember it
     ];
     
     # services.windmill = {
     #   enable = true;
     # };
       
-    services.paperless-ng = {
-      enable = true;
-      extraConfig = {
-        PAPERLESS_AUTO_LOGIN_USERNAME = "admin";
-      };
-    };
+    # services.paperless-ng = {
+    #   enable = true;
+    #   extraConfig = {
+    #     PAPERLESS_AUTO_LOGIN_USERNAME = "admin";
+    #   };
+    # };
 
+    hardware.bluetooth.enable = true;
+    hardware.usbWwan.enable = true;
     hardware.cpu.intel.updateMicrocode = true;
+
     services.fwupd.enable = true;
     # services.fwupd.overrideEspMountPoint = "/boot";
 
-    services.tlp.enable = lib.mkForce false; # does this come frm nixosHardware?
-      
-    # override common timeserver so we don't
-    # try to use ourselves:
-    
     nixcfg.common.useXeepTimeserver = false;
-    
-    security.polkit.enable = true;
     
     systemd.network = {
       enable = true;

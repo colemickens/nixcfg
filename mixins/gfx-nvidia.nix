@@ -7,7 +7,8 @@ let
     if (lib.versionOlder nvBeta.version nvStable.version)
     then config.boot.kernelPackages.nvidiaPackages.stable
     else config.boot.kernelPackages.nvidiaPackages.beta;
-in {
+in
+{
   config = {
     home-manager.users.cole = { pkgs, ... }: {
       wayland.windowManager.sway.extraOptions = [ "--unsupported-gpu" ];
@@ -20,22 +21,38 @@ in {
       MOZ_DISABLE_RDD_SANDBOX = "1";
       EGL_PLATFORM = "wayland";
     };
-      
-    boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_drm" "nvidia_uvm" ];
-    
+
+    # boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_drm" "nvidia_uvm" ];
+
+    # <legacy>
     hardware = {
-      graphics = {
-        enable = true;
-        videoDrivers = [ "nvidia" ];
-      };
-
+      opengl.enable = true;
       opengl.extraPackages = [ pkgs.nvidia-vaapi-driver ];
-
       nvidia = {
+        open = true;
         modesetting.enable = true;
+        nvidiaSettings = false;
         package = nvidiaPkg;
         powerManagement.enable = false;
       };
     };
+    services.xserver.videoDrivers = [ "nvidia" ];
+    # </legacy>
+
+    # hardware = {
+    #   graphics = {
+    #     enable = true;
+    #     videoDrivers = [ "nvidia" ];
+    #   };
+
+    #   opengl.extraPackages = [ pkgs.nvidia-vaapi-driver ];
+
+    #   nvidia = {
+    #     open = true;
+    #     modesetting.enable = true;
+    #     package = nvidiaPkg;
+    #     powerManagement.enable = false;
+    #   };
+    # };
   };
 }

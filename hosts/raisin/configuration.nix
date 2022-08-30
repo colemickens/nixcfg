@@ -1,28 +1,15 @@
 { config, pkgs, lib, inputs, ... }:
 let
-  hostname = "raisin";
   hn = config.networking.hostName;
+  # raisin bootloader = grub (signed-shim)
 in
 {
   imports = [
-    # ../../profiles/sway/default.nix
-    # ../../profiles/dev.nix
     ../../profiles/interactive.nix
 
-    # TODO: necessary with the nixosHardware imports?
-    ../../mixins/gfx-radeonsi.nix
-    # ../../mixins/gfx-debug.nix
-
-    # ../../mixins/android.nix
-    # ../../mixins/devshells.nix
     ../../mixins/grub-signed-shim.nix
-    # ../../mixins/hidpi.nix
+
     ../../mixins/libvirtd.nix
-    # ../../mixins/ledger.nix
-    # ../../mixins/logitech-mouse.nix
-    # ../../mixins/plex-mpv.nix
-    # ../../mixins/snapclient-local.nix
-    # ../../mixins/snapcast-sink.nix # doesn't work, feels like a privacy risk
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
@@ -30,29 +17,29 @@ in
     ../../mixins/wpa-full.nix
     ../../mixins/zfs.nix
 
-    # ./services/rtsp-simple-server.nix
-
-    # ./experimental.nix
-      
     inputs.hardware.nixosModules.common-cpu-amd
+    inputs.hardware.nixosModules.common-cpu-amd-pstate
     inputs.hardware.nixosModules.common-gpu-amd
     inputs.hardware.nixosModules.common-pc-laptop-ssd
   ];
 
   config = {
     system.stateVersion = "21.05";
-    networking.hostName = hostname;
+    networking.hostName = "raisin";
       
     hardware.bluetooth.enable = false;
     hardware.usbWwan.enable = true;
+    hardware.cpu.amd.updateMicrocode = true;
 
-    services.tlp.enable = true;
+    # it's a laptop-server, let's use this and use PPD to
+    # put it into max performance mode
+    # TODO: can we set this with nix?
+    services.power-profiles-daemon.enable = true;
     services.fwupd.enable = true;
-    # services.kmscon.enable = true;   # kmscon breaks sway!
-    # services.kmscon.hwRender = true; # though maybe not if hwRender is off?
-    # services.logind.extraConfig = ''
-    #   HandlePowerKey=hybrid-sleep
-    # '';
+    services.logind.extraConfig = ''
+      HandlePowerKey=poweroff
+      HandleLidSwitch=ignore
+    '';
 
     fileSystems = {
       "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; neededForBoot = true; };
@@ -64,6 +51,9 @@ in
     swapDevices = [{ device = "/dev/disk/by-partlabel/swap"; }];
     boot = {
       kernelModules = [ "iwlwifi" "ideapad_laptop" ];
+      kernelParams = [
+        "ideapad_laptop.allow_v4_dytc=1"
+      ];
       # kernelParams = [ "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}" ];
       initrd.availableKernelModules = [
         "xhci_pci"

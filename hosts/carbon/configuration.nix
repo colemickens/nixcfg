@@ -1,7 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 let
-  hostname = "carbon";
   hn = config.networking.hostName;
+  # carbon bootloader = systemd (laptop has secure boot disabled)
 in
 {
   imports = [
@@ -15,6 +15,8 @@ in
     ../../mixins/android.nix
     ../../mixins/devshells.nix
     ../../mixins/easyeffects.nix
+    # no, carbon uses systemd with the extended
+    # boot partition support...
     # ../../mixins/grub-signed-shim.nix
     ../../mixins/hidpi.nix
     ../../mixins/iwd.nix
@@ -33,41 +35,61 @@ in
 
     # ./experimental.nix
     ./unfree.nix
-      
+
     inputs.hardware.nixosModules.common-cpu-amd
-    # inputs.hardware.nixosModules.common-cpu-amd-pstate # not until 5.19, touchpad
+    inputs.hardware.nixosModules.common-cpu-amd-pstate # not until 5.19, touchpad
     inputs.hardware.nixosModules.common-gpu-amd
     inputs.hardware.nixosModules.common-pc-laptop-ssd
   ];
 
   config = {
+    system.stateVersion = "21.05";
+    networking.hostName = "carbon";
 
     home-manager.users.cole = { pkgs, ... }: {
       home.packages = with pkgs; [
         ripcord
+        anodium
+        esphome
       ];
     };
-    
-    system.stateVersion = "21.05";
-    networking.hostName = hostname;
-      
-    security.polkit.enable = true;
-    
-    environment.systemPackages = with pkgs; [
-      esphome
-      anodium
-    ];
+
+    # TODO: attempt to fix sound, but broke alsa/pipewire:
+    # environment.etc."modprobe.d/snd.conf".text = ''
+    #   options snd-sof-intel-hda-common hda_model=alc287-yoga9-bass-spk-pin
+    # '';
 
     hardware.bluetooth.enable = true;
     hardware.usbWwan.enable = true;
+    hardware.cpu.amd.updateMicrocode = true;
 
-    services.tlp.enable = true;
+    services.power-profiles-daemon.enable = true;
     services.fwupd.enable = true;
+
+    powerManagement.enable = true;
+
+    # experiments!
+    # see also ./experiments.nix
+    # maybe move to a specialisation:
+    # stage-1 -> systemd
     # services.kmscon.enable = true;   # kmscon breaks sway!
     # services.kmscon.hwRender = true; # though maybe not if hwRender is off?
-    services.logind.extraConfig = ''
-      HandlePowerKey=hybrid-sleep
-    '';
+
+    # TODO: revisit...? Can we get S3 on this POS Lenovo Chinesium?
+    # services.logind.extraConfig = ''
+    #   HandlePowerKey=hybrid-sleep
+    #   HandleLidSwitch=hybrid-sleep
+    # '';
+    # oh, these probably made things worse since it can't suspend...
+    # services.logind.extraConfig = ''
+    #   HandlePowerKey=suspend-then-hibernate
+    #   HandleLidSwitch=suspend-then-hibernate
+    # '';
+
+    # WAIT_ONLINE DEBUG
+    systemd.network.wait-online.ignoredInterfaces = lib.mkForce [ ];
+    systemd.network.wait-online.anyInterface = true;
+    # systemd.network.wait-online.timeout = 0;
 
     fileSystems = {
       "/efi" = { fsType = "vfat"; device = "/dev/nvme0n1p1"; neededForBoot = true; };
@@ -86,7 +108,10 @@ in
         enable = true;
       };
       kernelModules = [ "iwlwifi" "ideapad_laptop" ];
-      kernelParams = [ "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}" ];
+      kernelParams = [
+        "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}"
+        "ideapad_laptop.allow_v4_dytc=1"
+      ];
       initrd.availableKernelModules = [
         "xhci_pci"
         "xhci_hcd" # usb

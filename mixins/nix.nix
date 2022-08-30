@@ -22,6 +22,10 @@ in
   config = {
     environment.systemPackages = [ _nix ];
     nix = {
+      gc = {
+        automatic = true;
+        randomizedDelaySec = "30min";
+      };
       settings = {
         keep-derivations = true; # this is the default (?)
         cores = 0;

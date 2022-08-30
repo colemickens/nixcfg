@@ -82,6 +82,9 @@
     mobile-nixos.url = "github:colemickens/mobile-nixos/2022-03-blueline";
     mobile-nixos.inputs.nixpkgs.follows = "nixpkgs";
 
+    mobile-nixos-openstick.url = "github:colemickens/mobile-nixos/openstick";
+    mobile-nixos-openstick.inputs.nixpkgs.follows = "nixpkgs";
+
     nickel = { url = "github:tweag/nickel"; };
 
     # nix-coreboot.url = "github:colemickens/nix-coreboot";
@@ -315,14 +318,15 @@
       # TODO:
       # - for now we just re-use the nixosConfiguration
       # - but maybe, for example, we want to cross-compile these since hosted from 'xeep'
-      netboots = {};
-      _netboots = nixlib.genAttrs
+      xnetboots = {};
+      netboots = nixlib.genAttrs
         [
           "risky-cross"
           "rpifour1"
           "rpithreebp1"
-          "rpizerotwo1"
-          "rpizerotwo2"
+          # "radxazero1"
+          # "rpizerotwo1"
+          # "rpizerotwo2"
         ]
         (h: nixosConfigurations.${h}.config.system.build.extras.nfsboot);
       # nfsfirms = nixlib.genAttrs
@@ -391,6 +395,7 @@
         # blueloco    = mkSystem inputs.nixpkgs "x86_64-linux"  "blueloco";
         # enchilada = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
         # enchiloco   = mkSystem inputs.nixpkgs "x86_64-linux"  "enchiloco";
+        openstick = mkSystem inputs.nixpkgs "aarch64-linux" "openstick";
         #######################################################################
         # armv6l-linux (cross-built)
         # rpizero1 = mkSystem inputs.cross-armv6l "x86_64-linux" "rpizero1";
@@ -440,6 +445,9 @@
       #   blueline = inputs.self.nixosConfigurations.blueline.config.system.build;
       #   enchilada = inputs.self.nixosConfigurations.enchilada.config.mobile.outputs.android;
       # };
+      images = {
+        openstick = nixosConfigurations.openstick.config.mobile.outputs.android.abootimg;
+      };
       phones =
         let
           mkPhone = dev: {
