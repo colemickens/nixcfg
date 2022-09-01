@@ -429,11 +429,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1662036322,
-        "narHash": "sha256-6Ne7hBjR2uK1f5wV+Irwkssr3kH3qNXxxUZQ/LQSIlg=",
+        "lastModified": 1662052066,
+        "narHash": "sha256-tMO4wFXVRE/TPxOtaEpgu95Hff8PekqXZPt4e+5Di78=",
         "owner": "helix-editor",
         "repo": "helix",
-        "rev": "ec28b2b5ccf162e9df550e59a28e043d51796621",
+        "rev": "66276ce630cead06c84394768927fe20490d0638",
         "type": "github"
       },
       "original": {
@@ -472,11 +472,11 @@
         "wlroots": "wlroots"
       },
       "locked": {
-        "lastModified": 1662025668,
-        "narHash": "sha256-uKYBa8+xcYtPV+XFs9dltQP1sP1QFIJKQcD/io3h5Pc=",
+        "lastModified": 1662054398,
+        "narHash": "sha256-DozMyF6aabWEZa0ZSpplDBlxlwXnuJ3ZslNy6rBm5Wo=",
         "owner": "hyprwm",
         "repo": "Hyprland",
-        "rev": "8581e7178961ebe3a6c25f49583d13f9ee6ee22a",
+        "rev": "56203b175752b49c46eb9303c37b80cd4c2dfcf8",
         "type": "github"
       },
       "original": {
@@ -588,11 +588,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1662006977,
-        "narHash": "sha256-QFph7pd5auvOxCgY+HOP8OaUd7uArwKOS7jeBuu//mo=",
+        "lastModified": 1662054649,
+        "narHash": "sha256-CpJin8u90QHgmo8eY9S033s9IdW0TZ8qvyRO5WEImoE=",
         "owner": "martinvonz",
         "repo": "jj",
-        "rev": "c5aab9fe29aa8ad6eed7691f0fef032933b15beb",
+        "rev": "d53d9020c938f8770a247df01251ceef5cb0c69a",
         "type": "github"
       },
       "original": {
@@ -650,11 +650,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1662049683,
-        "narHash": "sha256-9tBdPKWp4FoqCzsXynkM0rRrKJc1ydOBSHbV39bkk1Y=",
+        "lastModified": 1662055187,
+        "narHash": "sha256-NfCBWHwMbLig9KqA6u+sotNs/KLxeQaCBe/HcH7Mwwg=",
         "owner": "colemickens",
         "repo": "mobile-nixos",
-        "rev": "93da322aacbeada81ce10eb83742a7889f815007",
+        "rev": "5f3dd3f9b75c31def0690e12d3a20af32b0f6313",
         "type": "github"
       },
       "original": {
@@ -1005,11 +1005,11 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1662051013,
+        "lastModified": 1662055276,
         "narHash": "sha256-3Oil018cjvyEMYHYLOkAQLSGayiAcIEvYTo2sIdKomQ=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "899a946cb1ed0a55aedb3bcf8246993351cd6204",
+        "rev": "430837d12e705abceb217bb70eb8f9093f0087fe",
         "type": "github"
       },
       "original": {
