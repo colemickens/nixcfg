@@ -11,29 +11,34 @@
 let
   hn = "slynux";
   
-  bridgeName = "wanbr0";
-  bridgeClients = {
-    blueline1 = { match.Driver = "rndis_host"; };
-    enchilada1 = { match.Driver = "cdc_ether"; };
-  };
-  staticNetworkConf = {
-    enable = true;
-  };
-  mkNetworkBindToBridge = (k: v: {
-    # this is large enough to come after we bond the bridge/bond
-    # but comes before our catch-all rules to add everything else to the bond
-    networks."30-${k}" = {
-      matchConfig = v.match;
-      networkConfig.Bridge = bridgeName;
-    };
-    # TODO: probably just blacklist the module?
-    networks."20-block-ms-wifi" = {
-      matchConfig.Driver = "mt76x2u";
-      linkConfig.Unmanaged = true;
-    };
-  });
-  bridgeConfs = (lib.fold lib.recursiveUpdate { } (lib.mapAttrsToList mkNetworkBindToBridge bridgeClients));
-  systemdNetworkVal = lib.recursiveUpdate staticNetworkConf bridgeConfs;
+  # bridgeName = "wanbr0";
+  # bridgeClients = {
+  #   blueline1 = { match.Driver = "rndis_host"; };
+  #   enchilada1 = { match.Driver = "cdc_ether"; };
+  # };
+  # staticNetworkConf = {
+  #   enable = true;
+    
+  #   newtorks."19-wanbr0-bridge" = {
+  #     matchConfig.Driver = "";
+  #     linkConfig = "";
+  #   };
+  #   networks."20-block-ms-wifi" = {
+  #     # TODO: probably just blacklist the module?
+  #     matchConfig.Driver = "mt76x2u";
+  #     linkConfig.Unmanaged = true;
+  #   };
+  # };
+  # mkNetworkBindToBridge = (k: v: {
+  #   # this is large enough to come after we bond the bridge/bond
+  #   # but comes before our catch-all rules to add everything else to the bond
+  #   networks."20-${k}" = {
+  #     matchConfig = v.match;
+  #     networkConfig.Bridge = bridgeName;
+  #   };
+  # });
+  # bridgeConfs = (lib.fold lib.recursiveUpdate { } (lib.mapAttrsToList mkNetworkBindToBridge bridgeClients));
+  # systemdNetworkVal = lib.recursiveUpdate staticNetworkConf bridgeConfs;
 in
 {
   imports = [
@@ -45,7 +50,7 @@ in
     ../../mixins/gfx-nvidia.nix
     ../../mixins/gfx-debug.nix
 
-    # ../../mixins/android.nix
+    ../../mixins/android.nix
     # ../../mixins/devshells.nix
     ../../mixins/grub-signed-shim.nix
     # ../../mixins/logitech-mouse.nix
@@ -67,6 +72,19 @@ in
   config = {
     system.stateVersion = "21.05";
     networking.hostName = "slynux";
+    
+    nixcfg.common.defaultNetworking = false;
+    networking = {
+      # hm, this is much nicer than doing it by hand...
+      # but, for example, I can't match on not-the-name, which 
+      # changes a lot with my stupid rdnis/usb devices, etc
+      useNetworkd = true;
+      interfaces."eno1".useDHCP = true;
+      interfaces."wanbr0".useDHCP = true;
+      bridges."wanbr0" = {
+        interfaces = [ "eno1" "enp5s0f0u4u2" ];
+      };
+    };
     # systemd.network = systemdNetworkVal;
 
     hardware.usbWwan.enable = true;

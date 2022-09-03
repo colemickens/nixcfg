@@ -47,7 +47,8 @@ printf "ACTIVATE: (outres: ${outres})\n" >/dev/stderr
 printf "          (host: ${host}) (action: ${action})\n" >/dev/stderr
 printf "=============================================================================================================\n" >/dev/stderr
 
-target="$(tailscale ip --6 "${host}")"
+# target="$(tailscale ip --6 "${host}")"
+target="$(tailscale ip --4 "${host}")"
 
 if [[ "${action:-""}" == "switch" || "${action:-""}" == "reboot" ]]; then
   printf "==:: (activate) remote: download toplevel ($target) ($outres)\n" > /dev/stderr

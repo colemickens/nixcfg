@@ -140,14 +140,28 @@ case "${cmd}" in
         https://home.x.cleo.cat/api/services/switch/turn_off >/dev/null
   ;;
   "pitest")
-    netboots1_out="$(nixup build .#hydraBundles.x86_64-linux.netboots)"
-    netboots2_out="$(nixup build .#hydraBundles.aarch64-linux.netboots)"
-    # "${DIR}/scripts/nix-pull.sh" "${netboots1_out}"
-    # "${DIR}/scripts/nix-pull.sh" "${netboots2_out}"
     
-    ssh "cole@$(tailscale ip --4 xeep)" "nix-store -r ${netboots1_out}"
-    ssh "cole@$(tailscale ip --4 xeep)" "nix-store -r ${netboots2_out}"
-
+    set -x
+    while true;
+    do
+      set +eo pipefail
+      netboots1_out="$(nixup build .#hydraBundles.x86_64-linux.netboots)"
+      netboots2_out="$(nixup build .#hydraBundles.aarch64-linux.netboots)"
+      if ssh "cole@$(tailscale ip --4 xeep)" "nix-store -r ${netboots1_out} --option narinfo-cache-negative-ttl 0" &&
+        ssh "cole@$(tailscale ip --4 xeep)" "nix-store -r ${netboots2_out} --option narinfo-cache-negative-ttl 0";
+      then
+        echo "yes"
+        break
+      else
+        echo "no"
+      fi
+      
+      echo "riscv build failed, probably nix bug, will retry in 10 seconds"
+      sleep 10
+    done
+    set -eo pipefail
+    
+    export BLDR_X86="$(tailscale ip --4 xeep)"
     nixup deploy xeep
     nixup pireboot
   ;;

@@ -5,14 +5,47 @@ let
 in
 {
   imports = [
-    (import "${inputs.mobile-nixos}/lib/configuration.nix" {
+    ./unfree.nix
+    # ../../mixins/common.nix
+    ../../mixins/helix.nix
+    # ../../mixins/ssh.nix
+    ../../mixins/nix.nix
+    ../../mixins/sshd.nix
+    ../../mixins/tailscale.nix
+    ../../mixins/wpa-slim.nix
+    ../../mixins/zellij.nix
+    ../../profiles/user.nix
+    ../../profiles/core.nix
+    # ../../profiles/interactive.nix
+    
+    (import "${inputs.mobile-nixos-openstick}/lib/configuration.nix" {
       device = "openstick";
     })
   ];
 
   config = {
-    # system.build.mobile = confic`mobile.outputs.android.abootimg;
-
-    system.stateVersion = "21.05";
+    system.stateVersion = "22.05";
+    networking.hostName = "openstick";
+    environment.systemPackages = with pkgs; [
+      usbutils
+      lshw
+      binwalk
+      nload
+      iperf
+    ];
+    
+    security.sudo.wheelNeedsPassword = false;
+    
+    # I think this is needed for firmware to be present in stage-2 when wpa/something
+    # fires it up?
+    # COMPRESS_FW_LOADER was needed to be enabled in the kernel
+    hardware.firmware = lib.mkBefore [ config.mobile.device.firmware ];
+    
+    networking.wireless.enable = true;
+    
+    documentation.enable = false;
+    documentation.doc.enable = false;
+    documentation.info.enable = false;
+    documentation.nixos.enable = false;
   };
 }

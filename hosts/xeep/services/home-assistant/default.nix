@@ -32,6 +32,8 @@ let
     
     slywin_wol = "switch.slywin";
     cleo_lamp = "switch.wp6_sw102_relay";
+    cleo_fountain = "switch.wp6_sw104_relay";
+    dabrig = "switch.wp_sw103_relay";
     project_powerstrip = "switch.wp6_sw106_relay";
 
     candle_den_bath = "switch.wp6_sw105_relay";
@@ -245,6 +247,29 @@ in
           #     target.entity_id = cleo_lamp_switch;
           #   }];
           # }
+          {
+            id = "cleo_fountain_cycle";
+            alias = "Cleo Fountain Cycle";
+            mode = "single";
+            trigger = {
+              platform = "time_pattern";
+              hours = "/1";
+              minutes = "0";
+            };
+            action = [
+              {
+                service = "switch.turn_off";
+                target.entity_id = cleo_fountain;
+              }
+              {
+                delay.seconds = 2;
+              }
+              {
+                service = "switch.turn_on";
+                target.entity_id = cleo_fountain;
+              }
+            ];
+          }
           {
             id = "candles_on";
             alias = "Candles On";
@@ -501,6 +526,10 @@ in
                   {
                     name = "Sony Bravia 55";
                     entity = "media_player.braviatv";
+                  }
+                  {
+                    name = "Dab Rig";
+                    entity = dabrig;
                   }
                   {
                     type = "section";

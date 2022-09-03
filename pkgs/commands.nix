@@ -102,7 +102,7 @@ let
           gpg --command-fd 0 --no-tty --no-greeting -q --edit-key "${gpgKeyId}" trust >/dev/null 2>&1
       fi
       gpg --card-status >/dev/null
-      gpg-connect-agent "scd checkpin ${gpgCardId}" /bye
+      echo "foo" | gpg --sign # somehow fixes some weird cases where remote gpg gets hung up when it hasn't been used locally
     '')
     (writeShellScriptBin "ssh-fix" ''
       ent="$(ls -t /tmp/ssh-**/agent.* | head -1)"

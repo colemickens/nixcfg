@@ -79,8 +79,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    mobile-nixos.url = "github:colemickens/mobile-nixos/2022-03-blueline";
-    mobile-nixos.inputs.nixpkgs.follows = "nixpkgs";
+    mobile-nixos-blueline.url = "github:colemickens/mobile-nixos/blueline2022";
+    mobile-nixos-blueline.inputs.nixpkgs.follows = "nixpkgs";
 
     mobile-nixos-openstick.url = "github:colemickens/mobile-nixos/openstick";
     mobile-nixos-openstick.inputs.nixpkgs.follows = "nixpkgs";
@@ -199,6 +199,7 @@
         default = (import ./shells/devshell.nix { inherit inputs system minimalMkShell; });
         devenv = (import ./shells/devenv.nix { inherit inputs system minimalMkShell; });
         gstreamer = (import ./shells/gstreamer.nix { inherit inputs system minimalMkShell; });
+        stable-diffusion = (import ./shells/stable-diffusion.nix { inherit inputs system; });
         uutils = minimalMkShell system {
           name = "uutils-devshell";
           nativeBuildInputs = with pkgs_.nixpkgs.${system}; [
@@ -223,8 +224,8 @@
           app = program: { type = "app"; program = "${program}"; };
           tfout = import ./cloud { terranix = inputs.terranix; pkgs = pkgs_.nixpkgs.${system}; };
 
-          mfb = dev: { type = "app"; program = nixosConfigurations.blueline.config.system.build.mobile-flash-boot.outPath; };
-          ds = dev: { type = "app"; program = nixosConfigurations.${dev}.config.system.build.deployScript; };
+          # mfb = dev: { type = "app"; program = nixosConfigurations.blueline.config.system.build.mobile-flash-boot.outPath; };
+          # ds = dev: { type = "app"; program = nixosConfigurations.${dev}.config.system.build.deployScript; };
         in
         (
           {
@@ -236,8 +237,8 @@
             tf-apply = { type = "app"; program = tfout.apply.outPath; };
             tf-destroy = { type = "app"; program = tfout.destroy.outPath; };
           }
-          // (nixlib.genAttrs [ "blueline" "enchilada" ] mfb)
-          // (nixlib.genAttrs [ "rpithreebp1" ] ds)
+          # // (nixlib.genAttrs [ "blueline" "enchilada" ] mfb)
+          # // (nixlib.genAttrs [ "rpithreebp1" ] ds)
         )
 
       );
@@ -391,11 +392,14 @@
         # rpizerotwo3 = mkSystem inputs.rpipkgs "aarch64-linux" "rpizerotwo3";
         ## oracular = mkSystem inputs.nixpkgs "aarch64-linux" "oracular";
         pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
-        # blueline = mkSystem inputs.nixpkgs "aarch64-linux" "blueline";
+        blueline = mkSystem inputs.nixpkgs "x86_64-linux" "blueline";
         # blueloco    = mkSystem inputs.nixpkgs "x86_64-linux"  "blueloco";
         # enchilada = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
         # enchiloco   = mkSystem inputs.nixpkgs "x86_64-linux"  "enchiloco";
-        openstick = mkSystem inputs.nixpkgs "aarch64-linux" "openstick";
+        # openstick = mkSystem inputs.nixpkgs "aarch64-linux" "openstick";
+        # openstick-cross = mkSystem inputs.nixpkgs "x86_64-linux" "openstick";
+        openstick = mkSystem inputs.nixpkgs "x86_64-linux" "openstick";
+        openstick-native = mkSystem inputs.nixpkgs "aarch64-linux" "openstick";
         #######################################################################
         # armv6l-linux (cross-built)
         # rpizero1 = mkSystem inputs.cross-armv6l "x86_64-linux" "rpizero1";
@@ -446,33 +450,39 @@
       #   enchilada = inputs.self.nixosConfigurations.enchilada.config.mobile.outputs.android;
       # };
       images = {
-        openstick = nixosConfigurations.openstick.config.mobile.outputs.android.abootimg;
+        openstick = {
+          aboot = nixosConfigurations.openstick-native.config.mobile.outputs.android.android-abootimg;
+          fastboot-images = nixosConfigurations.openstick.config.mobile.outputs.android.android-fastboot-images;
+        };
+        blueline = {
+          fastboot-images = nixosConfigurations.blueline.config.mobile.outputs.android.android-fastboot-images;
+        };
       };
-      phones =
-        let
-          mkPhone = dev: {
-            firmware = dev.config.mobile.device.firmware;
-            flash-boot = dev.config.system.build.mobile-flash-boot;
-          };
-          phone_hosts_ = (nixlib.attrNames (nixlib.filterAttrs
-            (_: v:
-              # v.meta.class = "phone"; // phone,server,desktop,laptop "string-y"?
-              v.config.networking.hostName == "blueline" || v.config.networking.hostName == "enchilada"
-            )
-            nixosConfigurations));
-          phone_hosts = nixlib.traceVal phone_hosts_;
+      # phones =
+      #   let
+      #     mkPhone = dev: {
+      #       firmware = dev.config.mobile.device.firmware;
+      #       flash-boot = dev.config.system.build.mobile-flash-boot;
+      #     };
+      #     phone_hosts_ = (nixlib.attrNames (nixlib.filterAttrs
+      #       (_: v:
+      #         # v.meta.class = "phone"; // phone,server,desktop,laptop "string-y"?
+      #         v.config.networking.hostName == "blueline" || v.config.networking.hostName == "enchilada"
+      #       )
+      #       nixosConfigurations));
+      #     phone_hosts = nixlib.traceVal phone_hosts_;
 
-          result = (
-            (nixlib.genAttrs phone_hosts (h: mkPhone nixosConfigurations."${h}")
-            )
-            //
-            ({
-              "blueboot" = (mkPhone (mkSystem inputs.crosspkgs "x86_64-linux" "blueline"));
-            })
-          );
-          result2 = nixlib.traceVal result;
-        in
-        result2;
+      #     result = (
+      #       (nixlib.genAttrs phone_hosts (h: mkPhone nixosConfigurations."${h}")
+      #       )
+      #       //
+      #       ({
+      #         "blueboot" = (mkPhone (mkSystem inputs.crosspkgs "x86_64-linux" "blueline"));
+      #       })
+      #     );
+      #     result2 = nixlib.traceVal result;
+      #   in
+      #   result2;
 
       # TODO:
       # - use bootspec to compose a multi-arch image

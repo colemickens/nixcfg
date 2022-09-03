@@ -167,7 +167,7 @@ in
           };
         };
 
-        networks."20-network-defaults" = {
+        networks."30-network-defaults" = {
           matchConfig.Name = "en* | eth* | usb* | wl*";
           networkConfig = {
             DHCP = "yes";

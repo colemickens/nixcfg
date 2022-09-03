@@ -102,6 +102,7 @@
         just
         pueue
         
+        binwalk
         cpio # needed?
         usbutils
         pciutils
