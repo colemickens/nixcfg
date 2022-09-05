@@ -8,8 +8,8 @@ let
   metadata = rec {
     repo_git = "https://github.com/k4zmu2a/SpaceCadetPinball";
     branch = "master";
-    rev = "69fd91f0032d0354a404c0124e8ac94a67631318";
-    sha256 = "sha256-UG0aKr44ImD426UJBe3w+uPu47HwgKv+HhiCGqHARL8=";
+    rev = "44d5fd509729374865c361de190fafd00f4781ae";
+    sha256 = "sha256-3dzQO3RcY/RxfrAmIrA//S4+iofJrpIQBoFXePsse38=";
   };
 in stdenv.mkDerivation rec {
   pname = if _assets == "" then "space-cadet-pinball" else "space-cadet-pinball-unfree";
