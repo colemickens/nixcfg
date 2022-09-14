@@ -14,9 +14,9 @@ let
     };
     repo_git = "https://github.com/${github.owner}/${github.repo}"; 
     branch = "master";
-    rev = "918fc2ccf4a2e3efa40a598d9d6abdc19def6408";
-    sha256 = "sha256-5SgiZhRcbCpNf9uuoutuRP+/00tTxYLDNhWMUep7tcE=";
-    cargoSha256 = "sha256-hF5XsGV7SmDGjEF/nC9ufcDNvT9tjuCMv0qY/vkICUU=";
+    rev = "9463eb9955cc62c5b608532c9867dbd5b7688039";
+    sha256 = "sha256-YmzCwG1RBTzUJE22WukcvqGRbrBPLHmWdkYOZ3MV38w=";
+    cargoSha256 = "sha256-osVFbfn3qiCuN3+WzAzj9PbUHnmn+XewwTNQ50IX/7w=";
   };
 in
 rustPlatform.buildRustPackage rec {
