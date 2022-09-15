@@ -250,11 +250,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1663271231,
-        "narHash": "sha256-9qSGxP67UobI27tupI49Yjm58+OTSxGXkPqoe2SBsSU=",
+        "lastModified": 1663282144,
+        "narHash": "sha256-TbRw3GcVATzh6OAovZ+S4h83kuxAv1hqY5jRHycCqoI=",
         "owner": "colemickens",
         "repo": "flake-firefox-nightly",
-        "rev": "2a855fc4f1575454e0a768c77c1c2bc323c56932",
+        "rev": "0cc8a76e3e62a82eb23d8e4122cdc7685e24884f",
         "type": "github"
       },
       "original": {
@@ -529,11 +529,11 @@
     "iterm2-color-schemes": {
       "flake": false,
       "locked": {
-        "lastModified": 1663270985,
-        "narHash": "sha256-f2M8tM0n5LQw+IuP9yk+okUEDNy/wROoxMMcvQg7ITI=",
+        "lastModified": 1663282218,
+        "narHash": "sha256-zOrJ+X9pzllEmq94xcqhqN5Jct17MKlbQshOGMAx1Do=",
         "owner": "mbadolato",
         "repo": "iTerm2-Color-Schemes",
-        "rev": "63d4c1c53d1148a42e4baea510d0af291b6f5a8a",
+        "rev": "a56897c3e031cb1be715706b7b25df860d5fc0a5",
         "type": "github"
       },
       "original": {
@@ -1039,11 +1039,11 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1663279043,
+        "lastModified": 1663282875,
         "narHash": "sha256-VxwTN78LYW9S28v+KUIXybxgxRiJTBL5H3SPD9+lhYI=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "6a5c2ff00be95d8988f3e154a53eb478fdea92f3",
+        "rev": "2330bdfb7977a3763621ca0fe9fec53c3387a41c",
         "type": "github"
       },
       "original": {
