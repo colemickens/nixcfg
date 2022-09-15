@@ -1039,11 +1039,11 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1663266603,
+        "lastModified": 1663267990,
         "narHash": "sha256-DRk2eMZbZ833cUYOwp4IEwaY5bBHgyxwxtEsqt3194s=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "68e9c2842157ab75ce20be51c57f3e8a5b5b010f",
+        "rev": "59625afef3ff0af89235b0a9a5acfadcc63fc72b",
         "type": "github"
       },
       "original": {
@@ -1352,11 +1352,11 @@
         "rust-overlay": "rust-overlay_3"
       },
       "locked": {
-        "lastModified": 1663169626,
-        "narHash": "sha256-6XSb7/HjGf+sNfa2VZUzB1VWi8Pfs5vQ5Uc1MsCElDI=",
+        "lastModified": 1663266936,
+        "narHash": "sha256-QF31fvsPDp6Hu9K7MdpBO6Spp4OftWWEaNI6YI9Ek0w=",
         "owner": "zellij-org",
         "repo": "zellij",
-        "rev": "65d12c4b9bd253a73756d384729463fa634e2b32",
+        "rev": "480086e3d456cb4984c70f50f7290fc06ad5b60a",
         "type": "github"
       },
       "original": {
