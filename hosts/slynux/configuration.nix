@@ -42,7 +42,7 @@ let
 in
 {
   imports = [
-    ../../profiles/sway
+    # ../../profiles/sway
     ../../profiles/interactive.nix
 
     # TODO: move to nixos-hardware
@@ -74,15 +74,33 @@ in
     networking.hostName = "slynux";
     
     nixcfg.common.defaultNetworking = false;
+    # systemd.network.wait-online.ignoredInterfaces = [ "wanbr0" ]; # since it's bridged?
+    systemd.network.wait-online.anyInterface = true; # untested here
     networking = {
+      firewall.allowedTCPPorts = [ 7860 7861 ];
       # hm, this is much nicer than doing it by hand...
       # but, for example, I can't match on not-the-name, which 
       # changes a lot with my stupid rdnis/usb devices, etc
       useNetworkd = true;
       interfaces."eno1".useDHCP = true;
+      # eno1 should use a static ip, currently gets "192.168.30.181" but we'd rather static it to "192.168.1.20" maybe to match xeep
       interfaces."wanbr0".useDHCP = true;
       bridges."wanbr0" = {
-        interfaces = [ "eno1" "enp5s0f0u4u2" ];
+        interfaces = [
+          "eno1"
+
+          "enp4s0f3u1u1"
+          "enp4s0f3u1u2"
+          "enp4s0f3u1u3"
+          "enp4s0f3u1u4"
+          "enp4s0f3u1u5"
+
+          "enp5s0f0u4u1"
+          "enp5s0f0u4u2"
+          "enp5s0f0u4u3"
+          "enp5s0f0u4u4"
+          "enp5s0f0u4u5"
+        ];
       };
     };
     # systemd.network = systemdNetworkVal;

@@ -3,8 +3,8 @@
 {
   config = {
     nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-      "openstick-firmware"
-      "uf896_v1_1_ogfw"
+      "google-blueline-vendor-firmware"
+      "google-blueline-firmware"
     ];
   };
 }

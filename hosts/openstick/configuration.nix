@@ -7,17 +7,18 @@ in
   imports = [
     ./unfree.nix
     # ../../mixins/common.nix
-    ../../mixins/helix.nix
+    # ../../mixins/helix.nix
     # ../../mixins/ssh.nix
     ../../mixins/nix.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
-    ../../mixins/wpa-slim.nix
-    ../../mixins/zellij.nix
+    ../../mixins/nmiot.nix
+    # ../../mixins/wpa-slim.nix
+    # ../../mixins/zellij.nix
     ../../profiles/user.nix
-    ../../profiles/core.nix
+    # ../../profiles/core.nix
     # ../../profiles/interactive.nix
-    
+
     (import "${inputs.mobile-nixos-openstick}/lib/configuration.nix" {
       device = "openstick";
     })
@@ -32,17 +33,22 @@ in
       binwalk
       nload
       iperf
+      zellij
+      bottom
+      libqmi
     ];
-    
+
     security.sudo.wheelNeedsPassword = false;
-    
+
     # I think this is needed for firmware to be present in stage-2 when wpa/something
     # fires it up?
     # COMPRESS_FW_LOADER was needed to be enabled in the kernel
     hardware.firmware = lib.mkBefore [ config.mobile.device.firmware ];
-    
-    networking.wireless.enable = true;
-    
+    hardware.bluetooth.enable = true;
+
+    # auto-start modem manager
+    systemd.services."ModemManager".wantedBy = [ "multi-user.target" ];
+
     documentation.enable = false;
     documentation.doc.enable = false;
     documentation.info.enable = false;

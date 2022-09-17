@@ -11,7 +11,7 @@ in
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
 
-    (import "${inputs.mobile-nixos}/lib/configuration.nix" {
+    (import "${inputs.mobile-nixos-pinephone}/lib/configuration.nix" {
       device = "pine64-pinephone";
     })
   ];

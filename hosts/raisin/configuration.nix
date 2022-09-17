@@ -9,6 +9,7 @@ in
 
     ../../mixins/grub-signed-shim.nix
 
+    ../../mixins/android.nix
     ../../mixins/libvirtd.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix

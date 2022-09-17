@@ -4,6 +4,15 @@ let
   pkgs = import inputs.nixpkgs {
     config.allowUnfree = true;
     system = system;
+    overlays = [
+      (final: prev: {
+        python3 = prev.python3.override {
+          packageOverrides = python-self: python-super: {
+            pytorch = python-super.pytorch.override { cudaSupport= true; };
+          };
+        };
+      })
+    ];
   };
   inherit (pkgs) lib;
 
@@ -31,6 +40,7 @@ pkgs.mkShell {
     ps.einops
     ps.transformers
     ps.torchmetrics
+    ps.pynvml
 
     # Missing from nixpkgs:
     # - streamlit>=0.73.1
@@ -56,8 +66,9 @@ pkgs.mkShell {
       "torch-fidelity==0.3.0" \
       "kornia==0.6" \
       "imwatermark" \
+      "gradio==3.3.1" \
       -e "git+https://github.com/CompVis/taming-transformers.git@master#egg=taming-transformers" \
-      -e "git+https://github.com/openai/CLIP.git@main#egg=clip" \
+      -e "git+https://github.com/crowsonkb/k-diffusion#egg=k_diffusion" \
       -e .
   '';
 }

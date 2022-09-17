@@ -33,7 +33,7 @@ let
     slywin_wol = "switch.slywin";
     cleo_lamp = "switch.wp6_sw102_relay";
     cleo_fountain = "switch.wp6_sw104_relay";
-    dabrig = "switch.wp_sw103_relay";
+    dabrig = "switch.wp6_sw103_relay";
     project_powerstrip = "switch.wp6_sw106_relay";
 
     candle_den_bath = "switch.wp6_sw105_relay";
@@ -259,14 +259,14 @@ in
             action = [
               {
                 service = "switch.turn_off";
-                target.entity_id = cleo_fountain;
+                target.entity_id = _ent.cleo_fountain;
               }
               {
                 delay.seconds = 2;
               }
               {
                 service = "switch.turn_on";
-                target.entity_id = cleo_fountain;
+                target.entity_id = _ent.cleo_fountain;
               }
             ];
           }
@@ -384,13 +384,14 @@ in
         #     token = "xInHWS17zONcFiW5bpPXA7ZDYdWuFQP2";
         #   }
         # ];
-        media_player = [
-          {
-            name = "braviatv";
-            platform = "braviatv";
-            host = "192.168.1.119";
-          }
-        ];
+        # media_player = [
+        #   {
+        #     name = "braviatv";
+        #     platform = "braviatv";
+        #     host = "192.168.1.119";
+        #   }
+        # ];
+        braviatv = {};
         nanoleaf = { };
         # prometheus = { namespace = "hass"; };
         ssdp = { };
@@ -529,7 +530,7 @@ in
                   }
                   {
                     name = "Dab Rig";
-                    entity = dabrig;
+                    entity = _ent.dabrig;
                   }
                   {
                     type = "section";

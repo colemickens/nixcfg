@@ -4,20 +4,16 @@ let
   pixel3_ip4 = "100.83.93.42";
   pixel3_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6253:5d2a]";
 
-  slynux_ip4 = "100.112.137.125";
-  slynux_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6270:897d]";
-  sinkor_ip4 = "100.88.111.30";
-  sinkor_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6258:6f1e]";
+  carbon_ip4 = "100.122.12.36";
+  carbon_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:627a:c24]";
+  # slynux_ip4 = "100.120.15.79";
+  # slynux_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6278:f4f]";
+  slynux_ip4 = "192.168.30.181";
+  # slynux_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6278:f4f]";
   xeep_ip4 = "100.72.11.62";
   xeep_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6248:b3e]";
-  raisin_ip4 = "100.92.252.95";
-  raisin_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:625c:fc5f]";
-  slywin_ip4 = "100.71.20.50";
-  slywin_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6247:1432]";
-  raiswin_ip4 = "100.84.178.79";
-  raiswin_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6254:b24f]";
-  pelinore_ip4 = "100.78.207.66";
-  pelinore_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:624e:cf42]";
+  raisin_ip4 = "100.112.194.64";
+  raisin_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6270:c240]";
   jeffhyper_ip4 = "100.103.91.27";
   jeffhyper_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6267:5b1b]";
 
@@ -33,6 +29,12 @@ let
         <h2>serveis</h2>
         <ul>
           <li><a href="https://x.cleo.cat">deixa'm entrar</a></li>
+        </ul>
+
+        <h2>serveis2</h2>
+        <ul>
+          <li><a href="https://sd.cleo.cat">stable-diffusion webui</a></li>
+          <li><a href="https://sdo.cleo.cat">stable-diffusion outputs</a></li>
         </ul>
 
         <br/>
@@ -53,6 +55,9 @@ let
         
         <h2>serveis</h2>
         <ul>
+          <li><a href="http://sd.x.cleo.cat">stable-diffusion</a></li>
+        </ul>
+        <ul>
           <li><a href="https://home.x.cleo.cat">home-assistant</a></li>
           <li><a href="https://homie.x.cleo.cat">homie (hodd)</a></li>
           <li><a href="https://unifi.x.cleo.cat">unifi</a></li>
@@ -64,15 +69,11 @@ let
         <ul>
           <li><a href="https://syncthing-pixel3.x.cleo.cat">syncthing (pixel3)</a></li>
           <br/>
-          <li><a href="https://syncthing-porty.x.cleo.cat">syncthing (porty)</a></li>
-          <li><a href="https://syncthing-sinkor.x.cleo.cat">syncthing (sinkor)</a></li>
+          <li><a href="https://syncthing-carbon.x.cleo.cat">syncthing (carbon)</a></li>
+          <li><a href="https://syncthing-slynux.x.cleo.cat">syncthing (slynux)</a></li>
           <li><a href="https://syncthing-raisin.x.cleo.cat">syncthing (raisin)</a></li>
           <li><a href="https://syncthing-xeep.x.cleo.cat">syncthing (xeep)</a></li>
           <li><a href="https://syncthing-jeffhyper.x.cleo.cat">syncthing (jeffhyper)</a></li>
-          <br/>
-          <li><a href="https://syncthing-slywin.x.cleo.cat">syncthing (slywin)</a></li>
-          <li><a href="https://syncthing-raiswin.x.cleo.cat">syncthing (raiswin)</a></li>
-          <li><a href="https://syncthing-pelinore.x.cleo.cat">syncthing (pelinore)</a></li>
         </ul>
 
         <h2>serveis futurs</h2>
@@ -99,6 +100,15 @@ let
     systemLabel = config.system.nixos.label;
   };
 
+  protectedVhost = {
+    useACMEHost = "cleo.cat";
+    forceSSL = true;
+    extraConfig = ''
+      auth_basic "protected cleo.cat service";
+      auth_basic_user_file /run/secrets/htpasswd;
+    '';
+  };
+
   internalVhost = {
     useACMEHost = "cleo.cat";
     forceSSL = true;
@@ -118,6 +128,10 @@ in
     sops.secrets."cloudflare-cleo-cat-creds" = {
       owner = "acme";
       group = "acme";
+    };
+    sops.secrets."htpasswd" = {
+      owner = "nginx";
+      group = "nginx";
     };
 
     networking.firewall = {
@@ -141,8 +155,9 @@ in
     # q: why isn't this done for me?
     # answer: because when nginx owns the acme setup, it configures the
     # group owner on the cert to be nginx's group
-    users.users.nginx.extraGroups = ["acme"];
+    users.users.nginx.extraGroups = [ "acme" ];
 
+    environment.etc."sdo-www".source = "/home/cole/code/stable-diffusion/outputs";
     services.nginx = {
       enable = true;
 
@@ -190,6 +205,31 @@ in
           '';
         };
       };
+
+      # EXTERNAL, PROTECTED
+      virtualHosts."sd.cleo.cat" = protectedVhost // {
+        locations."/" = {
+          proxyPass = "http://${slynux_ip4}:7860/";
+          proxyWebsockets = true;
+        };
+      };
+      virtualHosts."sdo.cleo.cat" = protectedVhost // {
+        locations."/" = {
+          proxyPass = "http://${slynux_ip4}:7861/";
+          proxyWebsockets = true;
+        };
+        # locations."/" = {
+        #   # root = "/etc/sdo-www/";
+        #   root = "/var/lib/stable-diffusion/outputs";
+        #   extraConfig = ''
+        #     disable_symlinks off;
+        #     autoindex on;
+        #   '';
+        # };
+      };
+
+
+      # INTERNAL ONLY
       virtualHosts."x.cleo.cat" = internalVhost // {
         root = payload_vpn;
       };
@@ -233,7 +273,7 @@ in
         };
       };
       # </homie-cast>
-      
+
       virtualHosts."denon.x.cleo.cat" = internalVhost // {
         locations."/" = {
           proxyPass = "http://192.168.1.126:80/";
@@ -267,25 +307,21 @@ in
           '';
         };
       };
-    
-    
+
+
       virtualHosts."aria2.x.cleo.cat" = internalVhost // {
         locations."/".proxyPass = "http://localhost:${toString config.services.aria2.rpcListenPort}";
         locations."/".proxyWebsockets = true;
       };
-      
-      
+
+
       # syncthing
-      virtualHosts."syncthing-pixel3.x.cleo.cat" = internalVhost // {
-        locations."/".proxyPass = "http://${pixel3_ip6}:8384/";
+      virtualHosts."syncthing-slynux.x.cleo.cat" = internalVhost // {
+        locations."/".proxyPass = "http://${slynux_ip4}:8384/";
         locations."/".proxyWebsockets = true;
       };
-      virtualHosts."syncthing-porty.x.cleo.cat" = internalVhost // {
-        locations."/".proxyPass = "http://${slynux_ip6}:8384/";
-        locations."/".proxyWebsockets = true;
-      };
-      virtualHosts."syncthing-sinkor.x.cleo.cat" = internalVhost // {
-        locations."/".proxyPass = "http://${sinkor_ip6}:8384/";
+      virtualHosts."syncthing-carbon.x.cleo.cat" = internalVhost // {
+        locations."/".proxyPass = "http://${carbon_ip6}:8384/";
         locations."/".proxyWebsockets = true;
       };
       virtualHosts."syncthing-xeep.x.cleo.cat" = internalVhost // {
@@ -294,18 +330,6 @@ in
       };
       virtualHosts."syncthing-raisin.x.cleo.cat" = internalVhost // {
         locations."/".proxyPass = "http://${raisin_ip6}:8384/";
-        locations."/".proxyWebsockets = true;
-      };
-      virtualHosts."syncthing-slywin.x.cleo.cat" = internalVhost // {
-        locations."/".proxyPass = "http://${slywin_ip4}:8384/";
-        locations."/".proxyWebsockets = true;
-      };
-      virtualHosts."syncthing-pelinore.x.cleo.cat" = internalVhost // {
-        locations."/".proxyPass = "http://${pelinore_ip4}:8384/";
-        locations."/".proxyWebsockets = true;
-      };
-      virtualHosts."syncthing-raiswin.x.cleo.cat" = internalVhost // {
-        locations."/".proxyPass = "http://${raiswin_ip4}:8384/";
         locations."/".proxyWebsockets = true;
       };
       virtualHosts."syncthing-jeffhyper.x.cleo.cat" = internalVhost // {

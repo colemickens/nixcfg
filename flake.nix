@@ -25,9 +25,9 @@
     cross-riscv64.url = "github:colemickens/nixpkgs/cmpkgs-cross-riscv64";
     rpipkgs = { url = "github:colemickens/nixpkgs/cmpkgs-rpipkgs"; };
     # </cmpkgs>
-    
+
     nix-netboot-server.url = "github:DeterminateSystems/nix-netboot-serve";
-    
+
     # nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # nixos-stable.url = "github:nixos/nixpkgs/nixos-22.05"; # for cachix
     # riscv64 = { url = "github:zhaofengli/nixos-riscv64"; };
@@ -63,7 +63,6 @@
     firefox.inputs.nixpkgs.follows = "nixpkgs";
 
     impermanence.url = "github:nix-community/impermanence";
-    impermanence.inputs.nixpkgs.follows = "nixpkgs";
 
     tow-boot-rpi = {
       url = "github:colemickens/Tow-Boot/rpi";
@@ -79,8 +78,16 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    mobile-nixos-pinephone.url = "github:colemickens/mobile-nixos/pinephone-emmc";
+    mobile-nixos-pinephone.inputs.nixpkgs.follows = "nixpkgs";
+
     mobile-nixos-blueline.url = "github:colemickens/mobile-nixos/blueline2022";
     mobile-nixos-blueline.inputs.nixpkgs.follows = "nixpkgs";
+
+    mobile-nixos-sdm845 = {
+      url = "github:colemickens/mobile-nixos/sdm845";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     mobile-nixos-openstick.url = "github:colemickens/mobile-nixos/openstick";
     mobile-nixos-openstick.inputs.nixpkgs.follows = "nixpkgs";
@@ -118,7 +125,7 @@
     #hydra.url = "github:NixOS/hydra"; };
     #hydra.inputs.nixpkgs.follows = "nixpkgs";
   };
-  
+
   nixConfig = {
     extra-substituters = [
       "https://cache.nixos.org"
@@ -258,7 +265,7 @@
           hodd = prev.callPackage ./pkgs/hodd { };
           keyboard-layouts = prev.callPackage ./pkgs/keyboard-layouts { };
           onionbalance = prev.python3Packages.callPackage ./pkgs/onionbalance { };
-          rumqtt = prev.callPackage ./pkgs/rumqtt { };
+          # rumqtt = prev.callPackage ./pkgs/rumqtt { };
           solo2-cli = prev.callPackage ./pkgs/solo2-cli {
             solo2-cli = prev.solo2-cli;
           };
@@ -319,8 +326,9 @@
       # TODO:
       # - for now we just re-use the nixosConfiguration
       # - but maybe, for example, we want to cross-compile these since hosted from 'xeep'
-      xnetboots = {};
-      netboots = nixlib.genAttrs
+      netboots = { };
+      # netboots = _netboots;
+      _netboots = nixlib.genAttrs
         [
           "risky-cross"
           "rpifour1"
@@ -393,13 +401,10 @@
         ## oracular = mkSystem inputs.nixpkgs "aarch64-linux" "oracular";
         pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
         blueline = mkSystem inputs.nixpkgs "x86_64-linux" "blueline";
-        # blueloco    = mkSystem inputs.nixpkgs "x86_64-linux"  "blueloco";
-        # enchilada = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
-        # enchiloco   = mkSystem inputs.nixpkgs "x86_64-linux"  "enchiloco";
-        # openstick = mkSystem inputs.nixpkgs "aarch64-linux" "openstick";
-        # openstick-cross = mkSystem inputs.nixpkgs "x86_64-linux" "openstick";
+        blueline-cross = mkSystem inputs.nixpkgs "x86_64-linux" "blueline";
+        enchilada = mkSystem inputs.nixpkgs "aarch64-linux" "enchilada";
+        enchilada-cross = mkSystem inputs.nixpkgs "x86_64-linux" "enchilada";
         openstick = mkSystem inputs.nixpkgs "x86_64-linux" "openstick";
-        openstick-native = mkSystem inputs.nixpkgs "aarch64-linux" "openstick";
         #######################################################################
         # armv6l-linux (cross-built)
         # rpizero1 = mkSystem inputs.cross-armv6l "x86_64-linux" "rpizero1";
@@ -413,7 +418,20 @@
       toplevels = nixlib.genAttrs
         (builtins.attrNames inputs.self.outputs.nixosConfigurations)
         (attr: nixosConfigurations.${attr}.config.system.build.toplevel);
-
+      nixosConfigs = {
+        phone = {
+          pinephone = mkSystem inputs.nixpkgs "aarch64-linux" "pinephone";
+          blueline = mkSystem inputs.nixpkgs "x86_64-linux" "blueline";
+          enchilada = mkSystem inputs.nixpkgs "x86_64-linux" "enchilada";
+        };
+        pc = {
+          carbon = mkSystem inputs.nixpkgs "x86_64-linux" "carbon";
+          jeffhyper = mkSystem inputs.nixpkgs "x86_64-linux" "jeffhyper";
+          slynux = mkSystem inputs.nixpkgs "x86_64-linux" "slynux";
+          raisin = mkSystem inputs.nixpkgs "x86_64-linux" "raisin";
+          xeep = mkSystem inputs.nixpkgs "x86_64-linux" "xeep";
+        };
+      };
 
       hydraJobs = forAllSystems (s: {
         #devshell = force_cached s inputs.self.devShell.${s}.inputDerivation;
@@ -422,6 +440,10 @@
         packages = force_cached s (filterPkgs pkgs_.nixpkgs.${s} inputs.self.packages.${s});
         toplevels = force_cached s (builtins.mapAttrs (n: v: v.config.system.build.toplevel)
           (filterHosts pkgs_.nixpkgs.${s} inputs.self.nixosConfigurations));
+        toplevels_pc = force_cached s (builtins.mapAttrs (n: v: v.config.system.build.toplevel)
+          (filterHosts pkgs_.nixpkgs.${s} inputs.self.nixosConfigs.pc));
+        toplevels_phone = force_cached s (builtins.mapAttrs (n: v: v.config.system.build.toplevel)
+          (filterHosts pkgs_.nixpkgs.${s} inputs.self.nixosConfigs.phone));
         netboots = force_cached s (filterPkgsTgt pkgs_.nixpkgs.${s} netboots);
         nfsfirms = force_cached s (filterPkgs pkgs_.nixpkgs.${s} nfsfirms);
         netpayload = force_cached s (
@@ -451,11 +473,15 @@
       # };
       images = {
         openstick = {
-          aboot = nixosConfigurations.openstick-native.config.mobile.outputs.android.android-abootimg;
+          aboot = nixosConfigurations.openstick.config.mobile.outputs.android.android-abootimg;
           fastboot-images = nixosConfigurations.openstick.config.mobile.outputs.android.android-fastboot-images;
         };
         blueline = {
-          fastboot-images = nixosConfigurations.blueline.config.mobile.outputs.android.android-fastboot-images;
+          bootimg = nixosConfigurations.blueline-cross.config.mobile.outputs.android.android-bootimg;
+        };
+        enchilada = {
+          # fastboot-images = nixosConfigurations.enchilada.config.mobile.outputs.android.android-fastboot-images;
+          bootimg = nixosConfigurations.enchilada-cross.config.mobile.outputs.android.android-bootimg;
         };
       };
       # phones =
@@ -494,7 +520,7 @@
       #   forAllSystems (s: installer);
       # - bundle the installer script
       # - the installer script should also manage host ssh/age keys + secrets re-provisioning
-      
+
       installer = nixosConfigurations.installer.config.system.build.isoImage;
 
       # images = nixlib.genAttrs [ "rpizero1" "rpizero2" ] (h:
