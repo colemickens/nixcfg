@@ -228,11 +228,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1663311104,
-        "narHash": "sha256-FgFdhRPr/PGB/KXZGXe+alNBW96vzyNj8QIwJTX9pnM=",
+        "lastModified": 1663396212,
+        "narHash": "sha256-dlK10QPTDYNpJ/vl2QPKOTrqEbQwAR/v2f4+xsetTkw=",
         "owner": "figsoda",
         "repo": "fenix",
-        "rev": "d5a8751249c2818d85c55506f7c4772179bee41f",
+        "rev": "263cd7f991c07a9592a6e825bfc37b23b00eb244",
         "type": "github"
       },
       "original": {
@@ -1078,11 +1078,11 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1663397153,
+        "lastModified": 1663398042,
         "narHash": "sha256-0dqY3BSIFk/irKKed6nDQtI9EsInG3bkpXQHuG6j+5U=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "ce6dc2e0a6e3938f2aa01d8a1bb7faea7add69ab",
+        "rev": "82a263fd8b8a0548a9630466c546ba1930e4fc99",
         "type": "github"
       },
       "original": {
