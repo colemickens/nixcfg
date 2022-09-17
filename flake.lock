@@ -545,11 +545,11 @@
     "iterm2-color-schemes": {
       "flake": false,
       "locked": {
-        "lastModified": 1663282218,
-        "narHash": "sha256-zOrJ+X9pzllEmq94xcqhqN5Jct17MKlbQshOGMAx1Do=",
+        "lastModified": 1663432746,
+        "narHash": "sha256-1gQbnueFQwk52lptEE6Ec7zLkmdOHovswRUn7KNCNtk=",
         "owner": "mbadolato",
         "repo": "iTerm2-Color-Schemes",
-        "rev": "a56897c3e031cb1be715706b7b25df860d5fc0a5",
+        "rev": "f61a9035634210b7259199a64a16fc66dec7182e",
         "type": "github"
       },
       "original": {
@@ -1078,11 +1078,11 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1663432198,
+        "lastModified": 1663433081,
         "narHash": "sha256-UfwX+aysqnCTjX6tG25Bs/JtJdlLzfspZ9kqapqTFyE=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "3e51e11679793ea9dce434d2d00783e73b4e37be",
+        "rev": "d69a2a9c1c1b4305c31e57cbf005cda4731416b5",
         "type": "github"
       },
       "original": {
