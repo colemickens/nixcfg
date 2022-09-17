@@ -615,11 +615,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1663390727,
-        "narHash": "sha256-lS8Lb6fCr187H6jWKngVuxlbHcNYupOBbeoGBlK13VQ=",
+        "lastModified": 1663426950,
+        "narHash": "sha256-hKJ1AL+a7U1fV07cFNmVLcZdeIQW6JbGezBk4jZC5UE=",
         "owner": "martinvonz",
         "repo": "jj",
-        "rev": "3c22ce11a4b2eccf1bc3e97a46ec2c73d879eab5",
+        "rev": "f3d39c78207bf86adab42bd0bedda99318291c9c",
         "type": "github"
       },
       "original": {
@@ -1078,11 +1078,11 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1663426668,
+        "lastModified": 1663427554,
         "narHash": "sha256-UfwX+aysqnCTjX6tG25Bs/JtJdlLzfspZ9kqapqTFyE=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "fa5f4e67b1cc17f9293afd12511be6798d058421",
+        "rev": "545b0dced114cb49149879c06f075694171b876e",
         "type": "github"
       },
       "original": {
