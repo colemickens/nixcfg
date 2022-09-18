@@ -266,11 +266,11 @@
     "flake-compat": {
       "flake": false,
       "locked": {
-        "lastModified": 1641205782,
-        "narHash": "sha256-4jY7RCWUoZ9cKD8co0/4tFARpWB+57+r1bLLvXNJliY=",
+        "lastModified": 1650374568,
+        "narHash": "sha256-Z+s0J8/r907g149rllvwhb4pKi8Wam5ij0st8PwAh+E=",
         "owner": "edolstra",
         "repo": "flake-compat",
-        "rev": "b7547d3eed6f32d06102ead8991ec52ab0a4f1a7",
+        "rev": "b4a34015c698c7793d592d66adbab377907a2be8",
         "type": "github"
       },
       "original": {
@@ -328,22 +328,6 @@
       }
     },
     "flake-compat_5": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1650374568,
-        "narHash": "sha256-Z+s0J8/r907g149rllvwhb4pKi8Wam5ij0st8PwAh+E=",
-        "owner": "edolstra",
-        "repo": "flake-compat",
-        "rev": "b4a34015c698c7793d592d66adbab377907a2be8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "edolstra",
-        "repo": "flake-compat",
-        "type": "github"
-      }
-    },
-    "flake-compat_6": {
       "flake": false,
       "locked": {
         "lastModified": 1650374568,
@@ -647,31 +631,9 @@
         "type": "github"
       }
     },
-    "mobile-nixos-blueline": {
-      "inputs": {
-        "flake-compat": "flake-compat",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1661719455,
-        "narHash": "sha256-ksKTPerlQ77OMoZHX98fVFifaFB9yU0XJNdhIUpyX2U=",
-        "owner": "colemickens",
-        "repo": "mobile-nixos",
-        "rev": "5601b872a308640c9228835b525940b4438e87f0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "ref": "blueline2022",
-        "repo": "mobile-nixos",
-        "type": "github"
-      }
-    },
     "mobile-nixos-openstick": {
       "inputs": {
-        "flake-compat": "flake-compat_2",
+        "flake-compat": "flake-compat",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -693,7 +655,7 @@
     },
     "mobile-nixos-pinephone": {
       "inputs": {
-        "flake-compat": "flake-compat_3",
+        "flake-compat": "flake-compat_2",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -715,22 +677,22 @@
     },
     "mobile-nixos-sdm845": {
       "inputs": {
-        "flake-compat": "flake-compat_4",
+        "flake-compat": "flake-compat_3",
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1663464553,
-        "narHash": "sha256-b8WRWubqdHypCl6WElG0L32JsHoySgsl+/pu/UnroEI=",
+        "lastModified": 1663468641,
+        "narHash": "sha256-b5cCBmaYhgFVcRR3Jvj1eJ7LQt12WSC0nVDLlsofM9c=",
         "owner": "colemickens",
         "repo": "mobile-nixos",
-        "rev": "8b64429d8a145cd21daa24b2c6682fd4c0d5e7e3",
+        "rev": "b3a230775a687523ea17c639515dd82f7b879129",
         "type": "github"
       },
       "original": {
         "owner": "colemickens",
-        "ref": "sdm845",
+        "ref": "sdm845-blue",
         "repo": "mobile-nixos",
         "type": "github"
       }
@@ -905,7 +867,7 @@
     "nixpkgs-wayland": {
       "inputs": {
         "cachix": "cachix_2",
-        "flake-compat": "flake-compat_5",
+        "flake-compat": "flake-compat_4",
         "lib-aggregate": "lib-aggregate",
         "nixpkgs": [
           "nixpkgs"
@@ -1056,7 +1018,6 @@
         "hyprland": "hyprland",
         "impermanence": "impermanence",
         "jj": "jj",
-        "mobile-nixos-blueline": "mobile-nixos-blueline",
         "mobile-nixos-openstick": "mobile-nixos-openstick",
         "mobile-nixos-pinephone": "mobile-nixos-pinephone",
         "mobile-nixos-sdm845": "mobile-nixos-sdm845",
@@ -1078,11 +1039,11 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1663468625,
+        "lastModified": 1663469508,
         "narHash": "sha256-UWry6qyeN6YIDXg9BpwZdQPczYTnpsAdwnoQBWkDmZw=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "979656f34eac2664590d287233cad8f651c7ad65",
+        "rev": "8a8f75ac04c64fee2d4801ee8a930cf4379f1769",
         "type": "github"
       },
       "original": {
@@ -1385,7 +1346,7 @@
     "zellij": {
       "inputs": {
         "crate2nix": "crate2nix",
-        "flake-compat": "flake-compat_6",
+        "flake-compat": "flake-compat_5",
         "flake-utils": "flake-utils_5",
         "nixpkgs": "nixpkgs_7",
         "rust-overlay": "rust-overlay_3"
