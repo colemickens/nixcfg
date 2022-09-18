@@ -116,11 +116,11 @@
     },
     "cross-armv6l": {
       "locked": {
-        "lastModified": 1663526306,
-        "narHash": "sha256-0xJgkL1r8yUoXy25NBhS3K/tTSCsJuQO0pICzGQ1E2M=",
+        "lastModified": 1663527095,
+        "narHash": "sha256-VF1xasjUAIrizSQmnwcTGSCipWr9boe4eUgkGEbcGbY=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "7c16333a02a487a403393feb1f78087df2deef71",
+        "rev": "d87436a053e5ca2ad1e6a159c4a402f9cdf556a3",
         "type": "github"
       },
       "original": {
@@ -132,11 +132,11 @@
     },
     "cross-riscv64": {
       "locked": {
-        "lastModified": 1663526299,
-        "narHash": "sha256-+KO4mYz4foAWRFMYWEQ6YQKGsNdZFAif8B2rBhEV2Nw=",
+        "lastModified": 1663527088,
+        "narHash": "sha256-e6mE+no6r4wDoX6oxpdqfQ4tIofki2OPAUeJ0kguD+Y=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "2d4d511e5f68addfe6c3fdc3a0ff7a00ed6b4c85",
+        "rev": "796914334bfea13ed5c9d797dabe276af756e537",
         "type": "github"
       },
       "original": {
@@ -951,11 +951,11 @@
     },
     "nixpkgs_6": {
       "locked": {
-        "lastModified": 1663526134,
-        "narHash": "sha256-5GWph6HQiY43ENCuw7qTOSuEtT+I6poCS3UE35d7DWc=",
+        "lastModified": 1663526857,
+        "narHash": "sha256-tNa2u8BtsG05YovV8F/kMSNPNeewsNYCJ28oU3HTJI8=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "6c5d3f4860b45c4d7ce1ea4ded41b2e84135520d",
+        "rev": "5b5ebc6bc69b5c6c27157dd4abc57e244297d685",
         "type": "github"
       },
       "original": {
@@ -1029,6 +1029,7 @@
         "nixpkgs-wayland": "nixpkgs-wayland",
         "rpipkgs": "rpipkgs",
         "sops-nix": "sops-nix",
+        "stable-diff": "stable-diff",
         "terranix": "terranix",
         "tow-boot-radxa-zero": "tow-boot-radxa-zero",
         "tow-boot-rpi": "tow-boot-rpi",
@@ -1039,11 +1040,11 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1663526379,
-        "narHash": "sha256-LzukqED5ykyiRD4iUQI2kPDEgeLAkEADd0A5cj894b8=",
+        "lastModified": 1663527168,
+        "narHash": "sha256-bjaEG6CX7ZVAAnutM0aQu3Vm03DMnF0uh6dNOtLAVfo=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "dfbcf5b55a841ebab8530844aa39f1eeaca0476e",
+        "rev": "c35a09619272eb46296e6f26c775f5ccb8ab3df3",
         "type": "github"
       },
       "original": {
@@ -1161,6 +1162,22 @@
         "owner": "Mic92",
         "ref": "master",
         "repo": "sops-nix",
+        "type": "github"
+      }
+    },
+    "stable-diff": {
+      "locked": {
+        "lastModified": 1663526924,
+        "narHash": "sha256-I5SDfzl4MTOvrQgULqwIF9iEknlzd6ubLRzXNC8EGHc=",
+        "owner": "colemickens",
+        "repo": "nixpkgs",
+        "rev": "5d55a6b6927b8dd07059da79f1c54202767ca6a6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "colemickens",
+        "ref": "stable-diff",
+        "repo": "nixpkgs",
         "type": "github"
       }
     },
