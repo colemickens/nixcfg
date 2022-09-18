@@ -1029,7 +1029,6 @@
         "nixpkgs-wayland": "nixpkgs-wayland",
         "rpipkgs": "rpipkgs",
         "sops-nix": "sops-nix",
-        "stable-diff": "stable-diff",
         "terranix": "terranix",
         "tow-boot-radxa-zero": "tow-boot-radxa-zero",
         "tow-boot-rpi": "tow-boot-rpi",
@@ -1040,11 +1039,11 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1663533406,
+        "lastModified": 1663534216,
         "narHash": "sha256-UWry6qyeN6YIDXg9BpwZdQPczYTnpsAdwnoQBWkDmZw=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "058ab98d6691643bb7626bd2cbdfbc3fa9f5c4d8",
+        "rev": "e8e23ae12b7b11300dae928936e1aceac5a03d8f",
         "type": "github"
       },
       "original": {
@@ -1162,22 +1161,6 @@
         "owner": "Mic92",
         "ref": "master",
         "repo": "sops-nix",
-        "type": "github"
-      }
-    },
-    "stable-diff": {
-      "locked": {
-        "lastModified": 1663531905,
-        "narHash": "sha256-Wud6a99NkC4WBOoO2X4LiP1UaTf258zogBzsUQHW2co=",
-        "owner": "colemickens",
-        "repo": "nixpkgs",
-        "rev": "a2260514d71884132359d8ba03ea0afd3c7832b0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "ref": "stable-diff",
-        "repo": "nixpkgs",
         "type": "github"
       }
     },
