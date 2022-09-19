@@ -77,5 +77,7 @@ in minimalMkShell pkgs.system { # TODO use something else for system?
     xorg.libX11 xorg.libxcb xorg.xcbutil # wezterm
     xorg.xcbproto xorg.xcbutil xorg.xcbutilwm  # wezterm
     xorg.xcbutilkeysyms xorg.xcbutilimage # wezterm
+    
+    inputs.marksman.outputs.packages.${system}.default
   ];
 }

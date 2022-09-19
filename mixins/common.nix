@@ -190,7 +190,7 @@ in
           coreutils
         ];
       nixpkgs.overlays = [
-        inputs.self.overlay
+        inputs.self.overlays.default
       ];
 
       ###################################

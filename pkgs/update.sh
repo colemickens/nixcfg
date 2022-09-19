@@ -30,11 +30,11 @@ if [[ "${1:-""}" != "" ]]; then
 
   printf '\n%s\n' ">>> update: ${pkgname}"
 
-  if ! nix eval --json "..#pkgs.x86_64-linux.${pkgname}.meta.verinfo" >"${t}" ; then
+  if ! nix eval --json "..#packages.x86_64-linux.${pkgname}.meta.verinfo" >"${t}" ; then
     echo "NO VERINFO"
     exit -1
   fi
-  if ! nix eval --json "..#pkgs.x86_64-linux.${pkgname}.meta.position" >"${t}.position"; then
+  if ! nix eval --json "..#packages.x86_64-linux.${pkgname}.meta.position" >"${t}.position"; then
     echo "NO POSITION"
     exit -1
   fi

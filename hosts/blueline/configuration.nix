@@ -3,20 +3,22 @@
 {
   imports = [
     ./unfree.nix
+
     # ../../mixins/common.nix
-    ../../mixins/tailscale.nix
     # ../../mixins/ssh.nix
-    ../../mixins/sshd.nix
-    # ../../mixins/wpa-slim.nix
     ../../mixins/nmiot.nix
     ../../mixins/nix.nix
+    ../../mixins/sshd.nix
+    ../../mixins/tailscale.nix
+    # ../../mixins/wpa-slim.nix
+
     ../../profiles/user.nix
     # ../../profiles/core.nix
     # ../../profiles/interactive.nix
 
-    ../../profiles/plamo
+    ../../profiles/phosh
 
-    (import "${inputs.mobile-nixos-blueline}/lib/configuration.nix" {
+    (import "${inputs.mobile-nixos-sdm845}/lib/configuration.nix" {
       device = "google-blueline";
     })
   ];
@@ -53,7 +55,7 @@
     systemd.services."ModemManager".wantedBy = [ "multi-user.target" ];
 
     # usb0 never appears with this disabled:
-    # mobile.boot.stage-1.networking.enable = true;
+    mobile.boot.stage-1.networking.enable = true;
 
     # networking.wireless.iwd.enable = true;
   };

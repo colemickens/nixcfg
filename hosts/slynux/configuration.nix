@@ -52,6 +52,7 @@ in
 
     ../../mixins/android.nix
     # ../../mixins/devshells.nix
+    ../../mixins/devtools.nix
     ../../mixins/grub-signed-shim.nix
     # ../../mixins/logitech-mouse.nix
     ../../mixins/rclone-googledrive-mounts.nix

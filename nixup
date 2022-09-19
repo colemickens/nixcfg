@@ -49,13 +49,8 @@ case "${cmd}" in
   "pkgup")   _h1 "pkgup";    "${DIR}/pkgs/update.sh" "${@}"; ;;
   "rpiup")   _h1 "rpiup";    "${DIR}/misc/rpi/rpipkgs.sh"; ;;
   "lockup")  _h1 "lockup";   (set -x; cd "${DIR}"; nix "${nixargs[@]}" flake lock --recreate-lock-file --commit-lock-file); ;;
-  "shellup") _h1 "shellup";  nixbuild "auto" "cachix:colemickens" ".#cachable"; ;;
+  "shellup") _h1 "shellup";  nixbuild "auto" "cachix:colemickens" ".#cache-dev"; ;;
   "inputup") _h1 "inputup";
-    # HOW?
-    # for s in "${resets[@]}"; do
-    #   git reset --hard "upstream/${branch}"
-    # done;
-    
     for s in "${srcdirs[@]}"; do
       _h2 "inputup - ${s}"
       test -d "${s}" || return;
@@ -73,6 +68,9 @@ case "${cmd}" in
     && nixup pkgup \
     && nixup shellup 
   ;;
+  "upbuild") _h1 "upbuild";
+    ./nixup build ".#cache-all"
+  ;;
   "upz") _h1 "upz";
     unset FLAKE_LOCK || true
     nixup up
@@ -89,11 +87,6 @@ case "${cmd}" in
     nixup deploy carbon || true
     nixup deploy xeep
     date
-  ;;
-
-  "upbuild") _h1 "upbuild";
-    f=".#hydraBundles.x86_64-linux"
-    nix build "$f.shells" "$f.packages" "$f.toplevels_pc"
   ;;
 
   "build")
@@ -133,14 +126,6 @@ case "${cmd}" in
     outres="$(cat "${stdout}")"
   ;;
   "rdeploy") export NIXUP_ACTION="reboot"; nixup deploy "${@}"; ;;
-  
-  "padd") 
-    pueue add -- "${DIR}/nixup" up
-    pueue add -- "${DIR}/nixup" pitest # deploys xeep
-    pueue add -- "${DIR}/nixup" deploy carbon
-    pueue add -- "${DIR}/nixup" deploy raisin
-    pueue add -- "${DIR}/nixup" deploy jeffhyper
-  ;; 
   
   "pi-on")
     curl -s -X POST -H "Authorization: Bearer $(cat /run/secrets/home-assistant-bearer-token)" -H "Content-Type: application/json" -d "{\"entity_id\": \"switch.${1}\"}" \

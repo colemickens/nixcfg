@@ -31,6 +31,8 @@ in
     hardware.bluetooth.enable = false;
     hardware.usbWwan.enable = true;
     hardware.cpu.amd.updateMicrocode = true;
+    
+    services.udisks2.enable = true; # fwupdmgr
 
     # it's a laptop-server, let's use this and use PPD to
     # put it into max performance mode

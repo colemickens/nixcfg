@@ -5,7 +5,8 @@ let
   # _firefox = pkgs.firefox-wayland;
   _firefox = lib.hiPrio firefoxFlake.firefox-nightly-bin;
 
-  _chromey = pkgs.ungoogled-chromium;
+  # _chromey = pkgs.ungoogled-chromium;
+  _chromey = pkgs.google-chrome-dev;
 in
 {
   imports = [
@@ -78,7 +79,7 @@ in
           # x86_64-linux only
           neochat
           _firefox
-          # _chromey
+          _chromey
         ]))
       );
     };

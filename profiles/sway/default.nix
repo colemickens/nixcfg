@@ -96,6 +96,8 @@ in
         pavucontrol
         #lxqt.pavucontrol-qt
         sirula
+        
+        anodium
 
         # file managers TODO: pick one?
         # xfce.thunar
