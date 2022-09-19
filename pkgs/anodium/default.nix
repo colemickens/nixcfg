@@ -21,13 +21,14 @@
 }:
 
 let
+  owner = "PolyMeilex";
   verinfo =
     {
-      repo_git = "https://github.com/colemickens/Anodium";
+      repo_git = "https://github.com/${owner}/Anodium";
       branch = "master";
-      rev = "441d2fded4a23bbc16e524ad869e3aa779ff00a0";
-      sha256 = "sha256-/hD+MSDE75+fmkdXy081i+bBBT5SQI8B32UtsYxgGrg=";
-      cargoSha256 = "sha256-bArNL/b8Eeo1afYe4MJAWPZTrFgweYi0xHRQhf2iBHg=";
+      rev = "fba6f0bff5c972ad4393dd93ed72f2c27ccbd470";
+      sha256 = "sha256-AJ97OLvDmDkkhsWHmdznRMj8v6Sy4reHi166ty25tco=";
+      cargoSha256 = "sha256-6s7VcMFzSObh6TTArr+P16pGAEoJA55lbD71RvVPxGc=";
     };
 in
 rustPlatform.buildRustPackage rec {
@@ -35,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   version = verinfo.rev;
 
   src = fetchFromGitHub {
-    owner = "colemickens";
+    owner = owner;
     repo = "Anodium";
     inherit (verinfo) rev sha256;
   };
