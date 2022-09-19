@@ -141,8 +141,8 @@ case "${cmd}" in
     while true;
     do
       set +eo pipefail
-      netboots1_out="$(nixup build .#hydraBundles.x86_64-linux.netboots)"
-      netboots2_out="$(nixup build .#hydraBundles.aarch64-linux.netboots)"
+      netboots1_out="$(nixup build .#bundles.x86_64-linux.netboots)"
+      netboots2_out="$(nixup build .#bundles.aarch64-linux.netboots)"
       if ssh "cole@$(tailscale ip --4 xeep)" "nix-store -r ${netboots1_out} --option narinfo-cache-negative-ttl 0" &&
         ssh "cole@$(tailscale ip --4 xeep)" "nix-store -r ${netboots2_out} --option narinfo-cache-negative-ttl 0";
       then

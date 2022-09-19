@@ -246,6 +246,7 @@
       ## PACKAGES + OVERLAY
       #################################################################################################################
       packages = (forAllSystems (s: (fullPkgs_.${s}.colePackages)));
+      pkgs = forAllSystems (s: fullPkgs_.${s});
       overlays = {
         default = (final: prev:
           let p = rec {
@@ -321,6 +322,7 @@
           rpifour1 = mkSystem inputs.rpipkgs "aarch64-linux" "rpifour1";
           rpithreebp1 = mkSystem inputs.rpipkgs "aarch64-linux" "rpithreebp1";
           rpizerotwo1 = mkSystem inputs.rpipkgs "aarch64-linux" "rpizerotwo1";
+          openstick = mkSystem inputs.rpipkgs "x86_64-linux" "openstick";
         };
         pc = {
           carbon = mkSystem inputs.nixpkgs "x86_64-linux" "carbon";
@@ -337,8 +339,10 @@
 
       ## NETBOOTS
       netboots = {};
-      _netboots = nixlib.genAttrs
-        [ "x_risky" "rpifour1" "rpithreebp1" "rpizerotwo1" ]
+      # netboots = netboots_;
+      netboots_ = nixlib.genAttrs
+        [ "rpifour1" ]
+        # [ "x_risky" "rpifour1" "rpithreebp1" "rpizerotwo1" ]
         (h: nixosConfigurations.${h}.config.system.build.extras.nfsboot);
 
 
