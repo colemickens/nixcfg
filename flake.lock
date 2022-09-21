@@ -805,11 +805,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1656022643,
-        "narHash": "sha256-A5HgP96jpAZ0ntUx5ADL1WYmqI+Gp3d9R9HSdcby7yg=",
+        "lastModified": 1663723551,
+        "narHash": "sha256-HoPuxe0x37edyo/BHXQMRE3wHYvN3vCIp2yISdvWEpI=",
         "owner": "DeterminateSystems",
         "repo": "nix-netboot-serve",
-        "rev": "ba0933e917e916b4983b9b4b2e6d8136a07b5876",
+        "rev": "90b0776a1b71107b78f9ea317df2c99c065c6e9b",
         "type": "github"
       },
       "original": {
@@ -1077,11 +1077,11 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1663723020,
+        "lastModified": 1663723888,
         "narHash": "sha256-jPlVyj3PPWdvJnl+BK3+a4lLYgSpdXQwZaz+SXSwJ24=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "c8fd7422db21a3e2ba25be6b5d8dd35bf664405b",
+        "rev": "17265338ba43a9cc31379f50b934902141cfbf33",
         "type": "github"
       },
       "original": {
