@@ -116,11 +116,11 @@
     },
     "cross-armv6l": {
       "locked": {
-        "lastModified": 1663966893,
-        "narHash": "sha256-Fj8uW59jEo006mGsk9/pKyZTtIbSWWMaqKIMMY7PCG0=",
+        "lastModified": 1664093525,
+        "narHash": "sha256-VjWFHaq26dj/ulMReo/8oSCzjLkqdVaghKAiMyhO5aI=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "fbb6b6e50ebfb1c2f3d0b872aa0274239181d076",
+        "rev": "726a00f5128a5a7b79794d5751e3083264a83583",
         "type": "github"
       },
       "original": {
@@ -132,11 +132,11 @@
     },
     "cross-riscv64": {
       "locked": {
-        "lastModified": 1663966886,
-        "narHash": "sha256-b/Kh55xRnLNyfvRhJjxjvx2ssIF9wtpfEqEXdRsWOEQ=",
+        "lastModified": 1664093517,
+        "narHash": "sha256-wC6gasa1iZVaLibuzeqqyIX6VlrGV2LEiiTYJ1+Rtvs=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "27c55c775e26df7967b0044539f1e7bc1aa1952d",
+        "rev": "c568ca624d9c5f528070867a647737c777af8d1a",
         "type": "github"
       },
       "original": {
@@ -988,11 +988,11 @@
     },
     "nixpkgs_6": {
       "locked": {
-        "lastModified": 1663966539,
-        "narHash": "sha256-6t/ghLZjaNruVBBsypX4WWEY28749HAqSSasGZXJk18=",
+        "lastModified": 1664092796,
+        "narHash": "sha256-kGPopuc4HFvbWipHYmrRqhR62+v4XChvi41u922KfK8=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "f0deda95ee67b5694b86b9571a3acb7c8b9e2ef8",
+        "rev": "b9bf67eace35cf3ea18770c6a12bd15f0ac6672b",
         "type": "github"
       },
       "original": {
@@ -1077,11 +1077,11 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1664092835,
+        "lastModified": 1664093579,
         "narHash": "sha256-v1CdQcdBfYbqm17aSU644C0Bu5sdtZQ5Y444oe0XMLk=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "53b62b368930ce046d2e7907f8bfd390fba719d6",
+        "rev": "06de5a8c69bebd1ed5c1897d61e212beb95c6386",
         "type": "github"
       },
       "original": {
