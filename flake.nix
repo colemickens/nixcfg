@@ -274,14 +274,14 @@
             # };
             visualizer2 = prev.callPackage ./pkgs/visualizer2 { };
 
-            # nix-build-uncached = prev.nix-build-uncached.overrideAttrs (old: {
-            #   src = prev.fetchFromGitHub {
-            #     owner = "colemickens";
-            #     repo = "nix-build-uncached";
-            #     rev = "36ea105";
-            #     sha256 = "sha256-Ovx+q5pdfg+yIF5HU7pV0nR6nnoTa3y/f9m4TV0XXc0=";
-            #   };
-            # });
+            nix-build-uncached = prev.nix-build-uncached.overrideAttrs (old: {
+              src = prev.fetchFromGitHub {
+                owner = "colemickens";
+                repo = "nix-build-uncached";
+                rev = "0edd782cb419ccb537ac11b1d98ab0f4fb9c9537";
+                sha256 = "sha256-xqD6aSyZzfyhZg2lYrhBXvU45bM8Bfttcnngqk8XXkk=";
+              };
+            });
 
             # alacritty/bottom/wezterm - rust updates are ... maybe not working? so...
             # disabled (not sure how to add rocksdb) # conduit = prev.callPackage ./pkgs/conduit {};
@@ -322,7 +322,7 @@
           rpifour1 = mkSystem inputs.rpipkgs "aarch64-linux" "rpifour1";
           rpithreebp1 = mkSystem inputs.rpipkgs "aarch64-linux" "rpithreebp1";
           rpizerotwo1 = mkSystem inputs.rpipkgs "aarch64-linux" "rpizerotwo1";
-          openstick = mkSystem inputs.rpipkgs "x86_64-linux" "openstick";
+          openstick = mkSystem inputs.nixpkgs "x86_64-linux" "openstick";
         };
         pc = {
           carbon = mkSystem inputs.nixpkgs "x86_64-linux" "carbon";

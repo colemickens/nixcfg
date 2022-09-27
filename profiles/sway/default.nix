@@ -43,7 +43,6 @@ in
     };
 
     xdg.portal.enable = true;
-    xdg.portal.gtkUsePortal = true;
     xdg.portal.extraPortals = with pkgs;
       [
         xdg-desktop-portal-wlr
@@ -98,6 +97,9 @@ in
         sirula
         
         anodium
+        sommelier
+        # virt-wl-proxy
+        wayland-proxy-virtwl
 
         # file managers TODO: pick one?
         # xfce.thunar

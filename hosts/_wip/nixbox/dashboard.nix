@@ -11,7 +11,7 @@ let
     url = "https://archive.org/download/xboxhdm_v1.9/xboxhdm_1.9.tar.zst";
     sha256 = "1yl6k3r4xflg5swsh85385n2kaw2q1giahliha1nwjykhh23c339";
   };
-  fatxKernel = pkgs.runCommandNoCC "fatxKernel" {} ''
+  fatxKernel = pkgs.runCommand "fatxKernel" {} ''
     mkdir $out
     cp ${xboxhdm19src}/xboxhdm/linux/isolinux/fatxImage $out/${img}
   '';
@@ -66,14 +66,14 @@ let
   nevolutionx = {};
 
   ## C-DRIVE
-  xbox_c =  pkgs.runCommandNoCC "xbox_c_drive" {} ''
+  xbox_c =  pkgs.runCommand "xbox_c_drive" {} ''
     mkdir $out
     touch $out/empty_c_drive
     #cp $nevolutionx}/bin/xboxdash.xbe $out/xboxdash.xbe
   '';
 
   ## E-DRIVE
-  xbox_e =  pkgs.runCommandNoCC "xbox_e_drive" {} ''
+  xbox_e =  pkgs.runCommand "xbox_e_drive" {} ''
     mkdir $out
     touch $out/empty_e_drive
   '';

@@ -104,7 +104,7 @@ minimalMkShell pkgs.system {
 
     /*tools */
     cmake
-    pkgconfig
+    pkg-config
     lldb
     python3
     /*nodejs*/
@@ -137,7 +137,7 @@ minimalMkShell pkgs.system {
     pcsclite
     openssl
     clang
-    libusb
+    libusb1
     gpgme
     libgpgerror
     libgit2
@@ -158,7 +158,7 @@ minimalMkShell pkgs.system {
     udev
     mesa
     libinput # Anodium
-    libseat # Anodium
+    seatd # Anodium
     xorg.libXcursor
     xorg.libXrandr
     xorg.libXi # Anodium

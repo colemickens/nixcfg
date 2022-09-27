@@ -28,6 +28,7 @@ in
         cursorTheme = prefs.cursor;
         gtk2.configLocation = "${hm.config.xdg.configHome}/gtk-2.0/gtkrc";
         gtk3.extraConfig = {
+          gtk-application-prefer-dark-theme = 1;
           gtk-cursor-theme-size = prefs.cursorSize;
           gtk-xft-hinting = 1;
           gtk-xft-hintstyle = "slight";

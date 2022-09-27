@@ -57,7 +57,7 @@ in
         # systemd.enable = true;
         settings = [{
         # settings = {
-          # ipc = true;
+          ipc = true;
           layer = "top";
           position = "top";
           modules-left = [

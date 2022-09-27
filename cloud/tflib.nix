@@ -19,7 +19,7 @@ let
   # # TODO: this doesn't work if the script has multiple bash vars per line .... fucking yuck
   # so put all TF_ type vars at top on their own line
   # TODO: is this safe to run everything through (shell embedded in nix?)
-  process = input: pkgs.runCommandNoCC "processabcxyz" {nativeBuildInputs = [pkgs.coreutils];} ''
+  process = input: pkgs.runCommand "processabcxyz" {nativeBuildInputs = [pkgs.coreutils];} ''
     sed '/TF_/! s/\''${\(.*\)}/$''${\1}/g' ${input} > $out
   '';
 

@@ -22,6 +22,7 @@ in
     ../../mixins/ledger.nix
     ../../mixins/libvirt.nix
     ../../mixins/logitech-mouse.nix
+    ../../mixins/obs.nix
     ../../mixins/plex-mpv.nix
     ../../mixins/snapclient-local.nix
     # ../../mixins/snapcast-sink.nix # doesn't work, feels like a privacy risk
@@ -110,7 +111,8 @@ in
       kernelModules = [ "iwlwifi" "ideapad_laptop" ];
       kernelParams = [
         "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}"
-        "ideapad_laptop.allow_v4_dytc=1"
+        # "ideapad_laptop.allow_v4_dytc=1"
+        "snd_hda_intel.model=lenovo-sky"
       ];
       initrd.availableKernelModules = [
         "xhci_pci"

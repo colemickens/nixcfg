@@ -64,7 +64,7 @@ if [[ "${NEW_BTFW_VERSION}" > "${NEW_WIFIFW_VERSION}" ]]; then
 fi
 
 t="$(mktemp)"; trap "rm $t" EXIT;
-nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.meta.verinfo" > "${t}" 2>/dev/null
+nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.passthru.verinfo" > "${t}" 2>/dev/null
 OLD_BTFW_REV="$(cat "${t}" | jq -r .btfw.rev)"
 OLD_BTFW_HASH="$(cat "${t}" | jq -r .btfw.hash)"
 OLD_WIFIFW_REV="$(cat "${t}" | jq -r .wififw.rev)"
@@ -120,7 +120,7 @@ METADATA_FILE="${NIXPKGS_WORKTREE}/pkgs/os-specific/linux/raspberrypi-eeprom/def
 UPDATE_ATTR="${NIXPKGS_WORKTREE}#legacyPackages.${ARCH}.raspberrypi-eeprom"
 UPDATE_ATTR_NAME="raspberrypi-eeprom"
 t="$(mktemp)"; trap "rm $t" EXIT;
-nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.meta.verinfo" > "${t}" 2>/dev/null
+nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.passthru.verinfo" > "${t}" 2>/dev/null
 OLD_EEPROM_REV="$(cat "${t}" | jq -r .rev)"
 OLD_EEPROM_HASH="$(cat "${t}" | jq -r .hash)"
 OLD_EEPROM_VERSION="$(cat "${t}" | jq -r .version)"
@@ -161,7 +161,7 @@ METADATA_FILE="${NIXPKGS_WORKTREE}/pkgs/os-specific/linux/firmware/raspberrypi/d
 UPDATE_ATTR="${NIXPKGS_WORKTREE}#legacyPackages.${ARCH}.raspberrypifw"
 UPDATE_ATTR_NAME="raspberrypifw"
 t="$(mktemp)"; trap "rm $t" EXIT;
-nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.meta.verinfo" > "${t}" 2>/dev/null
+nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.passthru.verinfo" > "${t}" 2>/dev/null
 OLD_RPIFW_REV="$(cat "${t}" | jq -r .rev)"
 OLD_RPIFW_HASH="$(cat "${t}" | jq -r .hash)"
 OLD_RPIFW_VERSION="$(cat "${t}" | jq -r .version)"
@@ -203,7 +203,7 @@ METADATA_FILE="${NIXPKGS_WORKTREE}/pkgs/os-specific/linux/firmware/raspberrypi/m
 UPDATE_ATTR="${NIXPKGS_WORKTREE}#legacyPackages.${ARCH}.raspberrypifw-master"
 UPDATE_ATTR_NAME="raspberrypifw-master"
 t="$(mktemp)"; trap "rm $t" EXIT;
-nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.meta.verinfo" > "${t}" 2>/dev/null
+nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.passthru.verinfo" > "${t}" 2>/dev/null
 OLD_RPIFW_REV="$(cat "${t}" | jq -r .rev)"
 OLD_RPIFW_HASH="$(cat "${t}" | jq -r .hash)"
 OLD_RPIFW_VERSION="$(cat "${t}" | jq -r .version)"
@@ -243,7 +243,7 @@ METADATA_FILE="${NIXPKGS_WORKTREE}/pkgs/os-specific/linux/firmware/raspberrypi/a
 UPDATE_ATTR="${NIXPKGS_WORKTREE}#legacyPackages.${ARCH}.raspberrypi-armstubs"
 UPDATE_ATTR_NAME="raspberrypi-armstubs"
 t="$(mktemp)"; trap "rm $t" EXIT;
-nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.meta.verinfo" > "${t}" 2>/dev/null
+nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.passthru.verinfo" > "${t}" 2>/dev/null
 OLD_ARMSTUBS_REV="$(cat "${t}" | jq -r .rev)"
 OLD_ARMSTUBS_HASH="$(cat "${t}" | jq -r .hash)"
 OLD_ARMSTUBS_VERSION="$(cat "${t}" | jq -r .version)"
@@ -283,7 +283,7 @@ METADATA_FILE="${NIXPKGS_WORKTREE}/pkgs/development/libraries/libraspberrypi/def
 UPDATE_ATTR="${NIXPKGS_WORKTREE}#legacyPackages.${ARCH}.libraspberrypi"
 UPDATE_ATTR_NAME="libraspberrypi"
 t="$(mktemp)"; trap "rm $t" EXIT;
-nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.meta.verinfo" > "${t}" 2>/dev/null
+nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.passthru.verinfo" > "${t}" 2>/dev/null
 OLD_LIBRPI_REV="$(cat "${t}" | jq -r .rev)"
 OLD_LIBRPI_HASH="$(cat "${t}" | jq -r .hash)"
 OLD_LIBRPI_VERSION="$(cat "${t}" | jq -r .version)"
@@ -333,7 +333,7 @@ METADATA_FILE="${NIXPKGS_WORKTREE}/pkgs/os-specific/linux/kernel/linux-rpi.nix"
 UPDATE_ATTR="${NIXPKGS_WORKTREE}#legacyPackages.${ARCH}.linuxPackages_rpi4.kernel"
 UPDATE_ATTR_NAME="linux_rpi"
 t="$(mktemp)"; trap "rm $t" EXIT;
-nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.meta.verinfo" > "${t}" 2>/dev/null
+nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.passthru.verinfo" > "${t}" 2>/dev/null
 OLD_LINUXRPI_REV="$(cat "${t}" | jq -r .rev)"
 OLD_LINUXRPI_HASH="$(cat "${t}" | jq -r .hash)"
 OLD_LINUXRPI_VERSION="$(cat "${t}" | jq -r .version)"

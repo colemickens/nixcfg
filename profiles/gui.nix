@@ -7,6 +7,12 @@ let
 
   # _chromey = pkgs.ungoogled-chromium;
   _chromey = pkgs.google-chrome-dev;
+  # _chromey = pkgs.writeShellScriptBin "chromey" ''
+  #   ${pkgs.sommelier}/bin/sommelier \
+  #     --xwayland-path=${pkgs.xwayland}/bin/Xwayland \
+  #     ${pkgs.google-chrome-dev}/bin/google-chrome-unstable --force-dark-mode
+  # '';
+
 in
 {
   imports = [

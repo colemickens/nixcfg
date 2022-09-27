@@ -80,7 +80,7 @@ in
       cli-visualizer
     ] ++ (if isCross then [ ] else [
       # these don't cross-compile due to makeWrapper issues?
-      alsaUtils
+      alsa-utils
       v4l-utils
       mpv
     ])));

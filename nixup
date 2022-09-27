@@ -68,18 +68,18 @@ case "${cmd}" in
     && nixup pkgup \
     && nixup shellup 
   ;;
-  "upbuild") _h1 "upbuild";
+  "cache-all") _h1 "cache-all";
     ./nixup build ".#cache-all"
   ;;
   "upz") _h1 "upz";
     unset FLAKE_LOCK || true
     nixup up
-    nixup upbuild
     date
   ;;
   "upzz") _h1 "upzz";
     unset FLAKE_LOCK || true
     nixup upz
+    # nixup cache-all
     nixup deploy slynux
     nixup deploy jeffhyper
     nixup deploy raisin

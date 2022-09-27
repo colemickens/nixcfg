@@ -31,7 +31,7 @@ in
     #     tb = config.system.build.towbootBuild;
     #     diskImage = tb.config.Tow-Boot.outputs.diskImage;
     #   in
-    #   pkgs.runCommandNoCC "nfsfirm-env-${hn}" { } (if hasTb then ''
+    #   pkgs.runCommand "nfsfirm-env-${hn}" { } (if hasTb then ''
     #     set -x
     #     mkdir $out
     #     cp -a "${diskImage}" $out/towboot.img
@@ -52,7 +52,7 @@ in
         firmware = tb.config.Tow-Boot.outputs.extra.firmwareContents;
         eeprom = tb.config.Tow-Boot.outputs.extra.eepromFiles; # TODO: "extraNetbootContents" ?? or should this just be in fwContents?
       in
-      pkgs.runCommandNoCC "nfsboot-env-${hn}" { } (
+      pkgs.runCommand "nfsboot-env-${hn}" { } (
         ''
         set -x
         mkdir $out

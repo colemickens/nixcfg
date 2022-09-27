@@ -6,7 +6,7 @@
 
     home-manager.users.cole = { pkgs, ... }: {
       home.packages = with pkgs; [
-        xdg_utils
+        xdg-utils
       ];
       xdg = {
         enable = true;

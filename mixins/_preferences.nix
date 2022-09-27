@@ -25,7 +25,8 @@ let
     };
   });
   # _iosevka = pkgs.iosevka; # weird aarch64 build failure?
-  _iosevka = pkgs.iosevka-bin;
+  # _iosevka = pkgs.iosevka-bin;
+  _iosevka = pkgs.iosevka-comfy.comfy-fixed;
   #_iosevka = customIosevkaTerm;
   
   # TODO: fix
@@ -100,7 +101,7 @@ rec {
 
     sans = { family = "Noto Sans"; package = pkgs.noto-fonts; };
     serif = { family = "Noto Serif"; package = pkgs.noto-fonts; };
-    monospace = { family = "Iosevka"; package = _iosevka; };
+    monospace = { family = "Iosevka Comfy Fixed"; package = _iosevka; };
     fallback = { family = "Font Awesome 5 Free"; package = pkgs.font-awesome; };
     emoji = { family = "Noto Color Emoji"; package = pkgs.noto-fonts-emoji; };
     

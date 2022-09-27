@@ -16,7 +16,7 @@
 , xorg
 , libxkbcommon
 , libinput
-, libseat
+, seatd
 , libGL
 }:
 
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
     udev
     mesa
     libinput
-    libseat
+    seatd
     glib
     cairo
     pango

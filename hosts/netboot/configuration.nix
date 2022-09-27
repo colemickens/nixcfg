@@ -27,7 +27,7 @@
           initrd initrd
           boot
         '';
-      in pkgs.runCommandNoCC "build-netbootEnv" { buildInputs = [ pkgs.nukeReferences ]; } ''
+      in pkgs.runCommand "build-netbootEnv" { buildInputs = [ pkgs.nukeReferences ]; } ''
         mkdir $out
         ln -s "${netboot_kernel}/Image"       "$out/kernel"
         ln -s "${netboot_initrd}/initrd.zst"  "$out/initrd"

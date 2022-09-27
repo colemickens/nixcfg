@@ -31,7 +31,7 @@ in minimalMkShell pkgs.system { # TODO use something else for system?
     llvmPackages.lldb
     rnix-lsp
 
-    /*tools */ cmake pkgconfig lldb python3
+    /*tools */ cmake pkg-config lldb python3
     /*nodejs*/ nodejs yarn
     /*golang*/ go go-outline gotools godef /*golint*/ gopls
 
@@ -55,7 +55,7 @@ in minimalMkShell pkgs.system { # TODO use something else for system?
     pcsclite
     openssl
     clang
-    libusb
+    libusb1
     gpgme libgpgerror libgit2 git # passrs
     dbus # passrs libsecret
     nettle # pass-rust (sequoia->nettle-sys)
@@ -70,7 +70,7 @@ in minimalMkShell pkgs.system { # TODO use something else for system?
     gst_all_1.gst-libav
           
     udev mesa libinput # Anodium
-    libseat # Anodium
+    seatd # Anodium
     xorg.libXcursor xorg.libXrandr xorg.libXi # Anodium
     libxkbcommon wayland wayland-protocols # wezterm
     fontconfig libglvnd egl-wayland # wezterm

@@ -8,7 +8,7 @@ let
   piubi = n: inputs.self.nixosConfigurations.${n}.config.system.build.sbc_ubootid;
 
   # for each host, link in by the ... serial?
-  tftp_netboots = pkgs.runCommandNoCC "tftp-netboots" { }
+  tftp_netboots = pkgs.runCommand "tftp-netboots" { }
     (
       (
         builtins.foldl'

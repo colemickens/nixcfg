@@ -23,7 +23,7 @@
 
     nixpkgs.overlays = [
       (final: prev: {
-        btrfs-progs = prev.runCommandNoCC "foo" { } ''
+        btrfs-progs = prev.runCommand "foo" { } ''
           mkdir -p $out/share/
           touch $out/share/btrfs-progs.txt
         '';

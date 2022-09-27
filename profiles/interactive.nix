@@ -9,7 +9,7 @@
     ../mixins/gpg-agent.nix
 
     ../mixins/aria2.nix
-    ../mixins/broot.nix
+    # ../mixins/broot.nix
     ../mixins/cachix.nix
     ../mixins/direnv.nix
     # ../mixins/gh.nix

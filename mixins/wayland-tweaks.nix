@@ -24,7 +24,7 @@ in {
         // (lib.optionalAttrs patchChromium {
           ungoogled-chromium = (let
             c = prev.ungoogled-chromium;
-            in prev.runCommandNoCC "wrap-chromium"
+            in prev.runCommand "wrap-chromium"
               { buildInputs = with pkgs; [ makeWrapper ]; }
               ''
                 makeWrapper ${c}/bin/chromium $out/bin/chromium \
@@ -38,7 +38,7 @@ in {
         // (lib.optionalAttrs patchChromium {
           google-chrome-dev = (let
             c = prev.google-chrome-dev;
-            in prev.runCommandNoCC "wrap-google-chrome-unstable"
+            in prev.runCommand "wrap-google-chrome-unstable"
               { buildInputs = with pkgs; [ makeWrapper ]; }
               ''
                 makeWrapper ${c}/bin/google-chrome-unstable $out/bin/google-chrome-unstable \

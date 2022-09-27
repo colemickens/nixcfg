@@ -8,7 +8,7 @@ in
     networking.networkmanager.useMinimalBasePackages = true;
     nixpkgs.overlays = [(final: prev: {
       networkmanager = prev.networkmanager.override {
-        openconnect = prev.runCommandNoCC "openconnect-fake" {} "mkdir -p $out";
+        openconnect = prev.runCommand "openconnect-fake" {} "mkdir -p $out";
       };
     })];
   };
