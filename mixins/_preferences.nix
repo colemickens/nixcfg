@@ -12,31 +12,6 @@ let
   colordefs = {
     bold_as_bright = true;
   };
-  customIosevkaTerm = (pkgs.iosevka.override {
-    set = "term";
-    # https://github.com/be5invis/Iosevka/blob/6b2b8b7e643a13e1cf56787aed4fd269dd3e044b/build-plans.toml#L186
-    privateBuildPlan = {
-      family = "Iosevka Term";
-      spacing = "term";
-      snapshotFamily = "iosevka";
-      snapshotFeature = "\"NWID\" on, \"ss03\" on";
-      export-glyph-names = true;
-      no-cv-ss = true;
-    };
-  });
-  # _iosevka = pkgs.iosevka; # weird aarch64 build failure?
-  # _iosevka = pkgs.iosevka-bin;
-  _iosevka = pkgs.iosevka-comfy.comfy-fixed;
-  #_iosevka = customIosevkaTerm;
-  
-  # TODO: fix
-  # cursorColor = "#EA0A8E";
-  # custom-bibata-cursors = pkgs.bibata-cursors.overrideAttrs(old: {
-  #   postPatch = (old.postPatch or "") + ''
-  #     substituteInPlace "./bitmapper/src/config.ts" \
-  #       --replace "#FF8300" "${cursorColor}"
-  #   '';
-  # });
 in
 rec {
   # all configured with HM, so just use binary name
@@ -73,7 +48,7 @@ rec {
 #T#cursor = { name = "Graphite"; package = pkgs.graphite-cursors; };
 #T# cursor = { name = "Qogir"; package = pkgs.qogir-cursors; }; # not packaged
   # cursor = { name = "phinger-cursors-light"; package = pkgs.phinger-cursors; };
-  cursor = { name = "macOSBigSur"; package = pkgs.apple-cursor; };
+  cursor = { name = "macOSBigSur-White"; package = pkgs.apple-cursor; };
   cursorSize = 48;
   
   themes = {
@@ -101,7 +76,10 @@ rec {
 
     sans = { family = "Noto Sans"; package = pkgs.noto-fonts; };
     serif = { family = "Noto Serif"; package = pkgs.noto-fonts; };
-    monospace = { family = "Iosevka Comfy Fixed"; package = _iosevka; };
+    # monospace = { family = "Iosevka Fixed"; package = pkgs.iosevka-bin; };
+    monospace = { family = "Iosevka Comfy Fixed"; package = pkgs.iosevka-comfy.comfy-fixed; };
+    # monospace = { family = "Go Mono"; package = pkgs.go-font; };
+    # monospace = { family = "Jetbrains Mono"; package = pkgs.jetbrains-mono; };
     fallback = { family = "Font Awesome 5 Free"; package = pkgs.font-awesome; };
     emoji = { family = "Noto Color Emoji"; package = pkgs.noto-fonts-emoji; };
     
@@ -117,7 +95,7 @@ rec {
       (with pkgs; [
         liberation_ttf # free corefonts-metric-compatible replacement
         ttf_bitstream_vera
-        gelasio
+        gelasio # metric-compatible with Georgia
         powerline-symbols
       ]);
   };
