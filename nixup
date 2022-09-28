@@ -29,7 +29,7 @@ srcdirs=(
   "${HOME}/code/tow-boot/radxa-zero"
   "${HOME}/code/tow-boot/visionfive"
   "${HOME}/code/tow-boot/lteusb8916"
-  "${HOME}/code/nixpkgs-wayland"
+  "${HOME}/code/nixpkgs-wayland/master"
   "${HOME}/code/visionfive-nix"
   "${HOME}/code/flake-firefox-nightly"
   "${HOME}/code/mobile-nixos/master"
