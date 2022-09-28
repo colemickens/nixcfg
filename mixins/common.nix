@@ -167,8 +167,8 @@ in
           };
         };
 
-        networks."30-network-defaults" = {
-          matchConfig.Name = "en* | eth* | usb* | wl*";
+        networks."30-network-defaults-wired" = {
+          matchConfig.Name = "en* | eth* | usb*";
           networkConfig = {
             DHCP = "yes";
             IPv6AcceptRA = true;
@@ -177,6 +177,23 @@ in
             # IPMasquerade = "both";
           };
           # dhcpV4Config.ClientIdentifier = "mac";
+          dhcpV4Config.Use6RD = "yes";
+          dhcpV6Config.PrefixDelegationHint = "::64";
+        };
+        networks."30-network-defaults-wireless" = {
+          matchConfig.Name = "wl*";
+          networkConfig = {
+            DHCP = "yes";
+            IPv6AcceptRA = true;
+            DHCPv6PrefixDelegation = "yes";
+            IPForward = "yes";
+            # IPMasquerade = "both";
+          };
+          # dhcpV4Config.ClientIdentifier = "mac";
+          routes = [
+            { routeConfig = { Gateway = "_dhcp4"; Metric = 1500; }; }
+            { routeConfig = { Gateway = "_ipv6ra"; Metric = 1500; }; }
+          ];
           dhcpV4Config.Use6RD = "yes";
           dhcpV6Config.PrefixDelegationHint = "::64";
         };
