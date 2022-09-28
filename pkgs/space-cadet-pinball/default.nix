@@ -5,7 +5,7 @@
 }:
 
 let
-  metadata = rec {
+  verinfo = rec {
     repo_git = "https://github.com/k4zmu2a/SpaceCadetPinball";
     branch = "master";
     rev = "e7ddebd16c272bc8a0ee12077ec82120f30d45a0";
@@ -13,13 +13,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = if _assets == "" then "space-cadet-pinball" else "space-cadet-pinball-unfree";
-  version = metadata.rev;
+  version = verinfo.rev;
 
   src = fetchFromGitHub {
     owner = "k4zmu2a";
     repo = "SpaceCadetPinball";
-    rev = metadata.rev;
-    sha256 = metadata.sha256;
+    rev = verinfo.rev;
+    sha256 = verinfo.sha256;
   };
 
   nativeBuildInputs = [
@@ -38,8 +38,8 @@ in stdenv.mkDerivation rec {
     fi
   '';
 
+  passthru.verinfo = verinfo;
   meta = with lib; {
-    verinfo = metadata;
     description = "Decompilation of 3D Pinball for Windows – Space Cadet";
     homepage = "https://github.com/k4zmu2a/SpaceCadetPinball";
     license = if _assets == "" then licenses.mit else licenses.unfree;

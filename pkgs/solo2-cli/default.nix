@@ -1,7 +1,8 @@
 args_@{ lib
 , fetchFromGitHub
 , solo2-cli
-, ... }:
+, ...
+}:
 
 let
   verinfo = rec {
@@ -25,7 +26,7 @@ let
   };
   version = builtins.substring 0 10 verinfo.rev;
 in
-(solo2-cli.override args).overrideAttrs(old: rec {
+(solo2-cli.override args).overrideAttrs (old: rec {
   pname = "solo2-cli";
   inherit version;
   src = newsrc;
@@ -40,5 +41,7 @@ in
   buildInputs = old.buildInputs ++ (map (n: args_.${n}) extraBuildInputs);
   nativeBuildInputs = old.nativeBuildInputs ++ (map (n: args_.${n}) extraNativeBuildInputs);
 
-  meta = (old.meta or {}) // { description = "${old.description or "zeterm"}"; verinfo = verinfo; };
+  passthru.verinfo = verinfo;
+
+  meta = (old.meta or { }) // { description = "${old.description or "zeterm"}"; };
 })

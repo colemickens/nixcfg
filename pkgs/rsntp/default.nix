@@ -42,10 +42,11 @@ rustPlatform.buildRustPackage rec {
   
   inherit (verinfo) cargoSha256;
 
+  passthru.verinfo = verinfo;
+
   meta = with lib; {
     description = "High-performance NTP server written in Rust";
     license = licenses.mit;
     maintainers = [ maintainers.colemickens ];
-    inherit verinfo;
   };
 }

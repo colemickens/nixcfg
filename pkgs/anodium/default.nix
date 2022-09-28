@@ -70,13 +70,14 @@ rustPlatform.buildRustPackage rec {
     wrapProgram "$out/bin/anodium" \
       --set "LD_LIBRARY_PATH" "${lib.makeLibraryPath buildInputs}"
   '';
-  
+
   strictDeps = true; #?
+
+  passthru.verinfo = verinfo;
 
   meta = with lib; {
     description = "WIP Wayland Compositor";
     homepage = "https://github.com/PolyMeilex/Anodium";
-    verinfo = verinfo;
     # license = licenses.gpl3;
     maintainers = with maintainers; [ colemickens ];
   };

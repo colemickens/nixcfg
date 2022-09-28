@@ -61,11 +61,12 @@ rustPlatform.buildRustPackage rec {
     visbins);
 
   inherit (verinfo) cargoSha256;
+  
+  passthru.verinfo = verinfo;
 
   meta = with lib; {
     description = "OpenGL Audio Visualizers in Rust";
     license = licenses.mit;
     maintainers = [ maintainers.colemickens ];
-    inherit verinfo;
   };
 }

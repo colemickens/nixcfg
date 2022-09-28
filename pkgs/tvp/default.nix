@@ -1,4 +1,3 @@
-
 { stdenv, lib, fetchFromGitHub, pkg-config, ffmpeg_4 }:
 
 let
@@ -9,7 +8,8 @@ let
     sha256 = "sha256-qDcDJXFaIqqWTpHc/MC1wQMJ4oTtEmQQ6qhDTSEjUtA=";
     version = rev;
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "terminalvideoplayer";
   version = verinfo.version;
 
@@ -32,12 +32,13 @@ in stdenv.mkDerivation rec {
   '';
   dontInstall = true;
 
+  passthru.verinfo = verinfo;
+
   meta = with lib; {
     mainProgram = "tvp";
-    verinfo = verinfo;
     description = "This is a cursed terminal video player";
     homepage = verinfo.repo_git;
     license = licenses.gpl3;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

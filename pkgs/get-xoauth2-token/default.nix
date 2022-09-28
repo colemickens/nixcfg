@@ -1,8 +1,15 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub
-, libgpgerror, libgit2, gpgme, gnupg }:
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
+, libgpgerror
+, libgit2
+, gpgme
+, gnupg
+}:
 
 let
-  metadata = {
+  verinfo = {
     repo_git = "https://github.com/colemickens/get-xoauth2-token";
     branch = "master";
     rev = "5ce47ccc3cc63300b03c0a9c0edc50ae9a88de77";
@@ -12,19 +19,20 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "get-xoauth2-token";
-  version = metadata.rev;
+  version = verinfo.rev;
 
   src = fetchFromGitHub {
     owner = "colemickens";
     repo = pname;
-    rev = metadata.rev;
-    sha256 = metadata.sha256;
+    rev = verinfo.rev;
+    sha256 = verinfo.sha256;
   };
 
-  cargoSha256 = metadata.cargoSha256;
+  cargoSha256 = verinfo.cargoSha256;
+
+  passthru.verinfo = verinfo;
 
   meta = with lib; {
-    verinfo = metadata;
     description = "gets an xoauth2 token for use with gmail";
     homepage = "https://github.com/colemickens/get-xoauth2-token";
     license = licenses.mit;
