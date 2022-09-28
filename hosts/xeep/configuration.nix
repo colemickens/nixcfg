@@ -20,7 +20,7 @@ in
     # ./services/aria2.nix
     ./services/revproxy.nix
     ./services/home-assistant
-    ./services/netboot-server.nix
+    # ./services/netboot-server.nix
     # ./services/samba.nix
     # ./services/rsntp.nix
     # ./services/rtsptoweb.nix
