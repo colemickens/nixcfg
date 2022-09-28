@@ -435,11 +435,11 @@
     },
     "hardware": {
       "locked": {
-        "lastModified": 1664355788,
-        "narHash": "sha256-/QOoHlhfesyvDkqkjw1gh7eLFiuLvIT+4alqiQpeBAU=",
+        "lastModified": 1664387039,
+        "narHash": "sha256-RlSksOo/OUwBXus7qnS84mzjNwO3cRgHbdF0KzATPlw=",
         "owner": "nixos",
         "repo": "nixos-hardware",
-        "rev": "2a7f39aac2c84b7b42cd416464c9f6c170d201a3",
+        "rev": "203dd7d7b9361c92579f086581f278f2707bcd76",
         "type": "github"
       },
       "original": {
@@ -498,11 +498,11 @@
         "wlroots": "wlroots"
       },
       "locked": {
-        "lastModified": 1664375573,
-        "narHash": "sha256-eavVnSeBkwLf3IXm9Yxh+FNC3sbNkvqaHmYfo9QYknE=",
+        "lastModified": 1664389693,
+        "narHash": "sha256-M8eCiod9GvH4WkgC/EEPwu7XVMt2upFwn4y2ycoBEYg=",
         "owner": "hyprwm",
         "repo": "Hyprland",
-        "rev": "ec5ffe8839c9c993fed4c23d72077969615dd298",
+        "rev": "31cb4c49d9f977d4cb0876cf1124bf9e86a60669",
         "type": "github"
       },
       "original": {
@@ -1077,11 +1077,11 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1664386527,
+        "lastModified": 1664389712,
         "narHash": "sha256-wnsrYa1A2e9a9rIA2/irMUMbAarr0jxkxnvRwDxFhsM=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "89d2719ee9ad6149d63102e844c6af1b8809ef87",
+        "rev": "e010dcff9bf2d9e44d32436b69a2a498a9822125",
         "type": "github"
       },
       "original": {
