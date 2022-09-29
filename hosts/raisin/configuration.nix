@@ -48,7 +48,7 @@ in
       "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; neededForBoot = true; };
       "/" = { fsType = "zfs"; device = "${hn}pool/root"; neededForBoot = true; };
       "/nix" = { fsType = "zfs"; device = "${hn}pool/nix"; neededForBoot = true; };
-      "/backup" = { fsType = "zfs"; device = "${hn}pool/backup"; neededForBoot = true; };
+      # "/backup" = { fsType = "zfs"; device = "${hn}pool/backup"; neededForBoot = true; };
       "/home" = { fsType = "zfs"; device = "${hn}pool/home"; neededForBoot = true; };
     };
     swapDevices = [{ device = "/dev/disk/by-partlabel/swap"; }];
@@ -57,6 +57,8 @@ in
       kernelParams = [
         "ideapad_laptop.allow_v4_dytc=1"
       ];
+      zfs.enableUnstable = true;
+      kernelPackages = pkgs.linuxPackages_latest;
       # kernelParams = [ "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}" ];
       initrd.availableKernelModules = [
         "xhci_pci"

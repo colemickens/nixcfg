@@ -49,6 +49,7 @@ in
       home.sessionVariables = {
         BROWSER = "firefox";
         MOZ_USE_XINPUT2 = "1";
+        NIXOS_OZONE_WL = "1";
       };
 
       # fucking god damn python and it's fucking god damn crypto lib always breaking

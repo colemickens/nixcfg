@@ -80,11 +80,11 @@ case "${cmd}" in
     unset FLAKE_LOCK || true
     nixup upz
     # nixup cache-all
+    nixup deploy carbon || true
     nixup deploy slynux
     nixup deploy jeffhyper
     nixup deploy raisin
     nixup deploy openstick
-    nixup deploy carbon || true
     nixup deploy xeep
     date
   ;;
@@ -97,7 +97,7 @@ case "${cmd}" in
     while [[ -f "${FLAKE_LOCK:-"flake.lock"}-lock" ]]; do sleep 0.1; printf "." >/dev/stderr; done; echo "using FLAKE_LOCK: ${FLAKE_LOCK:-"flake.lock"}">&2
     nixbuild "${@}"
   ;;
-  "deploy")
+  "deploy") _h1 "deploy ${1}"
     set -o errtrace
     host="${1}"; shift || true
     export NIXUP_LOGDIR="${NIXUP_LOGDIR:-"$(mktemp -d --tmpdir "nixup.XXXXXXXXXXX")"}/${host}";  mkdir -p "${NIXUP_LOGDIR}"

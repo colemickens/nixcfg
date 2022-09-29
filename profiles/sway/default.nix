@@ -8,6 +8,22 @@ let
   out_aw2521h = "Dell Inc. Dell AW2521H #HLAYMxgwABDZ";
   out_raisin = "Unknown 0x1402 0x00000000";
   out_carbon = "SDC 0x4152 Unknown";
+  
+  wlproxylaunch = pkgs.writeShellScriptBin "wlproxylaunch" ''
+    ${pkgs.wayland-proxy-virtwl}/bin/wayland-proxy-virtwl \
+      --wayland-display=wayland-2 \
+      --xwayland-binary=${pkgs.xwayland}/bin/Xwayland \
+      --x-display=2 \
+      --verbose &
+    
+    sleep 1
+    echo
+    echo "Ready! Example usage (in a new terminal):" >&2
+    echo " \$ export WAYLAND_DISPLAY=wayland-2; export DISPLAY=:2" >&2
+    echo " \$ ledger-live-desktop # for example" >&2
+    echo
+    wait
+  '';
 in
 {
   imports = [
@@ -19,7 +35,6 @@ in
     ../../mixins/sirula.nix
     ../../mixins/sway.nix # contains swayidle/swaylock config
     ../../mixins/waybar.nix
-    ../../mixins/wayland-tweaks.nix
 
     inputs.hyprland.nixosModules.default
   ];
@@ -61,14 +76,22 @@ in
         # };
         kanshi = {
           enable = true;
+          systemdTarget = "graphical-session.target";
           profiles = {
             "docked".outputs = [
               { criteria = "eDP-1"; status = "disable"; }
-              { criteria = "DP-5"; position = "1920,0"; }
-              { criteria = "DP-2"; position = "0,0"; }
+              { criteria = "DP-5"; position = "0,0"; }
               # { criteria = out_carbon; status = "disable"; }
               # { criteria = out_aw3418dw; position = "1920,0"; }
               # { criteria = out_aw2521h; position = "0,0"; }
+            ];
+            "docked2".outputs = [
+              { criteria = "eDP-1"; status = "disable"; }
+              { criteria = "DP-6"; position = "0,0"; }
+            ];
+            "docked3".outputs = [
+              { criteria = out_carbon; status = "disable"; }
+              { criteria = out_aw3418dw; position = "0,0"; }
             ];
             "undocked".outputs = [
               { criteria = "eDP-1"; status = "enable"; }
@@ -91,39 +114,31 @@ in
         XDG_CURRENT_DESKTOP = "sway";
       };
       home.packages = with pkgs; [
-        # pulseaudio
+        # audio cli/gui tools
+        pulseaudio
         pavucontrol
-        #lxqt.pavucontrol-qt
-        sirula
         
+        # wayland env requirements
+        qt5.qtwayland
+        qt6.qtwayland
+
+        # wayland adjacent
         anodium
-        sommelier
-        # virt-wl-proxy
-        wayland-proxy-virtwl
+        sirula # launcher
+        wlproxylaunch
+        wf-recorder
+        wl-clipboard
+        wlr-randr
+        wtype
+        # wlrctl # fucking awful UX, port to Rust
+        # wdisplays # use the CLI
+        # ydotool # requires a daemon for some reason? why doesn't wlrctl?
 
-        # file managers TODO: pick one?
-        # xfce.thunar
-        # gnome.nautilus
-
-
-        # swappy # um, who the fuck comes up with these stupid UX decisions in the sway-adjacent universe?
+        # misc utils
         pinta
         imv
         grim
-        qt5.qtwayland
         slurp
-        waypipe
-        wayvnc
-        wf-recorder
-        wl-clipboard
-        wlrctl
-        wlr-randr
-        wdisplays
-        # wl-gammactl # nixpkgs-wayland only
-        # wlvncc # nixpkgs-wayland only
-        # wshowkeys # use the wrapper ^
-        wtype
-        ydotool
       ];
     };
   };

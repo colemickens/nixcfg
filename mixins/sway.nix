@@ -238,12 +238,13 @@ in
                 background = background;
               };
             };
-            bars = [{
-              command = statusCommand;
-              mode = "hide";
-              hiddenState = "hide";
-              modifier = "Mod4";
-            }];
+            bars = [];
+            # bars = [{
+            #   command = statusCommand;
+            #   # mode = "hide";
+            #   # hiddenState = "hide";
+            #   # modifier = "Mod4";
+            # }];
             keybindings = {
               "${modifier}+Return" = "exec ${terminal}";
               "${modifier}+Shift+q" = "kill";

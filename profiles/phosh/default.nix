@@ -12,7 +12,6 @@ in
     # ../../mixins/sirula.nix
     # ../../mixins/sway.nix # contains swayidle/swaylock config
     # ../../mixins/waybar.nix
-    # ../../mixins/wayland-tweaks.nix
 
     # inputs.hyprland.nixosModules.default
   ];

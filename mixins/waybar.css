@@ -3,7 +3,7 @@
     border-radius: 5;
     /* `otf-font-awesome` is required to be installed for icons */
     /* font matches sway-config.nix */
-    font-family: "Iosevka";
+    font-family: "Iosevka Comfy Fixed"; /* TODO: parameterize this? */
     font-weight: bold;
     font-size: 11pt;
     min-height: 0;

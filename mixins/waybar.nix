@@ -54,7 +54,7 @@ in
       programs.waybar = {
         enable = true;
         style = pkgs.lib.readFile ./waybar.css;
-        # systemd.enable = true;
+        systemd.enable = true;
         settings = [{
         # settings = {
           ipc = true;
