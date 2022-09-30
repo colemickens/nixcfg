@@ -476,11 +476,11 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1664564346,
-        "narHash": "sha256-sQXdFN1da3R52LlEGNczXqDCz2R6Egx4wfBE7BI/RKw=",
+        "lastModified": 1664571857,
+        "narHash": "sha256-058GqkFyUN4QwRx2a6/UKct2zAPP8gkrImrmMIsCT04=",
         "owner": "colemickens",
         "repo": "home-manager",
-        "rev": "0669d7efe697e7571017149c15b3c00c6f8aaec6",
+        "rev": "d8aef6db0007b2c48d617fd4b3c4c4137f6063f3",
         "type": "github"
       },
       "original": {
@@ -1077,11 +1077,11 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1664571445,
+        "lastModified": 1664571933,
         "narHash": "sha256-rSPeJVUlHVHXdCgPm9OLyoC5tPv3PZU0pJImVt31Iqo=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "ff015cd66372d115022089fccb0a583e339efce2",
+        "rev": "125c41b9bb1b1fe0cdf20644c6cc8f743544953a",
         "type": "github"
       },
       "original": {
