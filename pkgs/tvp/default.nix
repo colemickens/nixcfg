@@ -4,8 +4,8 @@ let
   verinfo = rec {
     repo_git = "https://github.com/TheRealOrange/terminalvideoplayer";
     branch = "main";
-    rev = "8295e4948567cbe4f7854bb35adf3fd1d010a178";
-    sha256 = "sha256-qDcDJXFaIqqWTpHc/MC1wQMJ4oTtEmQQ6qhDTSEjUtA=";
+    rev = "ca5cd21fe3508aa3a97707c18f0ec9eb92fa9bcc";
+    sha256 = "sha256-riqQYAfwKrv3LpKzQObJeDP4QWVyv1YEXUChBBBVU/U=";
     version = rev;
   };
 in
