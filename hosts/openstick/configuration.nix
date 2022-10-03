@@ -19,6 +19,8 @@ in
     # ../../profiles/core.nix
     # ../../profiles/interactive.nix
 
+    ../../secrets
+
     (import "${inputs.mobile-nixos-openstick}/lib/configuration.nix" {
       device = "openstick";
     })

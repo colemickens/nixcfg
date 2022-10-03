@@ -13,11 +13,6 @@ function nixup() { "${0}" "${@}"; }
 function nixbuild() { "${DIR}/misc/nixbuild.sh" "${@}"; }
 function activate() { "${DIR}/misc/activate.sh" "${@}"; }
 
-# TODO: what we want:
-# FLAKE_LOCK=flake.dev.lock nix run .#apps.${arch}.deploy-${host}
-# -> that's a script that just executes ./misc/nixbuild.sh
-# -> and then runs ./misc/activate.sh with the right stuff?
-
 srcdirs=(
   "${HOME}/code/nixpkgs/master"
   "${HOME}/code/nixpkgs/cmpkgs"
@@ -60,7 +55,6 @@ case "${cmd}" in
     done;
   ;;
   "up") _h1 "upup";
-    unset FLAKE_LOCK || true
     true \
     && nixup inputup \
     && nixup rpiup \
@@ -72,12 +66,10 @@ case "${cmd}" in
     ./nixup build ".#cache-all"
   ;;
   "upz") _h1 "upz";
-    unset FLAKE_LOCK || true
     nixup up
     date
   ;;
   "upzz") _h1 "upzz";
-    unset FLAKE_LOCK || true
     nixup upz
     # nixup cache-all
     nixup deploy carbon || true
@@ -90,40 +82,21 @@ case "${cmd}" in
   ;;
 
   "build")
-    while [[ -f "${FLAKE_LOCK:-"flake.lock"}-lock" ]]; do sleep 0.1; printf "." >/dev/stderr; done; echo "using FLAKE_LOCK: ${FLAKE_LOCK:-"flake.lock"}">&2
     nixbuild "auto" "cachix:colemickens" "${@}";
   ;;
   "_build")
-    while [[ -f "${FLAKE_LOCK:-"flake.lock"}-lock" ]]; do sleep 0.1; printf "." >/dev/stderr; done; echo "using FLAKE_LOCK: ${FLAKE_LOCK:-"flake.lock"}">&2
     nixbuild "${@}"
   ;;
   "deploy") _h1 "deploy ${1}"
     set -o errtrace
     host="${1}"; shift || true
-    export NIXUP_LOGDIR="${NIXUP_LOGDIR:-"$(mktemp -d --tmpdir "nixup.XXXXXXXXXXX")"}/${host}";  mkdir -p "${NIXUP_LOGDIR}"
-    echo "NIXUP_LOGDIR = ${NIXUP_LOGDIR}"
-    # FLAKE_LOCK-lock:
-    while [[ -f "${FLAKE_LOCK:-"flake.lock"}-lock" ]]; do sleep 0.1; printf "." >/dev/stderr; done; echo "using FLAKE_LOCK: ${FLAKE_LOCK:-"flake.lock"}">&2
     if [[ "${host}" == "$(hostname)" ]]; then export NIXUP_ACTION="switch"; fi
     if [[ "${host}" == "raisin" ]]; then export NIXUP_ACTION="switch"; fi
     if [[ "${host}" == "xeep" ]]; then export NIXUP_ACTION="switch"; fi
-    touch "${NIXUP_LOGDIR}/lock"
-    trap 'rm "${NIXUP_LOGDIR}/lock"' EXIT
 
-    trap 'echo "-fail" >> ${NIXUP_LOGDIR}/status' ERR
+    outres="$(nixup _build "auto" "cachix:colemickens" ".#toplevels.${host}" "${@}")"
 
-    stdout="${NIXUP_LOGDIR}/stdout"
-    stderr="${NIXUP_LOGDIR}/stderr"
-
-    printf "nixbuild" > "${NIXUP_LOGDIR}/status"
-    nixup _build "auto" "cachix:colemickens" ".#toplevels.${host}" "${@}" \
-      > >(tee -a ${stdout}) 2> >(tee -a ${stderr} >&2)
-    outres="$(cat "${stdout}")"
-
-    printf "activate" > "${NIXUP_LOGDIR}/status"
-    activate "${NIXUP_ACTION:-"switch"}" "${outres}" "${host}" \
-      > >(tee -a ${stdout}) 2> >(tee -a ${stderr} >&2)
-    outres="$(cat "${stdout}")"
+    activate "${NIXUP_ACTION:-"switch"}" "${outres}" "${host}"
   ;;
   "rdeploy") export NIXUP_ACTION="reboot"; nixup deploy "${@}"; ;;
   
@@ -171,53 +144,5 @@ case "${cmd}" in
     parallel -j$(nproc) --halt 1 --verbose --tag "${DIR}/nixup pi-on" ::: "${pis[@]}"
   ;;
 
-  # # FLAKE_LOCK related
-  # "watchlock")
-  #   # `watchlock` is a very "scenario"-specific set of
-  #   # options, but it's meant to update a custom lockfile
-  #   # for use in shells with FLAKE_LOCK set.
-  #   # ideas:
-  #   #  - it would be neat to have this wrapped into a lil tool
-  #   #  - it could do hot re-eval in the future, etc
-    
-  #   set -x
-  #   echo "FLAKE_LOCK=${FLAKE_LOCK}"
-  #   (set -x; cd "${DIR}"; nix "${nixargs[@]}" flake lock --recreate-lock-file)
-  #   watchexec \
-  #     --clear \
-  #     --restart \
-  #     --ignore '*.watchman*' \
-  #     --project-origin $HOME/code/nixcfg \
-  #     --workdir $HOME/code/nixcfg \
-  #     -w $HOME/code/nixpkgs \
-  #     -w $HOME/code/mobile-nixos \
-  #     -w $HOME/code/home-manager/cmhm \
-  #     -w $HOME/code/vision-five \
-  #     -w $HOME/code/tow-boot/ \
-  #     -- \
-  #     $HOME/code/nixcfg/nixup watchlockup
-  # ;;
-  # "watchlockup")
-  #   # this is what `watchlock` calls internally
-  #   # but it can also be used instead of the watch
-  #   # for a one-time update of FLAKE_LOCK
-  #   touch "${FLAKE_LOCK}-lock"
-  #   echo ":: start :: ${FLAKE_LOCK}-lock" >/dev/stderr
-  #   nix flake lock \
-  #     --recreate-lock-file \
-  #     --verbose \
-  #     --override-input nixpkgs $HOME/code/nixpkgs/cmpkgs \
-  #     --override-input rpipkgs $HOME/code/nixpkgs/cmpkgs-rpipkgs \
-  #     --override-input cross-armv6l  $HOME/code/nixpkgs/cmpkgs-cross-armv6l \
-  #     --override-input cross-riscv64  $HOME/code/nixpkgs/cmpkgs-cross-riscv64 \
-  #     --override-input home-manager $HOME/code/home-manager/cmhm \
-  #     --override-input visionfive-nix  $HOME/code/visionfive-nix \
-  #     --override-input mobile-nixos  $HOME/code/mobile-nixos \
-  #     --override-input tow-boot-rpi $HOME/code/tow-boot/rpi \
-  #     --override-input tow-boot-radxa-zero $HOME/code/tow-boot/radxa-zero
-  #   echo ":: done :: ${FLAKE_LOCK}-lock" >/dev/stderr
-  #   rm "${FLAKE_LOCK}-lock"
-  # ;;
-    
   *) printf "!!! unknown command\n" >/dev/stderr; exit -1; ;;
 esac

@@ -2,8 +2,9 @@
 
 let
   cfg = config.nixcfg.common;
-  defaultKernel = pkgs.linuxPackages_latest;
-  defaultZfsKernel = pkgs.linuxPackages_5_18;
+  defaultKernel = pkgs.linuxPackages_5_18;
+  defaultZfsKernel = pkgs.linuxPackages_6_0;
+  _zfsEnableUnstable = true;
   # _defaultKernel = pkgs.linuxKernel.packagesFor
   #   (pkgs.linuxPackages_latest.kernel.override {
   #     structuredExtraConfig = {
@@ -119,6 +120,7 @@ in
           timeout = 1;
         };
         kernelPackages = lib.mkIf cfg.defaultKernel (lib.mkDefault (if cfg.useZfs then defaultZfsKernel else defaultKernel));
+        zfs.enableUnstable = lib.mkIf (cfg.defaultKernel && cfg.useZfs && _zfsEnableUnstable) true;
         kernel.sysctl = {
           "fs.file-max" = 100000;
           "fs.inotify.max_user_instances" = 256;

@@ -32,7 +32,7 @@ in
     services.unifi = {
       enable = true;
       openFirewall = false;
-      unifiPackage = pkgs.unifiStable;
+      unifiPackage = pkgs.unifi6;
       jrePackage = pkgs.jdk8_headless;
       mongodbPackage = pkgs.mongodb-3_4;
       maximumJavaHeapSize = 256;

@@ -70,6 +70,7 @@
         tealdeer
         du-dust
         dua
+        dufs # rust static file server
         exa
         fd
         gitui
@@ -136,7 +137,8 @@
         curl
         jq
         openssh
-
+        
+        
         linuxPackages.cpupower
         linuxPackages.usbip
 

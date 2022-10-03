@@ -120,21 +120,32 @@ in
 
     home-manager.users.cole = { pkgs, config, ... }@hm:
       let
-        swaylock = "${hm.config.programs.swaylock.package}/bin/swaylock";
+        # swaylock = "${hm.config.programs.swaylock.package}/bin/swaylock";
+        swaylock = "${pkgs.swaylock-effects}/bin/swaylock";
         swaymsg = "${hm.config.wayland.windowManager.sway.package}/bin/swaymsg";
       in
       {
         # block auto-sway reload, Sway crashes... ... but now  we work around it by doing kbmods per dev
         #xdg.configFile."sway/config".onChange = lib.mkForce "";
 
-        # programs.swaylock = {
-        #   enable = true;
-        #   package = pkgs.swaylock-effects;
-        #   # settings = {
-        #   #   debug = 1;
-        #   #   color = "000000";
-        #   # };
-        # };
+        programs.swaylock = {
+          # enable = true;
+          # package = pkgs.swaylock-effects;
+          settings = {
+            daemonize = true;
+            show-failed-attempts = true;
+            ignore-empty-password = true;
+
+            grace = 16;
+            fade = 15; # swaylock-effects only
+
+            color = "000000";
+            # font-size = 24;
+            # indicator-idle-visible = false;
+            # indicator-radius = 100;
+            # line-color = "ffffff";
+          };
+        };
         services.swayidle =
           let
             pgrep = "${pkgs.procps}/bin/pgrep";
@@ -148,20 +159,19 @@ in
             '';
             fadelock = pkgs.writeShellScript "fadelock.sh" ''
               set -x
-              exec "${swaylock}" -f --fade 15 --grace 16
+              exec "${swaylock}"
             '';
           in
           {
-            enable = true;
-            # debug = true;
-            # make sure you have -f in any `swaylock` runs
+            enable = false;
+            systemdTarget = "graphical-session.target";
             timeouts = [
               # auto-lock after 30 seconds
               { timeout = 30; command = fadelock.outPath; }
               # after any event, after 60 seconds, run dpms_off
-              { timeout = 60; command = "${dpms_set "off"}"; resumeCommand = "${dpms_set "on"}"; }
+              # { timeout = 60; command = "${dpms_set "off"}"; resumeCommand = "${dpms_set "on"}"; }
               # triggered after event changes, after 60 seconds after event, check to see if we should dpms_off
-              { timeout = 60; command = "${dpms_check "off"}"; resumeCommand = "${dpms_check "on"}"; }
+              # { timeout = 60; command = "${dpms_check "off"}"; resumeCommand = "${dpms_check "on"}"; }
             ];
             events = [
               { event = "before-sleep"; command = fadelock.outPath; }
@@ -186,14 +196,16 @@ in
             terminal = prefs.default_term;
             fonts = prefs.swayfonts;
             focus.followMouse = "always";
-            colors = let
-              red = "#E87461";
-              green = "#7AC74F";
-              bgcolor = "#000000";
-            in {
-              "focused" = { border = red; background = red; text="#ffffff"; indicator="#ffffff"; childBorder=red; };
-              "unfocused" = { border = bgcolor; background = bgcolor; text="#888888"; indicator="#ffffff"; childBorder=bgcolor; };
-            };
+            colors =
+              let
+                red = "#E87461";
+                green = "#7AC74F";
+                bgcolor = "#000000";
+              in
+              {
+                "focused" = { border = red; background = red; text = "#ffffff"; indicator = "#ffffff"; childBorder = red; };
+                "unfocused" = { border = bgcolor; background = bgcolor; text = "#888888"; indicator = "#ffffff"; childBorder = bgcolor; };
+              };
             gaps = { inner = 0; outer = 0; };
             window.border = 3;
             window.titlebar = false;
@@ -238,7 +250,7 @@ in
                 background = background;
               };
             };
-            bars = [];
+            bars = [ ];
             # bars = [{
             #   command = statusCommand;
             #   # mode = "hide";
@@ -254,7 +266,7 @@ in
               "${modifier}+Escape" = "exec ${prefs.default_launcher}";
               "${modifier}+Ctrl+Alt+Delete" = "exec ${swaymsg} exit || true";
               "${modifier}+Ctrl+Alt+Insert" = "exec ${swaymsg} reload";
-                  
+
               "${modifier}+Ctrl+Alt+F12" = "exec ${pkgs.procps}/bin/pkill -9 -f remote-viewer";
 
               "${modifier}+Alt+F1" = "exec ${cmd_pass}";

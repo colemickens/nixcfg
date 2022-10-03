@@ -18,6 +18,8 @@ in
     ../../mixins/wpa-full.nix
     ../../mixins/zfs.nix
 
+    ../../mixins/rclone-googledrive-mounts.nix
+
     inputs.hardware.nixosModules.common-cpu-amd
     inputs.hardware.nixosModules.common-cpu-amd-pstate
     inputs.hardware.nixosModules.common-gpu-amd
@@ -57,8 +59,6 @@ in
       kernelParams = [
         "ideapad_laptop.allow_v4_dytc=1"
       ];
-      zfs.enableUnstable = true;
-      kernelPackages = pkgs.linuxPackages_latest;
       # kernelParams = [ "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}" ];
       initrd.availableKernelModules = [
         "xhci_pci"

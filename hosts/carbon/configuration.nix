@@ -106,8 +106,6 @@ in
         entriesMountPoint = "/boot";
         enable = true;
       };
-      zfs.enableUnstable = true;
-      kernelPackages = pkgs.linuxPackages_latest;
       kernelModules = [ "iwlwifi" "ideapad_laptop" ];
       kernelParams = [
         "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}"

@@ -23,6 +23,15 @@ let
   #       -H "Content-Type: application/json" -X GET \
   #       "''${BUILD_HOST}/api/jobs" > "${jobpath}/data"
   #   ''] ++ suffix ));
+  networktoggle = pkgs. writeShellScriptBin "networktoggle.sh" ''
+    if ip link | grep wlan; then
+      sudo ${pkgs.util-linux}/bin/rfkill toggle wlan
+      sudo ${pkgs.systemd}/bin/networkctl reconfigure wlan0
+      ${pkgs.libnotify}/bin/notify-send "toggled wlan0"
+    else
+      ${pkgs.libnotify}/bin/notify-send "no wlan to toggle"
+    fi
+  '';
   batteryName = if config.networking.hostName != "pinebook" then "BAT0" else "cw2015-battery";
 in
 {
@@ -109,6 +118,7 @@ in
             network = {
               format-wifi = "{essid} {signalStrength}% {bandwidthUpBits} {bandwidthDownBits}";
               format-ethernet = "{ifname} eth {bandwidthUpBits} {bandwidthDownBits}";
+              on-click-middle = "${networktoggle}";
             };
             cpu.interval = 2;
             cpu.format = "cpu {load}% {usage}%";

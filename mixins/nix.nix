@@ -12,15 +12,20 @@ let
     };
   });
   # _nix = _nixUnstableXdg;
-  _nix = pkgs.nixUnstable.overrideAttrs(old: {
-    patches = (old.patches or []) ++ [
-      ../misc/0001-flakes-flake.lock-location-env-var.patch
-    ];
-  });
+  # _nix = pkgs.nixUnstable.overrideAttrs(old: {
+  #   patches = (old.patches or []) ++ [
+  #     ../misc/0001-flakes-flake.lock-location-env-var.patch
+  #   ];
+  # });
+  _nix = pkgs.nixUnstable;
 in
 {
   config = {
     environment.systemPackages = [ _nix ];
+    sops.secrets.nixAccessTokens = {
+      mode = "0440";
+      group = config.users.groups.keys.name;
+    };
     nix = {
       gc = {
         automatic = true;
@@ -47,10 +52,10 @@ in
         trusted-users = [ "@wheel" "root" ];
       };
       package = _nix;
-      extraOptions =
-        #lib.optionalString (config.nix.package == pkgs.nixUnstable)
-        #"experimental-features = nix-command flakes ca-references recursive-nix";
-        "experimental-features = nix-command flakes recursive-nix";
+      extraOptions = ''
+        experimental-features = nix-command flakes recursive-nix
+        !include ${config.sops.secrets.nixAccessTokens.path}
+      '';
     };
   };
 }

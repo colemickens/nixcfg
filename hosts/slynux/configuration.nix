@@ -146,9 +146,10 @@ in
       keyFile = "/lukskey";
       fallbackToPassword = true;
     };
-    # TODO: subsequently remove, and then purge old generations and initrds and rotate
-    # keys
+
     boot.initrd.secrets = {
+      # TODO: subsequently remove, and then purge old generations and initrds and rotate
+      # keys
       "/lukskey" = pkgs.writeText "lukskey" "test";
     };
 

@@ -8,9 +8,9 @@ outres="${1}"; shift
 host="${1}"; shift
 
 # target="STEAL THIS FROM THE CONFIG??" # TODO
-printf "activate-init" > "${NIXUP_LOGDIR}/status"
 
 function summarize() {
+  return
   while true; do
     set +e
     output="$(set +e; ssh -o ConnectTimeout=5 "${target}" "\
@@ -31,7 +31,7 @@ function summarize() {
     set -e
     
     if [[ "${exit}" == 0 ]]; then
-      printf "\n::== summary (${host})\n" >/dev/stderr
+      printf "\n::==:: activate: (${host}): SUMMARY\n" >/dev/stderr
       printf "\n${output}\n\n" >/dev/stderr
       break
     else
@@ -41,33 +41,32 @@ function summarize() {
   done
 }
 
-
-printf "\n=============================================================================================================\n" >/dev/stderr
-printf "ACTIVATE: (outres: ${outres})\n" >/dev/stderr
-printf "          (host: ${host}) (action: ${action})\n" >/dev/stderr
-printf "=============================================================================================================\n" >/dev/stderr
+printf "==:: activate: [host: ${host}) [action: ${action}]\n" >/dev/stderr
+printf "==:: activate: [outres: ${outres}]\n" >/dev/stderr
 
 # target="$(tailscale ip --6 "${host}")"
 target="$(tailscale ip --4 "${host}")"
+booted="$(ssh "${target}" "readlink -f /run/booted-system")"
+
+printf "==:: activate: [booted: ${booted}]\n" >/dev/stderr
 
 if [[ "${action:-""}" == "switch" || "${action:-""}" == "reboot" ]]; then
-  printf "==:: (activate) remote: download toplevel ($target) ($outres)\n" > /dev/stderr
-  printf "activate-download" > "${NIXUP_LOGDIR}/status"
-  ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --option 'narinfo-cache-negative-ttl' 0 --no-link --profile /nix/var/nix/profiles/system "${outres}")"
-
-  printf "==:: (activate) switch-to-configuration ($target) ($outres)\n" > /dev/stderr
-  printf "activate-switch" > "${NIXUP_LOGDIR}/status"
-  ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${outres}" -c switch-to-configuration switch)"
-
-  if [[ "${NIXOS_INSTALL:-""}" == "1" ]]; then
-    printf "==:: (activate) install ($target) ($outres)\n" > /dev/stderr
-    printf "activate-install" > "${NIXUP_LOGDIR}/status"
-    ssh "${target}" "$(printf '\"%s\" ' sudo nixos-install --no-root-passwd --root / "${nixargs[@]}" --system "${outres}")"
+  if [[ "${booted}" == "${outres}" ]]; then
+    printf "==:: activate: (${host}): download+activate [skip]\n" > /dev/stderr
+  else
+    printf "==:: activate: (${host}): download\n" > /dev/stderr
+    ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --option 'narinfo-cache-negative-ttl' 0 --no-link --profile /nix/var/nix/profiles/system "${outres}")"
+  
+    printf "==:: activate: (${host}): switch\n" > /dev/stderr
+    ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" shell -vv "${outres}" -c switch-to-configuration switch)"
+  
+    # if [[ "${NIXOS_INSTALL:-""}" == "1" ]]; then
+    #   printf "==:: (activate) install ($target) ($outres)\n" > /dev/stderr
+    #   ssh "${target}" "$(printf '\"%s\" ' sudo nixos-install --no-root-passwd --root / "${nixargs[@]}" --system "${outres}")"
+    # fi
   fi
   
   summarize
-  printf "\n==:: activation done\n\n" >/dev/stderr
-  printf "activate-done" > "${NIXUP_LOGDIR}/status"
 fi
 
 if [[ "${action:-""}" == "summarize" ]]; then
@@ -76,17 +75,13 @@ if [[ "${action:-""}" == "summarize" ]]; then
 fi
 
 if [[ "${action:-""}" == "reboot" ]]; then
-  booted="$(ssh "${target}" "readlink -f /run/booted-system")"
   if [[ "${booted}" == "${outres}" ]]; then
-    printf "reboot-skip" > "${NIXUP_LOGDIR}/status"
-    printf "\n==:: skip reboot for ${host} ...\n\n" >/dev/stderr
+    printf "\n==:: activate: (${host}): reboot (skip)\n\n" >/dev/stderr
   else
-    printf "reboot-wait" > "${NIXUP_LOGDIR}/status"
-    printf "\n==:: reboot and wait for ${host} ...\n\n" >/dev/stderr
+    printf "\n==:: activate: (${host}): reboot (and wait) ...\n\n" >/dev/stderr
     ssh "${target}" "sudo reboot" >/dev/null 2>/dev/null || true
     summarize
-    printf "reboot-done" > "${NIXUP_LOGDIR}/status"
   fi
 fi
 
-printf "==:: activate done ($host) (${target})\n" >/dev/stderr
+printf "==:: activate: (${host}): done\n" >/dev/stderr
