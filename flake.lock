@@ -250,11 +250,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1664805065,
-        "narHash": "sha256-2W33AAJs8hymTeHF0bpD4h4sjYNhDd2psSOtGNTJMdI=",
+        "lastModified": 1664809675,
+        "narHash": "sha256-4Wv5sFKepGZn1p+7VTZV79th61CTSvhsPm3FRJfD/mE=",
         "owner": "colemickens",
         "repo": "flake-firefox-nightly",
-        "rev": "90b9c9b8f7ca88d544dcec3429103fcf093aa97b",
+        "rev": "522b28175baf8fdb33290cd7c638426fbe4a264d",
         "type": "github"
       },
       "original": {
@@ -455,11 +455,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1664808356,
-        "narHash": "sha256-Z9aE/72O6Cj6Jfq2er/lwDXeLZnEZxGMbvbp0z4ABPY=",
+        "lastModified": 1664810097,
+        "narHash": "sha256-liFpcdgoA34AKndE5wqoPhARJKKBdYcENflYcvpYsIg=",
         "owner": "helix-editor",
         "repo": "helix",
-        "rev": "519857d6323d272106e0b48f9a9a23ce066f53f9",
+        "rev": "6cca7375ec1965e61c791bbe738c617ea43c6dce",
         "type": "github"
       },
       "original": {
@@ -1077,11 +1077,11 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1664808692,
+        "lastModified": 1664810346,
         "narHash": "sha256-BG1RRRY6D/4cq9pduXujz28G+4mR9iSJOIGu5ibBD44=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "aa69360842bcb8e3410a7e8a80aafef1e6eeb0ce",
+        "rev": "10fea93f4cc12d4c9c9bb5fadcd24467ccba8b29",
         "type": "github"
       },
       "original": {
