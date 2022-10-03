@@ -43,26 +43,40 @@ nix copy --derivation "${_drv}" \
   --no-check-sigs \
     >/dev/stderr
 
-if [[ "${trgt}" != "cachix" ]]; then
-  printf "==:: build: copy (from: ${bldr}) (to: ${trgt})\n" >/dev/stderr
-  nix copy "${_drv}" "${@}" \
-    --builders-use-substitutes \
-    --eval-store "auto" \
-    --from "ssh-ng://${_bldr}" \
-    --to "ssh-ng://${trgt}" \
-    --no-check-sigs \
-      >/dev/stderr
-else
-  printf "==:: build: build (on: ${bldr})\n" >/dev/stderr
-  nix build "${_drv}" "${@}" \
-    --builders-use-substitutes \
-    --eval-store "auto" \
-    --store "ssh-ng://${_bldr}" \
-    --keep-going \
-      >/dev/stderr
+retry=1
+while [[ "${retry}" == 1 ]]; do
+  retry=0
+  if [[ "${trgt}" != "cachix" ]]; then
+    printf "==:: build: copy (from: ${bldr}) (to: ${trgt})\n" >/dev/stderr
+    nix copy "${_drv}" "${@}" \
+      --builders-use-substitutes \
+      --eval-store "auto" \
+      --from "ssh-ng://${_bldr}" \
+      --to "ssh-ng://${trgt}" \
+      --no-check-sigs \
+        >/dev/stderr
+  else
+    printf "==:: build: build (on: ${bldr})\n" >/dev/stderr
+    set -x
+    stdbuf -i0 -o0 -e0 \
+      nix build "${_drv}" "${@}" \
+        --builders-use-substitutes \
+        --eval-store "auto" \
+        --store "ssh-ng://${_bldr}" \
+        --keep-going \
+          |& tee /tmp/l >/dev/stderr
 
-  printf "==:: build: push to cachix\n" >/dev/stderr
-  ssh "${_bldr}" "echo \"${_out}\" | env CACHIX_SIGNING_KEY=\"${cachix_key}\" tee /dev/stderr | cachix push ${cachix_cache} >/dev/stderr" >&2
-fi
+      if cat /tmp/l | rg "requires non-existent output"; then
+        retry=1
+      fi
+    set +x
 
+    printf "==:: build: push to cachix\n" >/dev/stderr
+    ssh "${_bldr}" "echo \"${_out}\" | env CACHIX_SIGNING_KEY=\"${cachix_key}\" tee /dev/stderr | cachix push ${cachix_cache} >/dev/stderr" >&2
+  fi
+done
+
+exitcode=0
+printf "==:: build: exitcode=${exitcode}\n" >/dev/stderr
 printf "${_out}"
+exit "${exitcode}"

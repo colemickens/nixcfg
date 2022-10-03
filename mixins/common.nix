@@ -143,6 +143,7 @@ in
       networking.useNetworkd = lib.mkIf (cfg.defaultNetworking) true;
       services.resolved.enable = true;
 
+      networking.firewall.logRefusedConnections = true;
       networking.timeServers = []
         ++ (if cfg.useXeepTimeserver then [ "192.168.1.10" ] else [])
         ++ defaultTimeServers;
