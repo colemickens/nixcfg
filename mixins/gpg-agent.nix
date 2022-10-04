@@ -1,9 +1,9 @@
 { pkgs, inputs, ... }:
 
 let
-  pinentryOverlay = (self: super: {
-    pinentry = super.pinentry.override { enabledFlavors = [ "gnome3" "tty" ]; };
-  });
+  wayprompt = "${inputs.nixpkgs-wayland.outputs.packages.${pkgs.system}.wayprompt}";
+  pinentryProgram = "${wayprompt}/bin/pinentry-wayprompt";
+
   sysPkgs = with pkgs; [ gcr ];
   def = {
     gnupgPkg = pkgs.gnupg;
@@ -111,7 +111,7 @@ in {
         then { disable-ccid = true; }
         else {};
 
-      nixpkgs.overlays = [ pinentryOverlay ];
+      # nixpkgs.overlays = [ pinentryOverlay ];
 
       services.gpg-agent = {
         # this has the SAME problem as above^, or rather is the same thing!
@@ -123,8 +123,10 @@ in {
         extraConfig = ''
           # enable-ssh-support
           allow-preset-passphrase
+          pinentry-program "${pinentryProgram}"
         '';
-        pinentryFlavor = "gnome3";
+        # pinentryFlavor = "gnome3";
+        pinentryFlavor = null;
         defaultCacheTtl = 34560000;
         defaultCacheTtlSsh = 34560000;
         maxCacheTtl = 34560000;

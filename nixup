@@ -47,7 +47,6 @@ case "${_cmd}" in
   "deploy")
     host="${1}"; shift
     printf "▒▒ deploy ${host} ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \n" >/dev/stderr;
-    set -x
     nixup build ".#toplevels.${host}" "${@}" > /tmp/outres
     outres="$(cat /tmp/outres)"
     "${DIR}/misc/activate.sh" "${NIXUP_ACTION:-"switch"}" "${outres}" "${host}"

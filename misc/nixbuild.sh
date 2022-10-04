@@ -58,6 +58,7 @@ while [[ "${retry}" == 1 ]]; do
   else
     printf "==:: build: build (on: ${bldr})\n" >/dev/stderr
     set -x
+    set +e
     stdbuf -i0 -o0 -e0 \
       nix build "${_drv}" "${@}" \
         --builders-use-substitutes \
@@ -69,6 +70,7 @@ while [[ "${retry}" == 1 ]]; do
       if cat /tmp/l | rg "requires non-existent output"; then
         retry=1
       fi
+    set -e
     set +x
 
     printf "==:: build: push to cachix\n" >/dev/stderr
