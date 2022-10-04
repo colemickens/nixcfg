@@ -267,7 +267,7 @@
               _assets = import ./pkgs/space-cadet-pinball/assets.nix { pkgs = prev; };
             };
             shreddit = prev.python3Packages.callPackage ./pkgs/shreddit { };
-            tvp = prev.callPackage ./pkgs/tvp { };
+            # TODO: RE_ENABLE: tvp = prev.callPackage ./pkgs/tvp { };
             rsntp = prev.callPackage ./pkgs/rsntp { };
             # rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {
             #   buildGoModule = prev.buildGo117Module;

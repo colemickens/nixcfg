@@ -117,8 +117,8 @@ in
         loader.grub = {
           pcmemtest.enable = lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isx86) true;
           timeoutStyle = "hidden";
-          timeout = 1;
         };
+        loader.timeout = 1;
         kernelPackages = lib.mkIf cfg.defaultKernel (lib.mkDefault (if cfg.useZfs then defaultZfsKernel else defaultKernel));
         zfs.enableUnstable = lib.mkIf (cfg.defaultKernel && cfg.useZfs && _zfsEnableUnstable) true;
         kernel.sysctl = {

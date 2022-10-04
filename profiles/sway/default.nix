@@ -125,6 +125,7 @@ in
         # wayland adjacent
         anodium
         sirula # launcher
+        wayprompt
         wlproxylaunch
         wf-recorder
         wl-clipboard
