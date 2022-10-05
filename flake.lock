@@ -116,11 +116,11 @@
     },
     "cross-armv6l": {
       "locked": {
-        "lastModified": 1664991199,
-        "narHash": "sha256-TeR2jdUGoMPICtUxFg/E2cdKb08d+6AVQ90KU8lkNQE=",
+        "lastModified": 1665000161,
+        "narHash": "sha256-EZTOSj1nvPfweS8YZsch/r3X9ZGMXxI+fJ7TgRrZJwQ=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "60846d59c28d6012b86d0521a585fedac9839ae3",
+        "rev": "c9136c09ff785bfacf04710caabe2822cba67400",
         "type": "github"
       },
       "original": {
@@ -132,11 +132,11 @@
     },
     "cross-riscv64": {
       "locked": {
-        "lastModified": 1664991191,
-        "narHash": "sha256-XU1jWN74+sIG8IGPiNnRkYUims+qVwSe1SXsJ22BGfc=",
+        "lastModified": 1665000154,
+        "narHash": "sha256-he4ESAc4dohQDhCn3Wi4OBDhJ9bAeoc4hpRhKCFeNCM=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "32657b51cd116ca143134e36795a2ee9fe5c3383",
+        "rev": "9265d6178e502da3d8ffdb913748ef2fceac06c8",
         "type": "github"
       },
       "original": {
@@ -911,11 +911,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1664991291,
-        "narHash": "sha256-ELkljYdhC+CmAb6FD0uxM6njHekq/kFZZIS33EAxHJo=",
+        "lastModified": 1664999658,
+        "narHash": "sha256-FEDnLPk/pBTOx3dFIBuJ8xjRGLB4MtdzwwT2fp4mP5c=",
         "owner": "nix-community",
         "repo": "nixpkgs-wayland",
-        "rev": "a62fa62ef9159d5bb916c2123a1c40cfa7d83b76",
+        "rev": "5c9b30992d1a39c2f5f0f2669d2107dff67eebc7",
         "type": "github"
       },
       "original": {
@@ -988,11 +988,11 @@
     },
     "nixpkgs_6": {
       "locked": {
-        "lastModified": 1664989206,
-        "narHash": "sha256-1nHfv4rt/wHQVqGzHzvCcM3+fgL8NyhDA9fkexRgCDo=",
+        "lastModified": 1664999555,
+        "narHash": "sha256-vj5AgBZ9YVqWkbdTqbAeabOGkTdsiO67H7JA/vs1Sn8=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "ae3b56dd63efaee358f91b59b897499abb20a9e6",
+        "rev": "493757f4c338a0b0ff76790ba1b40390e8c98549",
         "type": "github"
       },
       "original": {
@@ -1067,6 +1067,7 @@
         "nixpkgs-wayland": "nixpkgs-wayland",
         "rpipkgs": "rpipkgs",
         "sops-nix": "sops-nix",
+        "temp-git": "temp-git",
         "terranix": "terranix",
         "tow-boot-radxa-zero": "tow-boot-radxa-zero",
         "tow-boot-rpi": "tow-boot-rpi",
@@ -1199,6 +1200,22 @@
         "owner": "Mic92",
         "ref": "master",
         "repo": "sops-nix",
+        "type": "github"
+      }
+    },
+    "temp-git": {
+      "locked": {
+        "lastModified": 1664834019,
+        "narHash": "sha256-Y8F/fX1DYkqDG9qVssAnly/q0z0Umvb6Nb+xpuyaEwo=",
+        "owner": "qowoz",
+        "repo": "nixpkgs",
+        "rev": "e7ff1c9454eb83d132de6f12574a6a9a16da3579",
+        "type": "github"
+      },
+      "original": {
+        "owner": "qowoz",
+        "ref": "git",
+        "repo": "nixpkgs",
         "type": "github"
       }
     },
