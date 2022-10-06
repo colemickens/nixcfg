@@ -911,11 +911,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1664999658,
-        "narHash": "sha256-FEDnLPk/pBTOx3dFIBuJ8xjRGLB4MtdzwwT2fp4mP5c=",
+        "lastModified": 1665031920,
+        "narHash": "sha256-8VZCg//rxkh36ZZmgjJ+9I0io9Em4WUkBQNZJxZSebE=",
         "owner": "nix-community",
         "repo": "nixpkgs-wayland",
-        "rev": "5c9b30992d1a39c2f5f0f2669d2107dff67eebc7",
+        "rev": "0356e7747ec96828b9ac228b57a252e2e54bedb2",
         "type": "github"
       },
       "original": {
@@ -1067,7 +1067,6 @@
         "nixpkgs-wayland": "nixpkgs-wayland",
         "rpipkgs": "rpipkgs",
         "sops-nix": "sops-nix",
-        "temp-git": "temp-git",
         "terranix": "terranix",
         "tow-boot-radxa-zero": "tow-boot-radxa-zero",
         "tow-boot-rpi": "tow-boot-rpi",
@@ -1200,22 +1199,6 @@
         "owner": "Mic92",
         "ref": "master",
         "repo": "sops-nix",
-        "type": "github"
-      }
-    },
-    "temp-git": {
-      "locked": {
-        "lastModified": 1664834019,
-        "narHash": "sha256-Y8F/fX1DYkqDG9qVssAnly/q0z0Umvb6Nb+xpuyaEwo=",
-        "owner": "qowoz",
-        "repo": "nixpkgs",
-        "rev": "e7ff1c9454eb83d132de6f12574a6a9a16da3579",
-        "type": "github"
-      },
-      "original": {
-        "owner": "qowoz",
-        "ref": "git",
-        "repo": "nixpkgs",
         "type": "github"
       }
     },
