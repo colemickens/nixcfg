@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
-DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+DIR="$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)"
 set -euo pipefail
 
 bldr="${1}"; shift
 trgt="${1}"; shift
-attr="${1}"; shift; name="$(echo "${attr}" | cut -d '#' -f2-)"
+attr="${1}"; shift
 
-printf "==:: eval: [attr: ${attr}]\n" >/dev/stderr
 
 if [[ "$trgt" == *"cachix:"* ]]; then
   cachix_cache="$(echo "${trgt}" | cut -d ':' -f2)"
-  trgt="cachix"
-  # TODO: this is wrong:
-  cachix_key="$(cat /run/secrets/cachix.dhall | grep "eIu" | cut -d '"' -f2)"
+  cachix_key="$(cat /run/secrets/cachix_signkey_colemickens)"
 fi
+
+## EVAL
+printf "==:: nixbuild: eval: '${attr}'\n" >&2
 
 _json="$(nix eval --json "${attr}" "${@}" \
   --apply "x: { out=x.outPath; drv=x.drvPath; sys=x.system; }")"
@@ -21,12 +21,14 @@ _drv="$(echo "${_json}" | jq -r '.drv')"
 _out="$(echo "${_json}" | jq -r '.out')"
 _sys="$(echo "${_json}" | jq -r '.sys')"
 
-printf "==:: build [drv: ${_drv}]\n" >/dev/stderr
-printf "==:: build [out: ${_out}]\n" >/dev/stderr
+## BUILD
+printf "==:: nixbuild: build [drv: ${_drv}]\n" >&2
+printf "==:: nixbuild: build [out: ${_out}]\n" >&2
 
-# TODO: make sure we're checking the right attribute
-# we might be wanting to checking hostBuildPlat or whatever
+# auto-select builder based on derivation system
 if [[ "${bldr}" == "auto" ]]; then
+  # TODO: make sure we're checking the right attribute
+  # we might be wanting to checking hostBuildPlat or whatever
   case "${_sys}" in
     "aarch64-linux") _bldr="${BLDR_A64}"; ;;
     "armv6l-linux") _bldr="${BLDR_X86}"; ;;
@@ -36,49 +38,45 @@ else
   _bldr="${bldr}"
 fi
 
-printf "==:: build: copy drvs (to: ${bldr})\n" >/dev/stderr
+printf "==:: nixbuild: copy drvs (to: ${bldr})\n" >&2
 nix copy --derivation "${_drv}" \
   --eval-store "auto" \
   --to "ssh-ng://${_bldr}" \
   --no-check-sigs \
-    >/dev/stderr
+    >&2
 
-retry=1
-while [[ "${retry}" == 1 ]]; do
-  retry=0
-  if [[ "${trgt}" != "cachix" ]]; then
-    printf "==:: build: copy (from: ${bldr}) (to: ${trgt})\n" >/dev/stderr
-    nix copy "${_drv}" "${@}" \
+log="$(mktemp --tmpdir "nixbuild-XXXXXXXX")"
+trap "rm ${log}" EXIT
+while true; do
+  printf "==:: nixbuild: build (on: ${bldr}) (log: ${log})\n" >&2
+  set +e ####################
+  stdbuf -i0 -o0 -e0 \
+    nix build "${_drv}" \
       --builders-use-substitutes \
       --eval-store "auto" \
-      --from "ssh-ng://${_bldr}" \
-      --to "ssh-ng://${trgt}" \
-      --no-check-sigs \
-        >/dev/stderr
-  else
-    printf "==:: build: build (on: ${bldr})\n" >/dev/stderr
-    set -x
-    set +e
-    stdbuf -i0 -o0 -e0 \
-      nix build "${_drv}" "${@}" \
-        --builders-use-substitutes \
-        --eval-store "auto" \
-        --store "ssh-ng://${_bldr}" \
-        --keep-going \
-          |& tee /tmp/l >/dev/stderr
-
-      if cat /tmp/l | rg "requires non-existent output"; then
-        retry=1
-      fi
-    set -e
-    set +x
-
-    printf "==:: build: push to cachix\n" >/dev/stderr
-    ssh "${_bldr}" "echo \"${_out}\" | env CACHIX_SIGNING_KEY=\"${cachix_key}\" tee /dev/stderr | cachix push ${cachix_cache} >/dev/stderr" >&2
+      --store "ssh-ng://${_bldr}" \
+      --keep-going 2>&1 \
+        | tee "${log}" >&2
+  exitcode="${PIPESTATUS[0]}";
+  set -e ####################
+  if [[ "${exitcode}" == 0 ]]; then
+    printf "==:: nixbuild: build: success\n" >&2
+    break
+  elif cat "${log}" | rg "requires non-existent output"; then
+    printf "==:: nixbuild: build: retry (bug: nixos/nix#6572)\n" >&2
+    continue
+  elif cat "${log}" | rg "signal 9"; then
+    printf "==:: nixbuild: build: retry (oom)\n" >&2
+    continue
   fi
+  printf "==:: nixbuild: build: fatal failure\n" >&2
+  exit "${exitcode}"
 done
 
-exitcode=0
-printf "==:: build: exitcode=${exitcode}\n" >/dev/stderr
+if [[ "$trgt" == *"cachix:"* ]]; then
+  printf "==:: nixbuild: push to cachix\n" >&2
+  ssh "${_bldr}" "env CACHIX_SIGNING_KEY=\"${cachix_key}\" echo \"${_out}\" | cachix push ${cachix_cache} >&2" >&2
+fi
+
+printf "==:: nixbuild: done\n" >&2
 printf "${_out}"
-exit "${exitcode}"

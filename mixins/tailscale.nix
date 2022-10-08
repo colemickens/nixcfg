@@ -3,6 +3,7 @@
 {
   config = {
     services.tailscale.enable = true;
+    services.tailscale.ignoreReversePathFilter = true;
     
     networking.firewall.trustedInterfaces = [ "tailscale0" ];
   }

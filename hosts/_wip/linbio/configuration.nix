@@ -51,7 +51,7 @@ in
         "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; };
       };
 
-    boot.initrd.luks.devices."porty-luks" = {
+    boot.initrd.luks.devices."nixos-luksroot" = {
       allowDiscards = true;
       device = "/dev/disk/by-partlabel/porty-luks";
 

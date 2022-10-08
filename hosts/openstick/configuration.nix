@@ -42,6 +42,8 @@ in
 
     security.sudo.wheelNeedsPassword = false;
 
+    systemd.network.wait-online.anyInterface = true;
+
     # I think this is needed for firmware to be present in stage-2 when wpa/something
     # fires it up?
     # COMPRESS_FW_LOADER was needed to be enabled in the kernel

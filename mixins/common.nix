@@ -117,6 +117,10 @@ in
         loader.grub = {
           pcmemtest.enable = lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isx86) true;
           timeoutStyle = "hidden";
+          configurationLimit = 10;
+        };
+        loader.systemd-boot = {
+          configurationLimit = 10;
         };
         loader.timeout = 1;
         kernelPackages = lib.mkIf cfg.defaultKernel (lib.mkDefault (if cfg.useZfs then defaultZfsKernel else defaultKernel));
@@ -129,7 +133,7 @@ in
       };
 
       system.disableInstallerTools = true;
-      
+
       ###################################
       ## NETWORK 
       ###################################
@@ -144,13 +148,13 @@ in
       services.resolved.enable = true;
 
       networking.firewall.logRefusedConnections = true;
-      networking.timeServers = []
-        ++ (if cfg.useXeepTimeserver then [ "192.168.1.10" ] else [])
+      networking.timeServers = [ ]
+        ++ (if cfg.useXeepTimeserver then [ "192.168.1.10" ] else [ ])
         ++ defaultTimeServers;
 
       systemd.network = (lib.mkIf (cfg.defaultNetworking) {
         enable = true;
-        
+
         wait-online.anyInterface = true;
         wait-online.ignoredInterfaces = [ "wlan0" "wlp1s0" "wlp2s0" "tailscale0" "virbr0" ];
 
@@ -161,7 +165,7 @@ in
           # linkConfig.ActivationPolicy = "always-down";
           linkConfig.Unmanaged = "yes";
         };
-        
+
         networks."20-tailscale-ignore" = {
           matchConfig.Name = "tailscale*";
           linkConfig = {
@@ -212,6 +216,27 @@ in
       nixpkgs.overlays = [
         inputs.self.overlays.default
       ];
+
+      specialisation = {
+        "sysdinit" = {
+          inheritParentConfig = true;
+          configuration = {
+            config = {
+              boot.initrd.systemd.enable = true;
+
+              boot.initrd.luks.devices = lib.mkIf
+                (builtins.hasAttr "nixos-luksroot" config.boot.initrd.luks.devices)
+                {
+                  "nixos-luksroot" = {
+                    crypttabExtraOpts = [
+                      "fido2-device=auto"
+                    ];
+                  };
+                };
+            };
+          };
+        };
+      };
 
       ###################################
       ## SYSTEM

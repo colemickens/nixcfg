@@ -1,11 +1,15 @@
 { pkgs, lib, config, inputs, ... }:
 
+let
+  _gitPackage = pkgs.gitAndTools.gitFull;
+  # _gitPackage = inputs.temp-git.legacyPackages.${pkgs.system}.gitAndTools.gitFull;
+in
 {
   imports = [
     ./core.nix # imports hm
 
     ../secrets
-    
+
     ../mixins/gpg-agent.nix
 
     ../mixins/aria2.nix
@@ -35,7 +39,7 @@
     # I don't think my user dbus socket is here without this?????
     users.users.cole.linger = true;
     users.users.cole.shell = pkgs.zsh;
-    
+
     # HM: ca.desrt.dconf error:
     # TODO: sops.secrets."nixup-secrets".owner = config.users.users.cole;
     sops.secrets."nixup-secrets".owner = "cole";
@@ -56,7 +60,7 @@
         "${hm.config.xdg.configHome}/gdb/gdbinit".source = (pkgs.writeText "gdbinit" ''set auto-load safe-path /nix/store'');
       };
       programs = {
-        git.package = pkgs.gitAndTools.gitFull;
+        git.package = _gitPackage;
         neovim.enable = true;
       };
       home.packages = with pkgs; [
@@ -92,17 +96,17 @@
         watchman
         watchexec
         tpm2-tools
-        
+
         cava
         cli-visualizer
-        
+
         pipes-rs
 
         xplr
         difftastic
         just
         pueue
-        
+
         binwalk
         cpio # needed?
         usbutils
@@ -137,8 +141,8 @@
         curl
         jq
         openssh
-        
-        
+
+
         linuxPackages.cpupower
         linuxPackages.usbip
 

@@ -113,7 +113,7 @@ in
     # virtualisation.hypervGuest.enable = true; # dualboot: Linux, Win11(hyper-v guest)
 
     boot.loader.grub.pcmemtest.enable = true;
-    boot.loader.grub.configurationLimit = 20;
+    boot.loader.grub.configurationLimit = lib.mkForce 20;
     boot.initrd.availableKernelModules = [ "sd_mod" "sr_mod" ];
     boot.initrd.kernelModules = [
       "xhci_pci"
@@ -134,7 +134,7 @@ in
         "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; };
       };
 
-    boot.initrd.luks.devices."${hn}-luks" = {
+    boot.initrd.luks.devices."nixos-luksroot" = {
       allowDiscards = true;
       device = "/dev/disk/by-partlabel/${hn}-luks";
 

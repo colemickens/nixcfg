@@ -13,7 +13,7 @@ in
 
     ../../mixins/android.nix
     ../../mixins/devshells.nix
-    ../../mixins/easyeffects.nix
+    # ../../mixins/easyeffects.nix
     # no, carbon uses systemd with the extended
     # boot partition support...
     # ../../mixins/grub-signed-shim.nix
@@ -122,8 +122,7 @@ in
         "intel_agp"
         "usbnet"
       ];
-      initrd.luks.devices."${hn}-luksroot" = {
-        name = "${hn}-luksroot";
+      initrd.luks.devices."nixos-luksroot" = {
         device = "/dev/disk/by-partlabel/${hn}-luksroot";
         preLVM = true;
         allowDiscards = true;

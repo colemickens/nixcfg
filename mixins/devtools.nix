@@ -6,6 +6,7 @@
       home.packages = with pkgs; [
         inputs.marksman.outputs.packages.${pkgs.system}.default
         rnix-lsp
+        nodePackages.bash-language-server
       ];
     };
   };

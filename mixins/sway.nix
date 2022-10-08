@@ -23,6 +23,7 @@ let
 
   cmd_pass = "${prefs.default_term} --class floatmeplz -e 'gopass-clip'";
   cmd_totp = "${prefs.default_term} --class floatmeplz -e 'gopass-totp'";
+  cmd_empi = "${pkgs.wezterm}/bin/wezterm start --class floatmeplz 'emoji-pick'";
 
   statusCommand = "${pkgs.waybar}/bin/waybar";
 
@@ -263,6 +264,7 @@ in
               "${modifier}+Shift+c" = "reload";
               "${modifier}+Delete" = "exec ${swaylock}";
 
+              # "${modifier}+Tab" = "exec ${pkgs.wldash}/bin/wldash";
               "${modifier}+Escape" = "exec ${prefs.default_launcher}";
               "${modifier}+Ctrl+Alt+Delete" = "exec ${swaymsg} exit || true";
               "${modifier}+Ctrl+Alt+Insert" = "exec ${swaymsg} reload";
@@ -271,6 +273,10 @@ in
 
               "${modifier}+Alt+F1" = "exec ${cmd_pass}";
               "${modifier}+Alt+F2" = "exec ${cmd_totp}";
+              "${modifier}+Alt+F3" = "exec ${cmd_empi}";
+              "${modifier}+F1" = "exec ${cmd_pass}";
+              "${modifier}+F2" = "exec ${cmd_totp}";
+              "${modifier}+F3" = "exec ${cmd_empi}";
 
               # I gotta fucking learn some day
               #"${modifier}+Left" = "focus left";

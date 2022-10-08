@@ -16,3 +16,19 @@
 - wshowkeys
 - ?
 - 
+
+
+## firefox extensions
+- auto tab discard
+- clearurls
+- fastforward
+- hacker news enhancement suite
+- popup window
+- sponsorblock for youtube
+- tampermonkey
+- tree style tab
+- ublock origin
+
+## firefox disabled extensions
+- tridactyl?
+- about sync?

@@ -10,6 +10,7 @@ let
   out_carbon = "SDC 0x4152 Unknown";
   
   wlproxylaunch = pkgs.writeShellScriptBin "wlproxylaunch" ''
+    pkill -9 -f wayland-proxy-virtwl
     ${pkgs.wayland-proxy-virtwl}/bin/wayland-proxy-virtwl \
       --wayland-display=wayland-2 \
       --xwayland-binary=${pkgs.xwayland}/bin/Xwayland \
@@ -124,12 +125,14 @@ in
 
         # wayland adjacent
         anodium
+        shotman
         sirula # launcher
         wayprompt
         wlproxylaunch
         wf-recorder
         wl-clipboard
         wlr-randr
+        wofi # (wofi-emoji in sway config, needs it)
         wtype
         # wlrctl # fucking awful UX, port to Rust
         # wdisplays # use the CLI

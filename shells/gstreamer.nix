@@ -8,6 +8,7 @@ let
   #   src = "";
   # };
 
+  # TODO: add pipewire for 'pipewiresrc'
 
   gst-new-src = pkgs.fetchFromGitLab {
     domain = "gitlab.freedesktop.org";

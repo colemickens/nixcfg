@@ -24,7 +24,7 @@ in
     # ./services/samba.nix
     # ./services/rsntp.nix
     # ./services/rtsptoweb.nix
-    ./services/snapserver.nix
+    # ./services/snapserver.nix
     ./services/plex.nix
     ./services/unifi.nix
     
@@ -95,8 +95,7 @@ in
       kernelModules = config.boot.initrd.availableKernelModules;
       kernelParams = [ "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}" ];
       initrd.luks.devices = {
-        root = {
-          name = "root";
+        "nixos-luksroot" = {
           device = "/dev/disk/by-partlabel/newluks";
           preLVM = true;
           allowDiscards = true;

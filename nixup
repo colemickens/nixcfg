@@ -35,12 +35,18 @@ case "${_cmd}" in
   "up") printf "▒▒ up ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \n" >/dev/stderr;
     nixup inputup
     # nixup rpiup
-    nixup lockup && nixup pkgup && nixup shellup
+    nixup lockup
+    nixup pkgup
+    nixup shellup
   ;;
   "upz")
-    nixup up && nixup cacheup
+    nixup up
+    nixup cacheup
     nixup deployall
-    date
+  ;;
+  "loopup")
+    set +e
+    while true; do ./nixup; sleep 600; done
   ;;
 
   "build") "${DIR}/misc/nixbuild.sh" "auto" "cachix:colemickens" "${@}"; ;;

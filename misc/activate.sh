@@ -42,17 +42,17 @@ function summarize() {
 }
 
 printf "==:: activate: [host: ${host}) [action: ${action}]\n" >/dev/stderr
-printf "==:: activate: [outres: ${outres}]\n" >/dev/stderr
+printf "==:: activate: [outres:  ${outres}]\n" >/dev/stderr
 
 # target="$(tailscale ip --6 "${host}")"
 target="$(tailscale ip --4 "${host}")"
-booted="$(ssh "${target}" "readlink -f /run/booted-system")"
+current="$(ssh "${target}" "readlink -f /run/current-system")"
 
-printf "==:: activate: [booted: ${booted}]\n" >/dev/stderr
+printf "==:: activate: [current: ${current}]\n" >/dev/stderr
 
 if [[ "${action:-""}" == "switch" || "${action:-""}" == "reboot" ]]; then
-  if [[ "${booted}" == "${outres}" ]]; then
-    printf "==:: activate: (${host}): download+activate [skip]\n" > /dev/stderr
+  if [[ "${current}" == "${outres}" ]]; then
+    printf "==:: activate: (${host}): skip activation (already active)\n" > /dev/stderr
   else
     printf "==:: activate: (${host}): download\n" > /dev/stderr
     ssh "${target}" "$(printf '\"%s\" ' sudo nix "${nixargs[@]}" build --option 'narinfo-cache-negative-ttl' 0 --no-link --profile /nix/var/nix/profiles/system "${outres}")"
@@ -75,7 +75,7 @@ if [[ "${action:-""}" == "summarize" ]]; then
 fi
 
 if [[ "${action:-""}" == "reboot" ]]; then
-  if [[ "${booted}" == "${outres}" ]]; then
+  if [[ "${current}" == "${outres}" ]]; then
     printf "\n==:: activate: (${host}): reboot (skip)\n\n" >/dev/stderr
   else
     printf "\n==:: activate: (${host}): reboot (and wait) ...\n\n" >/dev/stderr

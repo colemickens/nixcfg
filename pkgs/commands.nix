@@ -5,11 +5,15 @@
 , tailscale
 , asciinema
 , msr-tools
+, skim
+, jq
+, wl-clipboard
 , nixUnstable
 , writeShellScriptBin
 , linkFarmFromDrvs
 , symlinkJoin
 , writePython3Bin
+, fetchurl
 }:
 
 let
@@ -21,6 +25,29 @@ let
 
   name = "cole-custom-commands";
   drvs = [
+    # PICKER: EMOJI
+    (
+      let
+        emojis = fetchurl {
+          url = "https://raw.githubusercontent.com/muan/emojilib/v3.0.6/dist/emoji-en-US.json";
+          sha256 = "sha256-wf7zsIEbX/diLwmVvnN2Goxh2V5D3Z6nbEMSb5pSGt0=";
+        };
+      in
+      writeShellScriptBin "emoji-pick" ''
+        cat "${emojis}" \
+          | "${jq}/bin/jq" --raw-output '. | to_entries | .[] | .key + " " + (.value | join(" ") | sub("_"; " "; "g"))' \
+          | "${skim}/bin/sk" \
+          | "${wl-clipboard}/bin/wl-copy"
+      ''
+    )
+    # PICKER: GOPASS
+    (writeShellScriptBin "gopass-clip" ''
+      gopass show --clip "$(gopass ls --flat | sk --height '100%' -p "pass> ")"
+    '')
+    (writeShellScriptBin "gopass-totp" ''
+      gopass totp --clip "$(gopass ls --flat | sk --height '100%' -p "totp> ")"
+    '')
+
     # SSH QUICK HELPERS
     (writeShellScriptBin "gssh" ''
       [[ -z "''${DEBUG_GPGSSH}" ]] || set -x
@@ -59,15 +86,12 @@ let
           -o StreamLocalBindUnlink=yes \
           -A "$host" -t 'ssh-fix || true; which zsh >/dev/null && exec zsh -l || exec bash -l'
     '')
-    
+
     # ASCIINEMA
     (writeShellScriptBin "rec" ''
       ${asciinema}/bin/asciinema rec "''${HOME}/''${1}.cast" -c "zellij attach -c ''${1}"
     '')
-    (writeShellScriptBin "gopass-clip" ''
-      gopass show --clip "$(gopass ls --flat | sk --height '100%' -p "gopass show --clip> ")"
-    '')
-    
+
     # ZELLIJ
     (writeShellScriptBin "zj" ''
       zellij a -c "''${1:-"$(hostname)"}"

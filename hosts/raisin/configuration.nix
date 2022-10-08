@@ -70,8 +70,7 @@ in
         "intel_agp"
         "usbnet"
       ];
-      initrd.luks.devices."${hn}-luksroot" = {
-        name = "${hn}-luksroot";
+      initrd.luks.devices."nixos-luksroot" = {
         device = "/dev/disk/by-partlabel/${hn}-luksroot";
         preLVM = true;
         allowDiscards = true;

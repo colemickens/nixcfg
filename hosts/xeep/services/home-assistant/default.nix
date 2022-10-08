@@ -172,10 +172,10 @@ in
               service = "media_player.turn_on";
               target.entity_id = "media_player.braviatv";
             }
-            {
-              service = "media_player.turn_on";
-              target.entity_id = "media_player.lg_webos_smart_tv";
-            }
+            # {
+            #   service = "media_player.turn_on";
+            #   target.entity_id = "media_player.lg_webos_smart_tv";
+            # }
             {
               delay.seconds = 15;
             }
@@ -219,65 +219,62 @@ in
           # TODO: think of something better for her lamp...
           # I think the lamp should be manual for blinds+ambient light
           # but I want something to ramp up around her food times...
-          # {
-          #   id = "cleo_lamp_on";
-          #   alias = "Cleo Lamp On";
-          #   mode = "single";
-          #   trigger = {
-          #     platform = "time_pattern";
-          #     hours = "20";
-          #     minutes = "30";
-          #   };
-          #   action = [{
-          #     service = "switch.turn_on";
-          #     target.entity_id = cleo_lamp_switch;
-          #   }];
-          # }
-          # {
-          #   id = "cleo_lamp_off";
-          #   alias = "Cleo Lamp Off";
-          #   mode = "single";
-          #   trigger = {
-          #     platform = "time_pattern";
-          #     hours = "8";
-          #     minutes = "45";
-          #   };
-          #   action = [{
-          #     service = "switch.turn_off";
-          #     target.entity_id = cleo_lamp_switch;
-          #   }];
-          # }
           {
-            id = "cleo_fountain_cycle";
-            alias = "Cleo Fountain Cycle";
+            id = "cleo_lamp_on";
+            alias = "Cleo Lamp On";
             mode = "single";
             trigger = {
-              platform = "time_pattern";
-              hours = "/1";
-              minutes = "0";
+              platform = "time";
+              at = [ "19:00:00" ];
             };
-            action = [
-              {
-                service = "switch.turn_off";
-                target.entity_id = _ent.cleo_fountain;
-              }
-              {
-                delay.seconds = 2;
-              }
-              {
-                service = "switch.turn_on";
-                target.entity_id = _ent.cleo_fountain;
-              }
-            ];
+            action = [{
+              service = "switch.turn_on";
+              target.entity_id = cleo_lamp_switch;
+            }];
           }
+          {
+            id = "cleo_lamp_off";
+            alias = "Cleo Lamp Off";
+            mode = "single";
+            trigger = {
+              platform = "time";
+              at = [ "7:00:00" ];
+            };
+            action = [{
+              service = "switch.turn_off";
+              target.entity_id = cleo_lamp_switch;
+            }];
+          }
+          # {
+          #   id = "cleo_fountain_cycle";
+          #   alias = "Cleo Fountain Cycle";
+          #   mode = "single";
+          #   trigger = {
+          #     platform = "time_pattern";
+          #     hours = "/1";
+          #     minutes = "0";
+          #   };
+          #   action = [
+          #     {
+          #       service = "switch.turn_off";
+          #       target.entity_id = _ent.cleo_fountain;
+          #     }
+          #     {
+          #       delay.seconds = 2;
+          #     }
+          #     {
+          #       service = "switch.turn_on";
+          #       target.entity_id = _ent.cleo_fountain;
+          #     }
+          #   ];
+          # }
           {
             id = "candles_on";
             alias = "Candles On";
             mode = "single";
             trigger = {
-              platform = "time_pattern";
-              hours = "/4";
-              minutes = "0";
+              platform = "time";
+              at = [ "00:00:00" "6:00:00" "12:00:00" "18:00:00" ];
             };
             action = [{
               service = "switch.turn_on";
@@ -288,27 +285,9 @@ in
             id = "candles_off";
             alias = "Candles Off";
             mode = "single";
-            # we're going to fire every hour, at 30 mins after the top
-            # but only run in the hours that come after the /3 hours...
-            condition = [
-              {
-                condition = "or";
-                conditions = [
-                  # on at : 00:00, 04:00, 08:00, 12:00, 16:00, 20:00
-                  # off at: 01:30, 05:30, 09:30, 13:30, 17:30, 21:30
-                  { condition = "time"; after = "1:00:00"; before = "2:00:00"; }
-                  { condition = "time"; after = "5:00:00"; before = "6:00:00"; }
-                  { condition = "time"; after = "9:00:00"; before = "10:00:00"; }
-                  { condition = "time"; after = "13:00:00"; before = "14:00:00"; }
-                  { condition = "time"; after = "17:00:00"; before = "18:00:00"; }
-                  { condition = "time"; after = "21:00:00"; before = "22:00:00"; }
-                ];
-              }
-            ];
             trigger = {
-              platform = "time_pattern";
-              hours = "*";
-              minutes = "30";
+              platform = "time";
+              at = [ "2:00:00" "8:00:00" "14:00:00" "20:00:00" ];
             };
             action = [{
               service = "switch.turn_off";

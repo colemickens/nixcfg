@@ -6,7 +6,9 @@ let
   _firefox = lib.hiPrio firefoxFlake.firefox-nightly-bin;
 
   # _chromey = pkgs.ungoogled-chromium;
-  _chromey = pkgs.google-chrome-dev;
+  _chromey = pkgs.google-chrome-dev.override {
+    commandLineArgs = [ "--force-dark-mode" ];
+  };
   # _chromey = pkgs.writeShellScriptBin "chromey" ''
   #   ${pkgs.sommelier}/bin/sommelier \
   #     --xwayland-path=${pkgs.xwayland}/bin/Xwayland \
@@ -61,6 +63,9 @@ in
         (with pkgs; [
           colePackages.customGuiCommands
 
+          # ide/editor
+          lapce
+
           # gui cli
           brightnessctl
           pulsemixer
@@ -73,7 +78,7 @@ in
           freerdp
           # vlc
           lapce
-          
+
           wpa_supplicant_gui
           # jami-daemon
           # jami-client-gnome
