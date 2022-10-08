@@ -62,10 +62,10 @@ while true; do
   if [[ "${exitcode}" == 0 ]]; then
     printf "==:: nixbuild: build: success\n" >&2
     break
-  elif cat "${log}" | rg "requires non-existent output"; then
+  elif cat "${log}" | rg "requires non-existent output" &>/dev/null; then
     printf "==:: nixbuild: build: retry (bug: nixos/nix#6572)\n" >&2
     continue
-  elif cat "${log}" | rg "signal 9"; then
+  elif cat "${log}" | rg "signal 9" &>/dev/null; then
     printf "==:: nixbuild: build: retry (oom)\n" >&2
     continue
   fi
@@ -80,3 +80,4 @@ fi
 
 printf "==:: nixbuild: done\n" >&2
 printf "${_out}"
+printf "\n" >&2

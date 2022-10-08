@@ -84,7 +84,4 @@ if [[ "${action:-""}" == "reboot" ]]; then
   fi
 fi
 
-exitcode=0
 printf "==:: activate: (${host}): done\n" >/dev/stderr
-printf "activate.sh: done: exitcode=${exitcode}\n" >/dev/stderr
-exit "${exitcode}"
