@@ -45,7 +45,7 @@ nix copy --derivation "${_drv}" \
   --no-check-sigs \
     >&2
 
-log="$(mktemp --tmpdir "nixbuild-XXXXXXXX")"
+log="$(mktemp --tmpdir "nixbuild-$(date '+%s')-XXXXXXXX")"
 trap "rm ${log}" EXIT
 while true; do
   printf "==:: nixbuild: build (on: ${bldr}) (log: ${log})\n" >&2
@@ -64,6 +64,7 @@ while true; do
     break
   elif cat "${log}" | rg "requires non-existent output" &>/dev/null; then
     printf "==:: nixbuild: build: retry (bug: nixos/nix#6572)\n" >&2
+    cp "${log}" "${DIR}/../bug6572logs/"
     continue
   elif cat "${log}" | rg "signal 9" &>/dev/null; then
     printf "==:: nixbuild: build: retry (oom)\n" >&2

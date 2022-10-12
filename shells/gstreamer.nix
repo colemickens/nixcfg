@@ -19,52 +19,52 @@ let
   };
   gst-overlay =
     (final: prev: {
-      gst_all_1 = {
-        gstreamer = prev.gst_all_1.gstreamer.overrideAttrs (old: rec {
-          version = "1.21.0.1";
-          src = gst-new-src;
-          sourceRoot = "${src.name}/subprojects/gstreamer";
-        });
-        gst-plugins-base = prev.gst_all_1.gst-plugins-base.overrideAttrs (old: rec {
-          version = "1.21.0.1";
-          src = gst-new-src;
-          sourceRoot = "${src.name}/subprojects/gst-plugins-base";
-          buildInputs = old.buildInputs ++ [ prev.xorg.libXi ];
-        });
-        gst-plugins-good = prev.gst_all_1.gst-plugins-good.overrideAttrs (old: rec {
-          version = "1.21.0.1";
-          src = gst-new-src;
-          sourceRoot = "${src.name}/subprojects/gst-plugins-good";
-        });
-        gst-plugins-bad = prev.gst_all_1.gst-plugins-bad.overrideAttrs (old: rec {
-          version = "1.21.0.1";
-          src = gst-new-src;
-          sourceRoot = "${src.name}/subprojects/gst-plugins-bad";
-          buildInputs = old.buildInputs ++ (with prev; [
-            gtk3
-          ]);
-          mesonFlags = old.mesonFlags ++ [
-            "-Damfcodec=disabled"
-            "-Ddirectshow=disabled"
-            "-Ddirectfb=disabled"
-          ];
-        });
-        gst-plugins-ugly = prev.gst_all_1.gst-plugins-ugly.overrideAttrs (old: rec {
-          version = "1.21.0.1";
-          src = gst-new-src;
-          sourceRoot = "${src.name}/subprojects/gst-plugins-ugly";
-        });
-        gst-libav = prev.gst_all_1.gst-libav.overrideAttrs (old: rec {
-          version = "1.21.0.1";
-          src = gst-new-src;
-          sourceRoot = "${src.name}/subprojects/gst-libav";
-        });
+      # gst_all_1 = {
+      #   gstreamer = prev.gst_all_1.gstreamer.overrideAttrs (old: rec {
+      #     version = "1.21.0.1";
+      #     src = gst-new-src;
+      #     sourceRoot = "${src.name}/subprojects/gstreamer";
+      #   });
+      #   gst-plugins-base = prev.gst_all_1.gst-plugins-base.overrideAttrs (old: rec {
+      #     version = "1.21.0.1";
+      #     src = gst-new-src;
+      #     sourceRoot = "${src.name}/subprojects/gst-plugins-base";
+      #     buildInputs = old.buildInputs ++ [ prev.xorg.libXi ];
+      #   });
+      #   gst-plugins-good = prev.gst_all_1.gst-plugins-good.overrideAttrs (old: rec {
+      #     version = "1.21.0.1";
+      #     src = gst-new-src;
+      #     sourceRoot = "${src.name}/subprojects/gst-plugins-good";
+      #   });
+      #   gst-plugins-bad = prev.gst_all_1.gst-plugins-bad.overrideAttrs (old: rec {
+      #     version = "1.21.0.1";
+      #     src = gst-new-src;
+      #     sourceRoot = "${src.name}/subprojects/gst-plugins-bad";
+      #     buildInputs = old.buildInputs ++ (with prev; [
+      #       gtk3
+      #     ]);
+      #     mesonFlags = old.mesonFlags ++ [
+      #       "-Damfcodec=disabled"
+      #       "-Ddirectshow=disabled"
+      #       "-Ddirectfb=disabled"
+      #     ];
+      #   });
+      #   gst-plugins-ugly = prev.gst_all_1.gst-plugins-ugly.overrideAttrs (old: rec {
+      #     version = "1.21.0.1";
+      #     src = gst-new-src;
+      #     sourceRoot = "${src.name}/subprojects/gst-plugins-ugly";
+      #   });
+      #   gst-libav = prev.gst_all_1.gst-libav.overrideAttrs (old: rec {
+      #     version = "1.21.0.1";
+      #     src = gst-new-src;
+      #     sourceRoot = "${src.name}/subprojects/gst-libav";
+      #   });
         # gst-omx = prev.gst_all_1.gst-omx.overrideAttrs (old: rec {
         #   version = "1.21.0.1";
         #   src = gst-new-src;
         #   sourceRoot = "${src.name}/subprojects/gst-omx";
         # });
-      };
+      # };
     });
 
   gstreamerPath = ""
