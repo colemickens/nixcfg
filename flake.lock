@@ -228,11 +228,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1665643900,
-        "narHash": "sha256-AS3xIv9o/TVdFX2b9l7pDXGeXLwpNcLJmfzCctyttuc=",
+        "lastModified": 1665730515,
+        "narHash": "sha256-0AwNgYCcGr9tae2wD3Bk3YYzG1lQZpoGkU4b1+rMg8U=",
         "owner": "figsoda",
         "repo": "fenix",
-        "rev": "b5fba66d5ef7a2eeb798f1062e33b418c05a732a",
+        "rev": "c6115bd02868c895114cb0e8348166d9ffc08695",
         "type": "github"
       },
       "original": {
@@ -435,11 +435,11 @@
     },
     "hardware": {
       "locked": {
-        "lastModified": 1665649208,
-        "narHash": "sha256-MDkPVG4W8gigJ8OxWDp9L6aKaEwLRV3As1RvKkMq0rc=",
+        "lastModified": 1665734422,
+        "narHash": "sha256-v8DMfRyFdulDyCCoOXak+oue1IgVBJZdSY1eXqdMRwQ=",
         "owner": "nixos",
         "repo": "nixos-hardware",
-        "rev": "d92ed98c099ae731664fc526c348d609c4cffe04",
+        "rev": "c8c54d8f0af9f19ed6e929e60f0e1609b89b1240",
         "type": "github"
       },
       "original": {
@@ -786,11 +786,11 @@
         "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1665684141,
-        "narHash": "sha256-96eq82QB81fPVgixB+fPTkixdHHzIxD/s0fvQjjKsuQ=",
+        "lastModified": 1665736011,
+        "narHash": "sha256-J2OHC+oa6QIdgIr++mnpoaaeEFUppCTY/hvZSzEQ1/o=",
         "owner": "tweag",
         "repo": "nickel",
-        "rev": "91a97b0cd2b69345f9d7a13307d45d22e6632524",
+        "rev": "3d01e08670be305cc2f602d408cf2cc5dd79daf0",
         "type": "github"
       },
       "original": {
