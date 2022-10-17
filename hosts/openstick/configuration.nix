@@ -43,6 +43,9 @@ in
     security.sudo.wheelNeedsPassword = false;
 
     systemd.network.wait-online.anyInterface = true;
+    
+    # TODO: move to a more common location, F**K YOU NM plugins, jesus
+    networking.networkmanager.plugins = lib.mkForce [];
 
     # I think this is needed for firmware to be present in stage-2 when wpa/something
     # fires it up?

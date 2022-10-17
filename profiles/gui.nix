@@ -89,7 +89,6 @@ in
           # librewolf
         ]) ++ (lib.optionals (pkgs.system == "x86_64-linux") (with pkgs; [
           # x86_64-linux only
-          neochat
           _firefox
           _chromey
         ]))

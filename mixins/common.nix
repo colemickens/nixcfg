@@ -147,6 +147,14 @@ in
       networking.useNetworkd = lib.mkIf (cfg.defaultNetworking) true;
       services.resolved.enable = true;
 
+      # TODO: Fuck OVHCloud.
+      # networking.extraHosts = let ip = "100.72.11.62"; in ''
+      #   ${ip} cleo.cat
+      #   ${ip} x.cleo.cat
+      #   ${ip} home.x.cleo.cat
+      #   ${ip} sd.cleo.cat
+      #   ${ip} sdo.cleo.cat
+      # '';
       networking.firewall.logRefusedConnections = true;
       networking.timeServers = [ ]
         ++ (if cfg.useXeepTimeserver then [ "192.168.1.10" ] else [ ])

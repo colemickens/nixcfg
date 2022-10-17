@@ -19,6 +19,8 @@ let
 
   rpifour1_ip4 = "100.111.5.113";
   rpifour1_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:626f:571]";
+  
+  internalDomain = "cleo.cat";
 
   template = pkgs.writeText "template.html" ''
     <html>
@@ -28,13 +30,13 @@ let
 
         <h2>serveis</h2>
         <ul>
-          <li><a href="https://x.cleo.cat">deixa'm entrar</a></li>
+          <li><a href="https://x.${internalDomain}">deixa'm entrar</a></li>
         </ul>
 
         <h2>serveis2</h2>
         <ul>
-          <li><a href="https://sd.cleo.cat">stable-diffusion webui</a></li>
-          <li><a href="https://sdo.cleo.cat">stable-diffusion outputs</a></li>
+          <li><a href="https://sd.${internalDomain}">stable-diffusion webui</a></li>
+          <li><a href="https://sdo.${internalDomain}">stable-diffusion outputs</a></li>
         </ul>
 
         <br/>
@@ -50,35 +52,35 @@ let
         
         <h2>public serveis</h2>
         <ul>
-          <li><a href="https://homie-cast.cleo.cat">homie-cast</a></li>
+          <li><a href="https://homie-cast.${internalDomain}">homie-cast</a></li>
         </ul>
         
         <h2>serveis</h2>
         <ul>
-          <li><a href="http://sd.x.cleo.cat">stable-diffusion</a></li>
+          <li><a href="http://sd.x.${internalDomain}">stable-diffusion</a></li>
         </ul>
         <ul>
-          <li><a href="https://home.x.cleo.cat">home-assistant</a></li>
-          <li><a href="https://homie.x.cleo.cat">homie (hodd)</a></li>
-          <li><a href="https://unifi.x.cleo.cat">unifi</a></li>
-          <li><a href="https://denon.x.cleo.cat">denon</a></li>
-          <li><a href="https://rtsptoweb.x.cleo.cat">rtsptoweb</a></li>
-          <li><a href="https://paperless.x.cleo.cat">paperless</a></li>
-          <li><a href="https://wphone.x.cleo.cat">wphone</a></li>
+          <li><a href="https://home.x.${internalDomain}">home-assistant</a></li>
+          <li><a href="https://homie.x.${internalDomain}">homie (hodd)</a></li>
+          <li><a href="https://unifi.x.${internalDomain}">unifi</a></li>
+          <li><a href="https://denon.x.${internalDomain}">denon</a></li>
+          <li><a href="https://rtsptoweb.x.${internalDomain}">rtsptoweb</a></li>
+          <li><a href="https://paperless.x.${internalDomain}">paperless</a></li>
+          <li><a href="https://wphone.x.${internalDomain}">wphone</a></li>
         </ul>
         <ul>
-          <li><a href="https://syncthing-pixel3.x.cleo.cat">syncthing (pixel3)</a></li>
+          <li><a href="https://syncthing-pixel3.x.${internalDomain}">syncthing (pixel3)</a></li>
           <br/>
-          <li><a href="https://syncthing-carbon.x.cleo.cat">syncthing (carbon)</a></li>
-          <li><a href="https://syncthing-slynux.x.cleo.cat">syncthing (slynux)</a></li>
-          <li><a href="https://syncthing-raisin.x.cleo.cat">syncthing (raisin)</a></li>
-          <li><a href="https://syncthing-xeep.x.cleo.cat">syncthing (xeep)</a></li>
-          <li><a href="https://syncthing-jeffhyper.x.cleo.cat">syncthing (jeffhyper)</a></li>
+          <li><a href="https://syncthing-carbon.x.${internalDomain}">syncthing (carbon)</a></li>
+          <li><a href="https://syncthing-slynux.x.${internalDomain}">syncthing (slynux)</a></li>
+          <li><a href="https://syncthing-raisin.x.${internalDomain}">syncthing (raisin)</a></li>
+          <li><a href="https://syncthing-xeep.x.${internalDomain}">syncthing (xeep)</a></li>
+          <li><a href="https://syncthing-jeffhyper.x.${internalDomain}">syncthing (jeffhyper)</a></li>
         </ul>
 
         <h2>serveis futurs</h2>
         <ul>
-          <li><a href="https://aria.x.cleo.cat">aria2c - webui</a></li>
+          <li><a href="https://aria.x.${internalDomain}">aria2c - webui</a></li>
         </ul>
 
         <br/>
@@ -101,16 +103,16 @@ let
   };
 
   protectedVhost = {
-    useACMEHost = "cleo.cat";
+    useACMEHost = "${internalDomain}";
     forceSSL = true;
     extraConfig = ''
-      auth_basic "protected cleo.cat service";
+      auth_basic "protected ${internalDomain} service";
       auth_basic_user_file /run/secrets/htpasswd;
     '';
   };
 
   internalVhost = {
-    useACMEHost = "cleo.cat";
+    useACMEHost = "${internalDomain}";
     forceSSL = true;
     extraConfig = ''
       allow 100.0.0.0/8;
@@ -120,7 +122,7 @@ let
   };
 
   redirSecret = pkgs.writeText "redir-tkn.conf" ''
-    return 301 https://openvscode.x.cleo.cat?tkn="";
+    return 301 https://openvscode.x.${internalDomain}?tkn="";
   '';
 in
 {
@@ -141,13 +143,13 @@ in
     security.acme = {
       acceptTerms = true;
       defaults.email = "cole.mickens@gmail.com";
-      certs."cleo.cat" = {
+      certs."${internalDomain}" = {
         dnsProvider = "cloudflare";
         #server = "https://acme-staging-v02.api.letsencrypt.org/directory";
         credentialsFile = config.sops.secrets."cloudflare-cleo-cat-creds".path;
         extraDomainNames = [
-          "*.cleo.cat"
-          "*.x.cleo.cat"
+          "*.${internalDomain}"
+          "*.x.${internalDomain}"
         ];
       };
     };
@@ -166,14 +168,14 @@ in
       recommendedGzipSettings = true;
       recommendedProxySettings = true;
 
-      virtualHosts."cleo.cat" = {
+      virtualHosts."${internalDomain}" = {
         root = payload;
         default = true;
-        useACMEHost = "cleo.cat";
+        useACMEHost = "${internalDomain}";
         forceSSL = true;
       };
-      # virtualHosts."oci.cleo.cat" = {
-      #   useACMEHost = "cleo.cat";
+      # virtualHosts."oci.${internalDomain}" = {
+      #   useACMEHost = "${internalDomain}";
       #   addSSL = true;
       #   forceSSL = false;
       #   locations."/" = {
@@ -185,8 +187,8 @@ in
       #   };
       # };
 
-      virtualHosts."netboot.cleo.cat" = {
-        useACMEHost = "cleo.cat";
+      virtualHosts."netboot.${internalDomain}" = {
+        useACMEHost = "${internalDomain}";
         addSSL = true;
         forceSSL = false;
         locations."/" = {
@@ -207,13 +209,13 @@ in
       };
 
       # EXTERNAL, PROTECTED
-      virtualHosts."sd.cleo.cat" = protectedVhost // {
+      virtualHosts."sd.${internalDomain}" = protectedVhost // {
         locations."/" = {
           proxyPass = "http://${slynux_ip4}:7860/";
           proxyWebsockets = true;
         };
       };
-      virtualHosts."sdo.cleo.cat" = protectedVhost // {
+      virtualHosts."sdo.${internalDomain}" = protectedVhost // {
         locations."/" = {
           proxyPass = "http://${slynux_ip4}:7861/";
           proxyWebsockets = true;
@@ -230,17 +232,17 @@ in
 
 
       # INTERNAL ONLY
-      virtualHosts."x.cleo.cat" = internalVhost // {
+      virtualHosts."x.${internalDomain}" = internalVhost // {
         root = payload_vpn;
       };
-      virtualHosts."home.x.cleo.cat" = internalVhost // {
+      virtualHosts."home.x.${internalDomain}" = internalVhost // {
         locations."/" = {
           proxyPass = "http://localhost:8123/";
           proxyWebsockets = true;
         };
       };
-      virtualHosts."homie.x.cleo.cat" = {
-        useACMEHost = "cleo.cat";
+      virtualHosts."homie.x.${internalDomain}" = {
+        useACMEHost = "${internalDomain}";
         addSSL = true;
         forceSSL = false;
         locations."/" = {
@@ -252,8 +254,8 @@ in
       };
 
       # <homie-cast>
-      virtualHosts."homie-cast.cleo.cat" = {
-        useACMEHost = "cleo.cat";
+      virtualHosts."homie-cast.${internalDomain}" = {
+        useACMEHost = "${internalDomain}";
         addSSL = true;
         forceSSL = false;
         locations."/" = {
@@ -262,8 +264,8 @@ in
           proxyWebsockets = true;
         };
       };
-      virtualHosts."homie-cast-ws.cleo.cat" = {
-        useACMEHost = "cleo.cat";
+      virtualHosts."homie-cast-ws.${internalDomain}" = {
+        useACMEHost = "${internalDomain}";
         addSSL = true;
         forceSSL = false;
         locations."/" = {
@@ -274,31 +276,31 @@ in
       };
       # </homie-cast>
 
-      virtualHosts."denon.x.cleo.cat" = internalVhost // {
+      virtualHosts."denon.x.${internalDomain}" = internalVhost // {
         locations."/" = {
           proxyPass = "http://192.168.1.126:80/";
           proxyWebsockets = true;
         };
       };
-      virtualHosts."unifi.x.cleo.cat" = internalVhost // {
+      virtualHosts."unifi.x.${internalDomain}" = internalVhost // {
         locations."/" = {
           proxyPass = "https://localhost:8443/";
           proxyWebsockets = true;
         };
       };
-      virtualHosts."rtsptoweb.x.cleo.cat" = internalVhost // {
+      virtualHosts."rtsptoweb.x.${internalDomain}" = internalVhost // {
         locations."/" = {
           proxyPass = "http://localhost:8083/";
           proxyWebsockets = true;
         };
       };
-      virtualHosts."paperless.x.cleo.cat" = internalVhost // {
+      virtualHosts."paperless.x.${internalDomain}" = internalVhost // {
         locations."/" = {
           proxyPass = "http://localhost:28981/";
           proxyWebsockets = true;
         };
       };
-      virtualHosts."wphone.x.cleo.cat" = internalVhost // {
+      virtualHosts."wphone.x.${internalDomain}" = internalVhost // {
         locations."/" = {
           root = "/srv/wphone/public";
           proxyWebsockets = true;
@@ -309,30 +311,30 @@ in
       };
 
 
-      virtualHosts."aria2.x.cleo.cat" = internalVhost // {
+      virtualHosts."aria2.x.${internalDomain}" = internalVhost // {
         locations."/".proxyPass = "http://localhost:${toString config.services.aria2.rpcListenPort}";
         locations."/".proxyWebsockets = true;
       };
 
 
       # syncthing
-      virtualHosts."syncthing-slynux.x.cleo.cat" = internalVhost // {
+      virtualHosts."syncthing-slynux.x.${internalDomain}" = internalVhost // {
         locations."/".proxyPass = "http://${slynux_ip4}:8384/";
         locations."/".proxyWebsockets = true;
       };
-      virtualHosts."syncthing-carbon.x.cleo.cat" = internalVhost // {
+      virtualHosts."syncthing-carbon.x.${internalDomain}" = internalVhost // {
         locations."/".proxyPass = "http://${carbon_ip6}:8384/";
         locations."/".proxyWebsockets = true;
       };
-      virtualHosts."syncthing-xeep.x.cleo.cat" = internalVhost // {
+      virtualHosts."syncthing-xeep.x.${internalDomain}" = internalVhost // {
         locations."/".proxyPass = "http://${xeep_ip6}:8384/";
         locations."/".proxyWebsockets = true;
       };
-      virtualHosts."syncthing-raisin.x.cleo.cat" = internalVhost // {
+      virtualHosts."syncthing-raisin.x.${internalDomain}" = internalVhost // {
         locations."/".proxyPass = "http://${raisin_ip6}:8384/";
         locations."/".proxyWebsockets = true;
       };
-      virtualHosts."syncthing-jeffhyper.x.cleo.cat" = internalVhost // {
+      virtualHosts."syncthing-jeffhyper.x.${internalDomain}" = internalVhost // {
         locations."/".proxyPass = "http://${jeffhyper_ip4}:8384/";
         locations."/".proxyWebsockets = true;
       };

@@ -23,6 +23,7 @@
         "netdev" # actually networkctl
         "lxd" # lxd lxc waydroid
         "flashrom"
+        "rtkit" # rtkit stuff
       ];
       uid = 1000;
       group = "cole";
