@@ -46,6 +46,8 @@ in
     system.stateVersion = "21.05";
     networking.hostName = "carbon";
 
+    nixcfg.common.hostColor = "purple";
+
     home-manager.users.cole = { pkgs, ... }: {
       home.packages = with pkgs; [
         ripcord
@@ -108,7 +110,7 @@ in
       };
       kernelModules = [ "iwlwifi" "ideapad_laptop" ];
       kernelParams = [
-        "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}"
+        "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * (1024 * 6))}"
         # "ideapad_laptop.allow_v4_dytc=1"
         "snd_hda_intel.model=lenovo-sky"
       ];

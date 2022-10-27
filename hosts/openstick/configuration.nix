@@ -39,6 +39,9 @@ in
       bottom
       libqmi
     ];
+    
+    boot.loader.grub.configurationLimit = 2;
+    boot.loader.generic-extlinux-compatible.configurationLimit = 2;
 
     security.sudo.wheelNeedsPassword = false;
 

@@ -69,6 +69,11 @@ in
           # gui cli
           brightnessctl
           pulsemixer
+          qpwgraph
+          
+          # voip
+          twinkle
+          linphone
 
           # misc gui
           libnotify

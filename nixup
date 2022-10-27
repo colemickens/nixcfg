@@ -21,6 +21,9 @@ case "${_cmd}" in
    "${DIR}/misc/nixbuild.sh" "auto" "cachix:colemickens" ".#cache-dev"
   ;;
   "cacheup") printf "▒▒ cacheup ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \n" >/dev/stderr;
+    if [[ "$(hostname)" == "slynux" ]]; then
+      nom build '.#cache-all'
+    fi
     "${DIR}/misc/nixbuild.sh" "auto" "cachix:colemickens" ".#cache-all"
   ;;
   "lockup") printf "▒▒ lockup ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \n" >/dev/stderr;

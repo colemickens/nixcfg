@@ -44,6 +44,8 @@ in
       libsmbios # ? can't remember it
     ];
     
+    nixcfg.common.hostColor = "orange";
+
     # services.windmill = {
     #   enable = true;
     # };

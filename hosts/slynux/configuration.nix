@@ -50,7 +50,7 @@ in
     ../../mixins/gfx-nvidia.nix
     ../../mixins/gfx-debug.nix
 
-    ../../mixins/android.nix
+    # ../../mixins/android.nix
     # ../../mixins/devshells.nix
     ../../mixins/devtools.nix
     ../../mixins/grub-signed-shim.nix
@@ -75,6 +75,10 @@ in
     networking.hostName = "slynux";
     
     nixcfg.common.defaultNetworking = false;
+    nixcfg.common.hostColor = "blue";
+    # nixcfg.appearance.promptGradient.fgstart = "0x40c9ff";
+    # nixcfg.appearance.promptGradient.fgend = "0xe81cff";
+
     # systemd.network.wait-online.ignoredInterfaces = [ "wanbr0" ]; # since it's bridged?
     systemd.network.wait-online.anyInterface = true; # untested here
     networking = {

@@ -9,7 +9,7 @@ in
 
     ../../mixins/grub-signed-shim.nix
 
-    ../../mixins/android.nix
+    # ../../mixins/android.nix
     ../../mixins/libvirtd.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
@@ -29,7 +29,9 @@ in
   config = {
     system.stateVersion = "21.05";
     networking.hostName = "raisin";
-      
+    
+    nixcfg.common.hostColor = "yellow";
+
     hardware.bluetooth.enable = false;
     hardware.usbWwan.enable = true;
     hardware.cpu.amd.updateMicrocode = true;

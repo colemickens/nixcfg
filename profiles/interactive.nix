@@ -96,6 +96,8 @@ in
         watchman
         watchexec
         tpm2-tools
+        
+        nix-output-monitor
 
         cava
         cli-visualizer

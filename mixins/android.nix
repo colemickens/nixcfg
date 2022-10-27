@@ -6,6 +6,7 @@
     users.users."cole".extraGroups = [ "adbusers" ];
 
     environment.systemPackages = with pkgs; [
+      rkdeveloptool
       scrcpy
     ];
   };

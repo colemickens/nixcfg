@@ -254,6 +254,7 @@
             customGuiCommands = prev.callPackage ./pkgs/commands-gui.nix { };
 
             anodium = prev.callPackage ./pkgs/anodium { };
+            catacomb = prev.callPackage ./pkgs/catacomb { };
             get-xoauth2-token = prev.callPackage ./pkgs/get-xoauth2-token { };
             hodd = prev.callPackage ./pkgs/hodd { };
             keyboard-layouts = prev.callPackage ./pkgs/keyboard-layouts { };

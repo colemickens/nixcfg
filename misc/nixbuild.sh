@@ -6,7 +6,7 @@ bldr="${1}"; shift
 trgt="${1}"; shift
 attr="${1}"; shift
 
-log="$(mktemp --tmpdir "nixbuild-$(date '+%s')-XXXXXXXX")"
+_log="$(mktemp -p "${DIR}/../logs" -d "nixbuild-$(date '+%s')-XXXXXXXX")"
 
 if [[ "$trgt" == *"cachix:"* ]]; then
   cachix_cache="$(echo "${trgt}" | cut -d ':' -f2)"
@@ -46,9 +46,11 @@ nix copy --derivation "${_drv}" \
   --no-check-sigs \
     >&2
 
-trap "rm ${log}" EXIT
+try=0
 while true; do
-  printf "==:: nixbuild: build (on: ${bldr}) (log: ${log})\n" >&2
+  try=$(( $try + 1 ))
+  log="${_log}/try${try}.txt"
+  printf "==:: nixbuild: build (on: ${bldr}) (log: $(readlink -f "${log}")\n" >&2
   set +e ####################
   stdbuf -i0 -o0 -e0 \
     nix build "${_drv}" \
@@ -64,7 +66,7 @@ while true; do
     break
   elif cat "${log}" | rg "requires non-existent output" &>/dev/null; then
     printf "==:: nixbuild: build: retry (bug: nixos/nix#6572)\n" >&2
-    cp "${log}" "${DIR}/../bug6572logs/"
+    cp "${log}" "${DIR}/../logs/bug6572/"
     continue
   elif cat "${log}" | rg "signal 9" &>/dev/null; then
     printf "==:: nixbuild: build: retry (oom) <log>\n" >&2
@@ -73,6 +75,7 @@ while true; do
     continue
   fi
   printf "==:: nixbuild: build: fatal failure\n" >&2
+  tail "${log}" >&2
   exit "${exitcode}"
 done
 

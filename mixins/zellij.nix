@@ -14,6 +14,9 @@ in
         settings = {
           default_mode = "normal";
           # ui.pane_frames.rounded_corners = true;
+          default_layout = "compact";
+          default_shell = "nu";
+          simplified_ui = true;
           pane_frames = false;
           scrollback_editor = "hx";
           theme = "default";

@@ -14,6 +14,8 @@ let
   ha_port = 8123;
   # ha_host_port = "${ha_host}:${toString ha_port}";
 
+  lgtv_mac = "c0-d7-aa-00-3b-c4";
+
   nanoleaf_light = "light.nanoleaf_light_panels_5b_38_ef";
   cleo_lamp_switch = "switch.wp6_sw102_relay";
   candle_switches = [
@@ -22,14 +24,14 @@ let
     "switch.wp6_sw108_relay" # candle2
     "switch.wp6_sw109_relay" # candle3
   ];
-  
+
   _ent = rec {
     lgc1 = "media_player.lg_webos_smart_tv";
     bravia = "media_player.braviatv";
     denon = "media_player.denon";
 
     nanoleaf = "light.nanoleaf_light_panels_5b_38_ef";
-    
+
     slywin_wol = "switch.slywin";
     cleo_lamp = "switch.wp6_sw102_relay";
     cleo_fountain = "switch.wp6_sw104_relay";
@@ -199,7 +201,8 @@ in
             };
             action = [{
               service = "wake_on_lan.send_magic_packet";
-              data.mac = "74-E6-B8-0E-BB-38";
+              # data.mac = "74-E6-B8-0E-BB-38";
+              data.mac = lgtv_mac;
             }];
           }
           {
@@ -370,7 +373,7 @@ in
         #     host = "192.168.1.119";
         #   }
         # ];
-        braviatv = {};
+        braviatv = { };
         nanoleaf = { };
         # prometheus = { namespace = "hass"; };
         ssdp = { };
