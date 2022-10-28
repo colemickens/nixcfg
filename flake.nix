@@ -62,6 +62,10 @@
       url = "github:colemickens/Tow-Boot/radxa-zero";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    tow-boot-radxa-rock5b = {
+      url = "github:colemickens/Tow-Boot/radxa-rock5b";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     tow-boot-visionfive = {
       url = "github:colemickens/Tow-Boot/visionfive";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -409,6 +413,14 @@
         openstick = {
           aboot = nixosConfigurations.openstick.config.mobile.outputs.android.android-abootimg;
           fastboot-images = nixosConfigurations.openstick.config.mobile.outputs.android.android-fastboot-images;
+        };
+        radxa-zero1 = {
+          uboot = {};
+        };
+        radxa-rock5b = {
+          # TODO: finish up tow-boot build
+          # TODO: kernel reference here: https://github.com/samueldr-wip/wip-nixos-on-arm/tree/wip/rock5
+          uboot = nixosConfigurations.rock5b.config.system.build.tow-boot.outputs.Tow-Boot.disk-image;
         };
       };
     };

@@ -2,6 +2,11 @@
 
 let
   hostname_color = config.nixcfg.common.hostColor;
+  # sym1="(ansi ${hostname_color})▐(ansi reset)";
+  # sym2="(ansi ${hostname_color})▌(ansi reset)";
+  sym1="(ansi reset)(ansi ${hostname_color})╭(ansi reset)";
+  sym2="(ansi ${hostname_color})(ansi reset) ";
+  prmt="(ansi reset)(ansi ${hostname_color})╰─▶ ";
 in
 {
   # settings are largely derived from:
@@ -9,41 +14,71 @@ in
   config = {
     home-manager.users.cole = { pkgs, ... }: {
       programs.nushell = {
-        #enable = (pkgs.system == "x86_64-linux" || pkgs.system == "aarch64-linux");
         enable = true;
 
         envFile.text = ''
           # Nushell Environment Config File
 
+          # Use nushell functions to define your right and left prompt
           def create_left_prompt [] {
               let path_segment = if (is-admin) {
                   $"(ansi red_bold)($env.PWD)"
               } else {
-                  $"(ansi ${hostname_color}_bold)(^hostname | str trim)(ansi white)〉(ansi green_bold)($env.PWD)"
+                $"(ansi green_bold)($env.PWD)"
               }
+              
+              let path_segment = if $path_segment == $env.HOME {
+                "~/"
+              } else {
+                $path_segment | str replace $env.HOME "~"
+              }
+              
+              let parts = [
+                $"${sym1}(ansi ${hostname_color}_reverse)(^hostname | str trim)(ansi reset)${sym2}(ansi green_bold)($path_segment)"
+                $"(ansi dark_gray)(date format '%F %T')"
+                $"(ansi dark_gray)\(($"($env.CMD_DURATION_MS)ms" | into duration --convert sec))"
+              ]
+              
+              let parts = if $env.LAST_EXIT_CODE != 0 {
+                $parts | append $"(ansi red)\(exit=($env.LAST_EXIT_CODE))"
+              } else { $parts }
 
-              $path_segment
+              ""
+              $parts | str join ' '
+              ""
           }
-
-          def create_right_prompt [] {
-              let time_segment = ([
-                  (date now | date format '%m/%d/%Y %r')
-              ] | str join)
-
-              $time_segment
-          }
-
-          # Use nushell functions to define your right and left prompt
           let-env PROMPT_COMMAND = { create_left_prompt }
-          let-env PROMPT_COMMAND_RIGHT = { create_right_prompt }
+          let-env PROMPT_COMMAND_RIGHT = { "" }
 
           # The prompt indicators are environmental variables that represent
           # the state of the prompt
-          let-env PROMPT_INDICATOR = { "〉" }
+          let-env PROMPT_INDICATOR = { $"${prmt}" } 
           let-env PROMPT_INDICATOR_VI_INSERT = { ": " }
-          let-env PROMPT_INDICATOR_VI_NORMAL = { "〉" }
+          let-env PROMPT_INDICATOR_VI_NORMAL = { "→ " }
           let-env PROMPT_MULTILINE_INDICATOR = { "::: " }
 
+          # <starship>
+          # let-env STARSHIP_SHELL = "nu"
+          # let-env STARSHIP_SESSION_KEY = (random chars -l 16)
+          # let-env PROMPT_MULTILINE_INDICATOR = (^starship prompt --continuation)
+          
+          # # Does not play well with default character module.
+          # # TODO: Also Use starship vi mode indicators?
+          # let-env PROMPT_INDICATOR = ""
+          
+          # let-env PROMPT_COMMAND = {
+          #     # jobs are not supported
+          #     let width = (term size -c | get columns | into string)
+          #     ^starship prompt $"--cmd-duration=($env.CMD_DURATION_MS)" $"--status=($env.LAST_EXIT_CODE)" $"--terminal-width=($width)"
+          # }
+          
+          # Not well-suited for `starship prompt --right`.
+          # Built-in right prompt is equivalent to $fill$right_format in the first prompt line.
+          # Thus does not play well with default `add_newline = True`.
+          let-env PROMPT_COMMAND_RIGHT = {${"''"}}
+          # </starship>
+
+          
           # Specifies how environment variables are:
           # - converted from a string to a value on Nushell startup (from_string)
           # - converted from a value back to a string when running external commands (to_string)
@@ -356,7 +391,7 @@ in
               # A suffix which will be used with 'truncating' methodology
               # truncating_suffix: "..."
             }
-            show_banner: true # true or false to enable or disable the banner
+            show_banner: false # true or false to enable or disable the banner
             show_clickable_links_in_ls: true # true or false to enable or disable clickable links in the ls listing. your terminal has to support links.
             render_right_prompt_on_last_line: false # true or false to enable or disable right prompt to be rendered on last line of the prompt.
 

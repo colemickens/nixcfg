@@ -51,6 +51,11 @@ case "${_cmd}" in
     set +e
     while true; do ./nixup; sleep 600; done
   ;;
+  "quick")
+    [[ "$(hostname)" != "slynux" ]] && (echo "wrong host" >&2; exit 10)
+    nom build "${DIR}#toplevels.slynux" --keep-going --out-link /tmp/slynux-out
+    sudo /tmp/slynux-out/bin/switch-to-configuration switch
+  ;;
 
   "build") "${DIR}/misc/nixbuild.sh" "auto" "cachix:colemickens" "${@}"; ;;
   "deploy")

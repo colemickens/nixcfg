@@ -132,7 +132,7 @@ in
         };
       };
 
-      system.disableInstallerTools = true;
+      # system.disableInstallerTools = true;
 
       ###################################
       ## NETWORK 

@@ -11,6 +11,9 @@
             name = "Cole Mickens";
             email = "cole.mickens@gmail.com";
           };
+          ui = {
+            color = "always";
+          };
         };
       };
     };

@@ -9,7 +9,13 @@
         enableIonIntegration = false;
         enableBashIntegration = false;
         settings = {
-          add_newline = false;
+          add_newline = true;
+          hostname = {
+            ssh_only = false;
+          };
+          shell = {
+            disabled = false;
+          };
         };
       };
     };
