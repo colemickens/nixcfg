@@ -26,9 +26,9 @@
         enable = true;
         
         # TODO: is this even needed? isn't it built in?
-        # plugins = with pkgs; [
-        #   obs-studio-plugins.wlrobs
-        # ];
+        plugins = with pkgs; [
+          obs-studio-plugins.wlrobs
+        ];
       };
     };
   };

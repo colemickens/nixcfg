@@ -51,7 +51,7 @@ in
     home-manager.users.cole = { pkgs, ... }: {
       home.packages = with pkgs; [
         ripcord
-        esphome
+        # esphome # some python error, yay
       ];
     };
 

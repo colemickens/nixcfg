@@ -62,10 +62,10 @@
       url = "github:colemickens/Tow-Boot/radxa-zero";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    tow-boot-radxa-rock5b = {
-      url = "github:colemickens/Tow-Boot/radxa-rock5b";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # tow-boot-radxa-rock5b = {
+    #   url = "github:colemickens/Tow-Boot/radxa-rock5b";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
     tow-boot-visionfive = {
       url = "github:colemickens/Tow-Boot/visionfive";
       inputs.nixpkgs.follows = "nixpkgs";

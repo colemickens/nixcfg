@@ -73,7 +73,9 @@ in
             "sway/mode"
             "sway/workspaces"
           ];
-          modules-center = [];
+          modules-center = [
+            # "taskbar"
+          ];
           modules-right =
             #(pkgs.lib.mapAttrsToList (k: v: "custom/srht-${k}") jobs) ++
             [

@@ -16,7 +16,7 @@ in
           # ui.pane_frames.rounded_corners = true;
           default_layout = "compact";
           default_shell = "nu";
-          simplified_ui = true;
+          simplified_ui = false;
           pane_frames = false;
           scrollback_editor = "hx";
           theme = "default";
