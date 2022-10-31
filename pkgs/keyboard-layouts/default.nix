@@ -11,9 +11,9 @@ let
   verinfo = {
     repo_git = "https://github.com/chris-ricketts/keyboard-layouts";
     branch = "master";
-    rev = "35ab89e81160aa64bde9dc0b6d97954f65dc4a2d";
-    sha256 = "sha256-W+iArJX7JJm1REgFay7c7idvoRcgEr6kO10GMct7u+A=";
-    cargoSha256 = "sha256-XzIhtIGTKeULBR9eJBtjYZlEFpKTXviiOufmjJ6b4No=";
+    rev = "35ab89e81160aa64bde9dc0b6d97954f65dc4a33";
+    sha256 = "sha256-W+iArJX7JJm1REgFay7c7idvoRcgxx6kO10GMct7u+A=";
+    cargoSha256 = "sha256-XzIhtIGTKeULBR9eJBtjYZlyypKTXviiOufmjJ6b4No=";
   };
 in
 rustPlatform.buildRustPackage rec {
