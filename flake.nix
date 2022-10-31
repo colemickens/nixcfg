@@ -170,10 +170,8 @@
     in
     ({
       ## PASSTHROUGH ##################################################################################################
-      _ = { inherit inputs lib hydralib; };
-
-      inherit toplevels;
-      inherit nixosConfigurations;
+      inherit inputs lib hydralib;
+      inherit toplevels nixosConfigs nixosConfigurations;
 
       ## CUSTOM PAYLOADS ##############################################################################################
       # installer = nixosConfigurations.installer.config.system.build.isoImage;
@@ -189,45 +187,37 @@
       ## OVERLAY
       #################################################################################################################
       overlays = {
-        default = (final: prev:
-          let p = rec {
-            customCommands = prev.callPackage ./pkgs/commands.nix { writePython3Bin = prev.writers.writePython3Bin; };
-            customGuiCommands = prev.callPackage ./pkgs/commands-gui.nix { };
+        default = (final: prev: {
+          anodium = prev.callPackage ./pkgs/anodium { };
+          catacomb = prev.callPackage ./pkgs/catacomb { };
+          get-xoauth2-token = prev.callPackage ./pkgs/get-xoauth2-token { };
+          keyboard-layouts = prev.callPackage ./pkgs/keyboard-layouts { };
+          onionbalance = prev.python3Packages.callPackage ./pkgs/onionbalance { };
+          # rumqtt = prev.callPackage ./pkgs/rumqtt { };
+          solo2-cli = prev.callPackage ./pkgs/solo2-cli {
+            solo2-cli = prev.solo2-cli;
+          };
+          space-cadet-pinball = prev.callPackage ./pkgs/space-cadet-pinball { };
+          space-cadet-pinball-unfree = prev.callPackage ./pkgs/space-cadet-pinball {
+            _assets = import ./pkgs/space-cadet-pinball/assets.nix { pkgs = prev; };
+          };
+          shreddit = prev.python3Packages.callPackage ./pkgs/shreddit { };
+          # tvp = prev.callPackage ./pkgs/tvp { };
+          rsntp = prev.callPackage ./pkgs/rsntp { };
+          # rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {
+          #   buildGoModule = prev.buildGo117Module;
+          # };
+          visualizer2 = prev.callPackage ./pkgs/visualizer2 { };
 
-            anodium = prev.callPackage ./pkgs/anodium { };
-            catacomb = prev.callPackage ./pkgs/catacomb { };
-            get-xoauth2-token = prev.callPackage ./pkgs/get-xoauth2-token { };
-            keyboard-layouts = prev.callPackage ./pkgs/keyboard-layouts { };
-            onionbalance = prev.python3Packages.callPackage ./pkgs/onionbalance { };
-            # rumqtt = prev.callPackage ./pkgs/rumqtt { };
-            solo2-cli = prev.callPackage ./pkgs/solo2-cli {
-              solo2-cli = prev.solo2-cli;
-            };
-            space-cadet-pinball = prev.callPackage ./pkgs/space-cadet-pinball { };
-            space-cadet-pinball-unfree = prev.callPackage ./pkgs/space-cadet-pinball {
-              _assets = import ./pkgs/space-cadet-pinball/assets.nix { pkgs = prev; };
-            };
-            shreddit = prev.python3Packages.callPackage ./pkgs/shreddit { };
-            # tvp = prev.callPackage ./pkgs/tvp { };
-            rsntp = prev.callPackage ./pkgs/rsntp { };
-            # rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {
-            #   buildGoModule = prev.buildGo117Module;
-            # };
-            visualizer2 = prev.callPackage ./pkgs/visualizer2 { };
-
-            nix-build-uncached = prev.nix-build-uncached.overrideAttrs (old: {
-              src = prev.fetchFromGitHub {
-                owner = "colemickens";
-                repo = "nix-build-uncached";
-                rev = "0edd782cb419ccb537ac11b1d98ab0f4fb9c9537";
-                sha256 = "sha256-xqD6aSyZzfyhZg2lYrhBXvU45bM8Bfttcnngqk8XXkk=";
-              };
-            });
-
-            # alacritty/bottom/wezterm - rust updates are ... maybe not working? so...
-            # disabled (not sure how to add rocksdb) # conduit = prev.callPackage ./pkgs/conduit {};
-          }; in p // { colePackages = p; }
-        );
+          # nix-build-uncached = prev.nix-build-uncached.overrideAttrs (old: {
+          #   src = prev.fetchFromGitHub {
+          #     owner = "colemickens";
+          #     repo = "nix-build-uncached";
+          #     rev = "0edd782cb419ccb537ac11b1d98ab0f4fb9c9537";
+          #     sha256 = "sha256-xqD6aSyZzfyhZg2lYrhBXvU45bM8Bfttcnngqk8XXkk=";
+          #   };
+          # });
+        });
       };
     }) //
     (
@@ -273,12 +263,11 @@
           #################################################################################################################
           ## PACKAGES
           # - `packages` follows flake convention -- packages provided by our overlay
-          # - `nixpkgs` is a re-export of `cmpkgs`
-          # - `pkgs` is non-free, overlayed nixpkgs (nixpkgs-wayland, nixcfg->overlay)
-          #   (note this can be a misnomer, since each host composes its own nixpkgs)
+          # - `pkgs` is overlayed nixpkgs (nixpkgs-wayland, nixcfg->overlay)
+          # - `fullPkgs` is non-free nixpkgs
           #################################################################################################################
           packages = (inputs.self.overlays.default (pkgs_) (pkgs_));
-          _ = { inherit pkgs fullPkgs; };
+          inherit pkgs fullPkgs;
 
           #################################################################################################################
           ## DEFUNCT

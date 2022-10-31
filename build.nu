@@ -2,6 +2,6 @@
 
 source ./lib.nu
 
-def main [ drvRef: string] {
+def main [ drvRef = "ciJobs.x86_64-linux.default": string] {
   buildDrv $drvRef
 }
