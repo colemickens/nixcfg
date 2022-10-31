@@ -61,7 +61,6 @@ let
         </ul>
         <ul>
           <li><a href="https://home.x.${internalDomain}">home-assistant</a></li>
-          <li><a href="https://homie.x.${internalDomain}">homie (hodd)</a></li>
           <li><a href="https://unifi.x.${internalDomain}">unifi</a></li>
           <li><a href="https://denon.x.${internalDomain}">denon</a></li>
           <li><a href="https://rtsptoweb.x.${internalDomain}">rtsptoweb</a></li>
@@ -239,17 +238,6 @@ in
         locations."/" = {
           proxyPass = "http://localhost:8123/";
           proxyWebsockets = true;
-        };
-      };
-      virtualHosts."homie.x.${internalDomain}" = {
-        useACMEHost = "${internalDomain}";
-        addSSL = true;
-        forceSSL = false;
-        locations."/" = {
-          root = pkgs.hodd;
-          extraConfig = ''
-            autoindex on;
-          '';
         };
       };
 

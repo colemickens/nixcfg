@@ -1,5 +1,4 @@
 .drone.key
-logs/
 **/result*
 results/
 **/.terradozer
@@ -14,5 +13,5 @@ results/
 .ignore
 .pijul
 .pijul/*
-gcroots/
+_builds/
 .jj/

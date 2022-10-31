@@ -17,14 +17,8 @@ case "${_cmd}" in
   "rpiup") printf "▒▒ rpiup ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \n" >/dev/stderr;
    "${DIR}/misc/rpi/rpipkgs.sh"
   ;;
-  "shellup") printf "▒▒ shellup ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \n" >/dev/stderr;
-   "${DIR}/misc/nixbuild.sh" "auto" "cachix:colemickens" ".#cache-dev"
-  ;;
   "cacheup") printf "▒▒ cacheup ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \n" >/dev/stderr;
-    if [[ "$(hostname)" == "slynux" ]]; then
-      nom build '.#cache-all'
-    fi
-    "${DIR}/misc/nixbuild.sh" "auto" "cachix:colemickens" ".#cache-all"
+    "${DIR}/misc/nixbuild2.sh" "auto" "cachix:colemickens" ".#ciJobs.reality"
   ;;
   "lockup") printf "▒▒ lockup ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \n" >/dev/stderr;
     nix "${nixargs[@]}" flake lock \
@@ -40,7 +34,6 @@ case "${_cmd}" in
     # nixup rpiup
     nixup lockup
     nixup pkgup
-    nixup shellup
   ;;
   "upz")
     nixup up
@@ -52,7 +45,7 @@ case "${_cmd}" in
     while true; do ./nixup; sleep 600; done
   ;;
 
-  "build") "${DIR}/misc/nixbuild.sh" "auto" "cachix:colemickens" "${@}"; ;;
+  "build") "${DIR}/misc/nixbuild2.sh" "auto" "cachix:colemickens" "${@}"; ;;
   "deploy")
     host="${1}"; shift
     printf "▒▒ deploy ${host} ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \n" >/dev/stderr;

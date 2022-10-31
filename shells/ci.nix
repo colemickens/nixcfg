@@ -6,18 +6,14 @@ let
 
 in
 minimalMkShell {
-  # TODO use something else for system?
-  name = "devshell";
-  hardeningDisable = [ "fortify" ];
+  name = "ci";
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
-  RUST_BACKTRACE = 1;
+  # shellHook = ''
+  #   # activate secrets?
+  # '';
 
   nativeBuildInputs = with pkgs; [
-    #nixUnstable
     cachix
-    nixpkgs-fmt
-    nix-prefetch-git
     bash
     curl
     cacert
@@ -27,20 +23,7 @@ minimalMkShell {
     parallel
     mercurial
     git
-    # todo: move a bunch of these to 'apps#update-env' ?
-    nettools
-    openssh
-    ripgrep
-    rsync
-    sops
-    gh
-    gawk
-    gnused
-    gnugrep
-    inputs.nickel.packages.${system}.build
-    OVMF.fd
-    # not sure, would be nice for nix stuff to work in helix even if I forget to join the shell
-    rnix-lsp
-    nixpkgs-fmt
+    nix-build-uncached
+    nushell
   ];
 }
