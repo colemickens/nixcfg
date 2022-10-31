@@ -66,7 +66,7 @@
     },
     "cpiotools": {
       "inputs": {
-        "nixpkgs": "nixpkgs_4"
+        "nixpkgs": "nixpkgs_2"
       },
       "locked": {
         "lastModified": 1655642194,
@@ -241,7 +241,7 @@
         "type": "github"
       }
     },
-    "firefox": {
+    "firefox-nightly": {
       "inputs": {
         "cachix": "cachix",
         "mozilla": "mozilla",
@@ -250,11 +250,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1667173737,
-        "narHash": "sha256-wcGhInKpwPOGxdGLJ731gXwlB6dReeKvifoXPR4fBaY=",
+        "lastModified": 1667175751,
+        "narHash": "sha256-r6hg78jWV9nndhAPzqkGAOUFuE2OUqVmLsnc/YE9VQ0=",
         "owner": "colemickens",
         "repo": "flake-firefox-nightly",
-        "rev": "c2e1e6a27885727df317dd79453ba274fd47050c",
+        "rev": "5316fb6dae26b6681509d887de2d84aec879f2a2",
         "type": "github"
       },
       "original": {
@@ -448,25 +448,12 @@
         "type": "github"
       }
     },
-    "hardware": {
-      "locked": {
-        "lastModified": 1666873549,
-        "narHash": "sha256-a6Eu1Qv/EndjepSMja5SvcG+4vM5Rl2gzJD7xscRHss=",
-        "owner": "nixos",
-        "repo": "nixos-hardware",
-        "rev": "419dcc0ec767803182ed01a326f134230578bf60",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "repo": "nixos-hardware",
-        "type": "github"
-      }
-    },
     "helix": {
       "inputs": {
         "nci": "nci",
-        "nixpkgs": "nixpkgs",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
         "rust-overlay": "rust-overlay"
       },
       "locked": {
@@ -626,7 +613,9 @@
     },
     "jj": {
       "inputs": {
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": [
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1667145640,
@@ -796,7 +785,7 @@
       "inputs": {
         "flake-utils": "flake-utils_3",
         "import-cargo": "import-cargo",
-        "nixpkgs": "nixpkgs_3",
+        "nixpkgs": "nixpkgs",
         "pre-commit-hooks": "pre-commit-hooks",
         "rust-overlay": "rust-overlay_2"
       },
@@ -838,7 +827,7 @@
     "nix-netboot-server": {
       "inputs": {
         "cpiotools": "cpiotools",
-        "nixpkgs": "nixpkgs_5"
+        "nixpkgs": "nixpkgs_3"
       },
       "locked": {
         "lastModified": 1664484325,
@@ -890,20 +879,34 @@
         "type": "github"
       }
     },
+    "nixos-hardware": {
+      "locked": {
+        "lastModified": 1666873549,
+        "narHash": "sha256-a6Eu1Qv/EndjepSMja5SvcG+4vM5Rl2gzJD7xscRHss=",
+        "owner": "nixos",
+        "repo": "nixos-hardware",
+        "rev": "419dcc0ec767803182ed01a326f134230578bf60",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixos-hardware",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1662019588,
         "narHash": "sha256-oPEjHKGGVbBXqwwL+UjsveJzghWiWV0n9ogo1X6l4cw=",
-        "owner": "nixos",
+        "owner": "NixOS",
         "repo": "nixpkgs",
         "rev": "2da64a81275b68fdad38af669afeda43d401e94b",
         "type": "github"
       },
       "original": {
-        "owner": "nixos",
+        "id": "nixpkgs",
         "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
+        "type": "indirect"
       }
     },
     "nixpkgs-22_05": {
@@ -963,35 +966,6 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1651634615,
-        "narHash": "sha256-VtvcS61bLh5mIBm9cV3idUHdlfPRFus/NwdJfaj5s8o=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "abfd31179174133ab8131139d650297bf4da63b7",
-        "type": "github"
-      },
-      "original": {
-        "id": "nixpkgs",
-        "type": "indirect"
-      }
-    },
-    "nixpkgs_3": {
-      "locked": {
-        "lastModified": 1662019588,
-        "narHash": "sha256-oPEjHKGGVbBXqwwL+UjsveJzghWiWV0n9ogo1X6l4cw=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "2da64a81275b68fdad38af669afeda43d401e94b",
-        "type": "github"
-      },
-      "original": {
-        "id": "nixpkgs",
-        "ref": "nixos-unstable",
-        "type": "indirect"
-      }
-    },
-    "nixpkgs_4": {
-      "locked": {
         "lastModified": 1655567057,
         "narHash": "sha256-Cc5hQSMsTzOHmZnYm8OSJ5RNUp22bd5NADWLHorULWQ=",
         "owner": "nixos",
@@ -1006,7 +980,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_5": {
+    "nixpkgs_3": {
       "locked": {
         "lastModified": 1655306633,
         "narHash": "sha256-nv4FfWWV/dEelByjXJtJkoDPOHIsKfLq50RN3Hqq5Yk=",
@@ -1022,7 +996,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_6": {
+    "nixpkgs_4": {
       "locked": {
         "lastModified": 1667174395,
         "narHash": "sha256-Yn76SZdVOQW33ndjB+cj/vn5MyB3fhRYKWJHiarNNQA=",
@@ -1038,7 +1012,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_7": {
+    "nixpkgs_5": {
       "locked": {
         "lastModified": 1664370076,
         "narHash": "sha256-NDnIo0nxJozLwEw0VPM+RApMA90uTfbvaNNtC5eB7Os=",
@@ -1084,8 +1058,7 @@
         "cross-armv6l": "cross-armv6l",
         "cross-riscv64": "cross-riscv64",
         "fenix": "fenix",
-        "firefox": "firefox",
-        "hardware": "hardware",
+        "firefox-nightly": "firefox-nightly",
         "helix": "helix",
         "home-manager": "home-manager",
         "hyprland": "hyprland",
@@ -1100,7 +1073,8 @@
         "nix-netboot-server": "nix-netboot-server",
         "nix-rice": "nix-rice",
         "nixlib": "nixlib",
-        "nixpkgs": "nixpkgs_6",
+        "nixos-hardware": "nixos-hardware",
+        "nixpkgs": "nixpkgs_4",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "rpipkgs": "rpipkgs",
         "sops-nix": "sops-nix",
@@ -1423,7 +1397,7 @@
         "crate2nix": "crate2nix",
         "flake-compat": "flake-compat_5",
         "flake-utils": "flake-utils_7",
-        "nixpkgs": "nixpkgs_7",
+        "nixpkgs": "nixpkgs_5",
         "rust-overlay": "rust-overlay_3"
       },
       "locked": {
