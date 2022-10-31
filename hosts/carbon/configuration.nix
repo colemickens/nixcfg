@@ -6,13 +6,14 @@ in
 {
   imports = [
     ../../profiles/sway/default.nix
+    ../../profiles/dev.nix
 
     # TODO: necessary with the nixosHardware imports?
     ../../mixins/gfx-radeonsi.nix
     ../../mixins/gfx-debug.nix
 
     ../../mixins/android.nix
-    ../../mixins/devshells.nix
+    # ../../mixins/devshells.nix
     # ../../mixins/easyeffects.nix
     # no, carbon uses systemd with the extended
     # boot partition support...
@@ -36,15 +37,17 @@ in
     # ./experimental.nix
     ./unfree.nix
 
-    inputs.hardware.nixosModules.common-cpu-amd
-    inputs.hardware.nixosModules.common-cpu-amd-pstate # not until 5.19, touchpad
-    inputs.hardware.nixosModules.common-gpu-amd
-    inputs.hardware.nixosModules.common-pc-laptop-ssd
+    inputs.nixos-hardware.nixosModules.common-cpu-amd
+    inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate # not until 5.19, touchpad
+    inputs.nixos-hardware.nixosModules.common-gpu-amd
+    inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
   ];
 
   config = {
     system.stateVersion = "21.05";
     networking.hostName = "carbon";
+    
+    hardware.video.hidpi.enable = true;
 
     nixcfg.common.hostColor = "purple";
 

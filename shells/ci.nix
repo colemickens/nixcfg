@@ -5,7 +5,7 @@ let
   llvmPackages = pkgs.llvmPackages_13;
 
 in
-minimalMkShell pkgs.system {
+minimalMkShell {
   # TODO use something else for system?
   name = "devshell";
   hardeningDisable = [ "fortify" ];

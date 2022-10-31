@@ -2,57 +2,43 @@
   description = "colemickens-nixcfg";
 
   inputs = {
-    nixlib.url = "github:nix-community/nixpkgs.lib"; #TODO: boo name! "libaggregate"?
+    nixlib = { url = "github:nix-community/nixpkgs.lib"; }; #TODO: boo name! "libaggregate"?
 
-    # <cmpkgs> # aka, my package sets
-    nixpkgs.url = "github:colemickens/nixpkgs/cmpkgs"; # for my regular nixpkgs
-    cross-armv6l.url = "github:colemickens/nixpkgs/cmpkgs-cross-armv6l";
-    cross-riscv64.url = "github:colemickens/nixpkgs/cmpkgs-cross-riscv64";
+    nixpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
+    cross-armv6l = { url = "github:colemickens/nixpkgs/cmpkgs-cross-armv6l"; };
+    cross-riscv64 = { url = "github:colemickens/nixpkgs/cmpkgs-cross-riscv64"; };
     rpipkgs = { url = "github:colemickens/nixpkgs/cmpkgs-rpipkgs"; };
-    # </cmpkgs>
 
-    nix-netboot-server.url = "github:DeterminateSystems/nix-netboot-serve";
+    home-manager = { url = "github:colemickens/home-manager/cmhm"; inputs."nixpkgs".follows = "nixpkgs"; };
+    nixos-hardware = { url = "github:nixos/nixos-hardware"; };
+    nixpkgs-wayland = { url = "github:nix-community/nixpkgs-wayland/master"; inputs."nixpkgs".follows = "nixpkgs"; };
+    # TODO: promote this to a nix-community project, it's neat, can combine with HM modules, etc  --- another maybe okayish way to bring folks in
+    nix-rice = { url = "github:colemickens/nix-rice"; inputs."nixpkgs".follows = "nixpkgs"; };
+    firefox-nightly = { url = "github:colemickens/flake-firefox-nightly"; inputs."nixpkgs".follows = "nixpkgs"; };
+    terranix = { url = "github:terranix/terranix"; inputs.nixpkgs.follows = "nixpkgs"; };
 
-    # nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    # nixos-stable.url = "github:nixos/nixpkgs/nixos-22.05"; # for cachix
-    # riscv64 = { url = "github:zhaofengli/nixos-riscv64"; };
-    visionfive-nix.url = "github:colemickens/visionfive-nix";
-    visionfive-nix.inputs.nixpkgs.follows = "cross-riscv64";
-
-    home-manager.url = "github:colemickens/home-manager/cmhm";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-
-    hyprland.url = "github:hyprwm/Hyprland";
-    hyprland.inputs.nixpkgs.follows = "nixpkgs";
-
-    sops-nix.url = "github:Mic92/sops-nix/master";
-    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
-
-    # eep, TODO: do we want to override nixpkgs?
-    helix.url = "github:helix-editor/helix";
-    jj.url = "github:martinvonz/jj";
-    zellij.url = "github:zellij-org/zellij";
-    marksman = {
-      url = "github:the-mikedavis/marksman/flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
+    visionfive-nix = { url = "github:colemickens/visionfive-nix"; inputs."nixpkgs".follows = "cross-riscv64"; };
     # nixos-riscv64.url = "https://github.com/colemickens/nixos-riscv64";
     # jh7100.url = "https://github.com/colemickens/jh7100";
 
-    hardware.url = "github:nixos/nixos-hardware";
+    impermanence = { url = "github:nix-community/impermanence"; };
+    nickel = { url = "github:tweag/nickel"; };
+    fenix = { url = "github:figsoda/fenix"; inputs."nixpkgs".follows = "nixpkgs"; };
+    sops-nix = { url = "github:Mic92/sops-nix/master"; inputs."nixpkgs".follows = "nixpkgs"; };
 
-    nix-rice.url = "github:colemickens/nix-rice";
-    nix-rice.inputs.nixpkgs.follows = "nixpkgs";
+    # devtools:
+    helix = { url = "github:helix-editor/helix"; inputs."nixpkgs".follows = "nixpkgs"; };
+    jj = { url = "github:martinvonz/jj"; inputs."nixpkgs".follows = "nixpkgs"; };
+    zellij = { url = "github:zellij-org/zellij"; };
+    marksman =  { url = "github:the-mikedavis/marksman/flake"; inputs."nixpkgs".follows = "nixpkgs"; };
+    # (todo):
+    nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; inputs."nixpkgs".follows = "nixpkgs"; };
 
-    nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland/master";
-    nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
+    # experimental:
+    hyprland = { url = "github:hyprwm/Hyprland"; inputs."nixpkgs".follows = "nixpkgs"; };
+    nix-netboot-server = { url = "github:DeterminateSystems/nix-netboot-serve"; };
 
-    firefox.url = "github:colemickens/flake-firefox-nightly";
-    firefox.inputs.nixpkgs.follows = "nixpkgs";
-
-    impermanence.url = "github:nix-community/impermanence";
-
+    # WIP: tow-boot/mobile-nixos stuffs:
     tow-boot-rpi = {
       url = "github:colemickens/Tow-Boot/rpi";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -83,18 +69,6 @@
       url = "github:colemickens/mobile-nixos/openstick";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nickel = { url = "github:tweag/nickel"; };
-
-    # nix-coreboot.url = "github:colemickens/nix-coreboot";
-    # nix-coreboot.inputs.nixpkgs.follows = "nixpkgs";
-
-    terranix.url = "github:terranix/terranix";
-    terranix.inputs.nixpkgs.follows = "nixpkgs";
-
-    # provides rust nightly for shells/devenv
-    fenix.url = "github:figsoda/fenix";
-    fenix.inputs.nixpkgs.follows = "nixpkgs";
 
     # We're back to using nixUnstable so we shouldn't need this:
     #nix.url = "github:nixos/nix/master";
@@ -145,92 +119,55 @@
   ## ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   outputs = inputs:
     let
-      # TODO: further cleanup via usage of "nixlib"
-      nixlib = inputs.nixlib.outputs.lib;
       supportedSystems = [
         "x86_64-linux"
         "aarch64-linux"
         "riscv64-linux"
-        # "riscv64-none-elf" # TODO
-        # "armv6l-linux" # eh, I think time is up
-        # "armv7l-linux" # eh, I think time is up
       ];
       forAllSystems = nixlib.genAttrs supportedSystems;
+
+
+      nixlib = inputs.nixlib.outputs.lib;
+      hydralib = import ./lib/hydralib.nix;
+      colelib = rec {
+        force_cached = sys: pkgs_.nixpkgs."${sys}".callPackage ./lib/force_cached.nix { };
+        pkgsFor = pkgs: system: overlays: pkgconfig: import pkgs { inherit system overlays; config = pkgconfig; };
+        pkgs_ = nixlib.genAttrs (builtins.attrNames inputs) (inp: nixlib.genAttrs supportedSystems (sys: pkgsFor inputs."${inp}" sys [] {}));
+        # pkgsNonfree_ = nixlib.genAttrs (builtins.attrNames inputs) (inp: nixlib.genAttrs supportedSystems (sys: pkgsFor inputs."${inp}" sys [] { allowNonfree=true; }));
+        fullPkgs_ = nixlib.genAttrs supportedSystems (sys: pkgsFor inputs.nixpkgs sys [ inputs.self.overlays.default inputs.nixpkgs-wayland.overlays.default ] {});
+        mkSystem = pkgs: system: host: (pkgs.lib.nixosSystem {
+            system = system;
+            modules = [ ./hosts/${host}/configuration.nix ];
+            specialArgs = { inherit inputs; };
+          });
+
       filterPkgTgt = system: (n: p: ("${system}" == p.system) && !(p.meta.broken or false));
       filterPkg_ = system: (n: p: (builtins.elem "${system}" (p.meta.platforms or [ "x86_64-linux" "aarch64-linux" ])) && !(p.meta.broken or false));
       filterPkgs = pkgs: pkgSet: (pkgs.lib.filterAttrs (filterPkg_ pkgs.system) pkgSet);
       filterPkgsTgt = pkgs: pkgSet: (pkgs.lib.filterAttrs (filterPkgTgt pkgs.system) pkgSet);
       filterHosts = pkgs: cfgs: (pkgs.lib.filterAttrs (n: v: pkgs.system == v.config.nixpkgs.system) cfgs);
-
-      colelib = rec {
-        force_cached = sys: pkgs_.nixpkgs."${sys}".callPackage ./lib/force_cached.nix { };
-        minimalMkShell = system: import ./lib/minimalMkShell.nix { pkgs = fullPkgs_.${system}; };
-        hydralib = import ./lib/hydralib.nix;
-        pkgsFor = pkgs: system: overlays:
-          import pkgs {
-            inherit system overlays;
-            config.allowUnfree = true;
-          };
-        pkgs_ = nixlib.genAttrs (builtins.attrNames inputs) (inp: nixlib.genAttrs supportedSystems (sys: pkgsFor inputs."${inp}" sys [ ]));
-        fullPkgs_ = nixlib.genAttrs supportedSystems (sys:
-          pkgsFor inputs.nixpkgs sys [ inputs.self.overlays.default inputs.nixpkgs-wayland.overlays.default ]);
-        mkSystem_ = pkgs: system: h: modules:
-          pkgs.lib.nixosSystem {
-            system = system;
-            modules = [ ./hosts/${h}/configuration.nix ] ++ modules;
-            specialArgs = { inherit inputs; };
-          };
-        mkSystem = pkgs: system: h: (mkSystem_ pkgs system h [ ./hosts/${h}/configuration.nix ]);
-
         pkgNames = s: builtins.attrNames (inputs.self.overlay pkgs_.${s} pkgs_.${s});
       };
-
-      _inputs = inputs;
-
     in
     with colelib; rec {
       _ = { inherit inputs colelib nixlib; };
 
       #################################################################################################################
       ## DEVSHELLS
+      ## - devtools's nativeBuildInputs are also includes in profiles/dev.nix
       #################################################################################################################
-      devShells = forAllSystems (system: rec {
-        # just the basic tools to run automation for the repo
-        # probably not needed/useful super often?
-        ci = (import ./shells/ci.nix { inherit inputs system minimalMkShell; });
-
-        # devenv has tooons of dev tools
-        # TODO: refactor to share a tool list with `./mixins/devtools.nix`
-        devenv = (import ./shells/devenv.nix { inherit inputs system minimalMkShell; });
-
-        # used with webrtcsink project(s):
-        # TODO: refactor to compose on top of devenv?
-        gstreamer = (import ./shells/gstreamer.nix { inherit inputs system minimalMkShell; });
-
-        # just for fun, imagine our Rust-y future:
-        uutils = minimalMkShell system {
-          name = "uutils-devshell";
-          nativeBuildInputs = with pkgs_.nixpkgs.${system}; [
-            (uutils-coreutils.override { prefix = ""; })
-            nushell
-          ];
-          shellHook = ''
-            exec nu
-          '';
-        };
-      });
+      devShells = forAllSystems (system:
+        (nixlib.genAttrs [ "ci" "devenv" "devtools" "gstreamer" "uutils" ] (name: import ./shells/${name}.nix {
+          inherit inputs system;
+          minimalMkShell = (import ./lib/minimalMkShell.nix { pkgs = (fullPkgs_.${system}); });
+        }))
+      );
 
       #################################################################################################################
       ## APPS
       #################################################################################################################
       apps = forAllSystems (system:
-        let
-          app = program: { type = "app"; program = "${program}"; };
-          tfout = import ./cloud { terranix = inputs.terranix; pkgs = pkgs_.nixpkgs.${system}; };
-
-          # mfb = dev: { type = "app"; program = nixosConfigurations.blueline.config.system.build.mobile-flash-boot.outPath; };
-          # ds = dev: { type = "app"; program = nixosConfigurations.${dev}.config.system.build.deployScript; };
-        in
+        let tfout = import ./cloud { terranix = inputs.terranix; pkgs = pkgs_.nixpkgs.${system}; }; in
         (
           {
             # CI (should we use HM for this instead?)
@@ -247,10 +184,19 @@
       );
 
       #################################################################################################################
-      ## PACKAGES + OVERLAY
+      ## PACKAGES
+      # - `packages` follows flake convention -- packages provided by our overlay
+      # - `nixpkgs` is a re-export of `cmpkgs`
+      # - `pkgs` is non-free, overlayed nixpkgs (nixpkgs-wayland, nixcfg->overlay)
+      #   (note this can be a misnomer, since each host composes its own nixpkgs)
       #################################################################################################################
-      packages = (forAllSystems (s: (fullPkgs_.${s}.colePackages)));
+      packages = (forAllSystems (s: (inputs.self.overlays.default (fullPkgs_.${s}) (fullPkgs_.${s}))));
+      nixpkgs = forAllSystems (s: (pkgs_."nixpkgs".${s}));
       pkgs = forAllSystems (s: fullPkgs_.${s});
+
+      #################################################################################################################
+      ## OVERLAY
+      #################################################################################################################
       overlays = {
         default = (final: prev:
           let p = rec {
@@ -343,7 +289,7 @@
         (attr: nixosConfigurations.${attr}.config.system.build.toplevel);
 
       ## NETBOOTS
-      netboots = {};
+      netboots = { };
       # netboots = netboots_;
       netboots_ = nixlib.genAttrs
         [ "rpifour1" ]
@@ -415,7 +361,7 @@
           fastboot-images = nixosConfigurations.openstick.config.mobile.outputs.android.android-fastboot-images;
         };
         radxa-zero1 = {
-          uboot = {};
+          uboot = { };
         };
         radxa-rock5b = {
           # TODO: finish up tow-boot build

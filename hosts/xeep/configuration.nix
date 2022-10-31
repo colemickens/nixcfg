@@ -30,7 +30,7 @@ in
     
 
     # ../../mixins/gfx-intel.nix # TODO: nixosHardware?
-    inputs.hardware.nixosModules.dell-xps-13-9370
+    inputs.nixos-hardware.nixosModules.dell-xps-13-9370
 
     ./unfree.nix
     

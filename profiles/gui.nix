@@ -1,7 +1,7 @@
 { pkgs, lib, config, inputs, ... }:
 
 let
-  firefoxFlake = inputs.firefox.packages.${pkgs.system};
+  firefoxFlake = inputs.firefox-nightly.packages.${pkgs.system};
   # _firefox = pkgs.firefox-wayland;
   _firefox = lib.hiPrio firefoxFlake.firefox-nightly-bin;
 
@@ -30,10 +30,7 @@ in
   ];
 
   config = {
-    hardware.opengl.enable = true;
-    hardware.opengl.extraPackages = [
-      pkgs.vulkan-validation-layers
-    ];
+    hardware.drivers.enable = true;
 
     # TODO: light or brightnessctl? why both?
     # do we even need either or use DM?

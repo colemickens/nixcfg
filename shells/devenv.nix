@@ -10,7 +10,7 @@ let
     + ":" + "${pkgs.gst_all_1.gst-plugins-bad}/lib/gstreamer-1.0"
     + ":" + "${pkgs.gst_all_1.gst-plugins-ugly}/lib/gstreamer-1.0"
   ;
-in minimalMkShell pkgs.system { # TODO use something else for system?
+in minimalMkShell { # TODO use something else for system?
   name = "devenv";
   hardeningDisable = [ "fortify" ];
 
@@ -18,26 +18,8 @@ in minimalMkShell pkgs.system { # TODO use something else for system?
   RUST_BACKTRACE = 1;
   GST_PLUGIN_SYSTEM_PATH = gstreamerPath;
 
-  nativeBuildInputs = with pkgs; [
-    (inputs.fenix.packages.${system}.latest.withComponents [
-      "cargo"
-      "clippy"
-      "rust-src"
-      "rustc"
-      "rustfmt"
-    ])
-    inputs.fenix.packages.${system}.rust-analyzer
-    cargo-watch bacon
-    llvmPackages.lldb
-    rnix-lsp
-
-    /*tools */ cmake pkg-config lldb python3
-    /*nodejs*/ nodejs yarn
-    /*golang*/ go go-outline gotools godef /*golint*/ gopls
-
+  nativeBuildInputs = inputs.self.devShells.${system}.devtools.nativeBuildInputs ++ (with pkgs; [
     pkg-config
-      
-    nixpkgs-review
       
     /* coreboot */
     # flashrom # use nixos module for udev rules
@@ -47,7 +29,7 @@ in minimalMkShell pkgs.system { # TODO use something else for system?
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
-  ];
+  ]);
 
   buildInputs = with pkgs; [
     freetype
@@ -77,7 +59,5 @@ in minimalMkShell pkgs.system { # TODO use something else for system?
     xorg.libX11 xorg.libxcb xorg.xcbutil # wezterm
     xorg.xcbproto xorg.xcbutil xorg.xcbutilwm  # wezterm
     xorg.xcbutilkeysyms xorg.xcbutilimage # wezterm
-    
-    inputs.marksman.outputs.packages.${system}.default
   ];
 }

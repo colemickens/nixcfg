@@ -80,7 +80,7 @@ let
     overlays = [ gst-overlay ];
   };
 in
-minimalMkShell pkgs.system {
+minimalMkShell {
   # TODO use something else for system?
   name = "gstreamer-devenv";
   hardeningDisable = [ "fortify" ];

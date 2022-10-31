@@ -43,9 +43,9 @@ in
     hardware = {
       opengl = {
         enable = true;
-        extraPackages = [
-          pkgs.vulkan-validation-layers
-        ];
+        # extraPackages = [
+        #   pkgs.vulkan-validation-layers
+        # ];
       };
     };
   };

@@ -44,6 +44,7 @@ in
   imports = [
     # ../../profiles/sway
     ../../profiles/interactive.nix
+    ../../profiles/dev.nix
 
     # TODO: move to nixos-hardware
     # eat my asshole nvidia, my gaming pc/server is crashing w/ the vga light keeps lit up...
@@ -52,7 +53,7 @@ in
 
     # ../../mixins/android.nix
     # ../../mixins/devshells.nix
-    ../../mixins/devtools.nix
+    # ../../mixins/devtools.nix
     ../../mixins/grub-signed-shim.nix
     # ../../mixins/logitech-mouse.nix
     ../../mixins/rclone-googledrive-mounts.nix
@@ -64,10 +65,10 @@ in
     # ./services/homie-cast.nix
 
     ./unfree.nix
-    inputs.hardware.nixosModules.common-cpu-amd
-    inputs.hardware.nixosModules.common-cpu-amd-pstate
-    inputs.hardware.nixosModules.common-pc-ssd
-    # inputs.hardware.nixosModules.common-gpu-nvidia
+    inputs.nixos-hardware.nixosModules.common-cpu-amd
+    inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
+    inputs.nixos-hardware.nixosModules.common-pc-ssd
+    # inputs.nixos-hardware.nixosModules.common-gpu-nvidia
   ];
 
   config = {

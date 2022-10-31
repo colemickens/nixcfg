@@ -22,37 +22,14 @@ in
       EGL_PLATFORM = "wayland";
     };
 
-    # boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_drm" "nvidia_uvm" ];
+    hardware.nvidia = {
+      enable = true;
+      package = nvidiaPkg;
 
-    # <legacy>
-    hardware = {
-      opengl.enable = true;
-      opengl.extraPackages = [ pkgs.nvidia-vaapi-driver ];
-      nvidia = {
-        open = true;
-        modesetting.enable = true;
-        nvidiaSettings = false;
-        package = nvidiaPkg;
-        powerManagement.enable = false;
-      };
+      open = true;
+      modesetting.enable = true;
+      nvidiaSettings = false;
+      powerManagement.enable = false;
     };
-    services.xserver.videoDrivers = [ "nvidia" ];
-    # </legacy>
-
-    # hardware = {
-    #   graphics = {
-    #     enable = true;
-    #     videoDrivers = [ "nvidia" ];
-    #   };
-
-    #   opengl.extraPackages = [ pkgs.nvidia-vaapi-driver ];
-
-    #   nvidia = {
-    #     open = true;
-    #     modesetting.enable = true;
-    #     package = nvidiaPkg;
-    #     powerManagement.enable = false;
-    #   };
-    # };
   };
 }
