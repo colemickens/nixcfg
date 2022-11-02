@@ -58,7 +58,7 @@ in
 
       home.packages = (
         (with pkgs; [
-          (pkgs.callPackage ../../pkgs/commands-gui.nix {})
+          (pkgs.callPackage ../pkgs/commands-gui.nix {})
 
           # ide/editor
           lapce

@@ -60,7 +60,7 @@ def deployHost [ host: string ] {
   ^ssh $"cole@($target)" $"sudo \"($toplevel)/bin/switch-to-configuration\" switch"
 }
 
-def deploy [ host = "_pc": string ] {
+def "main deploy" [ host = "_pc": string ] {
   print -e (header light_yellow_reverse $"deploy_list [($host)]")
 
   let hosts = (if ($host | str starts-with "_") {
@@ -82,7 +82,7 @@ def deploy [ host = "_pc": string ] {
   }
 }
 
-def inputup [] {
+def "main inputup" [] {
   print -e (header yellow_reverse "inputup")
   let srcdirs = [
     $"($env.HOME)/code/nixpkgs/master"
@@ -106,11 +106,19 @@ def inputup [] {
   $srcdirs | each { |s|
     if ($s | path exists) {
       print -e (header yellow $"inputup: ($s)" "-")
-      ^git -C $"($s)" rebase --abort
-      do -c {
+      # again, I have to put parens here to get it to work
+      (do -i {
+        print -e (header yellow $"inputup: ($s) [rebase --abort]" "-")
+        ^git -C $"($s)" rebase --abort
+      })
+      (do -c {
+        print -e (header yellow $"inputup: ($s) [pull --rebase]" "-")
         ^git -C $"($s)" pull --rebase
+      })
+      (do -c {
+        print -e (header yellow $"inputup: ($s) [push origin HEAD -f]" "-")
         ^git -C $"($s)" push origin HEAD -f
-      }
+      })
       null
     } else {
       print -e $"skipping ($s)"
@@ -119,33 +127,32 @@ def inputup [] {
   }
 }
 
-def up [] {
-  print -e (header red_reverse "loopup" "▒")
-
-  inputup
-  
+def "main pkgup" [] {
   print -e (header yellow_reverse "pkgup")
-  ./pkgs/pkgs-update.nu
-
-  print -e (header yellow_reverse "rpiup")
-  ./misc/rpi/rpi-update.nu
-
-  print -e (header yellow_reverse "lockup")
-  ^nix flake lock --recreate-lock-file --commit-lock-file
-
-  deploy _pc
+  do -c { ./pkgs/pkgs-update.nu }
 }
 
-
-def "main loopup" [] {
-  up
-  sleep 3sec
-  loopup
+def "main rpiup" [] {
+  print -e (header yellow_reverse "rpiup")
+  do -c { ./misc/rpi/rpi-update.nu }
+}
+def "main lockup" [] {
+  print -e (header yellow_reverse "lockup")
+  do -c { ^nix flake lock --recreate-lock-file --commit-lock-file }
 }
 
 def "main up" [] {
-  up
+  print -e (header red_reverse "loopup" "▒")
+
+  main inputup
+  main pkgup
+  main rpiup
+  main lockup
+
+  main deploy _pc
 }
+
+def "main loopup" [] { main up; sleep 3sec; main loopup }
 
 def main [] {
   print -e "commands: [loopup, up]"

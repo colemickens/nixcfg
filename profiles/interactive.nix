@@ -64,7 +64,7 @@ in
         neovim.enable = true;
       };
       home.packages = with pkgs; [
-        (pkgs.callPackage ../../pkgs/commands.nix {})
+        (pkgs.callPackage ../pkgs/commands.nix {})
 
         # <rust pkgs>
         # https://zaiste.net/posts/shell-commands-rust/

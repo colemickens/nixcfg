@@ -12,12 +12,13 @@
 , writeShellScriptBin
 , linkFarmFromDrvs
 , symlinkJoin
-, writePython3Bin
+, python3Packages
 , fetchurl
 }:
 
 let
   efibootmgr_ = "${efibootmgr}/bin/efibootmgr";
+  writePython3Bin = python3Packages.writePython3Bin;
 
   gpgKeyId = "0x9758078DE5308308";
   gpgCardId = "D2760001240100000006071267080000";
