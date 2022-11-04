@@ -1,0 +1,25 @@
+name: "clean"
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+jobs:
+  "clean":
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: cachix/install-nix-action@v18
+      with:
+        extra_nix_config: |
+          experimental-features = nix-command flakes ca-references
+          extra-binary-caches = https://colemickens.cachix.org
+          extra-trusted-public-keys = colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4=
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+    - name: shell
+      run: nix develop '.#ci' -c true
+    - name: init
+      run: nix develop '.#ci' -c .github/init.nu
+    - name: clean
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: nix develop '.#ci' -c .github/clean-actions.nu

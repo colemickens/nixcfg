@@ -1,9 +1,5 @@
 { pkgs, lib, config, inputs, ... }:
 
-let
-  _gitPackage = pkgs.gitAndTools.gitFull;
-  # _gitPackage = inputs.temp-git.legacyPackages.${pkgs.system}.gitAndTools.gitFull;
-in
 {
   imports = [
     ./core.nix # imports hm
@@ -16,7 +12,7 @@ in
     # ../mixins/broot.nix
     ../mixins/cachix.nix
     ../mixins/direnv.nix
-    # ../mixins/gh.nix
+    ../mixins/gh.nix
     ../mixins/gopass.nix
     ../mixins/helix.nix
     ../mixins/ion.nix
@@ -60,7 +56,7 @@ in
         "${hm.config.xdg.configHome}/gdb/gdbinit".source = (pkgs.writeText "gdbinit" ''set auto-load safe-path /nix/store'');
       };
       programs = {
-        git.package = _gitPackage;
+        git.enable = true;
         neovim.enable = true;
       };
       home.packages = with pkgs; [
@@ -162,9 +158,9 @@ in
         # github-cli cvs mercurial subversion git-lfs
         # ? git-absorb
       ]
-      ++ lib.optionals (pkgs.system == "x86_64-linux") [
+      ++ lib.optionals (pkgs.hostPlatform.system == "x86_64-linux") [
 
-      ] ++ lib.optionals (pkgs.system == "aarch64-linux") [
+      ] ++ lib.optionals (pkgs.hostPlatform.system == "aarch64-linux") [
         #
       ]
       ;

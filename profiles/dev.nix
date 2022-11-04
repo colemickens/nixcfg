@@ -5,7 +5,7 @@
     home-manager.users.cole = { pkgs, ... }: {
       home.packages = []
        ++ (with pkgs; [])
-       ++ inputs.self.devShells.${pkgs.system}.devtools.nativeBuildInputs
+       ++ inputs.self.devShells.${pkgs.hostPlatform.system}.devtools.nativeBuildInputs
       ;
     };
   };

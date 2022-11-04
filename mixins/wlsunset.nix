@@ -4,7 +4,7 @@
   config = {
     home-manager.users.cole = { pkgs, ... }: {
       services.wlsunset = {
-        #enable = (pkgs.system == "x86_64-linux");
+        #enable = (pkgs.hostPlatform.system == "x86_64-linux");
         enable = true;
         longitude = "-122.3321";
         latitude = "47.6062";

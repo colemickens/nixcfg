@@ -34,7 +34,7 @@ in {
             shim_path = {
               "x86_64-linux" = "\\EFI\\${efiBootloaderId}\\shimx64.efi";
               "aarch64-linux" = "\\EFI\\${efiBootloaderId}\\shima64.efi";
-            }.${pkgs.system};
+            }.${pkgs.hostPlatform.system};
             # TODO: this is awkward because it runs on every rebuild instead of only when installing?
             # maybe we just check for NIXOS_INSTALL? maybe this is only running because we did the mod?
           in ''

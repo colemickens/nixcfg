@@ -5,7 +5,7 @@
     home-manager.users.cole = { pkgs, ... }: {
       programs.pijul = {
         enable = true;
-        #package = inputs.jj.outputs.packages.${pkgs.system}.jj;
+        #package = inputs.jj.outputs.packages.${pkgs.hostPlatform.system}.jj;
         settings = {
           user = {
             name = "colemickens";

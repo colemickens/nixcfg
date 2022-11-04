@@ -207,8 +207,8 @@ in
                 "focused" = { border = red; background = red; text = "#ffffff"; indicator = "#ffffff"; childBorder = red; };
                 "unfocused" = { border = bgcolor; background = bgcolor; text = "#888888"; indicator = "#ffffff"; childBorder = bgcolor; };
               };
-            gaps = { inner = 0; outer = 0; };
-            window.border = 3;
+            gaps = { inner = 2; outer = 0; };
+            window.border = 4;
             window.titlebar = false;
             window.commands = [
               { criteria = { app_id = "mpv"; }; command = "sticky enable"; }

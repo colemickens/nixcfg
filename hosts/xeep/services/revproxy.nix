@@ -309,10 +309,18 @@ in
       virtualHosts."syncthing-slynux.x.${internalDomain}" = internalVhost // {
         locations."/".proxyPass = "http://${slynux_ip4}:8384/";
         locations."/".proxyWebsockets = true;
+        locations."/".extraConfig = ''
+          proxy_read_timeout 600s;
+          proxy_send_timeout 600s;
+        '';
       };
       virtualHosts."syncthing-carbon.x.${internalDomain}" = internalVhost // {
         locations."/".proxyPass = "http://${carbon_ip6}:8384/";
         locations."/".proxyWebsockets = true;
+        locations."/".extraConfig = ''
+          proxy_read_timeout 600s;
+          proxy_send_timeout 600s;
+        '';
       };
       virtualHosts."syncthing-xeep.x.${internalDomain}" = internalVhost // {
         locations."/".proxyPass = "http://${xeep_ip6}:8384/";
@@ -321,6 +329,10 @@ in
       virtualHosts."syncthing-raisin.x.${internalDomain}" = internalVhost // {
         locations."/".proxyPass = "http://${raisin_ip6}:8384/";
         locations."/".proxyWebsockets = true;
+        locations."/".extraConfig = ''
+          proxy_read_timeout 600s;
+          proxy_send_timeout 600s;
+        '';
       };
       virtualHosts."syncthing-jeffhyper.x.${internalDomain}" = internalVhost // {
         locations."/".proxyPass = "http://${jeffhyper_ip4}:8384/";

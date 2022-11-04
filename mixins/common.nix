@@ -2,8 +2,8 @@
 
 let
   cfg = config.nixcfg.common;
-  defaultKernel = pkgs.linuxPackages_5_18;
-  defaultZfsKernel = pkgs.linuxPackages_6_0;
+  defaultKernel = pkgs.linuxKernel.packages.linux_5_18;
+  defaultZfsKernel = pkgs.linuxKernel.packages.linux_6_0;
   _zfsEnableUnstable = true;
   # _defaultKernel = pkgs.linuxKernel.packagesFor
   #   (pkgs.linuxPackages_latest.kernel.override {

@@ -20,6 +20,7 @@ in
       serviceConfig.RestartSec = 10;
     };
     networking.networkmanager.enable = true;
+    networking.networkmanager.wifi.backend = "iwd";
     networking.networkmanager.plugins = lib.mkForce [ ];
   };
 }

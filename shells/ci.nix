@@ -2,8 +2,6 @@
 
 let
   pkgs = inputs.nixpkgs.legacyPackages.${system};
-  llvmPackages = pkgs.llvmPackages_13;
-
 in
 minimalMkShell {
   name = "ci";
@@ -14,16 +12,12 @@ minimalMkShell {
 
   nativeBuildInputs = with pkgs; [
     cachix
-    bash
-    curl
     cacert
-    jq
     jless
-    just
-    parallel
     mercurial
     git
-    nix-build-uncached
+    gh
     nushell
+    inputs.nix-eval-jobs.outputs.packages.${system}.default
   ];
 }

@@ -1,63 +1,61 @@
 #!/usr/bin/env nu
 
-let-env CACHIX_CACHE = (
-  if "CACHIX_CACHE" in ($env | transpose | get column0) { $env.CACHIX_CACHE }
-  else "colemickens"
-)
-def header [ color: string text: string spacer=" ": string ] {
+let-env CACHIX_CACHE = "colemickens"
+
+def header [ color: string text: string spacer="▒": string ] {
   let text = $"($text) "
-  let header = $" ($text | str rpad -c $spacer -l 80)"
+  let header = $"("" | str rpad -c $spacer -l 2) ($text | str rpad -c $spacer -l 100)"
   print -e $"(ansi $color)($header)(ansi reset)"
 }
 
 def buildDrv [ drvRef: string ] {
-  print -e (header yellow_reverse $"eval [($drvRef)]")
+  header "white_reverse" $"build ($drvRef)" "░"
+  header "blue_reverse" $"eval ($drvRef)"
   let evalJobs = (
     ^nix-eval-jobs
-      --flake $"~/code/nixcfg#($drvRef)"
+      --flake $".#($drvRef)"
       --check-cache-status
         | each { |it| ( $it | from json ) }
   )
-  print -e $evalJobs
   
-  print -e (header blue_reverse $"build [($drvRef)]")
+  header "green_reverse" $"build ($drvRef)"
   print -e ($evalJobs
     | where isCached == false
-    | select name drvPath outputs)
+    | select name isCached)
 
   $evalJobs
     | where isCached == false
-    | each { |drv|
-      ^nix build $drv.drvPath
-      null
-    }
+    | each { |drv| do -c  { ^nix build $drv.drvPath } }
 
-  print -e (header green_reverse $"cache [($drvRef)]")
-  $evalJobs | each { |drv|
+  header "purple_reverse" $"cache: calculate paths: ($drvRef)"
+  let pushPaths = ($evalJobs | each { |drv|
     $drv.outputs | each { |outPath|
       if ($outPath.out | path exists) {
-        ($outPath.out | ^cachix push $env.CACHIX_CACHE)
-        null
+        $outPath.out
       }
     }
-  }
-
-  let output = ($evalJobs | select name outputs)
-  print -e ($output | flatten)
+  })
+  print -e $pushPaths
+  let cachePathsStr = ($pushPaths | each {|it| $"($it)(char nl)"} | str collect)
   
-  $output
+  header "purple_reverse" $"cache/push ($drvRef)"
+  $cachePathsStr | ^cachix push $env.CACHIX_CACHE
+  
+  $evalJobs | first | get "outputs"
 }
 
 def deployHost [ host: string ] {
   let jobs = buildDrv $"toplevels.($host)" 
   let topout = ($jobs | flatten | first)
+  print -e $topout
   let toplevel = ($topout | get out)
   let target = (tailscale ip --6 $host | str trim)
   
   print -e (header purple_reverse $"activate [($host)]")
   print -e $topout
-  ^ssh $"cole@($target)" $"sudo nix build --profile /nix/var/nix/profiles/system \"($toplevel)\""
-  ^ssh $"cole@($target)" $"sudo \"($toplevel)/bin/switch-to-configuration\" switch"
+  let linkProfileCmd = ""
+  ^ssh $"cole@($target)" $"sudo nix build --profile /nix/var/nix/profiles/system '($toplevel)'"
+  ^ssh $"cole@($target)" $"sudo '($toplevel)/bin/switch-to-configuration' switch"
 }
 
 def "main deploy" [ host = "_pc": string ] {
@@ -91,10 +89,10 @@ def "main inputup" [] {
     $"($env.HOME)/code/nixpkgs/cmpkgs-cross-armv6l"
     $"($env.HOME)/code/home-manager/master"
     $"($env.HOME)/code/home-manager/cmhm"
-    $"($env.HOME)/code/tow-boot/development"
-    $"($env.HOME)/code/tow-boot/rpi"
-    $"($env.HOME)/code/tow-boot/radxa-zero"
-    $"($env.HOME)/code/tow-boot/visionfive"
+    # $"($env.HOME)/code/tow-boot/development"
+    # $"($env.HOME)/code/tow-boot/rpi"
+    # $"($env.HOME)/code/tow-boot/radxa-zero"
+    # $"($env.HOME)/code/tow-boot/visionfive"
     $"($env.HOME)/code/nixpkgs-wayland/master"
     $"($env.HOME)/code/flake-firefox-nightly"
     $"($env.HOME)/code/mobile-nixos/master"
@@ -153,6 +151,12 @@ def "main up" [] {
 }
 
 def "main loopup" [] { main up; sleep 3sec; main loopup }
+
+def "main ci" [] {
+  print -e (header red_reverse "ci" "▒")
+  main lockup
+  buildDrv 'ciJobs.x86_64-linux.default'
+}
 
 def main [] {
   print -e "commands: [loopup, up]"

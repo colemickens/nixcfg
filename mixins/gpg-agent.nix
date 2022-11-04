@@ -1,13 +1,13 @@
 { pkgs, inputs, ... }:
 
 let
-  wayprompt = "${inputs.nixpkgs-wayland.outputs.packages.${pkgs.system}.wayprompt}";
+  wayprompt = "${inputs.nixpkgs-wayland.outputs.packages.${pkgs.hostPlatform.system}.wayprompt}";
   pinentryProgram = "${wayprompt}/bin/pinentry-wayprompt";
 
   sysPkgs = with pkgs; [ gcr ];
   def = {
     gnupgPkg = pkgs.gnupg;
-    #gnupgPkg = inputs.temp-gpg-pr.legacyPackages.${pkgs.system}.gnupg;
+    #gnupgPkg = inputs.temp-gpg-pr.legacyPackages.${pkgs.hostPlatform.system}.gnupg;
     #gnupgPkg = pkgs.callPackage "${inputs.temp-gpg-pr}/pkgs/tools/security/gnupg/23.nix" {};
   };
   bad = def // {

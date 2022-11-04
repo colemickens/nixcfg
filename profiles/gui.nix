@@ -1,7 +1,7 @@
 { pkgs, lib, config, inputs, ... }:
 
 let
-  firefoxFlake = inputs.firefox-nightly.packages.${pkgs.system};
+  firefoxFlake = inputs.firefox-nightly.packages.${pkgs.hostPlatform.system};
   # _firefox = pkgs.firefox-wayland;
   _firefox = lib.hiPrio firefoxFlake.firefox-nightly-bin;
 
@@ -89,7 +89,7 @@ in
 
           nheko
           # librewolf
-        ]) ++ (lib.optionals (pkgs.system == "x86_64-linux") (with pkgs; [
+        ]) ++ (lib.optionals (pkgs.hostPlatform.system == "x86_64-linux") (with pkgs; [
           # x86_64-linux only
           _firefox
           _chromey

@@ -1,24 +1,27 @@
-name: "cache-all"
+name: "default"
 on:
   schedule:
     - cron: '*/10 * * * *'
   workflow_dispatch:
 jobs:
-  "cache-all":
+  "default":
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: setup-nix
-      uses: cachix/install-nix-action@v18
+    - uses: cachix/install-nix-action@v18
       with:
         extra_nix_config: |
           experimental-features = nix-command flakes ca-references
           extra-binary-caches = https://colemickens.cachix.org
           extra-trusted-public-keys = colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4=
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-    - name: prepare
-      run: nix develop -c .github/init
+    - name: shell
+      run: nix develop '.#ci' -c true
+    - name: clean
+      run: nix develop '.#ci' -c .github/clean.nu
+    - name: init
+      run: nix develop '.#ci' -c .github/init.nu
     - name: "cache-all"
       env:
         CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}"
-      run: nix develop '.#ci' -c './build.nu'
+      run: nix develop '.#ci' -c ./main.nu ci

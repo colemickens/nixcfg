@@ -8,7 +8,6 @@
 , skim
 , jq
 , wl-clipboard
-, nixUnstable
 , writeShellScriptBin
 , linkFarmFromDrvs
 , symlinkJoin

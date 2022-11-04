@@ -17,7 +17,7 @@ let
   #     ../misc/0001-flakes-flake.lock-location-env-var.patch
   #   ];
   # });
-  _nix = pkgs.nixUnstable;
+  _nix = pkgs.nixVersions.unstable;
 in
 {
   config = {
@@ -25,6 +25,9 @@ in
     sops.secrets.nixAccessTokens = {
       mode = "0440";
       group = config.users.groups.keys.name;
+    };
+    nixpkgs.config = {
+      allowAliases = false;
     };
     nix = {
       gc = {
