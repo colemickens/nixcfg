@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-../virt/tails-latest.sh
-
-sudo setfacl -m g:qemu-libvirtd:r-x /home/cole
-virsh -c 'qemu:///system' resume linux2020 \
-  || virsh -c 'qemu:///system' start linux2020

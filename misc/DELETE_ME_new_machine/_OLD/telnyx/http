@@ -1,6 +1,0 @@
-POST https://api.telnyx.com/v2/calls HTTP/1.1
-content-type: application/json
-Accept: application/json
-Authorization: Bearer {{$dotenv TELNYX_APIKEY}}
-
-{"connection_id": "1778779071774197689", "to": "+12065804422", "from": "+17852220655"}
