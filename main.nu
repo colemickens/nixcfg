@@ -25,7 +25,16 @@ def buildDrv [ drvRef: string ] {
 
   $evalJobs
     | where isCached == false
-    | each { |drv| do -c  { ^nix build $drv.drvPath } }
+    | each { |drv|
+      ^nix build --no-link $drv.drvPath
+      # let buildStore = 'ssh-ng://colemickens@aarch64.nixos.community'
+      # ssh $buildStore "cachix push colemickens"
+      # ^nix copy --no-check-sigs --to $"ssh-ng://($buildStore)" --derivation $drv.drvPath
+      # $drv.outputs | each { |it|
+      #   ^ssh $buildStore $"echo ($it.out) | cachix push colemickens"
+      #   ^nix build -j0 $it.out
+      # }
+    }
 
   header "purple_reverse" $"cache: calculate paths: ($drvRef)"
   let pushPaths = ($evalJobs | each { |drv|
@@ -49,12 +58,12 @@ def deployHost [ host: string ] {
   let topout = ($jobs | flatten | first)
   print -e $topout
   let toplevel = ($topout | get out)
-  let target = (tailscale ip --6 $host | str trim)
+  let target = (tailscale ip --4 $host | str trim)
   
   print -e (header purple_reverse $"activate [($host)]")
   print -e $topout
   let linkProfileCmd = ""
-  ^ssh $"cole@($target)" $"sudo nix build --profile /nix/var/nix/profiles/system '($toplevel)'"
+  ^ssh $"cole@($target)" $"sudo nix build --no-link --profile /nix/var/nix/profiles/system '($toplevel)'"
   ^ssh $"cole@($target)" $"sudo '($toplevel)/bin/switch-to-configuration' switch"
 }
 

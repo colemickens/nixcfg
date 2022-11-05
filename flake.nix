@@ -129,7 +129,7 @@
         modules = [ ./hosts/${v.host}/configuration.nix ];
         specialArgs = { inherit inputs; };
       }));
-      mkToplevel = v: (mkSystem v).config.system.build.toplevel;
+      mkToplevel = v: ((mkSystem v).config.system.build.toplevel);
 
       #################################################################################################################
       ## NIXOS CONFIGS + TOPLEVELS
@@ -253,6 +253,11 @@
             ({
               # CI (should we use HM for this instead?)
               # install-secrets = { type = "app"; program = legacyPackages."${system}".install-secrets.outPath; };
+              
+              default = { type = "app"; program = (pkgs.writeScript "nixcfg-main" ''
+                exec "${pkgs.nushell}/bin/nu" "${./. + "/main.nu"}" "''${@}"
+              '').outPath;
+              };
 
               # Terraform
               tf = { type = "app"; program = tfout.tf.outPath; };

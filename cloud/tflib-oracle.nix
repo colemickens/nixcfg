@@ -75,7 +75,8 @@ let
     "Canonical-Ubuntu-20.04-Minimal-2021.09.23-0" = canonical_ubuntu_20_04_minimal__arm64__20210923_0;
   };
 
-  sshpubkey = (builtins.elemAt (import ../data/sshkeys.nix) 0);
+  # sshpubkey = (builtins.elemAt (import ../data/sshkeys.nix) 0);
+  sshpubkey = (builtins.elemAt (import ../profiles/user.nix).config.users.extraUsers."cole".openssh.authorizedKeys.keys 0);
 
   mkVm = oracle_config: name: v: {
     output."${oracle_config.uniqueid}_${name}_public_ip_addr".value = "\${oci_core_instance.${oracle_config.uniqueid}_${name}.public_ip}";
