@@ -123,9 +123,9 @@
       hydralib = import ./lib/hydralib.nix;
       flake-utils = inputs.nixlib.lib.flake-utils;
 
-      mkSystem = v: (v.pkgs.lib.nixosSystem ({
+      mkSystem = n: v: (v.pkgs.lib.nixosSystem ({
         system = v.sys;
-        modules = [ ./hosts/${v.host}/configuration.nix ];
+        modules = [ ./hosts/${n}/configuration.nix ];
         specialArgs = { inherit inputs; };
       }));
       mkToplevel = v: ((mkSystem v).config.system.build.toplevel);
@@ -133,47 +133,58 @@
       #################################################################################################################
       ## NIXOS CONFIGS + TOPLEVELS
       #################################################################################################################
-      nixosConfigs = rec {
+      nixosConfigsEx = {
         misc = {
           # installer = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; host = "installer"; };
         };
         phone = rec {
-          pinephone = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; host = "pinephone"; };
-          blueline = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; host = "blueline"; };
-          enchilada = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; host = "enchilada"; };
+          pinephone = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; slug = "pinephone"; };
+          blueline = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; slug = "blueline"; };
+          enchilada = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; slug = "enchilada"; };
           # x_pinephone = pinephone // { sys = "x86_64-linux"; };
           # x_blueline = blueline // { sys = "x86_64-linux"; };
           # x_enchilada = enchilada // { sys = "x86_64-linux"; };
         };
         sbc = rec {
-          risky = { pkgs = inputs.nixpkgs; sys = "riscv64-linux"; host = "risky"; };
-          radxazero1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; host = "radxazero1"; };
-          rpifour1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; host = "rpifour1 "; };
-          rpithreebp1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; host = "rpithreebp1"; };
-          rpizerotwo1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; host = "rpizerotwo1"; };
-          openstick = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; host = "openstick"; };
-          # x_risky = risky // { sys = "x86_64-linux"; };
+          radxazero1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; slug = "radxazero1"; };
+          rpifour1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; slug = "rpifour1 "; };
+          rpithreebp1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; slug = "rpithreebp1"; };
+          rpizerotwo1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; slug = "rpizerotwo1"; };
+          # openstick = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; slug = "openstick"; };
+          openstick = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; slug = "openstick"; };
+          visionfive1 = { pkgs = inputs.nixpkgs; sys = "riscv64-linux"; slug = "visionfive1"; };
         };
         pc = {
-          carbon = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; host = "carbon"; };
-          jeffhyper = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; host = "jeffhyper"; };
-          slynux = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; host = "slynux"; };
-          raisin = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; host = "raisin"; };
-          xeep = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; host = "xeep"; };
+          carbon = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; slug = "carbon"; };
+          jeffhyper = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; slug = "jeffhyper"; };
+          slynux = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; slug = "slynux"; };
+          raisin = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; slug = "raisin"; };
+          xeep = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; slug = "xeep"; };
         };
-        _all = (misc // phone // sbc // pc);
       };
-      nixosConfigurations = (lib.mapAttrs (_: v: (mkSystem v)) nixosConfigs._all);
-      toplevels = (lib.mapAttrs (_: v: (mkToplevel v)) nixosConfigs._all);
 
+      nixosConfigs = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues nixosConfigsEx));
+      nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);
+      toplevels = (lib.mapAttrs (_: v: v.config.system.build.toplevel) nixosConfigurations);
+
+      ## SPECIAL OUTPUTS:
+      images = {
+        openstick = {
+          inherit (nixosConfigurations.openstick.config.mobile.outputs.android)
+            android-flashable-system android-flashable-bootimg android-abootimg/*android-bootimg*/;
+        };
+        # eche96 = nixosConfigurations.openstick.config.mobile.outputs.android;
+      };
+      imagePackages = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues images));
     in
     ({
       ## PASSTHROUGH ##################################################################################################
       inherit inputs lib hydralib;
-      inherit toplevels nixosConfigs nixosConfigurations;
+      inherit nixosConfigsEx nixosConfigs nixosConfigurations toplevels;
 
       ## CUSTOM PAYLOADS ##############################################################################################
       # installer = nixosConfigurations.installer.config.system.build.isoImage;
+      inherit images;
 
       ## NIXOS_MODULES ################################################################################################
       nixosModules = {
@@ -252,10 +263,12 @@
             ({
               # CI (should we use HM for this instead?)
               # install-secrets = { type = "app"; program = legacyPackages."${system}".install-secrets.outPath; };
-              
-              default = { type = "app"; program = (pkgs.writeScript "nixcfg-main" ''
-                exec "${pkgs.nushell}/bin/nu" "${./. + "/main.nu"}" "''${@}"
-              '').outPath;
+
+              default = {
+                type = "app";
+                program = (pkgs.writeScript "nixcfg-main" ''
+                  exec "${pkgs.nushell}/bin/nu" "${./. + "/main.nu"}" "''${@}"
+                '').outPath;
               };
 
               # Terraform
@@ -287,23 +300,18 @@
 
 
           #################################################################################################################
-          ## HYDRA JOBS / BUNDLES / LEGACY_PACKAGES
+          ## CI JOBS
           #################################################################################################################
-          # legacyPackages = (forAllSystems (s: {
-          #   # legacyPackages contains references to packages, thus inf recursion otherwise
-          #   cache-dev = bundles.${s}.devShells;
-          #   cache-all = pkgs_.nixpkgs.${s}.linkFarmFromDrvs "cache-all-${s}" [
-          #     bundles.${s}.devShells
-          #     bundles.${s}.packages
-          #     bundles.${s}.toplevels_pc
-          #   ];
-          # }));
-
           ciJobs = {
             default = ({ }
             // (lib.genAttrs [ "devtools" "ci" "devenv" ] (name: inputs.self.devShells.${system}.${name}.inputDerivation))
             // (inputs.self.packages.${system})
-            # // (lib.mapAttrs (_: v: mkToplevel v) (lib.filterAttrs (n: v: v.sys == system) nixosConfigs._all))
+            // (lib.mapAttrs
+              (n: v: toplevels."${n}")
+              (lib.filterAttrs (n: v: v.sys == system) nixosConfigs)
+            )
+            # we don't necessarily want to push 1GB packages to cachix:
+            # // (lib.filterAttrs (n: v: v.system == system) imagePackages)
             );
           };
 

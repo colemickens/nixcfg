@@ -9,35 +9,33 @@ def create_left_prompt [] {
     let line1 = $"(ansi reset)(ansi $hc)╭($hnseg)";
     let line2 = $"(ansi reset)(ansi $hc)╰─▶ (ansi reset)";
     
-    let scm = do {
-      let result = []
-      let result = ($result | append (
-        ^jj log --no-commit-working-copy --no-graph -T '"x"'
-        | complete 
-        | where $it.exit_code == 0
-        | get stdout
-        | str trim
-        | size
-        | get chars
-        | format $"(ansi $c)jj ($chars)")
-
-      let result = ($result | append (
-        ^git branch --show-current
-        | complete 
-        | where $it.exit_code == 0
-        | get stdout
-        | str trim
-        | size
-        | get chars
-        | format $"(ansi $c)jj ($chars)")
-      if ($branchCmd.exit_code == 0) {
-        let branch = ($branchCmd.stdout | str trim)
-        let gd = (^git status -s | complete | get "stdout" | str trim)
-        let c = (if ($gd == "") { "green_bold" } else { "yellow_bold" })
-        let i = (if ($gd == "") { "" } else { "*" })
-        $"(ansi $c)git ($branch)($i)"
+    let jj = (do -i { ^jj log --no-commit-working-copy --no-graph -T '"x"' }
+      | complete 
+      | where $it.exit_code == 0
+      | get -i stdout
+      | str trim
+      | where ($it != $nothing)
+      | each { |j|
+        let cc =  (($j | size).chars)
+        let c1 = "light_yellow_bold"; let c2 = "light_yellow"
+        let msg = $"($cc)"
+        # $"(ansi $"($c)_bold")jj(ansi reset) (ansi $c)($msg)"
+        $"(ansi $c1)│(ansi reset)(ansi $c2)($msg)"
       }
-    }
+    )
+    let git = (do -i { ^git branch --show-current }
+      | complete 
+      | where $it.exit_code == 0
+      | get -i stdout
+      | str trim
+      | where ($it != $nothing)
+      | each { |branch|
+        let e = (^git diff-index --quiet HEAD '--' | complete | get exit_code)
+        let i = (if ($e == 0) { "" } else { "*" })
+        let c = (if ($e == 0) { "green" } else { "yellow" }); let c1 = $"light_($c)_dimmed"; let c2 = $"light_($c)_dimmed"
+        $"(ansi $c1)│(ansi reset)(ansi $c2)($branch)($i)"
+      }
+    )
 
     let psc = if (is-admin) { "red_bold" } else { "default_bold" }
     let pathseg = $"(ansi default_underline)(ansi $psc)($env.PWD | str replace $env.HOME "~")"
@@ -51,8 +49,8 @@ def create_left_prompt [] {
     
     let line1 = ([
       $line1
-      $pathseg 
-      $scm
+      $pathseg
+      $jj $git
       $duration
       $last_exit
     ] | flatten | str join $"(ansi reset) ")

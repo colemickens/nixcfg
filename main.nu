@@ -32,7 +32,10 @@ def buildDrvs [ drvList: list ] {
     header "green_reverse" $"build: local"
     print -e ($drvs | select name isCached)
     let drvPaths = ($drvs | get "drvPath")
-    do -c { ^nom build --no-link $drvPaths }
+    ^nom build --keep-going --no-link $drvPaths
+    if $env.LAST_EXIT_CODE != 0 {
+      error {msg:"Adfadsfsdf"}
+    }
   }
 
   let buildStore = 'colemickens@aarch64.nixos.community'
@@ -95,7 +98,7 @@ def "main deploy" [ h = "_pc": string ] {
 
   let hosts = (if (not ($h | str starts-with "_")) { [ $h ] } else {
     let cls = ($h | str trim --char "_")
-    (^nix eval --json $".#nixosConfigs.($h | str trim --char '_')" --apply "x: builtins.attrNames x" | from json)
+    (^nix eval --json $".#nixosConfigsEx.($h | str trim --char '_')" --apply "x: builtins.attrNames x" | from json)
   })
   print -e $hosts
   
@@ -154,9 +157,9 @@ def "main lockup" [] {
 }
 
 def "main build" [ drv: string ] {
-  let drvs = (evalDrv $drv)
-  let ucdrvs = ($drvs | where ($it.isCached == false))
-  buildDrvs $ucdrvs
+  let drvs = evalDrv $drv # has a different type than above?
+  buildDrvs $drvs
+  print -e ($drvs | get outputs | flatten)
 }
 
 def "main loopup" [] { main up; sleep 3sec; main loopup }
