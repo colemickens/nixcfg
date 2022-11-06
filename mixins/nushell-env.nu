@@ -1,17 +1,12 @@
 # Nushell Environment Config File
 # Use nushell functions to define your right and left prompt
-def pill [ c: string, msg: string] {
-  let cr = $"($c)_reverse"
-  $"(ansi reset)(ansi $c)(ansi $cr)($msg)(ansi reset)(ansi $c)(ansi reset)"
-}
 
 def create_left_prompt [] {
     let hc = "@host_color@"
     let hcr = $"@host_color@_reverse"
-    let hostname = (^hostname | str trim)
-    let hostname = (pill "@host_color@" $hostname)
+    let hnseg = $"(ansi reset)(ansi $hcr) (^hostname | str trim) (ansi reset)"
     
-    let line1 = $"(ansi reset)(ansi $hc)╭($hostname)(ansi reset)";
+    let line1 = $"(ansi reset)(ansi $hc)╭($hnseg)";
     let line2 = $"(ansi reset)(ansi $hc)╰─▶ (ansi reset)";
     
     let git = do {
@@ -19,7 +14,7 @@ def create_left_prompt [] {
       if ($branchCmd.exit_code == 0) {
         let branch = ($branchCmd.stdout | str trim)
         let gd = (^git status -s | complete | get "stdout" | str trim)
-        let c = (if ($gd == "") { "green" } else { "yellow" })
+        let c = (if ($gd == "") { "green_bold" } else { "yellow_bold" })
         let i = (if ($gd == "") { "" } else { "*" })
         $"(ansi $c) ($branch)($i)"
       } else { "" }
@@ -28,22 +23,21 @@ def create_left_prompt [] {
     let psc = if (is-admin) { "red_bold" } else { "default_bold" }
     let pathseg = $"(ansi default_underline)(ansi $psc)($env.PWD | str replace $env.HOME "~")"
 
-    # let time = $"(ansi dark_gray)(date format '%T')(ansi reset)"
-    let duration = (($env.CMD_DURATION_MS + "ms") | into duration --convert sec)
-    let duration = $"(ansi dark_gray_italic)($duration)(ansi reset)"
+    let duration = (($env.CMD_DURATION_MS + "ms") | into duration --convert sec | str replace " sec" "s" | str trim)
+    let duration = $"(ansi dark_gray_italic)($duration)"
     
     let last_exit = if ($env.LAST_EXIT_CODE == 0) { [] } else {
-      [ $"(ansi light_red_bold)✘ ($env.LAST_EXIT_CODE)" ]
+      [ $"(ansi light_red_bold)✘($env.LAST_EXIT_CODE | str trim)" ]
     }
     
     let line1 = ([
       $line1
       $pathseg 
-      $last_exit
       $git
       $duration
+      $last_exit
     ] | flatten | str join $"(ansi reset) ")
-    $"($line1)\n($line2)(ansi reset)"
+    $"\n($line1)\n($line2)(ansi reset)"
 }
 let-env PROMPT_COMMAND = { create_left_prompt }
 let-env PROMPT_COMMAND_RIGHT = { "" }
