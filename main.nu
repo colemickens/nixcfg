@@ -2,7 +2,7 @@
 
 let-env CACHIX_CACHE = "colemickens"
 let CACHIX_SIGNING_KEY = if $"CACHIX_SIGNING_KEY_($env.CACHIX_CACHE)" in ($env | transpose | get column0) {
-  $env | get $"CACHIX_SIGNING_KEY_($env.CACHIX_CACHE)"
+  $env | get ($"CACHIX_SIGNING_KEY_($env.CACHIX_CACHE)" | str upcase)
 } else if ($"/run/secrets/cachix_signing_key_($env.CACHIX_CACHE)" | path exists) {
   open $"/run/secrets/cachix_signing_key_($env.CACHIX_CACHE)" | str trim
 } else {
