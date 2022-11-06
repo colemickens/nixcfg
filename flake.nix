@@ -302,7 +302,7 @@
           ciJobs = {
             default = ({ }
             // (lib.genAttrs [ "devtools" "ci" "devenv" ] (name: inputs.self.devShells.${system}.${name}.inputDerivation))
-            # // (inputs.self.packages.${system})
+            // (inputs.self.packages.${system})
             # // (lib.mapAttrs (_: v: mkToplevel v) (lib.filterAttrs (n: v: v.sys == system) nixosConfigs._all))
             );
           };

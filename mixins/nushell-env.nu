@@ -9,15 +9,34 @@ def create_left_prompt [] {
     let line1 = $"(ansi reset)(ansi $hc)╭($hnseg)";
     let line2 = $"(ansi reset)(ansi $hc)╰─▶ (ansi reset)";
     
-    let git = do {
-      let branchCmd = (do -i { ^git branch --show-current } | complete)
+    let scm = do {
+      let result = []
+      let result = ($result | append (
+        ^jj log --no-commit-working-copy --no-graph -T '"x"'
+        | complete 
+        | where $it.exit_code == 0
+        | get stdout
+        | str trim
+        | size
+        | get chars
+        | format $"(ansi $c)jj ($chars)")
+
+      let result = ($result | append (
+        ^git branch --show-current
+        | complete 
+        | where $it.exit_code == 0
+        | get stdout
+        | str trim
+        | size
+        | get chars
+        | format $"(ansi $c)jj ($chars)")
       if ($branchCmd.exit_code == 0) {
         let branch = ($branchCmd.stdout | str trim)
         let gd = (^git status -s | complete | get "stdout" | str trim)
         let c = (if ($gd == "") { "green_bold" } else { "yellow_bold" })
         let i = (if ($gd == "") { "" } else { "*" })
-        $"(ansi $c) ($branch)($i)"
-      } else { "" }
+        $"(ansi $c)git ($branch)($i)"
+      }
     }
 
     let psc = if (is-admin) { "red_bold" } else { "default_bold" }
@@ -33,7 +52,7 @@ def create_left_prompt [] {
     let line1 = ([
       $line1
       $pathseg 
-      $git
+      $scm
       $duration
       $last_exit
     ] | flatten | str join $"(ansi reset) ")

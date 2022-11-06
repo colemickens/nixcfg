@@ -31,6 +31,7 @@ in stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    true
     mkdir -p $out
     cp ../bin/SpaceCadetPinball $out/
     if [[ "${_assets}" != "" ]]; then
