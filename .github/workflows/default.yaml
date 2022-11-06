@@ -28,6 +28,12 @@ jobs:
     - name: "lockup"
       env: { CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}" }
       run: nix develop '.#ci' -c ./main.nu lockup
-    - name: "cacheall"
+    - name: "ci eval"
       env: { CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}" }
-      run: nix develop '.#ci' -c ./main.nu cacheall
+      run: nix develop '.#ci' -c ./main.nu ci eval
+    - name: "ci build"
+      env: { CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}" }
+      run: nix develop '.#ci' -c ./main.nu ci build
+    - name: "ci push"
+      env: { CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}" }
+      run: nix develop '.#ci' -c ./main.nu ci push

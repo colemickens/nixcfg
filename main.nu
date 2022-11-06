@@ -1,5 +1,6 @@
 #!/usr/bin/env nu
 
+let cidir = "/tmp/nixci"; mkdir $cidir
 let-env CACHIX_CACHE = "colemickens"
 let CACHIX_SIGNING_KEY = if $"CACHIX_SIGNING_KEY_($env.CACHIX_CACHE)" in ($env | transpose | get column0) {
   $env | get ($"CACHIX_SIGNING_KEY_($env.CACHIX_CACHE)" | str upcase)
@@ -8,7 +9,9 @@ let CACHIX_SIGNING_KEY = if $"CACHIX_SIGNING_KEY_($env.CACHIX_CACHE)" in ($env |
 } else {
   null
 }
-if ($CACHIX_SIGNING_KEY != null) { let-env CACHIX_SIGNING_KEY = $CACHIX_SIGNING_KEY }
+if ($CACHIX_SIGNING_KEY != null) {
+  let-env CACHIX_SIGNING_KEY = $CACHIX_SIGNING_KEY
+}
 
 def header [ color: string text: string spacer="▒": string ] {
   let text = $"($text) "
@@ -17,56 +20,44 @@ def header [ color: string text: string spacer="▒": string ] {
   print -e $"(ansi $color)($text)(ansi reset)"
 }
 
-def buildDrv [ drvRef: string ] {
-  header "white_reverse" $"build ($drvRef)" "░"
-  header "blue_reverse" $"eval ($drvRef)"
-  let evalJobs = (
-    ^nix-eval-jobs
-      --flake $".#($drvRef)"
-      --check-cache-status
-        | each { |it| ( $it | from json ) }
-  )
-  
-  header "green_reverse" $"build local ($drvRef)"
-  let jobs_x86 = ($evalJobs
-    | where system == "x86_64-linux"
-    | where isCached == false)
+def evalDrv [ ref: string ] {
+  let r = $".#($ref)"
+  header "blue_reverse" $"eval ($r)"
+  (^nix-eval-jobs
+    --flake $r
+    --gc-roots-dir $"($cidir)/gcroots"
+    --check-cache-status
+      | each { |it| ( $it | from json ) })
+}
+
+def buildDrvs [ drvs: list ] {
+  header "green_reverse" $"build: local"
+  let jobs_x86 = ($drvs | where system == "x86_64-linux")
   print -e ($jobs_x86 | select name isCached)
   $jobs_x86 | each { |drv|
     ^nix build --no-link $drv.drvPath
   }
 
-  header "green_reverse" $"build remote ($drvRef)"
-  let jobs_a64 = ($evalJobs
-    | where system == "aarch64-linux"
-    | where isCached == false)
+  let buildStore = 'colemickens@aarch64.nixos.community'
+  header "green_reverse" $"build: remote ($buildStore)"
+  let jobs_a64 = ($drvs | where system == "aarch64-linux")
   print -e ($jobs_a64 | select name isCached)
   $jobs_a64 | each { |drv|
-    let buildStore = 'colemickens@aarch64.nixos.community'
     ^nix copy --no-check-sigs --to $"ssh-ng://($buildStore)" --derivation $drv.drvPath
     $drv.outputs | each { |it|
       # TODO: this nixpkgs path is probably aarch64-combox specific
       ^ssh $buildStore $"echo ($it.out) | env CACHIX_SIGNING_KEY='($env.CACHIX_SIGNING_KEY)' nix-shell -I nixpkgs=/run/current-system/nixpkgs -p cachix --command 'cachix push colemickens'"
       ^nix build -j0 $it.out
     }
-    # ssh $buildStore "cachix push colemickens"
   }
+}
 
-  header "purple_reverse" $"cache: calculate paths: ($drvRef)"
-  let pushPaths = ($evalJobs | each { |drv|
-    $drv.outputs | each { |outPath|
-      if ($outPath.out | path exists) {
-        $outPath.out
-      }
-    }
-  })
-  print -e $pushPaths
-  let cachePathsStr = ($pushPaths | each {|it| $"($it)(char nl)"} | str collect)
-  
-  header "purple_reverse" $"cache/push ($drvRef)"
-  $cachePathsStr | ^cachix push $env.CACHIX_CACHE
-  
-  $evalJobs | first | get "outputs"
+def cacheDrvs [ drvs: list ] {
+  header "purple_reverse" $"cache: ??"
+  # we intentionally consider all outs that are local as possible pushables, even if isCached (its a misnomer)
+  let outs  = (($drvs | get outputs | flatten | get out) | flatten | where ($it | path exists))
+  let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str collect)
+  echo $outsStr | ^cachix push $env.CACHIX_CACHE
 }
 
 def deployHost [ host: string ] {
@@ -151,15 +142,30 @@ def "main lockup" [] {
   do -c { ^nix flake lock --recreate-lock-file --commit-lock-file }
 }
 
+
 def "main build" [ drv: string ] {
-  buildDrv $drv
+  let drvs = (evalDrv $drv)
+  let ucdrvs = ($drvs | where ($it.isCached == false))
+  buildDrvs $ucdrvs
 }
 
 def "main loopup" [] { main up; sleep 3sec; main loopup }
 
-def "main cacheall" [] {
-  buildDrv 'ciJobs.x86_64-linux.default'
+def "main ci eval" [] {
+  let r = evalDrv 'ciJobs.x86_64-linux.default'
+  $r | to json | save --raw $"($cidir)/drvs.json"
+  print -e $r
 }
+def "main ci build" [] {
+  let drvs = (open --raw $"($cidir)/drvs.json" | from json)
+  let ucdrvs = ($drvs | where ($it.isCached == false))
+  buildDrvs $ucdrvs
+}
+def "main ci push" [] {
+  let drvs = (open --raw $"($cidir)/drvs.json" | from json)
+  cacheDrvs $drvs
+}
+
 
 def "main up" [] {
   header red_reverse "loopup" "▒"
@@ -168,7 +174,10 @@ def "main up" [] {
   main pkgup
   main rpiup
   main lockup
-  main cacheall
+  
+  main ci eval
+  main ci build
+  main ci push
 
   main deploy _pc
 }
