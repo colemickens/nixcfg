@@ -9,8 +9,10 @@ def create_left_prompt [] {
     let hc = "@host_color@"
     let hcr = $"@host_color@_reverse"
     let hostname = (^hostname | str trim)
-    let p1 = $"(ansi reset)(ansi $hc)╭(ansi $hcr)($hostname)(ansi reset)(ansi $hc)(ansi reset)";
-    let p2 = $"(ansi reset)(ansi $hc)╰─▶ (ansi reset)";
+    let hostname = (pill "@host_color@" $hostname)
+    
+    let line1 = $"(ansi reset)(ansi $hc)╭($hostname)(ansi reset)";
+    let line2 = $"(ansi reset)(ansi $hc)╰─▶ (ansi reset)";
     
     let git = do {
       let branchCmd = (do -i { ^git branch --show-current } | complete)
@@ -18,26 +20,29 @@ def create_left_prompt [] {
         let branch = ($branchCmd.stdout | str trim)
         let gd = (^git status -s | complete | get "stdout" | str trim)
         let c = (if ($gd == "") { "green" } else { "yellow" })
-        # let i = (if ($gd == "") { " ✔" } else { " 💩" })
-        # let i = (if ($gd == "") { " ✔" } else { " ✘" })
-        let i = ""
-        pill $c $" ($branch)($i)"
+        let i = (if ($gd == "") { "" } else { "*" })
+        $"(ansi $c) ($branch)($i)"
       } else { "" }
     }
 
-    let psc = if (is-admin) { "red_bold" } else { "green_bold" }
-    let pathseg = $"(ansi $psc)🗀 ($env.PWD | str replace $env.HOME "~")"
+    let psc = if (is-admin) { "red_bold" } else { "default_bold" }
+    let pathseg = $"(ansi default_underline)(ansi $psc)($env.PWD | str replace $env.HOME "~")"
 
-    let time = $"(ansi dark_gray)(date format '%T')(ansi reset)"
-    let duration = (($env.CMD_DURATION_MS + "ms") | into duration --convert sec | str replace " sec" "" | str trim)
-    let duration = $"(ansi reset)(ansi dark_gray_italic)⏲ ($duration)(ansi reset)"
+    # let time = $"(ansi dark_gray)(date format '%T')(ansi reset)"
+    let duration = (($env.CMD_DURATION_MS + "ms") | into duration --convert sec)
+    let duration = $"(ansi dark_gray_italic)($duration)(ansi reset)"
     
     let last_exit = if ($env.LAST_EXIT_CODE == 0) { [] } else {
-      [ (pill "red" $env.LAST_EXIT_CODE) ]
+      [ $"(ansi light_red_bold)✘ ($env.LAST_EXIT_CODE)" ]
     }
     
-    let line1 = ([ $p1 $pathseg $last_exit $git $time $duration ] | flatten | str join $"(ansi reset) ")
-    let line2 = $p2
+    let line1 = ([
+      $line1
+      $pathseg 
+      $last_exit
+      $git
+      $duration
+    ] | flatten | str join $"(ansi reset) ")
     $"($line1)\n($line2)(ansi reset)"
 }
 let-env PROMPT_COMMAND = { create_left_prompt }
