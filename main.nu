@@ -1,11 +1,20 @@
 #!/usr/bin/env nu
 
 let-env CACHIX_CACHE = "colemickens"
+let CACHIX_SIGNING_KEY = if $"CACHIX_SIGNING_KEY_($env.CACHIX_CACHE)" in ($env | transpose | get column0) {
+  $env | get $"CACHIX_SIGNING_KEY_($env.CACHIX_CACHE)"
+} else if ($"/run/secrets/cachix_signing_key_($env.CACHIX_CACHE)" | path exists) {
+  open $"/run/secrets/cachix_signing_key_($env.CACHIX_CACHE)" | str trim
+} else {
+  null
+}
+if ($CACHIX_SIGNING_KEY != null) { let-env CACHIX_SIGNING_KEY = $CACHIX_SIGNING_KEY }
 
 def header [ color: string text: string spacer="▒": string ] {
   let text = $"($text) "
-  let header = $"("" | str rpad -c $spacer -l 2) ($text | str rpad -c $spacer -l 100)"
-  print -e $"(ansi $color)($header)(ansi reset)"
+  let text = $"("" | str rpad -c $spacer -l 2) ($text)"
+  let text = $"($text | str rpad -c $spacer -l 100)"
+  print -e $"(ansi $color)($text)(ansi reset)"
 }
 
 def buildDrv [ drvRef: string ] {
@@ -18,23 +27,30 @@ def buildDrv [ drvRef: string ] {
         | each { |it| ( $it | from json ) }
   )
   
-  header "green_reverse" $"build ($drvRef)"
-  print -e ($evalJobs
-    | where isCached == false
-    | select name isCached)
+  header "green_reverse" $"build local ($drvRef)"
+  let jobs_x86 = ($evalJobs
+    | where system == "x86_64-linux"
+    | where isCached == false)
+  print -e ($jobs_x86 | select name isCached)
+  $jobs_x86 | each { |drv|
+    ^nix build --no-link $drv.drvPath
+  }
 
-  $evalJobs
-    | where isCached == false
-    | each { |drv|
-      ^nix build --no-link $drv.drvPath
-      # let buildStore = 'ssh-ng://colemickens@aarch64.nixos.community'
-      # ssh $buildStore "cachix push colemickens"
-      # ^nix copy --no-check-sigs --to $"ssh-ng://($buildStore)" --derivation $drv.drvPath
-      # $drv.outputs | each { |it|
-      #   ^ssh $buildStore $"echo ($it.out) | cachix push colemickens"
-      #   ^nix build -j0 $it.out
-      # }
+  header "green_reverse" $"build remote ($drvRef)"
+  let jobs_a64 = ($evalJobs
+    | where system == "aarch64-linux"
+    | where isCached == false)
+  print -e ($jobs_a64 | select name isCached)
+  $jobs_a64 | each { |drv|
+    let buildStore = 'colemickens@aarch64.nixos.community'
+    ^nix copy --no-check-sigs --to $"ssh-ng://($buildStore)" --derivation $drv.drvPath
+    $drv.outputs | each { |it|
+      # TODO: this nixpkgs path is probably aarch64-combox specific
+      ^ssh $buildStore $"echo ($it.out) | env CACHIX_SIGNING_KEY='($env.CACHIX_SIGNING_KEY)' nix-shell -I nixpkgs=/run/current-system/nixpkgs -p cachix --command 'cachix push colemickens'"
+      ^nix build -j0 $it.out
     }
+    # ssh $buildStore "cachix push colemickens"
+  }
 
   header "purple_reverse" $"cache: calculate paths: ($drvRef)"
   let pushPaths = ($evalJobs | each { |drv|
@@ -60,15 +76,19 @@ def deployHost [ host: string ] {
   let toplevel = ($topout | get out)
   let target = (tailscale ip --4 $host | str trim)
   
-  print -e (header purple_reverse $"activate [($host)]")
+  header purple_reverse $"activate [($host)]"
   print -e $topout
   let linkProfileCmd = ""
-  ^ssh $"cole@($target)" $"sudo nix build --no-link --profile /nix/var/nix/profiles/system '($toplevel)'"
+  let opts = ([
+    "--no-link"
+    "--option narinfo-cache-negative-ttl 0"
+  ] | str join " ")
+  ^ssh $"cole@($target)" $"sudo nix build ($opts) --profile /nix/var/nix/profiles/system '($toplevel)'"
   ^ssh $"cole@($target)" $"sudo '($toplevel)/bin/switch-to-configuration' switch"
 }
 
 def "main deploy" [ host = "_pc": string ] {
-  print -e (header light_yellow_reverse $"deploy_list [($host)]")
+  header light_yellow_reverse $"deploy_list [($host)]"
 
   let hosts = (if ($host | str starts-with "_") {
     let host_class = ($host | str trim --char "_")
@@ -80,17 +100,15 @@ def "main deploy" [ host = "_pc": string ] {
   print -e $hosts
   
   $hosts | each { |host| 
-    print -e ""
-    print -e (header dark_gray_reverse $" ")
-    print -e (header dark_gray_reverse $" ")
-    print -e ""
+    echo $"▒▒ deploy ($host)" | str rpad -l 100 -c ' ' | ansi gradient --fgstart 0xffffff --fgend 0xfefefe --bgstart 0xfffff --bgend 0xdd00dd
+    print -e
     deployHost $host
     null
   }
 }
 
 def "main inputup" [] {
-  print -e (header yellow_reverse "inputup")
+  header yellow_reverse "inputup"
   let srcdirs = [
     $"($env.HOME)/code/nixpkgs/master"
     $"($env.HOME)/code/nixpkgs/cmpkgs"
@@ -111,60 +129,48 @@ def "main inputup" [] {
   ]
 
   $srcdirs | each { |s|
-    if ($s | path exists) {
-      print -e (header yellow $"inputup: ($s)" "-")
-      # again, I have to put parens here to get it to work
-      (do -i {
-        print -e (header yellow $"inputup: ($s) [rebase --abort]" "-")
-        ^git -C $"($s)" rebase --abort
-      })
-      (do -c {
-        print -e (header yellow $"inputup: ($s) [pull --rebase]" "-")
-        ^git -C $"($s)" pull --rebase
-      })
-      (do -c {
-        print -e (header yellow $"inputup: ($s) [push origin HEAD -f]" "-")
-        ^git -C $"($s)" push origin HEAD -f
-      })
-      null
-    } else {
-      print -e $"skipping ($s)"
-      null
-    }
+    header yellow $"   inputup: ($s)"
+    # man, I just am not sure about why I have to complete ignore
+    ^git -C $s rebase --abort | complete | ignore
+    do -c { ^git -C $s pull --rebase }
+    do -c { ^git -C $s push origin HEAD -f }
   }
 }
 
 def "main pkgup" [] {
-  print -e (header yellow_reverse "pkgup")
+  header yellow_reverse "pkgup"
   do -c { ./pkgs/pkgs-update.nu }
 }
 
 def "main rpiup" [] {
-  print -e (header yellow_reverse "rpiup")
+  header yellow_reverse "rpiup"
   do -c { ./misc/rpi/rpi-update.nu }
 }
 def "main lockup" [] {
-  print -e (header yellow_reverse "lockup")
+  header yellow_reverse "lockup"
   do -c { ^nix flake lock --recreate-lock-file --commit-lock-file }
 }
 
+def "main build" [ drv: string ] {
+  buildDrv $drv
+}
+
+def "main loopup" [] { main up; sleep 3sec; main loopup }
+
+def "main cacheall" [] {
+  buildDrv 'ciJobs.x86_64-linux.default'
+}
+
 def "main up" [] {
-  print -e (header red_reverse "loopup" "▒")
+  header red_reverse "loopup" "▒"
 
   main inputup
   main pkgup
   main rpiup
   main lockup
+  main cacheall
 
   main deploy _pc
-}
-
-def "main loopup" [] { main up; sleep 3sec; main loopup }
-
-def "main ci" [] {
-  print -e (header red_reverse "ci" "▒")
-  main lockup
-  buildDrv 'ciJobs.x86_64-linux.default'
 }
 
 def main [] {

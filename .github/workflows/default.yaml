@@ -22,7 +22,12 @@ jobs:
       run: nix develop '.#ci' -c .github/clean.nu
     - name: init
       run: nix develop '.#ci' -c .github/init.nu
-    - name: "cache-all"
-      env:
-        CACHIX_SIGNING_KEY: "${{ secrets.cachix_signing_key_colemickens }}"
-      run: nix develop '.#ci' -c ./main.nu ci
+    - name: "pkgup"
+      env: { CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}" }
+      run: nix develop '.#ci' -c ./main.nu pkgup
+    - name: "lockup"
+      env: { CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}" }
+      run: nix develop '.#ci' -c ./main.nu lockup
+    - name: "cacheall"
+      env: { CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}" }
+      run: nix develop '.#ci' -c ./main.nu cacheall

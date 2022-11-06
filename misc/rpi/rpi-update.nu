@@ -1,6 +1,6 @@
 #!/usr/bin/env nu
 
-^bash ./misc/rpi/update-rpi-packages.sh
+do -c { ^bash ./misc/rpi/update-rpi-packages.sh }
 
 # nixargs=(--experimental-features 'nix-command flakes')
 # buildargs=(

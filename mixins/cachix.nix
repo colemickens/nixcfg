@@ -17,7 +17,7 @@
       owner = "cole";
       group = "cole";
     };
-    sops.secrets."cachix_signkey_colemickens" = {
+    sops.secrets."cachix_signing_key_colemickens" = {
       owner = "cole";
       group = "cole";
     };

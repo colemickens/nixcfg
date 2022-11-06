@@ -35,6 +35,9 @@ in
               insert = "bar";
               select = "underline";
             };
+            file-picker = {
+              hidden = false;
+            };
             gutters = [ "diagnostics" "line-numbers" "spacer" ];
             true-color = true;
             lsp = {
