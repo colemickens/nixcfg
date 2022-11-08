@@ -4,7 +4,7 @@ let
   ncb = inputs.nix-coreboot;
   cb = ncb.lib.buildCoreboot {
     name = "coreboot-asus-p77h-i";
-    system = pkgs.system;
+    system = pkgs.hostPlatform.system;
     crossSystem = lib.systems.examples.gnu32;
     configText = builtins.readFile ./coreboot-config;
   };

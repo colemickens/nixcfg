@@ -32,7 +32,6 @@
     jj = { url = "github:martinvonz/jj"; inputs."nixpkgs".follows = "nixpkgs"; };
     zellij = { url = "github:zellij-org/zellij"; };
     marksman = { url = "github:the-mikedavis/marksman/flake"; inputs."nixpkgs".follows = "nixpkgs"; };
-    # (todo):
     nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; inputs."nixpkgs".follows = "nixpkgs"; };
 
     # experimental:
@@ -93,9 +92,7 @@
     #hydra.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  ## ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  ## NIX_CONFIG
-  ## ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  ## NIX_CONFIG ###############################################################
   nixConfig = {
     extra-substituters = [
       "https://cache.nixos.org"
@@ -118,8 +115,8 @@
   outputs = inputs:
     let
       lib = inputs.lib-aggregate.lib;
-      hydralib = import ./lib/hydralib.nix;
       flake-utils = inputs.nixlib.lib.flake-utils;
+      systems = [ "x86_64-linux" "aarch64-linux" "riscv64-linux" ];
 
       mkSystem = n: v: (v.pkgs.lib.nixosSystem ({
         system = v.sys;
@@ -134,9 +131,9 @@
           # installer = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; host = "installer"; };
         };
         phone = rec {
-          pinephone = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
-          blueline = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
-          enchilada = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
+          # pinephone = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
+          # blueline = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
+          # enchilada = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           # x_pinephone = pinephone // { sys = "x86_64-linux"; };
           # x_blueline = blueline // { sys = "x86_64-linux"; };
           # x_enchilada = enchilada // { sys = "x86_64-linux"; };
@@ -147,7 +144,7 @@
           rpithreebp1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpizerotwo1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           openstick = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
-          visionfive1 = { pkgs = inputs.nixpkgs; sys = "riscv64-linux"; };
+          visionfiveone1 = { pkgs = inputs.nixpkgs; sys = "riscv64-linux"; };
         };
         pc = {
           carbon = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
@@ -163,79 +160,78 @@
       toplevels = (lib.mapAttrs (_: v: v.config.system.build.toplevel) nixosConfigurations);
 
       ## SPECIAL OUTPUTS ######################################################
-      images = {
-        openstick = {
-          inherit (nixosConfigurations.openstick.config.mobile.outputs.android)
-            android-flashable-system android-flashable-bootimg android-abootimg/*android-bootimg*/;
+      images = let cfg = n: nixosConfigurations."${n}".config; in
+        {
+          # installer = (cfg "installer").config.system.build.isoImage;
+          openstick = {
+            inherit ((cfg "openstick").mobile.outputs.android)
+              android-flashable-system android-flashable-bootimg
+              android-abootimg android-bootimg;
+          };
+          # eche96 = nixosConfigurations.openstick.config.mobile.outputs.android;
         };
-        # eche96 = nixosConfigurations.openstick.config.mobile.outputs.android;
-      };
-      imagePackages = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues images));
-    in
-    ({
-      ## PASSTHROUGH ##########################################################
-      inherit inputs lib hydralib;
-      inherit nixosConfigsEx nixosConfigs nixosConfigurations toplevels;
 
-      ## CUSTOM PAYLOADS ######################################################
-      # installer = nixosConfigurations.installer.config.system.build.isoImage;
-      inherit images;
-
-      ## NIXOS_MODULES #########################################################
+      ## NIXOS_MODULES # TODO: we don't use these? #############################
       nixosModules = {
-        #   hydra-auto = import ./modules/hydra-auto.nix;
-        #   otg = import ./modules/otg.nix;
-        #   other-arch-vm = import ./modules/other-arch-vm.nix;
+        loginctl-linger = import ./modules/loginctl-linger.nix;
+        ttys = import ./modules/ttys.nix;
+        other-arch-vm = import ./modules/other-arch-vm.nix;
+        webrtcsink = import ./modules/webrtcsink.nix;
       };
 
       ## OVERLAY ################################################################
       overlays = {
-        default = (final: prev: { });
+        default = (final: prev:
+          # TODO: must be a better way?
+          let __colemickens_nixcfg_pkgs = rec {
+            test = prev.hello;
+          }; in
+          __colemickens_nixcfg_pkgs // { inherit __colemickens_nixcfg_pkgs; });
       };
-    }) //
-    (
+    in
+    (rec {
+      inherit nixosConfigsEx nixosConfigs nixosConfigurations;
+      inherit images nixosModules overlays;
+    }) // (
       ## SYSTEM-SPECIFIC OUTPUTS ##############################################
-      lib.flake-utils.eachSystem [ "x86_64-linux" "aarch64-linux" "riscv64-linux" ] (system:
+      lib.flake-utils.eachSystem systems (system:
         let
-          pkgs = import inputs.nixpkgs { inherit system; };
-          pkgs_ = import inputs.nixpkgs { inherit system; config.allowUnfree = true; };
-          fullPkgs = import inputs.nixpkgs { inherit system; config.overlays = [ inputs.self.overlays.default inputs.nixpkgs-wayland.overlays.default ]; };
-
-          fcd = pkgs.callPackage ./lib/force_cached.nix { };
-          filterPkgSystem = _p: lib.filterAttrs (n: v: (system) == _p.system); # can't we check pkg outptu system attr like evreything else
+          pkgs_ = _unfree: import inputs.nixpkgs {
+            inherit system;
+            overlays = [ overlays.default ];
+            config.allowAliases = false;
+            config.allowUnfree = _unfree;
+          };
+          pkgs = pkgs_ false;
+          pkgsUnfree = pkgs_ true;
+          # internal helpers:
+          tfout = import ./cloud { inherit (inputs) terranix; inherit pkgs; };
+          mkShell = (name: import ./shells/${name}.nix { inherit inputs pkgs; });
         in
-        {
-          ## DEVSHELLS
-          # devenv includes devtools
-          devShells =
-            let
-              mkShell = (name: import ./shells/${name}.nix { inherit pkgs; });
-              shells = (lib.genAttrs [ "ci" "devenv" "devtools" "gstreamer" "uutils" ] mkShell);
-            in
-            (shells // { default = shells.devtools; });
+        rec {
+          inherit pkgs pkgsUnfree;
 
-          ## APPS
-          apps = let tfout = import ./cloud { inherit (inputs) terranix; inherit pkgs; }; in
-            ({
-              # Terraform
-              tf = { type = "app"; program = tfout.tf.outPath; };
-              tf-apply = { type = "app"; program = tfout.apply.outPath; };
-              tf-destroy = { type = "app"; program = tfout.destroy.outPath; };
-            });
+          ## DEVSHELLS # some of 'em kinda compose #############################
+          devShells = (lib.genAttrs [ "ci" "devenv" "devtools" "gstreamer" "uutils" ] mkShell)
+          // { default = devShells.devtools; };
 
-          ## PACKAGES #########################################################
-          packages = (inputs.self.overlays.default (pkgs_) (pkgs_));
-          inherit pkgs; # overlayed nixpkgs (nixpkgs-wayland, default)
-          inherit pkgs_; # non-free nixpkgs
+          ## APPS ##############################################################
+          apps = {
+            tf = { type = "app"; program = tfout.tf.outPath; };
+            tf-apply = { type = "app"; program = tfout.apply.outPath; };
+            tf-destroy = { type = "app"; program = tfout.destroy.outPath; };
+          };
 
-          ## NETBOOTS (paused: add grub => nix-netboot-server) ################
+          ## PACKAGES ##########################################################
+          packages = (pkgs.__colemickens_nixcfg_pkgs);
+
+          ## NETBOOTS (paused: add grub => nix-netboot-server) #################
           # netboots_ = lib.genAttrs
           #   [ "rpifour1" ]
           #   # [ "x_risky" "rpifour1" "rpithreebp1" "rpizerotwo1" ]
           #   (h: nixosConfigurations.${h}.config.system.build.extras.nfsboot);
 
-
-          ## CI JOBS ##########################################################
+          ## CI JOBS ###########################################################
           ciJobs = {
             default = ({ }
             // (lib.genAttrs [ "devtools" "ci" "devenv" ] (name: inputs.self.devShells.${system}.${name}.inputDerivation))

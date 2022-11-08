@@ -27,8 +27,6 @@ in {
     boot = {
       loader.generic-extlinux-compatible.useGenerationDeviceTree = true;
 
-      kernelPackages = lib.mkDefault null;
-
       kernelParams = [
         "cma=512M"
         "snd_bcm2835.enable_hdmi=1"

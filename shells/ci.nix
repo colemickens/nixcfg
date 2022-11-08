@@ -1,4 +1,4 @@
-{ pkgs }:
+{ pkgs, inputs, ... }:
 
 let
   minimalMkShell = import ./_minimal.nix { inherit pkgs; };
@@ -20,7 +20,7 @@ minimalMkShell {
       mercurial
       nushell
     ]) ++ [
-      inputs.nix-eval-jobs.outputs.packages.${system}.default
+      inputs.nix-eval-jobs.outputs.packages.${pkgs.hostPlatform.system}.default
     ]
   );
 }

@@ -52,10 +52,10 @@ def buildRemoteDrvs [ drvs: list arch: string buildHost: string ] {
     let outs  = (($drvs | get outputs | flatten | get out) | flatten)
     let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str collect)
 
-    let nixopts = (if buildHost == "localhost" { $nixopts } else {
-      $nixopts + [ "--store" $"ssh-ng://($buildHost)" ]
+    let nixopts = (if ($buildHost == "localhost") { $nixopts } else {
+      $nixopts | append [ "--store" $"ssh-ng://($buildHost)" ]
     })
-    if (buildHost != "localhost") {
+    if ($buildHost != "localhost") {
       ^nix copy --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvPaths
     }
     ^$builder build $nixopts -L $nixopts $drvPaths
@@ -247,19 +247,17 @@ def "main ci next" [] {
     git worktree add $p
   }
   
-  do -c {
+  do {
     git -C $p rebase main
 
-    do -c {
+    do {
       cd $p
-      print -e "relock"
       nix flake lock --recreate-lock-file --override-input 'nixpkgs' $"github:colemickens/nixpkgs/cmpkgs-next-($id)" --override-input 'home-manager' $"github:colemickens/home-manager/cmhm-next-($id)" --commit-lock-file
-      print -e "relocked"
-    }
   
-    main ci eval
-    main ci build
-    main ci push
+      ./main.nu ci eval
+      ./main.nu ci build
+      ./main.nu ci push
+    }
     
     git push origin $"nixcfg_main-next-($id):main-next-($id)" -f
   }

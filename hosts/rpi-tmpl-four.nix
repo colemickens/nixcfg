@@ -43,36 +43,6 @@
       };
     };
 
-    # boot.kernelPackages = pkgs.linuxPackages_5_20;
-    # <v3d>
-    boot.kernelPackages = pkgs.linuxPackages_6_0;
-    # boot.kernelPackages = pkgs.linuxPackages_5_18;
-    # boot.kernelPatches = [
-    #   {
-    #     name = "v3d-enable-part1";
-    #     patch = pkgs.fetchpatch {
-    #       url = "https://patchwork.kernel.org/series/646576/mbox/";
-    #       excludes = [ "Documentation/*" ];
-    #       sha256 = "sha256-rn2+D2NjUTbfUtLb7uDBTzIpYIRo90p9SqxB1a2/XuY=";
-    #     };
-    #   }
-    #   {
-    #     name = "v3d-enable-part2";
-    #     patch = pkgs.fetchpatch {
-    #       url = "https://patchwork.kernel.org/series/647129/mbox/";
-    #       excludes = [ "Documentation/*" ];
-    #       sha256 = "sha256-+ohSoSvdTEqVCgWDIYy3Mq8aulDNYtnHaQ1K85y3e4k=";
-    #     };
-    #   }
-    #   {
-    #     name = "vc4-enable-cec";
-    #     patch = null;
-    #     extraConfig = ''
-    #       DRM_VC4_HDMI_CEC y
-    #     '';
-    #   }
-    # ];
-    # </v3d>
     boot.blacklistedKernelModules = [ "snd_bcm2835" ];
 
     nixcfg.common.defaultNetworking = false;

@@ -1,4 +1,4 @@
-{ pkgs }@args:
+{ pkgs, inputs }@args:
 
 let
   llvmPackages = pkgs.llvmPackages_13;
@@ -74,7 +74,8 @@ let
     + ":" + "${pkgs.gst_all_1.gst-libav}/lib/gstreamer-1.0"
     # + ":" + "${pkgs.gst_all_1.gst-omx}/lib/gstreamer-1.0"
   ;
-  pkgs = import args.pkgs {
+  pkgs = import args.pkgs.path {
+    system = args.pkgs.hostPlatform.system;
     overlays = [ gst-overlay ];
   };
   minimalMkShell = import ./_minimal.nix { inherit pkgs; };
@@ -89,14 +90,14 @@ minimalMkShell {
   GST_PLUGIN_SYSTEM_PATH = gstreamerPath;
 
   nativeBuildInputs = with pkgs; [
-    (inputs.fenix.packages.${system}.latest.withComponents [
+    (args.inputs.fenix.packages.${system}.latest.withComponents [
       "cargo"
       "clippy"
       "rust-src"
       "rustc"
       "rustfmt"
     ])
-    inputs.fenix.packages.${system}.rust-analyzer
+    args.inputs.fenix.packages.${system}.rust-analyzer
     cargo-watch
     bacon
     llvmPackages.lldb

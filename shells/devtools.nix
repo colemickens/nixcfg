@@ -1,4 +1,4 @@
-{ pkgs }:
+{ pkgs, inputs, ... }:
 
 let
   minimalMkShell = import ./_minimal.nix { inherit pkgs; };
@@ -7,7 +7,7 @@ minimalMkShell {
   name = "devtools";
 
   nativeBuildInputs = with pkgs; [
-    (inputs.fenix.packages.${system}.latest.withComponents [
+    (inputs.fenix.packages.${pkgs.hostPlatform.system}.latest.withComponents [
       "cargo"
       "clippy"
       "rust-src"
@@ -15,16 +15,15 @@ minimalMkShell {
       "rustfmt"
     ])
 
-    inputs.fenix.packages.${system}.rust-analyzer
-    cargo-watch # TODO ??
+    inputs.fenix.packages.${pkgs.hostPlatform.system}.rust-analyzer
     bacon # TODO ??
+
+    /* nix tools */
+    nix
     rnix-lsp
 
     /*tools */
-    cmake
-    pkg-config
     lldb
-    python3
     /*nodejs*/
     nodejs
     yarn
@@ -35,7 +34,7 @@ minimalMkShell {
     godef /*golint*/
     gopls
 
-    inputs.nix-eval-jobs.outputs.packages.${system}.default
-    inputs.marksman.outputs.packages.${system}.default
+    inputs.nix-eval-jobs.outputs.packages.${pkgs.hostPlatform.system}.default
+    inputs.marksman.outputs.packages.${pkgs.hostPlatform.system}.default
   ];
 }

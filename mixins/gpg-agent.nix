@@ -7,7 +7,6 @@ let
   sysPkgs = with pkgs; [ gcr ];
   def = {
     gnupgPkg = pkgs.gnupg;
-    #gnupgPkg = inputs.temp-gpg-pr.legacyPackages.${pkgs.hostPlatform.system}.gnupg;
     #gnupgPkg = pkgs.callPackage "${inputs.temp-gpg-pr}/pkgs/tools/security/gnupg/23.nix" {};
   };
   bad = def // {

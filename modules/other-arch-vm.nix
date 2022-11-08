@@ -4,7 +4,7 @@
 
 let
   # riscvBios = let riscvpkgs = import "${inputs.riscvpkgs}" {
-  #   system = pkgs.system;
+  #   system = pkgs.hostPlatform.system;
   #   crossSystem = lib.systems.examples.riscv64;
   #   config = { overlays = [ inputs.riscv64.overlay ]; };
   # }; in "${riscvpkgs.opensbi}/share/opensbi/lp64/generic/firmware/fw_jump.bin";
@@ -242,7 +242,7 @@ in
     systemd.services = lib.mkMerge (lib.flip lib.mapAttrsToList config.services.buildVMs (name: cfg:
       let
         vm = cfg.vmpkgs.lib.nixosSystem {
-          system = pkgs.system;
+          system = pkgs.hostPlatform.system;
           specialArgs = { inherit inputs; };
           modules = [
             cfg.config

@@ -1,4 +1,4 @@
-{ pkgs }:
+{ pkgs, inputs, ... }:
 
 let
   llvmPackages = pkgs.llvmPackages_13;
@@ -21,7 +21,7 @@ minimalMkShell {
   RUST_BACKTRACE = 1;
   GST_PLUGIN_SYSTEM_PATH = gstreamerPath;
 
-  nativeBuildInputs = inputs.self.devShells.${system}.devtools.nativeBuildInputs ++ (with pkgs; [
+  nativeBuildInputs = inputs.self.devShells.${pkgs.hostPlatform.system}.devtools.nativeBuildInputs ++ (with pkgs; [
     pkg-config
 
     /* coreboot */
@@ -42,7 +42,7 @@ minimalMkShell {
     clang
     libusb1
     gpgme
-    libgpgerror
+    libgpg-error
     libgit2
     git # passrs
     dbus # passrs libsecret
