@@ -7,6 +7,10 @@ on:
 jobs:
   "default":
     runs-on: ubuntu-latest
+    env:
+      NIX_BUILDER: "nix"
+      BUILDER_X86: "localhost"
+      CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}"
     steps:
     - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v18
@@ -23,22 +27,14 @@ jobs:
     - name: init
       run: nix develop '.#ci' -c .github/init.nu
     - name: "pkgup"
-      env: { CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}" }
       run: nix develop '.#ci' -c ./main.nu pkgup
     - name: "lockup"
-      env: { CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}" }
       run: nix develop '.#ci' -c ./main.nu lockup
     - name: "ci eval"
-      env: { CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}" }
       run: nix develop '.#ci' -c ./main.nu ci eval
     - name: "ci build"
-      env:
-        NIX_BUILDER: "nix"
-        CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}"
       run: nix develop '.#ci' -c ./main.nu ci build
     - name: "ci push"
-      env: { CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}" }
       run: nix develop '.#ci' -c ./main.nu ci push
     - name: "ci next"
-      env: { CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}" }
       run: nix develop '.#ci' -c ./main.nu ci next

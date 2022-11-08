@@ -15,20 +15,20 @@
     ../mixins/gh.nix
     ../mixins/gopass.nix
     ../mixins/helix.nix
-    ../mixins/ion.nix
+    # ../mixins/ion.nix
     ../mixins/jj.nix
-    ../mixins/joshuto.nix
-    ../mixins/lorri.nix
+    # ../mixins/joshuto.nix
+    # ../mixins/lorri.nix
     ../mixins/nushell.nix
     ../mixins/pijul.nix
-    ../mixins/skim.nix
-    ../mixins/solo2.nix
-    ../mixins/starship.nix
+    # ../mixins/skim.nix
+    # ../mixins/solo2.nix
+    # ../mixins/starship.nix
     ../mixins/sshd.nix
     ../mixins/tailscale.nix
     ../mixins/xdg.nix
     ../mixins/zellij.nix
-    ../mixins/zoxide.nix
+    # ../mixins/zoxide.nix
   ];
 
   config = {
@@ -60,7 +60,7 @@
         neovim.enable = true;
       };
       home.packages = with pkgs; [
-        (pkgs.callPackage ../pkgs/commands.nix {})
+        (pkgs.callPackage ../pkgs/commands.nix { })
 
         # <rust pkgs>
         # https://zaiste.net/posts/shell-commands-rust/
@@ -91,12 +91,8 @@
         python3Packages.pywatchman
         watchman
         watchexec
-        tpm2-tools
-        
-        nix-output-monitor
 
-        cava
-        cli-visualizer
+        nix-output-monitor
 
         pipes-rs
 
@@ -140,7 +136,6 @@
         jq
         openssh
 
-
         linuxPackages.cpupower
         linuxPackages.usbip
 
@@ -148,21 +143,15 @@
         yt-dlp
         imgurbash2
 
-        # autossh
-        # mosh
-        # sshuttle
+        mosh
         # nix-tree nix-du ncdu nix-prefetch nixpkgs-review
-        # git-crypt
         # mitmproxy
-        # sshfs cifs-utils ms-sys ntfs3g
-        # github-cli cvs mercurial subversion git-lfs
         # ? git-absorb
       ]
-      ++ lib.optionals (pkgs.hostPlatform.system == "x86_64-linux") [
-
-      ] ++ lib.optionals (pkgs.hostPlatform.system == "aarch64-linux") [
-        #
-      ]
+      ++ lib.optionals (pkgs.hostPlatform.system == "x86_64-linux")
+        [ ]
+      ++ lib.optionals (pkgs.hostPlatform.system == "aarch64-linux")
+        [ ]
       ;
     };
   };

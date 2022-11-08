@@ -7,6 +7,7 @@ let REPO = "nixcfg"
 
 for i in 1..20 {
   let runs = (^gh api $"repos/($USER)/($REPO)/actions/runs" | from json)
+  print -e $runs
   let ids = ($runs.workflow_runs
     | where ($it.name != "default" && $it.name != "clean")
     | get "id")

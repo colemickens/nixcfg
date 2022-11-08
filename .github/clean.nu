@@ -80,3 +80,8 @@ run-external "sudo" "rm" "-rf" $dirs
 
 let freespace = ((^df --output=avail -H "/") | tail -n1 | str trim)
 print -e $"(ansi blue)df = ($freespace)(ansi reset)"
+
+let p = "/" 
+print -e $"(ansi light_yelow_reverse) running dust ($p)"
+^dust "$p"
+

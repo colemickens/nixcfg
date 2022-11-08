@@ -3,9 +3,9 @@
 let cidir = "/tmp/nixci"; mkdir $cidir
 let nixpkgs = "https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # used by nix-shell cachix
 let nixopts = ([ "--no-link" "--option" "narinfo-cache-negative-ttl" "0" ])
-let builder = if ("NIX_BUILDER" in ($env | transpose | get column0)) {
-  $env | get NIX_BUILDER | str trim
-} else { "nom" }
+let builder = if (not ("NIX_BUILDER" in ($env | transpose | get column0))) { "nom" } else { $env | get NIX_BUILDER | str trim }
+let builder_x86 = if (not ("BUILDER_X86" in ($env | transpose | get column0))) { tailscale ip --4 "slynux" | str trim } else { $env | get "BUILDER_X86" | str trim }
+let builder_a64 = if (not ("BUILDER_A64" in ($env | transpose | get column0))) { "colemickens@aarch64.nixos.community" } else { $env | get "BUILDER_A64" | str trim }
 
 let-env CACHIX_CACHE = "colemickens"
 let cachixkey = ($"CACHIX_SIGNING_KEY_($env.CACHIX_CACHE)" | str upcase)
@@ -16,8 +16,7 @@ let-env CACHIX_SIGNING_KEY = if ($cachixkey in ($env | transpose | get column0))
 }
 
 def header [ color: string text: string spacer="▒": string ] {
-  let text = $"($text) "
-  let text = $"("" | str rpad -c $spacer -l 2) ($text)"
+  let text = $"("" | str rpad -c $spacer -l 2) ($text) "
   let text = $"($text | str rpad -c $spacer -l 100)"
   print -e $"(ansi $color)($text)(ansi reset)"
 }
@@ -40,8 +39,8 @@ def evalDrv [ ref: string ] {
 
 def buildDrvs [...drvs] {
   let drvs = ($drvs | flatten)
-  buildRemoteDrvs $drvs "x86_64-linux" $"cole@(^tailscale ip --4 slynux | str trim)"
-  buildRemoteDrvs $drvs "aarch64-linux" $"colemickens@aarch64.nixos.community"
+  buildRemoteDrvs $drvs "x86_64-linux" $builder_x86
+  buildRemoteDrvs $drvs "aarch64-linux" $builder_a64
 }
 
 def buildRemoteDrvs [ drvs: list arch: string buildHost: string ] {
@@ -53,21 +52,20 @@ def buildRemoteDrvs [ drvs: list arch: string buildHost: string ] {
     let outs  = (($drvs | get outputs | flatten | get out) | flatten)
     let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str collect)
 
-    ^nix copy --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvPaths
-    if $env.LAST_EXIT_CODE != 0 { error {msg:"Adfadsfsdf"} }
-
-    ^$builder build $nixopts -L --store $"ssh-ng://($buildHost)" $drvPaths
-    if $env.LAST_EXIT_CODE != 0 { error {msg:"Adfadsfsdf"} }
+    let nixopts = (if buildHost == "localhost" { $nixopts } else {
+      $nixopts + [ "--store" $"ssh-ng://($buildHost)" ]
+    })
+    if (buildHost != "localhost") {
+      ^nix copy --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvPaths
+    }
+    ^$builder build $nixopts -L $nixopts $drvPaths
 
     let sshExe = ([
       $"printf '%s' '($outsStr)' | env CACHIX_SIGNING_KEY='($env.CACHIX_SIGNING_KEY)' "
       $"nix-shell -I nixpkgs=($nixpkgs) -p cachix --command 'cachix push colemickens'"
     ] | str join ' ')
     ^ssh $buildHost $sshExe
-    if $env.LAST_EXIT_CODE != 0 { error {msg:"Adfadsfsdf"} }
-    
     ^nix build $nixopts -L -j0 $outs
-    if $env.LAST_EXIT_CODE != 0 { error {msg:"Adfadsfsdf"} }
   }
 }
 
