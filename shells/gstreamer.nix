@@ -1,7 +1,6 @@
-{ inputs, system, minimalMkShell }:
+{ pkgs }@args:
 
 let
-  _pkgs = inputs.nixpkgs.legacyPackages.${system};
   llvmPackages = pkgs.llvmPackages_13;
 
   # gst_new = gst_all_1.override{
@@ -75,10 +74,10 @@ let
     + ":" + "${pkgs.gst_all_1.gst-libav}/lib/gstreamer-1.0"
     # + ":" + "${pkgs.gst_all_1.gst-omx}/lib/gstreamer-1.0"
   ;
-  pkgs = import inputs.nixpkgs {
-    system = _pkgs.system;
+  pkgs = import args.pkgs {
     overlays = [ gst-overlay ];
   };
+  minimalMkShell = import ./_minimal.nix { inherit pkgs; };
 in
 minimalMkShell {
   # TODO use something else for system?

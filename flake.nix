@@ -209,10 +209,7 @@
           # devenv includes devtools
           devShells =
             let
-              mkShell = (name: import ./shells/${name}.nix {
-                inherit inputs system;
-                minimalMkShell = (import ./lib/minimalMkShell.nix { inherit pkgs; });
-              });
+              mkShell = (name: import ./shells/${name}.nix { inherit pkgs; });
               shells = (lib.genAttrs [ "ci" "devenv" "devtools" "gstreamer" "uutils" ] mkShell);
             in
             (shells // { default = shells.devtools; });

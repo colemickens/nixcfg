@@ -1,7 +1,7 @@
-{ inputs, system, minimalMkShell }:
+{ pkgs }:
 
 let
-  pkgs = inputs.nixpkgs.legacyPackages.${system};
+  minimalMkShell = import ./_minimal.nix { inherit pkgs; };
 in
 minimalMkShell {
   name = "ci";
@@ -10,14 +10,17 @@ minimalMkShell {
   #   # activate secrets?
   # '';
 
-  nativeBuildInputs = with pkgs; [
-    cachix
-    cacert
-    jless
-    mercurial
-    git
-    gh
-    nushell
-    inputs.nix-eval-jobs.outputs.packages.${system}.default
-  ];
+  nativeBuildInputs = (
+    (with pkgs; [
+      cachix
+      cacert
+      du-dust
+      git
+      gh
+      mercurial
+      nushell
+    ]) ++ [
+      inputs.nix-eval-jobs.outputs.packages.${system}.default
+    ]
+  );
 }

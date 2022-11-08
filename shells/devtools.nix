@@ -1,8 +1,9 @@
-{ inputs, system, minimalMkShell }:
+{ pkgs }:
 
 let
-  pkgs = inputs.nixpkgs.legacyPackages.${system};
-in minimalMkShell { # TODO use something else for system?
+  minimalMkShell = import ./_minimal.nix { inherit pkgs; };
+in
+minimalMkShell {
   name = "devtools";
 
   nativeBuildInputs = with pkgs; [
@@ -19,9 +20,20 @@ in minimalMkShell { # TODO use something else for system?
     bacon # TODO ??
     rnix-lsp
 
-    /*tools */ cmake pkg-config lldb python3
-    /*nodejs*/ nodejs yarn
-    /*golang*/ go go-outline gotools godef /*golint*/ gopls
+    /*tools */
+    cmake
+    pkg-config
+    lldb
+    python3
+    /*nodejs*/
+    nodejs
+    yarn
+    /*golang*/
+    go
+    go-outline
+    gotools
+    godef /*golint*/
+    gopls
 
     inputs.nix-eval-jobs.outputs.packages.${system}.default
     inputs.marksman.outputs.packages.${system}.default
