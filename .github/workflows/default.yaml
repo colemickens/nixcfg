@@ -39,3 +39,6 @@ jobs:
     - name: "ci push"
       env: { CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}" }
       run: nix develop '.#ci' -c ./main.nu ci push
+    - name: "ci next"
+      env: { CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}" }
+      run: nix develop '.#ci' -c ./main.nu ci next

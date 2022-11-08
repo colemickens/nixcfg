@@ -213,3 +213,57 @@ def "main ci" [] {
   main ci push
 }
 
+def updateInput [ name: string baseBr: string newBr: string upRemoteName: string upstreamUrl: string upstreamBr: string ] {
+  let originUrl = $"git@github.com:colemickens/($name)"
+  let baseDir = $"($env.PWD)/../($name)/($baseBr)"
+  let newDir = $"($env.PWD)/../($name)/($newBr)"
+  if (not ($baseDir | path exists)) {
+    do -c { mkdir $baseDir }
+    do -c { git clone $originUrl -b $baseBr $baseDir }
+  }
+  if (not ($newDir | path exists)) {
+    echo $"check ($newDir)"
+    (git -C $baseDir remote add "$upRemoteName" $upstreamUrl)
+    rm -rf $newDir
+    (git -C $baseDir worktree prune)
+    (git -C $baseDir branch -D $newBr)
+    do -c { git -C $baseDir worktree add $newDir }
+  }
+
+  do -c {
+    git -C $newDir reset --hard $baseBr
+    git -C $newDir rebase $"($upRemoteName)/($upstreamBr)"
+    git -C $newDir push origin HEAD
+  }
+}
+
+def "main ci next" [] {
+  let id = "xyz"
+  updateInput $"home-manager" "cmhm" $"cmhm-next-($id)" "nix-community" "https://github.com/nix-community/home-manager" "master"
+  updateInput $"nixpkgs" "cmpkgs" $"cmpkgs-next-($id)" "nixos" "https://github.com/nixos/nixpkgs" "nixos-unstable"
+  
+  let p = $"($env.PWD)/../nixcfg_main-next-($id)"
+  if (not ($p | path exists)) {
+    rm -rf $p
+    git worktree prune
+    git worktree add $p
+  }
+  
+  do -c {
+    git -C $p rebase main
+
+    do -c {
+      cd $p
+      print -e "relock"
+      nix flake lock --recreate-lock-file --override-input 'nixpkgs' $"github:colemickens/nixpkgs/cmpkgs-next-($id)" --override-input 'home-manager' $"github:colemickens/home-manager/cmhm-next-($id)" --commit-lock-file
+      print -e "relocked"
+    }
+  
+    main ci eval
+    main ci build
+    main ci push
+    
+    git push origin $"nixcfg_main-next-($id):main-next-($id)" -f
+  }
+}
+
