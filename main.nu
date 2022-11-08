@@ -1,6 +1,12 @@
 #!/usr/bin/env nu
 
 let cidir = "/tmp/nixci"; mkdir $cidir
+let nixpkgs = "https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # used by nix-shell cachix
+let nixopts = ([ "--no-link" "--option" "narinfo-cache-negative-ttl" "0" ])
+let builder = if ("NIX_BUILDER" in ($env | transpose | get column0)) {
+  $env | get NIX_BUILDER | str trim
+} else { "nom" }
+
 let-env CACHIX_CACHE = "colemickens"
 let cachixkey = ($"CACHIX_SIGNING_KEY_($env.CACHIX_CACHE)" | str upcase)
 let-env CACHIX_SIGNING_KEY = if ($cachixkey in ($env | transpose | get column0)) {
@@ -17,99 +23,97 @@ def header [ color: string text: string spacer="▒": string ] {
 }
 
 def evalDrv [ ref: string ] {
-  let r = $".#($ref)"
-  header "blue_reverse" $"eval ($r)"
-  (^nix-eval-jobs
-    --flake $r
+  header "light_cyan_reverse" $"eval: ($ref)"
+  let eval = (^nix-eval-jobs
+    --flake $".#($ref)"
     --gc-roots-dir $"($cidir)/gcroots"
-    --check-cache-status
-      | each { |it| ( $it | from json ) })
+    --check-cache-status)
+  if $env.LAST_EXIT_CODE != 0 {
+    error {msg:"Adfadsfsdf"}
+  }
+  let out = ($eval
+    | from ssv --noheaders
+    | get column1
+    | each { |it| ($it | from json ) })
+  $out
 }
 
-def buildDrvs [ drvList: list ] {
-  let drvs = ($drvList | where isCached == false | where system == "x86_64-linux")
-  let opts = ([ "--no-link" "--option" "narinfo-cache-negative-ttl" "0" ])
-  if (($drvs | length) > 0) {
-    header "green_reverse" $"build: local"
-    print -e ($drvs | select name isCached)
-    let drvPaths = ($drvs | get "drvPath")
-    ^nom build --keep-going --no-link $drvPaths
-    if $env.LAST_EXIT_CODE != 0 {
-      error {msg:"Adfadsfsdf"}
-    }
-  }
+def buildDrvs [...drvs] {
+  let drvs = ($drvs | flatten)
+  buildRemoteDrvs $drvs "x86_64-linux" $"cole@(^tailscale ip --4 slynux | str trim)"
+  buildRemoteDrvs $drvs "aarch64-linux" $"colemickens@aarch64.nixos.community"
+}
 
-  let buildStore = 'colemickens@aarch64.nixos.community'
-  let drvs = ($drvList | where isCached == false | where system == "aarch64-linux")
+def buildRemoteDrvs [ drvs: list arch: string buildHost: string ] {
+  let drvs = ($drvs | where isCached == false | where system == $arch)
+  header "light_blue_reverse" $"build: ($arch) ($drvs | length) drvs on ($buildHost)"
   if (($drvs | length) > 0) {
-    header "green_reverse" $"build: remote ($buildStore)"
     print -e ($drvs | select name isCached)
     let drvPaths = ($drvs | get "drvPath")
     let outs  = (($drvs | get outputs | flatten | get out) | flatten)
     let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str collect)
-    do -c { ^nix copy --no-check-sigs --to $"ssh-ng://($buildStore)" --derivation $drvPaths } | complete | select "exit_code"
-    ^nix build -L $opts --store $"ssh-ng://($buildStore)" $drvPaths
-    if $env.LAST_EXIT_CODE != 0 {
-      error {msg:"Adfadsfsdf"}
-    }
+
+    ^nix copy --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvPaths
+    if $env.LAST_EXIT_CODE != 0 { error {msg:"Adfadsfsdf"} }
+
+    ^$builder build $nixopts -L --store $"ssh-ng://($buildHost)" $drvPaths
+    if $env.LAST_EXIT_CODE != 0 { error {msg:"Adfadsfsdf"} }
 
     let sshExe = ([
       $"printf '%s' '($outsStr)' | env CACHIX_SIGNING_KEY='($env.CACHIX_SIGNING_KEY)' "
-      $"nix-shell -I nixpkgs=/run/current-system/nixpkgs -p cachix --command 'cachix push colemickens'"
+      $"nix-shell -I nixpkgs=($nixpkgs) -p cachix --command 'cachix push colemickens'"
     ] | str join ' ')
-    ^ssh $buildStore $sshExe
+    ^ssh $buildHost $sshExe
     if $env.LAST_EXIT_CODE != 0 { error {msg:"Adfadsfsdf"} }
     
-    ^nix build $opts -j0 $outs
+    ^nix build $nixopts -L -j0 $outs
     if $env.LAST_EXIT_CODE != 0 { error {msg:"Adfadsfsdf"} }
   }
 }
 
 def cacheDrvs [ drvs: list ] {
-  header "purple_reverse" $"cache: ??"
   # we intentionally consider all outs that are local as possible pushables, even if isCached (its a misnomer)
   let outs  = (($drvs | get outputs | flatten | get out) | flatten | where ($it | path exists))
   let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str collect)
+  header "purple_reverse" $"cache: ($outs | length) paths"
   echo $outsStr | ^cachix push $env.CACHIX_CACHE
 }
 
 def deployHost [ host: string ] {
+  header light_gray_reverse $"deploy: ($host)"
   let jobs = evalDrv $"toplevels.($host)"
   buildDrvs $jobs
+  cacheDrvs $jobs
   let topout = ($jobs | get "outputs" | flatten | get "out" | flatten | first)
   let target = (tailscale ip --4 $host | str trim)
   
-  header purple_reverse $"deploy: activate: ($host)"
+  header light_purple_reverse $"deploy: ($host): query"
   let linkProfileCmd = ""
-  let opts = ([ "--no-link" "--option" "narinfo-cache-negative-ttl" "0" ])
   let cs = (do -c { ^ssh $"cole@($target)" $"readlink -f /run/current-system" } | str trim)
   if ($cs == $topout) {
-    header purple_reverse $"deploy: ($host) [skipping]"
+    header light_purple_reverse $"deploy: ($host): already up-to-date"
   } else {
-    header purple_reverse $"deploy: ($host) [pulling]"
-    do -c { ^ssh $"cole@($target)" $"sudo nix build ($opts | str join ' ') --profile /nix/var/nix/profiles/system '($topout)'" }
-    header purple_reverse $"deploy: ($host) [switching]"
+    header light_purple_reverse $"deploy: ($host): pull"
+    let pullargs = (([ "sudo" "nix" "build" $nixopts "--profile" "/nix/var/nix/profiles/system" $topout ] | flatten) | str join ' ')
+    do -c { ^ssh $"cole@($target)" $pullargs }
+    header light_purple_reverse $"deploy: ($host): switch"
     do -c { ^ssh $"cole@($target)" $"sudo '($topout)/bin/switch-to-configuration' switch" }
+    null
   }
 }
 
-def "main deploy" [ h = "_pc": string ] {
-  header light_yellow_reverse $"deploy_list [($h)]"
-
-  let hosts = (if (not ($h | str starts-with "_")) { [ $h ] } else {
-    let cls = ($h | str trim --char "_")
-    (^nix eval --json $".#nixosConfigsEx.($h | str trim --char '_')" --apply "x: builtins.attrNames x" | from json)
+# def "main deploy" [ h: list ] {
+def "main deploy" [...h] {
+  let h = ($h | flatten)
+  header light_gray_reverse $"DEPLOY"
+  let h = (if ($h | length) == 0 { "_pc" } else $h)
+  let h = (if (not ($h | first | str starts-with "_")) { [ $h ] } else {
+    let ref = $".#nixosConfigsEx.($h | first | str trim --char '_')"
+    do -c { ^nix eval --json --apply "x: builtins.attrNames x" $ref }
+      | complete | get stdout | from json
   })
-  print -e $hosts
-  
-  $hosts | each { |host| 
-    print -e "\n"
-    print -e ($"▒▒ " | str rpad -l 100 -c ' ' | ansi gradient --fgstart 0xffffff --fgend 0xfefefe --bgstart 0x000000 --bgend 0xffffff)
-    print -e ($"▒▒ deploy ($host)" | str rpad -l 100 -c ' ' | ansi gradient --fgstart 0xffffff --fgend 0x000000 --bgstart 0xfffff --bgend 0x000000)
-    print -e ($"▒▒ " | str rpad -l 100 -c ' ' | ansi gradient --fgstart 0xffffff --fgend 0xfefefe --bgstart 0x000000 --bgend 0xffffff)
-    deployHost $host
-    null
-  }
+  let h = ($h | flatten)
+  $h | flatten | each { |h| deployHost $h }
 }
 
 def "main inputup" [] {
@@ -156,6 +160,7 @@ def "main lockup" [] {
   do -c { ^nix flake lock --recreate-lock-file }
 }
 
+def "main eval" [ drv: string ] { evalDrv $drv }
 def "main build" [ drv: string ] {
   let drvs = evalDrv $drv # has a different type than above?
   buildDrvs $drvs
@@ -180,11 +185,11 @@ def "main up" [] {
   main ci build
   main ci push
 
-  main deploy _pc
+  main deploy "_pc"
 }
 
 def main [] {
-  print -e "commands: [loopup, up]"
+  main up
 }
 
 ###############################################################################

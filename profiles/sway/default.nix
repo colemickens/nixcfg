@@ -124,7 +124,6 @@ in
         qt6.qtwayland
 
         # wayland adjacent
-        anodium
         shotman
         sirula # launcher
         wayprompt
@@ -139,7 +138,6 @@ in
         # ydotool # requires a daemon for some reason? why doesn't wlrctl?
 
         # misc utils
-        pinta
         imv
         grim
         slurp

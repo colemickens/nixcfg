@@ -51,13 +51,6 @@ in
 
     nixcfg.common.hostColor = "purple";
 
-    home-manager.users.cole = { pkgs, ... }: {
-      home.packages = with pkgs; [
-        ripcord
-        # esphome # some python error, yay
-      ];
-    };
-
     # TODO: attempt to fix sound, but broke alsa/pipewire:
     # environment.etc."modprobe.d/snd.conf".text = ''
     #   options snd-sof-intel-hda-common hda_model=alc287-yoga9-bass-spk-pin

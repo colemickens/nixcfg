@@ -114,9 +114,7 @@
     experimental-features = [ "nix-command" "flakes" "recursive-nix" ];
   };
 
-  ## ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  ## OUTPUTS
-  ## ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  ## OUTPUTS ##################################################################
   outputs = inputs:
     let
       lib = inputs.lib-aggregate.lib;
@@ -130,36 +128,33 @@
       }));
       mkToplevel = v: ((mkSystem v).config.system.build.toplevel);
 
-      #################################################################################################################
-      ## NIXOS CONFIGS + TOPLEVELS
-      #################################################################################################################
+      ## NIXOS CONFIGS + TOPLEVELS ############################################
       nixosConfigsEx = {
         misc = {
           # installer = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; host = "installer"; };
         };
         phone = rec {
-          pinephone = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; slug = "pinephone"; };
-          blueline = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; slug = "blueline"; };
-          enchilada = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; slug = "enchilada"; };
+          pinephone = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
+          blueline = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
+          enchilada = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           # x_pinephone = pinephone // { sys = "x86_64-linux"; };
           # x_blueline = blueline // { sys = "x86_64-linux"; };
           # x_enchilada = enchilada // { sys = "x86_64-linux"; };
         };
         sbc = rec {
-          radxazero1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; slug = "radxazero1"; };
-          rpifour1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; slug = "rpifour1 "; };
-          rpithreebp1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; slug = "rpithreebp1"; };
-          rpizerotwo1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; slug = "rpizerotwo1"; };
-          # openstick = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; slug = "openstick"; };
-          openstick = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; slug = "openstick"; };
-          visionfive1 = { pkgs = inputs.nixpkgs; sys = "riscv64-linux"; slug = "visionfive1"; };
+          radxazero1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
+          rpifour1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
+          rpithreebp1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
+          rpizerotwo1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
+          openstick = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
+          visionfive1 = { pkgs = inputs.nixpkgs; sys = "riscv64-linux"; };
         };
         pc = {
-          carbon = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; slug = "carbon"; };
-          jeffhyper = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; slug = "jeffhyper"; };
-          slynux = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; slug = "slynux"; };
-          raisin = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; slug = "raisin"; };
-          xeep = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; slug = "xeep"; };
+          carbon = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
+          jeffhyper = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
+          slynux = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
+          raisin = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
+          xeep = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
         };
       };
 
@@ -167,7 +162,7 @@
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);
       toplevels = (lib.mapAttrs (_: v: v.config.system.build.toplevel) nixosConfigurations);
 
-      ## SPECIAL OUTPUTS:
+      ## SPECIAL OUTPUTS ######################################################
       images = {
         openstick = {
           inherit (nixosConfigurations.openstick.config.mobile.outputs.android)
@@ -178,62 +173,28 @@
       imagePackages = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues images));
     in
     ({
-      ## PASSTHROUGH ##################################################################################################
+      ## PASSTHROUGH ##########################################################
       inherit inputs lib hydralib;
       inherit nixosConfigsEx nixosConfigs nixosConfigurations toplevels;
 
-      ## CUSTOM PAYLOADS ##############################################################################################
+      ## CUSTOM PAYLOADS ######################################################
       # installer = nixosConfigurations.installer.config.system.build.isoImage;
       inherit images;
 
-      ## NIXOS_MODULES ################################################################################################
+      ## NIXOS_MODULES #########################################################
       nixosModules = {
         #   hydra-auto = import ./modules/hydra-auto.nix;
         #   otg = import ./modules/otg.nix;
         #   other-arch-vm = import ./modules/other-arch-vm.nix;
       };
 
-      #################################################################################################################
-      ## OVERLAY
-      #################################################################################################################
+      ## OVERLAY ################################################################
       overlays = {
-        default = (final: prev: {
-          anodium = prev.callPackage ./pkgs/anodium { };
-          catacomb = prev.callPackage ./pkgs/catacomb { };
-          get-xoauth2-token = prev.callPackage ./pkgs/get-xoauth2-token { };
-          keyboard-layouts = prev.callPackage ./pkgs/keyboard-layouts { };
-          onionbalance = prev.python3Packages.callPackage ./pkgs/onionbalance { };
-          # rumqtt = prev.callPackage ./pkgs/rumqtt { };
-          solo2-cli = prev.callPackage ./pkgs/solo2-cli {
-            solo2-cli = prev.solo2-cli;
-          };
-          space-cadet-pinball = prev.callPackage ./pkgs/space-cadet-pinball { };
-          space-cadet-pinball-unfree = prev.callPackage ./pkgs/space-cadet-pinball {
-            _assets = import ./pkgs/space-cadet-pinball/assets.nix { pkgs = prev; };
-          };
-          shreddit = prev.python3Packages.callPackage ./pkgs/shreddit { };
-          # tvp = prev.callPackage ./pkgs/tvp { };
-          rsntp = prev.callPackage ./pkgs/rsntp { };
-          # rtsp-simple-server = prev.callPackage ./pkgs/rtsp-simple-server {
-          #   buildGoModule = prev.buildGo117Module;
-          # };
-          visualizer2 = prev.callPackage ./pkgs/visualizer2 { };
-
-          # nix-build-uncached = prev.nix-build-uncached.overrideAttrs (old: {
-          #   src = prev.fetchFromGitHub {
-          #     owner = "colemickens";
-          #     repo = "nix-build-uncached";
-          #     rev = "0edd782cb419ccb537ac11b1d98ab0f4fb9c9537";
-          #     sha256 = "sha256-xqD6aSyZzfyhZg2lYrhBXvU45bM8Bfttcnngqk8XXkk=";
-          #   };
-          # });
-        });
+        default = (final: prev: { });
       };
     }) //
     (
-      #################################################################################################################
-      ## SYSTEM-SPECIFIC
-      #################################################################################################################
+      ## SYSTEM-SPECIFIC OUTPUTS ##############################################
       lib.flake-utils.eachSystem [ "x86_64-linux" "aarch64-linux" "riscv64-linux" ] (system:
         let
           pkgs = import inputs.nixpkgs { inherit system; };
@@ -244,115 +205,49 @@
           filterPkgSystem = _p: lib.filterAttrs (n: v: (system) == _p.system); # can't we check pkg outptu system attr like evreything else
         in
         {
-          #################################################################################################################
           ## DEVSHELLS
-          ## - devtools's nativeBuildInputs are also included in `shells/devenv.nix` and in `profiles/dev.nix`
-          #################################################################################################################
-          devShells = lib.genAttrs [ "ci" "devenv" "devtools" "gstreamer" "uutils" ] (name: import ./shells/${name}.nix {
-            inherit inputs system;
-            minimalMkShell = (import ./lib/minimalMkShell.nix { inherit pkgs; });
-          });
-
-          #################################################################################################################
-          ## APPS
-          #################################################################################################################
-          apps =
+          # devenv includes devtools
+          devShells =
             let
-              tfout = import ./cloud { terranix = inputs.terranix; inherit pkgs; };
+              mkShell = (name: import ./shells/${name}.nix {
+                inherit inputs system;
+                minimalMkShell = (import ./lib/minimalMkShell.nix { inherit pkgs; });
+              });
+              shells = (lib.genAttrs [ "ci" "devenv" "devtools" "gstreamer" "uutils" ] mkShell);
             in
+            (shells // { default = shells.devtools; });
+
+          ## APPS
+          apps = let tfout = import ./cloud { inherit (inputs) terranix; inherit pkgs; }; in
             ({
-              # CI (should we use HM for this instead?)
-              # install-secrets = { type = "app"; program = legacyPackages."${system}".install-secrets.outPath; };
-
-              default = {
-                type = "app";
-                program = (pkgs.writeScript "nixcfg-main" ''
-                  exec "${pkgs.nushell}/bin/nu" "${./. + "/main.nu"}" "''${@}"
-                '').outPath;
-              };
-
               # Terraform
               tf = { type = "app"; program = tfout.tf.outPath; };
               tf-apply = { type = "app"; program = tfout.apply.outPath; };
               tf-destroy = { type = "app"; program = tfout.destroy.outPath; };
             });
 
-          #################################################################################################################
-          ## PACKAGES
-          # - `packages` follows flake convention -- packages provided by our overlay
-          # - `pkgs` is overlayed nixpkgs (nixpkgs-wayland, nixcfg->overlay)
-          # - `fullPkgs` is non-free nixpkgs
-          #################################################################################################################
+          ## PACKAGES #########################################################
           packages = (inputs.self.overlays.default (pkgs_) (pkgs_));
-          inherit pkgs fullPkgs;
+          inherit pkgs; # overlayed nixpkgs (nixpkgs-wayland, default)
+          inherit pkgs_; # non-free nixpkgs
 
-          #################################################################################################################
-          ## DEFUNCT
-          #################################################################################################################
-          # ## NETBOOTS
-          # netboots = { };
-          # # netboots = netboots_;
+          ## NETBOOTS (paused: add grub => nix-netboot-server) ################
           # netboots_ = lib.genAttrs
           #   [ "rpifour1" ]
           #   # [ "x_risky" "rpifour1" "rpithreebp1" "rpizerotwo1" ]
           #   (h: nixosConfigurations.${h}.config.system.build.extras.nfsboot);
-          #################################################################################################################
 
 
-          #################################################################################################################
-          ## CI JOBS
-          #################################################################################################################
+          ## CI JOBS ##########################################################
           ciJobs = {
             default = ({ }
             // (lib.genAttrs [ "devtools" "ci" "devenv" ] (name: inputs.self.devShells.${system}.${name}.inputDerivation))
             // (inputs.self.packages.${system})
             // (lib.mapAttrs
               (n: v: toplevels."${n}")
-              (lib.filterAttrs (n: v: v.sys == system) nixosConfigs)
-            )
-            # we don't necessarily want to push 1GB packages to cachix:
-            # // (lib.filterAttrs (n: v: v.system == system) imagePackages)
+              (lib.filterAttrs (n: v: v.sys == system) nixosConfigs))
             );
           };
-
-
-          #################################################################################################################
-          ## CURATED PAYLOADS
-          #################################################################################################################
-          # phones = (
-          #   let
-          #     phoneNamesAndroid = [ "blueline" "enchilada" ];
-          #     phoneNamesUboot = [ "pinephone" ];
-          #     mkAndroidPhone = phname: {
-          #       bootimg = nixosConfigurations."${phname}-cross".config.mobile.outputs.android.android-bootimg;
-          #       rootimg = nixosConfigurations."${phname}-cross".config.mobile.outputs.android.android-rootfs;
-          #       fastboot = nixosConfigurations."${phname}-cross".config.mobile.outputs.android.android-fastboot-images;
-          #       reset-script = nixosConfigurations."${phname}-cross".config.mobile.outputs.android.reset-script;
-          #     };
-          #     mkUbootPhone = phname: {
-          #       boot-partition = nixosConfigurations."${phname}-cross".config.mobile.outputs.u-boot.boot-partition;
-          #       disk-image = nixosConfigurations."${phname}-cross".config.mobile.outputs.u-boot.disk-image;
-          #     };
-          #   in
-          #   (
-          #     (lib.genAttrs phoneNamesAndroid mkAndroidPhone)
-          #     // (lib.genAttrs phoneNamesUboot mkUbootPhone)
-          #   )
-          # );
-          # sbc = {
-          #   openstick = {
-          #     aboot = nixosConfigurations.openstick.config.mobile.outputs.android.android-abootimg;
-          #     fastboot-images = nixosConfigurations.openstick.config.mobile.outputs.android.android-fastboot-images;
-          #   };
-          #   radxa-zero1 = {
-          #     uboot = { };
-          #   };
-          #   radxa-rock5b = {
-          #     # TODO: finish up tow-boot build
-          #     # TODO: kernel reference here: https://github.com/samueldr-wip/wip-nixos-on-arm/tree/wip/rock5
-          #     uboot = nixosConfigurations.rock5b.config.system.build.tow-boot.outputs.Tow-Boot.disk-image;
-          #   };
-          # };
         })
     );
 }

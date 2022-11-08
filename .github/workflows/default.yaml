@@ -32,7 +32,9 @@ jobs:
       env: { CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}" }
       run: nix develop '.#ci' -c ./main.nu ci eval
     - name: "ci build"
-      env: { CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}" }
+      env:
+        NIX_BUILDER: "nix"
+        CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}"
       run: nix develop '.#ci' -c ./main.nu ci build
     - name: "ci push"
       env: { CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}" }

@@ -5,15 +5,10 @@ let
   # _firefox = pkgs.firefox-wayland;
   _firefox = lib.hiPrio firefoxFlake.firefox-nightly-bin;
 
-  # _chromey = pkgs.ungoogled-chromium;
-  _chromey = pkgs.google-chrome-dev.override {
+  # _chrome = pkgs.ungoogled-chromium;
+  _chrome = pkgs.google-chrome-dev.override {
     commandLineArgs = [ "--force-dark-mode" ];
   };
-  # _chromey = pkgs.writeShellScriptBin "chromey" ''
-  #   ${pkgs.sommelier}/bin/sommelier \
-  #     --xwayland-path=${pkgs.xwayland}/bin/Xwayland \
-  #     ${pkgs.google-chrome-dev}/bin/google-chrome-unstable --force-dark-mode
-  # '';
 
 in
 {
@@ -51,48 +46,39 @@ in
         NIXOS_OZONE_WL = "1";
       };
 
-      # fucking god damn python and it's fucking god damn crypto lib always breaking
       services.pass-secret-service = {
         enable = true;
       };
 
       home.packages = (
         (with pkgs; [
-          (pkgs.callPackage ../pkgs/commands-gui.nix {})
+          (pkgs.callPackage ../pkgs/commands-gui.nix { })
 
-          # ide/editor
-          lapce
-
-          # gui cli
+          # misc tools/utils
           brightnessctl
-          pulsemixer
-          qpwgraph
-          
-          # voip
-          twinkle
-          linphone
-
-          # misc gui
+          virt-viewer
+          # qpwgraph # why doesn't this default to working with wayland?
           libnotify
           evince
-          gimp
-          qemu
-          freerdp
+          pinta
+          # gimp # lol wayland support when
+          # freerdp
           # vlc
-          lapce
 
-          wpa_supplicant_gui
-          # jami-daemon
-          # jami-client-gnome
-
-          virt-viewer
-
+          # communcation
+          twinkle
+          linphone
           nheko
-          # librewolf
+          ripcord
+
+          # browsers
+          ladybird
         ]) ++ (lib.optionals (pkgs.hostPlatform.system == "x86_64-linux") (with pkgs; [
           # x86_64-linux only
+
+          # browsers
           _firefox
-          _chromey
+          _chrome
         ]))
       );
     };
