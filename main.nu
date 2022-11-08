@@ -28,6 +28,7 @@ def evalDrv [ ref: string ] {
 
 def buildDrvs [ drvList: list ] {
   let drvs = ($drvList | where isCached == false | where system == "x86_64-linux")
+  let opts = ([ "--no-link" "--option" "narinfo-cache-negative-ttl" "0" ])
   if (($drvs | length) > 0) {
     header "green_reverse" $"build: local"
     print -e ($drvs | select name isCached)
@@ -47,7 +48,7 @@ def buildDrvs [ drvList: list ] {
     let outs  = (($drvs | get outputs | flatten | get out) | flatten)
     let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str collect)
     do -c { ^nix copy --no-check-sigs --to $"ssh-ng://($buildStore)" --derivation $drvPaths } | complete | select "exit_code"
-    ^nix build -L --store $"ssh-ng://($buildStore)" $drvPaths
+    ^nix build -L $opts --store $"ssh-ng://($buildStore)" $drvPaths
     if $env.LAST_EXIT_CODE != 0 {
       error {msg:"Adfadsfsdf"}
     }
@@ -59,7 +60,6 @@ def buildDrvs [ drvList: list ] {
     ^ssh $buildStore $sshExe
     if $env.LAST_EXIT_CODE != 0 { error {msg:"Adfadsfsdf"} }
     
-    let opts = ([ "--no-link" "--option" "narinfo-cache-negative-ttl" "0" ])
     ^nix build $opts -j0 $outs
     if $env.LAST_EXIT_CODE != 0 { error {msg:"Adfadsfsdf"} }
   }
@@ -153,7 +153,7 @@ def "main rpiup" [] {
 }
 def "main lockup" [] {
   header yellow_reverse "lockup"
-  do -c { ^nix flake lock --recreate-lock-file --commit-lock-file }
+  do -c { ^nix flake lock --recreate-lock-file }
 }
 
 def "main build" [ drv: string ] {
@@ -162,7 +162,11 @@ def "main build" [ drv: string ] {
   print -e ($drvs | get outputs | flatten)
 }
 
-def "main loopup" [] { main up; sleep 3sec; main loopup }
+def "main loopup" [] {
+  main up | ignore
+  sleep 3sec
+  main loopup
+}
 
 def "main up" [] {
   header red_reverse "loopup" "▒"
