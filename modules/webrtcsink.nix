@@ -108,7 +108,7 @@ in
             };
           })
           cfg.client.publishers)
-      ]);
+      ]))
     ];
   };
 }

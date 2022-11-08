@@ -954,21 +954,6 @@
         "type": "github"
       }
     },
-    "nixlib": {
-      "locked": {
-        "lastModified": 1667696192,
-        "narHash": "sha256-hOdbIhnpWvtmVynKcsj10nxz9WROjZja+1wRAJ/C9+s=",
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "rev": "babd9cd2ca6e413372ed59fbb1ecc3c3a5fd3e5b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "type": "github"
-      }
-    },
     "nixos-hardware": {
       "locked": {
         "lastModified": 1667768008,
@@ -1117,22 +1102,6 @@
         "type": "github"
       }
     },
-    "nixpkgs_5": {
-      "locked": {
-        "lastModified": 1667142599,
-        "narHash": "sha256-OLJxsg9VqfKjFkerOxWtNIkibsCvxsv5A8wNWO1MeWk=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "412b9917cea092f3d39f9cd5dead4effd5bc4053",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "pre-commit-hooks": {
       "inputs": {
         "flake-utils": [
@@ -1178,7 +1147,6 @@
         "nix-eval-jobs": "nix-eval-jobs",
         "nix-netboot-server": "nix-netboot-server",
         "nix-rice": "nix-rice",
-        "nixlib": "nixlib",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-wayland": "nixpkgs-wayland",
@@ -1503,7 +1471,9 @@
         "crate2nix": "crate2nix",
         "flake-compat": "flake-compat_5",
         "flake-utils": "flake-utils_9",
-        "nixpkgs": "nixpkgs_5",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
         "rust-overlay": "rust-overlay_3"
       },
       "locked": {

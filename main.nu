@@ -3,17 +3,17 @@
 let cidir = "/tmp/nixci"; mkdir $cidir
 let nixpkgs = "https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # used by nix-shell cachix
 let nixopts = ([ "--no-link" "--option" "narinfo-cache-negative-ttl" "0" ])
-let builder = if (not ("NIX_BUILDER" in ($env | transpose | get column0))) { "nom" } else { $env | get NIX_BUILDER | str trim }
-let builder_x86 = if (not ("BUILDER_X86" in ($env | transpose | get column0))) { tailscale ip --4 "slynux" | str trim } else { $env | get "BUILDER_X86" | str trim }
-let builder_a64 = if (not ("BUILDER_A64" in ($env | transpose | get column0))) { "colemickens@aarch64.nixos.community" } else { $env | get "BUILDER_A64" | str trim }
+let builder = if (not ("NIX_BUILDER" in $env)) { "nom" } else { $env | get NIX_BUILDER | str trim }
+let builder_x86 = (if ("BUILDER_X86" in $env) { $env | get "BUILDER_X86" | str trim }
+  else if ((^hostname | str trim) == "slynux") { "localhost" }
+  else { ^tailscale ip --4 "slynux" | str trim })
+let builder_a64 = if ("BUILDER_A64" in $env) { $env | get "BUILDER_A64" | str trim } else { "colemickens@aarch64.nixos.community" }
 
-let-env CACHIX_CACHE = "colemickens"
-let cachixkey = ($"CACHIX_SIGNING_KEY_($env.CACHIX_CACHE)" | str upcase)
-let-env CACHIX_SIGNING_KEY = if ($cachixkey in ($env | transpose | get column0)) {
-  $env | get $cachixkey | str trim
-} else if ($"/run/secrets/cachix_signing_key_($env.CACHIX_CACHE)" | path exists) {
-  open $"/run/secrets/cachix_signing_key_($env.CACHIX_CACHE)" | str trim
-}
+let cachix_cache = "colemickens"
+let cachixkey = ($"CACHIX_SIGNING_KEY_($cachix_cache)" | str upcase)
+let cachixkeypath = $"/run/secrets/cachix_signing_key_($cachix_cache)"
+let-env CACHIX_SIGNING_KEY = (if ($cachixkey in $env) { $env | get $cachixkey | str trim }
+  else if ($cachixkeypath | path exists) { open $cachixkeypath | str trim })
 
 def header [ color: string text: string spacer="▒": string ] {
   let text = $"("" | str rpad -c $spacer -l 2) ($text) "
@@ -37,13 +37,13 @@ def evalDrv [ ref: string ] {
   $out
 }
 
-def buildDrvs [...drvs] {
+def buildDrvs [ drvs: list cache=false: bool ] {
   let drvs = ($drvs | flatten)
-  buildRemoteDrvs $drvs "x86_64-linux" $builder_x86
-  buildRemoteDrvs $drvs "aarch64-linux" $builder_a64
+  buildRemoteDrvs $drvs "x86_64-linux" $builder_x86 $cache
+  buildRemoteDrvs $drvs "aarch64-linux" $builder_a64 $cache
 }
 
-def buildRemoteDrvs [ drvs: list arch: string buildHost: string ] {
+def buildRemoteDrvs [ drvs: list arch: string buildHost: string cache: bool ] {
   let drvs = ($drvs | where isCached == false | where system == $arch)
   header "light_blue_reverse" $"build: ($arch) ($drvs | length) drvs on ($buildHost)"
   if (($drvs | length) > 0) {
@@ -55,17 +55,25 @@ def buildRemoteDrvs [ drvs: list arch: string buildHost: string ] {
     let nixopts = (if ($buildHost == "localhost") { $nixopts } else {
       $nixopts | append [ "--store" $"ssh-ng://($buildHost)" ]
     })
-    if ($buildHost != "localhost") {
+    if ($buildHost == "localhost") {
+      ^nom build $nixopts $drvPaths
+    } else {
       ^nix copy --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvPaths
+      ^nix build $nixopts -L $drvPaths
     }
-    ^$builder build $nixopts -L $nixopts $drvPaths
 
-    let sshExe = ([
-      $"printf '%s' '($outsStr)' | env CACHIX_SIGNING_KEY='($env.CACHIX_SIGNING_KEY)' "
-      $"nix-shell -I nixpkgs=($nixpkgs) -p cachix --command 'cachix push colemickens'"
-    ] | str join ' ')
-    ^ssh $buildHost $sshExe
-    ^nix build $nixopts -L -j0 $outs
+    if cache {
+      if buildHost == localhost {
+        cacheDrvs $drvs
+      } else {
+        let sshExe = ([
+          $"printf '%s' '($outsStr)' | env CACHIX_SIGNING_KEY='($env.CACHIX_SIGNING_KEY)' "
+          $"nix-shell -I nixpkgs=($nixpkgs) -p cachix --command 'cachix push ($cachix_cache)'"
+        ] | str join ' ')
+        ^ssh $buildHost $sshExe
+        ^nix build $nixopts -L -j0 $outs
+      }
+    }
   }
 }
 
@@ -74,7 +82,7 @@ def cacheDrvs [ drvs: list ] {
   let outs  = (($drvs | get outputs | flatten | get out) | flatten | where ($it | path exists))
   let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str collect)
   header "purple_reverse" $"cache: ($outs | length) paths"
-  echo $outsStr | ^cachix push $env.CACHIX_CACHE
+  echo $outsStr | ^cachix push $cachix_cache
 }
 
 def deployHost [ host: string ] {
@@ -161,7 +169,7 @@ def "main lockup" [] {
 def "main eval" [ drv: string ] { evalDrv $drv }
 def "main build" [ drv: string ] {
   let drvs = evalDrv $drv # has a different type than above?
-  buildDrvs $drvs
+  buildDrvs $drvs false
   print -e ($drvs | get outputs | flatten)
 }
 
@@ -252,7 +260,13 @@ def "main ci next" [] {
 
     do {
       cd $p
-      nix flake lock --recreate-lock-file --override-input 'nixpkgs' $"github:colemickens/nixpkgs/cmpkgs-next-($id)" --override-input 'home-manager' $"github:colemickens/home-manager/cmhm-next-($id)" --commit-lock-file
+      let args = [
+        --recreate-lock-file
+        --override-input 'nixpkgs' $"github:colemickens/nixpkgs/cmpkgs-next-($id)"
+        --override-input 'home-manager' $"github:colemickens/home-manager/cmhm-next-($id)"
+        --commit-lock-file
+      ]
+      nix flake lock $args
   
       ./main.nu ci eval
       ./main.nu ci build

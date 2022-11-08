@@ -2,7 +2,6 @@
   description = "colemickens-nixcfg";
 
   inputs = {
-    nixlib = { url = "github:nix-community/nixpkgs.lib"; }; #TODO: boo name! "libaggregate"?
     lib-aggregate = { url = "github:nix-community/lib-aggregate"; }; #TODO: boo name! "libaggregate"?
 
     nixpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
@@ -14,6 +13,8 @@
     nixos-hardware = { url = "github:nixos/nixos-hardware"; };
     nixpkgs-wayland = { url = "github:nix-community/nixpkgs-wayland/master"; inputs."nixpkgs".follows = "nixpkgs"; };
     # TODO: promote this to a nix-community project, it's neat, can combine with HM modules, etc  --- another maybe okayish way to bring folks in
+    # TODO: rename, nix-rice is active again and my this is mostly just the colorschemes and an import... :p
+    #   -- maybe the appearance module idea manifests there?
     nix-rice = { url = "github:colemickens/nix-rice"; inputs."nixpkgs".follows = "nixpkgs"; };
     firefox-nightly = { url = "github:colemickens/flake-firefox-nightly"; inputs."nixpkgs".follows = "nixpkgs"; };
     terranix = { url = "github:terranix/terranix"; inputs.nixpkgs.follows = "nixpkgs"; };
@@ -22,17 +23,24 @@
     # nixos-riscv64.url = "https://github.com/colemickens/nixos-riscv64";
     # jh7100.url = "https://github.com/colemickens/jh7100";
 
-    impermanence = { url = "github:nix-community/impermanence"; };
+    impermanence = { url = "github:nix-community/impermanence"; }; # TODO: use it or lose it
     nickel = { url = "github:tweag/nickel"; };
     fenix = { url = "github:figsoda/fenix"; inputs."nixpkgs".follows = "nixpkgs"; };
     sops-nix = { url = "github:Mic92/sops-nix/master"; inputs."nixpkgs".follows = "nixpkgs"; };
+    
+    # transient deps, de-dupe here
+    # rust-overlay = { url = ""; };
 
     # devtools:
     helix = { url = "github:helix-editor/helix"; inputs."nixpkgs".follows = "nixpkgs"; };
     jj = { url = "github:martinvonz/jj"; inputs."nixpkgs".follows = "nixpkgs"; };
-    zellij = { url = "github:zellij-org/zellij"; };
     marksman = { url = "github:the-mikedavis/marksman/flake"; inputs."nixpkgs".follows = "nixpkgs"; };
     nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; inputs."nixpkgs".follows = "nixpkgs"; };
+    zellij = {
+      url = "github:zellij-org/zellij";
+      inputs."nixpkgs".follows = "nixpkgs";
+      # inputs."rust-overlay".follows = "rust-overlay";
+    };
 
     # experimental:
     hyprland = { url = "github:hyprwm/Hyprland"; inputs."nixpkgs".follows = "nixpkgs"; };
@@ -70,29 +78,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # We're back to using nixUnstable so we shouldn't need this:
-    #nix.url = "github:nixos/nix/master";
-    #nixpkgs-kubernetes.url = "github:colemickens/nixpkgs-kubernetes/main";
-    #nixpkgs-kubernetes.inputs.nixpkgs.follows = "nixpkgs";
-    #niche.url = "github:colemickens/niche/master";
-    #niche.inputs.nixpkgs.follows = "nixpkgs";
-    # construct.url = "github:matrix-construct/construct";
-    # construct.inputs.nixpkgs.follows = "nixpkgs";
-    # deploy-rs.url = "github:colemickens/deploy-rs";
-    # deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
-    #nixos-azure.url = "github:colemickens/nixos-azure/dev";
-    #nixos-azure.inputs.nixpkgs.follows = "nixpkgs";
-    # TODO: use this? or from nixpkgs???
-    # envfs.url = "github:Mic92/envfs"; };
-    # envfs.inputs.nixpkgs.follows = "nixpkgs";
-    # rust-overlay.url = "github:oxalica/rust-overlay"; # TODO: switch frm fenix?
-    # wfvm = { url = "https://git.m-labs.hk/M-Labs/wfvm"; type = "git"; flake = false; };
-    #nickel.url = "github:tweag/nickel"; };
-    #hydra.url = "github:NixOS/hydra"; };
-    #hydra.inputs.nixpkgs.follows = "nixpkgs";
+    # TODO: revisit/checkout: mic92/envfs, nickel, wfvm
   };
 
-  ## NIX_CONFIG ###############################################################
   nixConfig = {
     extra-substituters = [
       "https://cache.nixos.org"
@@ -115,8 +103,6 @@
   outputs = inputs:
     let
       lib = inputs.lib-aggregate.lib;
-      flake-utils = inputs.nixlib.lib.flake-utils;
-      systems = [ "x86_64-linux" "aarch64-linux" "riscv64-linux" ];
 
       mkSystem = n: v: (v.pkgs.lib.nixosSystem ({
         system = v.sys;
@@ -176,7 +162,7 @@
         loginctl-linger = import ./modules/loginctl-linger.nix;
         ttys = import ./modules/ttys.nix;
         other-arch-vm = import ./modules/other-arch-vm.nix;
-        webrtcsink = import ./modules/webrtcsink.nix;
+        # webrtcsink = import ./modules/webrtcsink.nix;
       };
 
       ## OVERLAY ################################################################
@@ -194,7 +180,7 @@
       inherit images nixosModules overlays;
     }) // (
       ## SYSTEM-SPECIFIC OUTPUTS ##############################################
-      lib.flake-utils.eachSystem systems (system:
+      lib.flake-utils.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
         let
           pkgs_ = _unfree: import inputs.nixpkgs {
             inherit system;
