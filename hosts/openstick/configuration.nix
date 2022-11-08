@@ -12,7 +12,8 @@ in
     ../../mixins/nix.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
-    ../../mixins/nmiot.nix
+    # ../../mixins/iwd-networks.nix
+    ../../mixins/iwd-auto-ap.nix
     # ../../mixins/wpa-slim.nix
     # ../../mixins/zellij.nix
     ../../profiles/user.nix
@@ -38,6 +39,7 @@ in
       zellij
       bottom
       libqmi
+      iw
     ];
     
     boot.loader.grub.configurationLimit = 2;

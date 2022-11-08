@@ -6,6 +6,7 @@ in
 {
   imports = [
     ../../profiles/interactive.nix
+    ../../profiles/laptop.nix
 
     ../../mixins/grub-signed-shim.nix
 
@@ -32,17 +33,6 @@ in
     
     nixcfg.common.hostColor = "yellow";
 
-    hardware.bluetooth.enable = false;
-    hardware.usbWwan.enable = true;
-    hardware.cpu.amd.updateMicrocode = true;
-    
-    services.udisks2.enable = true; # fwupdmgr
-
-    # it's a laptop-server, let's use this and use PPD to
-    # put it into max performance mode
-    # TODO: can we set this with nix?
-    services.power-profiles-daemon.enable = true;
-    services.fwupd.enable = true;
     services.logind.extraConfig = ''
       HandlePowerKey=poweroff
       HandleLidSwitch=ignore

@@ -199,15 +199,21 @@ in
             focus.followMouse = "always";
             colors =
               let
-                red = "#E87461";
-                green = "#7AC74F";
-                bgcolor = "#000000";
+                # from gruvbox image:
+                red = "#cc241d";
+                pink = "#d3869b";
+                blue = "#458588";
+                green = "#b8bb26";
+                yellow = "#d79921";
+                orange = "#fe8019";
+                bgcolor = "#2c2c2c";
+                _f = pink;
               in
               {
-                "focused" = { border = red; background = red; text = "#ffffff"; indicator = "#ffffff"; childBorder = red; };
+                "focused" = { border = _f; background = _f; text = "#ffffff"; indicator = "#ffffff"; childBorder = _f; };
                 "unfocused" = { border = bgcolor; background = bgcolor; text = "#888888"; indicator = "#ffffff"; childBorder = bgcolor; };
               };
-            gaps = { inner = 2; outer = 0; };
+            gaps = { inner = 0; outer = 0; };
             window.border = 4;
             window.titlebar = false;
             window.commands = [

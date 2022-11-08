@@ -27,7 +27,7 @@
     nickel = { url = "github:tweag/nickel"; };
     fenix = { url = "github:figsoda/fenix"; inputs."nixpkgs".follows = "nixpkgs"; };
     sops-nix = { url = "github:Mic92/sops-nix/master"; inputs."nixpkgs".follows = "nixpkgs"; };
-    
+
     # transient deps, de-dupe here
     # rust-overlay = { url = ""; };
 
@@ -151,8 +151,8 @@
           # installer = (cfg "installer").config.system.build.isoImage;
           openstick = {
             inherit ((cfg "openstick").mobile.outputs.android)
-              android-flashable-system android-flashable-bootimg
-              android-abootimg android-bootimg;
+              /* android-flashable-system android-flashable-bootimg
+              android-abootimg */ android-bootimg;
           };
           # eche96 = nixosConfigurations.openstick.config.mobile.outputs.android;
         };
@@ -170,13 +170,17 @@
         default = (final: prev:
           # TODO: must be a better way?
           let __colemickens_nixcfg_pkgs = rec {
-            test = prev.hello;
+            space-cadet-pinball = prev.callPackage ./pkgs/space-cadet-pinball { };
+            space-cadet-pinball-unfree = prev.callPackage ./pkgs/space-cadet-pinball {
+              _assets = import ./pkgs/space-cadet-pinball/assets.nix { pkgs = prev; };
+            };
+            visualizer2 = prev.callPackage ./pkgs/visualizer2 { };
           }; in
           __colemickens_nixcfg_pkgs // { inherit __colemickens_nixcfg_pkgs; });
       };
     in
     (rec {
-      inherit nixosConfigsEx nixosConfigs nixosConfigurations;
+      inherit nixosConfigsEx nixosConfigs nixosConfigurations toplevels;
       inherit images nixosModules overlays;
     }) // (
       ## SYSTEM-SPECIFIC OUTPUTS ##############################################

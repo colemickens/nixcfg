@@ -11,12 +11,6 @@ let
       sha256 = "sha256-HNU+jltYw3gdt9ApI21zUoojy0aJ4y1x7kidkWZkKg0=";
     };
   });
-  # _nix = _nixUnstableXdg;
-  # _nix = pkgs.nixUnstable.overrideAttrs(old: {
-  #   patches = (old.patches or []) ++ [
-  #     ../misc/0001-flakes-flake.lock-location-env-var.patch
-  #   ];
-  # });
   _nix = pkgs.nixVersions.unstable;
 in
 {
@@ -29,6 +23,9 @@ in
     nixpkgs.config = {
       allowAliases = false;
     };
+    nixpkgs.overlays = [
+      inputs.self.overlays.default
+    ];
     nix = {
       gc = {
         automatic = true;

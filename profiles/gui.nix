@@ -26,6 +26,7 @@ in
 
   config = {
     hardware.drivers.enable = true;
+    hardware.bluetooth.enable = true;
 
     # TODO: light or brightnessctl? why both?
     # do we even need either or use DM?

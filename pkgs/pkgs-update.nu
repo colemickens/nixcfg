@@ -1,7 +1,6 @@
 #!/usr/bin/env nu
 
 let system = "x86_64-linux"
-let packageNames = (nix eval --json $".#packages.($system)" --apply 'x: builtins.attrNames x' | str trim | from json)
 let fakeSha256 = "0000000000000000000000000000000000000000000000000000";
 
 def getBadHash [ attrName: string ] {
@@ -15,23 +14,28 @@ def getBadHash [ attrName: string ] {
   $val
 }
 
-def main [ packageName="all": string ] {
-  let pkgList = if $packageName != "all" { [$packageName] } else {$packageNames}
+def main [] {
+  let pkgList = (nix eval --json $".#packages.($system)" --apply 'x: builtins.attrNames x' | str trim | from json)
   
   $pkgList | each { |packageName|
-    let verinfo = (nix eval --json $".#packages.($system).($packageName).passthru.verinfo" | str trim | from json)
-    let meta = (nix eval --json $".#packages.($system).($packageName).meta" | str trim | from json)
-  
+    print -e $"(ansi light_blue)>> try ($packageName)(ansi reset)"
+    let eval = (nix eval --json $".#packages.($system).($packageName)" --apply 'x: { inherit (x) meta; inherit (x.passthru) verinfo; }' | str trim | from json)
+    { packageName: $packageName, eval: $eval }
+  }
+  | where {|it| $it.eval.verinfo != $nothing }
+  | each { |it|
+    print -e $"(ansi light_yellow_dimmed)>> check ($it.packageName)(ansi reset)"
+    let meta = $it.eval.meta; let verinfo = $it.eval.verinfo;
     let position = ($meta.position | str replace "/nix/store/([0-9a-z-]+)/pkgs/" "")
     let position = ($position | str replace ':([0-9]+)' "")
   
     # Try update rev
     let newrev = (
-      if "repo_git" in ($verinfo | transpose | get column0) {
+      if ("repo_git" in $verinfo) {
         (do -c {
           ^git ls-remote $"($verinfo.repo_git)" $"refs/heads/($verinfo.branch)"
         } | complete | get stdout | str trim | str replace '(\s+)(.*)$' '')
-      } else if "repo_hg" in ($verinfo | transpose | get column0) {
+      } else if ("repo_hg" in $verinfo) {
         (do -c {
           ^git ls-remote $"($verinfo.repo_git)" $"refs/heads/($verinfo.branch)"
           ^hg identify $"$(verinfo.repo_hg)" -r $"$(verinfo.branch)"
@@ -41,12 +45,17 @@ def main [ packageName="all": string ] {
       }
     )
     
-    print -e {packageName: $packageName, oldrev: $verinfo.rev, newrev: $newrev}
-    
-    if $newrev != $verinfo.rev {
+    {packageName: $it.packageName, eval: $it.eval, oldrev: $verinfo.rev, newrev: $newrev}
+  }
+  | where {|it| $it.oldrev != $it.newrev }
+  | each { |it|
+    print -e $"(ansi light_yellow)>> update ($it.packageName)(ansi reset)"
+    if $it.newrev != $it.oldrev {
+      let position = $it.position
+      let verinfo = $it.eval.verinfo
       print -e $"[($packageName)]: needs update!"
   
-      do -c { ^sd -s $"($verinfo.rev)" $"($newrev)" $"($position)" }
+      do -c { ^sd -s $"($verinfo.rev)" $"($it.newrev)" $"($position)" }
     
       do -c { ^sd -s $"($verinfo.sha256)" $"($fakeSha256)" $"($position)" }
       let newSha256 = (getBadHash $".#($packageName)")
@@ -67,10 +76,8 @@ def main [ packageName="all": string ] {
       }
       
       do -c {
-        ^git commit $position -m $"auto-update: ($packageName): ($verinfo.rev) => ($newrev)"
+        ^git commit $position -m $"auto-update: ($packageName): ($verinfo.rev) => ($it.newrev)"
       }
     }
-  
-    null
   }
 }

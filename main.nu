@@ -27,9 +27,6 @@ def evalDrv [ ref: string ] {
     --flake $".#($ref)"
     --gc-roots-dir $"($cidir)/gcroots"
     --check-cache-status)
-  if $env.LAST_EXIT_CODE != 0 {
-    error {msg:"Adfadsfsdf"}
-  }
   let out = ($eval
     | from ssv --noheaders
     | get column1
@@ -38,7 +35,6 @@ def evalDrv [ ref: string ] {
 }
 
 def buildDrvs [ drvs: list cache=false: bool ] {
-  let drvs = ($drvs | flatten)
   buildRemoteDrvs $drvs "x86_64-linux" $builder_x86 $cache
   buildRemoteDrvs $drvs "aarch64-linux" $builder_a64 $cache
 }
@@ -62,8 +58,8 @@ def buildRemoteDrvs [ drvs: list arch: string buildHost: string cache: bool ] {
       ^nix build $nixopts -L $drvPaths
     }
 
-    if cache {
-      if buildHost == localhost {
+    if $cache {
+      if $buildHost == localhost {
         cacheDrvs $drvs
       } else {
         let sshExe = ([
@@ -93,7 +89,7 @@ def deployHost [ host: string ] {
   let topout = ($jobs | get "outputs" | flatten | get "out" | flatten | first)
   let target = (tailscale ip --4 $host | str trim)
   
-  header light_purple_reverse $"deploy: ($host): query"
+  header light_purple_reverse $"deploy: ($topout | str replace '/nix/store/' '')"
   let linkProfileCmd = ""
   let cs = (do -c { ^ssh $"cole@($target)" $"readlink -f /run/current-system" } | str trim)
   if ($cs == $topout) {

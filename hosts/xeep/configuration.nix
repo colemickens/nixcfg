@@ -17,14 +17,8 @@ in
 
     ../../mixins/rclone-googledrive-mounts.nix
 
-    # ./services/aria2.nix
     ./services/revproxy.nix
     ./services/home-assistant
-    # ./services/netboot-server.nix
-    # ./services/samba.nix
-    # ./services/rsntp.nix
-    # ./services/rtsptoweb.nix
-    # ./services/snapserver.nix
     ./services/plex.nix
     ./services/unifi.nix
     
@@ -45,25 +39,6 @@ in
     ];
     
     nixcfg.common.hostColor = "orange";
-
-    # services.windmill = {
-    #   enable = true;
-    # };
-      
-    # services.paperless-ng = {
-    #   enable = true;
-    #   extraConfig = {
-    #     PAPERLESS_AUTO_LOGIN_USERNAME = "admin";
-    #   };
-    # };
-
-    hardware.bluetooth.enable = true;
-    hardware.usbWwan.enable = true;
-    hardware.cpu.intel.updateMicrocode = true;
-
-    services.fwupd.enable = true;
-    # services.fwupd.overrideEspMountPoint = "/boot";
-
     nixcfg.common.useXeepTimeserver = false;
     
     systemd.network = {

@@ -6,6 +6,10 @@
       "nvidia-x11"
       "nvidia-settings"
       "cudatoolkit"
+      
+      # profiles/gui
+      "ripcord"
+      "google-chrome-dev"
     ];
   };
 }

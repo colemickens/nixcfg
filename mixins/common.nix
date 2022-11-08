@@ -2,9 +2,8 @@
 
 let
   cfg = config.nixcfg.common;
-  defaultKernel = pkgs.linuxKernel.packages.linux_6_0;
-  defaultZfsKernel = pkgs.linuxKernel.packages.linux_6_0;
-  _zfsEnableUnstable = true;
+  _kernelPackages = pkgs.linuxKernel.packages.linux_6_0;
+  _zfsUnstable = true;
   # _defaultKernel = pkgs.linuxKernel.packagesFor
   #   (pkgs.linuxPackages_latest.kernel.override {
   #     structuredExtraConfig = {
@@ -31,12 +30,6 @@ let
   #   });
   hn = config.networking.hostName;
   defaultTimeServers = options.networking.timeServers.default;
-  _defaultTimeServers = [
-    "0.nixos.pool.ntp.org"
-    "1.nixos.pool.ntp.org"
-    "2.nixos.pool.ntp.org"
-    "3.nixos.pool.ntp.org"
-  ];
 in
 {
   imports = [
@@ -63,36 +56,37 @@ in
         type = lib.types.bool;
         default = true;
       };
+      defaultWifi = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+      };
       useZfs = lib.mkOption {
         type = lib.types.bool;
         default = true;
       };
       useXeepTimeserver = lib.mkOption {
         type = lib.types.bool;
-        # default = true; # TODO: this is questionable...
-        default = false; # TODO: this is questionable...
+        default = false;
       };
       hostColor = lib.mkOption {
         type = lib.types.str;
         default = "grey";
         description = "this is used as a hostname-hint-accent in zellij/waybar/shell prompts";
       };
-      defaultTheme = lib.mkOption {
-        type = lib.types.str;
-        default = "XXX";
-        description = ''
-          This is the name of an iterm2 theme.
-          Used for zellij, helix, sway, mako, etc.
-        '';
+      skipMitigations = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+      };
+      sysdBoot = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
       };
     };
   };
 
   config =
     ({
-      ###################################
-      ## DEBLOAT
-      ###################################
+      ## DEBLOAT ##############################################################
       documentation = (lib.mkIf cfg.defaultNoDocs ({
         enable = false;
         doc.enable = false;
@@ -100,31 +94,34 @@ in
         info.enable = false;
         nixos.enable = false;
       }));
+      system.disableInstallerTools = true;
 
-      ###################################
-      ## BOOT
-      ###################################
+      ## BOOT #################################################################
       console.earlySetup = true; # needed for LUKS
       boot = {
         tmpOnTmpfs = lib.mkDefault false;
         cleanTmpDir = true;
-        supportedFilesystems = lib.optionals (cfg.useZfs) [ "zfs" ];
-        initrd.supportedFilesystems = lib.optionals (cfg.useZfs) [ "zfs" ];
+        zfs.enableUnstable = (cfg.useZfs && _zfsUnstable);
 
-        # TODO: consider moving to non-interactive hosts only
-        kernelParams = [ "mitigations=off" ];
+        loader = {
+          grub = {
+            pcmemtest.enable = (pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isx86);
+            timeoutStyle = "hidden";
+            configurationLimit = 10;
+          };
+          systemd-boot = {
+            configurationLimit = 10;
+          };
+          timeout = 1;
+        };
 
-        loader.grub = {
-          pcmemtest.enable = lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isx86) true;
-          timeoutStyle = "hidden";
-          configurationLimit = 10;
+        initrd = {
+          systemd.enable = cfg.sysdBoot;
+          supportedFilesystems = lib.optionals (cfg.useZfs) [ "zfs" ];
         };
-        loader.systemd-boot = {
-          configurationLimit = 10;
-        };
-        loader.timeout = 1;
-        kernelPackages = lib.mkIf cfg.defaultKernel (lib.mkDefault (if cfg.useZfs then defaultZfsKernel else defaultKernel));
-        zfs.enableUnstable = lib.mkIf (cfg.defaultKernel && cfg.useZfs && _zfsEnableUnstable) true;
+
+        kernelPackages = _kernelPackages;
+        kernelParams = lib.mkIf cfg.skipMitigations [ "mitigations=off" ];
         kernel.sysctl = {
           "fs.file-max" = 100000;
           "fs.inotify.max_user_instances" = 256;
@@ -132,39 +129,32 @@ in
         };
       };
 
-      # system.disableInstallerTools = true;
+      ## NETWORK + TIME ##############################################
+      networking = {
+        hostId = pkgs.lib.concatStringsSep "" (pkgs.lib.take 8
+          (pkgs.lib.stringToCharacters
+            (builtins.hashString "sha256" config.networking.hostName)));
+        firewall.enable = true;
+        useDHCP = lib.mkIf (cfg.defaultNetworking) false;
+        useNetworkd = lib.mkIf (cfg.defaultNetworking) true;
 
-      ###################################
-      ## NETWORK 
-      ###################################
-      # - no wifi by default
-      #   so add iwd/wireless per-host
-      networking.hostId = pkgs.lib.concatStringsSep "" (pkgs.lib.take 8
-        (pkgs.lib.stringToCharacters
-          (builtins.hashString "sha256" config.networking.hostName)));
-      networking.firewall.enable = true;
-      networking.useDHCP = lib.mkIf (cfg.defaultNetworking) false;
-      networking.useNetworkd = lib.mkIf (cfg.defaultNetworking) true;
+        firewall.logRefusedConnections = false;
+        timeServers = [ ]
+          ++ (if cfg.useXeepTimeserver then [ "192.168.1.10" ] else [ ])
+          ++ defaultTimeServers;
+        
+        wireless = lib.mkIf cfg.defaultWifi {
+          iwd.enable = true;
+        };
+      };
       services.resolved.enable = true;
-
-      # TODO: Fuck OVHCloud.
-      # networking.extraHosts = let ip = "100.72.11.62"; in ''
-      #   ${ip} cleo.cat
-      #   ${ip} x.cleo.cat
-      #   ${ip} home.x.cleo.cat
-      #   ${ip} sd.cleo.cat
-      #   ${ip} sdo.cleo.cat
-      # '';
-      networking.firewall.logRefusedConnections = true;
-      networking.timeServers = [ ]
-        ++ (if cfg.useXeepTimeserver then [ "192.168.1.10" ] else [ ])
-        ++ defaultTimeServers;
+      services.timesyncd.enable = true;
+      time.timeZone = lib.mkDefault "America/Los_Angeles";
 
       systemd.network = (lib.mkIf (cfg.defaultNetworking) {
         enable = true;
 
         wait-online.anyInterface = true;
-        wait-online.ignoredInterfaces = [ "wlan0" "wlp1s0" "wlp2s0" "tailscale0" "virbr0" ];
 
         # leave the kernel dummy devies unmanagaed
         networks."10-dummy" = {
@@ -214,62 +204,50 @@ in
         };
       });
 
-      ###################################
-      ## PACKAGES / NIXPKGS CONFIG
-      ###################################
-      environment.systemPackages = with pkgs;
-        [
-          coreutils
-        ];
       nixpkgs.overlays = [
         inputs.self.overlays.default
       ];
 
-      specialisation = {
-        "sysdinit" = {
-          inheritParentConfig = true;
-          configuration = {
-            config = {
-              boot.initrd.systemd.enable = true;
+      ## SYSTEM ###############################################################
+      environment.systemPackages = with pkgs; [
+        coreutils
+      ];
 
-              boot.initrd.luks.devices = lib.mkIf
-                (builtins.hasAttr "nixos-luksroot" config.boot.initrd.luks.devices)
-                {
-                  "nixos-luksroot" = {
-                    crypttabExtraOpts = [
-                      "fido2-device=auto"
-                    ];
-                  };
-                };
-            };
-          };
+      specialisation."oldboot" = lib.mkIf cfg.sysdBoot {
+        inheritParentConfig = true;
+        configuration = {
+          config.nixcfg.common.sysdBoot = lib.mkForce false;
         };
       };
 
-      ###################################
-      ## SYSTEM
-      ###################################
+      security = {
+        sudo.enable = true;
+        sudo.wheelNeedsPassword = false;
+
+        please.enable = true;
+        please.wheelNeedsPassword = false;
+      };
+
+      users = {
+        mutableUsers = false;
+        users."root".initialHashedPassword = lib.mkForce "$6$k.vT0coFt3$BbZN9jqp6Yw75v9H/wgFs9MZfd5Ycsfthzt3Jdw8G93YhaiFjkmpY5vCvJ.HYtw0PZOye6N9tBjNS698tM3i/1";
+        users."root".hashedPassword = config.users.users."root".initialHashedPassword;
+      };
+
+      ## MISC HARDWARE RELATED ################################################
       services.fwupd.enable = true;
-      services.timesyncd.enable = true;
-      # services.journald.extraConfig = ''
-      #   SystemMaxUse=10M
-      # '';
-      i18n.defaultLocale = "en_US.UTF-8";
-      time.timeZone = lib.mkDefault "America/Los_Angeles";
+      hardware.enableRedistributableFirmware = true;
+      hardware.usbWwan.enable = true; # dual role usb/cdrom stick thing
+      hardware.cpu.intel.updateMicrocode = true;
+      hardware.cpu.amd.updateMicrocode = true;
+
+      ## SILLY CUSTOMIZATION ##################################################
       services.getty = {
         greetingLine = ''\l  -  (kernel: \r) (label: ${config.system.nixos.label}) (arch: \m)'';
         helpLine = ''
           -... . / --. .- -.-- --..-- / -.. --- / -.-. .-. .. -- .
         '';
       };
-
-      security.please.enable = true;
-      security.sudo.wheelNeedsPassword = false;
-      users.mutableUsers = false;
-      users.users."root".initialHashedPassword = lib.mkForce "$6$k.vT0coFt3$BbZN9jqp6Yw75v9H/wgFs9MZfd5Ycsfthzt3Jdw8G93YhaiFjkmpY5vCvJ.HYtw0PZOye6N9tBjNS698tM3i/1";
-      users.users."root".hashedPassword = config.users.users."root".initialHashedPassword;
-
-      hardware.enableRedistributableFirmware = true;
     });
 }
 
