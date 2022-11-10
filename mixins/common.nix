@@ -120,7 +120,7 @@ in
           supportedFilesystems = lib.optionals (cfg.useZfs) [ "zfs" ];
         };
 
-        kernelPackages = _kernelPackages;
+        kernelPackages = lib.mkIf cfg.defaultKernel _kernelPackages;
         kernelParams = lib.mkIf cfg.skipMitigations [ "mitigations=off" ];
         kernel.sysctl = {
           "fs.file-max" = 100000;

@@ -168,6 +168,11 @@ def "main build" [ drv: string ] {
   buildDrvs $drvs false
   print -e ($drvs | get outputs | flatten)
 }
+def "main cache" [ drv: string ] {
+  let drvs = evalDrv $drv # has a different type than above?
+  buildDrvs $drvs true
+  print -e ($drvs | get outputs | flatten)
+}
 
 def "main loopup" [] {
   main up | ignore

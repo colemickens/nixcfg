@@ -162,6 +162,8 @@
             {
               #TODO: major issue, this is diff:
               tb = o.system.build.tow-boot.outputs.diskImage;
+              # sdcard = o.system.build.sdImageX;
+              installer = o.system.build.installer;
               # tb = o.system.build.tow-boot.outputs.firmware;
               # rootfs = o.mobile.outputs.generatedFilesystems.rootfs;
             };
