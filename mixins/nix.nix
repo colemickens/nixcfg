@@ -3,23 +3,19 @@
 with lib;
 
 let
-  _nixUnstableXdg = pkgs.nixUnstable.overrideAttrs (old: {
-    src = pkgs.fetchFromGitHub {
-      owner = "Artturin";
-      repo = "nix";
-      rev = "0c4a30eecc22a7e10cddba4612df484ade3e291f";
-      sha256 = "sha256-HNU+jltYw3gdt9ApI21zUoojy0aJ4y1x7kidkWZkKg0=";
-    };
-  });
+  # _nixUnstableXdg = pkgs.nixUnstable.overrideAttrs (old: {
+  #   src = pkgs.fetchFromGitHub {
+  #     owner = "Artturin";
+  #     repo = "nix";
+  #     rev = "0c4a30eecc22a7e10cddba4612df484ade3e291f";
+  #     sha256 = "sha256-HNU+jltYw3gdt9ApI21zUoojy0aJ4y1x7kidkWZkKg0=";
+  #   };
+  # });
   _nix = pkgs.nixVersions.unstable;
 in
 {
   config = {
     environment.systemPackages = [ _nix ];
-    sops.secrets.nixAccessTokens = {
-      mode = "0440";
-      group = config.users.groups.keys.name;
-    };
     nixpkgs.config = {
       allowAliases = false;
     };
@@ -54,7 +50,6 @@ in
       package = _nix;
       extraOptions = ''
         experimental-features = nix-command flakes recursive-nix
-        !include ${config.sops.secrets.nixAccessTokens.path}
       '';
     };
   };

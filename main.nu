@@ -52,7 +52,7 @@ def buildRemoteDrvs [ drvs: list arch: string buildHost: string cache: bool ] {
       $nixopts | append [ "--store" $"ssh-ng://($buildHost)" ]
     })
     if ($buildHost == "localhost") {
-      ^nom build $nixopts $drvPaths
+      ^nom build --keep-going $nixopts $drvPaths
     } else {
       ^nix copy --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvPaths
       ^nix build $nixopts -L $drvPaths
@@ -204,6 +204,8 @@ def "main ci eval" [] {
 def "main ci build" [] {
   let drvs = (open --raw $"($cidir)/drvs.json" | from json)
   buildDrvs $drvs
+  
+  $drvs
 }
 def "main ci push" [] {
   let drvs = (open --raw $"($cidir)/drvs.json" | from json)

@@ -238,8 +238,8 @@ in
       services.fwupd.enable = true;
       hardware.enableRedistributableFirmware = true;
       hardware.usbWwan.enable = true; # dual role usb/cdrom stick thing
-      hardware.cpu.intel.updateMicrocode = true;
-      hardware.cpu.amd.updateMicrocode = true;
+      # hardware.cpu.intel.updateMicrocode = true;
+      # hardware.cpu.amd.updateMicrocode = true;
 
       ## SILLY CUSTOMIZATION ##################################################
       services.getty = {

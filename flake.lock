@@ -1088,12 +1088,10 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1668035702,
-        "narHash": "sha256-2W62IOfkuIuI0AA2uMRaLzBocaPA8ScSIOH+htAxPRA=",
-        "owner": "colemickens",
-        "repo": "nixpkgs",
-        "rev": "3ea6927f59571d735d3165090a29940d1cdbf2c3",
-        "type": "github"
+        "lastModified": 1668064198,
+        "narHash": "sha256-MrQPbzE2vQpUuJBB14iKMR56PQOG0LFFQWNX76JDVTo=",
+        "type": "git",
+        "url": "file:///home/cole/code/nixpkgs/cmpkgs"
       },
       "original": {
         "owner": "colemickens",
@@ -1334,12 +1332,10 @@
         ]
       },
       "locked": {
-        "lastModified": 1668054058,
-        "narHash": "sha256-BcqNgQNy8V0ueA1tvdu+4rec3xc+J7hGlHtxTUYNxLY=",
-        "owner": "colemickens",
-        "repo": "Tow-Boot",
-        "rev": "d291461b4336127091e6cf1fa80d64384b3bd368",
-        "type": "github"
+        "lastModified": 1668059671,
+        "narHash": "sha256-/FKAV2di/ZD2LScuWc1/PKbMe1gKk9ATJbMtXWVHrNs=",
+        "type": "git",
+        "url": "file:///home/cole/code/tow-boot/radxa-rock5b"
       },
       "original": {
         "owner": "colemickens",

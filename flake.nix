@@ -160,7 +160,10 @@
             };
           rockfiveb1 = let o = (cfg "rockfiveb1"); in
             {
-              tb = o.system.build.towboot.outputs.diskImage;
+              #TODO: major issue, this is diff:
+              tb = o.system.build.tow-boot.outputs.diskImage;
+              # tb = o.system.build.tow-boot.outputs.firmware;
+              # rootfs = o.mobile.outputs.generatedFilesystems.rootfs;
             };
           # eche96 = nixosConfigurations.openstick.config.mobile.outputs.android;
         };
