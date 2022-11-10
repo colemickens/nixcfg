@@ -56,10 +56,10 @@
       url = "github:colemickens/Tow-Boot/radxa-zero";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # tow-boot-radxa-rock5b = {
-    #   url = "github:colemickens/Tow-Boot/radxa-rock5b";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    tow-boot-radxa-rock5b = {
+      url = "github:colemickens/Tow-Boot/radxa-rock5b";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     tow-boot-visionfive = {
       url = "github:colemickens/Tow-Boot/visionfive";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -126,11 +126,13 @@
         };
         sbc = rec {
           radxazero1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
+          rockfiveb1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpifour1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpithreebp1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpizerotwo1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           openstick = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
-          visionfiveone1 = { pkgs = inputs.nixpkgs; sys = "riscv64-linux"; };
+          # visionfiveone1 = { pkgs = inputs.cross-riscv64; sys = "riscv64-linux"; };
+          # visionfiveone1 = { pkgs = inputs.cross-riscv64; sys = "x86_64-linux"; };
         };
         pc = {
           carbon = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
@@ -149,11 +151,17 @@
       images = let cfg = n: nixosConfigurations."${n}".config; in
         {
           # installer = (cfg "installer").config.system.build.isoImage;
-          openstick = {
-            inherit ((cfg "openstick").mobile.outputs.android)
-              /* android-flashable-system android-flashable-bootimg
-              android-abootimg */ android-bootimg;
-          };
+          openstick = let o = (cfg "openstick"); in
+            {
+              aboot = o.mobile.outputs.android.android-abootimg;
+              boot = o.mobile.outputs.android.android-bootimg;
+              # 'fastboot flash -S 100M $rootfs/NIXOS_SYSTEM.img'
+              rootfs = o.mobile.outputs.generatedFilesystems.rootfs;
+            };
+          rockfiveb1 = let o = (cfg "rockfiveb1"); in
+            {
+              tb = o.system.build.towboot.outputs.diskImage;
+            };
           # eche96 = nixosConfigurations.openstick.config.mobile.outputs.android;
         };
 
@@ -197,6 +205,10 @@
           # internal helpers:
           tfout = import ./cloud { inherit (inputs) terranix; inherit pkgs; };
           mkShell = (name: import ./shells/${name}.nix { inherit inputs pkgs; });
+          mkAppScript = (name: script: {
+            type = "app";
+            program = pkgs.writeScript "${name}.sh" script;
+          });
         in
         rec {
           inherit pkgs pkgsUnfree;

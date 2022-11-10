@@ -38,12 +38,13 @@ in
       maximumJavaHeapSize = 256;
     };
 
-
-    networking.firewall.interfaces = lib.mkMerge [
-      (lib.genAttrs allowedInterfaces (n: allowedRules))
-      ({
-        "tailscale0".allowedTCPPorts = [ 8080 8443 ];
-      })
-    ];
+    networking.firewall.allowedTCPPorts = allowedRules.allowedTCPPorts;
+    networking.firewall.allowedUDPPorts = allowedRules.allowedUDPPorts;
+    # networking.firewall.interfaces = lib.mkMerge [
+    #   (lib.genAttrs allowedInterfaces (n: allowedRules))
+    #   ({
+    #     "tailscale0".allowedTCPPorts = [ 8080 8443 ];
+    #   })
+    # ];
   };
 }

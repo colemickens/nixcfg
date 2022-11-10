@@ -11,12 +11,12 @@ in
     ../../profiles/viz
     ../../mixins/wpa-full.nix
   ]
-  ++ inputs.tow-boot-radxa-zero.nixosModules
+  ++ inputs.tow-boot-radxa-rock5b.nixosModules
   ;
   config = {
     nixcfg.common.useZfs = false;
     
-    networking.hostName = "radxazero1";
+    networking.hostName = "radxarockfiveb1";
     system.stateVersion = "21.11";
     # boot.initrd.systemd.network.networks."10-eth0".addresses =
     #   [{ addressConfig = { Address = eth_ip; }; }];

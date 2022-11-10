@@ -12,6 +12,7 @@ in
     ../../mixins/gfx-nvidia.nix
     ../../mixins/gfx-debug.nix
 
+    ../../mixins/android.nix
     ../../mixins/grub-signed-shim.nix
     ../../mixins/rclone-googledrive-mounts.nix
     ../../mixins/sshd.nix

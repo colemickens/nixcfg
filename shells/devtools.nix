@@ -21,6 +21,7 @@ minimalMkShell {
     /* nix tools */
     nix
     rnix-lsp
+    nix-du nix-tree
 
     /*tools */
     lldb
