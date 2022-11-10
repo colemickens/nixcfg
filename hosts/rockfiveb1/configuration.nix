@@ -7,8 +7,8 @@ in
   imports = [
     ./unfree.nix
     
-    ../profiles/interactive.nix
-    ../mixins/iwd-networks.nix
+    ../../profiles/interactive.nix
+    ../../mixins/iwd-networks.nix
   ]
   ++ inputs.tow-boot-radxa-rock5b.nixosModules
   ;
