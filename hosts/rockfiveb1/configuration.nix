@@ -15,7 +15,10 @@ in
   ++ inputs.tow-boot-radxa-rock5b.nixosModules
   ;
   config = {
-    nixcfg.common.useZfs = false;
+    nixcfg.common = {
+      useZfs = false;
+      defaultKernel = false;
+    };
     
     networking.hostName = "rockfiveb1";
     system.stateVersion = "21.11";
