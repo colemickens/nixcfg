@@ -1088,14 +1088,30 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1668070376,
-        "narHash": "sha256-QuDVCVz1+jOFXW6mL6uZyZiSb5F5k+w0EaJhES9/1ok=",
+        "lastModified": 1668218696,
+        "narHash": "sha256-v5FH34PsmQvh2DkOSkKizH+6nG5Xr8i3prHs795CMCE=",
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs/cmpkgs"
       },
       "original": {
         "owner": "colemickens",
         "ref": "cmpkgs",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_5": {
+      "locked": {
+        "lastModified": 1667991831,
+        "narHash": "sha256-DHgEsLZI044B9T4AjA3K6+yB9/DqLr4dyA7OIx0FG7o=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "872fceeed60ae6b7766cc0a4cd5bf5901b9098ec",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -1327,13 +1343,11 @@
     },
     "tow-boot-radxa-rock5b": {
       "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
+        "nixpkgs": "nixpkgs_5"
       },
       "locked": {
         "lastModified": 1668059671,
-        "narHash": "sha256-/FKAV2di/ZD2LScuWc1/PKbMe1gKk9ATJbMtXWVHrNs=",
+        "narHash": "sha256-E2Z+QgymGXPjkh+8sLklgHJmL2nJSOd/NsPesWlofWk=",
         "type": "git",
         "url": "file:///home/cole/code/tow-boot/radxa-rock5b"
       },

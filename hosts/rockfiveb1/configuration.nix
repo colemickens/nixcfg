@@ -9,9 +9,11 @@ in
 {
   imports = [
     ./unfree.nix
-
+    ../../profiles/user.nix
     ../../mixins/common.nix
-    ../../mixins/iwd-networks.nix
+    ../../mixins/tailscale.nix
+    ../../mixins/sshd.nix
+    # ../../mixins/iwd-networks.nix
   ]
   ++ inputs.tow-boot-radxa-rock5b.nixosModules
   ;
@@ -26,7 +28,7 @@ in
     fileSystems = lib.mkDefault {
       "/boot" = {
         fsType = "vfat";
-        device = "/dev/disk/by-partuuid/${hn}-boot";
+        device = "/dev/disk/by-partlabel/${hn}-boot";
       };
       "/" = {
         fsType = "ext4";
@@ -39,13 +41,15 @@ in
     nixcfg.common = {
       useZfs = false;
       defaultKernel = false;
+      defaultNetworking = false;
+      sysdBoot = false;
     };
 
-    system.build.installer = (
+    system.build.installFiles = (
       let
         closureInfo = pkgs.closureInfo { rootPaths = config.system.build.toplevel; };
       in
-      pkgs.runCommand "make-installer-${hn}" { } ''
+      pkgs.runCommand "installFiles-${hn}" { } ''
         set -x
         mkdir $out
         mkdir $out/boot
@@ -54,6 +58,7 @@ in
           -d $out/boot/ -c "${config.system.build.toplevel}"
       
         cp -a "${closureInfo}/registration" "$out/root/nix-path-registration"
+        echo "${config.system.build.toplevel.outPath}" > "$out/root/toplevel"
       ''
     ).out;
     boot.postBootCommands = ''
@@ -66,17 +71,7 @@ in
         rm -f /nix-path-registration
       fi
     '';
-    
-    # install script
-    system.build.installScript = ''
-      # new gpt
-      # new part boot
-      # new part root
-      # format boot
-      # rsync $installer/boot
-      # rsync $installer/root
-      # nix copy --to --no-check-sigs
-    '';
+
 
     networking.hostName = hn;
     system.stateVersion = "21.11";
@@ -92,14 +87,21 @@ in
       enable = true;
     };
 
-    tow-boot.enable = true;
-    tow-boot.autoUpdate = false;
-    tow-boot.device = "radxa-rock5b";
     # configuration.config.Tow-Boot = {
-    tow-boot.config = ({
-      diskImage.mbr.diskID = config.system.build.mbr_disk_id;
-      # useDefaultPatches = false;
-      # withLogo = false;
-    });
+    tow-boot = {
+      enable = true;
+      autoUpdate = false;
+      device = "radxa-rock5b";
+      config = {
+        # diskImage.mbr.diskID = config.system.build.mbr_disk_id;
+        defconfig = "rock-5b-rk3588_defconfig";
+        withExtDtb = "${config.boot.kernelPackages.kernel}/dtbs/rockchip/rk3588-rock-5b.dtb";
+        config = [
+          (helpers: with helpers; { })
+        ];
+        # useDefaultPatches = false;
+        # withLogo = false;
+      };
+    };
   };
 }

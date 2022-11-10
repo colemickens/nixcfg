@@ -39,15 +39,12 @@ def buildDrvs [ drvs: list cache=false: bool ] {
   buildRemoteDrvs $drvs "aarch64-linux" $builder_a64 $cache
 }
 
-def buildRemoteDrvs [ drvs: list arch: string buildHost: string cache: bool ] {
-  let drvs = ($drvs | where isCached == false | where system == $arch)
-  header "light_blue_reverse" $"build: ($arch) ($drvs | length) drvs on ($buildHost)"
+def buildRemoteDrvs [ drvs_: list arch: string buildHost: string cache: bool ] {
+  let drvs = ($drvs_ | where isCached == false | where system == $arch)
+  header "light_blue_reverse" $"build: ($arch) ($drvs | length) drvs on ($buildHost) [cache=($cache)]"
   if (($drvs | length) > 0) {
     print -e ($drvs | select name isCached)
     let drvPaths = ($drvs | get "drvPath")
-    let outs  = (($drvs | get outputs | flatten | get out) | flatten)
-    let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str collect)
-
     let nixopts = (if ($buildHost == "localhost") { $nixopts } else {
       $nixopts | append [ "--store" $"ssh-ng://($buildHost)" ]
     })
@@ -57,18 +54,20 @@ def buildRemoteDrvs [ drvs: list arch: string buildHost: string cache: bool ] {
       ^nix copy --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvPaths
       ^nix build $nixopts -L $drvPaths
     }
+  }
 
-    if $cache {
-      if $buildHost == localhost {
-        cacheDrvs $drvs
-      } else {
-        let sshExe = ([
-          $"printf '%s' '($outsStr)' | env CACHIX_SIGNING_KEY='($env.CACHIX_SIGNING_KEY)' "
-          $"nix-shell -I nixpkgs=($nixpkgs) -p cachix --command 'cachix push ($cachix_cache)'"
-        ] | str join ' ')
-        ^ssh $buildHost $sshExe
-        ^nix build $nixopts -L -j0 $outs
-      }
+  if $cache {
+    let outs  = (($drvs_ | get outputs | flatten | get out) | flatten)
+    let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str collect)
+    if $buildHost == localhost {
+      cacheDrvs $drvs_
+    } else {
+      let sshExe = ([
+        $"printf '%s' '($outsStr)' | env CACHIX_SIGNING_KEY='($env.CACHIX_SIGNING_KEY)' "
+        $"nix-shell -I nixpkgs=($nixpkgs) -p cachix --command 'cachix push ($cachix_cache)'"
+    ] | str join ' ')
+      ^ssh $buildHost $sshExe
+      ^nix build $nixopts -L -j0 $outs
     }
   }
 }
@@ -168,10 +167,13 @@ def "main build" [ drv: string ] {
   buildDrvs $drvs false
   print -e ($drvs | get outputs | flatten)
 }
-def "main cache" [ drv: string ] {
+def "main cachedl" [ drv: string] {
   let drvs = evalDrv $drv # has a different type than above?
   buildDrvs $drvs true
-  print -e ($drvs | get outputs | flatten)
+  let builds = ($drvs | get outputs | get out)
+  header light_gray_reverse $"download"
+  ^nix build -j0 --option narinfo-cache-negative-ttl 0 $builds
+  $builds
 }
 
 def "main loopup" [] {

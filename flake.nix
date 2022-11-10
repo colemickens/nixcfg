@@ -58,7 +58,7 @@
     };
     tow-boot-radxa-rock5b = {
       url = "github:colemickens/Tow-Boot/radxa-rock5b";
-      inputs.nixpkgs.follows = "nixpkgs";
+      # inputs.nixpkgs.follows = "nixpkgs";
     };
     tow-boot-visionfive = {
       url = "github:colemickens/Tow-Boot/visionfive";
@@ -127,6 +127,7 @@
         sbc = rec {
           radxazero1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rockfiveb1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
+          aitchninesix1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpifour1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpithreebp1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpizerotwo1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
@@ -160,14 +161,14 @@
             };
           rockfiveb1 = let o = (cfg "rockfiveb1"); in
             {
-              #TODO: major issue, this is diff:
-              tb = o.system.build.tow-boot.outputs.diskImage;
-              # sdcard = o.system.build.sdImageX;
-              installer = o.system.build.installer;
-              # tb = o.system.build.tow-boot.outputs.firmware;
-              # rootfs = o.mobile.outputs.generatedFilesystems.rootfs;
+              tbsd = o.system.build.tow-boot.outputs.diskImage;
+              installFiles = o.system.build.installFiles;
             };
-          # eche96 = nixosConfigurations.openstick.config.mobile.outputs.android;
+          aitchninesix1 = let o = (cfg "aitchninesix1"); in
+            {
+              tbsd = o.system.build.tow-boot.outputs.diskImage;
+              installFiles = o.system.build.installFiles;
+            };
         };
 
       ## NIXOS_MODULES # TODO: we don't use these? #############################
@@ -212,7 +213,7 @@
           mkShell = (name: import ./shells/${name}.nix { inherit inputs pkgs; });
           mkAppScript = (name: script: {
             type = "app";
-            program = pkgs.writeScript "${name}.sh" script;
+            program = (pkgs.writeScript "${name}.sh" script).outPath;
           });
         in
         rec {
@@ -224,6 +225,19 @@
 
           ## APPS ##############################################################
           apps = {
+            rockfiveb1_install = let f = images.rockfiveb1.installFiles; in
+              mkAppScript "rockfiveb1_install" ''
+                set -x
+                set -euo pipefail
+                rm -f result
+                ./main.nu cachedl 'images.rockfiveb1.installFiles'
+                out="$(readlink result)"
+                sudo rsync -avh --delete "$out/boot/" "/tmp/sda1/"
+                sudo rsync -avh "$out/root/" "/tmp/sda2/"
+                sudo nix copy "''$(cat "$out/root/toplevel")" \
+                  --no-check-sigs \
+                  --to /tmp/sda2
+              '';
             tf = { type = "app"; program = tfout.tf.outPath; };
             tf-apply = { type = "app"; program = tfout.apply.outPath; };
             tf-destroy = { type = "app"; program = tfout.destroy.outPath; };
