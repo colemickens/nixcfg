@@ -230,13 +230,13 @@
                 set -x
                 set -euo pipefail
                 rm -f result
-                ./main.nu cachedl 'images.rockfiveb1.installFiles'
+                ./main.nu cachedl 'images.aitchninesix1.installFiles'
                 out="$(readlink result)"
-                sudo rsync -avh --delete "$out/boot/" "/tmp/sda1/"
-                sudo rsync -avh "$out/root/" "/tmp/sda2/"
+                sudo rsync -avh --delete "$out/boot/" "/tmp/mnt-boot/"
+                sudo rsync -avh "$out/root/" "/tmp/mnt-root/"
                 sudo nix copy "''$(cat "$out/root/toplevel")" \
                   --no-check-sigs \
-                  --to /tmp/sda2
+                  --to /tmp/mnt-root
               '';
             tf = { type = "app"; program = tfout.tf.outPath; };
             tf-apply = { type = "app"; program = tfout.apply.outPath; };

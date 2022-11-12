@@ -2,7 +2,7 @@
 
 let cidir = "/tmp/nixci"; mkdir $cidir
 let nixpkgs = "https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # used by nix-shell cachix
-let nixopts = ([ "--no-link" "--option" "narinfo-cache-negative-ttl" "0" ])
+let nixopts = [ "--no-link" "--option" "narinfo-cache-negative-ttl" "0" ]
 let builder = if (not ("NIX_BUILDER" in $env)) { "nom" } else { $env | get NIX_BUILDER | str trim }
 let builder_x86 = (if ("BUILDER_X86" in $env) { $env | get "BUILDER_X86" | str trim }
   else if ((^hostname | str trim) == "slynux") { "localhost" }
@@ -83,8 +83,7 @@ def cacheDrvs [ drvs: list ] {
 def deployHost [ host: string ] {
   header light_gray_reverse $"deploy: ($host)"
   let jobs = evalDrv $"toplevels.($host)"
-  buildDrvs $jobs
-  cacheDrvs $jobs
+  buildDrvs $jobs true
   let topout = ($jobs | get "outputs" | flatten | get "out" | flatten | first)
   let target = (tailscale ip --4 $host | str trim)
   

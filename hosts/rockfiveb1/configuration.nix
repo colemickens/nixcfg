@@ -5,6 +5,8 @@ let
   kernel = pkgs.callPackage ./kernel.nix { };
   kernelPackages = pkgs.linuxKernel.packagesFor kernel;
   hn = "rockfiveb1";
+
+  krnl = config.boot.kernelPackages.kernel;
 in
 {
   imports = [
@@ -75,8 +77,6 @@ in
 
     networking.hostName = hn;
     system.stateVersion = "21.11";
-    # boot.initrd.systemd.network.networks."10-eth0".addresses =
-    #   [{ addressConfig = { Address = eth_ip; }; }];
     system.build = rec {
       mbr_disk_id = "888885b1";
     };
@@ -93,14 +93,10 @@ in
       autoUpdate = false;
       device = "radxa-rock5b";
       config = {
-        # diskImage.mbr.diskID = config.system.build.mbr_disk_id;
-        defconfig = "rock-5b-rk3588_defconfig";
-        withExtDtb = "${config.boot.kernelPackages.kernel}/dtbs/rockchip/rk3588-rock-5b.dtb";
-        config = [
-          (helpers: with helpers; { })
-        ];
-        # useDefaultPatches = false;
-        # withLogo = false;
+        device.identifier = "radxa-rock5b";
+        Tow-Boot = {
+          defconfig = "rock-5b-rk3588_defconfig";
+        };
       };
     };
   };
