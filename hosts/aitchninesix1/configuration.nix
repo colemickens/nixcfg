@@ -91,10 +91,9 @@ in
     boot.loader.generic-extlinux-compatible = {
       enable = true;
     };
-    
-    hardware.deviceTree.name = "rockchip/rk3588-nvr-demo-v10.dtb";
-    # hardware.deviceTree.name = "rockchip/rk3588-nvr-demo-v10-android.dtb";
-    
+
+    hardware.deviceTree.name = "rockchip/rk3588-nvr-demo-v10-android.dtb";
+
     tow-boot = {
       enable = true;
       autoUpdate = false;
@@ -103,6 +102,11 @@ in
         device.identifier = lib.mkForce "rockchip-rk3588-nvr-demo-v10";
         Tow-Boot = {
           defconfig = lib.mkForce "rk3588_defconfig";
+          config = [
+            (helpers: with helpers; {
+              # DEFAULT_DEVICE_TREE = "rk3558-nvr-demo-v10-android";
+            })
+          ];
         };
       };
     };

@@ -12,7 +12,7 @@ buildLinux (args // {
     owner = "rockchip-linux";
     repo = "kernel";
     rev = tag;
-    hash = "sha256-xLnuSbgarpFhyvGGHuF1/NsHMMkSwTcaTs/c33Xlxxx=";
+    hash = "sha256-IvLpUoNZHJWTmqxrA7tkP8mTESIeFl1Y6bJWeDi/hAw=";
   };
 
   structuredExtraConfig = with lib.kernel; {
@@ -50,6 +50,12 @@ buildLinux (args // {
     DEBUG_INFO_BTF = lib.mkForce no;
     DEBUG_INFO_BTF_MODULES = lib.mkForce no;
     
+    DRM_ITE_IT6161 = yes;
+    BCMDHD_PCIE = yes;
+    MALI_CSF_SUPPORT = yes;
+    
+    TOUCHSCREEN_FTS = lib.mkForce no;
+    
     # This is not a good console...
     # FIQ_DEBUGGER = no;
     # TODO: Fix 8250 console not binding as a console
@@ -70,6 +76,6 @@ buildLinux (args // {
     request_key_helper
   ]);
 
-  defconfig = "rk3588_nvr.config";
+  defconfig = "rockchip_linux_defconfig";
 
 } // (args.argsOverride or { }))

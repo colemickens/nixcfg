@@ -1090,6 +1090,9 @@
       "locked": {
         "lastModified": 1668218696,
         "narHash": "sha256-v5FH34PsmQvh2DkOSkKizH+6nG5Xr8i3prHs795CMCE=",
+        "ref": "refs/heads/cmpkgs",
+        "rev": "1558c224a71399567d73a5a5dca2868ee77ba86f",
+        "revCount": 424346,
         "type": "git",
         "url": "file:///home/cole/code/nixpkgs/cmpkgs"
       },
@@ -1347,7 +1350,7 @@
       },
       "locked": {
         "lastModified": 1668059671,
-        "narHash": "sha256-lOdXRlDp8fca1/8hAhgnX8aNf10Lrp5xes0p5vEeQSw=",
+        "narHash": "sha256-ZdnJRtl88RRI9VjMrdIod4gtb2NwOkIOG8Tm6njBfLM=",
         "type": "git",
         "url": "file:///home/cole/code/tow-boot/radxa-rock5b"
       },
