@@ -82,7 +82,7 @@ let
 in
 minimalMkShell {
   # TODO use something else for system?
-  name = "gstreamer-devenv";
+  name = "shell-gstreamer-devenv";
   hardeningDisable = [ "fortify" ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";

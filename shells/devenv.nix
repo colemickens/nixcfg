@@ -14,7 +14,7 @@ let
 in
 minimalMkShell {
   # TODO use something else for system?
-  name = "devenv";
+  name = "shell-devenv";
   hardeningDisable = [ "fortify" ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";

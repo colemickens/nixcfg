@@ -22,7 +22,7 @@ in
       EGL_PLATFORM = "wayland";
     };
 
-    hardware.nvidia = {
+    hardware.gpu.nvidia = {
       enable = true;
       package = nvidiaPkg;
 

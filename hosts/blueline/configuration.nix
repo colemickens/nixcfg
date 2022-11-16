@@ -6,17 +6,18 @@
 
     # ../../mixins/common.nix
     # ../../mixins/ssh.nix
-    ../../mixins/nmiot.nix
     ../../mixins/nix.nix
     ../../mixins/sshd.nix
+    ../../mixins/pipewire.nix
     ../../mixins/tailscale.nix
-    # ../../mixins/wpa-slim.nix
+    ../../mixins/iwd-networks.nix
 
     ../../profiles/user.nix
     # ../../profiles/core.nix
     # ../../profiles/interactive.nix
 
-    ../../profiles/phosh
+    # ../../profiles/phosh
+    ../../profiles/gnome-shell-mobile
 
     (import "${inputs.mobile-nixos-sdm845}/lib/configuration.nix" {
       device = "google-blueline";
@@ -26,6 +27,10 @@
   config = {
     system.stateVersion = "22.05";
     networking.hostName = "blueline";
+    
+    environment.systemPackages = with pkgs; [
+      bottom
+    ];
     # nixpkgs.crossSystem.system = "aarch64-linux";
 
     security.sudo.wheelNeedsPassword = false;

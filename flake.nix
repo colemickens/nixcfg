@@ -117,8 +117,8 @@
           # installer = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; host = "installer"; };
         };
         phone = rec {
-          # pinephone = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
-          # blueline = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
+          pinephone = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
+          blueline = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           # enchilada = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           # x_pinephone = pinephone // { sys = "x86_64-linux"; };
           # x_blueline = blueline // { sys = "x86_64-linux"; };
@@ -168,6 +168,10 @@
             {
               tbsd = o.system.build.tow-boot.outputs.diskImage;
               installFiles = o.system.build.installFiles;
+            };
+          blueline = let o = (cfg "blueline"); in
+            {
+              boot = o.mobile.outputs.android.android-bootimg;
             };
         };
 
@@ -244,7 +248,7 @@
           };
 
           ## PACKAGES ##########################################################
-          packages = (pkgs.__colemickens_nixcfg_pkgs);
+          packages = (pkgsUnfree.__colemickens_nixcfg_pkgs);
 
           ## NETBOOTS (paused: add grub => nix-netboot-server) #################
           # netboots_ = lib.genAttrs

@@ -2,7 +2,7 @@
 
 {
   config = {
-    hardware.radeon = {
+    hardware.gpu.radeon = {
       enable = true;
       utils.enable = true;
     };

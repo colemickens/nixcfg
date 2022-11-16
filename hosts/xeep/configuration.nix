@@ -53,6 +53,8 @@ in
         };
       };
     };
+    
+    networking.firewall.checkReversePath = "loose";
 
     boot = {
       initrd.availableKernelModules = [

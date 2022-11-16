@@ -126,7 +126,7 @@ def "main inputup" [] {
     [ "nixpkgs/cmpkgs" "nixpkgs/{master,cmpkgs-cross-{riscv64,armv6l}}" ]
     [ "home-manager/cmhm" "home-manager/master" ]
     # "tow-boot/development" "tow-boot/{rpi,radxa-zero,visionfive}"
-    [ "mobile-nixos/master" "mobile-nixos/{openstick,blueline-mainline-only--2022-08}" ]
+    [ "mobile-nixos/master" "mobile-nixos/{openstick,reset-scripts,sdm845-blue}" ]
     [ "flake-firefox-nightly" ]
     [ "nixpkgs-wayland/master" ]
     [ "linux/master" ]
@@ -136,10 +136,13 @@ def "main inputup" [] {
     ($s0 | each { |s1|
       glob $s1 | each { |dir|
         # man, I just am not sure about why I have to complete ignore
+        print -e $"input: ($dir): (ansi yellow_dimmed)check(ansi reset)"
         let r0 = (do -i { ^git -C $dir rebase --abort } | complete | ignore)
-        let r1 = (do -c { ^git -C $dir pull --rebase } | complete)
-        let r2 = (do -c { ^git -C $dir push origin HEAD -f } | complete)
-        ({ input: $dir, rebase:$r1.exit_code, push:$r2.exit_code })
+        let cmd = (do -i { ^git -C $dir pull --rebase } | complete)
+        if ($cmd.exit_code != 0) { error make {msg: $"input: ($dir): failed:\n\n($cmd.stderr)"} }
+        let cmd = (do -i { ^git -C $dir push origin HEAD -f } | complete)
+        if ($cmd.exit_code != 0) { error make {msg: $"input: ($dir): failed:\n\n($cmd.stderr)"} }
+        print -e $"input: ($dir): (ansi green)ok(ansi reset)"
         []
       } | flatten
     } | flatten) # had to add parens to get parallelism
@@ -185,7 +188,7 @@ def "main up" [] {
   header red_reverse "loopup" "▒"
 
   main inputup
-  main pkgup
+  # main pkgup
   main rpiup
   main lockup
   

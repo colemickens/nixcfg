@@ -33,8 +33,8 @@ in
     programs.calls.enable = true;
     hardware.sensor.iio.enable = true; # ?? no idea
 
-    environment.gnome.excludePackages = with pkgs.gnome3; [
-      gnome-terminal
+    environment.gnome.excludePackages = with pkgs.gnome; [
+      # gnome-terminal
     ];
 
     environment.etc."machine-info".text = lib.mkDefault ''

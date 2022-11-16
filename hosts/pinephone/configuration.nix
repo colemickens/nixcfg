@@ -4,7 +4,7 @@
   imports = [
     ./unfree.nix
 
-    ../../mixins/nmiot.nix
+    ../../mixins/iwd-networks.nix
     ../../mixins/nix.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix

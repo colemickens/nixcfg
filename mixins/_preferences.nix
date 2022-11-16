@@ -2,7 +2,7 @@
 
 let
   # colorscheme = inputs.nix-rice.colorschemes."purplepeter";
-  colorscheme = inputs.nix-rice.colorschemes."Gruvbox Dark";
+  colorscheme = inputs.nix-rice.colorschemes."GruvboxDark";
   # colorscheme = inputs.nix-rice.colorschemes."Ocean";
 
   bg_gruvbox_rainbow = builtins.fetchurl {

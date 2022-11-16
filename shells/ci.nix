@@ -4,7 +4,7 @@ let
   minimalMkShell = import ./_minimal.nix { inherit pkgs; };
 in
 minimalMkShell {
-  name = "ci";
+  name = "shell-ci";
 
   # shellHook = ''
   #   # activate secrets?

@@ -27,6 +27,7 @@ in
         automatic = true;
         randomizedDelaySec = "30min";
       };
+      nixPath = lib.mkForce []; # i doth protest
       settings = {
         keep-derivations = true; # this is the default (?)
         cores = 0;

@@ -4,7 +4,7 @@ let
   minimalMkShell = import ./_minimal.nix { inherit pkgs; };
 in
 minimalMkShell {
-  name = "devtools";
+  name = "shell-devtools";
 
   nativeBuildInputs = with pkgs; [
     (inputs.fenix.packages.${pkgs.hostPlatform.system}.latest.withComponents [
