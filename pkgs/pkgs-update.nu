@@ -45,7 +45,7 @@ def main [] {
       }
     )
     
-    {packageName: $it.packageName, eval: $it.eval, oldrev: $verinfo.rev, newrev: $newrev}
+    {packageName: $it.packageName, eval: $it.eval, oldrev: $verinfo.rev, newrev: $newrev, position: $position}
   }
   | where {|it| $it.oldrev != $it.newrev }
   | each { |it|
@@ -53,7 +53,8 @@ def main [] {
     if $it.newrev != $it.oldrev {
       let position = $it.position
       let verinfo = $it.eval.verinfo
-      print -e $"[($packageName)]: needs update!"
+      let packageName = $it.packageName
+      print -e $"[($packageName)]: needs update! ($it.newrev) ($it.oldrev)"
   
       do -c { ^sd -s $"($verinfo.rev)" $"($it.newrev)" $"($position)" }
     

@@ -58,7 +58,7 @@
     };
     tow-boot-radxa-rock5b = {
       url = "github:colemickens/Tow-Boot/radxa-rock5b";
-      # inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     tow-boot-visionfive = {
       url = "github:colemickens/Tow-Boot/visionfive";
@@ -67,6 +67,10 @@
 
     mobile-nixos-sdm845 = {
       url = "github:colemickens/mobile-nixos/sdm845-blue";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    mobile-nixos-reset-scripts = {
+      url = "github:colemickens/mobile-nixos/reset-scripts";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     mobile-nixos-pinephone = {
@@ -119,7 +123,7 @@
         phone = rec {
           pinephone = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           blueline = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
-          # enchilada = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
+          enchilada = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; }; # x86, only used for reset-script rn
           # x_pinephone = pinephone // { sys = "x86_64-linux"; };
           # x_blueline = blueline // { sys = "x86_64-linux"; };
           # x_enchilada = enchilada // { sys = "x86_64-linux"; };
@@ -133,7 +137,7 @@
           rpizerotwo1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           openstick = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
           # visionfiveone1 = { pkgs = inputs.cross-riscv64; sys = "riscv64-linux"; };
-          # visionfiveone1 = { pkgs = inputs.cross-riscv64; sys = "x86_64-linux"; };
+          visionfiveone1 = { pkgs = inputs.cross-riscv64; sys = "x86_64-linux"; };
         };
         pc = {
           carbon = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
@@ -172,6 +176,10 @@
           blueline = let o = (cfg "blueline"); in
             {
               boot = o.mobile.outputs.android.android-bootimg;
+            };
+          enchilada = let o = (cfg "enchilada"); in
+            {
+              reset-script = o.mobile.outputs.android.reset-script;
             };
         };
 

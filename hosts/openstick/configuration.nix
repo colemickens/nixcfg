@@ -32,6 +32,11 @@ in
     networking.hostName = "openstick";
     environment.systemPackages = with pkgs; [ usbutils lshw libqmi ];
 
+    networking.networkmanager = {
+      enable = true;
+      wifi.backend = "iwd";
+    };
+
     boot.loader.generic-extlinux-compatible.configurationLimit = 2;
     security.sudo.wheelNeedsPassword = false;
     systemd.network.wait-online.anyInterface = true;

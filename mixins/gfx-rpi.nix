@@ -38,7 +38,7 @@ in
       vulkan-tools
       vulkan-loader
       vulkan-headers
-      drm_info
+      # drm_info
     ];
     hardware = {
       opengl = {

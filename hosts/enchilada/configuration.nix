@@ -10,7 +10,8 @@
     # ../../mixins/ssh.nix
     ../../mixins/sshd.nix
     # ../../mixins/wpa-slim.nix
-    ../../mixins/nmiot.nix
+    # ../../mixins/nmiot.nix
+    ../../mixins/iwd-networks.nix
     ../../mixins/nix.nix
     ../../profiles/user.nix
     # ../../profiles/info
@@ -19,7 +20,7 @@
 
     ../../profiles/phosh
 
-    (import "${inputs.mobile-nixos-sdm845}/lib/configuration.nix" {
+    (import "${inputs.mobile-nixos-reset-scripts}/lib/configuration.nix" {
       device = "oneplus-enchilada";
     })
   ];
@@ -32,10 +33,15 @@
       nixos.enable = false;
     };
 
+    networking.networkmanager = {
+      enable = true;
+      wifi.backend = "iwd";
+    };
+
     system.stateVersion = "22.05";
     system.build.android-serial = "b205392d";
     security.sudo.wheelNeedsPassword = false;
-    
+
     services.timesyncd.enable = true;
 
     networking.hostName = "enchilada";

@@ -11,11 +11,13 @@
     tow-boot.device = "raspberryPi-aarch64";
     # configuration.config.Tow-Boot = {
     tow-boot.config = ({
-      diskImage.mbr.diskID = config.system.build.mbr_disk_id;
-      uBootVersion = "2022.04";
-      useDefaultPatches = false;
-      withLogo = false;
-      rpi = {
+      Tow-Boot = {
+        diskImage.mbr.diskID = config.system.build.mbr_disk_id;
+        uBootVersion = "2022.04";
+        useDefaultPatches = false;
+        withLogo = false;
+      };
+      Tow-Boot.rpi = {
         mainlineKernel = inputs.rpipkgs.legacyPackages.${pkgs.hostPlatform.system}.linuxPackages_latest.kernel;
         foundationKernel = inputs.rpipkgs.legacyPackages.${pkgs.hostPlatform.system}.linuxPackages_rpi4.kernel;
         #firmwarePackage = inputs.rpipkgs.legacyPackages.${pkgs.hostPlatform.system}.raspberrypifw;

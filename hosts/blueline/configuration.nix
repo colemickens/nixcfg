@@ -28,6 +28,12 @@
     system.stateVersion = "22.05";
     networking.hostName = "blueline";
     
+    # guess we'll use NM so we can maybe use MM too
+    networking.networkmanager = {
+      enable = true;
+      wifi.backend = "iwd";
+    };
+    
     environment.systemPackages = with pkgs; [
       bottom
     ];

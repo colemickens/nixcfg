@@ -18,8 +18,8 @@
     nixcfg.common.useZfs = false;
 
     tow-boot.autoUpdate = lib.mkDefault false; # default incase we're netbooting, sdcard profile overrides this
-    tow-boot = {
-      config.rpi = {
+    tow-boot.config = {
+      Tow-Boot.rpi = {
         upstream_kernel = true;
 
         hdmi_ignore_cec = lib.mkDefault true;
@@ -42,6 +42,8 @@
         # });
       };
     };
+    
+    nixcfg.common.defaultKernel = false;
     boot.kernelPackages = pkgs.linuxPackages_latest;
     boot.blacklistedKernelModules = [ "snd_bcm2835" ];
 

@@ -1,11 +1,11 @@
 { pkgs, tfutil, ... }:
 
 let
-  tf_metal_version = "3.3.0-alpha.3";
+  tf_equinix_version = "1.10.0";
 
   lib = pkgs.lib;
   mkVm = packet_config: instance_name: vm: {
-    resource.metal_spot_market_request."${instance_name}" = {
+    resource.equinix_metal_spot_market_request."${instance_name}" = {
       project_id = packet_config.project_id;
       max_bid_price = vm.bid;
       facilities = [ vm.loc ]; # https://github.com/equinix/terraform-provider-metal/issues/196
@@ -41,11 +41,12 @@ in {
   plans = {
     c2_medium_arm = "c2.medium.arm";
     c3_large_arm = "c3.large.arm";
+
+    c3_medium_x86 = "c3.medium.x86";
   };
   
   os = {
-    nixos_21_05 = "nixos_21_05";
-    nixos_21_11 = "nixos_21_11";
+    nixos_22_05 = "nixos_22_05";
   };
 
   tfplan = packet_config: vms:
@@ -54,16 +55,16 @@ in {
       ++ [{
         terraform = {
           required_providers = {
-            metal = {
-              source = "equinix/metal";
-              version = tf_metal_version;
+            "equinix" = {
+              source = "equinix/equinix";
+              version = tf_equinix_version;
             };
           };
         };
         # TODO: finish plumbing this through:
         # variable.termtime.description = "termination time for devices";
         provider = {
-          metal = [{
+          equinix = [{
             # auth_token # METAL_AUTH_TOKEN is set by 'tf-apply' wrapper script
           }];
         };

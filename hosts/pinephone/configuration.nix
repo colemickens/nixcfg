@@ -22,6 +22,11 @@
     system.stateVersion = "22.05";
     networking.hostName = "pinephone";
 
+    networking.networkmanager = {
+      enable = true;
+      wifi.backend = "iwd";
+    };
+
     security.sudo.wheelNeedsPassword = false;
 
     documentation = {

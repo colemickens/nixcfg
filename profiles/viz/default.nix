@@ -43,6 +43,7 @@ let
       "rpizerotwo1" = vs_vis;
       "rpizerotwo2" = vs_vis;
       "radxazero1" = vs_vis;
+      "rockfiveb1" = vs_vis;
     }).${config.networking.hostName}
   );
 

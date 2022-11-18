@@ -20,7 +20,7 @@
 
     tow-boot.autoUpdate = lib.mkDefault false; # default incase we're netbooting, sdcard profile overrides this
     tow-boot = {
-      config.rpi = {
+      config.Tow-Boot.rpi = {
         upstream_kernel = true;
 
         hdmi_ignore_cec = lib.mkDefault true;
@@ -48,6 +48,7 @@
     boot.blacklistedKernelModules = [ "snd_bcm2835" ];
 
     nixcfg.common.defaultNetworking = false;
+    nixcfg.common.defaultKernel = false;
     # all our networking is defined in netboot client
     # ... for now (?)
   };

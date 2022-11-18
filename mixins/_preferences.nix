@@ -48,7 +48,7 @@ rec {
 #T#cursor = { name = "Graphite"; package = pkgs.graphite-cursors; };
 #T# cursor = { name = "Qogir"; package = pkgs.qogir-cursors; }; # not packaged
   # cursor = { name = "phinger-cursors-light"; package = pkgs.phinger-cursors; };
-  cursor = { name = "macOSBigSur-White"; package = pkgs.apple-cursor; };
+  cursor = { name = "macOS-BigSur-White"; package = pkgs.apple-cursor; };
   cursorSize = 48;
   
   themes = {

@@ -19,7 +19,7 @@
 
     tow-boot.autoUpdate = lib.mkDefault false; # default incase we're netbooting, sdcard profile overrides this
     tow-boot.config = {
-      rpi-eeprom = {
+      Tow-Boot.rpi-eeprom = {
         enable = true;
         extraConfig = ''
           BOOT_UART=1
@@ -27,7 +27,7 @@
           BOOT_ORDER=0xf412 # netboot -> sdcard -> usbmsd -> reboot
         '';
       };
-      rpi = {
+      Tow-Boot.rpi = {
         upstream_kernel = true;
 
         hdmi_safe = true;

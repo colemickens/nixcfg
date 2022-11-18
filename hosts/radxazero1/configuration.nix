@@ -16,7 +16,7 @@ in
   config = {
     nixcfg.common.useZfs = false;
     
-    networking.hostName = "radxarockfiveb1";
+    networking.hostName = "radxazero1";
     system.stateVersion = "21.11";
     # boot.initrd.systemd.network.networks."10-eth0".addresses =
     #   [{ addressConfig = { Address = eth_ip; }; }];

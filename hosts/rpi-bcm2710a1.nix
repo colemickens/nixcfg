@@ -21,12 +21,6 @@ in
     nixcfg.common.useZfs = false;
     environment.systemPackages = with pkgs; [ picocom ];
 
-    tow-boot.config = {
-      rpi = {
-
-      };
-    };
-
     boot = {
       kernelParams = [
         "cma=128M"

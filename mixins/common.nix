@@ -213,12 +213,12 @@ in
         coreutils
       ];
 
-      specialisation."oldboot" = lib.mkIf cfg.sysdBoot {
-        inheritParentConfig = true;
-        configuration = {
-          config.nixcfg.common.sysdBoot = lib.mkForce false;
-        };
-      };
+      # specialisation."oldboot" = lib.mkIf cfg.sysdBoot {
+      #   inheritParentConfig = true;
+      #   configuration = {
+      #     config.nixcfg.common.sysdBoot = lib.mkForce false;
+      #   };
+      # };
 
       security = {
         sudo.enable = true;

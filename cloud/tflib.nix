@@ -9,7 +9,7 @@ let
   };
 
   oracle = import ./tflib-oracle.nix {inherit pkgs tfutil;};
-  packet = import ./tflib-packet.nix {inherit pkgs tfutil;};
+  equinix = import ./tflib-equinix.nix {inherit pkgs tfutil;};
 
   # TODO: turn this into something
   # that zips up a dir, shoves it in userdata with a script that self-extracts and runs it
@@ -41,5 +41,5 @@ in {
       uservars = /*toVars*/ {};
     };
   };
-  inherit oracle packet;
+  inherit oracle equinix;
 }

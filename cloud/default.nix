@@ -2,7 +2,14 @@
 
 let
   tflib = import ./tflib.nix { inherit pkgs; };
-  tfpkg = (pkgs.terraform_1.withPlugins (p: [ p.metal p.oci /* p.sops */ ]));
+  tfpkg = (pkgs.terraform_1.withPlugins (p:
+  [
+    # these should be included, maybe via option/modules
+    # from the tflib-*.nix
+    p.equinix
+    p.oci
+    /* p.sops */
+  ]));
   tf = "${tfpkg}/bin/terraform"; # "${tf}"
   tfstate = "./cloud/_state";
 
@@ -34,11 +41,11 @@ let
   ## </oracle>
 
   ##
-  ## <packet>
+  ## <equinix>
   metal_cole = {
     project_id = "afc67974-ff22-41fd-9346-5b2c8d51e3a9";
   };
-  ## </packet>
+  ## </equinix>
 
   ##
   ## get nixpkgs provider versions:
@@ -55,12 +62,19 @@ let
   terraformCfg = terranix.lib.terranixConfiguration {
     inherit pkgs;
     modules = [
-      ### PACKET VMS
-      (tflib.packet.tfplan metal_cole {
+      ### equinix VMS
+      (tflib.equinix.tfplan metal_cole {
+        pktspot1 = {
+          plan = tflib.equinix.plans.c3_medium_x86;
+          os = tflib.equinix.os.nixos_22_05;
+          loc = tflib.equinix.metros.dc10;
+          bid = "0.50";
+          payload = tflib.payloads.nixos-generic-config;
+        };
         # pktspotnewnixosarm1 = {
-        #   plan = tflib.packet.plans.c3_large_arm;
-        #   os = tflib.packet.os.nixos_21_11;
-        #   loc = tflib.packet.metros.dc10;
+        #   plan = tflib.equinix.plans.c3_large_arm;
+        #   os = tflib.equinix.os.nixos_21_11;
+        #   loc = tflib.equinix.metros.dc10;
         #   bid = "0.50";
         #   payload = tflib.payloads.nixos-generic-config;
         # };
@@ -68,8 +82,8 @@ let
 
         # ipxe works too!
         # pktspotnewnixosarm0 = {
-        #   plan = tflib.packet.plans.c3_large_arm;
-        #   loc = tflib.packet.metros.dc10;
+        #   plan = tflib.equinix.plans.c3_large_arm;
+        #   loc = tflib.equinix.metros.dc10;
         #   bid = "0.60";
         #   ipxe_script_url = "http://netboot.cleo.cat/aarch64/generic/netboot.ipxe";
         # };
@@ -145,7 +159,7 @@ in {
 
   destroy = (pkgs.writeShellScript "destroy" ''
     set -euo pipefail; set -x
-    export METAL_AUTH_TOKEN="$(gopass show colemickens/packet.net | grep apikey | cut -d' ' -f2)"
+    export METAL_AUTH_TOKEN="$(gopass show colemickens/equinix.net | grep apikey | cut -d' ' -f2)"
     export TF_STATE="${tfstate}"
     if [[ ! -e "''${TF_STATE}/config.tf.json" ]]; then
       cp "${terraformCfg}" "''${TF_STATE}/config.tf.json"
