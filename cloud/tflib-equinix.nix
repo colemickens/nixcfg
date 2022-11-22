@@ -42,7 +42,12 @@ in {
     c2_medium_arm = "c2.medium.arm";
     c3_large_arm = "c3.large.arm";
 
+    c2_medium_x86 = "c2.medium.x86";
     c3_medium_x86 = "c3.medium.x86";
+    m3_large_x86 = "m3.large.x86";
+    s3_xlarge_x86 = "s3.xlarge.x86";
+    n2_xlarge_x86 = "n2.xlarge.x86";
+    n3_xlarge_x86 = "n3.xlarge.x86";
   };
   
   os = {

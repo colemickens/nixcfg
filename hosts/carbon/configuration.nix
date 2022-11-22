@@ -39,6 +39,8 @@ in
     networking.hostName = "carbon";
     
     hardware.video.hidpi.enable = true;
+    
+    environment.systemPackages = with pkgs; [ yuzu-mainline ryujinx ];
 
     nixcfg.common.hostColor = "purple";
     nixcfg.common.skipMitigations = false;

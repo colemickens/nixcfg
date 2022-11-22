@@ -2,7 +2,7 @@
 
 let dirs = [
   "/usr/lib/apache2"
-  "/usr/lib/erlang"
+  # "/usr/lib/erlang"
   "/usr/lib/firefox" # wtf
   "/usr/lib/google-cloud-sdk"
   "/usr/lib/gcc"

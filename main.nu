@@ -40,10 +40,11 @@ def buildDrvs [ drvs: list cache=false: bool ] {
 }
 
 def buildRemoteDrvs [ drvs_: list arch: string buildHost: string cache: bool ] {
-  let drvs = ($drvs_ | where isCached == false | where system == $arch)
+  let drvs_ = ($drvs_ | where system == $arch)
+  let drvs = ($drvs_ | where isCached == false)
   header "light_blue_reverse" $"build: ($arch) ($drvs | length) drvs on ($buildHost) [cache=($cache)]"
   if (($drvs | length) > 0) {
-    print -e ($drvs | select name isCached)
+    print -e ($drvs | select drvPath)
     let drvPaths = ($drvs | get "drvPath")
     let nixopts = (if ($buildHost == "localhost") { $nixopts } else {
       $nixopts | append [ "--store" $"ssh-ng://($buildHost)" ]
@@ -56,7 +57,7 @@ def buildRemoteDrvs [ drvs_: list arch: string buildHost: string cache: bool ] {
     }
   }
 
-  if $cache {
+  if ($cache && ($drvs | length) > 0) {
     let outs  = (($drvs_ | get outputs | flatten | get out) | flatten)
     let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str collect)
     if $buildHost == localhost {
@@ -67,7 +68,10 @@ def buildRemoteDrvs [ drvs_: list arch: string buildHost: string cache: bool ] {
         $"nix-shell -I nixpkgs=($nixpkgs) -p cachix --command 'cachix push ($cachix_cache)'"
     ] | str join ' ')
       ^ssh $buildHost $sshExe
-      ^nix build $nixopts -L -j0 $outs
+      
+      # TODO: this pulls all paths even
+      # if we don't need to
+      # ^nix build $nixopts -L -j0 $outs
     }
   }
 }

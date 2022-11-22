@@ -123,10 +123,8 @@
         phone = rec {
           pinephone = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           blueline = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
-          enchilada = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; }; # x86, only used for reset-script rn
           # x_pinephone = pinephone // { sys = "x86_64-linux"; };
           # x_blueline = blueline // { sys = "x86_64-linux"; };
-          # x_enchilada = enchilada // { sys = "x86_64-linux"; };
         };
         sbc = rec {
           radxazero1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
@@ -176,10 +174,6 @@
           blueline = let o = (cfg "blueline"); in
             {
               boot = o.mobile.outputs.android.android-bootimg;
-            };
-          enchilada = let o = (cfg "enchilada"); in
-            {
-              reset-script = o.mobile.outputs.android.reset-script;
             };
         };
 

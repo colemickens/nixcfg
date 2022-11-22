@@ -5,18 +5,17 @@ let-env GH_PAGER = "cat"
 let USER = "colemickens"
 let REPO = "nixcfg"
 
-for i in 1..20 {
-  let runs = (^gh api $"repos/($USER)/($REPO)/actions/runs" | from json)
-  print -e $runs
-  let ids = ($runs.workflow_runs
-    | where ($it.name != "default" && $it.name != "clean")
-    | get "id")
-  
-  $ids | window 4 --stride 4 --remainder | each { |it1|
-    par-each { |it2|
-      print -e $"(ansi red)delete ($it2)(ansi reset)"
-      let res = (do -i { ^gh api $"repos/($USER)/($REPO)/actions/runs/($it2)" -X DELETE } | complete)
-      { id:$it2, exit:$res.exit_code, stderr:($res.stderr | str trim) }
-    }
-  } | flatten
+for i in 1..2000 {
+  let runs = (^gh api $"repos/($USER)/($REPO)/actions/runs?per_page=100" | from json)
+  let runs = ($runs.workflow_runs)
+  let runs = ($runs | select name id status node_id)
+  let runs = ($runs | where status == "completed")
+  $runs | get "id" | each { |it|
+    print -e $"(ansi red)delete ($it)(ansi reset)"
+    ^gh api $"repos/($USER)/($REPO)/actions/runs/($it)" -X DELETE }
+    sleep 1sec
+  }
+
+  print -e "here..."
+  sleep 10sec
 }

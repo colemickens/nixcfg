@@ -1,12 +1,15 @@
 { pkgs, modulesPath, inputs, config, ... }:
 
+let
+  hn = "visionfiveone1";
+in
 {
   imports = [
     ../../profiles/user.nix
 
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
-    
+
     # the visionfive module pulls in the nixos-riscv64 overlay automatically:
     # "${inputs.riscv64}/nixos/visionfive.nix"
   ];
@@ -14,7 +17,7 @@
   config = {
     system.stateVersion = "21.11";
 
-    nix.nixPath = [];
+    nix.nixPath = [ ];
     nix.gc.automatic = true;
 
     documentation.enable = false;
@@ -23,12 +26,12 @@
     documentation.nixos.enable = false;
 
     nixpkgs.crossSystem.system = "riscv64-linux";
-    
+
     environment.systemPackages = with pkgs; [
       binutils
       usbutils
     ];
-    
+
     fileSystems = {
       # "/boot/firmware" = {
       #   fsType = "vfat";
@@ -55,6 +58,7 @@
 
     # TODO: move some more of this to common?
     networking = {
+      hostname = hn;
       firewall.enable = true;
       firewall.allowedTCPPorts = [ 22 ];
       networkmanager.enable = false;

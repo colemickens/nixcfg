@@ -23,7 +23,7 @@ let
   #       -H "Content-Type: application/json" -X GET \
   #       "''${BUILD_HOST}/api/jobs" > "${jobpath}/data"
   #   ''] ++ suffix ));
-  networktoggle = pkgs. writeShellScriptBin "networktoggle.sh" ''
+  networktoggle = pkgs.writeShellScriptBin "networktoggle.sh" ''
     if ip link | grep wlan; then
       sudo ${pkgs.util-linux}/bin/rfkill toggle wlan
       sudo ${pkgs.systemd}/bin/networkctl reconfigure wlan0
@@ -65,8 +65,7 @@ in
         style = pkgs.lib.readFile ./waybar.css;
         systemd.enable = true;
         settings = [{
-        # settings = {
-          ipc = true;
+          # ipc = true;
           layer = "top";
           position = "top";
           modules-left = [
@@ -79,14 +78,16 @@ in
           modules-right =
             #(pkgs.lib.mapAttrsToList (k: v: "custom/srht-${k}") jobs) ++
             [
+              # "keyboard-state"
               "idle_inhibitor"
               "tray"
               "network"
               "cpu"
               "memory"
               "pulseaudio"
-              "clock"
               "backlight"
+              "clock"
+              "temperature"
               "battery"
             ];
 
@@ -97,47 +98,60 @@ in
             #   exec = "${pkgs.coreutils}/bin/cat ${jobpath}/${v}-json";
             #   return-type = "json";
             # }) jobs) /
-          {
-            "sway/workspaces" = {
-              all-outputs = true;
-              disable-scroll-wraparound = true;
-              #enable-bar-scroll = true;
-            };
-            "sway/mode" = { tooltip = false; };
+            {
+              "sway/workspaces" = {
+                all-outputs = true;
+                disable-scroll-wraparound = true;
+                #enable-bar-scroll = true;
+              };
+              "sway/mode" = { tooltip = false; };
 
-            idle_inhibitor = {
-              format = "{icon}";
-              format-icons = {
-                activated = "unlocked";
-                deactivated = "locking";
+              # TODO:
+              keyboard-state = {
+                "numlock" = true;
+                "capslock" = true;
+                "format" = "{name} {icon}";
+                "format-icons" = {
+                  "locked" = "+";
+                  "unlocked" = "-";
+                };
+              };
+              temperature = {
+                format = "{temperatureC}°C";
+              };
+              idle_inhibitor = {
+                format = "{icon}";
+                format-icons = {
+                  activated = "unlocked";
+                  deactivated = "locking";
+                };
+              };
+              pulseaudio = {
+                format = "vol {volume}%";
+                #on-click-middle = "${pkgs.sway}/bin/swaymsg exec \"${pkgs.alacritty}/bin/alacritty -e pulsemixer\"";
+                on-click-middle = "${pkgs.sway}/bin/swaymsg exec \"${pkgs.pavucontrol}/bin/pavucontrol\"";
+              };
+              network = {
+                format-wifi = "{essid} {signalStrength}% {bandwidthUpBits} {bandwidthDownBits}";
+                format-ethernet = "{ifname} eth {bandwidthUpBits} {bandwidthDownBits}";
+                on-click-middle = "${networktoggle}";
+              };
+              cpu.interval = 2;
+              cpu.format = "cpu {load}% {usage}%";
+              memory.format = "mem {}%";
+              backlight = {
+                format = "nit {percent}%";
+                on-scroll-up = "${pkgs.brightnessctl}/bin/brightnessctl set 2%+";
+                on-scroll-down = "${pkgs.brightnessctl}/bin/brightnessctl set 2%-";
+              };
+              tray.spacing = 10;
+              # battery
+              clock.format = "{:%a %b %d %H:%M}";
+              battery = {
+                format = "bat {}";
+                bat = "${batteryName}";
               };
             };
-            pulseaudio = {
-              format = "vol {volume}%";
-              #on-click-middle = "${pkgs.sway}/bin/swaymsg exec \"${pkgs.alacritty}/bin/alacritty -e pulsemixer\"";
-              on-click-middle = "${pkgs.sway}/bin/swaymsg exec \"${pkgs.pavucontrol}/bin/pavucontrol\"";
-            };
-            network = {
-              format-wifi = "{essid} {signalStrength}% {bandwidthUpBits} {bandwidthDownBits}";
-              format-ethernet = "{ifname} eth {bandwidthUpBits} {bandwidthDownBits}";
-              on-click-middle = "${networktoggle}";
-            };
-            cpu.interval = 2;
-            cpu.format = "cpu {load}% {usage}%";
-            memory.format = "mem {}%";
-            backlight = {
-              format = "nit {percent}%";
-              on-scroll-up = "${pkgs.brightnessctl}/bin/brightnessctl set 2%+";
-              on-scroll-down = "${pkgs.brightnessctl}/bin/brightnessctl set 2%-";
-            };
-            tray.spacing = 10;
-            # battery
-            clock.format = "{:%a %b %d %H:%M}";
-            battery = {
-              format = "bat {}";
-              bat = "${batteryName}";
-            };
-          };
         }];
         # };
       };

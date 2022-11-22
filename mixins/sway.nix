@@ -206,15 +206,16 @@ in
                 green = "#b8bb26";
                 yellow = "#d79921";
                 orange = "#fe8019";
-                bgcolor = "#2c2c2c";
-                _f = pink;
+                # bgcolor = "#2c2c2c";
+                bgcolor = "#000000";
+                _f = red;
               in
               {
                 "focused" = { border = _f; background = _f; text = "#ffffff"; indicator = "#ffffff"; childBorder = _f; };
                 "unfocused" = { border = bgcolor; background = bgcolor; text = "#888888"; indicator = "#ffffff"; childBorder = bgcolor; };
               };
             gaps = { inner = 0; outer = 0; };
-            window.border = 4;
+            window.border = 6;
             window.titlebar = false;
             window.commands = [
               { criteria = { app_id = "mpv"; }; command = "sticky enable"; }

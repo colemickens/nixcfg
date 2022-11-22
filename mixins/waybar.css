@@ -1,9 +1,12 @@
 * {
+    all: unset;
+
     border: none;
-    border-radius: 5;
+    /* border-radius: 5; */
     /* `otf-font-awesome` is required to be installed for icons */
     /* font matches sway-config.nix */
     font-family: "Iosevka Comfy Fixed"; /* TODO: parameterize this? */
+    font-family: "Noto Sans";
     font-weight: bold;
     font-size: 11pt;
     min-height: 0;
@@ -40,7 +43,9 @@ window#waybar.chromium {
 }
 
 #workspaces button {
-    padding: 0 5px;
+    /*padding: 0 5px;*/
+    padding: 0 10px;
+    margin: 0 1px;
     background-color: transparent;
     color: #ffffff;
     border-bottom: 3px solid transparent;
@@ -177,7 +182,7 @@ label:focus {
 }
 
 #temperature.critical {
-    background-color: #eb4d4b;
+    background-color: #f53c3c;
 }
 
 #tray {
@@ -185,6 +190,12 @@ label:focus {
 }
 
 #idle_inhibitor {
+    background-color: #2d3436;
+}
+#temperature {
+    background-color: #555753;
+}
+#temperature.critical {
     background-color: #2d3436;
 }
 

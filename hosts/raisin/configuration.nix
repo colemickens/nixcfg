@@ -12,12 +12,14 @@ in
 
     # ../../mixins/android.nix
     ../../mixins/libvirtd.nix
+    ../../mixins/hidpi.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
     ../../mixins/upower.nix
-    ../../mixins/wpa-full.nix
     ../../mixins/zfs.nix
+    
+    ../../mixins/iwd-networks.nix
 
     ../../mixins/rclone-googledrive-mounts.nix
 
@@ -32,6 +34,8 @@ in
     networking.hostName = "raisin";
     
     nixcfg.common.hostColor = "yellow";
+    
+    networking.wireless.iwd.enable = true;
 
     services.logind.extraConfig = ''
       HandlePowerKey=poweroff
@@ -45,7 +49,7 @@ in
       # "/backup" = { fsType = "zfs"; device = "${hn}pool/backup"; neededForBoot = true; };
       "/home" = { fsType = "zfs"; device = "${hn}pool/home"; neededForBoot = true; };
     };
-    swapDevices = [{ device = "/dev/disk/by-partlabel/swap"; }];
+    # swapDevices = [{ device = "/dev/disk/by-partlabel/swap"; }];
     boot = {
       kernelModules = [ "iwlwifi" "ideapad_laptop" ];
       kernelParams = [

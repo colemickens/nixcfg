@@ -65,21 +65,19 @@ let
       ### equinix VMS
       (tflib.equinix.tfplan metal_cole {
         pktspot1 = {
-          plan = tflib.equinix.plans.c3_medium_x86;
+          plan = tflib.equinix.plans.n3_xlarge_x86;
           os = tflib.equinix.os.nixos_22_05;
           loc = tflib.equinix.metros.dc10;
           bid = "0.50";
           payload = tflib.payloads.nixos-generic-config;
         };
-        # pktspotnewnixosarm1 = {
-        #   plan = tflib.equinix.plans.c3_large_arm;
-        #   os = tflib.equinix.os.nixos_21_11;
-        #   loc = tflib.equinix.metros.dc10;
-        #   bid = "0.50";
-        #   payload = tflib.payloads.nixos-generic-config;
-        # };
-        # 2022-05-17: plan{c3.large.arm} + dc{dc10,dc11} + bid{0.5}
-
+        pktspotarm1 = {
+          plan = tflib.equinix.plans.c2_medium_arm;
+          os = tflib.equinix.os.nixos_22_05;
+          loc = tflib.equinix.metros.dc10;
+          bid = "0.50";
+          payload = tflib.payloads.nixos-generic-config;
+        };
         # ipxe works too!
         # pktspotnewnixosarm0 = {
         #   plan = tflib.equinix.plans.c3_large_arm;

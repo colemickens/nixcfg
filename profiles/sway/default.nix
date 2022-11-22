@@ -100,7 +100,7 @@ in
             ];
           };
         };
-        poweralertd.enable = true;
+        # poweralertd.enable = true;
         wlsunset = {
           enable = true;
           latitude = "47.608103";

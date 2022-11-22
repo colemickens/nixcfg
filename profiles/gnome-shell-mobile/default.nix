@@ -27,14 +27,14 @@
             ];
           });
           gnome-shell = (prev.gnome.gnome-shell.override { inherit mutter; }).overrideAttrs (super: rec {
-            version = "fd58fd44e5eb18f337f7b6fc8b614b696b1035e";
+            version = "82d68488ce05e51f220f361fdbf2a888e51fc12b";
             src = prev.fetchFromGitLab {
               domain = "gitlab.gnome.org";
               owner = "verdre";
               repo = "gnome-shell";
               rev = version;
               fetchSubmodules = true;
-              sha256 = "sha256-lwl7evnxYMhOZlFdDsyfPLHbHPHNgriRgTOIzp2x3+0=";
+              sha256 = "sha256-AYtA3zrrGz8hwkDW8AyZU/zUs4Oz46J8MiyGz/aHZUE=";
             };
             postPatch = ''
               patchShebangs src/data-to-c.pl

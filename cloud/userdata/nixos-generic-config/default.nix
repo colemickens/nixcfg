@@ -11,7 +11,11 @@
         "fs.inotify.max_user_watches" = 500000;
       };
     };
-    environment.systemPackages = with pkgs; [ coreutils cachix ];
+    environment.systemPackages = with pkgs; [
+      coreutils
+      cachix
+      bottom
+    ];
     nix = {
       buildCores = 0;
       binaryCachePublicKeys = [
@@ -26,7 +30,7 @@
       ];
       trustedUsers = [ "@wheel" "root" ];
       package = pkgs.nixUnstable;
-      extraOptions = "experimental-features = nix-command flakes ca-references recursive-nix";
+      extraOptions = "experimental-features = nix-command flakes recursive-nix";
     };
 
     security.sudo.wheelNeedsPassword = false;

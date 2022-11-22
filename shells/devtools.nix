@@ -35,6 +35,8 @@ minimalMkShell {
     godef /*golint*/
     gopls
 
+    gron
+
     inputs.nix-eval-jobs.outputs.packages.${pkgs.hostPlatform.system}.default
     inputs.marksman.outputs.packages.${pkgs.hostPlatform.system}.default
   ];
