@@ -90,7 +90,7 @@ in
       documentation = (lib.mkIf cfg.defaultNoDocs ({
         enable = false;
         doc.enable = false;
-        man.enable = true;
+        man.enable = false;
         info.enable = false;
         nixos.enable = false;
       }));
@@ -105,12 +105,14 @@ in
 
         loader = {
           grub = {
-            pcmemtest.enable = (pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isx86);
+            # memtest86.enable = (pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isx86);
             timeoutStyle = "hidden";
             configurationLimit = 10;
           };
           systemd-boot = {
             configurationLimit = 10;
+            # memtest86.enable = (pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isx86);
+            memtest86.entryFilename = "z-memtest86.conf";
           };
           timeout = 1;
         };

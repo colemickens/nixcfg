@@ -102,6 +102,13 @@ let
       nix develop $HOME/code/nixcfg#devenv "''${@}"
     '')
 
+    # NIXCFG helper
+    (writeShellScriptBin "nixcfg" ''
+      nixcfg="$HOME/code/nixcfg"
+      cd $nixcfg
+      nu ./misc/main.nu "''${@}"
+    '')
+
     # GPG/SSH FIXUP
     (writeShellScriptBin "gpg-fix" ''
       set -x

@@ -15,7 +15,7 @@ in
     ../../mixins/common.nix
     ../../mixins/tailscale.nix
     ../../mixins/sshd.nix
-    # ../../mixins/iwd-networks.nix
+    ../../mixins/iwd-networks.nix
   ]
   ++ inputs.tow-boot-radxa-rock5b.nixosModules
   ;
@@ -43,9 +43,10 @@ in
     nixcfg.common = {
       useZfs = false;
       defaultKernel = false;
-      defaultNetworking = false;
+      # defaultNetworking = false;
       sysdBoot = false;
     };
+    networking.wireless.iwd.enable = true;
 
     system.build.installFiles = (
       let

@@ -5,9 +5,10 @@
     lib-aggregate = { url = "github:nix-community/lib-aggregate"; }; #TODO: boo name! "libaggregate"?
 
     nixpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
-    cross-armv6l = { url = "github:colemickens/nixpkgs/cmpkgs-cross-armv6l"; };
-    cross-riscv64 = { url = "github:colemickens/nixpkgs/cmpkgs-cross-riscv64"; };
-    rpipkgs = { url = "github:colemickens/nixpkgs/cmpkgs-rpipkgs"; };
+    nixpkgs-stable = { url = "github:nixos/nixpkgs/nixos-22.05"; }; # any stable to use
+    nixpkgs-cross = { url = "github:colemickens/nixpkgs/cmpkgs-cross"; }; # base for cross-compiling fixes (used directly for aarch64 and riscv64-branch)
+    nixpkgs-cross-riscv64 = { url = "github:colemickens/nixpkgs/cmpkgs-cross-riscv64"; };
+    nixpkgs-rpipkgs = { url = "github:colemickens/nixpkgs/cmpkgs-rpipkgs"; };
 
     home-manager = { url = "github:colemickens/home-manager/cmhm"; inputs."nixpkgs".follows = "nixpkgs"; };
     nixos-hardware = { url = "github:nixos/nixos-hardware"; };
@@ -19,7 +20,7 @@
     firefox-nightly = { url = "github:colemickens/flake-firefox-nightly"; inputs."nixpkgs".follows = "nixpkgs"; };
     terranix = { url = "github:terranix/terranix"; inputs.nixpkgs.follows = "nixpkgs"; };
 
-    visionfive-nix = { url = "github:colemickens/visionfive-nix"; inputs."nixpkgs".follows = "cross-riscv64"; };
+    visionfive-nix = { url = "github:colemickens/visionfive-nix"; inputs."nixpkgs".follows = "nixpkgs-cross-riscv64"; };
     # nixos-riscv64.url = "https://github.com/colemickens/nixos-riscv64";
     # jh7100.url = "https://github.com/colemickens/jh7100";
 
@@ -50,7 +51,7 @@
     tow-boot-rpi = {
       url = "github:colemickens/Tow-Boot/rpi";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.rpipkgs.follows = "rpipkgs";
+      inputs.rpipkgs.follows = "nixpkgs-rpipkgs";
     };
     tow-boot-radxa-zero = {
       url = "github:colemickens/Tow-Boot/radxa-zero";
@@ -133,9 +134,9 @@
           rpifour1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpithreebp1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpizerotwo1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
-          openstick = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
+          openstick = { pkgs = inputs.nixpkgs-cross; sys = "x86_64-linux"; };
           # visionfiveone1 = { pkgs = inputs.cross-riscv64; sys = "riscv64-linux"; };
-          visionfiveone1 = { pkgs = inputs.cross-riscv64; sys = "x86_64-linux"; };
+          visionfiveone1 = { pkgs = inputs.nixpkgs-cross-riscv64; sys = "x86_64-linux"; };
         };
         pc = {
           carbon = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
@@ -206,20 +207,22 @@
       ## SYSTEM-SPECIFIC OUTPUTS ##############################################
       lib.flake-utils.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
         let
-          pkgs_ = _unfree: import inputs.nixpkgs {
-            inherit system;
-            overlays = [ overlays.default ];
-            config.allowAliases = false;
-            config.allowUnfree = _unfree;
-          };
-          pkgs = pkgs_ false;
-          pkgsUnfree = pkgs_ true;
+          pkgcfg = extraCfg:
+            lib.recursiveUpdate {
+              inherit system;
+              overlays = [ overlays.default ];
+              config.allowAliases = false;
+            } extraCfg;
+          pkgs_ = np: extraCfg: (import np (pkgcfg extraCfg));
+          pkgs = pkgs_ inputs.nixpkgs {};
+          pkgsUnfree = pkgs_ inputs.nixpkgs { config.allowUnfree=true; };
+          pkgsStable = pkgs_ inputs.nixpkgs-stable {};
           # internal helpers:
           tfout = import ./cloud { inherit (inputs) terranix; inherit pkgs; };
           mkShell = (name: import ./shells/${name}.nix { inherit inputs pkgs; });
           mkAppScript = (name: script: {
             type = "app";
-            program = (pkgs.writeScript "${name}.sh" script).outPath;
+            program = (pkgsStable.writeScript "${name}.sh" script).outPath;
           });
         in
         rec {

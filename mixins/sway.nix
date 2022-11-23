@@ -3,7 +3,8 @@
 let
   prefs = import ./_preferences.nix { inherit inputs config lib pkgs; };
 
-  background = prefs.background;
+  # background = prefs.background;
+  background = "#000000 solid_color";
 
   out_aw3418dw = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
   out_aw2521h = "Dell Inc. Dell AW2521H #HLAYMxgwABDZ";
@@ -214,8 +215,8 @@ in
                 "focused" = { border = _f; background = _f; text = "#ffffff"; indicator = "#ffffff"; childBorder = _f; };
                 "unfocused" = { border = bgcolor; background = bgcolor; text = "#888888"; indicator = "#ffffff"; childBorder = bgcolor; };
               };
-            gaps = { inner = 0; outer = 0; };
-            window.border = 6;
+            gaps = { inner = 2; outer = 2; };
+            window.border = 4;
             window.titlebar = false;
             window.commands = [
               { criteria = { app_id = "mpv"; }; command = "sticky enable"; }

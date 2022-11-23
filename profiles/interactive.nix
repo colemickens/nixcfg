@@ -1,5 +1,6 @@
 { pkgs, lib, config, inputs, ... }:
 
+# includes ci devshell nativeBuildInputs - see bottom
 {
   imports = [
     ./core.nix # imports hm
@@ -152,6 +153,7 @@
         [ ]
       ++ lib.optionals (pkgs.hostPlatform.system == "aarch64-linux")
         [ ]
+      ++ inputs.self.devShells.${pkgs.hostPlatform.system}.ci.nativeBuildInputs
       ;
     };
   };

@@ -14,7 +14,7 @@ in
 
     ../../mixins/android.nix
     ../../mixins/grub-signed-shim.nix
-    ../../mixins/rclone-googledrive-mounts.nix
+    # ../../mixins/rclone-googledrive-mounts.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix

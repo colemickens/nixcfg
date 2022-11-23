@@ -6,6 +6,7 @@ in
 {
   imports = [
     ../../profiles/interactive.nix
+    ../../profiles/dev.nix
     ../../profiles/laptop.nix
 
     ../../mixins/grub-signed-shim.nix
@@ -21,7 +22,7 @@ in
     
     ../../mixins/iwd-networks.nix
 
-    ../../mixins/rclone-googledrive-mounts.nix
+    # ../../mixins/rclone-googledrive-mounts.nix
 
     inputs.nixos-hardware.nixosModules.common-cpu-amd
     inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
@@ -49,11 +50,12 @@ in
       # "/backup" = { fsType = "zfs"; device = "${hn}pool/backup"; neededForBoot = true; };
       "/home" = { fsType = "zfs"; device = "${hn}pool/home"; neededForBoot = true; };
     };
-    # swapDevices = [{ device = "/dev/disk/by-partlabel/swap"; }];
+    swapDevices = [{ device = "/dev/disk/by-partlabel/swap"; }];
     boot = {
       kernelModules = [ "iwlwifi" "ideapad_laptop" ];
       kernelParams = [
         "ideapad_laptop.allow_v4_dytc=1"
+        "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 1024 * 8)}"
       ];
       # kernelParams = [ "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}" ];
       initrd.availableKernelModules = [

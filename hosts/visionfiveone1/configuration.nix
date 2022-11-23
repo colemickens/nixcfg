@@ -58,7 +58,7 @@ in
 
     # TODO: move some more of this to common?
     networking = {
-      hostname = hn;
+      hostName = hn;
       firewall.enable = true;
       firewall.allowedTCPPorts = [ 22 ];
       networkmanager.enable = false;

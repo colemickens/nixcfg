@@ -44,7 +44,7 @@ def buildRemoteDrvs [ drvs_: list arch: string buildHost: string cache: bool ] {
   let drvs = ($drvs_ | where isCached == false)
   header "light_blue_reverse" $"build: ($arch) ($drvs | length) drvs on ($buildHost) [cache=($cache)]"
   if (($drvs | length) > 0) {
-    print -e ($drvs | select drvPath)
+    print -e ($drvs | select drvPath outputs | flatten)
     let drvPaths = ($drvs | get "drvPath")
     let nixopts = (if ($buildHost == "localhost") { $nixopts } else {
       $nixopts | append [ "--store" $"ssh-ng://($buildHost)" ]
@@ -98,7 +98,7 @@ def deployHost [ host: string ] {
     header light_purple_reverse $"deploy: ($host): already up-to-date"
   } else {
     header light_purple_reverse $"deploy: ($host): pull"
-    let pullargs = (([ "sudo" "nix" "build" $nixopts "--profile" "/nix/var/nix/profiles/system" $topout ] | flatten) | str join ' ')
+    let pullargs = (([ "sudo" "nix" "build" "-j0" $nixopts "--profile" "/nix/var/nix/profiles/system" $topout ] | flatten) | str join ' ')
     do -c { ^ssh $"cole@($target)" $pullargs }
     header light_purple_reverse $"deploy: ($host): switch"
     do -c { ^ssh $"cole@($target)" $"sudo '($topout)/bin/switch-to-configuration' switch" }
@@ -123,33 +123,31 @@ def "main deploy" [...h] {
 def "main inputup" [] {
   header yellow_reverse "inputup"
   let srcdirs = ([
-    # "nixpkgs/{master,cmpkgs,cmpkgs-cross-{riscv64,armv6l}}"
-    # "home-manager/{master,cmhm}"
-    # # "tow-boot/{development,rpi,radxa-zero,visionfive}"
-    # "mobile-nixos/{master,openstick,blueline-mainline-only--2022-08}"
-    [ "nixpkgs/cmpkgs" "nixpkgs/{master,cmpkgs-cross-{riscv64,armv6l}}" ]
+    [ "nixpkgs/master" "nixpkgs/cmpkgs" "nixpkgs/cmpkgs-cross" "nixpkgs/cmpkgs-cross-riscv64" ]
     [ "home-manager/cmhm" "home-manager/master" ]
-    # "tow-boot/development" "tow-boot/{rpi,radxa-zero,visionfive}"
-    [ "mobile-nixos/master" "mobile-nixos/{openstick,reset-scripts,sdm845-blue}" ]
+    [ "tow-boot/development" "tow-boot/development-flakes"
+      "tow-boot/rpi" "tow-boot/radxa-zero" "tow-boot/radxa-rock5b" "tow-boot/visionfive" ]
+    [ "mobile-nixos/master"
+      "mobile-nixos/master-flakes"
+      "mobile-nixos/openstick" "mobile-nixos/pinephone-emmc" "mobile-nixos/reset-scripts" "mobile-nixos/sdm845-blue" ]
     [ "flake-firefox-nightly" ]
     [ "nixpkgs-wayland/master" ]
-    [ "linux/master" ]
-  ] | each { |it1| $it1 | each {|it| $"($env.HOME)/code/($it)" } })
+    [ "linux/master"
+      # "linux/openstick"
+      # "linux/rock5"
+    ]
+  ] | flatten | each { |it1| $it1 | each {|it| $"($env.HOME)/code/($it)" } })
 
-  $srcdirs | par-each { |s0|
-    ($s0 | each { |s1|
-      glob $s1 | each { |dir|
-        # man, I just am not sure about why I have to complete ignore
-        print -e $"input: ($dir): (ansi yellow_dimmed)check(ansi reset)"
-        let r0 = (do -i { ^git -C $dir rebase --abort } | complete | ignore)
-        let cmd = (do -i { ^git -C $dir pull --rebase } | complete)
-        if ($cmd.exit_code != 0) { error make {msg: $"input: ($dir): failed:\n\n($cmd.stderr)"} }
-        let cmd = (do -i { ^git -C $dir push origin HEAD -f } | complete)
-        if ($cmd.exit_code != 0) { error make {msg: $"input: ($dir): failed:\n\n($cmd.stderr)"} }
-        print -e $"input: ($dir): (ansi green)ok(ansi reset)"
-        []
-      } | flatten
-    } | flatten) # had to add parens to get parallelism
+  $srcdirs | each { |dir|
+    # man, I just am not sure about why I have to complete ignore
+    print -e $"input: ($dir): (ansi yellow_dimmed)check(ansi reset)"
+    let r0 = (do -i { ^git -C $dir rebase --abort } | complete | ignore)
+    let cmd = (do -i { ^git -C $dir pull --rebase } | complete)
+    if ($cmd.exit_code != 0) { error make {msg: $"input: ($dir): failed:\n\n($cmd.stderr)"} }
+    let cmd = (do -i { ^git -C $dir push origin HEAD -f } | complete)
+    if ($cmd.exit_code != 0) { error make {msg: $"input: ($dir): failed:\n\n($cmd.stderr)"} }
+    print -e $"input: ($dir): (ansi green)ok(ansi reset)"
+    []
   } | flatten
 }
 
@@ -201,6 +199,13 @@ def "main up" [] {
   main ci push
 
   main deploy "_pc"
+  main deploy "_phone"
+}
+
+def "main rescue" [ p: string ] {
+  print -e $"lez go ($p)"
+  ^echo nix copy -vv --from $"ssh-ng://($env.BUILDER_X86)" $p
+  ^nix copy -vv --from $"ssh-ng://($env.BUILDER_X86)" $p
 }
 
 def main [] {
@@ -218,6 +223,7 @@ def "main ci build" [] {
   let drvs = (open --raw $"($cidir)/drvs.json" | from json)
   buildDrvs $drvs
   
+  header light_blue_reverse $"ci build summary"
   $drvs
 }
 def "main ci push" [] {

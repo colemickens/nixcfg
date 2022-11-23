@@ -47,8 +47,13 @@ in
         NIXOS_OZONE_WL = "1";
       };
 
-      services.pass-secret-service = {
-        enable = true;
+      services = {
+        pass-secret-service = {
+          enable = true;
+        };
+        syncthing = {
+          tray.enable = config.services.syncthing.enable;
+        };
       };
 
       home.packages = (

@@ -63,16 +63,28 @@ let dirs = [
   "/opt/mssql-tools"
   "/opt/pipx"
   
+  "/etc/skel"
+  
+  "/home/linuxbrew"
+  "/home/runner/.cargo"
+  "/home/runner/.rustup"
+  # "/home/runner/runners" ## might need this?
+  "/var/lib/gems"
+  "/var/lib/snapd"
+  "/var/lib/apt"
+  
   # "/snap" # might not be possible, mount?
 ]
 
 let freespace = ((^df --output=avail -H "/") | tail -n1 | str trim)
 print -e $"(ansi blue)df = ($freespace)(ansi reset)"
 
-let dirs = ($dirs | each { |it| (ls --directory $it | get name) } | flatten)
-print -e $"(ansi red)clean:\n($dirs)"
-run-external "sudo" "rm" "-rf" $dirs
+let dirs2 = ($dirs | where {|it| $it | path exists } | each { |it| (ls --directory $it | get name) } | flatten)
+print -e $"(ansi red)clean:\n($dirs2)(ansi reset)"
+run-external "sudo" "rm" "-rf" $dirs2
 
+print -e $"(ansi red)clean:\n($dirs)(ansi reset)"
+run-external "sudo" "rm" "-rf" $dirs2
 # du "/*" | sort-by -r "apparent"
 # du "/lib/*" | sort-by -r "apparent"
 # du "/usr/*" | sort-by -r "apparent"
@@ -81,7 +93,17 @@ run-external "sudo" "rm" "-rf" $dirs
 let freespace = ((^df --output=avail -H "/") | tail -n1 | str trim)
 print -e $"(ansi blue)df = ($freespace)(ansi reset)"
 
-let p = "/" 
-print -e $"(ansi light_yellow_reverse) running dust ($p)"
-^dust "$p"
+let p = "/var/lib";
+print -e $"(ansi light_yellow_reverse) running dust ($p)(ansi reset)"; ^dust -x $p; sleep 1sec
 
+let p = "/home/runner";
+print -e $"(ansi light_yellow_reverse) running dust ($p)(ansi reset)"; ^dust -x $p; sleep 1sec
+
+let p = "/usr/local";
+print -e $"(ansi light_yellow_reverse) running dust ($p)(ansi reset)"; ^dust -x $p; sleep 1sec
+
+let p = "/usr/lib";
+print -e $"(ansi light_yellow_reverse) running dust ($p)(ansi reset)"; ^dust -x $p; sleep 1sec
+
+let p = "/";
+print -e $"(ansi light_yellow_reverse) running dust ($p)(ansi reset)"; ^dust -x $p; sleep 1sec

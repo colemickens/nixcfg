@@ -1,4 +1,5 @@
 name: "clean-actions"
+concurrency: "clean-actions"
 on:
   schedule:
     - cron: '*/20 * * * *'
