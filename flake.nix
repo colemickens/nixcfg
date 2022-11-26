@@ -127,14 +127,17 @@
           # x_pinephone = pinephone // { sys = "x86_64-linux"; };
           # x_blueline = blueline // { sys = "x86_64-linux"; };
         };
-        sbc = rec {
+        psbc = rec { # psbc = peristent sbc (aka ones we want to actually deploy)
           radxazero1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rockfiveb1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
+          openstick = { pkgs = inputs.nixpkgs-cross; sys = "x86_64-linux"; };
+        };
+        sbc = rec {
+          # goes in psbc when it's ready to be deployed again:
           aitchninesix1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpifour1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpithreebp1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpizerotwo1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
-          openstick = { pkgs = inputs.nixpkgs-cross; sys = "x86_64-linux"; };
           # visionfiveone1 = { pkgs = inputs.cross-riscv64; sys = "riscv64-linux"; };
           visionfiveone1 = { pkgs = inputs.nixpkgs-cross-riscv64; sys = "x86_64-linux"; };
         };

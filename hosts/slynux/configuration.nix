@@ -50,7 +50,6 @@ in
     };
 
     boot = {
-      tmpOnTmpfs = true;
       loader.grub.configurationLimit = lib.mkForce 20;
       initrd = {
         availableKernelModules = [ "sd_mod" "sr_mod" ];

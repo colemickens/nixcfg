@@ -167,12 +167,17 @@ def "main lockup" [] {
 
 def "main eval" [ drv: string ] { evalDrv $drv }
 def "main build" [ drv: string ] {
-  let drvs = evalDrv $drv # has a different type than above?
+  let drvs = evalDrv $drv
   buildDrvs $drvs false
   print -e ($drvs | get outputs | flatten)
 }
+def "main cache" [ drv: string] {
+  let drvs = evalDrv $drv
+  buildDrvs $drvs true
+  print -e ($drvs | get outputs | flatten)
+}
 def "main cachedl" [ drv: string] {
-  let drvs = evalDrv $drv # has a different type than above?
+  let drvs = evalDrv $drv
   buildDrvs $drvs true
   let builds = ($drvs | get outputs | get out)
   header light_gray_reverse $"download"
@@ -199,6 +204,7 @@ def "main up" [] {
   main ci push
 
   main deploy "_pc"
+  main deploy "_psbc"
   main deploy "_phone"
 }
 
