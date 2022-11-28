@@ -15,7 +15,13 @@ buildLinux (args // {
     hash = "sha256-nfAbnPiYdVVvx0WSWcZWwKfqqLMWelydJj2FLEhjIzU=";
   };
 
+  # I don't think the fork was rebasing all the way
+  # and is missing options, it seems:
   ignoreConfigErrors = true;
+
+  structuredExtraConfig = with lib.kernel; {
+    SND_USB_CAIAQ = no;
+  };
 
   # structuredExtraConfig = with lib.kernel; {
   #   # Not needed, and implementation iffy / does not build / used for testing

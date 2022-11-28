@@ -181,6 +181,10 @@
             {
               boot = o.mobile.outputs.android.android-bootimg;
             };
+          xboxog1 = let o = (cfg "xboxog1"); in
+            {
+              boot = o.system.build.xisoImage;
+            };
         };
 
       ## NIXOS_MODULES # TODO: we don't use these? #############################
@@ -200,6 +204,7 @@
             space-cadet-pinball-unfree = prev.callPackage ./pkgs/space-cadet-pinball {
               _assets = import ./pkgs/space-cadet-pinball/assets.nix { pkgs = prev; };
             };
+            extract-xiso = prev.callPackage ./pkgs/extract-xiso { };
             visualizer2 = prev.callPackage ./pkgs/visualizer2 { };
           }; in
           __colemickens_nixcfg_pkgs // { inherit __colemickens_nixcfg_pkgs; });

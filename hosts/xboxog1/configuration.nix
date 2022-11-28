@@ -20,6 +20,13 @@ in
   ++ inputs.tow-boot-radxa-rock5b.nixosModules
   ;
   config = {
+    nixpkgs.crossTarget = xbox;
+  
+    system.build.xisoImage = pkgs.runCommand "${hn}.xiso.iso" {} ''
+      mkdir "files/"
+
+      ${pkgs.extract-xiso}/bin/extract-xiso -c "files/" "$out"
+    '';
     nixpkgs.overlays = [
       (final: super: {
         makeModulesClosure = x:

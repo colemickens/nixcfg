@@ -153,7 +153,10 @@ def "main inputup" [] {
 
 def "main pkgup" [] {
   header yellow_reverse "pkgup"
-  do -c { ./pkgs/pkgs-update.nu }
+  do {
+    cd pkgs
+    ./pkgs-update.nu
+  }
 }
 
 def "main rpiup" [] {

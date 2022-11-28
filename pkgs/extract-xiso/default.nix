@@ -10,6 +10,7 @@
 , wayland
 , libglvnd
 , makeWrapper
+, cmake
 }:
 
 let
@@ -21,8 +22,7 @@ let
     repo_git = "https://github.com/${github.owner}/${github.repo}";
     branch = "master";
     rev = "4488c39d7aa0bd0c371929a3fdeb456123aa46b3";
-    sha256 = "";
-    cargoSha256 = "";
+    sha256 = "sha256-c0ayLMgb1cIWR/KJeUdwIq98kALdwHj+51J2MT0cBFo=";
   };
 in
 stdenv.mkDerivation rec {
@@ -38,7 +38,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    makeWrapper
+    # makeWrapper
+    cmake
   ];
   buildInputs = [
     alsa-lib

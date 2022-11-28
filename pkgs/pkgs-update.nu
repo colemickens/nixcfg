@@ -6,16 +6,17 @@ let fakeSha256 = "0000000000000000000000000000000000000000000000000000";
 def getBadHash [ attrName: string ] {
   let val = ((do -i { ^nix build --no-link $attrName }| complete)
       | get stderr
-      | split row "\n"
-      | where ($it | str contains "got:")
-      | str replace '\s+got:(.*)(sha256-.*)' '$2'
-      | get 0
-  )
+      | split row "\n")
+  let val = ($val
+      | where ($it | str contains "got:"))
+  let val = ($val | str replace '\s+got:(.*)(sha256-.*)' '$2' | get 0)
   $val
 }
 
 def main [] {
   let pkgList = (nix eval --json $".#packages.($system)" --apply 'x: builtins.attrNames x' | str trim | from json)
+
+  print -e $pkgList
   
   $pkgList | each { |packageName|
     print -e $"(ansi light_blue)>> try ($packageName)(ansi reset)"
@@ -56,6 +57,7 @@ def main [] {
       let packageName = $it.packageName
       print -e $"[($packageName)]: needs update! ($it.newrev) ($it.oldrev)"
   
+      do -i { ^echo sd -s $"($verinfo.rev)" $"($it.newrev)" $"($position)" }
       do -c { ^sd -s $"($verinfo.rev)" $"($it.newrev)" $"($position)" }
     
       do -c { ^sd -s $"($verinfo.sha256)" $"($fakeSha256)" $"($position)" }
