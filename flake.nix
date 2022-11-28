@@ -124,35 +124,32 @@
         phone = rec {
           pinephone = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           blueline = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
-          # x_pinephone = pinephone // { sys = "x86_64-linux"; };
-          # x_blueline = blueline // { sys = "x86_64-linux"; };
         };
-        psbc = rec { # psbc = peristent sbc (aka ones we want to actually deploy)
+        sbc = rec {
           radxazero1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rockfiveb1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           openstick = { pkgs = inputs.nixpkgs-cross; sys = "x86_64-linux"; };
-        };
-        sbc = rec {
-          # goes in psbc when it's ready to be deployed again:
           aitchninesix1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpifour1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpithreebp1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpizerotwo1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
-          # visionfiveone1 = { pkgs = inputs.cross-riscv64; sys = "riscv64-linux"; };
           visionfiveone1 = { pkgs = inputs.nixpkgs-cross-riscv64; sys = "x86_64-linux"; };
         };
         pc = {
           carbon = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
-          # temporarily suspended: keeps being offline:
-          # jeffhyper = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
-          slynux = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
+          jeffhyper = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
           raisin = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
+          slynux = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
           xeep = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
-          xboxog1 = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
+          # xboxog1 = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; }; # i686 = sse2 = no-go
         };
       };
 
       nixosConfigs = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues nixosConfigsEx));
+      deployConfigs = { inherit (nixosConfigs)
+        carbon raisin slynux /*jeffhyper*/ xeep
+        rockfiveb1 rpizerotwo1;
+      };
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);
       toplevels = (lib.mapAttrs (_: v: v.config.system.build.toplevel) nixosConfigurations);
 
@@ -177,12 +174,10 @@
               tbsd = o.system.build.tow-boot.outputs.diskImage;
               installFiles = o.system.build.installFiles;
             };
-          blueline = let o = (cfg "blueline"); in
-            {
+          blueline = let o = (cfg "blueline"); in {
               boot = o.mobile.outputs.android.android-bootimg;
             };
-          xboxog1 = let o = (cfg "xboxog1"); in
-            {
+          xboxog1 = let o = (cfg "xboxog1"); in {
               boot = o.system.build.xisoImage;
             };
         };
@@ -211,7 +206,7 @@
       };
     in
     (rec {
-      inherit nixosConfigsEx nixosConfigs nixosConfigurations toplevels;
+      inherit nixosConfigsEx nixosConfigs nixosConfigurations deployConfigs toplevels;
       inherit images nixosModules overlays;
     }) // (
       ## SYSTEM-SPECIFIC OUTPUTS ##############################################

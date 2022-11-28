@@ -21,6 +21,8 @@ minimalMkShell {
     /* nix tools */
     nix
     rnix-lsp
+    nil
+    alejandra
     nix-du nix-tree
 
     /*tools */

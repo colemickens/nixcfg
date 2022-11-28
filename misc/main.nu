@@ -110,9 +110,8 @@ def deployHost [ host: string ] {
 def "main deploy" [...h] {
   let h = ($h | flatten)
   header light_gray_reverse $"DEPLOY"
-  let h = (if ($h | length) == 0 { "_pc" } else $h)
-  let h = (if (not ($h | first | str starts-with "_")) { [ $h ] } else {
-    let ref = $".#nixosConfigsEx.($h | first | str trim --char '_')"
+  let h = (if ($h | length) != 0 { $h } else {
+    let ref = $".#deployConfigs"
     do -c { ^nix eval --json --apply "x: builtins.attrNames x" $ref }
       | complete | get stdout | from json
   })
@@ -206,9 +205,7 @@ def "main up" [] {
   main ci build
   main ci push
 
-  main deploy "_pc"
-  main deploy "_psbc"
-  main deploy "_phone"
+  main deploy
 }
 
 def "main rescue" [ p: string ] {
