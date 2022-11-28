@@ -148,6 +148,7 @@
           slynux = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
           raisin = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
           xeep = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
+          xboxog1 = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
         };
       };
 
