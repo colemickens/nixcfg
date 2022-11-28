@@ -55,7 +55,7 @@ in
       kernelModules = [ "iwlwifi" "ideapad_laptop" ];
       kernelParams = [
         "ideapad_laptop.allow_v4_dytc=1"
-        "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 1024 * 8)}"
+        # "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 1024 * 8)}"
       ];
       # kernelParams = [ "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}" ];
       initrd.availableKernelModules = [

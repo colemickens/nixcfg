@@ -143,7 +143,8 @@
         };
         pc = {
           carbon = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
-          jeffhyper = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
+          # temporarily suspended: keeps being offline:
+          # jeffhyper = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
           slynux = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
           raisin = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
           xeep = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
