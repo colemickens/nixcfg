@@ -1,18 +1,30 @@
-{ pkgs, config, inputs, ... }:
-
-let
-  tomlFormat = pkgs.formats.toml { };
+{
+  pkgs,
+  config,
+  inputs,
+  ...
+}: let
+  tomlFormat = pkgs.formats.toml {};
   gen = cfg: (tomlFormat.generate "helix-languages.toml" cfg);
   helixUnstable = inputs.helix.outputs.packages.${pkgs.hostPlatform.system}.helix;
-in
-{
+in {
   config = {
-    home-manager.users.cole = { pkgs, ... }: {
-      xdg.configFile."helix/languages.toml".source = gen {
-        nix = { auto-format = true; };
-      };
+    home-manager.users.cole = {pkgs, ...}: {
+      # xdg.configFile."helix/languages.toml".source = gen {
+      #   languages = [
+      #     {
+      #       name = "nix";
+      #       formatter = {command = "alejandra";};
+      #     }
+      #   ];
+      # };
+      xdg.configFile."helix/languages.toml".text = ''
+        [[language]]
+        name = "nix"
+        # formatter = { command = "alejandra" }
+        formatter = { command = "nixpkgs-fmt" }
+      '';
       programs.helix = {
-
         # TODO: temp workaround for cross-arch eval with cargo-nix-integration
         enable = true;
         package =
@@ -38,7 +50,7 @@ in
             file-picker = {
               hidden = false;
             };
-            gutters = [ "diagnostics" "line-numbers" "spacer" ];
+            gutters = ["diagnostics" "line-numbers" "spacer"];
             true-color = true;
             lsp = {
               display-messages = true;

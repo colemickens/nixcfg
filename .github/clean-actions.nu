@@ -12,7 +12,10 @@ for i in 1..2000 {
   let runs = ($runs | where status == "completed")
   $runs | get "id" | each { |it|
     print -e $"(ansi red)delete ($it)(ansi reset)"
-    do -c { ^gh api $"repos/($USER)/($REPO)/actions/runs/($it)" -X DELETE }
+    ^gh api $"repos/($USER)/($REPO)/actions/runs/($it)" -X DELETE
+    if ($env.LAST_EXIT_CODE != 0) {
+      error make { msg: "failed" }
+    }
     sleep 1sec
   }
 }

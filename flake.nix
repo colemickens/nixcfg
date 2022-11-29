@@ -114,18 +114,17 @@
         modules = [ ./hosts/${n}/configuration.nix ];
         specialArgs = { inherit inputs; };
       }));
-      mkToplevel = v: ((mkSystem v).config.system.build.toplevel);
 
       ## NIXOS CONFIGS + TOPLEVELS ############################################
       nixosConfigsEx = {
         misc = {
           # installer = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; host = "installer"; };
         };
-        phone = rec {
+        phone = {
           pinephone = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           blueline = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
         };
-        sbc = rec {
+        sbc = {
           radxazero1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rockfiveb1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           openstick = { pkgs = inputs.nixpkgs-cross; sys = "x86_64-linux"; };
@@ -146,41 +145,38 @@
       };
 
       nixosConfigs = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues nixosConfigsEx));
-      deployConfigs = { inherit (nixosConfigs)
-        carbon raisin slynux /*jeffhyper*/ xeep
-        rockfiveb1 rpizerotwo1;
+      deployConfigs = {
+        inherit (nixosConfigs)
+          carbon raisin slynux/*jeffhyper*/ xeep
+          rockfiveb1 rpizerotwo1;
       };
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);
       toplevels = (lib.mapAttrs (_: v: v.config.system.build.toplevel) nixosConfigurations);
 
       ## SPECIAL OUTPUTS ######################################################
-      images = let cfg = n: nixosConfigurations."${n}".config; in
-        {
-          # installer = (cfg "installer").config.system.build.isoImage;
-          openstick = let o = (cfg "openstick"); in
-            {
-              aboot = o.mobile.outputs.android.android-abootimg;
-              boot = o.mobile.outputs.android.android-bootimg;
-              # 'fastboot flash -S 100M $rootfs/NIXOS_SYSTEM.img'
-              rootfs = o.mobile.outputs.generatedFilesystems.rootfs;
-            };
-          rockfiveb1 = let o = (cfg "rockfiveb1"); in
-            {
-              tbsd = o.system.build.tow-boot.outputs.diskImage;
-              installFiles = o.system.build.installFiles;
-            };
-          aitchninesix1 = let o = (cfg "aitchninesix1"); in
-            {
-              tbsd = o.system.build.tow-boot.outputs.diskImage;
-              installFiles = o.system.build.installFiles;
-            };
-          blueline = let o = (cfg "blueline"); in {
-              boot = o.mobile.outputs.android.android-bootimg;
-            };
-          xboxog1 = let o = (cfg "xboxog1"); in {
-              boot = o.system.build.xisoImage;
-            };
+      images = let cfg = n: nixosConfigurations."${n}".config; in {
+        # installer = (cfg "installer").config.system.build.isoImage;
+        openstick = let o = (cfg "openstick"); in {
+          aboot = o.mobile.outputs.android.android-abootimg;
+          boot = o.mobile.outputs.android.android-bootimg;
+          # 'fastboot flash -S 100M $rootfs/NIXOS_SYSTEM.img'
+          rootfs = o.mobile.outputs.generatedFilesystems.rootfs;
         };
+        rockfiveb1 = let o = (cfg "rockfiveb1"); in {
+          tbsd = o.system.build.tow-boot.outputs.diskImage;
+          installFiles = o.system.build.installFiles;
+        };
+        aitchninesix1 = let o = (cfg "aitchninesix1"); in {
+          tbsd = o.system.build.tow-boot.outputs.diskImage;
+          installFiles = o.system.build.installFiles;
+        };
+        blueline = let o = (cfg "blueline"); in {
+          boot = o.mobile.outputs.android.android-bootimg;
+        };
+        xboxog1 = let o = (cfg "xboxog1"); in {
+          boot = o.system.build.xisoImage;
+        };
+      };
 
       ## NIXOS_MODULES # TODO: we don't use these? #############################
       nixosModules = {
@@ -194,88 +190,96 @@
       overlays = {
         default = (final: prev:
           # TODO: must be a better way?
-          let __colemickens_nixcfg_pkgs = rec {
-            space-cadet-pinball = prev.callPackage ./pkgs/space-cadet-pinball { };
-            space-cadet-pinball-unfree = prev.callPackage ./pkgs/space-cadet-pinball {
-              _assets = import ./pkgs/space-cadet-pinball/assets.nix { pkgs = prev; };
+          let
+            __colemickens_nixcfg_pkgs = rec {
+              space-cadet-pinball = prev.callPackage ./pkgs/space-cadet-pinball { };
+              space-cadet-pinball-unfree = prev.callPackage ./pkgs/space-cadet-pinball {
+                _assets = import ./pkgs/space-cadet-pinball/assets.nix { pkgs = prev; };
+              };
+              extract-xiso = prev.callPackage ./pkgs/extract-xiso { };
+              visualizer2 = prev.callPackage ./pkgs/visualizer2 { };
             };
-            extract-xiso = prev.callPackage ./pkgs/extract-xiso { };
-            visualizer2 = prev.callPackage ./pkgs/visualizer2 { };
-          }; in
+          in
           __colemickens_nixcfg_pkgs // { inherit __colemickens_nixcfg_pkgs; });
       };
     in
-    (rec {
-      inherit nixosConfigsEx nixosConfigs nixosConfigurations deployConfigs toplevels;
-      inherit images nixosModules overlays;
-    }) // (
-      ## SYSTEM-SPECIFIC OUTPUTS ##############################################
-      lib.flake-utils.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
-        let
-          pkgcfg = extraCfg:
-            lib.recursiveUpdate {
+    lib.recursiveUpdate
+      ({
+        inherit nixosConfigsEx nixosConfigs nixosConfigurations deployConfigs toplevels;
+        inherit images nixosModules overlays;
+      })
+      (
+        ## SYSTEM-SPECIFIC OUTPUTS ##############################################
+        lib.flake-utils.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
+          let
+            pkgcfg = extraCfg: {
               inherit system;
               overlays = [ overlays.default ];
-              config.allowAliases = false;
-            } extraCfg;
-          pkgs_ = np: extraCfg: (import np (pkgcfg extraCfg));
-          pkgs = pkgs_ inputs.nixpkgs {};
-          pkgsUnfree = pkgs_ inputs.nixpkgs { config.allowUnfree=true; };
-          pkgsStable = pkgs_ inputs.nixpkgs-stable {};
-          # internal helpers:
-          tfout = import ./cloud { inherit (inputs) terranix; inherit pkgs; };
-          mkShell = (name: import ./shells/${name}.nix { inherit inputs pkgs; });
-          mkAppScript = (name: script: {
-            type = "app";
-            program = (pkgsStable.writeScript "${name}.sh" script).outPath;
-          });
-        in
-        rec {
-          inherit pkgs pkgsUnfree;
+              config = ({ allowAliases = false; } // extraCfg);
+            };
+            pkgs_ = np: extraCfg: (import np (pkgcfg extraCfg));
+            pkgs = pkgs_ inputs.nixpkgs { };
+            pkgsUnfree = pkgs_ inputs.nixpkgs { allowUnfree = true; };
+            pkgsStable = pkgs_ inputs.nixpkgs-stable { };
+            mkShell = (name: import ./shells/${name}.nix { inherit inputs pkgs; });
+            # mkAppScript = (name: script: {
+            #   type = "app";
+            #   program = (pkgsStable.writeScript "${name}.sh" script).outPath;
+            # });
+          in
+          rec {
+            inherit pkgs pkgsStable pkgsUnfree;
 
-          ## DEVSHELLS # some of 'em kinda compose #############################
-          devShells = (lib.genAttrs [ "ci" "devenv" "devtools" "gstreamer" "uutils" ] mkShell)
-          // { default = devShells.devtools; };
+            ## DEVSHELLS # some of 'em kinda compose #############################
+            devShells = (lib.genAttrs [ "ci" "devenv" "devtools" "gstreamer" "uutils" ] mkShell)
+              // { default = devShells.devtools; };
 
-          ## APPS ##############################################################
-          apps = {
-            rockfiveb1_install = let f = images.rockfiveb1.installFiles; in
-              mkAppScript "rockfiveb1_install" ''
-                set -x
-                set -euo pipefail
-                rm -f result
-                ./main.nu cachedl 'images.aitchninesix1.installFiles'
-                out="$(readlink result)"
-                sudo rsync -avh --delete "$out/boot/" "/tmp/mnt-boot/"
-                sudo rsync -avh "$out/root/" "/tmp/mnt-root/"
-                sudo nix copy "''$(cat "$out/root/toplevel")" \
-                  --no-check-sigs \
-                  --to /tmp/mnt-root
-              '';
-            tf = { type = "app"; program = tfout.tf.outPath; };
-            tf-apply = { type = "app"; program = tfout.apply.outPath; };
-            tf-destroy = { type = "app"; program = tfout.destroy.outPath; };
-          };
+            ## APPS ##############################################################
+            apps = lib.recursiveUpdate
+              ({
+                # TODO: this definitely goes somewhere else:
+                # rockfiveb1_install = let f = images.rockfiveb1.installFiles; in
+                #   mkAppScript "rockfiveb1_install" ''
+                #     set -x
+                #     set -euo pipefail
+                #     rm -f result
+                #     ./main.nu cachedl 'images.aitchninesix1.installFiles'
+                #     out="$(readlink result)"
+                #     sudo rsync -avh --delete "$out/boot/" "/tmp/mnt-boot/"
+                #     sudo rsync -avh "$out/root/" "/tmp/mnt-root/"
+                #     sudo nix copy "''$(cat "$out/root/toplevel")" \
+                #       --no-check-sigs \
+                #       --to /tmp/mnt-root
+                #   '';
+              })
+              (
+                let tfout = import ./cloud { inherit (inputs) terranix; inherit pkgs; }; in {
+                  tf = { type = "app"; program = tfout.tf.outPath; };
+                  tf-apply = { type = "app"; program = tfout.apply.outPath; };
+                  tf-destroy = { type = "app"; program = tfout.destroy.outPath; };
+                }
+              );
 
-          ## PACKAGES ##########################################################
-          packages = (pkgsUnfree.__colemickens_nixcfg_pkgs);
+            ## PACKAGES ##########################################################
+            packages = (pkgsUnfree.__colemickens_nixcfg_pkgs);
 
-          ## NETBOOTS (paused: add grub => nix-netboot-server) #################
-          # netboots_ = lib.genAttrs
-          #   [ "rpifour1" ]
-          #   # [ "x_risky" "rpifour1" "rpithreebp1" "rpizerotwo1" ]
-          #   (h: nixosConfigurations.${h}.config.system.build.extras.nfsboot);
+            ## NETBOOTS (paused: add grub => nix-netboot-server) #################
+            # netboots_ = lib.genAttrs
+            #   [ "rpifour1" ]
+            #   # [ "x_risky" "rpifour1" "rpithreebp1" "rpizerotwo1" ]
+            #   (h: nixosConfigurations.${h}.config.system.build.extras.nfsboot);
 
-          ## CI JOBS ###########################################################
-          ciJobs = {
-            default = ({ }
-            // (lib.genAttrs [ "devtools" "ci" "devenv" ] (name: inputs.self.devShells.${system}.${name}.inputDerivation))
-            // (inputs.self.packages.${system})
-            // (lib.mapAttrs
-              (n: v: toplevels."${n}")
-              (lib.filterAttrs (n: v: v.sys == system) nixosConfigs))
-            );
-          };
-        })
-    );
+            ## CI JOBS ###########################################################
+            ciJobs = {
+              default = ({ }
+                // (lib.genAttrs [ "devtools" "ci" "devenv" ] (name: inputs.self.devShells.${system}.${name}.inputDerivation))
+                // (inputs.self.packages.${system})
+                // (lib.mapAttrs
+                (n: v: toplevels."${n}")
+                (lib.filterAttrs (n: v: v.sys == system) nixosConfigs))
+              );
+            };
+          })
+      )
+  ;
 }
