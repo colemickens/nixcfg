@@ -50,7 +50,7 @@ def buildRemoteDrvs [ drvs_: list arch: string buildHost: string cache: bool ] {
       $nixopts | append [ "--store" $"ssh-ng://($buildHost)" ]
     })
     if ($buildHost == "localhost") {
-      ^nom build --keep-going $nixopts $drvPaths
+      ^nix build --keep-going $nixopts $drvPaths
     } else {
       ^nix copy --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvPaths
       ^nix build $nixopts -L $drvPaths
@@ -60,7 +60,7 @@ def buildRemoteDrvs [ drvs_: list arch: string buildHost: string cache: bool ] {
   if ($cache && ($drvs | length) > 0) {
     let outs  = (($drvs_ | get outputs | flatten | get out) | flatten)
     let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str collect)
-    if $buildHost == localhost {
+    if $buildHost == "localhost" {
       cacheDrvs $drvs_
     } else {
       let sshExe = ([
@@ -140,11 +140,11 @@ def "main inputup" [] {
   $srcdirs | each { |dir|
     # man, I just am not sure about why I have to complete ignore
     print -e $"input: ($dir): (ansi yellow_dimmed)check(ansi reset)"
-    let r0 = (do -i { ^git -C $dir rebase --abort } | complete | ignore)
-    let cmd = (do -i { ^git -C $dir pull --rebase } | complete)
-    if ($cmd.exit_code != 0) { error make {msg: $"input: ($dir): failed:\n\n($cmd.stderr)"} }
-    let cmd = (do -i { ^git -C $dir push origin HEAD -f } | complete)
-    if ($cmd.exit_code != 0) { error make {msg: $"input: ($dir): failed:\n\n($cmd.stderr)"} }
+    ^git -C $dir rebase --abort
+    ^git -C $dir pull --rebase
+    if ($env.LAST_EXIT_CODE != 0) { error make { msg: $"rebase failed for ($dir)"}; break }
+    ^git -C $dir push origin HEAD -f
+    if ($env.LAST_EXIT_CODE != 0) { error make { msg: $"push failed for ($dir)"}; break }
     print -e $"input: ($dir): (ansi green)ok(ansi reset)"
     []
   } | flatten
