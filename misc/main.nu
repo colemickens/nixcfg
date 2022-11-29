@@ -2,8 +2,9 @@
 
 let cidir = "/tmp/nixci"; mkdir $cidir
 let nixpkgs = "https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # used by nix-shell cachix
+let nix = "./misc/nix.sh"
 let nixopts = [ "--no-link" "--option" "narinfo-cache-negative-ttl" "0" ]
-let builder = if (not ("NIX_BUILDER" in $env)) { "nix" } else { $env | get NIX_BUILDER | str trim }
+# let builder = if (not ("NIX_BUILDER" in $env)) { "nix" } else { $env | get NIX_BUILDER | str trim }
 let builder_x86 = (if ("BUILDER_X86" in $env) { $env | get "BUILDER_X86" | str trim }
   else if ((^hostname | str trim) == "slynux") { "localhost" }
   else { ^tailscale ip --4 "slynux" | str trim })
@@ -50,10 +51,10 @@ def buildRemoteDrvs [ drvs_: list arch: string buildHost: string cache: bool ] {
       $nixopts | append [ "--store" $"ssh-ng://($buildHost)" ]
     })
     if ($buildHost == "localhost") {
-      ^nix build --keep-going $nixopts $drvPaths
+      ^$nix build --keep-going $nixopts $drvPaths
     } else {
-      ^nix copy --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvPaths
-      ^nix build $nixopts -L $drvPaths
+      ^$nix copy --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvPaths
+      ^$nix build $nixopts -L $drvPaths
     }
   }
 
@@ -71,7 +72,7 @@ def buildRemoteDrvs [ drvs_: list arch: string buildHost: string cache: bool ] {
       
       # TODO: this pulls all paths even
       # if we don't need to
-      # ^nix build $nixopts -L -j0 $outs
+      # ^$nix build $nixopts -L -j0 $outs
     }
   }
 }
@@ -138,13 +139,25 @@ def "main inputup" [] {
   ] | flatten | each { |it1| $it1 | each {|it| $"($env.HOME)/code/($it)" } })
 
   $srcdirs | each { |dir|
-    # man, I just am not sure about why I have to complete ignore
     print -e $"input: ($dir): (ansi yellow_dimmed)check(ansi reset)"
+
+    # rebase, ignore if we're not rebasing
     ^git -C $dir rebase --abort
+    # pull, rebase, errors here are fatal, we want things "clean/rebased/pushed"
     ^git -C $dir pull --rebase
-    if ($env.LAST_EXIT_CODE != 0) { error make { msg: $"rebase failed for ($dir)"}; break }
+    if ($env.LAST_EXIT_CODE != 0) {
+      print -e $"(ansi red) input: ($dir): failed rebase(ansi reset)"
+      error make { msg: $"rebase failed for ($dir)"}
+      break
+    }
+    # git push => also fatal if fails
     ^git -C $dir push origin HEAD -f
-    if ($env.LAST_EXIT_CODE != 0) { error make { msg: $"push failed for ($dir)"}; break }
+    if ($env.LAST_EXIT_CODE != 0) {
+      print -e $"(ansi red) input: ($dir): failed push(ansi reset)"
+      error make { msg: $"push failed for ($dir)"};
+      break
+    }
+
     print -e $"input: ($dir): (ansi green)ok(ansi reset)"
     []
   } | flatten
@@ -154,17 +167,20 @@ def "main pkgup" [] {
   header yellow_reverse "pkgup"
   do {
     cd pkgs
-    ./pkgs-update.nu
+    ^./pkgs-update.nu
+    if ($env.LAST_EXIT_CODE != 0) { error make { msg: "failed to pkgs-update.nu" } }
   }
 }
 
 def "main rpiup" [] {
   header yellow_reverse "rpiup"
-  do -c { ./misc/rpi/rpi-update.nu }
+  ^./misc/rpi/rpi-update.nu
+  if ($env.LAST_EXIT_CODE != 0) { error make { msg: "failed to rpi-update" } }
 }
 def "main lockup" [] {
   header yellow_reverse "lockup"
-  do -c { ^nix flake lock --recreate-lock-file }
+  ^$nix flake lock --recreate-lock-file
+  if ($env.LAST_EXIT_CODE != 0) { error make { msg: "failed to lockup" } }
 }
 
 def "main eval" [ drv: string ] { evalDrv $drv }
@@ -183,21 +199,24 @@ def "main cachedl" [ drv: string] {
   buildDrvs $drvs true
   let builds = ($drvs | get outputs | get out)
   header light_gray_reverse $"download"
-  ^nix build -j0 --option narinfo-cache-negative-ttl 0 $builds
+  ^$nix build -j0 --option narinfo-cache-negative-ttl 0 $builds
+  if ($env.LAST_EXIT_CODE != 0) { error make { msg: "failed to dl from cache" } }
   $builds
 }
 
 def "main loopup" [] {
-  main up | ignore
-  sleep 3sec
-  main loopup
+  loop {
+    main up
+    print -e $"(ansi purple)waiting 60 seconds...(ansi reset)"
+    sleep 60sec
+  }
 }
 
 def "main up" [] {
   header red_reverse "loopup" "▒"
 
   main inputup
-  # main pkgup
+  main pkgup
   main rpiup
   main lockup
   
@@ -206,12 +225,6 @@ def "main up" [] {
   main ci push
 
   main deploy
-}
-
-def "main rescue" [ p: string ] {
-  print -e $"lez go ($p)"
-  ^echo nix copy -vv --from $"ssh-ng://($env.BUILDER_X86)" $p
-  ^nix copy -vv --from $"ssh-ng://($env.BUILDER_X86)" $p
 }
 
 def main [] {
