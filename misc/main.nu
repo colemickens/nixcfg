@@ -3,7 +3,7 @@
 let cidir = "/tmp/nixci"; mkdir $cidir
 let nixpkgs = "https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # used by nix-shell cachix
 let nixopts = [ "--no-link" "--option" "narinfo-cache-negative-ttl" "0" ]
-let builder = if (not ("NIX_BUILDER" in $env)) { "nom" } else { $env | get NIX_BUILDER | str trim }
+let builder = if (not ("NIX_BUILDER" in $env)) { "nix" } else { $env | get NIX_BUILDER | str trim }
 let builder_x86 = (if ("BUILDER_X86" in $env) { $env | get "BUILDER_X86" | str trim }
   else if ((^hostname | str trim) == "slynux") { "localhost" }
   else { ^tailscale ip --4 "slynux" | str trim })

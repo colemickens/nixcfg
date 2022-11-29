@@ -32,7 +32,7 @@ in
     # do we even need either or use DM?
     programs.light.enable = true;
 
-    home-manager.users.cole = { pkgs, ... }: {
+    home-manager.users.cole = { pkgs, config, ... }@hm: {
       # home-manager/#2064
       systemd.user.targets.tray = {
         Unit = {
@@ -52,7 +52,7 @@ in
           enable = true;
         };
         syncthing = {
-          tray.enable = config.services.syncthing.enable;
+          tray.enable = hm.config.services.syncthing.enable;
         };
       };
 

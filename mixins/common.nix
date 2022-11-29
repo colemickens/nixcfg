@@ -185,6 +185,8 @@ in
           };
           # dhcpV4Config.ClientIdentifier = "mac";
           dhcpV4Config.Use6RD = "yes";
+          dhcpV4Config.RouteMetric = 512;
+          dhcpV6Config.RouteMetric = 512;
           dhcpV6Config.PrefixDelegationHint = "::64";
         };
         networks."30-network-defaults-wireless" = {
@@ -197,10 +199,12 @@ in
             # IPMasquerade = "both";
           };
           # dhcpV4Config.ClientIdentifier = "mac";
-          routes = [
-            { routeConfig = { Gateway = "_dhcp4"; Metric = 1500; }; }
-            { routeConfig = { Gateway = "_ipv6ra"; Metric = 1500; }; }
-          ];
+          dhcpV4Config.RouteMetric = 1500;
+          dhcpV6Config.RouteMetric = 1500;
+          # routes = [
+          #   { routeConfig = { Gateway = "_dhcp4"; Metric = 1500; }; }
+          #   { routeConfig = { Gateway = "_ipv6ra"; Metric = 1500; }; }
+          # ];
           dhcpV4Config.Use6RD = "yes";
           dhcpV6Config.PrefixDelegationHint = "::64";
         };

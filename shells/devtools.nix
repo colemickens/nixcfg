@@ -20,6 +20,9 @@ in
       inputs.fenix.packages.${pkgs.hostPlatform.system}.rust-analyzer
       bacon # TODO ??
 
+      fzf
+      skim
+
       /*
       nix tools
       */
