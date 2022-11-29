@@ -100,9 +100,16 @@ def deployHost [ host: string ] {
   } else {
     header light_purple_reverse $"deploy: ($host): pull"
     let pullargs = (([ "sudo" "nix" "build" "-j0" $nixopts "--profile" "/nix/var/nix/profiles/system" $topout ] | flatten) | str join ' ')
-    do -c { ^ssh $"cole@($target)" $pullargs }
+    ^ssh $"cole@($target)" $pullargs
+    if ($env.LAST_EXIT_CODE != 0) {
+      error make { msg: $"failed to pull for ($host)"}
+    }
     header light_purple_reverse $"deploy: ($host): switch"
-    do -c { ^ssh $"cole@($target)" $"sudo '($topout)/bin/switch-to-configuration' switch" }
+    ^ssh $"cole@($target)" $"sudo '($topout)/bin/switch-to-configuration' switch"
+    if ($env.LAST_EXIT_CODE != 0) {
+      error make { msg: $"failed to switch for ($host)"}
+    }
+    
     null
   }
 }
