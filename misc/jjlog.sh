@@ -2,6 +2,6 @@
 
 while true; do
   clear
-  jj log
-  sleep 5
+  timeout 3 jj status
+  sleep 3
 done

@@ -192,11 +192,18 @@
           # TODO: must be a better way?
           let
             __colemickens_nixcfg_pkgs = rec {
+              extract-xiso = prev.callPackage ./pkgs/extract-xiso { };
+              nushell = prev.callPackage ./pkgs/nushell {
+                inherit (prev.darwin.apple_sdk.frameworks) AppKit Foundation Security;
+                inherit (prev.darwin.apple_sdk) sdk;
+              };
               space-cadet-pinball = prev.callPackage ./pkgs/space-cadet-pinball { };
               space-cadet-pinball-unfree = prev.callPackage ./pkgs/space-cadet-pinball {
                 _assets = import ./pkgs/space-cadet-pinball/assets.nix { pkgs = prev; };
               };
-              extract-xiso = prev.callPackage ./pkgs/extract-xiso { };
+              wezterm = prev.darwin.apple_sdk_11_0.callPackage ./pkgs/wezterm {
+                inherit (prev.darwin.apple_sdk_11_0.frameworks) Cocoa CoreGraphics Foundation UserNotifications;
+              };
               visualizer2 = prev.callPackage ./pkgs/visualizer2 { };
             };
           in

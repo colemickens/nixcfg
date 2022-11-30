@@ -26,7 +26,15 @@ in
 
   config = {
     hardware.drivers.enable = true;
-    hardware.bluetooth.enable = true;
+    hardware.bluetooth = {
+      enable = true;
+      powerOnBoot = false;
+      settings = {
+        General = {
+          Experimental = true;
+        };
+      };
+    };
 
     # TODO: light or brightnessctl? why both?
     # do we even need either or use DM?
@@ -51,9 +59,9 @@ in
         pass-secret-service = {
           enable = true;
         };
-        syncthing = {
-          tray.enable = hm.config.services.syncthing.enable;
-        };
+        # syncthing = {
+        #   tray.enable = hm.config.services.syncthing.enable;
+        # };
       };
 
       home.packages = (
@@ -76,6 +84,7 @@ in
           linphone
           nheko
           ripcord
+          wlfreerdp
 
           # browsers
           ladybird

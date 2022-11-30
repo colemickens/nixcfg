@@ -26,6 +26,9 @@ let dirs = [
   "/usr/local/julia*" # julia1.8.2
   "/usr/local/n"
   "/usr/local/sqlpackage"
+  "/usr/local/bin"
+  "/usr/local/julia*"
+  "/usr/local/aws-sam*"
 
   "/usr/local/lib/android"
   "/usr/local/lib/heroku"

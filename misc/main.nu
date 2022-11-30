@@ -52,37 +52,28 @@ def buildRemoteDrvs [ drvs_: list arch: string buildHost: string cache: bool ] {
     })
     if ($buildHost == "localhost") {
       ^$nix build --keep-going $nixopts $drvPaths
+      if ($env.LAST_EXIT_CODE != 0) { error make { msg: $"failed to build..."} }
     } else {
       ^$nix copy --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvPaths
       ^$nix build $nixopts -L $drvPaths
+      if ($env.LAST_EXIT_CODE != 0) { error make { msg: $"failed to build..."} }
     }
   }
 
   if ($cache && ($drvs | length) > 0) {
-    let outs  = (($drvs_ | get outputs | flatten | get out) | flatten)
+    let outs = ($drvs | get "outputs" | flatten | get "out" | flatten)
     let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str collect)
     if $buildHost == "localhost" {
-      cacheDrvs $drvs_
+      header "purple_reverse" $"cache: ($outs | length) paths"
+      echo $outsStr | ^cachix push $cachix_cache
     } else {
       let sshExe = ([
         $"printf '%s' '($outsStr)' | env CACHIX_SIGNING_KEY='($env.CACHIX_SIGNING_KEY)' "
         $"nix-shell -I nixpkgs=($nixpkgs) -p cachix --command 'cachix push ($cachix_cache)'"
     ] | str join ' ')
       ^ssh $buildHost $sshExe
-      
-      # TODO: this pulls all paths even
-      # if we don't need to
-      # ^$nix build $nixopts -L -j0 $outs
     }
   }
-}
-
-def cacheDrvs [ drvs: list ] {
-  # we intentionally consider all outs that are local as possible pushables, even if isCached (its a misnomer)
-  let outs  = (($drvs | get outputs | flatten | get out) | flatten | where ($it | path exists))
-  let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str collect)
-  header "purple_reverse" $"cache: ($outs | length) paths"
-  echo $outsStr | ^cachix push $cachix_cache
 }
 
 def deployHost [ host: string ] {
@@ -247,14 +238,14 @@ def "main ci eval" [] {
 }
 def "main ci build" [] {
   let drvs = (open --raw $"($cidir)/drvs.json" | from json)
-  buildDrvs $drvs
+  buildDrvs $drvs false
   
   header light_blue_reverse $"ci build summary"
   $drvs
 }
 def "main ci push" [] {
   let drvs = (open --raw $"($cidir)/drvs.json" | from json)
-  cacheDrvs $drvs
+  buildDrvs $drvs true
 }
 def "main ci" [] {
   main ci eval
@@ -263,7 +254,7 @@ def "main ci" [] {
 }
 
 def updateInput [ name: string baseBr: string newBr: string upRemoteName: string upstreamUrl: string upstreamBr: string ] {
-  let originUrl = $"git@github.com:colemickens/($name)"
+  let originUrl = $"https://github.com/colemickens/($name)"
   let baseDir = $"($env.PWD)/../($name)/($baseBr)"
   let newDir = $"($env.PWD)/../($name)/($newBr)"
   if (not ($baseDir | path exists)) {
