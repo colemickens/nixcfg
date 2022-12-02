@@ -1,16 +1,14 @@
-{ stdenv, lib, fetchFromGitHub
-, cmake, pkg-config
-, SDL2, SDL2_mixer
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, SDL2
+, SDL2_mixer
 , _assets ? ""
 }:
 
-let
-  verinfo = rec {
-    repo_git = "https://github.com/k4zmu2a/SpaceCadetPinball";
-    branch = "master";
-    rev = "2162cac9771bb50059f440c50e9a30d982cdd848";
-    sha256 = "sha256-44Q2rewnV0mBfYqm8NC2yxp4ebAmcmtGICc0U2ndauo=";
-  };
+let verinfo = import ./metadata.nix;
 in stdenv.mkDerivation rec {
   pname = if _assets == "" then "space-cadet-pinball" else "space-cadet-pinball-unfree";
   version = verinfo.rev;
@@ -23,11 +21,13 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake pkg-config
+    cmake
+    pkg-config
   ];
 
   buildInputs = [
-    SDL2 SDL2_mixer
+    SDL2
+    SDL2_mixer
   ];
 
   installPhase = ''

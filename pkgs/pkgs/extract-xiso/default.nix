@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   version = verinfo.rev;
 
   src = fetchFromGitHub {
-    owner = verinfo.github.owner;
-    repo = verinfo.github.repo;
+    owner = "XboxDev";
+    repo = "extract-xiso";
     rev = verinfo.rev;
     sha256 = verinfo.sha256;
   };
