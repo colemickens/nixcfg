@@ -91,5 +91,6 @@ rustPlatform.buildRustPackage rec {
     tests.version = testers.testVersion {
       package = nushell;
     };
+    verinfo = metadata;
   };
 }

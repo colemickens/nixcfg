@@ -234,7 +234,7 @@ def main [] {
 ###############################################################################
 def "main ci eval" [] {
   let r = (evalDrv 'ciJobs.x86_64-linux.default')
-  $r | to json | save --raw $"($cidir)/drvs.json"
+  $r | to json | save -f --raw $"($cidir)/drvs.json"
 }
 def "main ci build" [] {
   let drvs = (open --raw $"($cidir)/drvs.json" | from json)

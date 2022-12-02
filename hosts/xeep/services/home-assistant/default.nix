@@ -88,6 +88,24 @@ in
             data.payload.id = "youtube.leanback.v4";
             data.command = "system.launcher/launch";
           }];
+          lgc1_open_hulu.sequence = [{
+            service = "webostv.command";
+            target.entity_id = "media_player.lg_webos_smart_tv";
+            data.payload.id = "hulu";
+            data.command = "system.launcher/launch";
+          }];
+          lgc1_open_amazon.sequence = [{
+            service = "webostv.command";
+            target.entity_id = "media_player.lg_webos_smart_tv";
+            data.payload.id = "amazon";
+            data.command = "system.launcher/launch";
+          }];
+          lgc1_open_netflix.sequence = [{
+            service = "webostv.command";
+            target.entity_id = "media_player.lg_webos_smart_tv";
+            data.payload.id = "netflix";
+            data.command = "system.launcher/launch";
+          }];
           lgc1_open_spotify.sequence = [{
             service = "webostv.command";
             target.entity_id = "media_player.lg_webos_smart_tv";
@@ -206,72 +224,6 @@ in
             }];
           }
           {
-            id = "morning";
-            alias = "morning";
-            mode = "single";
-            trigger = {
-              platform = "time_pattern";
-              hours = "7";
-              minutes = "00";
-            };
-            action = [{
-              service = "script.turn_on";
-              target.entity_id = "script.morning";
-            }];
-          }
-          # TODO: think of something better for her lamp...
-          # I think the lamp should be manual for blinds+ambient light
-          # but I want something to ramp up around her food times...
-          {
-            id = "cleo_lamp_on";
-            alias = "Cleo Lamp On";
-            mode = "single";
-            trigger = {
-              platform = "time";
-              at = [ "19:00:00" ];
-            };
-            action = [{
-              service = "switch.turn_on";
-              target.entity_id = cleo_lamp_switch;
-            }];
-          }
-          {
-            id = "cleo_lamp_off";
-            alias = "Cleo Lamp Off";
-            mode = "single";
-            trigger = {
-              platform = "time";
-              at = [ "7:00:00" ];
-            };
-            action = [{
-              service = "switch.turn_off";
-              target.entity_id = cleo_lamp_switch;
-            }];
-          }
-          # {
-          #   id = "cleo_fountain_cycle";
-          #   alias = "Cleo Fountain Cycle";
-          #   mode = "single";
-          #   trigger = {
-          #     platform = "time_pattern";
-          #     hours = "/1";
-          #     minutes = "0";
-          #   };
-          #   action = [
-          #     {
-          #       service = "switch.turn_off";
-          #       target.entity_id = _ent.cleo_fountain;
-          #     }
-          #     {
-          #       delay.seconds = 2;
-          #     }
-          #     {
-          #       service = "switch.turn_on";
-          #       target.entity_id = _ent.cleo_fountain;
-          #     }
-          #   ];
-          # }
-          {
             id = "candles_on";
             alias = "Candles On";
             mode = "single";
@@ -297,90 +249,21 @@ in
               target.entity_id = candle_switches;
             }];
           }
-          # {
-          #   id = "handle_tag_scan";
-          #   alias = "Handle Tag Scan";
-          #   mode = "single";
-          #   max_exceeded = "silent";
-          #   variables = {
-          #     # media_players = {
-          #     #    SCANNER_ID => "playback.device"
-          #     #   "ae114876cf32566742995fe050bdb55a" = "media_player.denon";
-          #     # };
-          #     tags = {
-          #       "A4-B2-75-D5" = {
-          #         media_content_id = "https://open.spotify.com/track/6I9VzXrHxO9rA9A5euc8Ak";
-          #         media_content_type = "track";
-          #       };
-          #       "7C-3C-26-17" = {
-          #         # cascade trigger something else?
-          #       };
-          #     };
-          #   };
-          #   trigger = {
-          #     platform = "event";
-          #     event_type = "tag_scanned";
-          #   };
-          #   condition = [
-          #     "{{ trigger.event.data.tag_id in tags }}"
-          #     # "{{ trigger.event.data.device_id in media_players }}"
-          #   ];
-          #   action = [
-          #     {
-          #       service = "media_player.play_media";
-          #       data = {
-          #         entity_id = "media_player.spotify_cole_mickens";
-          #         #entity_id = "{{ media_players[trigger.event.data.device_id] }}";
-          #         media_content_id = "{{ tags[trigger.event.data.tag_id].media_content_id }}";
-          #         media_content_type = "{{ tags[trigger.event.data.tag_id].media_content_type }}";
-          #       };
-          #     }
-          #   ];
-          # }
         ];
-        #cast = { media_player = { host = "192.168.1.200"; }; };
-        #cloud = { };
         config = { };
         climate = { };
-        ## default_config = { }; ## TODO?
         denonavr = { };
-        #discovery = { };
         esphome = { };
-        frontend = {
-          # themes = {
-          #   midnight = import ./theme-midnight.nix;
-          #   slate = import ./theme-slate.nix;
-          # };
-        };
-        # history = { };
+        frontend = { };
         http = {
           server_host = ha_host;
           server_port = ha_port;
           use_x_forwarded_for = true;
           trusted_proxies = [ "127.0.0.1" "::1" ];
         };
-        # light = [
-        #   {
-        #     platform = "nanoleaf";
-        #     host = "192.168.72.138";
-        #     token = "xInHWS17zONcFiW5bpPXA7ZDYdWuFQP2";
-        #   }
-        # ];
-        # media_player = [
-        #   {
-        #     name = "braviatv";
-        #     platform = "braviatv";
-        #     host = "192.168.1.119";
-        #   }
-        # ];
         braviatv = { };
         nanoleaf = { };
-        # prometheus = { namespace = "hass"; };
         ssdp = { };
-        # recorder = {
-        #   purge_interval = 1;
-        #   purge_keep_days = 30;
-        # };
         switch = [
           {
             platform = "wake_on_lan";
@@ -390,30 +273,26 @@ in
         ];
         system_health = { };
         wake_on_lan = { };
-        webostv = { }; # TODO: it whines about this, but we need it to pull in pip pkgs
-        # weather = {
-        #   platform = "openweathermap";
-        #   api_key = secrets.openweathermap_apikey;
-        # };
+        webostv = { };
       };
       lovelaceConfigWritable = false;
       lovelaceConfig = {
-        title = "Chimera HomeAss";
+        title = "Cleo's Pad";
         views = [
           {
-            title = "Home";
+            title = "Abode";
             cards = [
               {
                 title = "Living Room";
                 type = "entities";
                 entities = [
-                  {
-                    type = "section";
-                    label = "Air Conditioner";
-                  }
-                  {
-                    entity = "climate.ac";
-                  }
+                  # {
+                  #   type = "section";
+                  #   label = "Air Conditioner";
+                  # }
+                  # {
+                  #   entity = "climate.ac";
+                  # }
                   {
                     type = "section";
                     label = "Television";
@@ -429,7 +308,7 @@ in
                         entity = "script.lgc1_screen_on";
                         tap_action.action = "call-service";
                         tap_action.service = "script.lgc1_screen_on";
-                        name = "on";
+                        name = "screen on";
                         icon = "mdi:television";
                       }
                       {
@@ -437,8 +316,13 @@ in
                         tap_action.action = "call-service";
                         tap_action.service = "script.lgc1_screen_off";
                         icon = "mdi:television-off";
-                        name = "off";
+                        name = "screen off";
                       }
+                    ];
+                  }
+                  {
+                    type = "buttons";
+                    entities = [
                       {
                         entity = "script.lgc1_open_youtube";
                         tap_action.action = "call-service";
@@ -447,19 +331,50 @@ in
                         name = "youtube";
                       }
                       {
-                        entity = "script.lgc1_open_plex";
-                        tap_action.action = "call-service";
-                        tap_action.service = "script.lgc1_open_plex";
-                        icon = "mdi:movie-open-outline";
-                        name = "plex";
-                      }
-                      {
                         entity = "script.lgc1_open_spotify";
                         tap_action.action = "call-service";
                         tap_action.service = "script.lgc1_open_spotify";
                         icon = "mdi:music";
                         name = "spotify";
                       }
+                      {
+                        entity = "script.lgc1_open_plex";
+                        tap_action.action = "call-service";
+                        tap_action.service = "script.lgc1_open_plex";
+                        icon = "mdi:movie-open-outline";
+                        name = "plex";
+                      }
+                    ];
+                  }
+                  {
+                    type = "buttons";
+                    entities = [
+                      {
+                        entity = "script.lgc1_open_hulu";
+                        tap_action.action = "call-service";
+                        tap_action.service = "script.lgc1_open_hulu";
+                        icon = "mdi:drama-masks";
+                        name = "hulu";
+                      }
+                      {
+                        entity = "script.lgc1_open_netflix";
+                        tap_action.action = "call-service";
+                        tap_action.service = "script.lgc1_open_netflix";
+                        icon = "mdi:drama-masks";
+                        name = "netflix";
+                      }
+                      {
+                        entity = "script.lgc1_open_amazon";
+                        tap_action.action = "call-service";
+                        tap_action.service = "script.lgc1_open_amazon";
+                        icon = "mdi:drama-masks";
+                        name = "amazon";
+                      }
+                    ];
+                  }
+                  {
+                    type = "buttons";
+                    entities = [
                       {
                         entity = "script.lgc1_open_pc";
                         tap_action.action = "call-service";
@@ -487,133 +402,21 @@ in
                     entity = "switch.slywin";
                   }
 
-                  {
-                    type = "section";
-                    label = "Receiver";
-                  }
-                  {
-                    name = "Denon AVR1913";
-                    entity = "media_player.denon";
-                  }
+                  # {
+                  #   type = "section";
+                  #   label = "Receiver";
+                  # }
+                  # {
+                  #   name = "Denon AVR1913";
+                  #   entity = "media_player.denon";
+                  # }
                 ];
               }
-
-              {
-                title = "Kitchen Table";
-                type = "entities";
-                entities = [
-                  {
-                    type = "section";
-                    label = "Television";
-                  }
-                  {
-                    name = "Sony Bravia 55";
-                    entity = "media_player.braviatv";
-                  }
-                  {
-                    name = "Dab Rig";
-                    entity = _ent.dabrig;
-                  }
-                  {
-                    type = "section";
-                    label = "Cleo";
-                  }
-                  {
-                    name = "Cleo Lamp";
-                    entity = "switch.wp6_sw102_relay";
-                    icon = "mdi:lightbulb";
-                  }
-                ];
-              }
-
-              {
-                title = "Bedroom";
-                type = "entities";
-                entities = [
-                  {
-                    name = "Nanoleaf △  Lights";
-                    entity = "light.nanoleaf_light_panels_5b_38_ef";
-                  }
-                  {
-                    type = "buttons";
-                    entities = (
-                      let mkButton = effect: rec {
-                        type = "button";
-                        entity = "light.nanoleaf_light_panels_5b_38_ef";
-                        tap_action.action = "call-service";
-                        tap_action.service = "light.turn_on";
-                        tap_action.data.entity_id = entity;
-                        tap_action.data.brightness_pct = 100;
-                        tap_action.data.effect = effect;
-                        name = effect;
-                      }; in
-                      [
-                        (mkButton "Paint Splatter")
-                        (mkButton "Northern Lights")
-                        (mkButton "moonlight")
-                        (mkButton "Tachyon Light2")
-                        (mkButton "Twinkling Midnight Sky")
-                        (mkButton "TV Simulation")
-                        (mkButton "Disco Color")
-                        (mkButton "Vaporwave")
-                        (mkButton "Sunset")
-                        (mkButton "Single fade")
-                      ]
-                    );
-                  }
-                ];
-              }
-            ];
-          }
-
-          {
-            title = "Routines";
-            cards = [
-              {
-                title = "Routines";
-                type = "entities";
-                entities = [
-                  {
-                    type = "buttons";
-                    entities = [
-                      {
-                        entity = "script.bedtime";
-                        tap_action.action = "call-service";
-                        tap_action.service = "script.bedtime";
-                        name = "sleep";
-                        icon = "mdi:sleep";
-                      }
-                    ];
-                  }
-                ];
-              }
-            ];
-          }
-
-          {
-            title = "Projects";
-            cards = [
-              {
-                title = "Projects";
-                type = "entities";
-                entities = [
-                  {
-                    name = "powerstrip";
-                    entity = "switch.wp6_sw106_relay";
-                  }
-                ];
-              }
-            ];
-          }
-
-          {
-            title = "Automations";
-            cards = [
               {
                 title = "Automations";
                 type = "entities";
                 entities = [
-                  "automation.morning"
+                  # "automation.morning"
                   "automation.candles_off"
                   "automation.candles_on"
                 ];
@@ -630,6 +433,117 @@ in
               }
             ];
           }
+
+              # {
+              #   title = "Kitchen Table";
+              #   type = "entities";
+              #   entities = [
+              #     {
+              #       type = "section";
+              #       label = "Television";
+              #     }
+              #     {
+              #       name = "Sony Bravia 55";
+              #       entity = "media_player.braviatv";
+              #     }
+              #     {
+              #       name = "Dab Rig";
+              #       entity = _ent.dabrig;
+              #     }
+              #     {
+              #       type = "section";
+              #       label = "Cleo";
+              #     }
+              #     {
+              #       name = "Cleo Lamp";
+              #       entity = "switch.wp6_sw102_relay";
+              #       icon = "mdi:lightbulb";
+              #     }
+              #   ];
+              # }
+
+          #     {
+          #       title = "Bedroom";
+          #       type = "entities";
+          #       entities = [
+          #         {
+          #           name = "Nanoleaf △  Lights";
+          #           entity = "light.nanoleaf_light_panels_5b_38_ef";
+          #         }
+          #         {
+          #           type = "buttons";
+          #           entities = (
+          #             let
+          #               mkButton = effect: rec {
+          #                 type = "button";
+          #                 entity = "light.nanoleaf_light_panels_5b_38_ef";
+          #                 tap_action.action = "call-service";
+          #                 tap_action.service = "light.turn_on";
+          #                 tap_action.data.entity_id = entity;
+          #                 tap_action.data.brightness_pct = 100;
+          #                 tap_action.data.effect = effect;
+          #                 name = effect;
+          #               };
+          #             in
+          #             [
+          #               (mkButton "Paint Splatter")
+          #               (mkButton "Northern Lights")
+          #               (mkButton "moonlight")
+          #               (mkButton "Tachyon Light2")
+          #               (mkButton "Twinkling Midnight Sky")
+          #               (mkButton "TV Simulation")
+          #               (mkButton "Disco Color")
+          #               (mkButton "Vaporwave")
+          #               (mkButton "Sunset")
+          #               (mkButton "Single fade")
+          #             ]
+          #           );
+          #         }
+          #       ];
+          #     }
+          #   ];
+          # }
+
+          # {
+          #   title = "Routines";
+          #   cards = [
+          #     {
+          #       title = "Routines";
+          #       type = "entities";
+          #       entities = [
+          #         {
+          #           type = "buttons";
+          #           entities = [
+          #             {
+          #               entity = "script.bedtime";
+          #               tap_action.action = "call-service";
+          #               tap_action.service = "script.bedtime";
+          #               name = "sleep";
+          #               icon = "mdi:sleep";
+          #             }
+          #           ];
+          #         }
+          #       ];
+          #     }
+          #   ];
+          # }
+
+          # {
+          #   title = "Projects";
+          #   cards = [
+          #     {
+          #       title = "Projects";
+          #       type = "entities";
+          #       entities = [
+          #         {
+          #           name = "powerstrip";
+          #           entity = "switch.wp6_sw106_relay";
+          #         }
+          #       ];
+          #     }
+          #   ];
+          # }
+
         ];
       };
     };

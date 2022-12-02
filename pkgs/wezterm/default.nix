@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage rec {
     rm -r wezterm-ssh/tests
   '';
 
-  cargoSha256 = "sha256-D6/biuLsXaCr0KSiopo9BuAVmniF8opAfDH71C3dtt0=";
+  cargoSha256 = metadata.cargoSha256;
 
   nativeBuildInputs = [
     installShellFiles
@@ -132,6 +132,7 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
+  passthru.verinfo = metadata;
   meta = with lib; {
     description = "A GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
     homepage = "https://wezfurlong.org/wezterm";

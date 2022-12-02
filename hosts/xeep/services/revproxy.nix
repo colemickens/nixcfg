@@ -1,42 +1,30 @@
 { config, pkgs, lib, modulesPath, inputs, ... }:
 
 let
-  pixel3_ip4 = "100.83.93.42";
-  pixel3_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6253:5d2a]";
-
   carbon_ip4 = "100.122.12.36";
-  carbon_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:627a:c24]";
-  # slynux_ip4 = "100.120.15.79";
-  # slynux_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6278:f4f]";
-  slynux_ip4 = "192.168.30.181";
-  # slynux_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6278:f4f]";
+  slynux_ip4 = "100.120.15.79";
   xeep_ip4 = "100.72.11.62";
-  xeep_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6248:b3e]";
   raisin_ip4 = "100.112.194.64";
-  raisin_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6270:c240]";
   jeffhyper_ip4 = "100.103.91.27";
-  jeffhyper_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:6267:5b1b]";
-
-  rpifour1_ip4 = "100.111.5.113";
-  rpifour1_ip6 = "[fd7a:115c:a1e0:ab12:4843:cd96:626f:571]";
   
-  internalDomain = "cleo.cat";
+  domain = "cleo.cat";
+  idomain = "x.cleo.cat";
+  localCidr4 = "100.0.0.0/8";
+  localCidr6 = "fd7a:115c:a1e0:ab12:0000:0000:0000:0000/64";
+  realCidr4 = "192.168.0.0/16";
 
   template = pkgs.writeText "template.html" ''
     <html>
-      <head><title>cleo cat!</title></head>
+      <head>
+        <title>cleo cat!</title>
+        <meta charset="UTF-8">
+      </head>
       <body>
         <h1>Ens encanta la Cleo!</h1>
 
-        <h2>serveis</h2>
+        <h2>serveis (internal)</h2>
         <ul>
-          <li><a href="https://x.${internalDomain}">deixa'm entrar</a></li>
-        </ul>
-
-        <h2>serveis2</h2>
-        <ul>
-          <li><a href="https://sd.${internalDomain}">stable-diffusion webui</a></li>
-          <li><a href="https://sdo.${internalDomain}">stable-diffusion outputs</a></li>
+          <li><a href="https://home.${domain}">home-assistant</a></li>
         </ul>
 
         <br/>
@@ -46,40 +34,34 @@ let
   '';
   template_vpn = pkgs.writeText "template.html" ''
     <html>
-      <head><title>cleo cat!</title></head>
+      <head>
+        <title>cleo cat!</title>
+        <meta charset="UTF-8">
+      </head>
       <body>
         <h1>Ens encanta la Cleo!</h1>
         
         <h2>public serveis</h2>
         <ul>
-          <li><a href="https://homie-cast.${internalDomain}">homie-cast</a></li>
+          <li><a href="https://homie-cast.${domain}">homie-cast</a></li>
         </ul>
         
         <h2>serveis</h2>
         <ul>
-          <li><a href="http://sd.x.${internalDomain}">stable-diffusion</a></li>
+          <li><a href="http://sd.${idomain}">stable-diffusion</a></li>
         </ul>
         <ul>
-          <li><a href="https://home.x.${internalDomain}">home-assistant</a></li>
-          <li><a href="https://unifi.x.${internalDomain}">unifi</a></li>
-          <li><a href="https://denon.x.${internalDomain}">denon</a></li>
-          <li><a href="https://rtsptoweb.x.${internalDomain}">rtsptoweb</a></li>
-          <li><a href="https://paperless.x.${internalDomain}">paperless</a></li>
-          <li><a href="https://wphone.x.${internalDomain}">wphone</a></li>
-        </ul>
-        <ul>
-          <li><a href="https://syncthing-pixel3.x.${internalDomain}">syncthing (pixel3)</a></li>
-          <br/>
-          <li><a href="https://syncthing-carbon.x.${internalDomain}">syncthing (carbon)</a></li>
-          <li><a href="https://syncthing-slynux.x.${internalDomain}">syncthing (slynux)</a></li>
-          <li><a href="https://syncthing-raisin.x.${internalDomain}">syncthing (raisin)</a></li>
-          <li><a href="https://syncthing-xeep.x.${internalDomain}">syncthing (xeep)</a></li>
-          <li><a href="https://syncthing-jeffhyper.x.${internalDomain}">syncthing (jeffhyper)</a></li>
+          <li><a href="https://home.${idomain}">home-assistant</a></li>
+          <li><a href="https://unifi.${idomain}">unifi</a></li>
+          <li><a href="https://denon.${idomain}">denon</a></li>
+          <li><a href="https://rtsptoweb.${idomain}">rtsptoweb</a></li>
+          <li><a href="https://paperless.${idomain}">paperless</a></li>
+          <li><a href="https://wphone.${idomain}">wphone</a></li>
         </ul>
 
         <h2>serveis futurs</h2>
         <ul>
-          <li><a href="https://aria.x.${internalDomain}">aria2c - webui</a></li>
+          <li><a href="https://aria.${idomain}">aria2c - webui</a></li>
         </ul>
 
         <br/>
@@ -102,16 +84,26 @@ let
   };
 
   protectedVhost = {
-    useACMEHost = "${internalDomain}";
+    useACMEHost = "${domain}";
     forceSSL = true;
     extraConfig = ''
-      auth_basic "protected ${internalDomain} service";
+      auth_basic "protected ${domain} service";
       auth_basic_user_file /run/secrets/htpasswd;
+    '';
+  };
+  
+  localVhost = {
+    useACMEHost = "${domain}";
+    forceSSL = true;
+    extraConfig = ''
+      allow ${localCidr4};
+      allow ${realCidr4};
+      deny all;
     '';
   };
 
   internalVhost = {
-    useACMEHost = "${internalDomain}";
+    useACMEHost = "${domain}";
     forceSSL = true;
     extraConfig = ''
       allow 100.0.0.0/8;
@@ -119,10 +111,6 @@ let
       deny all;
     '';
   };
-
-  redirSecret = pkgs.writeText "redir-tkn.conf" ''
-    return 301 https://openvscode.x.${internalDomain}?tkn="";
-  '';
 in
 {
   config = {
@@ -142,13 +130,13 @@ in
     security.acme = {
       acceptTerms = true;
       defaults.email = "cole.mickens@gmail.com";
-      certs."${internalDomain}" = {
+      certs."${domain}" = {
         dnsProvider = "cloudflare";
         #server = "https://acme-staging-v02.api.letsencrypt.org/directory";
         credentialsFile = config.sops.secrets."cloudflare-cleo-cat-creds".path;
         extraDomainNames = [
-          "*.${internalDomain}"
-          "*.x.${internalDomain}"
+          "*.${domain}"
+          "*.${idomain}"
         ];
       };
     };
@@ -167,14 +155,14 @@ in
       recommendedGzipSettings = true;
       recommendedProxySettings = true;
 
-      virtualHosts."${internalDomain}" = {
+      virtualHosts."${domain}" = {
         root = payload;
         default = true;
-        useACMEHost = "${internalDomain}";
+        useACMEHost = "${domain}";
         forceSSL = true;
       };
-      # virtualHosts."oci.${internalDomain}" = {
-      #   useACMEHost = "${internalDomain}";
+      # virtualHosts."oci.${domain}" = {
+      #   useACMEHost = "${domain}";
       #   addSSL = true;
       #   forceSSL = false;
       #   locations."/" = {
@@ -186,8 +174,8 @@ in
       #   };
       # };
 
-      virtualHosts."netboot.${internalDomain}" = {
-        useACMEHost = "${internalDomain}";
+      virtualHosts."netboot.${domain}" = {
+        useACMEHost = "${domain}";
         addSSL = true;
         forceSSL = false;
         locations."/" = {
@@ -207,14 +195,22 @@ in
         };
       };
 
+      # "EXTERNAL", UNPROTECTED, LIMITED TO LOCAL
+      virtualHosts."home.${domain}" = localVhost // {
+        locations."/" = {
+          proxyPass = "http://localhost:8123/";
+          proxyWebsockets = true;
+        };
+      };
+      
       # EXTERNAL, PROTECTED
-      virtualHosts."sd.${internalDomain}" = protectedVhost // {
+      virtualHosts."sd.${domain}" = protectedVhost // {
         locations."/" = {
           proxyPass = "http://${slynux_ip4}:7860/";
           proxyWebsockets = true;
         };
       };
-      virtualHosts."sdo.${internalDomain}" = protectedVhost // {
+      virtualHosts."sdo.${domain}" = protectedVhost // {
         locations."/" = {
           proxyPass = "http://${slynux_ip4}:7861/";
           proxyWebsockets = true;
@@ -231,112 +227,50 @@ in
 
 
       # INTERNAL ONLY
-      virtualHosts."x.${internalDomain}" = internalVhost // {
+      virtualHosts."${idomain}" = internalVhost // {
         root = payload_vpn;
       };
-      virtualHosts."home.x.${internalDomain}" = internalVhost // {
+      virtualHosts."home.${idomain}" = internalVhost // {
         locations."/" = {
           proxyPass = "http://localhost:8123/";
           proxyWebsockets = true;
         };
       };
 
-      # <homie-cast>
-      virtualHosts."homie-cast.${internalDomain}" = {
-        useACMEHost = "${internalDomain}";
-        addSSL = true;
-        forceSSL = false;
-        locations."/" = {
-          # proxyPass = "http://${slynux_ip4}:80/";
-          proxyPass = "http://localhost:8000/";
-          proxyWebsockets = true;
-        };
-      };
-      virtualHosts."homie-cast-ws.${internalDomain}" = {
-        useACMEHost = "${internalDomain}";
-        addSSL = true;
-        forceSSL = false;
-        locations."/" = {
-          # proxyPass = "http://${slynux_ip4}:9443/";
-          proxyPass = "http://localhost:9443/";
-          proxyWebsockets = true;
-        };
-      };
-      # </homie-cast>
+      # # <homie-cast>
+      # virtualHosts."homie-cast.${domain}" = {
+      #   useACMEHost = "${domain}";
+      #   addSSL = true;
+      #   forceSSL = false;
+      #   locations."/" = {
+      #     # proxyPass = "http://${slynux_ip4}:80/";
+      #     proxyPass = "http://localhost:8000/";
+      #     proxyWebsockets = true;
+      #   };
+      # };
+      # virtualHosts."homie-cast-ws.${domain}" = {
+      #   useACMEHost = "${domain}";
+      #   addSSL = true;
+      #   forceSSL = false;
+      #   locations."/" = {
+      #     # proxyPass = "http://${slynux_ip4}:9443/";
+      #     proxyPass = "http://localhost:9443/";
+      #     proxyWebsockets = true;
+      #   };
+      # };
+      # # </homie-cast>
 
-      virtualHosts."denon.x.${internalDomain}" = internalVhost // {
+      virtualHosts."denon.${idomain}" = internalVhost // {
         locations."/" = {
           proxyPass = "http://192.168.1.126:80/";
           proxyWebsockets = true;
         };
       };
-      virtualHosts."unifi.x.${internalDomain}" = internalVhost // {
+      virtualHosts."unifi.${idomain}" = internalVhost // {
         locations."/" = {
           proxyPass = "https://localhost:8443/";
           proxyWebsockets = true;
         };
-      };
-      virtualHosts."rtsptoweb.x.${internalDomain}" = internalVhost // {
-        locations."/" = {
-          proxyPass = "http://localhost:8083/";
-          proxyWebsockets = true;
-        };
-      };
-      virtualHosts."paperless.x.${internalDomain}" = internalVhost // {
-        locations."/" = {
-          proxyPass = "http://localhost:28981/";
-          proxyWebsockets = true;
-        };
-      };
-      virtualHosts."wphone.x.${internalDomain}" = internalVhost // {
-        locations."/" = {
-          root = "/srv/wphone/public";
-          proxyWebsockets = true;
-          extraConfig = ''
-            autoindex on;
-          '';
-        };
-      };
-
-
-      virtualHosts."aria2.x.${internalDomain}" = internalVhost // {
-        locations."/".proxyPass = "http://localhost:${toString config.services.aria2.rpcListenPort}";
-        locations."/".proxyWebsockets = true;
-      };
-
-
-      # syncthing
-      virtualHosts."syncthing-slynux.x.${internalDomain}" = internalVhost // {
-        locations."/".proxyPass = "http://${slynux_ip4}:8384/";
-        locations."/".proxyWebsockets = true;
-        locations."/".extraConfig = ''
-          proxy_read_timeout 600s;
-          proxy_send_timeout 600s;
-        '';
-      };
-      virtualHosts."syncthing-carbon.x.${internalDomain}" = internalVhost // {
-        locations."/".proxyPass = "http://${carbon_ip6}:8384/";
-        locations."/".proxyWebsockets = true;
-        locations."/".extraConfig = ''
-          proxy_read_timeout 600s;
-          proxy_send_timeout 600s;
-        '';
-      };
-      virtualHosts."syncthing-xeep.x.${internalDomain}" = internalVhost // {
-        locations."/".proxyPass = "http://${xeep_ip6}:8384/";
-        locations."/".proxyWebsockets = true;
-      };
-      virtualHosts."syncthing-raisin.x.${internalDomain}" = internalVhost // {
-        locations."/".proxyPass = "http://${raisin_ip6}:8384/";
-        locations."/".proxyWebsockets = true;
-        locations."/".extraConfig = ''
-          proxy_read_timeout 600s;
-          proxy_send_timeout 600s;
-        '';
-      };
-      virtualHosts."syncthing-jeffhyper.x.${internalDomain}" = internalVhost // {
-        locations."/".proxyPass = "http://${jeffhyper_ip4}:8384/";
-        locations."/".proxyWebsockets = true;
       };
     };
   };

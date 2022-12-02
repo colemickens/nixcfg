@@ -225,9 +225,10 @@
               config = ({ allowAliases = false; } // extraCfg);
             };
             pkgs_ = np: extraCfg: (import np (pkgcfg extraCfg));
-            pkgs = pkgs_ inputs.nixpkgs { };
+            pkgsFree = pkgs_ inputs.nixpkgs { };
             pkgsUnfree = pkgs_ inputs.nixpkgs { allowUnfree = true; };
             pkgsStable = pkgs_ inputs.nixpkgs-stable { };
+            pkgs = pkgsFree;
             mkShell = (name: import ./shells/${name}.nix { inherit inputs pkgs; });
             # mkAppScript = (name: script: {
             #   type = "app";
