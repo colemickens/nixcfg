@@ -165,7 +165,8 @@ def "main pkgup" [] {
   header yellow_reverse "pkgup"
   do {
     cd pkgs
-    ^./pkgs-update.nu
+    ^./main.nu update
+
     if ($env.LAST_EXIT_CODE != 0) { error make { msg: "failed to pkgs-update.nu" } }
   }
 }
@@ -205,6 +206,7 @@ def "main cachedl" [ drv: string] {
 def "main loopup" [] {
   loop {
     main up
+    if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: failed" } }
     print -e $"(ansi purple)waiting 60 seconds...(ansi reset)"
     sleep 60sec
   }
@@ -214,7 +216,7 @@ def "main up" [] {
   header red_reverse "loopup" "▒"
 
   main inputup
-  main pkgup
+  # main pkgup
   main rpiup
   main lockup
   

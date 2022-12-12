@@ -197,10 +197,10 @@
                 inherit (prev.darwin.apple_sdk.frameworks) AppKit Foundation Security;
                 inherit (prev.darwin.apple_sdk) sdk;
               };
-              space-cadet-pinball = prev.callPackage ./pkgs/pkgs/space-cadet-pinball { };
-              space-cadet-pinball-unfree = prev.callPackage ./pkgs/pkgs/space-cadet-pinball {
-                _assets = import ./pkgs/pkgs/space-cadet-pinball/assets.nix { pkgs = prev; };
-              };
+              # space-cadet-pinball = prev.callPackage ./pkgs/pkgs/space-cadet-pinball { };
+              # space-cadet-pinball-unfree = prev.callPackage ./pkgs/pkgs/space-cadet-pinball {
+              #   _assets = import ./pkgs/pkgs/space-cadet-pinball/assets.nix { pkgs = prev; };
+              # };
               wezterm = prev.darwin.apple_sdk_11_0.callPackage ./pkgs/pkgs/wezterm {
                 inherit (prev.darwin.apple_sdk_11_0.frameworks) Cocoa CoreGraphics Foundation UserNotifications;
               };

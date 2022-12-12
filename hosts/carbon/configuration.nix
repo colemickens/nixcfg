@@ -13,6 +13,7 @@ in
     ../../mixins/gfx-debug.nix
 
     ../../mixins/android.nix
+    ../../mixins/easyeffects.nix
     ../../mixins/hidpi.nix
     ../../mixins/ledger.nix
     ../../mixins/logitech-mouse.nix
@@ -39,6 +40,11 @@ in
     networking.hostName = "carbon";
     
     hardware.video.hidpi.enable = true;
+    services.udev.packages = with pkgs; [ rivalcfg ];
+
+    time.timeZone = lib.mkForce null; # we're on the move
+
+    networking.firewall.checkReversePath = "loose";
     
     environment.systemPackages = with pkgs; [ yuzu-mainline ryujinx ];
 

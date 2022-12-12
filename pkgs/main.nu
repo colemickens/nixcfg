@@ -158,8 +158,8 @@ def "main rereadme" [] {
 
   let regexString = ([ '(?s)(.*)' $delimStart '(.*)' $delimEnd '(.*)' ] | str join '')
   let replaceText = $"\$1($tableText)\$3"
-  ^rg --multiline $regexString "README.md" --replace $replaceText | save --raw README2.md
-  mv README2.md README.md
+  ^rg --multiline $regexString "README.md" --replace $replaceText | save -f --raw README2.md
+  mv -f README2.md README.md
   
   let ec = ((do -c { ^git diff --exit-code "README.md" } | complete).exit_code)
   if ($ec == 1) {

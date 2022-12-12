@@ -35,6 +35,8 @@ in
     networking.hostName = "raisin";
     
     nixcfg.common.hostColor = "yellow";
+
+    networking.firewall.checkReversePath = "loose";
     
     networking.wireless.iwd.enable = true;
 
