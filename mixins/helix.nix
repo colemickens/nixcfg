@@ -41,6 +41,7 @@ in {
             line-number = "relative";
             mouse = true;
             indent-guides.render = true;
+            color-modes = true;
             cursorline = true;
             cursor-shape = {
               normal = "block";
@@ -50,7 +51,14 @@ in {
             file-picker = {
               hidden = false;
             };
-            gutters = ["diagnostics" "line-numbers" "spacer"];
+            rulers = [ 80 120 ];
+            bufferline = "always";
+            gutters = ["diagnostics" "line-numbers" "spacer" "git" ];
+            statusline = {
+              left = [ "mode" "file-name" ];
+              center = [];
+              right = [ "diagnostics" "selections" "position" "position-percentage" ];
+            };
             true-color = true;
             lsp = {
               display-messages = true;

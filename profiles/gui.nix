@@ -94,6 +94,7 @@ in
           # browsers
           _firefox
           _chrome
+          captive-browser
         ]))
       );
     };

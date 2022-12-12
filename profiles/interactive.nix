@@ -93,6 +93,8 @@
         watchman
         watchexec
 
+        prs
+
         nix-output-monitor
 
         pipes-rs
