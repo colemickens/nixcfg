@@ -2,7 +2,7 @@ name: "freeup-test"
 concurrency: "freeup-test"
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '0 */12 * * *'
   workflow_dispatch:
 jobs:
   "freeup-test":
