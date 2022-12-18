@@ -10,6 +10,8 @@
       # profiles/gui
       "ripcord"
       "steam"
+      "steam-original"
+      "steam-run"
       "google-chrome-dev"
     ];
   };
