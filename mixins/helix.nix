@@ -53,7 +53,7 @@ in {
             };
             rulers = [ 80 120 ];
             bufferline = "always";
-            gutters = ["diagnostics" "line-numbers" "spacer" "git" ];
+            gutters = ["diagnostics" "line-numbers" "spacer" /*"git"*/ ];
             statusline = {
               left = [ "mode" "file-name" ];
               center = [];

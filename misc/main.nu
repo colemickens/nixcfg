@@ -60,7 +60,7 @@ def buildRemoteDrvs [ drvs_: list arch: string buildHost: string cache: bool ] {
     }
   }
 
-  if ($cache && ($drvs | length) > 0) {
+  if ($cache and ($drvs | length) > 0) {
     let outs = ($drvs | get "outputs" | flatten | get "out" | flatten)
     let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str collect)
     if $buildHost == "localhost" {
@@ -216,15 +216,26 @@ def "main up" [] {
   header red_reverse "loopup" "▒"
 
   main inputup
-  # main pkgup
+    if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: inputup failed" } }
+  main pkgup
+    if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: pkgup failed" } }
   main rpiup
+    if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: rpiup failed" } }
   main lockup
+    if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: lockup failed" } }
   
   main ci eval
+    if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: ci eval failed" } }
   main ci build
+    if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: ci build failed" } }
   main ci push
+    if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: ci push failed" } }
+
+  main build "ciJobs.aarch64-linux.default"
+    if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: build ciJobs.aarch64-linux.default failed" } }
 
   main deploy
+    if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: deploy failed" } }
 }
 
 def main [] {

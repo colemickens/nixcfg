@@ -44,7 +44,7 @@ def updatePkgs [] {
     let position = $"pkgs/($packageName)/metadata.nix"
     let verinfo = (^nix eval --json -f $position | str trim | from json)
     
-    let skip = (("skip" in ($verinfo | transpose | get column0)) && $verinfo.skip)
+    let skip = (("skip" in ($verinfo | transpose | get column0)) and $verinfo.skip)
     if $skip {
       print -e $"(ansi light_yellow) update ($packageName) - (ansi light_cyan_underline)skipped(ansi reset)"
     } else {
@@ -182,7 +182,7 @@ def flakeAdvance [] {
 
 def gitPush [] {
   header "purple_reverse" "git push origin HEAD"
-  ^git push origin HEAD
+  # ^git push origin HEAD
 }
 
 def "main advance" [] {
