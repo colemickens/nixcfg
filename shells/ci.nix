@@ -19,6 +19,7 @@ minimalMkShell {
       gh
       mercurial
       nushell
+      sd
     ]) ++ [
       inputs.nix-eval-jobs.outputs.packages.${pkgs.hostPlatform.system}.default
     ]
