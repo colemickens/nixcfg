@@ -9,6 +9,7 @@
       
       # profiles/gui
       "ripcord"
+      "steam"
       "google-chrome-dev"
     ];
   };
