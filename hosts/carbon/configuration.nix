@@ -42,6 +42,8 @@ in
     hardware.video.hidpi.enable = true;
     services.udev.packages = with pkgs; [ rivalcfg ];
 
+    services.tailscale.useRoutingFeatures = "client";
+
     time.timeZone = lib.mkForce null; # we're on the move
 
     networking.firewall.checkReversePath = "loose";

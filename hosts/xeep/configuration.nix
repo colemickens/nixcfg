@@ -40,6 +40,8 @@ in
     
     nixcfg.common.hostColor = "orange";
     nixcfg.common.useXeepTimeserver = false;
+
+    services.tailscale.useRoutingFeatures = "server";
     
     systemd.network = {
       enable = true;

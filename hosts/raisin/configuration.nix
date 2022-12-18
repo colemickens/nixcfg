@@ -40,6 +40,8 @@ in
     
     networking.wireless.iwd.enable = true;
 
+    services.tailscale.useRoutingFeatures = "server";
+
     services.logind.extraConfig = ''
       HandlePowerKey=poweroff
       HandleLidSwitch=ignore
