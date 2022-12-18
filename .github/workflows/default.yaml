@@ -2,7 +2,7 @@ name: "default"
 concurrency: "default"
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '0 */12 * * *'
   workflow_dispatch:
 jobs:
   "default":
