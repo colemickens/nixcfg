@@ -8,6 +8,7 @@ in
     ../../profiles/sway
     ../../profiles/interactive.nix
     ../../profiles/dev.nix
+    ../../profiles/gaming.nix
 
     ../../mixins/gfx-nvidia.nix
     ../../mixins/gfx-debug.nix
