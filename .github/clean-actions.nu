@@ -6,7 +6,7 @@ let USER = "colemickens"
 let REPO = "nixcfg"
 
 loop {
-  let runs = (^gh api $"repos/($USER)/($REPO)/actions/runs?per_page=100&page=2" | from json)
+  let runs = (^gh api $"repos/($USER)/($REPO)/actions/runs?per_page=100" | from json)
   let runs = ($runs.workflow_runs)
   let runs = ($runs | select name id status node_id)
   let runs = ($runs | where status == "completed")

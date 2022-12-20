@@ -147,8 +147,15 @@
       nixosConfigs = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues nixosConfigsEx));
       deployConfigs = {
         inherit (nixosConfigs)
-          carbon raisin slynux/*jeffhyper*/ xeep
-          rockfiveb1 rpizerotwo1;
+          carbon raisin
+          #slynux
+          jeffhyper xeep
+          rockfiveb1
+          rpizerotwo1
+          #blueline
+          openstick
+          #pinephone
+          ;
       };
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);
       toplevels = (lib.mapAttrs (_: v: v.config.system.build.toplevel) nixosConfigurations);

@@ -6,7 +6,7 @@
     boot = {
       cleanTmpDir = true;
       kernel.sysctl = {
-        "fs.file-max" = 100000;
+        "fs.file-max" = 2147483584;
         "fs.inotify.max_user_instances" = 256;
         "fs.inotify.max_user_watches" = 500000;
       };

@@ -5,10 +5,8 @@ let nixpkgs = "https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" #
 let nix = "./misc/nix.sh"
 let nixopts = [ "--no-link" "--option" "narinfo-cache-negative-ttl" "0" ]
 # let builder = if (not ("NIX_BUILDER" in $env)) { "nix" } else { $env | get NIX_BUILDER | str trim }
-let builder_x86 = (if ("BUILDER_X86" in $env) { $env | get "BUILDER_X86" | str trim }
-  else if ((^hostname | str trim) == "slynux") { "localhost" }
-  else { ^tailscale ip --4 "slynux" | str trim })
-let builder_a64 = if ("BUILDER_A64" in $env) { $env | get "BUILDER_A64" | str trim } else { "colemickens@aarch64.nixos.community" }
+let builder_x86 = (if ("BUILDER_X86" in $env) { $env | get "BUILDER_X86" | str trim } else { ^tailscale ip --4 "slynux" | str trim })
+let builder_a64 = (if ("BUILDER_A64" in $env) { $env | get "BUILDER_A64" | str trim } else { "colemickens@aarch64.nixos.community" })
 
 let cachix_cache = "colemickens"
 let cachixkey = ($"CACHIX_SIGNING_KEY_($cachix_cache)" | str upcase)

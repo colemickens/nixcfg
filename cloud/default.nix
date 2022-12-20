@@ -72,7 +72,7 @@ let
           payload = tflib.payloads.nixos-generic-config;
         };
         pktspotarm1 = {
-          plan = tflib.equinix.plans.c2_medium_arm;
+          plan = tflib.equinix.plans.c3_large_arm;
           os = tflib.equinix.os.nixos_22_05;
           loc = tflib.equinix.metros.dc10;
           bid = "0.50";

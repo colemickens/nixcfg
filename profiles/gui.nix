@@ -84,7 +84,7 @@ in
           linphone
           nheko
           ripcord
-          wlfreerdp
+          freerdp
 
           # browsers
           ladybird
