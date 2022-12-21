@@ -11,7 +11,7 @@ in
     ../../mixins/tailscale.nix
 
     # the visionfive module pulls in the nixos-riscv64 overlay automatically:
-    # "${inputs.riscv64}/nixos/visionfive.nix"
+    "${inputs.nixos-riscv64}/nixos/visionfive.nix"
   ];
 
   config = {

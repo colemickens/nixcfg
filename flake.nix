@@ -21,8 +21,7 @@
     terranix = { url = "github:terranix/terranix"; inputs.nixpkgs.follows = "nixpkgs"; };
 
     visionfive-nix = { url = "github:colemickens/visionfive-nix"; inputs."nixpkgs".follows = "nixpkgs-cross-riscv64"; };
-    # nixos-riscv64.url = "https://github.com/colemickens/nixos-riscv64";
-    # jh7100.url = "https://github.com/colemickens/jh7100";
+    nixos-riscv64.url = "github:colemickens/nixos-riscv64";
 
     impermanence = { url = "github:nix-community/impermanence"; }; # TODO: use it or lose it
     nickel = { url = "github:tweag/nickel"; };
@@ -38,7 +37,7 @@
     marksman = { url = "github:the-mikedavis/marksman/flake"; inputs."nixpkgs".follows = "nixpkgs"; };
     nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; inputs."nixpkgs".follows = "nixpkgs"; };
     zellij = {
-      url = "github:zellij-org/zellij";
+      url = "github:zellij-org/zellij/6a5e15edf33c034b049a866f8628968b5168c533";
       inputs."nixpkgs".follows = "nixpkgs";
       # inputs."rust-overlay".follows = "rust-overlay";
     };
