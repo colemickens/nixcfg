@@ -36,11 +36,11 @@
     jj = { url = "github:martinvonz/jj"; inputs."nixpkgs".follows = "nixpkgs"; };
     marksman = { url = "github:the-mikedavis/marksman/flake"; inputs."nixpkgs".follows = "nixpkgs"; };
     nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; inputs."nixpkgs".follows = "nixpkgs"; };
-    zellij = {
-      url = "github:zellij-org/zellij/6a5e15edf33c034b049a866f8628968b5168c533";
-      inputs."nixpkgs".follows = "nixpkgs";
-      # inputs."rust-overlay".follows = "rust-overlay";
-    };
+    # zellij = {
+    #   url = "github:zellij-org/zellij/6a5e15edf33c034b049a866f8628968b5168c533";
+    #   inputs."nixpkgs".follows = "nixpkgs";
+    #   # inputs."rust-overlay".follows = "rust-overlay";
+    # };
 
     # experimental:
     hyprland = { url = "github:hyprwm/Hyprland"; inputs."nixpkgs".follows = "nixpkgs"; };
@@ -131,7 +131,7 @@
           rpifour1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpithreebp1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpizerotwo1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
-          visionfiveone1 = { pkgs = inputs.nixpkgs-cross-riscv64; sys = "x86_64-linux"; };
+          # visionfiveone1 = { pkgs = inputs.nixpkgs-cross-riscv64; sys = "x86_64-linux"; };
         };
         pc = {
           carbon = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
@@ -146,9 +146,11 @@
       nixosConfigs = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues nixosConfigsEx));
       deployConfigs = {
         inherit (nixosConfigs)
-          carbon raisin
+          carbon
+          raisin
           #slynux
-          jeffhyper xeep
+          jeffhyper
+          xeep
           rockfiveb1
           rpizerotwo1
           #blueline

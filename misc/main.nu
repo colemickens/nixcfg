@@ -40,7 +40,8 @@ def buildDrvs [ drvs: list cache=false: bool ] {
 
 def buildRemoteDrvs [ drvs_: list arch: string buildHost: string cache: bool ] {
   let drvs_ = ($drvs_ | where system == $arch)
-  let drvs = ($drvs_ | where isCached == false)
+  let drvs = $drvs_
+  # let drvs = ($drvs_ | where isCached == false)
   header "light_blue_reverse" $"build: ($arch) ($drvs | length) drvs on ($buildHost) [cache=($cache)]"
   if (($drvs | length) > 0) {
     print -e ($drvs | select drvPath outputs | flatten)
@@ -65,6 +66,7 @@ def buildRemoteDrvs [ drvs_: list arch: string buildHost: string cache: bool ] {
       header "purple_reverse" $"cache: ($outs | length) paths"
       echo $outsStr | ^cachix push $cachix_cache
     } else {
+      header "purple_reverse" $"cache: remote: ($outs | length) paths"
       let sshExe = ([
         $"printf '%s' '($outsStr)' | env CACHIX_SIGNING_KEY='($env.CACHIX_SIGNING_KEY)' "
         $"nix-shell -I nixpkgs=($nixpkgs) -p cachix --command 'cachix push ($cachix_cache)'"
