@@ -58,6 +58,7 @@ in
       gron
 
       inputs.nix-eval-jobs.outputs.packages.${pkgs.hostPlatform.system}.default
-      inputs.marksman.outputs.packages.${pkgs.hostPlatform.system}.default
+      # inputs.marksman.outputs.packages.${pkgs.hostPlatform.system}.default
+      # marksman
     ];
   }

@@ -34,7 +34,7 @@
     # devtools:
     helix = { url = "github:helix-editor/helix"; inputs."nixpkgs".follows = "nixpkgs"; };
     jj = { url = "github:martinvonz/jj"; inputs."nixpkgs".follows = "nixpkgs"; };
-    marksman = { url = "github:the-mikedavis/marksman/flake"; inputs."nixpkgs".follows = "nixpkgs"; };
+    # marksman = { url = "github:the-mikedavis/marksman/flake"; inputs."nixpkgs".follows = "nixpkgs"; };
     nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; inputs."nixpkgs".follows = "nixpkgs"; };
     # zellij = {
     #   url = "github:zellij-org/zellij/6a5e15edf33c034b049a866f8628968b5168c533";

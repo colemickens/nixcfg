@@ -18,7 +18,7 @@ in
     ../../mixins/ledger.nix
     ../../mixins/logitech-mouse.nix
     ../../mixins/obs.nix
-    ../../mixins/plex-mpv.nix
+    # ../../mixins/plex-mpv.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
