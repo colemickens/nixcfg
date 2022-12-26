@@ -217,11 +217,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1672059697,
-        "narHash": "sha256-zL/iEt1yx1GrQs5Onag935VPRkvmpzfe/jY65BWR4oU=",
+        "lastModified": 1672074307,
+        "narHash": "sha256-y5AVvo2NePJFuXxptrgHA6yI0vIKwZ2NDtEUWmwckjQ=",
         "owner": "colemickens",
         "repo": "flake-firefox-nightly",
-        "rev": "ead9ef7756cdfe754adc5bd5272e0012f87d3f03",
+        "rev": "2e13becd7051d9837b5c4d28ffcc2100d26dc0df",
         "type": "github"
       },
       "original": {
@@ -511,11 +511,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1671918916,
-        "narHash": "sha256-g1RsIODy/VjsEWfwc2n40pVTidFL4xPWh6lCqCF2dRo=",
+        "lastModified": 1672081902,
+        "narHash": "sha256-XAs9h0xuFkL9GWJrtd0Je7eo3IOZebOKU1vRM4FrfZA=",
         "owner": "helix-editor",
         "repo": "helix",
-        "rev": "1af76b738dd5bdae14b025d07d3001c4ad23e071",
+        "rev": "a637461677bed1468af5a5d86c57113de3345247",
         "type": "github"
       },
       "original": {
@@ -616,21 +616,6 @@
         "type": "github"
       }
     },
-    "import-cargo": {
-      "locked": {
-        "lastModified": 1594305518,
-        "narHash": "sha256-frtArgN42rSaEcEOYWg8sVPMUK+Zgch3c+wejcpX3DY=",
-        "owner": "edolstra",
-        "repo": "import-cargo",
-        "rev": "25d40be4a73d40a2572e0cc233b83253554f06c5",
-        "type": "github"
-      },
-      "original": {
-        "owner": "edolstra",
-        "repo": "import-cargo",
-        "type": "github"
-      }
-    },
     "iterm2-color-schemes": {
       "flake": false,
       "locked": {
@@ -706,11 +691,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1671894674,
-        "narHash": "sha256-IQ3momQOsBhcvQnhg/xT4h8kJWdmd31jqgV6BkorqfI=",
+        "lastModified": 1672068038,
+        "narHash": "sha256-1DHJZCgyhfBCSuuusFjjurTW7KZIhgkcPzsNQw9ILCk=",
         "owner": "martinvonz",
         "repo": "jj",
-        "rev": "d89619c9c6d34cb846817ed42e17555a62a137b6",
+        "rev": "70a6798d7670a38d843bc347b7ca1c1f7a69d627",
         "type": "github"
       },
       "original": {
@@ -892,17 +877,16 @@
       "inputs": {
         "crane": "crane_2",
         "flake-utils": "flake-utils_4",
-        "import-cargo": "import-cargo",
         "nixpkgs": "nixpkgs",
         "pre-commit-hooks": "pre-commit-hooks",
         "rust-overlay": "rust-overlay_3"
       },
       "locked": {
-        "lastModified": 1671816138,
-        "narHash": "sha256-IGoUmeMHprKFj4x7wAYk9fiSQfW/B3fKcBd0lFHDGAc=",
+        "lastModified": 1672083653,
+        "narHash": "sha256-A7mkX2Qx82QrTJZTZ1DWl9S42lb6CU400U17ZplvsSA=",
         "owner": "tweag",
         "repo": "nickel",
-        "rev": "7884e18bf6f0d76e1945c16d62b9164994cde71e",
+        "rev": "9b1318a2084e343879be114ccf2bc463302cb3bd",
         "type": "github"
       },
       "original": {
