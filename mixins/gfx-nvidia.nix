@@ -29,7 +29,7 @@ in
       open = true;
       modesetting.enable = true;
       nvidiaSettings = false;
-      powerManagement.enable = false;
+      powerManagement.enable = true;
     };
   };
 }

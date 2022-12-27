@@ -14,8 +14,8 @@ in
     ../rpi-tmpl-zerotwow.nix
 
     # IMPORTER PICKS ONE:
-    ../../mixins/netboot-client.nix
-    # ../rpi-sdcard.nix
+    # ../../mixins/netboot-client.nix
+    ../rpi-sdcard.nix
     # ../mixins/wpa-full.nix
   ];
   config = {

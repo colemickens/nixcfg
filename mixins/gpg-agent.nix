@@ -3,6 +3,7 @@
 let
   wayprompt = "${inputs.nixpkgs-wayland.outputs.packages.${pkgs.hostPlatform.system}.wayprompt}";
   pinentryProgram = "${wayprompt}/bin/pinentry-wayprompt";
+  # pinentryProgram = "${pkgs.pinentry-bemenu}/bin/pinentry-bemenu";
 
   sysPkgs = with pkgs; [ gcr ];
   def = {

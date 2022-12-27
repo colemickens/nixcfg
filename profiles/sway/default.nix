@@ -127,6 +127,7 @@ in
         shotman
         sirula # launcher
         wayprompt
+        waylevel
         wlproxylaunch
         wf-recorder
         wl-clipboard

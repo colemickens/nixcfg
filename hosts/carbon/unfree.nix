@@ -6,6 +6,7 @@
       # "amdgpu-pro" # TODO: not sure we're keeping this anyway
       "ripcord"
       "google-chrome-dev"
+      "steam" "steam-run" "steam-original"
     ];
   };
 }

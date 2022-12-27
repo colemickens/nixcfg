@@ -214,11 +214,6 @@ in
         inputs.self.overlays.default
       ];
 
-      ## SYSTEM ###############################################################
-      environment.systemPackages = with pkgs; [
-        coreutils
-      ];
-
       # specialisation."oldboot" = lib.mkIf cfg.sysdBoot {
       #   inheritParentConfig = true;
       #   configuration = {
@@ -246,6 +241,13 @@ in
       hardware.usbWwan.enable = true; # dual role usb/cdrom stick thing
       # hardware.cpu.intel.updateMicrocode = true;
       # hardware.cpu.amd.updateMicrocode = true;
+
+      environment = {
+        systemPackages = with pkgs; [ coreutils ];
+        etc."flake.lock" = {
+          source = ../flake.lock;
+        };
+      };
 
       ## SILLY CUSTOMIZATION ##################################################
       services.getty = {

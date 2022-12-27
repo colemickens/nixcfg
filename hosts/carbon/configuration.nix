@@ -8,6 +8,7 @@ in
     ../../profiles/sway/default.nix
     ../../profiles/dev.nix
     ../../profiles/laptop.nix
+    ../../profiles/gaming.nix
 
     ../../mixins/gfx-radeonsi.nix
     ../../mixins/gfx-debug.nix
@@ -16,7 +17,9 @@ in
     ../../mixins/easyeffects.nix
     ../../mixins/hidpi.nix
     ../../mixins/ledger.nix
+    ../../mixins/libvirt.nix
     ../../mixins/logitech-mouse.nix
+    ../../mixins/hw-steelseries-aerox3.nix
     ../../mixins/obs.nix
     # ../../mixins/plex-mpv.nix
     ../../mixins/sshd.nix
@@ -40,7 +43,6 @@ in
     networking.hostName = "carbon";
     
     hardware.video.hidpi.enable = true;
-    services.udev.packages = with pkgs; [ rivalcfg ];
 
     services.tailscale.useRoutingFeatures = "client";
 
