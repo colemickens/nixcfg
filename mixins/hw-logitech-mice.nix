@@ -2,7 +2,7 @@
 
 {
   config = {
-    services.ratbagd.enable = true;
+    # services.ratbagd.enable = true;
 
     hardware.logitech.wireless = {
       enable = true;
@@ -11,7 +11,7 @@
 
     home-manager.users.cole = { pkgs, ... }: {
       home.packages = with pkgs; [
-        piper
+        # piper
       ];
     };
   };

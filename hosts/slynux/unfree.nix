@@ -13,6 +13,8 @@
       "steam-original"
       "steam-run"
       "google-chrome-dev"
+
+      "xow_dongle-firmware"
     ];
   };
 }

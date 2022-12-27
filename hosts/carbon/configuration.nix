@@ -18,7 +18,7 @@ in
     ../../mixins/hidpi.nix
     ../../mixins/ledger.nix
     ../../mixins/libvirt.nix
-    # ../../mixins/hw-logitech-mice.nix
+    ../../mixins/hw-logitech-mice.nix
     ../../mixins/hw-steelseries-aerox3.nix
     ../../mixins/obs.nix
     # ../../mixins/plex-mpv.nix

@@ -152,10 +152,10 @@
           jeffhyper
           xeep
           rockfiveb1
-          rpizerotwo1
+          # rpizerotwo1
           #blueline
           openstick
-          #pinephone
+          # pinephone
           ;
       };
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);

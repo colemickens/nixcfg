@@ -12,6 +12,7 @@ in
   imports = [
     ./unfree.nix
     ../../profiles/user.nix
+    ../../profiles/interactive.nix
     ../../mixins/common.nix
     ../../mixins/tailscale.nix
     ../../mixins/sshd.nix
