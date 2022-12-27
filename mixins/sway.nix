@@ -8,19 +8,13 @@ let
 
   out_aw3418dw = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
   out_aw2521h = "Dell Inc. Dell AW2521H #HLAYMxgwABDZ";
-  out_raisin = "Unknown 0x1402 0x00000000";
   out_carbon = "SDC 0x4152 Unknown";
   out_lgc165 = "Goldstar Company Ltd LG TV SSCR2 0x00000101";
-  out_rpi4_lgc165 = "LG Electronics LG TV SSCR2 0x00000101";
 
-  in_tp_pinebook = "9610:30:HAILUCK_CO.,LTD_USB_KEYBOARD_Touchpad";
   in_tp_carbon = "1739:52896:MSFT0001:00_06CB:CEA0_Touchpad";
-  in_tp_raisin = "1739:52804:MSFT0001:00_06CB:CE44_Touchpad";
-  in_tp_trackpoint_ii = "6127:24814:Lenovo_TrackPoint_Keyboard_II";
-  in_mouse_logi = "1133:16505:Logitech_G_Pro";
-  in_kb_porty = "1118:1957:Microsoft_Microsoft___Nano_Transceiver_v2.1_Consumer_Control";
-  in_kb_carbon = "1:1:AT_Translated_Set_2_keyboard";
-  in_kb_raisin = "1:1:AT_Translated_Set_2_keyboard";
+  in_mouse_mxmaster3 = "1133:16514:Logitech_MX_Master_3";
+  in_mouse_aerox3 = "4152:6200:SteelSeries_SteelSeries_Aerox_3_Wireless";
+  in_touchscreen_carbon = "1267:11840:ELAN3915:00_04F3:2E40";
 
   cmd_pass = "${prefs.default_term} --class floatmeplz -e 'gopass-clip'";
   cmd_totp = "${prefs.default_term} --class floatmeplz -e 'gopass-totp'";
@@ -28,43 +22,32 @@ let
 
   statusCommand = "${pkgs.waybar}/bin/waybar";
 
-  _keyboard = {
-    xkb_layout = "us";
-    xkb_options = "shift:both_capslock,caps:super";
-  };
   _touchpad = {
     click_method = "clickfinger";
     tap = "enabled";
     dwt = "enabled";
     scroll_method = "two_finger";
     natural_scroll = "enabled";
-    accel_profile = "adaptive";
-    pointer_accel = "1";
+    # accel_profile = "adaptive";
+    # pointer_accel = "1";
+    accel_profile = "flat";
+    # pointer_accel = "0";
   };
   _mouse = {
-    accel_profile = "adaptive";
-    pointer_accel = ".1";
+    accel_profile = "flat";
+    # pointer_accel = "0";
   };
   _hostinputs = {
-    porty = {
-      "${in_kb_porty}" = _keyboard;
-      "${in_mouse_logi}" = _mouse;
-    };
-    pinebook = {
-      "${in_tp_pinebook}" = _touchpad;
-    };
     carbon = {
       "${in_tp_carbon}" = _touchpad;
-      "${in_kb_carbon}" = _keyboard;
-    };
-    raisin = {
-      "${in_tp_raisin}" = _touchpad;
-      "${in_kb_raisin}" = _keyboard;
+      "${in_mouse_mxmaster3}" = _mouse;
+      "${in_mouse_aerox3}" = _mouse;
+      "${in_touchscreen_carbon}" = { events = "disabled"; };
     };
   };
   hostinputs = let hn = config.networking.hostName; in
     if !builtins.hasAttr hn _hostinputs
-    then { "input:keyboard" = _keyboard; }
+    then { }
     else _hostinputs.${hn};
 
   # silly gtk/gnome wayland schenanigans
@@ -234,26 +217,26 @@ in
               "${out_aw3418dw}" = {
                 mode = "3440x1440@120Hz";
                 pos = "0 0";
-                #mode = "3440x1440Hz";
-                # don't force alienware to be a certain refresh rate (it depends what adapter is used :/)
                 subpixel = "rgb";
                 scale = "1.0";
                 adaptive_sync = "on";
               };
-              #"${out_aw3418dw}" = { disable = ""; };
+              "${out_aw2521h}" = {
+                mode = "1920x1080@340Hz";
+                pos = "0 0";
+                subpixel = "rgb";
+                scale = "1.0";
+                adaptive_sync = "on";
+              };
               "${out_carbon}" = {
                 mode = "2880x1800@90Hz";
                 pos = "3440 0";
                 subpixel = "rgb";
                 scale = "1.8";
                 adaptive_sync = "on";
-                #render_bit_depth = "10";
               };
               "${out_lgc165}" = {
                 disable = "";
-              };
-              "${out_rpi4_lgc165}" = {
-                mode = "1920x1080@60.000Hz";
               };
               "*" = {
                 background = background;
