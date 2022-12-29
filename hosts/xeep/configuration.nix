@@ -15,11 +15,11 @@ in
     ../../mixins/upower.nix
     ../../mixins/zfs.nix
 
-    ../../mixins/rclone-googledrive-mounts.nix
+    # ../../mixins/rclone-googledrive-mounts.nix
 
     ./services/revproxy.nix
     ./services/home-assistant
-    ./services/plex.nix
+    # ./services/plex.nix
     ./services/unifi.nix
     
 

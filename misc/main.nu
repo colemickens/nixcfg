@@ -130,11 +130,9 @@ def "main inputup" [] {
       "mobile-nixos/openstick" "mobile-nixos/pinephone-emmc" "mobile-nixos/reset-scripts" "mobile-nixos/sdm845-blue" ]
     [ "flake-firefox-nightly" ]
     [ "nixpkgs-wayland/master" ]
-    [ "linux/master"
-      # "linux/openstick"
-      # "linux/rock5"
-    ]
   ] | flatten | each { |it1| $it1 | each {|it| $"($env.HOME)/code/($it)" } })
+
+  let srcdirs = ($srcdirs | append (["linux/master"] | each {|it| $"($env.HOME)/code-ext/($it)"}))
 
   $srcdirs | each { |dir|
     print -e $"input: ($dir): (ansi yellow_dimmed)check(ansi reset)"

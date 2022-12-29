@@ -12,7 +12,7 @@
 
     home-manager = { url = "github:colemickens/home-manager/cmhm"; inputs."nixpkgs".follows = "nixpkgs"; };
     nixos-hardware = { url = "github:nixos/nixos-hardware"; };
-    nixpkgs-wayland = { url = "github:nix-community/nixpkgs-wayland/master"; inputs."nixpkgs".follows = "nixpkgs"; };
+    nixpkgs-wayland = { url = "github:colemickens/nixpkgs-wayland/master"; inputs."nixpkgs".follows = "nixpkgs"; };
     # TODO: promote this to a nix-community project, it's neat, can combine with HM modules, etc  --- another maybe okayish way to bring folks in
     # TODO: rename, nix-rice is active again and my this is mostly just the colorschemes and an import... :p
     #   -- maybe the appearance module idea manifests there?

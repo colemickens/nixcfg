@@ -14,7 +14,6 @@
         evtest
         linuxConsoleTools
 
-        gamehub
         vkbasalt
         gamescope
         protonup-ng

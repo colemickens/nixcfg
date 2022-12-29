@@ -5,10 +5,10 @@ let
 in
 {
   imports = [
-    ../../profiles/sway/default.nix
-    ../../profiles/dev.nix
-    ../../profiles/laptop.nix
-    ../../profiles/gaming.nix
+    ../../profiles/gui-wayland-sway.nix
+    ../../profiles/addon-dev.nix
+    ../../profiles/addon-laptop.nix
+    ../../profiles/addon-gaming.nix
 
     ../../mixins/gfx-radeonsi.nix
     ../../mixins/gfx-debug.nix
@@ -20,14 +20,8 @@ in
     ../../mixins/libvirt.nix
     ../../mixins/hw-logitech-mice.nix
     ../../mixins/hw-steelseries-aerox3.nix
-    ../../mixins/obs.nix
-    # ../../mixins/plex-mpv.nix
-    ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
-    ../../mixins/tailscale.nix
-    ../../mixins/upower.nix # TODO: check if used?
     ../../mixins/zfs.nix
-    # ../../mixins/grub-signed-shim.nix # we use systemd + bootpart support
 
     # ./experimental.nix
     ./unfree.nix
@@ -76,7 +70,7 @@ in
       kernelModules = [ "iwlwifi" "ideapad_laptop" ];
       kernelParams = [
         "ideapad_laptop.allow_v4_dytc=1"
-        "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * (1024 * 6))}"
+        # "zfs.zfs_arc_max=${builtins.toString (1023 * 1024 * (1024 * 6))}"
       ];
       initrd.availableKernelModules = [
         "xhci_pci"
