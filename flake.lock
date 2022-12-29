@@ -556,11 +556,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1672253778,
-        "narHash": "sha256-ocqug01FNMOZ9NE8oYETKZx2phmwszAqzRLIqz23qtE=",
+        "lastModified": 1672311166,
+        "narHash": "sha256-/F/MXlYOB8bACh5h4T6TYfwcyE2wZwdwfzMdbfHxE8E=",
         "owner": "hyprwm",
         "repo": "Hyprland",
-        "rev": "a55db95a3b295adc5e89326349498c0955442b41",
+        "rev": "3e2200ed90b1e4451955f8391bfdc8dcb3d8c887",
         "type": "github"
       },
       "original": {
@@ -995,14 +995,16 @@
     },
     "nixos-riscv64": {
       "inputs": {
-        "nixpkgs": "nixpkgs_4"
+        "nixpkgs": [
+          "nixpkgs-cross-riscv64"
+        ]
       },
       "locked": {
-        "lastModified": 1647822145,
-        "narHash": "sha256-hN9oOPwR/mhUnhG2YLywUDFE51SpyBC8O8IOFSVPqbU=",
+        "lastModified": 1672311683,
+        "narHash": "sha256-5JponebGsowqsEMV0/U2c24f+Z/yyoFHPUOBSP+Orps=",
         "owner": "colemickens",
         "repo": "nixos-riscv64",
-        "rev": "f0b105b7671289c3fc17849532afe4fceb95bfd6",
+        "rev": "e3478c930719adab89dce548dd83ce6bc01a8ec4",
         "type": "github"
       },
       "original": {
@@ -1044,11 +1046,11 @@
     },
     "nixpkgs-cross-riscv64": {
       "locked": {
-        "lastModified": 1672304056,
-        "narHash": "sha256-YszLMcDUndvpfG+maYDsXnPzKjnayX6/TQj1V+FJ3tU=",
+        "lastModified": 1672306984,
+        "narHash": "sha256-bWDPSaU//ZAEUQvQcu00SPsl+Kxw/gmOrbSkK2ZNshY=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "e4bc7799e59c5d16174b5b5736a616361ceb8374",
+        "rev": "ee3efde97fd14874f9b8928d13f4b385ec7b8503",
         "type": "github"
       },
       "original": {
@@ -1228,22 +1230,6 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1642210689,
-        "narHash": "sha256-ORT7pNlPyjEQ328IflHeA0mcKsJ8/+fPh9L66CTqHLA=",
-        "owner": "zhaofengli",
-        "repo": "nixpkgs",
-        "rev": "c6a277fba79364aca312f3966418842210c4c865",
-        "type": "github"
-      },
-      "original": {
-        "owner": "zhaofengli",
-        "ref": "riscv",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_5": {
-      "locked": {
         "lastModified": 1672303885,
         "narHash": "sha256-GAkG57xyzIXgyjp2FAwaUCP+IeYMjlghROxA+b2Cd+g=",
         "owner": "colemickens",
@@ -1306,7 +1292,7 @@
         "nix-rice": "nix-rice",
         "nixos-hardware": "nixos-hardware",
         "nixos-riscv64": "nixos-riscv64",
-        "nixpkgs": "nixpkgs_5",
+        "nixpkgs": "nixpkgs_4",
         "nixpkgs-cross": "nixpkgs-cross",
         "nixpkgs-cross-riscv64": "nixpkgs-cross-riscv64",
         "nixpkgs-rpipkgs": "nixpkgs-rpipkgs",
