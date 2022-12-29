@@ -6,6 +6,7 @@ in
 {
   imports = [
     ../rpi-tmpl-four.nix
+    ../../mixins/netboot-client.nix
   ];
   config = {
     networking.hostName = "rpifour1";

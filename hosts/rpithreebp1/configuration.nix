@@ -6,6 +6,7 @@ in
 {
   imports = [
     ../rpi-tmpl-threebp.nix
+    ../../mixins/netboot-client.nix
   ];
   config = {
     networking.hostName = "rpithreebp1";

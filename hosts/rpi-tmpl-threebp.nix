@@ -10,6 +10,7 @@
 
     ../profiles/gui-viz.nix
     ../mixins/gfx-rpi.nix
+    ../mixins/iwd-networks.nix
   ];
 
   config = {

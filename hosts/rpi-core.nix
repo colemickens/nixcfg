@@ -11,6 +11,7 @@ in
       cleanTmpDir = lib.mkDefault true;
       loader = {
         grub.enable = lib.mkDefault false;
+        systemd-boot.enable = false;
         generic-extlinux-compatible.enable = lib.mkDefault true;
         generic-extlinux-compatible.configurationLimit = lib.mkDefault cfgLimit;
       };

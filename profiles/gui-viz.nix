@@ -52,13 +52,13 @@ in
 {
   imports = [
     # ../../profiles/user.nix
-    ../../secrets
-    ../../mixins/common.nix
+    ../secrets
+    ../mixins/common.nix
 
-    ../../mixins/pipewire.nix # snapcast
-    ../../mixins/snapclient-local.nix # snapcast
-    ../../mixins/tailscale.nix
-    ../../mixins/sshd.nix
+    ../mixins/pipewire.nix # snapcast
+    ../mixins/snapclient-local.nix # snapcast
+    ../mixins/tailscale.nix
+    ../mixins/sshd.nix
   ];
   config = {
     sops.secrets."tailscale-join-authkey".owner = "cole";
@@ -94,7 +94,8 @@ in
         export WLR_RENDERER=vulkan
       ''));
     };
-    environment.etc."sway/config".source = ./viz-sway-config;
+    environment.etc."sway/config".text = ''
+    '';
 
     environment.loginShellInit = ''
       # [[ "$(tty)" == /dev/tty? ]] && sudo /run/current-system/sw/bin/lock this 

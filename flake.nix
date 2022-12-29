@@ -179,11 +179,8 @@
           tbsd = o.system.build.tow-boot.outputs.diskImage;
           installFiles = o.system.build.installFiles;
         };
-        blueline = let o = (cfg "blueline"); in {
-          boot = o.mobile.outputs.android.android-bootimg;
-        };
-        xboxog1 = let o = (cfg "xboxog1"); in {
-          boot = o.system.build.xisoImage;
+        blueline = let o = (mkSystem "blueline" { sys = "x86_64-linux"; pkgs = inputs.nixpkgs; }); in {
+          boot = o.config.mobile.outputs.android.android-bootimg;
         };
       };
 
