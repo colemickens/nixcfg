@@ -131,7 +131,8 @@
           rpifour1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpithreebp1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpizerotwo1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
-          # visionfiveone1 = { pkgs = inputs.nixpkgs-cross-riscv64; sys = "x86_64-linux"; };
+          visionfiveone1 = { pkgs = inputs.nixpkgs-cross-riscv64; sys = "x86_64-linux"; };
+          visionfivetwo1 = { pkgs = inputs.nixpkgs-cross-riscv64; sys = "x86_64-linux"; };
         };
         pc = {
           carbon = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
@@ -139,6 +140,7 @@
           raisin = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
           slynux = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
           xeep = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
+          # zeph = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
         };
       };
 
@@ -150,11 +152,16 @@
           slynux
           jeffhyper
           xeep
+          # zeph # new
           radxazero1
           rockfiveb1
-          # rpizerotwo1
+          visionfivetwo1
+          # rpizerotwo1 # broken??
           # blueline
           # pinephone
+          # rpifour1 # netboot
+          # rpithreebp1 # netboot
+          # visionfiveone1 # netboot
           openstick
           ;
       };

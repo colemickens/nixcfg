@@ -36,7 +36,7 @@
 
         # misc utils
         # imv
-        # #TODOCOLE oculante # rust image viewer
+        oculante
         grim
         slurp
       ];
