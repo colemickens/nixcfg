@@ -3,6 +3,7 @@
 {
   imports = [
     ./unfree.nix
+    ./bootloader-update.nix
 
     ../../mixins/iwd-networks.nix
     ../../mixins/nix.nix
@@ -21,6 +22,10 @@
   config = {
     system.stateVersion = "22.05";
     networking.hostName = "pinephone";
+
+    mobile-nixos.install-bootloader = {
+      enable = true;
+    };
 
     networking.networkmanager = {
       enable = true;
