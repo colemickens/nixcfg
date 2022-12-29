@@ -3,7 +3,7 @@
 {
   imports = [
     ./unfree.nix
-    ./bootloader-update.nix
+    ./mobile-nixos-bootloader.nix
 
     ../../mixins/iwd-networks.nix
     ../../mixins/nix.nix

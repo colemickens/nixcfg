@@ -2,6 +2,7 @@
 with lib;
 
 let
+  boot-partition = config.mobile.outputs.u-boot.boot-partition;
   cfg = config.mobile-nixos.install-bootloader;
   install-bootloader-script = pkgs.writeScript "install-bootloader" ''
     #!${pkgs.zsh}/bin/zsh
@@ -10,7 +11,7 @@ let
 
     install -d /var/lib/mobile-nixos-bootloader
 
-    print "Requested bootloader: ${config.system.build.boot-partition}"
+    print "Requested bootloader: ${boot-partition}"
 
     if [[ -e /var/lib/mobile-nixos-bootloader/current ]]
     then
@@ -19,7 +20,7 @@ let
 
       print "Current bootloader: $current"
 
-      if [[ "${config.system.build.boot-partition}" = "$current" ]]
+      if [[ "${boot-partition}" = "$current" ]]
       then
         print "No bootloader update required"
         exit 0
@@ -31,8 +32,8 @@ let
 
     print "Deploying bootloader to ${cfg.target}"
 
-    dd if="${config.system.build.boot-partition}/mobile-nixos-boot.img" of="${cfg.target}" bs=16M conv=fsync oflag=direct status=progress
-    ln -T -f -s "${config.system.build.boot-partition}" /var/lib/mobile-nixos-bootloader/current
+    dd if="${boot-partition}/mobile-nixos-boot.img" of="${cfg.target}" bs=16M conv=fsync oflag=direct status=progress
+    ln -T -f -s "${boot-partition}" /var/lib/mobile-nixos-bootloader/current
   '';
 
 in {
@@ -53,4 +54,3 @@ in {
     system.build.installBootLoader = install-bootloader-script;
   };
 }
-
