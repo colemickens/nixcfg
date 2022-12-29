@@ -6,18 +6,13 @@ in
 {
   imports = [
     ../../profiles/interactive.nix
-    ../../profiles/dev.nix
-    ../../profiles/laptop.nix
-
-    ../../mixins/grub-signed-shim.nix
+    ../../profiles/addon-dev.nix
+    ../../profiles/addon-laptop.nix
 
     # ../../mixins/android.nix
     ../../mixins/libvirtd.nix
     ../../mixins/hidpi.nix
-    ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
-    ../../mixins/tailscale.nix
-    ../../mixins/upower.nix
     ../../mixins/zfs.nix
     
     ../../mixins/iwd-networks.nix
@@ -33,26 +28,21 @@ in
   config = {
     system.stateVersion = "21.05";
     networking.hostName = "raisin";
-    
-    nixcfg.common.hostColor = "yellow";
 
-    networking.firewall.checkReversePath = "loose";
-    
-    networking.wireless.iwd.enable = true;
+    nixcfg.common.hostColor = "yellow";
 
     services.tailscale.useRoutingFeatures = "server";
 
     services.logind.extraConfig = ''
-      HandlePowerKey=poweroff
+      HandlePowerKey=ignore
       HandleLidSwitch=ignore
     '';
 
     fileSystems = {
-      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; neededForBoot = true; };
       "/" = { fsType = "zfs"; device = "${hn}pool/root"; neededForBoot = true; };
-      "/nix" = { fsType = "zfs"; device = "${hn}pool/nix"; neededForBoot = true; };
-      # "/backup" = { fsType = "zfs"; device = "${hn}pool/backup"; neededForBoot = true; };
       "/home" = { fsType = "zfs"; device = "${hn}pool/home"; neededForBoot = true; };
+      "/nix" = { fsType = "zfs"; device = "${hn}pool/nix"; neededForBoot = true; };
+      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; neededForBoot = true; };
     };
     swapDevices = [{ device = "/dev/disk/by-partlabel/swap"; }];
     boot = {
@@ -74,9 +64,7 @@ in
       ];
       initrd.luks.devices."nixos-luksroot" = {
         device = "/dev/disk/by-partlabel/${hn}-luksroot";
-        preLVM = true;
         allowDiscards = true;
-        
         keyFile = "/lukskey";
         fallbackToPassword = true; # doesn't work if keyfile is present, but not a valid luks key
       };

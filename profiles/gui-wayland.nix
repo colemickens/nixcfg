@@ -4,12 +4,12 @@
   imports = [
     ./gui.nix
 
-    # ../../mixins/ironbar.nix
-    ../../mixins/kanshi.nix
-    ../../mixins/mako.nix
-    ../../mixins/obs.nix
-    ../../mixins/sirula.nix
-    ../../mixins/waybar.nix
+    # ../mixins/ironbar.nix
+    ../mixins/kanshi.nix
+    ../mixins/mako.nix
+    ../mixins/obs.nix
+    ../mixins/sirula.nix
+    ../mixins/waybar.nix
     # ../../mixins/wlsunset.nix
     # ../../mixins/wluma.nix
   ];
@@ -36,7 +36,7 @@
 
         # misc utils
         # imv
-        oculante # rust image viewer
+        # #TODOCOLE oculante # rust image viewer
         grim
         slurp
       ];

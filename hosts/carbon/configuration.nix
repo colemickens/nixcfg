@@ -1,7 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  hn = config.networking.hostName;
+  hn = "carbon";
 in
 {
   imports = [
@@ -18,8 +18,6 @@ in
     ../../mixins/hidpi.nix
     ../../mixins/ledger.nix
     ../../mixins/libvirt.nix
-    ../../mixins/hw-logitech-mice.nix
-    ../../mixins/hw-steelseries-aerox3.nix
     ../../mixins/syncthing.nix
     ../../mixins/zfs.nix
 
@@ -34,21 +32,13 @@ in
 
   config = {
     system.stateVersion = "21.05";
-    networking.hostName = "carbon";
-    
-    hardware.video.hidpi.enable = true;
-
-    services.tailscale.useRoutingFeatures = "client";
-
-    time.timeZone = lib.mkForce null; # we're on the move
-
-    networking.firewall.checkReversePath = "loose";
-    
-    environment.systemPackages = with pkgs; [ yuzu-mainline ryujinx ];
-
+    networking.hostName = hn;
     nixcfg.common.hostColor = "purple";
     nixcfg.common.skipMitigations = false;
-    nixcfg.common.defaultWifi = true;
+
+    time.timeZone = lib.mkForce null; # we're on the move
+    services.tailscale.useRoutingFeatures = "client";
+    hardware.video.hidpi.enable = true;
 
     fileSystems = {
       "/efi" = { fsType = "vfat"; device = "/dev/nvme0n1p1"; neededForBoot = true; };
@@ -61,11 +51,11 @@ in
     swapDevices = [{ device = "/dev/disk/by-partlabel/${hn}-swap"; }];
 
     boot = {
-      loader.efi.efiSysMountPoint = "/efi";
-      loader.grub.enable = false;
-      loader.systemd-boot = {
-        entriesMountPoint = "/boot";
-        enable = true;
+      loader = {
+        efi.efiSysMountPoint = "/efi";
+        systemd-boot = {
+          entriesMountPoint = "/boot";
+        };
       };
       kernelModules = [ "iwlwifi" "ideapad_laptop" ];
       kernelParams = [
@@ -84,7 +74,6 @@ in
       ];
       initrd.luks.devices."nixos-luksroot" = {
         device = "/dev/disk/by-partlabel/${hn}-luksroot";
-        preLVM = true;
         allowDiscards = true;
         crypttabExtraOpts = [ "fido2-device=auto" ];
       };

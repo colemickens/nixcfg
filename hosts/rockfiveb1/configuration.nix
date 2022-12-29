@@ -10,13 +10,10 @@ let
 in
 {
   imports = [
-    ./unfree.nix
-    ../../profiles/user.nix
-    ../../profiles/interactive.nix
-    ../../mixins/common.nix
-    ../../mixins/tailscale.nix
-    ../../mixins/sshd.nix
+    ../../profiles/core.nix
     ../../mixins/iwd-networks.nix
+
+    ./unfree.nix
   ]
   ++ inputs.tow-boot-radxa-rock5b.nixosModules
   ;
@@ -84,9 +81,12 @@ in
     };
 
     boot.kernelPackages = kernelPackages;
-    boot.loader.grub.enable = false;
-    boot.loader.generic-extlinux-compatible = {
-      enable = true;
+    boot.loader = {
+      grub.enable = false;
+      systemd-boot.enable = false;
+      generic-extlinux-compatible = {
+        enable = true;
+      };
     };
 
     # configuration.config.Tow-Boot = {

@@ -1,7 +1,7 @@
 { pkgs, lib, config, inputs, ... }:
 
 let
-  prefs = import ./_preferences.nix { inherit inputs config lib pkgs; };
+  prefs = import ../mixins/_preferences.nix { inherit inputs config lib pkgs; };
 
   # background = prefs.background;
   background = "#000000 solid_color";
@@ -87,8 +87,6 @@ in
 {
   imports = [
     ./gui-wayland.nix
-
-    ../../mixins/sway.nix # contains swayidle/swaylock config
   ];
   config = {
     nixpkgs.overlays = [

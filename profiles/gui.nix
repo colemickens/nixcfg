@@ -15,6 +15,9 @@ in
   imports = [
     ./interactive.nix # includes core.nix (which imports hm)
 
+    ../mixins/hw-logitech-mice.nix
+    ../mixins/hw-steelseries-aerox3.nix
+
     ../mixins/alacritty.nix
     ../mixins/fonts.nix
     ../mixins/gtk.nix

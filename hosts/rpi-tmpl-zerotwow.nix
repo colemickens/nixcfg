@@ -8,8 +8,9 @@
     # ../mixins/netboot-client.nix
     # ../rpi-sdcard.nix
 
-    ../profiles/viz
+    ../profiles/gui-viz.nix
     ../mixins/gfx-rpi.nix
+    ../mixins/iwd-networks.nix
   ];
 
   config = {

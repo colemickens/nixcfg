@@ -28,15 +28,15 @@
       (final: prev: {
         gnome = prev.gnome // rec {
           mutter = prev.gnome.mutter.overrideAttrs (super: rec {
-            # https://gitlab.gnome.org/verdre/mutter/-/tree/mobile-shell-devel
-            # nov 26 2022:
-            version = "b77f0a30604cf6383ebf52ffcd7d865983938393"; # mobile-shell
+            # https://gitlab.gnome.org/verdre/mutter/-/tree/${branch}
+            # 2022/12/14: (mobile-shell branch)
+            version = "4e6674075cfd7e644da14837a661ed3a1fb0395b"; # mobile-shell
             src = prev.fetchFromGitLab {
               domain = "gitlab.gnome.org";
               owner = "verdre";
               repo = "mutter";
               rev = version;
-              sha256 = "sha256-PC39VPrEk6w7+YOgBUT7DoUUYOaagaTOUWVKf1DEId8=";
+              sha256 = "sha256-AgisT14I22q8VEkc7IionZmZi89KMEHBVwQLVdL22Ck=";
             };
             patches = [
               # (prev.fetchpatch {
@@ -46,15 +46,16 @@
             ];
           });
           gnome-shell = (prev.gnome.gnome-shell.override { inherit mutter; }).overrideAttrs (super: rec {
-            # https://gitlab.gnome.org/verdre/gnome-shell/-/tree/mobile-shell-devel
-            version = "d2dc9c265c3a7485eba6b56ab6bee3be3f37da27"; # mobile-shell
+            # https://gitlab.gnome.org/verdre/gnome-shell/-/tree/${branch}
+            # 2022/11/22: (branch: mobile-shell)
+            version = "4ef0db259a1815d00656c3adab89df14f272067e"; # mobile-shell
             src = prev.fetchFromGitLab {
               domain = "gitlab.gnome.org";
               owner = "verdre";
               repo = "gnome-shell";
               rev = version;
               fetchSubmodules = true;
-              sha256 = "sha256-cJWdNEHlRTyXGux+wl5kUXvUlY+gEXbwiEmyHtc8nLM=";
+              sha256 = "sha256-pIBJFyg1XDVrZdPhbDYdSGrDEwa1xTT4gSnF7z7tLpw=";
             };
             postPatch = ''
               patchShebangs src/data-to-c.pl

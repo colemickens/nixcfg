@@ -4,12 +4,12 @@
   imports = [
     ./rpi-bcm2710a1.nix
 
-    ../mixins/netboot-client.nix
+    # IMPORTER PICKS ONE:
+    # ../mixins/netboot-client.nix
     # ../rpi-sdcard.nix
 
-    ../profiles/viz
+    ../profiles/gui-viz.nix
     ../mixins/gfx-rpi.nix
-    ../mixins/wpa-full.nix
   ];
 
   config = {

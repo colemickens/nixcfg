@@ -8,6 +8,9 @@
 
     ../secrets
 
+    # ../mixins/common.nix
+
+    ../mixins/bottom.nix
     ../mixins/cachix.nix
     ../mixins/gh.nix
     ../mixins/git.nix
@@ -19,10 +22,12 @@
     ../mixins/nushell.nix
     ../mixins/pijul.nix
     ../mixins/skim.nix
+    ../mixins/ssh.nix
     ../mixins/xdg.nix
     # ../mixins/xplr.nix
     ../mixins/zellij.nix
     # ../mixins/zenith.nix
+    ../mixins/zsh.nix
   ];
   # unusedImports = [
   #   ../mixins/ion.nix
@@ -81,15 +86,16 @@
           neovim.enable = true;
         };
         home.packages = lib.mkMerge [
-          (lib.mkIf (pkgs.hostPlatform.system == "x86_64-linux") [ ])
-          (lib.mkIf (pkgs.hostPlatform.system == "aarch_64-linux") [ ])
+          (lib.mkIf (pkgs.hostPlatform.system == "x86_64-linux") (with pkgs; [
+            zenith # uh oh, no aarch64 support? noooooo
+          ]))
+          (lib.mkIf (pkgs.hostPlatform.system == "aarch_64-linux") (with pkgs; [ ]))
           # ++ inputs.self.devShells.${pkgs.hostPlatform.system}.ci.nativeBuildInputs
           (with pkgs; [
             (pkgs.callPackage ../pkgs/commands.nix { })
 
             # <rust pkgs>
             # https://zaiste.net/posts/shell-commands-rust/
-            zenith # uh oh, no aarch64 support? noooooo
             bat
             tealdeer
             du-dust

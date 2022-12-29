@@ -23,7 +23,7 @@ def header [ color: string text: string spacer="▒": string ] {
 def evalDrv [ ref: string ] {
   header "light_cyan_reverse" $"eval: ($ref)"
   let eval = (^nix-eval-jobs
-    --flake $".#($ref)"
+    --flake $ref
     --gc-roots-dir $"($cidir)/gcroots"
     --check-cache-status)
   let out = ($eval
@@ -78,7 +78,7 @@ def buildRemoteDrvs [ drvs_: list arch: string buildHost: string cache: bool ] {
 
 def deployHost [ host: string ] {
   header light_gray_reverse $"deploy: ($host)"
-  let jobs = evalDrv $"toplevels.($host)"
+  let jobs = evalDrv $"/home/cole/code/nixcfg#toplevels.($host)"
   buildDrvs $jobs true
   let topout = ($jobs | get "outputs" | flatten | get "out" | flatten | first)
   let target = (tailscale ip --4 $host | str trim)
@@ -182,6 +182,7 @@ def "main lockup" [] {
 
 def "main eval" [ drv: string ] { evalDrv $drv }
 def "main build" [ drv: string ] {
+  echo $">>>> ($drv)"
   let drvs = evalDrv $drv
   buildDrvs $drvs false
   print -e ($drvs | get outputs | flatten)

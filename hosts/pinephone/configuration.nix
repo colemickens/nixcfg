@@ -11,7 +11,7 @@
 
     ../../profiles/user.nix
 
-    ../../profiles/phosh
+    ../../profiles/gui-phosh.nix
 
     (import "${inputs.mobile-nixos-pinephone}/lib/configuration.nix" {
       device = "pine64-pinephone";

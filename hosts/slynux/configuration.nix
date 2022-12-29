@@ -5,20 +5,14 @@ let
 in
 {
   imports = [
-    ../../profiles/sway
-    ../../profiles/interactive.nix
-    ../../profiles/dev.nix
-    ../../profiles/gaming.nix
+    ../../profiles/gui-wayland-sway.nix
+    ../../profiles/addon-dev.nix
+    ../../profiles/addon-gaming.nix
 
     ../../mixins/gfx-nvidia.nix
     ../../mixins/gfx-debug.nix
 
-    ../../mixins/android.nix
-    ../../mixins/grub-signed-shim.nix
-    # ../../mixins/rclone-googledrive-mounts.nix
-    ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
-    ../../mixins/tailscale.nix
     ../../mixins/zfs.nix
 
     ./unfree.nix
@@ -33,25 +27,9 @@ in
     system.stateVersion = "21.05";
     networking.hostName = "slynux";
 
-    nixcfg.common.defaultNetworking = false;
     nixcfg.common.hostColor = "blue";
 
-    systemd.network.wait-online.anyInterface = true; # untested here
-    networking = {
-      # TODO: try this again with hand-crafted so we can match on wildcards for bridged usb devices
-      useNetworkd = true;
-      interfaces."eno1".useDHCP = true;
-      interfaces."wanbr0".useDHCP = true;
-      bridges."wanbr0" = {
-        interfaces = [
-          "eno1"
-          "enp4s0f3u1u1" # android phone
-        ];
-      };
-    };
-
     boot = {
-      loader.grub.configurationLimit = lib.mkForce 20;
       initrd = {
         availableKernelModules = [ "sd_mod" "sr_mod" ];
         kernelModules = [

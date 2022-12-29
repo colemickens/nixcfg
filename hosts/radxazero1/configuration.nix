@@ -6,18 +6,24 @@ in
 {
   imports = [
     ../rpi-sdcard.nix
-    ./unfree.nix
 
-    ../../profiles/viz
-    ../../mixins/wpa-full.nix
+    ../../profiles/core.nix
+    ../../mixins/iwd-networks.nix
+
+    ./unfree.nix
   ]
   ++ inputs.tow-boot-radxa-rock5b.nixosModules
   ;
   config = {
     nixcfg.common.useZfs = false;
+    nixcfg.common.defaultNetworking = lib.mkForce true; # why rpi-sdcard??
     
     networking.hostName = "radxazero1";
     system.stateVersion = "21.11";
+
+    services.tailscale.useRoutingFeatures = "server";
+    networking.wireless.iwd.enable = true;
+
     # boot.initrd.systemd.network.networks."10-eth0".addresses =
     #   [{ addressConfig = { Address = eth_ip; }; }];
     system.build = rec {
@@ -26,13 +32,16 @@ in
     
     boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
     # boot.kernelPackages = lib.mkForce pkgs.linuxPackages_5_18;
-    boot.loader.grub.enable = false;
-    boot.loader.generic-extlinux-compatible = {
-      enable = true;
+    boot.loader = {
+      grub.enable = false;
+      systemd-boot.enable = false;
+      generic-extlinux-compatible = {
+        enable = true;
+      };
     };
 
     tow-boot.enable = true;
-    tow-boot.autoUpdate = true;
+    tow-boot.autoUpdate = false;
     tow-boot.device = "radxa-zero";
     # configuration.config.Tow-Boot = {
     tow-boot.config = ({

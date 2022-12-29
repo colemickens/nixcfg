@@ -56,12 +56,19 @@ let
       ip="$(${tailscale}/bin/tailscale ip --6 "$host")"
       gpgssh cole@"$ip"
     '')
-    (writeShellScriptBin "zssh" ''
+    (writeShellScriptBin "zssh4" ''
+      _zssh --4 "''${@}"
+    '')
+    (writeShellScriptBin "zssh6" ''
+      _zssh --6 "''${@}"
+    '')
+    (writeShellScriptBin "_zssh" ''
       [[ -z "''${DEBUG_GPGSSH}" ]] || set -x
       set -euo pipefail
+      ipver="''${1}"; shift
       host="''${1}"; shift
       while true; do
-        if ip="$(${tailscale}/bin/tailscale ip --6 "$host")"; then break; fi
+        if ip="$(${tailscale}/bin/tailscale ip $ipver "$host")"; then break; fi
       done
       while true; do
         set +e
@@ -134,6 +141,7 @@ let
       fi
       gpg --card-status >/dev/null
       echo "foo" | gpg --sign &>/dev/null # somehow fixes some weird cases where remote gpg gets hung up when it hasn't been used locally
+      ssh localhost true
     '')
     (writeShellScriptBin "ssh-fix" ''
       ent="$(ls -t /tmp/ssh-**/agent.* | head -1)"

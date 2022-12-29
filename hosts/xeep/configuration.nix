@@ -6,28 +6,24 @@ in
 {
   imports = [
     ../../profiles/interactive.nix
+    ../../profiles/addon-laptop.nix
 
-    ../../mixins/grub-signed-shim.nix
+    # ../../mixins/grub-signed-shim.nix
+
     ../../mixins/libvirtd.nix
-    ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
-    ../../mixins/tailscale.nix
-    ../../mixins/upower.nix
     ../../mixins/zfs.nix
 
-    # ../../mixins/rclone-googledrive-mounts.nix
-
-    ./services/revproxy.nix
-    ./services/home-assistant
-    # ./services/plex.nix
+    # ./services/revproxy.nix
+    # ./services/home-assistant
     ./services/unifi.nix
-    
+
 
     # ../../mixins/gfx-intel.nix # TODO: nixosHardware?
     inputs.nixos-hardware.nixosModules.dell-xps-13-9370
 
     ./unfree.nix
-    
+
     inputs.nix-netboot-server.nixosModules.nix-netboot-serve
   ];
 
@@ -37,12 +33,12 @@ in
     environment.systemPackages = with pkgs; [
       libsmbios # ? can't remember it
     ];
-    
+
     nixcfg.common.hostColor = "orange";
     nixcfg.common.useXeepTimeserver = false;
 
     services.tailscale.useRoutingFeatures = "server";
-    
+
     systemd.network = {
       enable = true;
       networks."15-eth0-static-ip" = {
@@ -55,10 +51,10 @@ in
         };
       };
     };
-    
-    networking.firewall.checkReversePath = "loose";
 
     boot = {
+      loader.systemd-boot.enable = true;
+      loader.efi.efiSysMountPoint = "/boot";
       initrd.availableKernelModules = [
         "xhci_pci"
         "xhci_hcd" # usb
@@ -72,12 +68,11 @@ in
         "r8152" # usb ethernet adapter
         "msr"
       ];
-      loader.efi.efiSysMountPoint = "/boot";
       kernelModules = config.boot.initrd.availableKernelModules;
       kernelParams = [ "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}" ];
       initrd.luks.devices = {
         "nixos-luksroot" = {
-          device = "/dev/disk/by-partlabel/newluks";
+          device = "/dev/disk/by-partlabel/${hn}-luks";
           preLVM = true;
           allowDiscards = true;
 
@@ -88,12 +83,12 @@ in
       };
     };
 
-    fileSystems = {
-      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/newboot"; };
-      "/" = { fsType = "zfs"; device = "tank2/root"; };
-      "/home" = { fsType = "zfs"; device = "tank2/home"; };
-      "/backup" = { fsType = "zfs"; device = "tank2/backup"; };
-      "/nix" = { fsType = "zfs"; device = "tank2/nix2"; };
+    fileSystems = let zpool = "${hn}pool"; in {
+      "/" = { fsType = "zfs"; device = "${zpool}/root"; };
+      "/nix" = { fsType = "zfs"; device = "${zpool}/nix"; };
+      "/home" = { fsType = "zfs"; device = "${zpool}/home"; };
+      "/backup" = { fsType = "zfs"; device = "${zpool}/backup"; };
+      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; };
     };
     swapDevices = [ ];
   };

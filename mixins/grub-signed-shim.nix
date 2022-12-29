@@ -23,6 +23,7 @@ in {
           canTouchEfiVariables = true; # okay, for now poke in the unsigned grub so we have *something* to boot
           efiSysMountPoint = efiMount;
         };
+        systemd-boot.enable = false;
         grub = rec {
           enable = true;
           devices = [ "nodev" ];

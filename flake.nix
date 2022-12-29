@@ -117,7 +117,7 @@
       ## NIXOS CONFIGS + TOPLEVELS ############################################
       nixosConfigsEx = {
         misc = {
-          # installer = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; host = "installer"; };
+          installer = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
         };
         phone = {
           pinephone = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
@@ -148,14 +148,15 @@
         inherit (nixosConfigs)
           carbon
           raisin
-          #slynux
+          slynux
           jeffhyper
           xeep
+          radxazero1
           rockfiveb1
           # rpizerotwo1
-          #blueline
+          blueline
           openstick
-          # pinephone
+          pinephone
           ;
       };
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);
@@ -163,7 +164,7 @@
 
       ## SPECIAL OUTPUTS ######################################################
       images = let cfg = n: nixosConfigurations."${n}".config; in {
-        # installer = (cfg "installer").config.system.build.isoImage;
+        installer = (cfg "installer").system.build.isoImage;
         openstick = let o = (cfg "openstick"); in {
           aboot = o.mobile.outputs.android.android-abootimg;
           boot = o.mobile.outputs.android.android-bootimg;

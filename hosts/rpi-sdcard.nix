@@ -2,7 +2,7 @@
 
 {
   config = {
-    networking.useDHCP = true;
+    networking.useDHCP = lib.mkDefault true;
     nixcfg.common.defaultNetworking = false;
     
     tow-boot.autoUpdate = lib.mkForce true;

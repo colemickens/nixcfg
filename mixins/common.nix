@@ -56,10 +56,6 @@ in
         type = lib.types.bool;
         default = true;
       };
-      defaultWifi = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-      };
       useZfs = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -104,12 +100,17 @@ in
         zfs.enableUnstable = (cfg.useZfs && _zfsUnstable);
 
         loader = {
+          efi = {
+            canTouchEfiVariables = true;
+          };
           grub = {
+            enable = lib.mkDefault false;
             # memtest86.enable = (pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isx86);
             timeoutStyle = "hidden";
             configurationLimit = 10;
           };
           systemd-boot = {
+            enable = lib.mkDefault true;
             configurationLimit = 10;
             # memtest86.enable = (pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isx86);
             memtest86.entryFilename = "z-memtest86.conf";
@@ -144,10 +145,6 @@ in
         timeServers = [ ]
           ++ (if cfg.useXeepTimeserver then [ "192.168.1.10" ] else [ ])
           ++ defaultTimeServers;
-        
-        wireless = lib.mkIf cfg.defaultWifi {
-          iwd.enable = true;
-        };
       };
       services.resolved.enable = true;
       services.timesyncd.enable = true;
@@ -237,6 +234,7 @@ in
 
       ## MISC HARDWARE RELATED ################################################
       services.fwupd.enable = true;
+      services.udisks2.enable = true;
       hardware.enableRedistributableFirmware = true;
       hardware.usbWwan.enable = true; # dual role usb/cdrom stick thing
       # hardware.cpu.intel.updateMicrocode = true;

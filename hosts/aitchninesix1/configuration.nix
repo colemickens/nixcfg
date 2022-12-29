@@ -87,9 +87,12 @@ in
     };
 
     boot.kernelPackages = kernelPackages;
-    boot.loader.grub.enable = false;
-    boot.loader.generic-extlinux-compatible = {
-      enable = true;
+    boot.loader = {
+      grub.enable = false;
+      systemd-boot.enable = false;
+      generic-extlinux-compatible = {
+        enable = true;
+      };
     };
 
     hardware.deviceTree.name = "rockchip/rk3588-nvr-demo-v10-android.dtb";
