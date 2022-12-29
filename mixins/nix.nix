@@ -30,6 +30,7 @@ in
       nixPath = lib.mkForce []; # i doth protest
       settings = {
         keep-derivations = true; # this is the default (?)
+        builders-use-substitutes = true;
         cores = 0;
         max-jobs = "auto";
         trusted-public-keys = [

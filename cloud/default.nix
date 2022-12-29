@@ -71,13 +71,13 @@ let
           bid = "0.50";
           payload = tflib.payloads.nixos-generic-config;
         };
-        pktspotarm1 = {
-          plan = tflib.equinix.plans.c3_large_arm;
-          os = tflib.equinix.os.nixos_22_05;
-          loc = tflib.equinix.metros.dc10;
-          bid = "0.50";
-          payload = tflib.payloads.nixos-generic-config;
-        };
+        # pktspotarm1 = {
+        #   plan = tflib.equinix.plans.c3_large_arm;
+        #   os = tflib.equinix.os.nixos_22_05;
+        #   loc = tflib.equinix.metros.dc10;
+        #   bid = "0.50";
+        #   payload = tflib.payloads.nixos-generic-config;
+        # };
         # ipxe works too!
         # pktspotnewnixosarm0 = {
         #   plan = tflib.equinix.plans.c3_large_arm;

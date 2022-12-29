@@ -2,10 +2,12 @@
 set -x
 set -euo pipefail
 
+upstream="nixos/nixos-unstable-small"
+
     # make sure cmpkgs is already rebased
     (d="${HOME}/code/nixpkgs/cmpkgs"; cd "${d}" \
       && git -C "${d}" remote update \
-      && git -C "${d}" rebase 'nixos/nixos-unstable')
+      && git -C "${d}" rebase "${upstream}")
 
     # now update-rpi-packages.sh
     # this will rebase itself on its known upstream and wip branch

@@ -9,7 +9,7 @@ set -x
 
 export CACHEDIR="${HOME}/.cache/rpi"; mkdir -p "${CACHEDIR}"
 
-export UPSTREAM_BRANCH="nixos/nixos-unstable"
+export UPSTREAM_BRANCH="nixos/nixos-unstable-small"
 export RPI_BRANCH="rpi-wip"
 export WORKTREE="rpi-updates-auto"
 
@@ -113,8 +113,9 @@ fi
 git -C "${WORKDIR}" remote update
 git -C "${WORKDIR}" reset --hard origin/master
 NEW_EEPROM_REV="$(git -C "${WORKDIR}" log --pretty=format:"%H" -n1 'firmware/stable')"
-NEW_EEPROM_VERSION="$(git -C "${WORKDIR}" log --pretty=format:"%cs" -n1 'firmware/stable')"
 LATEST_PIEEPROM_FILENAME="$(basename "$(ls "${WORKDIR}"/firmware/stable/pieeprom*bin | sort | tail -1)")"
+[[ "${LATEST_PIEEPROM_FILENAME}" =~ pieeprom-([0-9-]+).bin ]]
+NEW_EEPROM_VERSION="${BASH_REMATCH[1]}" # match it out of filename
 
 METADATA_FILE="${NIXPKGS_WORKTREE}/pkgs/os-specific/linux/raspberrypi-eeprom/default.nix"
 UPDATE_ATTR="${NIXPKGS_WORKTREE}#legacyPackages.${ARCH}.raspberrypi-eeprom"
@@ -197,7 +198,7 @@ git -C "${WORKDIR}" remote update
 git -C "${WORKDIR}" reset --hard origin/master
 NEW_RPIFW_REV="$(git -C "${WORKDIR}" log --pretty=format:"%H" -n1 'boot')"
 NEW_RPIFW_VERSION="$(git -C "${WORKDIR}" log --pretty=format:"%cs" -n1 'boot')"
-KERNEL_COMMIT="$(cat "${WORKDIR}"/extra/git_hash)"
+# KERNEL_COMMIT="$(cat "${WORKDIR}"/extra/git_hash)"
 
 METADATA_FILE="${NIXPKGS_WORKTREE}/pkgs/os-specific/linux/firmware/raspberrypi/master.nix"
 UPDATE_ATTR="${NIXPKGS_WORKTREE}#legacyPackages.${ARCH}.raspberrypifw-master"
@@ -326,8 +327,8 @@ KRNL_PATCHLEVEL="$(head -n 5 "${WORKDIR}/Makefile" | grep "^PATCHLEVEL" | cut -d
 KRNL_SUBLEVEL="$(head -n 5 "${WORKDIR}/Makefile" | grep "^SUBLEVEL" | cut -d ' ' -f 3)"
 
 NEW_LINUXRPI_REV="${KERNEL_COMMIT}"
-NEW_LINUXRPI_VERSION="${KRNL_VERSION}.${KRNL_PATCHLEVEL}.${KRNL_SUBLEVEL}"
-NEW_LINUXRPI_TAG="1.$(git -C "${WORKDIR}" log --pretty=format:"%cs" -n1 | tr -d '\-')"
+NEW_LINUXRPI_MODDIRVERSION="${KRNL_VERSION}.${KRNL_PATCHLEVEL}.${KRNL_SUBLEVEL}"
+NEW_LINUXRPI_VERSION="$(git -C "${WORKDIR}" log --pretty=format:"%cs" -n1 | tr -d '\-')"
 
 METADATA_FILE="${NIXPKGS_WORKTREE}/pkgs/os-specific/linux/kernel/linux-rpi.nix"
 UPDATE_ATTR="${NIXPKGS_WORKTREE}#legacyPackages.${ARCH}.linuxPackages_rpi4.kernel"
@@ -337,7 +338,7 @@ nix "${nixargs[@]}" eval --json "${UPDATE_ATTR}.passthru.verinfo" > "${t}" 2>/de
 OLD_LINUXRPI_REV="$(cat "${t}" | jq -r .rev)"
 OLD_LINUXRPI_HASH="$(cat "${t}" | jq -r .hash)"
 OLD_LINUXRPI_VERSION="$(cat "${t}" | jq -r .version)"
-OLD_LINUXRPI_TAG="$(cat "${t}" | jq -r .tag)"
+OLD_LINUXRPI_MODDIRVERSION="$(cat "${t}" | jq -r .modDirVersion)"
 
 if [[ "${OLD_LINUXRPI_REV}" != "${NEW_LINUXRPI_REV}" ]]; then
   # do replacement!
@@ -351,9 +352,10 @@ if [[ "${OLD_LINUXRPI_REV}" != "${NEW_LINUXRPI_REV}" ]]; then
   sed -i "s|${PLACEHOLDER0}|${NEW_HASH}|" "${METADATA_FILE}"
 
   sed -i "s|${OLD_LINUXRPI_VERSION}|${NEW_LINUXRPI_VERSION}|" "${METADATA_FILE}"
+  sed -i "s|${OLD_LINUXRPI_MODDIRVERSION}|${NEW_LINUXRPI_MODDIRVERSION}|" "${METADATA_FILE}"
 
-  OLD_LINUXRPI_VERSION="${OLD_LINUXRPI_VERSION}-${OLD_LINUXRPI_TAG}"
-  NEW_LINUXRPI_VERSION="${NEW_LINUXRPI_VERSION}-${NEW_LINUXRPI_TAG}"
+  OLD_LINUXRPI_VERSION="${OLD_LINUXRPI_VERSION}-${OLD_LINUXRPI_MODDIRVERSION}"
+  NEW_LINUXRPI_VERSION="${NEW_LINUXRPI_VERSION}-${NEW_LINUXRPI_MODDIRVERSION}"
 
   commitmsg="${UPDATE_ATTR_NAME}: ${OLD_LINUXRPI_VERSION} -> ${NEW_LINUXRPI_VERSION}"
   git -C "${NIXPKGS_WORKTREE}" commit "${METADATA_FILE}" -m "${commitmsg}"

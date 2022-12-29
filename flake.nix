@@ -21,7 +21,7 @@
     terranix = { url = "github:terranix/terranix"; inputs.nixpkgs.follows = "nixpkgs"; };
 
     visionfive-nix = { url = "github:colemickens/visionfive-nix"; inputs."nixpkgs".follows = "nixpkgs-cross-riscv64"; };
-    nixos-riscv64.url = "github:colemickens/nixos-riscv64";
+    nixos-riscv64 = { url = "github:colemickens/nixos-riscv64"; inputs."nixpkgs".follows = "nixpkgs-cross-riscv64"; };
 
     impermanence = { url = "github:nix-community/impermanence"; }; # TODO: use it or lose it
     nickel = { url = "github:tweag/nickel"; };
@@ -149,13 +149,13 @@
         inherit (nixosConfigs)
           carbon
           raisin
-          slynux
+          # slynux # defunct, or soon to be
           jeffhyper
           xeep
           # zeph # new
           radxazero1
           rockfiveb1
-          visionfivetwo1
+          # visionfivetwo1
           # rpizerotwo1 # broken??
           # blueline
           # pinephone

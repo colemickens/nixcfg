@@ -1,14 +1,11 @@
-{ pkgs, modulesPath, inputs, config, ... }:
+{ pkgs, lib, modulesPath, inputs, config, ... }:
 
 let
   hn = "visionfivetwo1";
 in
 {
   imports = [
-    ../../profiles/user.nix
-
-    ../../mixins/sshd.nix
-    ../../mixins/tailscale.nix
+    ../../profiles/core.nix
 
     # the visionfive module pulls in the nixos-riscv64 overlay automatically:
     "${inputs.nixos-riscv64}/nixos/visionfive2.nix"
@@ -16,9 +13,23 @@ in
 
   config = {
     system.stateVersion = "21.11";
+    nixpkgs.overlays = [
+      (final: super: {
+        makeModulesClosure = x:
+          super.makeModulesClosure (x // { allowMissing = true; });
+      })
+    ];
 
     nix.nixPath = [ ];
     nix.gc.automatic = true;
+
+    /**/
+    nixcfg.common.defaultKernel = false;
+    # nixcfg.common.useZfs = false;
+    services.fwupd.enable = lib.mkForce false;
+    services.udisks2.enable = lib.mkForce false;
+    hardware.usbWwan.enable = lib.mkForce false;
+    /**/
 
     documentation.enable = false;
     documentation.doc.enable = false;
@@ -47,6 +58,7 @@ in
     boot = {
       loader = {
         grub.enable = false;
+        systemd-boot.enable = false;
         generic-extlinux-compatible.enable = true;
         generic-extlinux-compatible.configurationLimit = 3;
       };
