@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../gui.nix
+    ./gui.nix
 
     # ../../mixins/ironbar.nix
     ../../mixins/kanshi.nix

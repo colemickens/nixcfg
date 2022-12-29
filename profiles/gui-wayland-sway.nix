@@ -86,7 +86,7 @@ in
 
 {
   imports = [
-    ../gui-wayland.nix
+    ./gui-wayland.nix
 
     ../../mixins/sway.nix # contains swayidle/swaylock config
   ];
