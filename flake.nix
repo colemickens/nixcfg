@@ -139,7 +139,6 @@
           raisin = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
           slynux = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
           xeep = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
-          # xboxog1 = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; }; # i686 = sse2 = no-go
         };
       };
 
@@ -154,9 +153,9 @@
           radxazero1
           rockfiveb1
           # rpizerotwo1
-          blueline
+          # blueline
+          # pinephone
           openstick
-          pinephone
           ;
       };
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);

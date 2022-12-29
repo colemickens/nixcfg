@@ -230,7 +230,7 @@ def "main up" [] {
   main ci push
     if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: ci push failed" } }
 
-  main build "ciJobs.aarch64-linux.default"
+  main build "'/home/cole/code/nixcfg#ciJobs.aarch64-linux.default'"
     if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: build ciJobs.aarch64-linux.default failed" } }
 
   main deploy
@@ -245,7 +245,7 @@ def main [] {
 ## CI
 ###############################################################################
 def "main ci eval" [] {
-  let r = (evalDrv 'ciJobs.x86_64-linux.default')
+  let r = (evalDrv "'~/code/nixcfg#ciJobs.x86_64-linux.default'")
   $r | to json | save -f --raw $"($cidir)/drvs.json"
 }
 def "main ci build" [] {
