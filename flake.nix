@@ -18,7 +18,7 @@
     nixos-hardware = { url = "github:nixos/nixos-hardware"; };
     nixpkgs-wayland = { url = "github:nix-community/nixpkgs-wayland/master"; inputs."nixpkgs".follows = "nixpkgs"; };
     sops-nix = { url = "github:Mic92/sops-nix/master"; inputs."nixpkgs".follows = "nixpkgs"; };
-    hyprland = { url = "github:hyprwm/Hyprland"; inputs."nixpkgs".follows = "nixpkgs"; };
+    hyprland = { url = "github:colemickens/Hyprland"; inputs."nixpkgs".follows = "nixpkgs"; };
 
     nix-rice = { url = "github:colemickens/nix-rice"; inputs."nixpkgs".follows = "nixpkgs"; };
     terranix = { url = "github:terranix/terranix"; inputs.nixpkgs.follows = "nixpkgs"; };
@@ -121,7 +121,7 @@
         sbc = {
           radxazero1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rockfiveb1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
-          openstick = { pkgs = inputs.nixpkgs-cross; sys = "x86_64-linux"; };
+          openstick = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
           aitchninesix1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpifour1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
           rpithreebp1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
@@ -293,6 +293,7 @@
             #   (h: nixosConfigurations.${h}.config.system.build.extras.nfsboot);
 
             ## CI JOBS ###########################################################
+            ciBundles = builtins.mapAttrs (n: v: pkgs.buildEnv { name = "cibundle"; paths = (builtins.attrValues v); }) ciJobs;
             ciJobs = {
               default = ({ }
                 // (lib.genAttrs [ "devtools" "ci" "devenv" ] (name: inputs.self.devShells.${system}.${name}.inputDerivation))

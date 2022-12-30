@@ -1,11 +1,11 @@
-name: "default"
-concurrency: "default"
+name: "action-nextci"
+concurrency: "action-nextci"
 on:
   schedule:
     - cron: '0 */12 * * *'
   workflow_dispatch:
 jobs:
-  "default":
+  "action-nextci":
     runs-on: ubuntu-latest
     env:
       NIX_BUILDER: "nix"
@@ -26,5 +26,5 @@ jobs:
       run: nix develop '.#ci' -c .github/freeup.nu
     - name: init
       run: nix develop '.#ci' -c .github/init.nu
-    - name: "ci"
-      run: nix develop '.#ci' -c ./misc/main.nu ci
+    - name: "action-nextci"
+      run: nix develop '.#ci' -c ./misc/main.nu action-nextci

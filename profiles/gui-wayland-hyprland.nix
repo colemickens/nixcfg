@@ -1,22 +1,32 @@
 { pkgs, lib, config, inputs, ... }:
 
+let
+  _xwayland = {
+    enable = _xwayland;
+    hidpiXwayland = _xwayland;
+  };
+in
 {
   imports = [
-    ../gui-wayland.nix
+    ./gui-wayland.nix
 
     inputs.hyprland.nixosModules.default
-    inputs.hyprland.homeManagerModules.default
   ];
   config = {
     programs.hyprland = {
       enable = true;
+      # xwayland = _xwayland;
     };
 
     home-manager.users.cole = { pkgs, ... }: {
-      programs.hyprland = {
+      imports = [
+        inputs.hyprland.homeManagerModules.default
+      ];
+      wayland.windowManager.hyprland = {
         enable = true;
         systemdIntegration = true;
         recommendedEnvironment = true;
+        # xwayland = _xwayland;
       };
     };
   };

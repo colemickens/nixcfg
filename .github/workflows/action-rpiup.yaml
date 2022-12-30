@@ -1,11 +1,11 @@
-name: "default"
-concurrency: "default"
+name: "action-rpiup"
+concurrency: "action-rpiup"
 on:
   schedule:
     - cron: '0 */12 * * *'
   workflow_dispatch:
 jobs:
-  "default":
+  "action-rpiup":
     runs-on: ubuntu-latest
     env:
       NIX_BUILDER: "nix"
@@ -26,15 +26,5 @@ jobs:
       run: nix develop '.#ci' -c .github/freeup.nu
     - name: init
       run: nix develop '.#ci' -c .github/init.nu
-    - name: "pkgup"
-      run: nix develop '.#ci' -c ./misc/main.nu pkgup
-    - name: "lockup"
-      run: nix develop '.#ci' -c ./misc/main.nu lockup
-    - name: "ci eval"
-      run: nix develop '.#ci' -c ./misc/main.nu ci eval
-    - name: "ci build"
-      run: nix develop '.#ci' -c ./misc/main.nu ci build
-    - name: "ci push"
-      run: nix develop '.#ci' -c ./misc/main.nu ci push
-    - name: "ci next"
-      run: nix develop '.#ci' -c ./misc/main.nu ci next
+    - name: "action-rpiup"
+      run: nix develop '.#ci' -c ./misc/main.nu action-rpiup

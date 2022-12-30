@@ -97,16 +97,16 @@ let freespace = ((^df --output=avail -H "/") | tail -n1 | str trim)
 print -e $"(ansi blue)df = ($freespace)(ansi reset)"
 
 let p = "/var/lib";
-print -e $"(ansi light_yellow_reverse) running dust ($p)(ansi reset)"; ^dust -x $p; sleep 1sec
+print -e $"\n\n\n(ansi light_yellow_reverse) running dust ($p)(ansi reset)"; ^dust -x $p; sleep 1sec
 
 let p = "/home/runner";
-print -e $"(ansi light_yellow_reverse) running dust ($p)(ansi reset)"; ^dust -x $p; sleep 1sec
+print -e $"\n\n\n(ansi light_yellow_reverse) running dust ($p)(ansi reset)"; ^dust -x $p; sleep 1sec
 
 let p = "/usr/local";
-print -e $"(ansi light_yellow_reverse) running dust ($p)(ansi reset)"; ^dust -x $p; sleep 1sec
+print -e $"\n\n\n(ansi light_yellow_reverse) running dust ($p)(ansi reset)"; ^dust -x $p; sleep 1sec
 
 let p = "/usr/lib";
-print -e $"(ansi light_yellow_reverse) running dust ($p)(ansi reset)"; ^dust -x $p; sleep 1sec
+print -e $"\n\n\n(ansi light_yellow_reverse) running dust ($p)(ansi reset)"; ^dust -x $p; sleep 1sec
 
 let p = "/";
-print -e $"(ansi light_yellow_reverse) running dust ($p)(ansi reset)"; ^dust -x $p; sleep 1sec
+print -e $"\n\n\n(ansi light_yellow_reverse) running dust ($p)(ansi reset)"; ^dust -x $p; sleep 1sec

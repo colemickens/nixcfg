@@ -33,8 +33,15 @@ in
     programs.calls.enable = true;
     hardware.sensor.iio.enable = true; # ?? no idea
 
+    services.gnome.gnome-online-accounts.enable = lib.mkForce false;
     environment.gnome.excludePackages = with pkgs.gnome; [
       # gnome-terminal
+      evolution-data-server
+      # gnome-online-accounts
+      yelp
+      geary
+      epiphany
+      sushi
     ];
 
     environment.etc."machine-info".text = lib.mkDefault ''
