@@ -7,7 +7,6 @@ let-env CACHIX_CACHE = (
   if "CACHIX_CACHE" in ($env | transpose | get column0) { $env.CACHIX_CACHE }
   else "colemickens"
 )
-let-env CACHIX_SIGNING_KEY = $env.CACHIX_SIGNING_KEY_COLEMICKENS
 
 def header [ color: string text: string spacer="▒": string ] {
   let text = $"($text) "

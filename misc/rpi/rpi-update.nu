@@ -40,13 +40,11 @@ def post [] {
 
 def buildall [] {
   print -e $"(ansi purple)build all(ansi reset)"
-  # let p = $"($nixpkgs)#legacyPackages.($builder_arch)"
-  # let store = "ssh-ng://colemickens@aarch64.nixos.community"
   let p = $"($nixpkgs)#legacyPackages.($builder_arch).pkgsCross.aarch64-multiplatform"
   let store = $"ssh-ng://($env.BUILDER_X86)"
   (^nix build
     --keep-going --no-link
-    --eval-store 'auto'
+    --eval-store auto
     --store $store
     $"($p).raspberrypifw"
     $"($p).raspberrypifw-master"

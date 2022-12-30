@@ -8,6 +8,8 @@
       "google-chrome-dev"
       "steam" "steam-run" "steam-original"
       "xow_dongle-firmware"
+
+      "cudatoolkit" # nvtop
     ];
   };
 }

@@ -7,7 +7,7 @@ let
 
   sysPkgs = with pkgs; [ gcr ];
   def = {
-    gnupgPkg = pkgs.gnupg;
+    # gnupgPkg = pkgs.gnupg;
     #gnupgPkg = pkgs.callPackage "${inputs.temp-gpg-pr}/pkgs/tools/security/gnupg/23.nix" {};
   };
   bad = def // {
@@ -27,25 +27,6 @@ let
     enableYubikeyRules = true;
     enablePcscd = false;
     disableCcid = false;
-  };
-  config3 = def // {
-    enableGpgRules = false;
-    enableYubikeyRules = false;
-    enablePcscd = true;
-    disableCcid = true;
-  };
-  config4 = config3 // {
-    enableGpgRules = false;
-    enableYubikeyRules = false;
-    enablePcscd = true;
-    disableCcid = false;
-    gnupgPkg = pkgs.gnupg22; # old gpg falls back to pc/sc automatically
-  };
-  ult = def // {
-    enableGpgRules = true;
-    enableYubikeyRules = true;
-    enablePcscd = true;
-    disableCcid = true;
   };
   ecfg = config2;
 in {
@@ -105,7 +86,7 @@ in {
       home.packages = with pkgs; [
         yubikey-personalization yubico-piv-tool
       ];
-      programs.gpg.package = ecfg.gnupgPkg;
+      # programs.gpg.package = ecfg.gnupgPkg;
       programs.gpg.scdaemonSettings =
         if ecfg.disableCcid
         then { disable-ccid = true; }

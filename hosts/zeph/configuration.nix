@@ -1,11 +1,12 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  hn = "carbon";
+  hn = "slynux";
 in
 {
   imports = [
-    ../../profiles/gui-wayland-sway.nix
+    ../../profiles/gui-wayland-hyprland.nix
+    ../../profiles/addon-asus.nix
     ../../profiles/addon-dev.nix
     ../../profiles/addon-laptop.nix
     ../../profiles/addon-gaming.nix
@@ -32,7 +33,7 @@ in
 
   config = {
     system.stateVersion = "21.05";
-    networking.hostName = hn;
+    networking.hostName = "zeph";
     nixcfg.common.hostColor = "purple";
     nixcfg.common.skipMitigations = false;
 
@@ -57,9 +58,8 @@ in
           entriesMountPoint = "/boot";
         };
       };
-      kernelModules = [ "iwlwifi" "ideapad_laptop" ];
+      kernelModules = [ "iwlwifi" ];
       kernelParams = [
-        "ideapad_laptop.allow_v4_dytc=1"
         # "zfs.zfs_arc_max=${builtins.toString (1023 * 1024 * (1024 * 6))}"
       ];
       initrd.availableKernelModules = [

@@ -7,6 +7,8 @@ let nixopts = [ "--builders-use-substitutes" "--option" "narinfo-cache-negative-
   "--option" "extra-trusted-public-keys" "'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= unmatched.cachix.org-1:F8TWIP/hA2808FDABsayBCFjrmrz296+5CQaysosTTc= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs='" ];
 let builder_x86 = (if ("BUILDER_X86" in $env) { $env.BUILDER_X86 | str trim } else { $"cole@localhost" })
 let builder_a64 = (if ("BUILDER_A64" in $env) { $env.BUILDER_A64 | str trim } else { $"colemickens@aarch64.nixos.community" })
+let-env BUILDER_X86 = $builder_x86 # lazy
+let-env BUILDER_A64 = $builder_a64 # Todo: lazy
 # let builder_r64 = (if ("BUILDER_R64" in $env) { $env.BUILDER_R64 | str trim } else { $"cole@(^tailscale ip --4 visionfive2 | str trim)" })
 
 let cachix_cache = "colemickens"

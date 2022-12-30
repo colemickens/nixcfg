@@ -3,9 +3,10 @@
 {
   config = {
     nixpkgs.overlays = [
-        (prev: final: {
-          gnupg = prev.gnupg.override { openldap = null; };
-        })
+      (final: prev: rec {
+        gnupg23 = final.gnupg23.override { openldap = "foo"; };
+        gnupg = gnupg23;
+      })
     ];
   };
 }
