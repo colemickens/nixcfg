@@ -3,7 +3,7 @@
 {
   config = {
     nixpkgs.overlays = [
-      (prev: final: {
+      (final: prev: {
         libsecret = prev.libsecret.overrideAttrs(old: {
           doCheck = false;
         });
