@@ -12,11 +12,11 @@ in
         enable = true;
         settings = {
           default_mode = "normal";
-          # ui.pane_frames.rounded_corners = true;
+          ui.pane_frames.rounded_corners = true;
           default_layout = "compact";
           default_shell = "nu";
-          # simplified_ui = true;
-          # pane_frames = true;
+          simplified_ui = true;
+          pane_frames = true;
           scrollback_editor = "hx";
           theme = "default";
           themes = {

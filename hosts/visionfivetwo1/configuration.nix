@@ -6,6 +6,7 @@ in
 {
   imports = [
     ../../profiles/core.nix
+    ../../profiles/addon-cross.nix
 
     # the visionfive module pulls in the nixos-riscv64 overlay automatically:
     "${inputs.nixos-riscv64}/nixos/visionfive2.nix"
