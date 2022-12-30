@@ -145,6 +145,7 @@
             cryptsetup
             wipe
             file
+            lsof
             unar
             p7zip # needed with unar??
             sops # age ?rage?

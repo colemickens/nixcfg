@@ -122,7 +122,7 @@ def "main inputup" [] {
   header yellow_reverse "inputup"
   let srcdirs = ([
     [ "nixpkgs/master" "nixpkgs/cmpkgs" "nixpkgs/cmpkgs-cross" "nixpkgs/cmpkgs-cross-riscv64" ]
-    [ "home-manager/cmhm" "home-manager/master" ]
+    [ "home-manager/master" "home-manager/cmhm" ]
     [ "tow-boot/development" "tow-boot/development-flakes"
       "tow-boot/rpi" "tow-boot/radxa-zero" "tow-boot/radxa-rock5b" "tow-boot/visionfive" ]
     [ "mobile-nixos/master"
@@ -141,7 +141,7 @@ def "main inputup" [] {
     # rebase, ignore if we're not rebasing
     ^git -C $dir rebase --abort
     # pull, rebase, errors here are fatal, we want things "clean/rebased/pushed"
-    ^git -C $dir pull --rebase
+    ^git -C $dir pull --rebase --no-gpg-sign
     if ($env.LAST_EXIT_CODE != 0) {
       print -e $"(ansi red) input: ($dir): failed rebase(ansi reset)"
       error make { msg: $"rebase failed for ($dir)"}
@@ -173,6 +173,8 @@ def "main pkgup" [] {
 def "main rpiup" [] {
   header yellow_reverse "rpiup"
   ^./misc/rpi/rpi-update.nu
+  git -C "~/code/nixpkgs/rpipkgs" push origin HEAD -f
+  git -C "~/code/nixpkgs/rpipkgs-dev" push origin HEAD -f
   if ($env.LAST_EXIT_CODE != 0) { error make { msg: "failed to rpi-update" } }
 }
 def "main lockup" [] {

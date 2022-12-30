@@ -1,11 +1,10 @@
-name: "next"
-concurrency: "next"
+concurrency: ${{ GITHUB_WORKFLOW }}
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '0 */12 * * *'
   workflow_dispatch:
 jobs:
-  "next":
+  ${{ GITHUB_WORKFLOW }}:
     runs-on: ubuntu-latest
     env:
       NIX_BUILDER: "nix"
@@ -26,3 +25,5 @@ jobs:
       run: nix develop '.#ci' -c .github/freeup.nu
     - name: init
       run: nix develop '.#ci' -c .github/init.nu
+    - name: ${{ GITHUB_WORKFLOW }}
+      run: nix develop '.#ci' -c ./misc/main.nu ${{ GITHUB_WORKFLOW }}

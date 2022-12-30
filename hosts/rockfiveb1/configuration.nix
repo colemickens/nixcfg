@@ -73,7 +73,6 @@ in
       fi
     '';
 
-
     networking.hostName = hn;
     system.stateVersion = "21.11";
     system.build = rec {

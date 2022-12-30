@@ -26,5 +26,15 @@ jobs:
       run: nix develop '.#ci' -c .github/freeup.nu
     - name: init
       run: nix develop '.#ci' -c .github/init.nu
-    - name: "ci"
-      run: nix develop '.#ci' -c ./misc/main.nu ci
+    - name: "pkgup"
+      run: nix develop '.#ci' -c ./misc/main.nu pkgup
+    - name: "lockup"
+      run: nix develop '.#ci' -c ./misc/main.nu lockup
+    - name: "ci eval"
+      run: nix develop '.#ci' -c ./misc/main.nu ci eval
+    - name: "ci build"
+      run: nix develop '.#ci' -c ./misc/main.nu ci build
+    - name: "ci push"
+      run: nix develop '.#ci' -c ./misc/main.nu ci push
+    - name: "ci next"
+      run: nix develop '.#ci' -c ./misc/main.nu ci next

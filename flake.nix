@@ -1,56 +1,50 @@
 {
   description = "colemickens-nixcfg";
 
+  # TODO: revisit/checkout: mic92/envfs, nickel, wfvm
+  # TODO: promote nix-rice (rename to nix-iterm-themes) to nix-community
+  # TODO: nix-rice is active?? do we want to collab? appearance module as a full idea?
+
   inputs = {
     lib-aggregate = { url = "github:nix-community/lib-aggregate"; }; #TODO: boo name! "libaggregate"?
 
     nixpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
     nixpkgs-stable = { url = "github:nixos/nixpkgs/nixos-22.05"; }; # any stable to use
-    nixpkgs-cross = { url = "github:colemickens/nixpkgs/cmpkgs-cross"; }; # base for cross-compiling fixes (used directly for aarch64 and riscv64-branch)
     nixpkgs-cross-riscv64 = { url = "github:colemickens/nixpkgs/cmpkgs-cross-riscv64"; };
-    nixpkgs-rpipkgs = { url = "github:colemickens/nixpkgs/cmpkgs-rpipkgs"; };
+    rpipkgs = { url = "github:colemickens/nixpkgs/rpipkgs"; }; # used only for tow-boot/rpi
 
+    firefox-nightly = { url = "github:colemickens/flake-firefox-nightly"; inputs."nixpkgs".follows = "nixpkgs"; };
     home-manager = { url = "github:colemickens/home-manager/cmhm"; inputs."nixpkgs".follows = "nixpkgs"; };
     nixos-hardware = { url = "github:nixos/nixos-hardware"; };
-    nixpkgs-wayland = { url = "github:colemickens/nixpkgs-wayland/master"; inputs."nixpkgs".follows = "nixpkgs"; };
-    # TODO: promote this to a nix-community project, it's neat, can combine with HM modules, etc  --- another maybe okayish way to bring folks in
-    # TODO: rename, nix-rice is active again and my this is mostly just the colorschemes and an import... :p
-    #   -- maybe the appearance module idea manifests there?
+    nixpkgs-wayland = { url = "github:nix-community/nixpkgs-wayland/master"; inputs."nixpkgs".follows = "nixpkgs"; };
+    sops-nix = { url = "github:Mic92/sops-nix/master"; inputs."nixpkgs".follows = "nixpkgs"; };
+    hyprland = { url = "github:hyprwm/Hyprland"; inputs."nixpkgs".follows = "nixpkgs"; };
+
     nix-rice = { url = "github:colemickens/nix-rice"; inputs."nixpkgs".follows = "nixpkgs"; };
-    firefox-nightly = { url = "github:colemickens/flake-firefox-nightly"; inputs."nixpkgs".follows = "nixpkgs"; };
     terranix = { url = "github:terranix/terranix"; inputs.nixpkgs.follows = "nixpkgs"; };
+    fenix = { url = "github:figsoda/fenix"; inputs."nixpkgs".follows = "nixpkgs"; }; # used for nightly rust devtools
 
     visionfive-nix = { url = "github:colemickens/visionfive-nix"; inputs."nixpkgs".follows = "nixpkgs-cross-riscv64"; };
     nixos-riscv64 = { url = "github:colemickens/nixos-riscv64"; inputs."nixpkgs".follows = "nixpkgs-cross-riscv64"; };
 
-    impermanence = { url = "github:nix-community/impermanence"; }; # TODO: use it or lose it
-    nickel = { url = "github:tweag/nickel"; };
-    fenix = { url = "github:figsoda/fenix"; inputs."nixpkgs".follows = "nixpkgs"; };
-    sops-nix = { url = "github:Mic92/sops-nix/master"; inputs."nixpkgs".follows = "nixpkgs"; };
-
-    # transient deps, de-dupe here
-    # rust-overlay = { url = ""; };
-
     # devtools:
     helix = { url = "github:helix-editor/helix"; inputs."nixpkgs".follows = "nixpkgs"; };
     jj = { url = "github:martinvonz/jj"; inputs."nixpkgs".follows = "nixpkgs"; };
-    # marksman = { url = "github:the-mikedavis/marksman/flake"; inputs."nixpkgs".follows = "nixpkgs"; };
     nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; inputs."nixpkgs".follows = "nixpkgs"; };
-    # zellij = {
-    #   url = "github:zellij-org/zellij/6a5e15edf33c034b049a866f8628968b5168c533";
-    #   inputs."nixpkgs".follows = "nixpkgs";
-    #   # inputs."rust-overlay".follows = "rust-overlay";
-    # };
-
     # experimental:
-    hyprland = { url = "github:hyprwm/Hyprland"; inputs."nixpkgs".follows = "nixpkgs"; };
     nix-netboot-server = { url = "github:DeterminateSystems/nix-netboot-serve"; };
 
-    # WIP: tow-boot/mobile-nixos stuffs:
+    # <maybe-unused>
+    # impermanence = { url = "github:nix-community/impermanence"; }; # TODO: use it or lose it
+    # nickel = { url = "github:tweag/nickel"; };
+    # rust-overlay = { url = ""; };
+    # </maybe-unused>
+
+    # <tow-boot>
     tow-boot-rpi = {
       url = "github:colemickens/Tow-Boot/rpi";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.rpipkgs.follows = "nixpkgs-rpipkgs";
+      inputs.rpipkgs.follows = "rpipkgs";
     };
     tow-boot-radxa-zero = {
       url = "github:colemickens/Tow-Boot/radxa-zero";
@@ -64,7 +58,9 @@
       url = "github:colemickens/Tow-Boot/visionfive";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # </tow-boot>
 
+    # <mobile-nixos>
     mobile-nixos-sdm845 = {
       url = "github:colemickens/mobile-nixos/sdm845-blue";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -81,8 +77,7 @@
       url = "github:colemickens/mobile-nixos/openstick";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # TODO: revisit/checkout: mic92/envfs, nickel, wfvm
+    # </mobile-nixos>
   };
 
   nixConfig = {
@@ -185,6 +180,10 @@
           tbsd = o.system.build.tow-boot.outputs.diskImage;
           installFiles = o.system.build.installFiles;
         };
+        rpizerotwo1 = let o = (cfg "rpizerotwo1"); in {
+          tbsd = o.system.build.tow-boot.outputs.diskImage;
+          installFiles = o.system.build.installFiles;
+        };
 
         # blueline = let o = (mkSystem "blueline" { sys = "x86_64-linux"; pkgs = inputs.nixpkgs; }).config; in {
         blueline = let o = (cfg "blueline"); in {
@@ -244,13 +243,15 @@
             pkgsStable = pkgs_ inputs.nixpkgs-stable { };
             pkgs = pkgsFree;
             mkShell = (name: import ./shells/${name}.nix { inherit inputs pkgs; });
-            # mkAppScript = (name: script: {
-            #   type = "app";
-            #   program = (pkgsStable.writeScript "${name}.sh" script).outPath;
-            # });
+            mkAppScript = (name: script: {
+              type = "app";
+              program = (pkgsStable.writeScript "${name}.sh" script).outPath;
+            });
           in
           rec {
-            inherit pkgs pkgsStable pkgsUnfree;
+            inherit pkgs;
+            inherit pkgsStable;
+            inherit pkgsUnfree;
 
             ## DEVSHELLS # some of 'em kinda compose #############################
             devShells = (lib.genAttrs [ "ci" "devenv" "devtools" "gstreamer" "uutils" ] mkShell)
@@ -260,19 +261,19 @@
             apps = lib.recursiveUpdate
               ({
                 # TODO: this definitely goes somewhere else:
-                # rockfiveb1_install = let f = images.rockfiveb1.installFiles; in
-                #   mkAppScript "rockfiveb1_install" ''
-                #     set -x
-                #     set -euo pipefail
-                #     rm -f result
-                #     ./main.nu cachedl 'images.aitchninesix1.installFiles'
-                #     out="$(readlink result)"
-                #     sudo rsync -avh --delete "$out/boot/" "/tmp/mnt-boot/"
-                #     sudo rsync -avh "$out/root/" "/tmp/mnt-root/"
-                #     sudo nix copy "''$(cat "$out/root/toplevel")" \
-                #       --no-check-sigs \
-                #       --to /tmp/mnt-root
-                #   '';
+                sdinstall = let d = "rpizerotwo1"; f = images.${d}.installFiles; in
+                  mkAppScript "${d}_sdinstall" ''
+                    set -x
+                    set -euo pipefail
+                    rm -f result
+                    ./main.nu cachedl 'images.${d}.installFiles'
+                    out="$(readlink result)"
+                    sudo rsync -avh --delete "$out/boot/" "/tmp/mnt-boot/"
+                    sudo rsync -avh "$out/root/" "/tmp/mnt-root/"
+                    sudo nix copy "''$(cat "$out/root/toplevel")" \
+                      --no-check-sigs \
+                      --to /tmp/mnt-root
+                  '';
               })
               (
                 let tfout = import ./cloud { inherit (inputs) terranix; inherit pkgs; }; in {

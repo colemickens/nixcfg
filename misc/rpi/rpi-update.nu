@@ -1,112 +1,64 @@
 #!/usr/bin/env nu
 
-do -c { ^bash ./misc/rpi/update-rpi-packages.sh }
+let builder_arch = "x86_64-linux"
+let cachedir = $"($env.HOME)/.cache/rpi"
+mkdir $cachedir
 
-# nixargs=(--experimental-features 'nix-command flakes')
-# buildargs=(
-#   --option 'extra-binary-caches' 'https://cache.nixos.org https://nixpkgs-wayland.cachix.org'
-#   --option 'trusted-public-keys' 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA='
-#   --option 'build-cores' '0'
-#   --option 'narinfo-cache-negative-ttl' '0'
-# )
-# ## the rest should be generic across repos that use `update.sh`+`metadata.nix`
-# if [[ "${1:-""}" != "" ]]; then
-#   ##
-#   ## internal script (called in parallel)
-#   ##
-#   t="$(mktemp)"; trap "rm ${t}" EXIT;
-#   m="$(mktemp)"; trap "rm ${m}" EXIT;
-#   l="$(mktemp)"; trap "rm ${l}" EXIT;
-#   pkg="${1}"
-#   pkgname="$(basename "${pkg}")"
-#   printf '\n%s\n' ">>> update: ${pkgname}"
-#   if ! nix eval --json "..#packages.x86_64-linux.${pkgname}.passthru.verinfo" >"${t}" ; then
-#     echo "NO VERINFO"
-#     exit -1
-#   fi
-#   if ! nix eval --json "..#packages.x86_64-linux.${pkgname}.meta.position" >"${t}.position"; then
-#     echo "NO POSITION"
-#     exit -1
-#   fi
-#   metadata="$(cat "${t}.position" | jq -r)"
-#   # trim off the filenumber
-#   # trim off the store path (assume its in here)
-#   metadata=$(echo "${metadata}" | cut -d':' -f1)
-#   metadata="${DIR}/$(echo "${metadata}" | cut -d'/' -f6-)"
-#   branch="$(cat "${t}" | jq -r .branch)"
-#   rev="$(cat "${t}" | jq -r .rev)"
-#   sha256="$(cat "${t}" | jq -r .sha256)"
-#   upattr="$(cat "${t}" | jq -r .upattr)";  # optional, but set if not user-set
-#   if [[ "${upattr}" == "null" ]]; then upattr="${pkgname}"; fi
-#   url="$(cat "${t}" | jq -r .url)" # optional
-#   cargoSha256="$(cat "${t}" | jq -r .cargoSha256)" # optional
-#   vendorSha256="$(cat "${t}" | jq -r .vendorSha256)" # optional
-#   skip="$(cat "${t}" | jq -r .skip)" # optional
-#   repo_git="$(cat "${t}" | jq -r .repo_git)" # optional
-#   repo_hg="$(cat "${t}" | jq -r .repo_hg)" # optional
-#   if [[ "${skip}" == "true" ]]; then
-#     echo "skipping (pinned to ${rev})"
-#     exit 0
-#   fi
-#   # grab the latest rev from the repo (supports: git, merucurial)
-#   if [[ "${repo_git}" != "null" ]]; then
-#     repotyp="git";
-#     repo="${repo_git}"
-#     newrev="$(git ls-remote "${repo}" "refs/heads/${branch}" | awk '{ print $1}')"
-#   elif [[ "${repo_hg}" != "null" ]]; then
-#     repotyp="hg";
-#     repo="${repo_hg}"
-#     newrev="$(hg identify "${repo}" -r "${branch}")"
-#   else
-#     echo "unknown repo_typ"
-#     exit 1;
-#   fi
-#   # early quit if we don't need to update
-#   if [[ "${rev}" == "${newrev}" && "${FORCE_RECHECK:-""}" != "true" ]]; then
-#     echo "up-to-date (${rev})"
-#     exit 0
-#   fi
-#   echo "${rev} => ${newrev}"
-#   # Update Sha256
-#   set -x
-#   sed -i "s|${rev}|${newrev}|" "${metadata}"; echo $?
-#   sed -i "s|${sha256}|0000000000000000000000000000000000000000000000000000|" "${metadata}"
-#   nix "${nixargs[@]}" build --no-link "..#${upattr}" &> "${l}" || true
-#   newsha256="$(cat "${l}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
-#   if [[ "${newsha256}" == "" ]]; then cat "${l}" >/dev/stderr; exit -1; fi
-#   if [[ "${newsha256}" == "sha256" ]]; then newsha256="$(cat "${l}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
-#   newsha256="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${newsha256}")"
-#   sed -i "s|0000000000000000000000000000000000000000000000000000|${newsha256}|" "${metadata}"
-#   # CargoSha256 has to happen AFTER the other rev/sha256 bump
-#   if [[ "${cargoSha256}" != "null" ]]; then
-#     sed -i "s|${cargoSha256}|0000000000000000000000000000000000000000000000000000|" "${metadata}"
-#     nix "${nixargs[@]}" build --no-link "..#${upattr}" &> "${l}" || true
-#     newcargoSha256="$(cat "${l}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
-#     if [[ "${newcargoSha256}" == "sha256" ]]; then newcargoSha256="$(cat "${l}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
-#     newcargoSha256="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${newcargoSha256}")"
-#     sed -i "s|0000000000000000000000000000000000000000000000000000|${newcargoSha256}|" "${metadata}"
-#   fi
-#   # VendorSha256 has to happen AFTER the other rev/sha256 bump
-#   if [[ "${vendorSha256}" != "null" ]]; then
-#     sed -i "s|${vendorSha256}|0000000000000000000000000000000000000000000000000000|" "${metadata}"
-#     nix "${nixargs[@]}" build --no-link "..#${upattr}" &> "${l}" || true
-#     newvendorSha256="$(cat "${l}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
-#     if [[ "${newvendorSha256}" == "sha256" ]]; then newvendorSha256="$(cat "${l}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
-#     newvendorSha256="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${newvendorSha256}")"
-#     sed -i "s|0000000000000000000000000000000000000000000000000000|${newvendorSha256}|" "${metadata}"
-#   fi
-#   # Commit
-#   git diff-index --quiet HEAD "${pkg}" || \
-#     git commit "${pkg}" -m "${cprefix} ${pkgname}: ${rev} => ${newrev}"
-#   echo "done updating ${pkg} (${rev} => ${newrev})"
-#   exit 0
-# fi
-# ##
-# ## main script
-# ##
-# # updates galore
-# pkgslist=()
-# for p in `ls -v -d -- ./*/ | sort -V`; do
-#   "${0}" "${p}"
-# done
-# exit 0
+let upstream = "nixos/nixos-unstable-small"
+let upstream_pr = "nixos/master"
+let branch = "rpipkgs"
+let branch_pr = "rpi-updates-auto"
+let branch_dev = "rpipkgs-dev"
+
+let nixpkgs = $"~/code/nixpkgs/($branch)"
+let nixpkgs_pr = $"~/code/nixpkgs/($branch_pr)"
+let nixpkgs_dev = $"~/code/nixpkgs/($branch_dev)"
+
+def update [] {
+  print -e $"(ansi purple)update(ansi reset)"
+  do -c { ^bash ./misc/rpi/update-rpi-packages.sh }
+}
+
+def pre [] {
+  print -e $"(ansi purple)pre(ansi reset)"
+  git -C $nixpkgs remote update
+  git -C $nixpkgs worktree prune
+  
+  git -C $nixpkgs rebase --abort | ignore
+  git -C $nixpkgs reset --hard $branch_dev
+  git -C $nixpkgs rebase $upstream --no-gpg-sign
+}
+
+def post [] {
+  print -e $"(ansi purple)post(ansi reset)"
+  git -C $nixpkgs_pr rebase --abort | ignore
+  git -C $nixpkgs_pr reset --hard $branch
+  git -C $nixpkgs_pr rebase $upstream_pr --no-gpg-sign
+  git -C $nixpkgs_pr push origin HEAD -f
+  git -C $nixpkgs push origin HEAD -f
+}
+
+def buildall [] {
+  print -e $"(ansi purple)build all(ansi reset)"
+  # let p = $"($nixpkgs)#legacyPackages.($builder_arch)"
+  # let store = "ssh-ng://colemickens@aarch64.nixos.community"
+  let p = $"($nixpkgs)#legacyPackages.($builder_arch).pkgsCross.aarch64-multiplatform"
+  let store = $"ssh-ng://($env.BUILDER_X86)"
+  (^nix build
+    --keep-going --no-link
+    --eval-store 'auto'
+    --store $store
+    $"($p).raspberrypifw"
+    $"($p).raspberrypifw-master"
+    $"($p).raspberrypiWirelessFirmware"
+    $"($p).libraspberrypi"
+    $"($p).raspberrypi-eeprom"
+    $"($p).raspberrypi-armstubs"
+    $"($p).linux_rpi4"
+  )
+}
+
+pre
+update
+buildall
+post
