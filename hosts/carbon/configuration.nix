@@ -14,6 +14,8 @@ in
     ../../mixins/gfx-radeonsi.nix
     ../../mixins/gfx-debug.nix
 
+    ../../mixins/addon-fixes.nix
+
     ../../mixins/android.nix
     ../../mixins/easyeffects.nix
     ../../mixins/hidpi.nix

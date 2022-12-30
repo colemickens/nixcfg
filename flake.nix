@@ -135,7 +135,7 @@
           raisin = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
           slynux = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
           xeep = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
-          # zeph = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
+          zeph = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
         };
       };
 
