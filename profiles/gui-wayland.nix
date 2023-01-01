@@ -11,7 +11,7 @@
     ../mixins/sirula.nix
     ../mixins/waybar.nix
     # ../../mixins/wlsunset.nix
-    ../../mixins/wluma.nix
+    ../mixins/wluma.nix
   ];
   config = {
     home-manager.users.cole = { pkgs, ... }: {

@@ -29,7 +29,7 @@ in
 
   config = {
     system.stateVersion = "22.05";
-    networking.hostName = "openstick";
+    networking.hostName = hostname;
     environment.systemPackages = with pkgs; [ usbutils lshw libqmi ];
 
     networking.networkmanager = {

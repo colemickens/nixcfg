@@ -13,6 +13,9 @@ in
     inputs.hyprland.nixosModules.default
   ];
   config = {
+    environment.sessionVariables = {
+      WLR_RENDERER = "vulkan";
+    };
     programs.hyprland = {
       enable = true;
       xwayland = _xwayland;
@@ -170,7 +173,7 @@ in
           bind = SUPER,P,pseudo, # dwindle
           bind = SUPER,F,fullscreen,1 # ...
           bind = SUPERSHIFT,F,fullscreen,0 # ...
-          bind = SUPER,J,togglesplit, # dwindle
+          bind = SUPER,T,togglesplit, # dwindle
           bind = SUPERSHIFT,Q,killactive, # ...
           bind = ALTCTRLSUPER, delete, exit, # ...
 
