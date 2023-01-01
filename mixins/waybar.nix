@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, inputs, ... }:
 
 let
   # jobpath = "/run/user/1000/srht/jobs";
@@ -62,6 +62,7 @@ in
       home.packages = [ pkgs.libappindicator-gtk3 ];
       programs.waybar = {
         enable = true;
+        package = inputs.nixpkgs-wayland.outputs.packages.${pkgs.hostPlatform.system}.waybar;
         style = pkgs.lib.readFile ./waybar.css;
         systemd.enable = true;
         settings = [{
@@ -69,8 +70,9 @@ in
           layer = "top";
           position = "top";
           modules-left = [
-            "sway/mode"
-            "sway/workspaces"
+            # "sway/mode"
+            # "sway/workspaces"
+            "wlr/workspaces"
           ];
           modules-center = [
             # "taskbar"

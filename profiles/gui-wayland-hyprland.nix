@@ -1,9 +1,9 @@
 { pkgs, lib, config, inputs, ... }:
 
 let
-  _xwayland = {
-    enable = false;
-    hidpi = false;
+  _xwayland = rec {
+    enable = true;
+    hidpi = enable;
   };
 in
 {
@@ -17,7 +17,7 @@ in
       enable = true;
       xwayland = _xwayland;
     };
-    programs.xwayland.enable = false; # TODO: dumb default
+    programs.xwayland.enable = _xwayland.enable; # TODO: hyprland should follow itself
 
     home-manager.users.cole = { pkgs, ... }: {
       imports = [
@@ -25,6 +25,7 @@ in
       ];
       home.packages = with pkgs; [
         wlr-randr
+        glpaper
       ];
       wayland.windowManager.hyprland = {
         enable = true;
@@ -43,7 +44,7 @@ in
 
           # See https://wiki.hyprland.org/Configuring/Monitors/
           monitor=,preferred,auto,auto
-
+          monitor=desc:Dell Inc. Dell AW3418DW ##ASPD8psOnhPd,3440x1440@120,auto,1
 
           # See https://wiki.hyprland.org/Configuring/Keywords/ for more
 
@@ -63,9 +64,13 @@ in
 
               follow_mouse = 1
 
-              touchpad {
-                  natural_scroll = no
-              }
+            touchpad {
+              disable_while_typing=1
+              natural_scroll=1
+              clickfinger_behavior=1
+              middle_button_emulation=0
+              tap-to-click=0
+            }
 
               sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
           }
@@ -73,11 +78,14 @@ in
           general {
               # See https://wiki.hyprland.org/Configuring/Variables/ for more
 
-              gaps_in = 5
+              gaps_in = 3
               gaps_out = 20
-              border_size = 2
+              border_size = 5
               col.active_border = rgba(33ccffee) rgba(00ff99ee) 45deg
-              col.inactive_border = rgba(595959aa)
+              # col.active_border = rgba(05d6d9ff) rgba(f907fcff) 45deg
+              # col.active_border = rgba(ff0d0dff)
+              # col.active_border = rgba(ffffffff)
+              col.inactive_border = rgba(59595900)
 
               layout = dwindle
           }
@@ -85,16 +93,19 @@ in
           decoration {
               # See https://wiki.hyprland.org/Configuring/Variables/ for more
 
-              rounding = 10
-              blur = yes
-              blur_size = 3
-              blur_passes = 1
+              rounding = 5
+              blur = no
+              blur_size = 8
+              blur_passes = 2
               blur_new_optimizations = on
 
               drop_shadow = yes
               shadow_range = 4
               shadow_render_power = 3
               col.shadow = rgba(1a1a1aee)
+
+              # dim_inactive = true
+              # dim_strength = 0.20
           }
 
           animations {
@@ -127,46 +138,47 @@ in
               workspace_swipe = on
           }
 
+          misc {
+            disable_hyprland_logo = true
+            disable_splash_rendering = true
+            no_vfr = false
+          }
+
           # Example per-device config
           # See https://wiki.hyprland.org/Configuring/Keywords/#executing for more
           device:epic mouse V1 {
               sensitivity = -0.5
           }
 
-          input {
-             touchpad {
-              disable_while_typing=1
-              natural_scroll=1
-              clickfinger_behavior=1
-              middle_button_emulation=0
-              tap-to-click=0
-            }
-          }
-
-
           # Example windowrule v1
           # windowrule = float, ^(kitty)$
           # Example windowrule v2
           # windowrulev2 = float,class:^(kitty)$,title:^(kitty)$
           # See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
+          # windowrulev2 = opacity 0.85 0.85,class:^(Alacritty)$
+          # windowrulev2 = opacity 0.85 0.85,class:^(org.wezfurlong.wezterm)$
 
 
           # See https://wiki.hyprland.org/Configuring/Keywords/ for more
           $mainMod = SUPER
 
           # Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
-          bind = $mainMod, return, exec, alacritty
-          bind = $mainMod, escape, exec, sirula
-          bind = $mainMod, V, togglefloating, 
-          bind = $mainMod, P, pseudo, # dwindle
-          bind = $mainMod, J, togglesplit, # dwindle
-          bind = $mainMod_CTRL_ALT, delete, exit
+          bind = SUPER,return,exec,alacritty
+          bind = SUPER,escape,exec,sirula
+          bind = SUPERSHIFT,space,togglefloating, 
+          bind = SUPERSHIFTALT,space,pin, # ...
+          bind = SUPER,P,pseudo, # dwindle
+          bind = SUPER,F,fullscreen,1 # ...
+          bind = SUPERSHIFT,F,fullscreen,0 # ...
+          bind = SUPER,J,togglesplit, # dwindle
+          bind = SUPERSHIFT,Q,killactive, # ...
+          bind = ALTCTRLSUPER, delete, exit, # ...
 
           # Move focus with mainMod + arrow keys
-          bind = $mainMod, left, movefocus, l
-          bind = $mainMod, right, movefocus, r
-          bind = $mainMod, up, movefocus, u
-          bind = $mainMod, down, movefocus, d
+          bind = $mainMod, H, movefocus, l
+          bind = $mainMod, L, movefocus, r
+          bind = $mainMod, K, movefocus, u
+          bind = $mainMod, J, movefocus, d
 
           # Switch workspaces with mainMod + [0-9]
           bind = $mainMod, 1, workspace, 1

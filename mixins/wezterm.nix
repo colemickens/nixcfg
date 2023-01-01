@@ -20,7 +20,7 @@ in
           default_prog = { "${prefs.shell.program}" },
           enable_tab_bar = false,
           use_fancy_tab_bar = false,
-          front_end = "WebGpu",
+          -- front_end = "WebGpu",
           initial_rows = 24,
           initial_cols = 120,
           font_size = ${toString prefs.font.size},
@@ -29,7 +29,7 @@ in
           default_cursor_style = 'BlinkingBar',
           colors = {
             foreground = "${colors.foreground}",
-            background = "${colors.background}",
+            background = "#000000",
             ansi = {
               "${colors.black}",
               "${colors.red}",

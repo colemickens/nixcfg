@@ -40,6 +40,8 @@ in
       };
     };
 
+    programs.noisetorch.enable = true;
+
     home-manager.users.cole = { pkgs, config, ... }@hm: {
       # home-manager/#2064
       systemd.user.targets.tray = {
@@ -76,6 +78,11 @@ in
           virt-viewer
           evince
           pinta
+
+          pw-viz
+          qpwgraph
+          helvum
+          jamesdsp
 
           # libnotify # does an app need this? patch it instead?
           # TODO: BROKEN WITH WAYLAND:?

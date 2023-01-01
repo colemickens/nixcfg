@@ -11,6 +11,9 @@
     documentation.enable = lib.mkOverride 10 false;
     documentation.nixos.enable = lib.mkOverride 10 false;
 
+    environment.systemPackages = with pkgs; [
+      
+    ];
     nixcfg.common.sysdBoot = false;
 
     system.disableInstallerTools = lib.mkOverride 10 false;

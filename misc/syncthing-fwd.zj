@@ -14,4 +14,7 @@ layout {
     pane command="./misc/syncthing-fwd.sh" {
       args "58384" "jeffhyper"
     }
+    pane command="./misc/syncthing-fwd.sh" {
+      args "8389" "zeph"
+    }
 }

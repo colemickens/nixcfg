@@ -142,14 +142,12 @@
       nixosConfigs = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues nixosConfigsEx));
       deployConfigs = {
         inherit (nixosConfigs)
-          carbon
           raisin
-          # slynux # defunct, or soon to be
-          jeffhyper
           xeep
-          # zeph # new
-          radxazero1
-          rockfiveb1
+          jeffhyper
+          zeph
+          # radxazero1
+          # rockfiveb1
           # visionfivetwo1
           # rpizerotwo1 # broken??
           # blueline
@@ -157,7 +155,7 @@
           # rpifour1 # netboot
           # rpithreebp1 # netboot
           # visionfiveone1 # netboot
-          openstick
+          # openstick
           ;
       };
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);

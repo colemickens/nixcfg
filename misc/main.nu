@@ -138,7 +138,7 @@ def "main inputup" [] {
       "mobile-nixos/master-flakes"
       "mobile-nixos/openstick" "mobile-nixos/pinephone-emmc" "mobile-nixos/reset-scripts" "mobile-nixos/sdm845-blue" ]
     [ "nixos-riscv64" ]
-    [ "flake-firefox-nightly" ]
+    # [ "flake-firefox-nightly" ]
     [ "nixpkgs-wayland/master" ]
   ] | flatten | each { |it1| $it1 | each {|it| $"($env.HOME)/code/($it)" } })
 
