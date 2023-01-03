@@ -111,11 +111,11 @@ in
           };
           systemd-boot = {
             enable = lib.mkDefault true;
-            configurationLimit = 10;
+            configurationLimit = 20;
             # memtest86.enable = (pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isx86);
             memtest86.entryFilename = "z-memtest86.conf";
           };
-          timeout = 1;
+          timeout = 3;
         };
 
         initrd = {
@@ -237,8 +237,8 @@ in
       services.udisks2.enable = true;
       hardware.enableRedistributableFirmware = true;
       hardware.usbWwan.enable = true; # dual role usb/cdrom stick thing
-      # hardware.cpu.intel.updateMicrocode = true;
-      # hardware.cpu.amd.updateMicrocode = true;
+      hardware.cpu.amd.updateMicrocode = (pkgs.hostPlatform.system == "x86_64-linux");
+      hardware.cpu.intel.updateMicrocode = (pkgs.hostPlatform.system == "x86_64-linux");
 
       environment = {
         systemPackages = with pkgs; [ coreutils ];

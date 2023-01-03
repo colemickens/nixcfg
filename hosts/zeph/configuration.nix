@@ -36,6 +36,9 @@ in
     networking.hostName = "zeph";
     nixcfg.common.hostColor = "purple";
     nixcfg.common.skipMitigations = false;
+    environment.systemPackages = [
+      inputs.hyprland.packages.${pkgs.hostPlatform.system}.xdg-desktop-portal-hyprland
+    ];
 
     time.timeZone = lib.mkForce null; # we're on the move
     services.tailscale.useRoutingFeatures = "client";
@@ -47,6 +50,10 @@ in
       "/" = { fsType = "zfs"; device = "${hn}pool/root"; neededForBoot = true; };
       "/nix" = { fsType = "zfs"; device = "${hn}pool/nix"; neededForBoot = true; };
       "/home" = { fsType = "zfs"; device = "${hn}pool/home"; neededForBoot = true; };
+      "/mnt/games" = { fsType = "zfs"; device = "${hn}pool/games"; };
+
+      "/mnt/data/t5" = { fsType = "zfs"; device = "${hn}pool/data/t5"; };
+      "/mnt/data/raisin" = { fsType = "zfs"; device = "${hn}pool/data/raisin"; };
     };
     swapDevices = [{ device = "/dev/disk/by-partlabel/${hn}-swap"; }];
 

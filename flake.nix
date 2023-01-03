@@ -19,6 +19,7 @@
     nixpkgs-wayland = { url = "github:nix-community/nixpkgs-wayland/master"; inputs."nixpkgs".follows = "nixpkgs"; };
     sops-nix = { url = "github:Mic92/sops-nix/master"; inputs."nixpkgs".follows = "nixpkgs"; };
     hyprland = { url = "github:colemickens/Hyprland"; inputs."nixpkgs".follows = "nixpkgs"; };
+    ironbar = { url = "github:JakeStanger/ironbar"; inputs."nixpkgs".follows = "nixpkgs"; };
 
     nix-rice = { url = "github:colemickens/nix-rice"; inputs."nixpkgs".follows = "nixpkgs"; };
     terranix = { url = "github:terranix/terranix"; inputs.nixpkgs.follows = "nixpkgs"; };

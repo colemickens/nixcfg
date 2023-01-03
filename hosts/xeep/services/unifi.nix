@@ -34,7 +34,7 @@ in
       openFirewall = false;
       unifiPackage = pkgs.unifi6;
       jrePackage = pkgs.jdk8_headless;
-      mongodbPackage = pkgs.mongodb-3_4;
+      # mongodbPackage = pkgs.mongodb-3_4;
       maximumJavaHeapSize = 256;
     };
 

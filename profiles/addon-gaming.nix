@@ -3,10 +3,10 @@
 {
   config = {
     programs.steam.enable = true;
-    # programs.gamescope = {
-    #   enable = true;
-    #   # settings = {};
-    # };
+    programs.gamescope = {
+      enable = true;
+      # settings = {};
+    };
     hardware = {
       xone.enable = true;
     };
@@ -17,7 +17,7 @@
 
         vkbasalt
         goverlay
-        gamescope
+        # gamescope
         protonup-ng
 
         yuzu-mainline
