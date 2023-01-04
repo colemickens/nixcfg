@@ -1030,11 +1030,11 @@
     },
     "nixpkgs-cross-riscv64": {
       "locked": {
-        "lastModified": 1672786231,
-        "narHash": "sha256-9iLCeaOnRGJ4yT2NN3QXmJaS1poJ1dNavt2skKIVgL0=",
+        "lastModified": 1672833135,
+        "narHash": "sha256-rVzDu2+GlyeVuPydttdJi/cfLUFUbX/1bvWGiJi4F8k=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "793e763f40e8d41434b6af58e4bcebc15c40cac5",
+        "rev": "b9281460d6ab1c46eca6006f294277c023a58a9b",
         "type": "github"
       },
       "original": {
@@ -1166,11 +1166,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1672786225,
-        "narHash": "sha256-yfOexDSkC0QLUoYvedqxL68Mj+JLGSAoqcb3QIE88iQ=",
+        "lastModified": 1672833128,
+        "narHash": "sha256-FGbPhERNMgrRxdFAM36dho4C9jUqJ8g4iOsxpmnOTy4=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "51b9348f9688262771d39d646c6b80eb8df40671",
+        "rev": "5c2e5b6a07b08ad57e4bceefca45ef7e10722eed",
         "type": "github"
       },
       "original": {
@@ -1216,11 +1216,11 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1672827422,
+        "lastModified": 1672832607,
         "narHash": "sha256-xXBenttF3yzcqSQz29pfbvf0gtZoQPCbkWwhIoZY2QQ=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "3e1a8b4e1a22ac377eb54922af12bd0277701db4",
+        "rev": "300b0a1650bbb6b694c59357053114dcc1f2f945",
         "type": "github"
       },
       "original": {
