@@ -11,6 +11,8 @@ in
 {
   imports = [
     ../../profiles/core.nix
+    ../../profiles/gui-wayland-hyprland.nix
+
     ../../mixins/iwd-networks.nix
 
     ./unfree.nix
@@ -18,7 +20,11 @@ in
   ++ inputs.tow-boot-radxa-rock5b.nixosModules
   ;
   config = {
+    environment.systemPackages = with pkgs; [
+      xdg-desktop-portal-hyprland
+    ];
     nixpkgs.overlays = [
+      inputs.hyprland.overlays.default
       (final: super: {
         makeModulesClosure = x:
           super.makeModulesClosure (x // { allowMissing = true; });

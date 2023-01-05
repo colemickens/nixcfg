@@ -27,7 +27,7 @@
         
         # TODO: is this even needed? isn't it built in?
         plugins = with pkgs; [
-          obs-studio-plugins.wlrobs
+          # obs-studio-plugins.wlrobs
         ];
       };
     };

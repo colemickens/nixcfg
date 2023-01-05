@@ -9,7 +9,7 @@
     ../mixins/mako.nix
     ../mixins/obs.nix
     ../mixins/sirula.nix
-    ../mixins/waybar.nix
+    # ../mixins/waybar.nix # moved to gui-way-sway
     # ../../mixins/wlsunset.nix
     ../mixins/wluma.nix
   ];

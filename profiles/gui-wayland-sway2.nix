@@ -118,6 +118,7 @@ in
 
         wayland.windowManager.sway = {
           enable = true;
+          package = pkgs.sway.override { sway-unwrapped = inputs.nixpkgs-wayland.packages.${pkgs.hostPlatform.system}.sway-unwrapped; };
           systemdIntegration = true; # beta
           wrapperFeatures = {
             base = false; # this should be the default (dbus activation, not sure where XDG_CURRENT_DESKTOP comes from)

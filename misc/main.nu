@@ -81,7 +81,7 @@ def cacheDrvs [ drvs: list ] {
 def downDrvs [ drvs: list target: string ] {
   header "purple_reverse" $"download: ($target): $drvs"
   let builds = ($drvs | get outputs | get out)
-  ^ssh $"cole@($target)" (([ "nix" "build" "-j0" $nixopts $builds ] | flatten) | str join ' ')
+  ^ssh $"cole@($target)" (([ "nix" "build" "--no-link" "-j0" $nixopts $builds ] | flatten) | str join ' ')
   if ($env.LAST_EXIT_CODE != 0) {
     error make { msg: $"failed to down to ($target)"}
   }
@@ -99,7 +99,7 @@ def deployHost [ host: string ] {
   if ($cs == $topout) { header light_purple_reverse $"deploy: ($host): already up-to-date"; return }
 
   header light_purple_reverse $"deploy: ($host): apply and switch"
-  ^ssh $"cole@($target)" (([ "sudo" "nix" "build" "-j0" $nixopts "--profile" "/nix/var/nix/profiles/system" $topout ] | flatten) | str join ' ')
+  ^ssh $"cole@($target)" (([ "sudo" "nix" "build" "--no-link" "-j0" $nixopts "--profile" "/nix/var/nix/profiles/system" $topout ] | flatten) | str join ' ')
   if ($env.LAST_EXIT_CODE != 0) { error make { msg: $"failed to down to ($target)"} }
   ^ssh $"cole@($target)" $"sudo '($topout)/bin/switch-to-configuration' switch"
   if ($env.LAST_EXIT_CODE != 0) {  error make { msg: $"failed to switch for ($host)"} }

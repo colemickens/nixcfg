@@ -10,6 +10,7 @@
 
     # ../mixins/common.nix
 
+    ../mixins/aria2.nix
     ../mixins/bottom.nix
     ../mixins/cachix.nix
     ../mixins/gh.nix

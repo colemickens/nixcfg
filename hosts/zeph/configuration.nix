@@ -5,7 +5,8 @@ let
 in
 {
   imports = [
-    ../../profiles/gui-wayland-hyprland.nix
+    # ../../profiles/gui-wayland-hyprland.nix
+    ../../profiles/gui-wayland-sway2.nix
     ../../profiles/addon-asus.nix
     ../../profiles/addon-dev.nix
     ../../profiles/addon-laptop.nix
@@ -53,7 +54,7 @@ in
       "/mnt/games" = { fsType = "zfs"; device = "${hn}pool/games"; };
 
       "/mnt/data/t5" = { fsType = "zfs"; device = "${hn}pool/data/t5"; };
-      "/mnt/data/raisin" = { fsType = "zfs"; device = "${hn}pool/data/raisin"; };
+      "/mnt/data/xeep_backup" = { fsType = "zfs"; device = "${hn}pool/data/xeep_backup"; };
     };
     swapDevices = [{ device = "/dev/disk/by-partlabel/${hn}-swap"; }];
 

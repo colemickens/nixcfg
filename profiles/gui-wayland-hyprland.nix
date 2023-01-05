@@ -9,6 +9,8 @@ in
 {
   imports = [
     ./gui-wayland.nix
+    # ../mixins/ironbar.nix
+    ../mixins/waybar.nix
 
     inputs.hyprland.nixosModules.default
   ];
@@ -29,6 +31,7 @@ in
       home.packages = with pkgs; [
         wlr-randr
         glpaper
+        inputs.cosmic.outputs.packages.${pkgs.hostPlatform.system}.default
       ];
       wayland.windowManager.hyprland = {
         enable = true;

@@ -18,8 +18,9 @@
     nixos-hardware = { url = "github:nixos/nixos-hardware"; };
     nixpkgs-wayland = { url = "github:nix-community/nixpkgs-wayland/master"; inputs."nixpkgs".follows = "nixpkgs"; };
     sops-nix = { url = "github:Mic92/sops-nix/master"; inputs."nixpkgs".follows = "nixpkgs"; };
-    hyprland = { url = "github:colemickens/Hyprland"; inputs."nixpkgs".follows = "nixpkgs"; };
+    hyprland = { url = "github:hyprwm/Hyprland"; inputs."nixpkgs".follows = "nixpkgs"; };
     ironbar = { url = "github:JakeStanger/ironbar"; inputs."nixpkgs".follows = "nixpkgs"; };
+    cosmic = { url = "github:pop-os/cosmic-comp"; inputs = {"fenix".follows = "fenix"; "nixpkgs".follows = "nixpkgs"; }; };
 
     nix-rice = { url = "github:colemickens/nix-rice"; inputs."nixpkgs".follows = "nixpkgs"; };
     terranix = { url = "github:terranix/terranix"; inputs.nixpkgs.follows = "nixpkgs"; };

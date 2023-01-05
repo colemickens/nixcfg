@@ -68,6 +68,8 @@ in
           _firefox
           _chrome
           captive-browser
+          jamesdsp
+          ripcord
         ]))
         (with pkgs; [
           (pkgs.callPackage ../pkgs/commands-gui.nix { })
@@ -82,7 +84,6 @@ in
           pw-viz
           qpwgraph
           helvum
-          jamesdsp
 
           # libnotify # does an app need this? patch it instead?
           # TODO: BROKEN WITH WAYLAND:?
@@ -92,7 +93,6 @@ in
 
           # communcation
           nheko
-          ripcord
           freerdp
         ])
       ];
