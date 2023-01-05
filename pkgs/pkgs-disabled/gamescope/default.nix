@@ -6,6 +6,7 @@
 , xorg
 , libdrm
 , vulkan-loader
+, vulkan-headers
 , wayland
 , wayland-protocols
 , libxkbcommon
@@ -21,6 +22,9 @@
 , stb
 , wlroots
 , libliftoff
+, hwdata
+, vkroots
+, libdisplay-info
 , lib
 , makeBinaryWrapper
 }:
@@ -58,7 +62,11 @@ stdenv.mkDerivation {
     xorg.libXi
     libdrm
     libliftoff
+    hwdata
+    vkroots
+    libdisplay-info
     vulkan-loader
+    vulkan-headers
     glslang
     SDL2
     wayland

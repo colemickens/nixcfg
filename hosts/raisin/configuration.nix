@@ -1,23 +1,18 @@
 { config, pkgs, lib, inputs, ... }:
 let
   hn = config.networking.hostName;
-  # raisin bootloader = grub (signed-shim)
 in
 {
   imports = [
     ../../profiles/interactive.nix
-    ../../profiles/addon-dev.nix
     ../../profiles/addon-laptop.nix
 
-    # ../../mixins/android.nix
-    ../../mixins/libvirtd.nix
-    ../../mixins/hidpi.nix
-    ../../mixins/syncthing.nix
-    ../../mixins/zfs.nix
-    
     ../../mixins/iwd-networks.nix
-
-    # ../../mixins/rclone-googledrive-mounts.nix
+    ../../mixins/plex.nix
+    ../../mixins/rclone-googledrive-mounts.nix
+    ../../mixins/syncthing.nix
+    ../../mixins/unifi.nix
+    ../../mixins/zfs.nix
 
     inputs.nixos-hardware.nixosModules.common-cpu-amd
     inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate

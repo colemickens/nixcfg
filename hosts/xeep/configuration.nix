@@ -8,16 +8,14 @@ in
     ../../profiles/interactive.nix
     ../../profiles/addon-laptop.nix
 
-    # ../../mixins/grub-signed-shim.nix
-
-    ../../mixins/libvirtd.nix
+    ../../mixins/iwd-networks.nix
+    ../../mixins/plex.nix
+    ../../mixins/rclone-googledrive-mounts.nix
     ../../mixins/syncthing.nix
+    ../../mixins/unifi.nix
     ../../mixins/zfs.nix
-
     # ./services/revproxy.nix
     # ./services/home-assistant
-    ./services/unifi.nix
-
 
     # ../../mixins/gfx-intel.nix # TODO: nixosHardware?
     inputs.nixos-hardware.nixosModules.dell-xps-13-9370
