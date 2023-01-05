@@ -10,10 +10,10 @@ buildLinux (args // {
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
-    owner = "Joshua-Ashton";
-    repo = "kernel";
+    owner = "JoshuaAshton";
+    repo = "linux-hdr";
     rev = tag;
-    hash = "sha256-xLxxxxgarpFhyvGGHuF1/NsHMMkSwTcaTs/c33XliuA=";
+    hash = "sha256-LTUXxvSSNfJ/ioYfG/APknm4bNnYHen372qxPuRwFSM=";
   };
 
   structuredExtraConfig = with lib.kernel; {

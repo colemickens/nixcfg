@@ -3,6 +3,7 @@
 , freerdp
 , wayland-proxy-virtwl
 , xwayland
+, gamescope
 }:
 
 let
@@ -34,12 +35,18 @@ let
       /p:"''${RDPPASS}" \
       /rfx +fonts /dynamic-resolution /compression-level:2
   '';
+  gs = writeShellScriptBin "gs" ''
+    set -x
+    export ENABLE_GAMESCOPE_WSI=1
+    ${gamescope}/bin/gamescope -w 1920 -h 1080 -r 120 --hdr-enabled -- "''${@}"
+  '';
 in
 symlinkJoin {
   name = "commands-gui";
   paths = [
     wlproxylaunch
     rdp-sly
+    gs
   ];
 }
 
