@@ -6,5 +6,5 @@ rec {
   branch = "main";
   rev = "9b617de6f038e0d50cefa50e62dc7d4289feadca";
   sha256 = "sha256-q/jmzJxlV4xKjcmC9BxnZaTA8nmeJpLuNf4I/W9Ismg=";
-  cargoSha256 = "0000000000000000000000000000000000000000000000000000";
+  cargoSha256 = "sha256-OtWHdBHtk9tFKDz9UpboMDz87QUAbHLYhF075lp+p1s=";
 }
