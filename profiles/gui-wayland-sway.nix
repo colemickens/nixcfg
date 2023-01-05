@@ -87,7 +87,7 @@ in
 {
   imports = [
     ./gui-wayland.nix
-    ./waybar.nix
+    ../mixins/waybar.nix
   ];
   config = {
     nixpkgs.overlays = [

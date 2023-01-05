@@ -70,9 +70,9 @@ in
           layer = "top";
           position = "top";
           modules-left = [
-            # "sway/mode"
-            # "sway/workspaces"
-            "wlr/workspaces"
+            "sway/mode"
+            "sway/workspaces"
+            # "wlr/workspaces"
           ];
           modules-center = [
             # "taskbar"

@@ -87,12 +87,12 @@ in
 {
   imports = [
     ./gui-wayland.nix
-    ./waybar.nix
+    ../mixins/waybar.nix
   ];
   config = {
-    nixpkgs.overlays = [
-      inputs.nixpkgs-wayland.overlay
-    ];
+    # nixpkgs.overlays = [
+    #   inputs.nixpkgs-wayland.overlay
+    # ];
 
     xdg.portal.enable = true;
     xdg.portal.extraPortals = with pkgs; [

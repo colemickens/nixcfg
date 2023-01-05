@@ -5,8 +5,6 @@ let
   kernel = pkgs.callPackage ./kernel.nix { };
   kernelPackages = pkgs.linuxKernel.packagesFor kernel;
   hn = "rockfiveb1";
-
-  krnl = config.boot.kernelPackages.kernel;
 in
 {
   imports = [
