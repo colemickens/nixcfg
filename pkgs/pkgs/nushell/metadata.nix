@@ -4,7 +4,7 @@ rec {
   repo = "nushell";
   repo_git = "https://${domain}/${owner}/${repo}";
   branch = "main";
-  rev = "424d5611a551ab725b08be0d4dcbea7f42f7323f";
-  sha256 = "sha256-6g1PNNTMeA55s6im8PAKRXBtQBv+Grb8Q68yA9wCK8s=";
-  cargoSha256 = "sha256-afXbN7qXciZLdnQCoXVZU+ngRmVoYxaSMPihUbGTFw8=";
+  rev = "95cd9dd2b2516f1197914330ee0924d178956756";
+  sha256 = "sha256-IExrhAJDplQGvfQgYp8iHvDRIlRyb6O9n5nG3J339Cw=";
+  cargoSha256 = "sha256-kl4otZqbQUb2iLyqGb0zd+ppDiKFgea62FGKepA4iz0=";
 }
