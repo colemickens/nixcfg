@@ -4,13 +4,13 @@
   imports = [
     ./gui.nix
 
-    # ../mixins/ironbar.nix
-    ../mixins/kanshi.nix
+    # ../mixins/ironbar.nix # let child pick
+    # ../mixins/kanshi.nix # let child pick
+    # ../mixins/waybar.nix # let child pick
+    # ../mixins/wlsunset.nix # let child pick
     ../mixins/mako.nix
     ../mixins/obs.nix
     ../mixins/sirula.nix
-    # ../mixins/waybar.nix # moved to gui-way-sway
-    # ../../mixins/wlsunset.nix
     ../mixins/wluma.nix
   ];
   config = {
@@ -24,21 +24,20 @@
         MOZ_ENABLE_WAYLAND = "1";
       };
       home.packages = with pkgs; [
-        # wayland env requirements
         qt5.qtwayland
         qt6.qtwayland
 
-        # wayland adjacent
-        sirula # launcher
-        wayout # display on/off
         wl-clipboard # wl-{copy,paste}
         wtype # virtual keystroke insertion
 
-        # misc utils
-        # imv
-        oculante
-        grim
-        slurp
+        # imv # image viewer
+        oculante # image viewer (rust)
+        grim # area selection
+        slurp # screen capture
+        wf-recorder # screen record
+
+        # wayout # https://git.sr.ht/~shinyzenith/wayout (disp power mgmt)
+        # wayout # https://git.sr.ht/~proycon/wayout (draw text to surface)
       ];
     };
   };

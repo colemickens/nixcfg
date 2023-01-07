@@ -206,10 +206,6 @@
           let
             __colemickens_nixcfg_pkgs = rec {
               extract-xiso = prev.callPackage ./pkgs/pkgs/extract-xiso { };
-              # gamescope = prev.callPackage ./pkgs/pkgs/gamescope {
-              #   # wlroots = inputs.nixpkgs-wayland.outputs.packages.${prev.hostPlatform.system}.wlroots;
-              #   wlroots = prev.wlroots_0_16;
-              # };
               nushell = prev.callPackage ./pkgs/pkgs/nushell {
                 inherit (prev.darwin.apple_sdk.frameworks) AppKit Foundation Security;
                 inherit (prev.darwin.apple_sdk) sdk;

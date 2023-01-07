@@ -19,22 +19,22 @@ in
           pane_frames = true;
           scrollback_editor = "hx";
           theme = "default";
-          themes = {
-            nixdefault = {
-              fg = convert colors.foreground;
-              bg = convert colors.background;
-              gray = convert colors.background;
-              black = convert colors.black;
-              red = convert colors.red;
-              green = convert colors.green;
-              yellow = convert colors.yellow;
-              blue = convert colors.blue;
-              magenta = convert colors.purple;
-              cyan = convert colors.cyan;
-              white = convert colors.white;
-              orange = convert colors.yellow;
-            };
-          };
+        #   themes = {
+        #     nixdefault = {
+        #       fg = convert colors.foreground;
+        #       bg = convert colors.background;
+        #       gray = convert colors.background;
+        #       black = convert colors.black;
+        #       red = convert colors.red;
+        #       green = convert colors.green;
+        #       yellow = convert colors.yellow;
+        #       blue = convert colors.blue;
+        #       magenta = convert colors.purple;
+        #       cyan = convert colors.cyan;
+        #       white = convert colors.white;
+        #       orange = convert colors.yellow;
+        #     };
+        #   };
         };
       };
     };

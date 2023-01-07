@@ -12,7 +12,8 @@
 
     ../../profiles/user.nix
 
-    ../../profiles/gui-phosh.nix
+    # ../../profiles/gui-phosh.nix # tired of webkit-gtk issues
+    ../../profiles/gui-wayland-sway2.nix
 
     (import "${inputs.mobile-nixos-pinephone}/lib/configuration.nix" {
       device = "pine64-pinephone";
@@ -50,6 +51,7 @@
     #   "/" = { fsType = "ext4"; device = "/dev/sda1"; };
     # };
     # boot.loader.grub.enable = false;
+    boot.loader.systemd-boot.enable = lib.mkForce false;
     # boot.loader.generic-extlinux-compatible.enable = true;
 
     # mobile = {

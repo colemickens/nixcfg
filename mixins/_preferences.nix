@@ -18,7 +18,6 @@ rec {
   editor = "hx";
   shell = { program = "zsh"; args = [ ]; };
   default_term = "alacritty";
-  default_launcher = "sirula";
 
   gtk = {
     font = { name = "${font.default.family} 11"; package = font.default.package; };

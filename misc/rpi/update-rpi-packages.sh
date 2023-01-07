@@ -18,6 +18,8 @@ export NIXPKGS_PR="/home/cole/code/nixpkgs/${BRANCH_PR}"
 export NIXPKGS_DEV="/home/cole/code/nixpkgs/${BRANCH_DEV}"
 
 export ARCH="x86_64-linux" # what system you're doing the update from
+# oops they fixed linux_rpi's meta...
+export NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1
 
 function update() {
   
@@ -335,7 +337,7 @@ function update() {
     sed -i "s|${OLD_LINUXRPI_REV}|${NEW_LINUXRPI_REV}|g" "${METADATA_FILE}"
     sed -i "s|${OLD_LINUXRPI_HASH}|${PLACEHOLDER0}|g" "${METADATA_FILE}"
     # copyable:
-    nix "${nixargs[@]}" build --no-link "${UPDATE_ATTR}" &> "${t}" || true; cat "${t}"
+    nix "${nixargs[@]}" build --impure "${UPDATE_ATTR}" &> "${t}" || true; cat "${t}"
     NEW_HASH="$(cat "${t}" | grep 'got:' | cut -d':' -f2 | tr -d ' ' || true)"
     if [[ "${NEW_HASH}" == "sha256" ]]; then NEW_HASH="$(cat "${t}" | grep 'got:' | cut -d':' -f3 | tr -d ' ' || true)"; fi
     NEW_HASH="$(nix "${nixargs[@]}" hash to-sri --type sha256 "${NEW_HASH}")"

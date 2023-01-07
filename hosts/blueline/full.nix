@@ -6,7 +6,8 @@
     ../../mixins/pipewire.nix
 
     # ../../profiles/gui-gnomemobile.nix
-    ../../profiles/gui-phosh.nix
+    ../../profiles/gui-wayland-sway2.nix
+    # ../../profiles/gui-phosh.nix # tired of webkit-gtk issues
 
     # in bootstrap
     # (import "${inputs.mobile-nixos-sdm845}/lib/configuration.nix" {

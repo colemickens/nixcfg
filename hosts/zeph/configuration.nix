@@ -3,8 +3,9 @@
 let
   hn = "zeph";
 
-  kernel = pkgs.callPackage ./kernel.nix { };
-  kernelPackages = pkgs.linuxKernel.packagesFor kernel;
+  # kernel = pkgs.callPackage ./kernel-hdr.nix { };
+  # kernelPackages = pkgs.linuxKernel.packagesFor kernel;
+  kernelPackages = null;
 in
 {
   imports = [
@@ -40,7 +41,7 @@ in
     networking.hostName = "zeph";
     nixcfg.common.hostColor = "purple";
     nixcfg.common.skipMitigations = false;
-    nixcfg.common.defaultKernel = false;
+    nixcfg.common.defaultKernel = (kernelPackages == null);
     environment.systemPackages = [
       inputs.hyprland.packages.${pkgs.hostPlatform.system}.xdg-desktop-portal-hyprland
     ];
@@ -69,7 +70,7 @@ in
           entriesMountPoint = "/boot";
         };
       };
-      kernelPackages = kernelPackages;
+      kernelPackages = lib.mkIf (kernelPackages != null) kernelPackages;
       kernelModules = [ "iwlwifi" ];
       kernelParams = [
         # "zfs.zfs_arc_max=${builtins.toString (1023 * 1024 * (1024 * 6))}"

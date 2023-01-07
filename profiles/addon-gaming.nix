@@ -2,6 +2,11 @@
 
 {
   config = {
+    networking.firewall = {
+      # https://portforward.com/halo-infinite/
+      allowedTCPPorts = [ 3074 ];
+      allowedUDPPorts = [ 88 500 3074 2075 3544 4500 ];
+    };
     programs.steam.enable = true;
     # programs.gamescope = {
     #   enable = true;
@@ -15,7 +20,7 @@
         evtest
         linuxConsoleTools
 
-        vkbasalt
+        # vkbasalt
         goverlay
         gamescope
         protonup-ng
@@ -23,9 +28,9 @@
         yuzu-mainline
         ryujinx
       ];
-      programs.mangohud = {
-        enable = true;
-      };
+      # programs.mangohud = {
+      #   enable = true;
+      # };
     };
   };
 }

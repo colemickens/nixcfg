@@ -4,14 +4,18 @@ let
   prefs = import ../mixins/_preferences.nix { inherit inputs config lib pkgs; };
 
   # background = prefs.background;
-  background = "#000000 solid_color";
+  _bg = "#000000";
+  background = "${_bg} solid_color";
+  borderActive = "#33ccff";
+  borderInactive = _bg;
 
-  out_aw3418dw = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
-  out_aw2521h = "Dell Inc. Dell AW2521H #HLAYMxgwABDZ";
-  out_carbon = "SDC 0x4152 Unknown";
-  out_lgc165 = "Goldstar Company Ltd LG TV SSCR2 0x00000101";
+  # out_aw3418dw = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
+  # out_aw2521h = "Dell Inc. Dell AW2521H #HLAYMxgwABDZ";
+  # out_carbon = "SDC 0x4152 Unknown";
+  # out_lgc165 = "Goldstar Company Ltd LG TV SSCR2 0x00000101";
 
   in_tp_carbon = "1739:52896:MSFT0001:00_06CB:CEA0_Touchpad";
+  in_tp_zeph = "1267:12699:ASUE120A:00_04F3:319B_Touchpad";
   in_mouse_mxmaster3 = "1133:16514:Logitech_MX_Master_3";
   in_mouse_aerox3 = "4152:6200:SteelSeries_SteelSeries_Aerox_3_Wireless";
   in_touchscreen_carbon = "1267:11840:ELAN3915:00_04F3:2E40";
@@ -87,6 +91,7 @@ in
 {
   imports = [
     ./gui-wayland.nix
+    ../mixins/kanshi.nix
     ../mixins/waybar.nix
   ];
   config = {
@@ -133,24 +138,11 @@ in
             terminal = prefs.default_term;
             fonts = prefs.swayfonts;
             focus.followMouse = "always";
-            colors =
-              let
-                # from gruvbox image:
-                red = "#cc241d";
-                pink = "#d3869b";
-                blue = "#458588";
-                green = "#b8bb26";
-                yellow = "#d79921";
-                orange = "#fe8019";
-                # bgcolor = "#2c2c2c";
-                bgcolor = "#000000";
-                _f = red;
-              in
-              {
-                "focused" = { border = _f; background = _f; text = "#ffffff"; indicator = "#ffffff"; childBorder = _f; };
-                "unfocused" = { border = bgcolor; background = bgcolor; text = "#888888"; indicator = "#ffffff"; childBorder = bgcolor; };
-              };
-            gaps = { inner = 2; outer = 2; };
+            colors = {
+              "focused" = { border = borderActive; background = borderActive; text = "#ffffff"; indicator = "#ffffff"; childBorder = borderActive; };
+              "unfocused" = { border = borderInactive; background = borderInactive; text = "#888888"; indicator = "#ffffff"; childBorder = borderInactive; };
+            };
+            gaps = { inner = 2; outer = 6; };
             window.border = 4;
             window.titlebar = false;
             window.commands = [
@@ -166,45 +158,20 @@ in
             ];
             input = {
               "${in_tp_carbon}" = _touchpad;
+              "${in_tp_zeph}" = _touchpad;
               "${in_mouse_mxmaster3}" = _mouse;
               "${in_mouse_aerox3}" = _mouse;
               "${in_touchscreen_carbon}" = { events = "disabled"; };
             };
             output = {
-              "${out_aw3418dw}" = {
-                mode = "3440x1440@120Hz";
-                pos = "0 0";
-                subpixel = "rgb";
-                scale = "1.0";
-                adaptive_sync = "on";
-              };
-              "${out_aw2521h}" = {
-                mode = "1920x1080@340Hz";
-                pos = "0 0";
-                subpixel = "rgb";
-                scale = "1.0";
-                adaptive_sync = "on";
-              };
-              "${out_carbon}" = {
-                mode = "2880x1800@90Hz";
-                pos = "3440 0";
-                subpixel = "rgb";
-                scale = "1.8";
-                adaptive_sync = "on";
-              };
-              "${out_lgc165}" = {
-                disable = "";
-              };
-              "*" = {
-                background = background;
-              };
+              "*" = { background = background; };
             };
             bars = [ ];
             keybindings = {
               "${modifier}+Return" = "exec ${terminal}";
               "${modifier}+Shift+q" = "kill";
 
-              "${modifier}+Escape" = "exec ${prefs.default_launcher}";
+              "${modifier}+Escape" = "exec ${pkgs.sirula}/bin/sirula";
               "${modifier}+Ctrl+Alt+Delete" = "exec ${swaymsg} exit";
               "${modifier}+Ctrl+Alt+Insert" = "exec ${swaymsg} reload";
 

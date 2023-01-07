@@ -4,6 +4,8 @@ let
 in
 {
   imports = [
+    ./unfree.nix
+
     ../../profiles/interactive.nix
     ../../profiles/addon-laptop.nix
 
@@ -11,7 +13,6 @@ in
     ../../mixins/plex.nix
     ../../mixins/rclone-googledrive-mounts.nix
     ../../mixins/syncthing.nix
-    ../../mixins/unifi.nix
     ../../mixins/zfs.nix
 
     inputs.nixos-hardware.nixosModules.common-cpu-amd
