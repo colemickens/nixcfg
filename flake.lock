@@ -1035,11 +1035,11 @@
     },
     "nixpkgs-cross-riscv64": {
       "locked": {
-        "lastModified": 1673291908,
-        "narHash": "sha256-aOVFH1e5won+KgnVHwmtWgCddUbRL8n//ZDHQwN1Ogc=",
+        "lastModified": 1673297785,
+        "narHash": "sha256-s4IeGAOsVki9N4RkebRZX9ccMDzt68nRy5SGqqqv6P0=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "085476fd2b8142563cf21ae7941c41a1e3fdbb73",
+        "rev": "cfe6333f7645981cd25f2b6d08ab8ad55ee8393b",
         "type": "github"
       },
       "original": {
@@ -1099,16 +1099,16 @@
     },
     "nixpkgs-stable": {
       "locked": {
-        "lastModified": 1672580127,
-        "narHash": "sha256-3lW3xZslREhJogoOkjeZtlBtvFMyxHku7I/9IVehhT8=",
+        "lastModified": 1673163619,
+        "narHash": "sha256-B33PFBL64ZgTWgMnhFL3jgheAN/DjHPsZ1Ih3z0VE5I=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "0874168639713f547c05947c76124f78441ea46c",
+        "rev": "8c54d842d9544361aac5f5b212ba04e4089e8efe",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixos-22.05",
+        "ref": "nixos-22.11",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -1171,11 +1171,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1673291661,
-        "narHash": "sha256-4jfWCKBhIMCCiw1dFz4WadSXLbSA4+0Yiy4BWvY47aY=",
+        "lastModified": 1673297778,
+        "narHash": "sha256-BIuqD+eraGgC5PARKZiuGKPHoT20BsTb26Y+22ucuqg=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "267dbf228d90355dbd60ce5233ce5c9eb14a2475",
+        "rev": "83928112b2b807104380000b5595792e4262e465",
         "type": "github"
       },
       "original": {
@@ -1221,11 +1221,11 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1673295766,
-        "narHash": "sha256-Gg7NA2T3n5TC9Ddrz+L4yS2Jrc9l/BBU3iD8rvVeAeo=",
+        "lastModified": 1673297473,
+        "narHash": "sha256-FnAE5bgiojigrGXj76kB4B/T0deX9O2O9Q6zbDeSHRE=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "7d054fc85c23e66bdd48845a0369761e338faa9d",
+        "rev": "1a3f9619d7cc35bc6b8d2f9016f4b49144aded3b",
         "type": "github"
       },
       "original": {
