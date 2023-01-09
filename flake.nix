@@ -20,7 +20,7 @@
     sops-nix = { url = "github:Mic92/sops-nix/master"; inputs."nixpkgs".follows = "nixpkgs"; };
     hyprland = { url = "github:hyprwm/Hyprland"; inputs."nixpkgs".follows = "nixpkgs"; };
     ironbar = { url = "github:JakeStanger/ironbar"; inputs."nixpkgs".follows = "nixpkgs"; };
-    cosmic = { url = "github:pop-os/cosmic-comp"; inputs = {"fenix".follows = "fenix"; "nixpkgs".follows = "nixpkgs"; }; };
+    cosmic = { url = "github:pop-os/cosmic-comp"; inputs = { "fenix".follows = "fenix"; "nixpkgs".follows = "nixpkgs"; }; };
 
     nix-rice = { url = "github:colemickens/nix-rice"; inputs."nixpkgs".follows = "nixpkgs"; };
     terranix = { url = "github:terranix/terranix"; inputs.nixpkgs.follows = "nixpkgs"; };
@@ -106,58 +106,73 @@
       lib = inputs.lib-aggregate.lib;
 
       mkSystem = n: v: (v.pkgs.lib.nixosSystem ({
-        system = v.sys;
-        modules = [ ./hosts/${n}/configuration.nix ];
+        # system = v.sys;
+        modules = [
+          ./hosts/${n}/configuration.nix
+        ] ++ (if builtins.hasAttr "buildSys" v then [
+          ({ config, ... }: { config.nixpkgs.buildPlatform.system = v.buildSys; })
+        ] else [ ]);
         specialArgs = { inherit inputs; };
       }));
 
       ## NIXOS CONFIGS + TOPLEVELS ############################################
       nixosConfigsEx = {
         misc = {
-          installer = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
+          installer = { pkgs = inputs.nixpkgs; };
         };
         phone = {
-          pinephone = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
-          blueline = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
+          pinephone = { pkgs = inputs.nixpkgs; };
+          blueline = { pkgs = inputs.nixpkgs; };
         };
         sbc = {
-          radxazero1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
-          rockfiveb1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
-          openstick = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
-          aitchninesix1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
-          rpifour1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
-          rpithreebp1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
-          rpizerotwo1 = { pkgs = inputs.nixpkgs; sys = "aarch64-linux"; };
-          visionfiveone1 = { pkgs = inputs.nixpkgs-cross-riscv64; sys = "x86_64-linux"; };
-          visionfivetwo1 = { pkgs = inputs.nixpkgs-cross-riscv64; sys = "x86_64-linux"; };
+          radxazero1 = { pkgs = inputs.nixpkgs; };
+          rockfiveb1 = { pkgs = inputs.nixpkgs; };
+          openstick = { pkgs = inputs.nixpkgs; buildSys = "x86_64-linux"; };
+          aitchninesix1 = { pkgs = inputs.nixpkgs; };
+          rpifour1 = { pkgs = inputs.nixpkgs; };
+          rpithreebp1 = { pkgs = inputs.nixpkgs; };
+          rpizerotwo1 = { pkgs = inputs.nixpkgs; };
+          visionfiveone1 = { pkgs = inputs.nixpkgs-cross-riscv64; };
+          visionfivetwo1 = { pkgs = inputs.nixpkgs-cross-riscv64; };
         };
         pc = {
-          carbon = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
-          jeffhyper = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
-          raisin = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
-          slynux = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
-          xeep = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
-          zeph = { pkgs = inputs.nixpkgs; sys = "x86_64-linux"; };
+          carbon = { pkgs = inputs.nixpkgs; };
+          jeffhyper = { pkgs = inputs.nixpkgs; };
+          raisin = { pkgs = inputs.nixpkgs; };
+          slynux = { pkgs = inputs.nixpkgs; };
+          xeep = { pkgs = inputs.nixpkgs; };
+          zeph = { pkgs = inputs.nixpkgs; };
         };
       };
 
       nixosConfigs = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues nixosConfigsEx));
+      nixosConfigsCi = {
+        # TODO: can we shallow eval nixos configs to get hostPlatform and avoid this?
+        x86_64-linux = [
+          "zeph"
+          "slynux"
+          "xeep"
+          "raisin"
+          "carbon"
+          "jeffhyper" # decomission
+          "openstick"
+        ];
+        aarch64-linux = [
+          "rpizerotwo1"
+          "rpifour1"
+          "rpithreebp1"
+          "rockfiveb1"
+          "radxazero1"
+          "pinephone"
+          "blueline"
+        ];
+      };
       deployConfigs = {
         inherit (nixosConfigs)
           raisin
           xeep
           jeffhyper
           zeph
-          # radxazero1
-          # rockfiveb1
-          # visionfivetwo1
-          # rpizerotwo1 # broken??
-          # blueline
-          # pinephone
-          # rpifour1 # netboot
-          # rpithreebp1 # netboot
-          # visionfiveone1 # netboot
-          # openstick
           ;
       };
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);
@@ -298,9 +313,8 @@
               default = ({ }
                 // (lib.genAttrs [ "devtools" "ci" "devenv" ] (name: inputs.self.devShells.${system}.${name}.inputDerivation))
                 // (inputs.self.packages.${system})
-                // (lib.mapAttrs
-                (n: v: toplevels."${n}")
-                (lib.filterAttrs (n: v: v.sys == system) nixosConfigs))
+                // (lib.genAttrs nixosConfigsCi.${system} (n: toplevels."${n}")
+              )
               );
             };
           })

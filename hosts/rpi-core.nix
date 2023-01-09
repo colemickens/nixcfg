@@ -5,6 +5,8 @@ let
 in
 {
   config = {
+    nixpkgs.hostPlatform.system = "aarch64-linux";
+
     boot = {
       # low mem device
       tmpOnTmpfs = lib.mkDefault false;

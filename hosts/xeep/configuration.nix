@@ -27,6 +27,8 @@ in
   ];
 
   config = {
+    nixpkgs.hostPlatform.system = "x86_64-linux";
+
     networking.hostName = hn;
     system.stateVersion = "21.05";
     environment.systemPackages = with pkgs; [

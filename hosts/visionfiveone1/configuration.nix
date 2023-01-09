@@ -14,6 +14,8 @@ in
   ];
 
   config = {
+    nixpkgs.hostPlatform.system = "riscv64-linux";
+
     system.stateVersion = "21.11";
     nixpkgs.overlays = [
       (final: super: {
@@ -35,8 +37,6 @@ in
     documentation.doc.enable = false;
     documentation.info.enable = false;
     documentation.nixos.enable = false;
-
-    nixpkgs.crossSystem.system = "riscv64-linux";
 
     environment.systemPackages = with pkgs; [
       binutils

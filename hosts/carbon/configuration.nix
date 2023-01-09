@@ -34,6 +34,8 @@ in
   ];
 
   config = {
+    nixpkgs.hostPlatform.system = "x86_64-linux";
+
     system.stateVersion = "21.05";
     networking.hostName = hn;
     nixcfg.common.hostColor = "purple";

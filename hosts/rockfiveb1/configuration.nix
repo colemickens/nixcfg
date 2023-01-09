@@ -14,10 +14,12 @@ in
     ../../mixins/iwd-networks.nix
 
     ./unfree.nix
-  ]
-  ++ inputs.tow-boot-radxa-rock5b.nixosModules
-  ;
+
+    inputs.tow-boot-radxa-rock5b.nixosModules.default
+  ];
   config = {
+    nixpkgs.hostPlatform.system = "aarch64-linux";
+
     environment.systemPackages = with pkgs; [
       xdg-desktop-portal-hyprland
     ];

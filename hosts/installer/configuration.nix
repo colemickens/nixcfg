@@ -7,6 +7,8 @@
   ];
 
   config = {
+    nixpkgs.hostPlatform.system = "x86_64-linux";
+
     boot.loader.timeout = lib.mkOverride 10 10;
     documentation.enable = lib.mkOverride 10 false;
     documentation.nixos.enable = lib.mkOverride 10 false;

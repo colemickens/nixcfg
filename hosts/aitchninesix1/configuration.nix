@@ -16,10 +16,12 @@ in
     ../../mixins/tailscale.nix
     ../../mixins/sshd.nix
     # ../../mixins/iwd-networks.nix
-  ]
-  ++ inputs.tow-boot-radxa-rock5b.nixosModules
-  ;
+    inputs.tow-boot-radxa-rock5b.nixosModules.default
+  ];
+
   config = {
+    nixpkgs.hostPlatform.system = "aarch64-linux";
+
     nixpkgs.overlays = [
       (final: super: {
         makeModulesClosure = x:

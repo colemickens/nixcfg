@@ -3,7 +3,7 @@
 {
   imports = [
     ../../profiles/interactive.nix
-    
+
     ../../mixins/grub-signed-shim.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
@@ -12,6 +12,8 @@
   ];
 
   config = {
+    nixpkgs.hostPlatform.system = "x86_64-linux";
+
     system.stateVersion = "21.05";
     virtualisation.hypervGuest.enable = true;
 

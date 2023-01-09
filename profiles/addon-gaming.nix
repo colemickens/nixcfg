@@ -13,20 +13,22 @@
     #   # settings = {};
     # };
     hardware = {
-      xone.enable = true;
+      xone.enable = true; # xbox one wired/wireless driver
     };
     home-manager.users.cole = { pkgs, config, ... }@hm: {
       home.packages = with pkgs; [
-        evtest
-        linuxConsoleTools
+        evtest # misc input debug
+        linuxConsoleTools # joystick testing
+        protonup-ng # latest and greatest proton
 
         # vkbasalt
-        goverlay
+        # goverlay
         gamescope
-        protonup-ng
 
-        yuzu-mainline
-        ryujinx
+        # emulators
+        dolphin-emu # gamecube emu
+        ryujinx # switch emu
+        yuzu-mainline # switch emu
       ];
       # programs.mangohud = {
       #   enable = true;

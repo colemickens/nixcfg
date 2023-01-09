@@ -28,6 +28,8 @@ in
   ];
 
   config = {
+    nixpkgs.hostPlatform.system = "aarch64-linux";
+
     system.stateVersion = "22.05";
     networking.hostName = hostname;
     environment.systemPackages = with pkgs; [ usbutils lshw libqmi ];

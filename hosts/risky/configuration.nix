@@ -27,9 +27,9 @@ in
     inputs.visionfive-nix.nixosModules.visionfive
     # inputs.visionfive-nix.nixosModules.sdcard
     # inputs.visionfive-nix.nixosModules.sdcard # TODO: replace with our own custom installed-disk.nix module
-  ]
-  ++ inputs.tow-boot-visionfive.nixosModules
-  ;
+
+    inputs.tow-boot-visionfive.nixosModules.default
+  ];
 
   config = {
     system.build = rec {
@@ -64,12 +64,12 @@ in
 
     boot.initrd.systemd.network.networks = _networks;
     systemd.network.networks = _networks;
-    
+
     nixpkgs.crossSystem.system = "riscv64-linux";
     nixpkgs.overlays = [
       # TODO: port out whatever is needed from that repo
       inputs.visionfive-nix.overlay
-      
+
       # this is stupid, make my own netboot module:
       (final: prev: {
         grub2_efi = prev.writeShellScriptBin "foo" "bar";
@@ -130,7 +130,8 @@ in
       "brcmfmac"
       "dwmac_generic"
       "dw_axi_dmac_platform"
-      "dw_mmc-pltfm" "spi-dw-mmio"
+      "dw_mmc-pltfm"
+      "spi-dw-mmio"
       "motorcomm"
       "stmmac"
       "stmmac-platform"

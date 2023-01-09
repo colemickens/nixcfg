@@ -11,13 +11,15 @@ in
     ../../mixins/iwd-networks.nix
 
     ./unfree.nix
-  ]
-  ++ inputs.tow-boot-radxa-rock5b.nixosModules
-  ;
+
+    inputs.tow-boot-radxa-zero.nixosModules.default
+  ];
   config = {
+    nixpkgs.hostPlatform.system = "aarch64-linux";
+
     nixcfg.common.useZfs = false;
     nixcfg.common.defaultNetworking = lib.mkForce true; # why rpi-sdcard??
-    
+
     networking.hostName = "radxazero1";
     system.stateVersion = "21.11";
 
@@ -29,7 +31,7 @@ in
     system.build = rec {
       mbr_disk_id = "88888401";
     };
-    
+
     boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
     # boot.kernelPackages = lib.mkForce pkgs.linuxPackages_5_18;
     boot.loader = {

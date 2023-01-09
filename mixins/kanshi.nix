@@ -30,6 +30,9 @@ in
               { criteria = out_aw3418dw; position = "1920,0"; }
               { criteria = out_aw2521h; position = "0,0"; }
             ];
+            "zeph_undocked".outputs = [
+              { criteria = out_zeph; status = "enable"; scale = 1.7; }
+            ];
             "zeph_docked_aw34".outputs = [
               { criteria = out_zeph; status = "disable"; }
               { criteria = out_aw3418dw; position = "0,0"; }
