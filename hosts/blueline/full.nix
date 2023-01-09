@@ -6,7 +6,7 @@
     ../../mixins/pipewire.nix
 
     # ../../profiles/gui-gnomemobile.nix
-    ../../profiles/gui-wayland-sway2.nix
+    ../../profiles/gui-wayland-sway.nix
     # ../../profiles/gui-phosh.nix # tired of webkit-gtk issues
 
     # in bootstrap

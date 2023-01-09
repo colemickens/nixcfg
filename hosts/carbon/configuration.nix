@@ -5,8 +5,7 @@ let
 in
 {
   imports = [
-    # ../../profiles/gui-wayland-sway.nix
-    ../../profiles/gui-wayland-hyprland.nix
+    ../../profiles/gui-wayland-sway.nix
     ../../profiles/addon-dev.nix
     ../../profiles/addon-laptop.nix
     ../../profiles/addon-gaming.nix

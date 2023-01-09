@@ -31,7 +31,8 @@ in
           };
           colors = rec {
             primary.foreground = colors.foreground;
-            primary.background = colors.background;
+            # primary.background = colors.background;
+            primary.background = "#111111";
 
             normal = {
               black = colors.black;

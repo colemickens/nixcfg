@@ -14,6 +14,7 @@ in
 
     inputs.tow-boot-radxa-zero.nixosModules.default
   ];
+
   config = {
     nixpkgs.hostPlatform.system = "aarch64-linux";
 

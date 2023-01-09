@@ -210,10 +210,10 @@ def "main up" [] {
   main cache "'/home/cole/code/nixcfg#ciJobs.x86_64-linux.default'"
   if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: cache x86 failed" } }
 
+  main deploy; if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: deploy failed" } }
+
   main cache "'/home/cole/code/nixcfg#ciJobs.aarch64-linux.default'"
   if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: cache aarch64 failed" } }
-
-  main deploy; if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: deploy failed" } }
 }
 def "main selfup" [] {
   nix $nixopts build $"~/code/nixcfg#toplevels.(^hostname | str trim)" --out-link /tmp/selfup

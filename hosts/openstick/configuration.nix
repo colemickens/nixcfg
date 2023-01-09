@@ -6,6 +6,8 @@ in
 {
   imports = [
     ./unfree.nix
+    ../../profiles/addon-cross.nix
+
     # ../../mixins/common.nix
     # ../../mixins/helix.nix
     # ../../mixins/ssh.nix
@@ -47,12 +49,12 @@ in
       isNormalUser = true;
       password = "openstick2022";
     };
-    
+
     services.openssh = {
       enable = true;
       passwordAuthentication = lib.mkForce true;
     };
- 
+
     # I think this is needed for firmware to be present in stage-2 when wpa/something
     # fires it up?
     # COMPRESS_FW_LOADER was needed to be enabled in the kernel

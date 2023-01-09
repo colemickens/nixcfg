@@ -27,7 +27,7 @@ in
     system.stateVersion = "21.05";
     networking.hostName = "raisin";
 
-    nixcfg.common.hostColor = "yellow";
+    nixcfg.common.hostColor = "green";
 
     services.tailscale.useRoutingFeatures = "server";
 

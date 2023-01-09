@@ -13,7 +13,7 @@
     ../../profiles/user.nix
 
     # ../../profiles/gui-phosh.nix # tired of webkit-gtk issues
-    ../../profiles/gui-wayland-sway2.nix
+    ../../profiles/gui-wayland-sway.nix
 
     (import "${inputs.mobile-nixos-pinephone}/lib/configuration.nix" {
       device = "pine64-pinephone";
@@ -21,6 +21,8 @@
   ];
 
   config = {
+    nixpkgs.hostPlatform.system = "aarch64-linux";
+
     system.stateVersion = "22.05";
     networking.hostName = "pinephone";
 

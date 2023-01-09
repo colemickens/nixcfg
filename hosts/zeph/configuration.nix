@@ -10,7 +10,7 @@ in
 {
   imports = [
     # ../../profiles/gui-wayland-hyprland.nix
-    ../../profiles/gui-wayland-sway2.nix
+    ../../profiles/gui-wayland-sway.nix
     ../../profiles/addon-asus.nix
     ../../profiles/addon-dev.nix
     ../../profiles/addon-laptop.nix

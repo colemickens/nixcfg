@@ -72,7 +72,7 @@ let
       done
       while true; do
         set +e
-        ssh -o ConnectTimeout=5 cole@"$ip" "''${@}"
+        ssh -o ConnectTimeout=5 -t cole@"$ip" "''${@}"
       done
     '')
     (writeShellScriptBin "gpgssh" ''

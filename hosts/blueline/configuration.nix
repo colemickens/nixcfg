@@ -9,5 +9,7 @@
     # ./bootstrap.nix
     ./full.nix # includes bootstrap.nix
   ];
-  config = {};
+  config = {
+    nixpkgs.hostPlatform.system = "aarch64-linux";
+  };
 }

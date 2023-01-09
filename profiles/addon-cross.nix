@@ -2,10 +2,12 @@
 
 {
   config = {
+    networking.networkmanager.plugins = lib.mkForce [];
     nixpkgs.overlays = [
-      (final: prev: rec {
-        gnupg23 = final.gnupg23.override { openldap = "foo"; };
-        gnupg = gnupg23;
+      (final: prev: {
+        gnupg23 = prev.gnupg23.override { openldap = null; };
+        # openfortivpn = null;
+        # networkmanager-fortisslvpn = null;
       })
     ];
   };

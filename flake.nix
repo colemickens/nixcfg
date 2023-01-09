@@ -9,7 +9,7 @@
     lib-aggregate = { url = "github:nix-community/lib-aggregate"; }; #TODO: boo name! "libaggregate"?
 
     nixpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
-    nixpkgs-stable = { url = "github:nixos/nixpkgs/nixos-22.05"; }; # any stable to use
+    nixpkgs-stable = { url = "github:nixos/nixpkgs/nixos-22.11"; }; # any stable to use
     nixpkgs-cross-riscv64 = { url = "github:colemickens/nixpkgs/cmpkgs-cross-riscv64"; };
     rpipkgs = { url = "github:colemickens/nixpkgs/rpipkgs"; }; # used only for tow-boot/rpi
 
@@ -148,35 +148,35 @@
       nixosConfigs = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues nixosConfigsEx));
       nixosConfigsCi = {
         # TODO: can we shallow eval nixos configs to get hostPlatform and avoid this?
-        x86_64-linux = [
-          "zeph"
-          "slynux"
-          "xeep"
-          "raisin"
-          "carbon"
-          "jeffhyper" # decomission
-          "openstick"
-        ];
-        aarch64-linux = [
-          "rpizerotwo1"
-          "rpifour1"
-          "rpithreebp1"
-          "rockfiveb1"
-          "radxazero1"
-          "pinephone"
-          "blueline"
-        ];
+        x86_64-linux = {
+          inherit (nixosConfigs)
+            zeph carbon
+            slynux xeep raisin
+            jeffhyper
+            openstick
+            ;
+        };
+        aarch64-linux = {
+          inherit (nixosConfigs)
+            rpizerotwo1 rpithreebp1 rpifour1
+            radxazero1 rockfiveb1
+            pinephone/*blueline*/
+            ;
+        };
       };
       deployConfigs = {
+        # TODO: replace this with a service that pulls latest built
+        # dashboard to show what generation is deployed
         inherit (nixosConfigs)
-          raisin
-          xeep
-          jeffhyper
-          zeph
+          raisin xeep jeffhyper slynux zeph
           ;
       };
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);
       toplevels = (lib.mapAttrs (_: v: v.config.system.build.toplevel) nixosConfigurations);
+
+      # TODO: automatic cross-compiling now made easy with {host,build}Platform
+      crossConfigurations = (lib.mapAttrs (n: v: (mkSystem n (v // { buildSys = "x86_64-linux"; }))) nixosConfigs);
+      crossToplevels = (lib.mapAttrs (_: v: v.config.system.build.toplevel) crossConfigurations);
 
       ## SPECIAL OUTPUTS ######################################################
       images = let cfg = n: nixosConfigurations."${n}".config; in {
@@ -241,6 +241,7 @@
     lib.recursiveUpdate
       ({
         inherit nixosConfigsEx nixosConfigs nixosConfigurations deployConfigs toplevels;
+        inherit crossConfigurations crossToplevels;
         inherit images nixosModules overlays;
       })
       (
@@ -313,7 +314,7 @@
               default = ({ }
                 // (lib.genAttrs [ "devtools" "ci" "devenv" ] (name: inputs.self.devShells.${system}.${name}.inputDerivation))
                 // (inputs.self.packages.${system})
-                // (lib.genAttrs nixosConfigsCi.${system} (n: toplevels."${n}")
+                // (lib.genAttrs (builtins.attrNames nixosConfigsCi.${system}) (n: toplevels."${n}")
               )
               );
             };

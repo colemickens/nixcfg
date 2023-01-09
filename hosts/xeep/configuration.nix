@@ -35,7 +35,7 @@ in
       libsmbios # ? can't remember it
     ];
 
-    nixcfg.common.hostColor = "orange";
+    nixcfg.common.hostColor = "yellow";
     nixcfg.common.useXeepTimeserver = false;
 
     services.tailscale.useRoutingFeatures = "server";

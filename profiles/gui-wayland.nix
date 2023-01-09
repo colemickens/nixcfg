@@ -35,6 +35,7 @@
         grim # area selection
         slurp # screen capture
         wf-recorder # screen record
+        wev # event viewer
 
         # wayout # https://git.sr.ht/~shinyzenith/wayout (disp power mgmt)
         # wayout # https://git.sr.ht/~proycon/wayout (draw text to surface)
