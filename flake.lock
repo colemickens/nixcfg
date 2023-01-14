@@ -548,11 +548,11 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1673343832,
-        "narHash": "sha256-cqjTz4fyVp+THpAL+ZQVdJDAgadc+92Vdq5skVWIufw=",
+        "lastModified": 1673740389,
+        "narHash": "sha256-vX5ZRBiRGRLNXH48LOs4kbm6SYzBBKw/2PYTwPn0Mnc=",
         "owner": "colemickens",
         "repo": "home-manager",
-        "rev": "92f79f8063fbb41f070ae21be698697bd640e0da",
+        "rev": "e34843ff5162c5eba79a9f752bbcb8e0bbbee667",
         "type": "github"
       },
       "original": {
@@ -702,11 +702,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1673720904,
-        "narHash": "sha256-ZdPRWVk01mvHxemsiUzpLFMzt3olIxfi+DNZ4xA7ao0=",
+        "lastModified": 1673740371,
+        "narHash": "sha256-clmqBmJZRgLtxseo5vDOjzLwGX7MLRJR7kwXhFKuqrc=",
         "owner": "martinvonz",
         "repo": "jj",
-        "rev": "bdaebf33c40233e537ef1584d5639679904e7bf5",
+        "rev": "50321f851f4ce0f484fcd029b4d04581ad356d64",
         "type": "github"
       },
       "original": {
@@ -1139,11 +1139,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1673664286,
-        "narHash": "sha256-nr1ksUlPiNNhm86RBuEpvreqH3eHzA0r49wMhxphk8U=",
+        "lastModified": 1673739598,
+        "narHash": "sha256-xZ0PryDR2Sp85q/Ptb/u2CEx9mmJauWlRyvOZpUNgj4=",
         "owner": "nix-community",
         "repo": "nixpkgs-wayland",
-        "rev": "b85d194266400f87dd8a1b62724b5b2e6caff23d",
+        "rev": "e145556894a45e5a491d72077cd80c0cf2e74dec",
         "type": "github"
       },
       "original": {
@@ -1221,11 +1221,11 @@
     },
     "rpipkgs": {
       "locked": {
-        "lastModified": 1673648445,
+        "lastModified": 1673739447,
         "narHash": "sha256-/ZtRG1J0Z7XtBKKsyYQT9LuLKhvDzdiBURuAq03VBaI=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "b9c118913ab0cfe4ae6df7b9e66b9d7e29df1932",
+        "rev": "dc05283afdbdece45e9f5e43baee592b3f19e82d",
         "type": "github"
       },
       "original": {
