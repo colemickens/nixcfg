@@ -8,31 +8,33 @@
   inputs = {
     lib-aggregate = { url = "github:nix-community/lib-aggregate"; }; #TODO: boo name! "libaggregate"?
 
-    nixpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
     nixpkgs-stable = { url = "github:nixos/nixpkgs/nixos-22.11"; }; # any stable to use
-    nixpkgs-cross-riscv64 = { url = "github:colemickens/nixpkgs/cmpkgs-cross-riscv64"; };
-    rpipkgs = { url = "github:colemickens/nixpkgs/rpipkgs"; }; # used only for tow-boot/rpi
 
-    firefox-nightly = { url = "github:colemickens/flake-firefox-nightly"; inputs."nixpkgs".follows = "nixpkgs"; };
-    home-manager = { url = "github:colemickens/home-manager/cmhm"; inputs."nixpkgs".follows = "nixpkgs"; };
+    cmpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
+    cmpkgs-cross-riscv64 = { url = "github:colemickens/nixpkgs/cmpkgs-cross-riscv64"; };
+    cmpkgs-rpipkgs = { url = "github:colemickens/nixpkgs/cmpkgs-rpipkgs"; }; # used only for tow-boot/rpi
+
+    firefox-nightly = { url = "github:colemickens/flake-firefox-nightly"; inputs."nixpkgs".follows = "cmpkgs"; };
+    home-manager = { url = "github:colemickens/home-manager/cmhm"; inputs."nixpkgs".follows = "cmpkgs"; };
     nixos-hardware = { url = "github:nixos/nixos-hardware"; };
-    nixpkgs-wayland = { url = "github:nix-community/nixpkgs-wayland/master"; inputs."nixpkgs".follows = "nixpkgs"; };
-    sops-nix = { url = "github:Mic92/sops-nix/master"; inputs."nixpkgs".follows = "nixpkgs"; };
-    hyprland = { url = "github:hyprwm/Hyprland"; inputs."nixpkgs".follows = "nixpkgs"; };
-    ironbar = { url = "github:JakeStanger/ironbar"; inputs."nixpkgs".follows = "nixpkgs"; };
-    cosmic = { url = "github:pop-os/cosmic-comp"; inputs = { "fenix".follows = "fenix"; "nixpkgs".follows = "nixpkgs"; }; };
+    nixpkgs-wayland = { url = "github:nix-community/nixpkgs-wayland/master"; inputs."nixpkgs".follows = "cmpkgs"; };
+    sops-nix = { url = "github:Mic92/sops-nix/master"; inputs."nixpkgs".follows = "cmpkgs"; };
+    hyprland = { url = "github:colemickens/Hyprland"; inputs."nixpkgs".follows = "cmpkgs"; };
+    # hyprland = { url = "github:hyprwm/Hyprland"; inputs."nixpkgs".follows = "cmpkgs"; };
+    ironbar = { url = "github:JakeStanger/ironbar"; inputs."nixpkgs".follows = "cmpkgs"; };
+    cosmic = { url = "github:pop-os/cosmic-comp"; inputs = { "fenix".follows = "fenix"; "nixpkgs".follows = "cmpkgs"; }; };
 
-    nix-rice = { url = "github:colemickens/nix-rice"; inputs."nixpkgs".follows = "nixpkgs"; };
-    terranix = { url = "github:terranix/terranix"; inputs.nixpkgs.follows = "nixpkgs"; };
-    fenix = { url = "github:figsoda/fenix"; inputs."nixpkgs".follows = "nixpkgs"; }; # used for nightly rust devtools
+    nix-rice = { url = "github:colemickens/nix-rice"; inputs."nixpkgs".follows = "cmpkgs"; };
+    terranix = { url = "github:terranix/terranix"; inputs."nixpkgs".follows = "cmpkgs"; };
+    fenix = { url = "github:figsoda/fenix"; inputs."nixpkgs".follows = "cmpkgs"; }; # used for nightly rust devtools
 
-    visionfive-nix = { url = "github:colemickens/visionfive-nix"; inputs."nixpkgs".follows = "nixpkgs-cross-riscv64"; };
-    nixos-riscv64 = { url = "github:colemickens/nixos-riscv64"; inputs."nixpkgs".follows = "nixpkgs-cross-riscv64"; };
+    visionfive-nix = { url = "github:colemickens/visionfive-nix"; inputs."nixpkgs".follows = "cmpkgs-cross-riscv64"; };
+    nixos-riscv64 = { url = "github:colemickens/nixos-riscv64"; inputs."nixpkgs".follows = "cmpkgs-cross-riscv64"; };
 
     # devtools:
-    helix = { url = "github:helix-editor/helix"; inputs."nixpkgs".follows = "nixpkgs"; };
-    jj = { url = "github:martinvonz/jj"; inputs."nixpkgs".follows = "nixpkgs"; };
-    nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; inputs."nixpkgs".follows = "nixpkgs"; };
+    helix = { url = "github:helix-editor/helix"; inputs."nixpkgs".follows = "cmpkgs"; };
+    jj = { url = "github:martinvonz/jj"; inputs."nixpkgs".follows = "cmpkgs"; };
+    nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; inputs."nixpkgs".follows = "cmpkgs"; };
     # experimental:
     nix-netboot-server = { url = "github:DeterminateSystems/nix-netboot-serve"; };
 
@@ -45,39 +47,39 @@
     # <tow-boot>
     tow-boot-rpi = {
       url = "github:colemickens/Tow-Boot/rpi";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.rpipkgs.follows = "rpipkgs";
+      inputs."nixpkgs".follows = "cmpkgs";
+      inputs.rpipkgs.follows = "cmpkgs-rpipkgs";
     };
     tow-boot-radxa-zero = {
       url = "github:colemickens/Tow-Boot/radxa-zero";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs."nixpkgs".follows = "cmpkgs";
     };
     tow-boot-radxa-rock5b = {
       url = "github:colemickens/Tow-Boot/radxa-rock5b";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs."nixpkgs".follows = "cmpkgs";
     };
     tow-boot-visionfive = {
       url = "github:colemickens/Tow-Boot/visionfive";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs."nixpkgs".follows = "cmpkgs";
     };
     # </tow-boot>
 
     # <mobile-nixos>
     mobile-nixos-sdm845 = {
       url = "github:colemickens/mobile-nixos/sdm845-blue";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs."nixpkgs".follows = "cmpkgs";
     };
     mobile-nixos-reset-scripts = {
       url = "github:colemickens/mobile-nixos/reset-scripts";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs."nixpkgs".follows = "cmpkgs";
     };
     mobile-nixos-pinephone = {
       url = "github:colemickens/mobile-nixos/pinephone-emmc";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs."nixpkgs".follows = "cmpkgs";
     };
     mobile-nixos-openstick = {
       url = "github:colemickens/mobile-nixos/openstick";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs."nixpkgs".follows = "cmpkgs";
     };
     # </mobile-nixos>
   };
@@ -118,30 +120,30 @@
       ## NIXOS CONFIGS + TOPLEVELS ############################################
       nixosConfigsEx = {
         misc = {
-          installer = { pkgs = inputs.nixpkgs; };
+          installer = { pkgs = inputs.cmpkgs; };
         };
         phone = {
-          pinephone = { pkgs = inputs.nixpkgs; };
-          blueline = { pkgs = inputs.nixpkgs; };
+          pinephone = { pkgs = inputs.cmpkgs; };
+          blueline = { pkgs = inputs.cmpkgs; };
         };
         sbc = {
-          radxazero1 = { pkgs = inputs.nixpkgs; };
-          rockfiveb1 = { pkgs = inputs.nixpkgs; };
-          openstick = { pkgs = inputs.nixpkgs; buildSys = "x86_64-linux"; };
-          aitchninesix1 = { pkgs = inputs.nixpkgs; };
-          rpifour1 = { pkgs = inputs.nixpkgs; };
-          rpithreebp1 = { pkgs = inputs.nixpkgs; };
-          rpizerotwo1 = { pkgs = inputs.nixpkgs; };
-          visionfiveone1 = { pkgs = inputs.nixpkgs-cross-riscv64; };
-          visionfivetwo1 = { pkgs = inputs.nixpkgs-cross-riscv64; };
+          radxazero1 = { pkgs = inputs.cmpkgs; };
+          rockfiveb1 = { pkgs = inputs.cmpkgs; };
+          openstick = { pkgs = inputs.cmpkgs; buildSys = "x86_64-linux"; };
+          aitchninesix1 = { pkgs = inputs.cmpkgs; };
+          rpifour1 = { pkgs = inputs.cmpkgs-rpipkgs; };
+          rpithreebp1 = { pkgs = inputs.cmpkgs-rpipkgs; };
+          rpizerotwo1 = { pkgs = inputs.cmpkgs-rpipkgs; };
+          visionfiveone1 = { pkgs = inputs.cmpkgs-cross-riscv64; };
+          visionfivetwo1 = { pkgs = inputs.cmpkgs-cross-riscv64; };
         };
         pc = {
-          carbon = { pkgs = inputs.nixpkgs; };
-          jeffhyper = { pkgs = inputs.nixpkgs; };
-          raisin = { pkgs = inputs.nixpkgs; };
-          slynux = { pkgs = inputs.nixpkgs; };
-          xeep = { pkgs = inputs.nixpkgs; };
-          zeph = { pkgs = inputs.nixpkgs; };
+          carbon = { pkgs = inputs.cmpkgs; };
+          jeffhyper = { pkgs = inputs.cmpkgs; };
+          raisin = { pkgs = inputs.cmpkgs; };
+          slynux = { pkgs = inputs.cmpkgs; };
+          xeep = { pkgs = inputs.cmpkgs; };
+          zeph = { pkgs = inputs.cmpkgs; };
         };
       };
 
@@ -168,7 +170,7 @@
         # TODO: replace this with a service that pulls latest built
         # dashboard to show what generation is deployed
         inherit (nixosConfigs)
-          raisin xeep jeffhyper slynux zeph
+          raisin xeep jeffhyper /*slynux*/ zeph
           ;
       };
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);
@@ -200,7 +202,7 @@
           installFiles = o.system.build.installFiles;
         };
 
-        # blueline = let o = (mkSystem "blueline" { sys = "x86_64-linux"; pkgs = inputs.nixpkgs; }).config; in {
+        # blueline = let o = (mkSystem "blueline" { sys = "x86_64-linux"; pkgs = inputs."nixpkgs"; }).config; in {
         blueline = let o = (cfg "blueline"); in {
           boot = o.mobile.outputs.android.android-bootimg;
         };
@@ -254,8 +256,8 @@
               config = ({ allowAliases = false; } // extraCfg);
             };
             pkgs_ = np: extraCfg: (import np (pkgcfg extraCfg));
-            pkgsFree = pkgs_ inputs.nixpkgs { };
-            pkgsUnfree = pkgs_ inputs.nixpkgs { allowUnfree = true; };
+            pkgsFree = pkgs_ inputs.cmpkgs { };
+            pkgsUnfree = pkgs_ inputs.cmpkgs { allowUnfree = true; };
             pkgsStable = pkgs_ inputs.nixpkgs-stable { };
             pkgs = pkgsFree;
             mkShell = (name: import ./shells/${name}.nix { inherit inputs pkgs; });

@@ -6,7 +6,7 @@
 }: let
   tomlFormat = pkgs.formats.toml {};
   gen = cfg: (tomlFormat.generate "helix-languages.toml" cfg);
-  helixUnstable = inputs.helix.outputs.packages.${pkgs.hostPlatform.system}.helix;
+  helixUnstable = inputs.helix.outputs.packages.${pkgs.stdenv.hostPlatform.system}.helix;
 in {
   config = {
     home-manager.users.cole = {pkgs, ...}: {

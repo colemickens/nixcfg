@@ -11,11 +11,11 @@ export CACHEDIR="${HOME}/.cache/rpi"; mkdir -p "${CACHEDIR}"
 
 export UPSTREAM="nixos/nixos-unstable-small"
 export BRANCH="rpipkgs"
-export BRANCH_PR="rpi-updates-auto"
-export BRANCH_DEV="rpipkgs-dev"
+# export BRANCH_PR="rpi-updates-auto"
+# export BRANCH_DEV="rpipkgs-dev"
 export NIXPKGS="/home/cole/code/nixpkgs/${BRANCH}"
-export NIXPKGS_PR="/home/cole/code/nixpkgs/${BRANCH_PR}"
-export NIXPKGS_DEV="/home/cole/code/nixpkgs/${BRANCH_DEV}"
+# export NIXPKGS_PR="/home/cole/code/nixpkgs/${BRANCH_PR}"
+# export NIXPKGS_DEV="/home/cole/code/nixpkgs/${BRANCH_DEV}"
 
 export ARCH="x86_64-linux" # what system you're doing the update from
 # oops they fixed linux_rpi's meta...

@@ -22,7 +22,7 @@ minimalMkShell {
       sd
       ripgrep
     ]) ++ [
-      inputs.nix-eval-jobs.outputs.packages.${pkgs.hostPlatform.system}.default
+      inputs.nix-eval-jobs.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
     ]
   );
 }

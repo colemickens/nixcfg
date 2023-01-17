@@ -20,10 +20,10 @@
         withLogo = false;
       };
       Tow-Boot.rpi = {
-        mainlineKernel = inputs.rpipkgs.legacyPackages.${pkgs.hostPlatform.system}.linuxPackages_latest.kernel;
-        foundationKernel = inputs.rpipkgs.legacyPackages.${pkgs.hostPlatform.system}.linuxPackages_rpi4.kernel;
-        #firmwarePackage = inputs.rpipkgs.legacyPackages.${pkgs.hostPlatform.system}.raspberrypifw;
-        firmwarePackage = inputs.rpipkgs.legacyPackages.${pkgs.hostPlatform.system}.raspberrypifw-master;
+        mainlineKernel = inputs.rpipkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system}.linuxPackages_latest.kernel;
+        foundationKernel = inputs.rpipkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system}.linuxPackages_rpi4.kernel;
+        #firmwarePackage = inputs.rpipkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system}.raspberrypifw;
+        firmwarePackage = inputs.rpipkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system}.raspberrypifw-master;
       };
     });
   };

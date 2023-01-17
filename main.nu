@@ -19,7 +19,7 @@ let-env CACHIX_SIGNING_KEY = (open $"/run/secrets/cachix_signing_key_colemickens
 
 def header [ color: string text: string spacer="▒": string ] {
   let text = $"("" | str rpad -c $spacer -l 2) ($text) "
-  let text = $"($text | str rpad -c $spacer -l 100)"
+  let text = $"($text | str rpad -c $spacer -l 50)"
   print -e $"(ansi $color)($text)(ansi reset)"
 }
 
@@ -120,20 +120,23 @@ def "main cache" [ drv: string ] {
 # def "main deploy" [ h: list ] {
 def "main deploy" [...h] {
   let h = ($h | flatten)
-  header light_gray_reverse $"DEPLOY"
   let h = (if ($h | length) != 0 { $h } else {
     let ref = $".#deployConfigs"
     do -c { ^nix eval --json --apply "x: builtins.attrNames x" $ref }
       | complete | get stdout | from json
   })
   let h = ($h | flatten)
+  header light_gray_reverse $"DEPLOY"
+  print -e $h
   $h | flatten | each { |h| deployHost $h }
 }
 
 def "main inputup" [] {
   header yellow_reverse "inputup"
   let srcdirs = ([
-    [ "nixpkgs/master" "nixpkgs/cmpkgs" "nixpkgs/cmpkgs-cross" "nixpkgs/cmpkgs-cross-riscv64" ]
+    [ "nixpkgs/master" "nixpkgs/cmpkgs"
+      "nixpkgs/rpipkgs" # keep our dev/auto branch rebased on n-u-s
+      "nixpkgs/cmpkgs-cross" "nixpkgs/cmpkgs-cross-riscv64" ]
     [ "home-manager/master" "home-manager/cmhm" ]
     [ "tow-boot/development" "tow-boot/development-flakes"
       "tow-boot/rpi" "tow-boot/radxa-zero" "tow-boot/radxa-rock5b" "tow-boot/visionfive" ]

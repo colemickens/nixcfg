@@ -1,7 +1,7 @@
 { pkgs, inputs, ... }:
 
 let
-  wayprompt = "${inputs.nixpkgs-wayland.outputs.packages.${pkgs.hostPlatform.system}.wayprompt}";
+  wayprompt = "${inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system}.wayprompt}";
   pinentryProgram = "${wayprompt}/bin/pinentry-wayprompt";
   # pinentryProgram = "${pkgs.pinentry-bemenu}/bin/pinentry-bemenu";
 
@@ -28,7 +28,13 @@ let
     enablePcscd = false;
     disableCcid = false;
   };
-  ecfg = config2;
+  config3 = def // {
+    enableGpgRules = true;
+    enableYubikeyRules = true;
+    enablePcscd = true;
+    disableCcid = true;
+  };
+  ecfg = config3;
 in {
   config = {
     # okay yikes, since some of this is dependent on scdaemon
@@ -84,7 +90,9 @@ in {
       programs.gpg.homedir = "${hm.config.xdg.dataHome}/gnupg";
       home.file."${hm.config.programs.gpg.homedir}/.keep".text = "";
       home.packages = with pkgs; [
-        yubikey-personalization yubico-piv-tool
+        yubikey-personalization
+        yubikey-manager
+        yubico-piv-tool
       ];
       # programs.gpg.package = ecfg.gnupgPkg;
       programs.gpg.scdaemonSettings =

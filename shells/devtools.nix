@@ -9,7 +9,7 @@ in
     name = "shell-devtools";
 
     nativeBuildInputs = with pkgs; [
-      (inputs.fenix.packages.${pkgs.hostPlatform.system}.latest.withComponents [
+      (inputs.fenix.packages.${pkgs.stdenv.hostPlatform.system}.latest.withComponents [
         "cargo"
         "clippy"
         "rust-src"
@@ -17,7 +17,7 @@ in
         "rustfmt"
       ])
 
-      inputs.fenix.packages.${pkgs.hostPlatform.system}.rust-analyzer
+      inputs.fenix.packages.${pkgs.stdenv.hostPlatform.system}.rust-analyzer
       bacon # TODO ??
 
       fzf
@@ -57,8 +57,8 @@ in
 
       gron
 
-      inputs.nix-eval-jobs.outputs.packages.${pkgs.hostPlatform.system}.default
-      # inputs.marksman.outputs.packages.${pkgs.hostPlatform.system}.default
+      inputs.nix-eval-jobs.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
+      # inputs.marksman.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
       # marksman
     ];
   }

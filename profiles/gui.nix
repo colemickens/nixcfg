@@ -1,7 +1,7 @@
 { pkgs, lib, config, inputs, ... }:
 
 let
-  firefoxFlake = inputs.firefox-nightly.packages.${pkgs.hostPlatform.system};
+  firefoxFlake = inputs.firefox-nightly.packages.${pkgs.stdenv.hostPlatform.system};
   # _firefox = pkgs.firefox-wayland;
   _firefox = lib.hiPrio firefoxFlake.firefox-nightly-bin;
 

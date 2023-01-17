@@ -21,7 +21,7 @@ minimalMkShell {
   RUST_BACKTRACE = 1;
   GST_PLUGIN_SYSTEM_PATH = gstreamerPath;
 
-  nativeBuildInputs = inputs.self.devShells.${pkgs.hostPlatform.system}.devtools.nativeBuildInputs ++ (with pkgs; [
+  nativeBuildInputs = inputs.self.devShells.${pkgs.stdenv.hostPlatform.system}.devtools.nativeBuildInputs ++ (with pkgs; [
     pkg-config
 
     /* coreboot */

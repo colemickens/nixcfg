@@ -91,7 +91,7 @@
             zenith # uh oh, no aarch64 support? noooooo
           ]))
           (lib.mkIf (pkgs.hostPlatform.system == "aarch_64-linux") (with pkgs; [ ]))
-          # ++ inputs.self.devShells.${pkgs.hostPlatform.system}.ci.nativeBuildInputs
+          # ++ inputs.self.devShells.${pkgs.stdenv.hostPlatform.system}.ci.nativeBuildInputs
           (with pkgs; [
             (pkgs.callPackage ../pkgs/commands.nix { })
 
@@ -109,7 +109,7 @@
             grex
             hexyl
             xh
-            dogdns
+            # dogdns # build error and we dont use
             ripasso-cursive
             ripgrep
             jless

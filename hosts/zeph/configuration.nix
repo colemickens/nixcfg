@@ -45,7 +45,7 @@ in
     nixcfg.common.skipMitigations = false;
     nixcfg.common.defaultKernel = (kernelPackages == null);
     environment.systemPackages = [
-      inputs.hyprland.packages.${pkgs.hostPlatform.system}.xdg-desktop-portal-hyprland
+      inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland
     ];
 
     time.timeZone = lib.mkForce null; # we're on the move

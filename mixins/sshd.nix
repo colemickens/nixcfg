@@ -5,11 +5,15 @@
     networking.firewall.allowedTCPPorts = [ 22 ];
     services.openssh = {
       enable = true;
-      passwordAuthentication = false;
-      permitRootLogin = lib.mkForce "no";
-      extraConfig = ''
-        StreamLocalBindUnlink yes
-      '';
+      settings = {
+        PermitRootLogin = "no";
+        PasswordAuthentication = false;
+        StreamLocalBindUnlink = "yes";
+        # StreamLocalBindUnlink = true; # ? untested
+      };
+      # extraConfig = ''
+      #   StreamLocalBindUnlink yes
+      # '';
     };
   };
 }

@@ -31,7 +31,7 @@ in
       home.packages = with pkgs; [
         wlr-randr
         glpaper
-        inputs.cosmic.outputs.packages.${pkgs.hostPlatform.system}.default
+        inputs.cosmic.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
       ];
       wayland.windowManager.hyprland = {
         enable = true;

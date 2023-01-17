@@ -2,7 +2,7 @@
 
 let
   prefs = import ./_preferences.nix { inherit pkgs inputs; };
-  convert = color: let c = inputs.nix-rice.lib.${pkgs.hostPlatform.system}.color.hexToRgba color; in [ c.r c.g c.b ];
+  convert = color: let c = inputs.nix-rice.lib.${pkgs.stdenv.hostPlatform.system}.color.hexToRgba color; in [ c.r c.g c.b ];
   colors = prefs.themes.zellij;
 in
 {

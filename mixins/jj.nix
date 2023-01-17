@@ -5,7 +5,7 @@
     home-manager.users.cole = { pkgs, ... }: {
       programs.jj = {
         enable = true;
-        package = inputs.jj.outputs.packages.${pkgs.hostPlatform.system}.jujutsu;
+        package = inputs.jj.outputs.packages.${pkgs.stdenv.hostPlatform.system}.jujutsu;
         settings = {
           user = {
             name = "Cole Mickens";
