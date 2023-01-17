@@ -48,6 +48,54 @@
         "type": "github"
       }
     },
+    "cmpkgs": {
+      "locked": {
+        "lastModified": 1673919667,
+        "narHash": "sha256-ZuzC0ZoyGwBZdsSJz2gwarXfVXMO8bpkzGn8pJ3xw90=",
+        "owner": "colemickens",
+        "repo": "nixpkgs",
+        "rev": "623402dbb6c4e38a107bdd5cc32e700488ad6e2b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "colemickens",
+        "ref": "cmpkgs",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "cmpkgs-cross-riscv64": {
+      "locked": {
+        "lastModified": 1673919694,
+        "narHash": "sha256-kJk4NTwBRSX1+bfwXZ5/9Vhym15hmxV2PkQrg4xItDE=",
+        "owner": "colemickens",
+        "repo": "nixpkgs",
+        "rev": "853f31e961d0fc47e389ff23ddcc268d8c3870e4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "colemickens",
+        "ref": "cmpkgs-cross-riscv64",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "cmpkgs-rpipkgs": {
+      "locked": {
+        "lastModified": 1673926250,
+        "narHash": "sha256-3ySB24h8U7FkbOvLCRKJ5cq1/zZV/giuqhtwZXygNcE=",
+        "owner": "colemickens",
+        "repo": "nixpkgs",
+        "rev": "c08830071423232b5952e59bb2d32e0bb0364de4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "colemickens",
+        "ref": "cmpkgs-rpipkgs",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "cosmic": {
       "inputs": {
         "crane": "crane",
@@ -57,7 +105,7 @@
         "flake-utils": "flake-utils_2",
         "nix-filter": "nix-filter",
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ]
       },
       "locked": {
@@ -216,7 +264,7 @@
     "fenix": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ],
         "rust-analyzer-src": "rust-analyzer-src"
       },
@@ -239,7 +287,7 @@
         "cachix": "cachix",
         "mozilla": "mozilla",
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ]
       },
       "locked": {
@@ -522,7 +570,7 @@
       "inputs": {
         "nci": "nci",
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ],
         "rust-overlay": "rust-overlay_2"
       },
@@ -543,7 +591,7 @@
     "home-manager": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ],
         "utils": "utils"
       },
@@ -566,7 +614,7 @@
       "inputs": {
         "hyprland-protocols": "hyprland-protocols",
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ],
         "wlroots": "wlroots",
         "xdph": "xdph"
@@ -609,7 +657,7 @@
     "ironbar": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ],
         "rust-overlay": "rust-overlay_3"
       },
@@ -698,7 +746,7 @@
     "jj": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ]
       },
       "locked": {
@@ -757,7 +805,7 @@
       "inputs": {
         "flake-compat": "flake-compat_2",
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ]
       },
       "locked": {
@@ -779,7 +827,7 @@
       "inputs": {
         "flake-compat": "flake-compat_3",
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ]
       },
       "locked": {
@@ -801,7 +849,7 @@
       "inputs": {
         "flake-compat": "flake-compat_4",
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ]
       },
       "locked": {
@@ -823,7 +871,7 @@
       "inputs": {
         "flake-compat": "flake-compat_5",
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ]
       },
       "locked": {
@@ -888,7 +936,7 @@
       "inputs": {
         "flake-parts": "flake-parts_2",
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ]
       },
       "locked": {
@@ -965,7 +1013,7 @@
       "inputs": {
         "iterm2-color-schemes": "iterm2-color-schemes",
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ]
       },
       "locked": {
@@ -1000,7 +1048,7 @@
     "nixos-riscv64": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs-cross-riscv64"
+          "cmpkgs-cross-riscv64"
         ]
       },
       "locked": {
@@ -1029,22 +1077,6 @@
       "original": {
         "owner": "nixos",
         "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs-cross-riscv64": {
-      "locked": {
-        "lastModified": 1673919694,
-        "narHash": "sha256-kJk4NTwBRSX1+bfwXZ5/9Vhym15hmxV2PkQrg4xItDE=",
-        "owner": "colemickens",
-        "repo": "nixpkgs",
-        "rev": "853f31e961d0fc47e389ff23ddcc268d8c3870e4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "ref": "cmpkgs-cross-riscv64",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -1135,7 +1167,7 @@
         "lib-aggregate": "lib-aggregate_2",
         "nix-eval-jobs": "nix-eval-jobs_2",
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ]
       },
       "locked": {
@@ -1169,24 +1201,11 @@
         "type": "github"
       }
     },
-    "nixpkgs_3": {
-      "locked": {
-        "lastModified": 1673919667,
-        "narHash": "sha256-ZuzC0ZoyGwBZdsSJz2gwarXfVXMO8bpkzGn8pJ3xw90=",
-        "owner": "colemickens",
-        "repo": "nixpkgs",
-        "rev": "623402dbb6c4e38a107bdd5cc32e700488ad6e2b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "ref": "cmpkgs",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
+        "cmpkgs": "cmpkgs",
+        "cmpkgs-cross-riscv64": "cmpkgs-cross-riscv64",
+        "cmpkgs-rpipkgs": "cmpkgs-rpipkgs",
         "cosmic": "cosmic",
         "fenix": "fenix",
         "firefox-nightly": "firefox-nightly",
@@ -1205,11 +1224,8 @@
         "nix-rice": "nix-rice",
         "nixos-hardware": "nixos-hardware",
         "nixos-riscv64": "nixos-riscv64",
-        "nixpkgs": "nixpkgs_3",
-        "nixpkgs-cross-riscv64": "nixpkgs-cross-riscv64",
         "nixpkgs-stable": "nixpkgs-stable",
         "nixpkgs-wayland": "nixpkgs-wayland",
-        "rpipkgs": "rpipkgs",
         "sops-nix": "sops-nix",
         "terranix": "terranix",
         "tow-boot-radxa-rock5b": "tow-boot-radxa-rock5b",
@@ -1217,22 +1233,6 @@
         "tow-boot-rpi": "tow-boot-rpi",
         "tow-boot-visionfive": "tow-boot-visionfive",
         "visionfive-nix": "visionfive-nix"
-      }
-    },
-    "rpipkgs": {
-      "locked": {
-        "lastModified": 1673830986,
-        "narHash": "sha256-HRuuUreSkxhuv/6Mr3WRvOFRgkHi1kGmBLVtXUhCOzI=",
-        "owner": "colemickens",
-        "repo": "nixpkgs",
-        "rev": "90732e6404acdc1e09192525a5258854220dbc10",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "ref": "rpipkgs",
-        "repo": "nixpkgs",
-        "type": "github"
       }
     },
     "rust-analyzer-src": {
@@ -1326,7 +1326,7 @@
     "sops-nix": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ],
         "nixpkgs-stable": "nixpkgs-stable_2"
       },
@@ -1351,7 +1351,7 @@
         "bats-support": "bats-support",
         "flake-utils": "flake-utils_7",
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ],
         "terranix-examples": "terranix-examples"
       },
@@ -1387,7 +1387,7 @@
     "tow-boot-radxa-rock5b": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ]
       },
       "locked": {
@@ -1408,7 +1408,7 @@
     "tow-boot-radxa-zero": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ]
       },
       "locked": {
@@ -1429,10 +1429,10 @@
     "tow-boot-rpi": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ],
         "rpipkgs": [
-          "rpipkgs"
+          "cmpkgs-rpipkgs"
         ]
       },
       "locked": {
@@ -1453,7 +1453,7 @@
     "tow-boot-visionfive": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "cmpkgs"
         ]
       },
       "locked": {
@@ -1509,7 +1509,7 @@
         "jh7100_secondBoot": "jh7100_secondBoot",
         "jh71xx-tools": "jh71xx-tools",
         "nixpkgs": [
-          "nixpkgs-cross-riscv64"
+          "cmpkgs-cross-riscv64"
         ],
         "vendor-kernel": "vendor-kernel"
       },
