@@ -23,11 +23,11 @@ in
             ];
             "carbon_docked_aw34".outputs = [
               { criteria = out_carbon; status = "disable"; }
-              { criteria = out_aw3418dw; position = "0,0"; }
+              { criteria = out_aw3418dw; position = "0,0"; mode = "3440x1440@120Hz"; }
             ];
             "carbon_docked_both".outputs = [
               { criteria = out_carbon; status = "disable"; }
-              { criteria = out_aw3418dw; position = "1920,0"; }
+              { criteria = out_aw3418dw; position = "1920,0"; mode = "3440x1440@120Hz"; }
               { criteria = out_aw2521h; position = "0,0"; }
             ];
             "zeph_undocked".outputs = [
@@ -35,7 +35,7 @@ in
             ];
             "zeph_docked_aw34".outputs = [
               { criteria = out_zeph; status = "disable"; }
-              { criteria = out_aw3418dw; position = "0,0"; }
+              { criteria = out_aw3418dw; position = "0,0"; mode = "3440x1440@120Hz"; }
             ];
           };
         };

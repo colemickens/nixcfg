@@ -8,6 +8,7 @@ buildLinux (args // {
   version = "${modDirVersion}";
   inherit modDirVersion;
 
+  # https://gitlab.freedesktop.org/JoshuaAshton/linux-hdr
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "JoshuaAshton";

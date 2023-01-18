@@ -20,7 +20,8 @@ in
         scrollback_editor "hx"
         ui {
           pane_frames {
-            rounded_corners true
+            // rounded_corners true
+            rounded_corners false
           }
         }
       '';

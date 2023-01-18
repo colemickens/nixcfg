@@ -81,9 +81,9 @@ in
           evince
           pinta
 
-          pw-viz
+          # pw-viz
           qpwgraph
-          helvum
+          # helvum
 
           # libnotify # does an app need this? patch it instead?
           # TODO: BROKEN WITH WAYLAND:?

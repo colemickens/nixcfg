@@ -1,5 +1,8 @@
 { pkgs, config, ... }:
 
+let
+  _yuzu = pkgs.yuzu-mainline.override { qtwebengine = null; };
+in
 {
   config = {
     networking.firewall = {
@@ -7,11 +10,28 @@
       allowedTCPPorts = [ 3074 ];
       allowedUDPPorts = [ 88 500 3074 2075 3544 4500 ];
     };
-    programs.steam.enable = true;
-    # programs.gamescope = {
-    #   enable = true;
-    #   # settings = {};
-    # };
+    services = {
+      replay-sorcery = {
+        enable = true;
+        enableSysAdminCapability = true;
+        # autostart = {};
+        # setting = {};
+      };
+    };
+    programs = {
+      steam = {
+        enable = true;
+      };
+      gamescope = {
+        enable = true;
+        enableRenice = true;
+        # settings = {};
+      };
+      gamemode = {
+        enable = true;
+        enableRenice = true;
+      };
+    };
     hardware = {
       xone.enable = true; # xbox one wired/wireless driver
     };
@@ -21,18 +41,19 @@
         linuxConsoleTools # joystick testing
         protonup-ng # latest and greatest proton
 
-        # vkbasalt
-        # goverlay
-        gamescope
+        vkbasalt
+        goverlay
 
         # emulators
         dolphin-emu # gamecube emu
         ryujinx # switch emu
-        yuzu-mainline # switch emu
+        _yuzu
       ];
-      # programs.mangohud = {
-      #   enable = true;
-      # };
+      programs = {
+        mangohud = {
+          enable = true;
+        };
+      };
     };
   };
 }

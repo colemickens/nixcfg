@@ -13,6 +13,8 @@ in
   imports = [
     ../rpi-tmpl-zerotwow.nix
 
+    ../../modules/rsynstall.nix
+
     # IMPORTER PICKS ONE:
     # ../../mixins/netboot-client.nix
     ../rpi-sdcard.nix

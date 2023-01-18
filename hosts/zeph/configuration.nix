@@ -39,14 +39,22 @@ in
   config = {
     nixpkgs.hostPlatform.system = "x86_64-linux";
 
+    home-manager.users.cole = { pkgs, config, ... }@hm: {
+      wayland.windowManager.sway.config = {
+        startup = [
+          { command = "${pkgs.asusctl}/bin/rog-control-center"; }
+        ];
+        keybindings = {
+          "XF86Launch1" = "exec ${pkgs.asusctl}/bin/rog-control-center";
+        };
+      };
+    };
+
     system.stateVersion = "21.05";
     networking.hostName = "zeph";
     nixcfg.common.hostColor = "purple";
     nixcfg.common.skipMitigations = false;
     nixcfg.common.defaultKernel = (kernelPackages == null);
-    environment.systemPackages = [
-      inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland
-    ];
 
     time.timeZone = lib.mkForce null; # we're on the move
     services.tailscale.useRoutingFeatures = "client";

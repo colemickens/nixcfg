@@ -13,7 +13,7 @@
     pipewire
     pulseaudio
     pulsemixer
-    pw-viz
+    # pw-viz
   ];
 
   programs.dconf.enable = true;

@@ -2,12 +2,14 @@
 
 let
   prefs = import ../mixins/_preferences.nix { inherit inputs config lib pkgs; };
+  # term = "${pkgs.wezterm}/bin/wezterm";
+  term = "${pkgs.alacritty}/bin/alacritty";
 
   # background = prefs.background;
   _bg = "#000000";
   background = "${_bg} solid_color";
   borderActive = "#33ccff";
-  borderInactive = _bg;
+  borderInactive = "#222222";
 
   # out_aw3418dw = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
   # out_aw2521h = "Dell Inc. Dell AW2521H #HLAYMxgwABDZ";
@@ -27,13 +29,12 @@ let
     scroll_method = "two_finger";
     natural_scroll = "enabled";
     accel_profile = "adaptive";
-    # pointer_accel = "1";
+    pointer_accel = "0.5";
     # accel_profile = "flat";
     # pointer_accel = "0";
   };
   _mouse = {
     accel_profile = "flat";
-    # pointer_accel = "0";
   };
 
   # silly gtk/gnome wayland schenanigans
@@ -143,7 +144,7 @@ in
               "focused" = { border = borderActive; background = borderActive; text = "#ffffff"; indicator = "#ffffff"; childBorder = borderActive; };
               "unfocused" = { border = borderInactive; background = borderInactive; text = "#888888"; indicator = "#ffffff"; childBorder = borderInactive; };
             };
-            gaps = { inner = 2; outer = 6; };
+            gaps = { inner = 2; outer = 0; };
             window.border = 4;
             window.titlebar = false;
             window.commands = [
@@ -156,6 +157,7 @@ in
             ];
             startup = [
               { always = true; command = "${gsettings_auto}"; }
+              { always = true; command = "${pkgs.kanshi}/bin/kanshictl reload"; }
             ];
             input = {
               "${in_tp_carbon}" = _touchpad;
@@ -169,15 +171,8 @@ in
             };
             bars = [ ];
             keybindings = {
-              "${modifier}+Return" = "exec ${terminal}";
+              "${modifier}+Return" = "exec ${term}";
               "${modifier}+Shift+q" = "kill";
-
-              # <zeph>
-              # "XF86AudioLowerVolume" = "exec ${pactl}/bin/pactl mute"
-              # "XF86AudioRaiseVolume" = "exec ${pactl}/bin/pactl mute"
-              # "XF86AudioMicMute" = "exec ${pactl}/bin/pactl mute"
-              # "XF86Launch1" = "exec ${pactl}/bin/pactl mute"
-              # </zeph>
 
               "${modifier}+Escape" = "exec ${pkgs.sirula}/bin/sirula";
               "${modifier}+Ctrl+Alt+Delete" = "exec ${swaymsg} exit";

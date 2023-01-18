@@ -135,8 +135,9 @@ def "main inputup" [] {
   header yellow_reverse "inputup"
   let srcdirs = ([
     [ "nixpkgs/master" "nixpkgs/cmpkgs"
-      "nixpkgs/rpipkgs" # keep our dev/auto branch rebased on n-u-s
-      "nixpkgs/cmpkgs-cross" "nixpkgs/cmpkgs-cross-riscv64" ]
+      "nixpkgs/cmpkgs-cross" "nixpkgs/cmpkgs-cross-riscv64"
+      # exclude rpipkgs/cmpkgs-rpipkgs, that is managed by `rpiup`
+    ]
     [ "home-manager/master" "home-manager/cmhm" ]
     [ "tow-boot/development" "tow-boot/development-flakes"
       "tow-boot/rpi" "tow-boot/radxa-zero" "tow-boot/radxa-rock5b" "tow-boot/visionfive" ]
