@@ -5,8 +5,6 @@ let nix = "./misc/nix.sh"
 let nixopts = [ "--builders-use-substitutes" "--option" "narinfo-cache-negative-ttl" "0"
   "--option" "extra-substituters" "'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://unmatched.cachix.org https://nix-community.cachix.org'"
   "--option" "extra-trusted-public-keys" "'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= unmatched.cachix.org-1:F8TWIP/hA2808FDABsayBCFjrmrz296+5CQaysosTTc= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs='"
-  "--option" "max-jobs" "4"
-  "--option" "cores" "2"
 ];
 let builder_x86 = (if ("BUILDER_X86" in $env) { $env.BUILDER_X86 | str trim } else { $"cole@localhost" })
 let builder_a64 = (if ("BUILDER_A64" in $env) { $env.BUILDER_A64 | str trim } else { $"colemickens@aarch64.nixos.community" })

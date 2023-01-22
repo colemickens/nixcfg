@@ -9,9 +9,8 @@ in
     ../../profiles/addon-laptop.nix
 
     ../../mixins/iwd-networks.nix
-    ../../mixins/libvirtd.nix
-    ../../mixins/plex.nix
-    ../../mixins/rclone-googledrive-mounts.nix
+    # ../../mixins/plex.nix
+    # ../../mixins/rclone-googledrive-mounts.nix
     ../../mixins/syncthing.nix
     ../../mixins/unifi.nix
     ../../mixins/zfs.nix
@@ -88,7 +87,6 @@ in
       "/" = { fsType = "zfs"; device = "${zpool}/root"; };
       "/nix" = { fsType = "zfs"; device = "${zpool}/nix"; };
       "/home" = { fsType = "zfs"; device = "${zpool}/home"; };
-      # "/backup" = { fsType = "zfs"; device = "${zpool}/backup"; };
       "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; };
     };
     swapDevices = [ ];

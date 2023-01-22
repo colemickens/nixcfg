@@ -40,13 +40,8 @@ rec {
   
   ## cursor
   # cursor = { name = "capitaine-cursors-white"; package = pkgs.capitaine-cursors; };
-#T# cursor = { name = "apple-cursor"; package = pkgs.apple-cursor; };
   # cursor = { name = "Bibata-Original-Amber"; package = pkgs.bibata-cursors; };
-  # cursor = null;
-  # cursor = { name = "Bibata-Original-Amber"; package = custom-bibata-cursors; };
-#T#cursor = { name = "Graphite"; package = pkgs.graphite-cursors; };
-#T# cursor = { name = "Qogir"; package = pkgs.qogir-cursors; }; # not packaged
-  # cursor = { name = "phinger-cursors-light"; package = pkgs.phinger-cursors; };
+  # cursor = { name = "Catppuccin-Latte-Pink-Cursors"; package = pkgs.catppuccin-cursors.lattePink; };
   cursor = { name = "macOS-BigSur-White"; package = pkgs.apple-cursor; };
   cursorSize = 48;
   

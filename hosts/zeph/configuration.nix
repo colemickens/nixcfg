@@ -24,6 +24,7 @@ in
     ../../mixins/hidpi.nix
     ../../mixins/ledger.nix
     ../../mixins/libvirt.nix
+    ../../mixins/libvirtd.nix
     ../../mixins/syncthing.nix
     ../../mixins/zfs.nix
 

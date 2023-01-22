@@ -11,12 +11,12 @@ in
       allowedUDPPorts = [ 88 500 3074 2075 3544 4500 ];
     };
     services = {
-      replay-sorcery = {
-        enable = true;
-        enableSysAdminCapability = true;
-        # autostart = {};
-        # setting = {};
-      };
+      # replay-sorcery = {
+      #   enable = true;
+      #   enableSysAdminCapability = true;
+      #   # autostart = {};
+      #   # setting = {};
+      # };
     };
     programs = {
       steam = {

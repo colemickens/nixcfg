@@ -19,7 +19,7 @@
     nixos-hardware = { url = "github:nixos/nixos-hardware"; };
     nixpkgs-wayland = { url = "github:nix-community/nixpkgs-wayland/master"; inputs."nixpkgs".follows = "cmpkgs"; };
     sops-nix = { url = "github:Mic92/sops-nix/master"; inputs."nixpkgs".follows = "cmpkgs"; };
-    hyprland = { url = "github:colemickens/Hyprland"; inputs."nixpkgs".follows = "cmpkgs"; };
+    hyprland = { url = "github:hyprwm/Hyprland"; inputs."nixpkgs".follows = "cmpkgs"; };
     # hyprland = { url = "github:hyprwm/Hyprland"; inputs."nixpkgs".follows = "cmpkgs"; };
     ironbar = { url = "github:JakeStanger/ironbar"; inputs."nixpkgs".follows = "cmpkgs"; };
     cosmic = { url = "github:pop-os/cosmic-comp"; inputs = { "fenix".follows = "fenix"; "nixpkgs".follows = "cmpkgs"; }; };
@@ -170,15 +170,15 @@
         # TODO: replace this with a service that pulls latest built
         # dashboard to show what generation is deployed
         inherit (nixosConfigs)
-          raisin xeep jeffhyper /*slynux*/ zeph
+          raisin xeep jeffhyper/*slynux*/ zeph
           ;
       };
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);
       toplevels = (lib.mapAttrs (_: v: v.config.system.build.toplevel) nixosConfigurations);
 
       # TODO: automatic cross-compiling now made easy with {host,build}Platform
-      crossConfigurations = (lib.mapAttrs (n: v: (mkSystem n (v // { buildSys = "x86_64-linux"; }))) nixosConfigs);
-      crossToplevels = (lib.mapAttrs (_: v: v.config.system.build.toplevel) crossConfigurations);
+      xnixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n (v // { buildSys = "x86_64-linux"; }))) nixosConfigs);
+      xtoplevels = (lib.mapAttrs (_: v: v.config.system.build.toplevel) xnixosConfigurations);
 
       ## SPECIAL OUTPUTS ######################################################
       images = let cfg = n: nixosConfigurations."${n}".config; in {
@@ -243,7 +243,7 @@
     lib.recursiveUpdate
       ({
         inherit nixosConfigsEx nixosConfigs nixosConfigurations deployConfigs toplevels;
-        inherit crossConfigurations crossToplevels;
+        inherit xnixosConfigurations xtoplevels;
         inherit images nixosModules overlays;
       })
       (
@@ -276,23 +276,7 @@
               // { default = devShells.devtools; };
 
             ## APPS ##############################################################
-            apps = lib.recursiveUpdate
-              ({
-                # TODO: this definitely goes somewhere else:
-                sdinstall = let d = "rpizerotwo1"; f = images.${d}.installFiles; in
-                  mkAppScript "${d}_sdinstall" ''
-                    set -x
-                    set -euo pipefail
-                    rm -f result
-                    ./main.nu cachedl 'images.${d}.installFiles'
-                    out="$(readlink result)"
-                    sudo rsync -avh --delete "$out/boot/" "/tmp/mnt-boot/"
-                    sudo rsync -avh "$out/root/" "/tmp/mnt-root/"
-                    sudo nix copy "''$(cat "$out/root/toplevel")" \
-                      --no-check-sigs \
-                      --to /tmp/mnt-root
-                  '';
-              })
+            apps = lib.recursiveUpdate {}
               (
                 let tfout = import ./cloud { inherit (inputs) terranix; inherit pkgs; }; in {
                   tf = { type = "app"; program = tfout.tf.outPath; };
@@ -313,11 +297,10 @@
             ## CI JOBS ###########################################################
             ciBundles = builtins.mapAttrs (n: v: pkgs.buildEnv { name = "cibundle"; paths = (builtins.attrValues v); }) ciJobs;
             ciJobs = {
-              default = ({ }
+              default = { }
                 // (lib.genAttrs [ "devtools" "ci" "devenv" ] (name: inputs.self.devShells.${system}.${name}.inputDerivation))
                 // (inputs.self.packages.${system})
                 // (lib.genAttrs (builtins.attrNames nixosConfigsCi.${system}) (n: toplevels."${n}")
-              )
               );
             };
           })

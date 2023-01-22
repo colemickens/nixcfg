@@ -70,6 +70,8 @@ in
           captive-browser
           jamesdsp
           ripcord
+
+          nheko # boo, why?! # TODO
         ]))
         (with pkgs; [
           (pkgs.callPackage ../pkgs/commands-gui.nix { })
@@ -92,7 +94,6 @@ in
           # ladybird
 
           # communcation
-          nheko
           freerdp
         ])
       ];

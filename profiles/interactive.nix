@@ -108,6 +108,7 @@
             # gex
             grex
             hexyl
+            macchina # fine, I give in
             xh
             # dogdns # build error and we dont use
             ripasso-cursive
