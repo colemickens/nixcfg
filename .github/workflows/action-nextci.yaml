@@ -13,7 +13,7 @@ jobs:
       CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}"
     steps:
     - uses: actions/checkout@v3
-    - uses: cachix/install-nix-action@v18
+    - uses: cachix/install-nix-action@v19
       with:
         extra_nix_config: |
           experimental-features = nix-command flakes ca-references
