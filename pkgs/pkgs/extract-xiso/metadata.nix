@@ -4,6 +4,6 @@ rec {
   repo = "extract-xiso";
   repo_git = "https://${domain}/${owner}/${repo}";
   branch = "master";
-  rev = "4488c39d7aa0bd0c371929a3fdeb456123aa46b3";
-  sha256 = "sha256-c0ayLMgb1cIWR/KJeUdwIq98kALdwHj+51J2MT0cBFo=";
+  rev = "3438285c5098757b112215c131e837876b566d31";
+  sha256 = "sha256-nPkdyxI2gxxCpE4sG9sax+mbKkhbe3zZENvlO7JSUEQ=";
 }
