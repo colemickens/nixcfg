@@ -16,8 +16,8 @@ let cachix_cache = "colemickens"
 let-env CACHIX_SIGNING_KEY = (open $"/run/secrets/cachix_signing_key_colemickens" | str trim)
 
 def header [ color: string text: string spacer="▒": string ] {
-  let text = $"("" | str rpad -c $spacer -l 2) ($text) "
-  let text = $"($text | str rpad -c $spacer -l 50)"
+  let text = $"("" | fill -a r -c $spacer -w 2) ($text) "
+  let text = $"($text | fill -a l -c $spacer -w 50)"
   print -e $"(ansi $color)($text)(ansi reset)"
 }
 
@@ -89,6 +89,7 @@ def deployHost [ host: string ] {
   let target = (tailscale ip --4 $host | str trim)
   header light_gray_reverse $"deploy: ($host) -> ($target)"
   let drvs = evalDrv $"/home/cole/code/nixcfg#toplevels.($host)"
+  print -e ($drvs | get outputs)
   buildDrvs $drvs
   cacheDrvs $drvs
   downDrvs $drvs $target
@@ -110,6 +111,7 @@ def "main build" [ drv: string ] {
 }
 def "main cache" [ drv: string ] {
   let drvs = evalDrv $drv
+  print -e ( $drvs | get 0)
   # let drvs = ($drvs | where isCached == false)
   buildDrvs $drvs
   cacheDrvs $drvs
@@ -149,29 +151,19 @@ def "main inputup" [] {
 
   let srcdirs = ($srcdirs | append (["linux/master"] | each {|it| $"($env.HOME)/code-ext/($it)"}))
 
-  $srcdirs | each { |dir|
+  for dir in $srcdirs {
+  # $srcdirs | each { |dir|
     print -e $"input: ($dir): (ansi yellow_dimmed)check(ansi reset)"
 
     # rebase, ignore if we're not rebasing
-    ^git -C $dir rebase --abort
-    # pull, rebase, errors here are fatal, we want things "clean/rebased/pushed"
+    do -i { ^git -C $dir rebase --abort }
     ^git -C $dir pull --rebase --no-gpg-sign
-    if ($env.LAST_EXIT_CODE != 0) {
-      print -e $"(ansi red) input: ($dir): failed rebase(ansi reset)"
-      error make { msg: $"rebase failed for ($dir)"}
-      break
-    }
-    # git push => also fatal if fails
     ^git -C $dir push origin HEAD -f
-    if ($env.LAST_EXIT_CODE != 0) {
-      print -e $"(ansi red) input: ($dir): failed push(ansi reset)"
-      error make { msg: $"push failed for ($dir)"};
-      break
-    }
 
     print -e $"input: ($dir): (ansi green)ok(ansi reset)"
-    []
-  } | flatten
+  }
+
+  return null # no idea why it returns an empty list otherwise
 }
 
 def "main pkgup" [] {
@@ -179,51 +171,44 @@ def "main pkgup" [] {
   do {
     cd pkgs
     ^./main.nu update
-    if ($env.LAST_EXIT_CODE != 0) { error make { msg: "failed to pkgs-update.nu" } }
   }
 }
 
 def "main rpiup" [] {
   header yellow_reverse "rpiup"
-  ^./misc/rpi/rpi-update.nu
-  if ($env.LAST_EXIT_CODE != 0) { error make { msg: "failed to rpi-update" } }
+  # ^./misc/rpi/rpi-update.nu
 }
 def "main lockup" [] {
   header yellow_reverse "lockup"
   ^$nix flake lock --recreate-lock-file
-  if ($env.LAST_EXIT_CODE != 0) { error make { msg: "failed to lockup" } }
 }
-def "main loopup" [] {
-  loop {
-    main up
-    if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: failed" } }
-    print -e $"(ansi purple)waiting 60 seconds...(ansi reset)"
-    sleep 60sec
-  }
+def "main cache_x86" [] {
+  header yellow_reverse "cache_x86"
+  main cache "'/home/cole/code/nixcfg#ciJobs.x86_64-linux.default'"
+}
+def "main cache_a64" [] {
+  header yellow_reverse "cache_a64"
+  main cache "'/home/cole/code/nixcfg#ciJobs.aarch64-linux.default'"
 }
 def "main up" [] {
-  header red_reverse "loopup" "▒"
+  header red_reverse "up" "▒"
 
-  main inputup; if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: inputup failed" } }
-  main pkgup; if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: pkgup failed" } }
-  main rpiup; if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: rpiup failed" } }
-  main lockup; if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: lockup failed" } }
-
-  main cache "'/home/cole/code/nixcfg#ciJobs.x86_64-linux.default'"
-  if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: cache x86 failed" } }
-
-  main deploy; if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: deploy failed" } }
-
-  main cache "'/home/cole/code/nixcfg#ciJobs.aarch64-linux.default'"
-  if ($env.LAST_EXIT_CODE != 0) { error make { msg: "up: cache aarch64 failed" } }
+  main inputup
+  main pkgup
+  main rpiup
+  main lockup
+  main cache_x86
+  main deploy
+  main cache_a64
 }
+
 def "main selfup" [] {
-  nix $nixopts build $"~/code/nixcfg#toplevels.(^hostname | str trim)" --out-link /tmp/selfup
+  nix $nixopts build $"/home/cole/code/nixcfg#toplevels.(^hostname | str trim)" --out-link /tmp/selfup
   sudo nix build --profile /nix/var/nix/profiles/system /tmp/selfup
   sudo /tmp/selfup/bin/switch-to-configuration switch
   rm /tmp/selfup
 }
-def main [] { echo "main" }
+def main [] { main up }
 
 ## action-rpiup ###############################################################
 def "main action-rpiup" [] {

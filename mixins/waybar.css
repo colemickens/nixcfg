@@ -47,13 +47,14 @@ window#waybar.chromium {
 */
 
 #workspaces button.current_output {
-    border-left: 3px solid #64727D;
+    border-right: 3px solid #ffffff;
     color: #ffffff;
 }
 
 #workspaces button.focused {
     background-color: #aaa;
     color: #000000;
+    border-right: 3px solid #ee00ff;
 }
 
 #workspaces button.focused.current_output {

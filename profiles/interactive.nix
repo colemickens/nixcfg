@@ -25,7 +25,7 @@
     ../mixins/skim.nix
     ../mixins/ssh.nix
     ../mixins/xdg.nix
-    # ../mixins/xplr.nix
+    # ../mixins/xplr.nix # TODO
     ../mixins/zellij.nix
     # ../mixins/zenith.nix
     ../mixins/zsh.nix
@@ -117,10 +117,11 @@
             sd
             procs
             bandwhich
+            universal-archiver
+            rustscan
             #sfz # simple file zerver? lol
             # prs # gopass replacement, oh fuck thank god, but no TOTP or PASSWORD_STORE_DIR or sequoia support
             # </rust pkgs>
-            python3Packages.pywatchman
             watchman
             watchexec
 
@@ -130,7 +131,6 @@
 
             pipes-rs
 
-            xplr
             difftastic
             just
             pueue

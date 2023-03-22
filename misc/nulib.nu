@@ -11,7 +11,7 @@ def "main startvm" [ vmname: string ] {
 
 def "main tails" [] {
   # sound=ac97 display=spice/qxl
-  let lso = (fetch "https://tails.boum.org/install/v2/Tails/amd64/stable/latest.json")
+  let lso = (http get "https://tails.boum.org/install/v2/Tails/amd64/stable/latest.json")
   let ver = ($lso.installations | first | get "version")
 
   let dest = $"($env.HOME)/.cache/tails/($ver)"

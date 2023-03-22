@@ -37,6 +37,10 @@ let
     accel_profile = "flat";
   };
 
+  tryStartSteam = pkgs.writeShellScript "try-start-steam.sh" ''
+    which steam && steam
+  '';
+
   # silly gtk/gnome wayland schenanigans
   # TODO: see if this is necessary if we get HM to do it? or our own systemd user units?
   gsettings_auto =
@@ -92,7 +96,7 @@ in
 {
   imports = [
     ./gui-wayland.nix
-    ../mixins/kanshi.nix
+    # ../mixins/kanshi.nix
     ../mixins/waybar.nix
   ];
   config = {
@@ -163,6 +167,7 @@ in
             startup = [
               { always = true; command = "${gsettings_auto}"; }
               { always = true; command = "${pkgs.kanshi}/bin/kanshictl reload"; }
+              { always = true; command = "${tryStartSteam}"; }
             ];
             input = {
               "${in_tp_carbon}" = _touchpad;
@@ -175,6 +180,15 @@ in
               "*" = { background = background; };
             };
             bars = [ ];
+            assigns = {
+              "8" = [
+                { class = "^steam_app_"; }
+              ];
+              "9" = [
+                { name = "^Steam$"; }
+                { class = "^steamwebhelper$"; }
+              ];
+            };
             keybindings = {
               "${modifier}+Return" = "exec ${term}";
               "${modifier}+Shift+q" = "kill";
@@ -182,6 +196,16 @@ in
               "${modifier}+Escape" = "exec ${pkgs.sirula}/bin/sirula";
               "${modifier}+Ctrl+Alt+Delete" = "exec ${swaymsg} exit";
               "${modifier}+Ctrl+Alt+Insert" = "exec ${swaymsg} reload";
+
+              "${modifier}+F1" = "exec ${swaymsg} firefox";
+              "${modifier}+F2" = "exec ${swaymsg} google-chrome-unstable";
+              "${modifier}+F3" = "exec ${swaymsg} steam";
+
+              # "XF86MicMute" = "";
+              "XF86AudioRaiseVolume" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume +2";
+              "XF86AudioLowerVolume" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume -2";
+              "XF86AudioMute" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --toggle-mute";
+              "XF86Launch4" = "exec ${pkgs.asusctl}/bin/asusctl profile -n";
 
               "${modifier}+h" = "focus left";
               "${modifier}+j" = "focus down";

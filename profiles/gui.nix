@@ -42,6 +42,13 @@ in
 
     programs.noisetorch.enable = true;
 
+    services = {
+      mullvad-vpn = {
+        enable = true;
+        enableExcludeWrapper = false;
+      };
+    };
+
     home-manager.users.cole = { pkgs, config, ... }@hm: {
       # home-manager/#2064
       systemd.user.targets.tray = {
@@ -53,8 +60,8 @@ in
 
       home.sessionVariables = {
         BROWSER = "firefox";
-        TERMINAL = "nu";
-        MOZ_USE_XINPUT2 = "1";
+        # TERMINAL = "nu";
+        # MOZ_USE_XINPUT2 = "1";
       };
 
       services = {
@@ -71,7 +78,7 @@ in
           jamesdsp
           ripcord
 
-          nheko # boo, why?! # TODO
+          nheko
         ]))
         (with pkgs; [
           (pkgs.callPackage ../pkgs/commands-gui.nix { })
@@ -87,12 +94,15 @@ in
           qpwgraph
           # helvum
 
-          # libnotify # does an app need this? patch it instead?
+          # libnotify # `notify-send`
+          toastify
           # TODO: BROKEN WITH WAYLAND:?
           # qpwgraph
           # pw-viz
-          # ladybird
+          # ladybird # qt? long build anyway?
 
+          # valent # kde connect (gtk)
+          
           # communcation
           freerdp
         ])

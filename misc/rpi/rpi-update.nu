@@ -25,7 +25,7 @@ do -c { ^bash ./misc/rpi/update-rpi-packages.sh }
 #
 # sanity check our work
 print -e $"(ansi purple)build all(ansi reset)"
-let p = $"~/code/nixpkgs/rpipkgs#legacyPackages.($builder_arch).pkgsCross.aarch64-multiplatform"
+let p = $"($env.HOME)/code/nixpkgs/rpipkgs#legacyPackages.($builder_arch).pkgsCross.aarch64-multiplatform"
 let store = $"ssh-ng://($env.BUILDER_X86)"
 (^nix build
   --keep-going --no-link

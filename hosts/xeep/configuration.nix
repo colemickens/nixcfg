@@ -1,7 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 let
   hn = "xeep";
-  static_ip = "192.168.1.10/16";
+  static_ip = "192.168.1.70/16";
 in
 {
   imports = [
@@ -12,7 +12,7 @@ in
     # ../../mixins/plex.nix
     # ../../mixins/rclone-googledrive-mounts.nix
     ../../mixins/syncthing.nix
-    ../../mixins/unifi.nix
+    # ../../mixins/unifi.nix
     ../../mixins/zfs.nix
     # ./services/revproxy.nix
     # ./services/home-assistant

@@ -8,7 +8,6 @@ in
     ../../profiles/gui-wayland-sway.nix
     ../../profiles/addon-dev.nix
     ../../profiles/addon-laptop.nix
-    ../../profiles/addon-gaming.nix
 
     ../../mixins/gfx-radeonsi.nix
     ../../mixins/gfx-debug.nix
@@ -49,7 +48,6 @@ in
       "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; neededForBoot = true; };
       "/" = { fsType = "zfs"; device = "${hn}pool/root"; neededForBoot = true; };
       "/nix" = { fsType = "zfs"; device = "${hn}pool/nix"; neededForBoot = true; };
-      "/persist" = { fsType = "zfs"; device = "${hn}pool/persist"; neededForBoot = true; };
       "/home" = { fsType = "zfs"; device = "${hn}pool/home"; neededForBoot = true; };
     };
     swapDevices = [{ device = "/dev/disk/by-partlabel/${hn}-swap"; }];

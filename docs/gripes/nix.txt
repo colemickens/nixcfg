@@ -10,3 +10,12 @@ remote stuff is terrible
 - hosts can set limits, or not
 - nix tries to be smarter about expanding to the size of the room
 - beyond that, requesters can offer build plan config that can override the host's config/defaults, up to its limits
+
+
+## scheduler
+1. copy from above
+2. cores is too complicated, it should be dynamic, possible to bias with historical
+   data, the docs should come with a recommendation
+3. why cant the builder use cgroups to ensure that NIX_BUILD_CORES is more than
+   just an ask?
+4. 

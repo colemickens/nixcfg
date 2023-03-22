@@ -31,7 +31,7 @@ in
               { criteria = out_aw2521h; position = "0,0"; }
             ];
             "zeph_undocked".outputs = [
-              { criteria = out_zeph; status = "enable"; scale = 1.7; }
+              { criteria = out_zeph; status = "enable"; scale = 1.7; adaptive_sync = "enable"; }
             ];
             "zeph_docked_aw34".outputs = [
               { criteria = out_zeph; status = "disable"; }

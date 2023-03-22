@@ -1,0 +1,3 @@
+snapshot retention:
+
+sudo zfs set com.sun:auto-snapshot:weekly=true,keep=52 storage

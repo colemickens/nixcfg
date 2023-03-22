@@ -3,6 +3,8 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
+, cmake
+, fontconfig
 , alsa-lib
 , libpulseaudio
 , sfml
@@ -33,6 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+    cmake
     makeWrapper
   ];
   buildInputs = [
@@ -42,6 +45,7 @@ rustPlatform.buildRustPackage rec {
     csfml
     wayland
     libglvnd
+    fontconfig
   ];
   postFixup = (map
     (f: ''

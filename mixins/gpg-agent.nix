@@ -73,7 +73,10 @@ in {
     # this allows gpg to see yubikey/openpgp with ccid (I think, no pcscd anyway)
     services.udev.packages =
       if ecfg.enableYubikeyRules
-      then [ pkgs.yubikey-personalization pkgs.yubico-piv-tool ]
+      then [
+        pkgs.yubikey-personalization
+        pkgs.yubico-piv-tool
+      ]
       else [];
 
     # using this requires use of `disable-ccid` in scdaemon.conf!

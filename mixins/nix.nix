@@ -33,6 +33,7 @@ in
         builders-use-substitutes = true;
         cores = 0;
         max-jobs = "auto";
+        use-xdg-base-directories = true;
         trusted-public-keys = [
           "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
           "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4="

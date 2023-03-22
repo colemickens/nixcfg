@@ -1,7 +1,7 @@
 { pkgs, tfutil, ... }:
 
 let
-  tf_equinix_version = "1.11.1";
+  tf_equinix_version = "~> 1.11";
 
   lib = pkgs.lib;
   mkVm = packet_config: instance_name: vm: {

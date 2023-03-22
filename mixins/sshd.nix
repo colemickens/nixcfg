@@ -6,7 +6,7 @@
     services.openssh = {
       enable = true;
       settings = {
-        PermitRootLogin = "no";
+        PermitRootLogin = lib.mkForce "no";
         PasswordAuthentication = false;
         StreamLocalBindUnlink = "yes";
         # StreamLocalBindUnlink = true; # ? untested

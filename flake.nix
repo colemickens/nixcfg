@@ -38,6 +38,10 @@
     # experimental:
     nix-netboot-server = { url = "github:DeterminateSystems/nix-netboot-serve"; };
 
+    # random apps:
+    jstest-gtk = { url = "gitlab:jstest-gtk/jstest-gtk"; inputs."nixpkgs".follows = "cmpkgs"; };
+    xboxdrv = { url = "gitlab:xboxdrv/xboxdrv"; /*inputs."nixpkgs".follows = "cmpkgs";*/ };
+
     # <maybe-unused>
     # impermanence = { url = "github:nix-community/impermanence"; }; # TODO: use it or lose it
     # nickel = { url = "github:tweag/nickel"; };
@@ -155,14 +159,14 @@
             zeph carbon
             slynux xeep raisin
             jeffhyper
-            openstick
+            # openstick
             ;
         };
         aarch64-linux = {
           inherit (nixosConfigs)
-            rpizerotwo1 rpithreebp1 rpifour1
-            radxazero1 rockfiveb1
-            pinephone/*blueline*/
+            # rpizerotwo1 rpithreebp1 rpifour1
+            # radxazero1 rockfiveb1
+            # pinephone/*blueline*/
             ;
         };
       };
@@ -170,7 +174,11 @@
         # TODO: replace this with a service that pulls latest built
         # dashboard to show what generation is deployed
         inherit (nixosConfigs)
-          raisin xeep jeffhyper/*slynux*/ zeph
+          zeph
+          jeffhyper
+          raisin
+          slynux
+          xeep
           ;
       };
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);
@@ -298,7 +306,8 @@
             ciBundles = builtins.mapAttrs (n: v: pkgs.buildEnv { name = "cibundle"; paths = (builtins.attrValues v); }) ciJobs;
             ciJobs = {
               default = { }
-                // (lib.genAttrs [ "devtools" "ci" "devenv" ] (name: inputs.self.devShells.${system}.${name}.inputDerivation))
+                # // (lib.genAttrs [ "devtools" "ci" "devenv" ] (name: inputs.self.devShells.${system}.${name}.inputDerivation))
+                # // (lib.genAttrs [ "devtools" "ci" "devenv" ] (name: inputs.self.devShells.${system}.${name}))
                 // (inputs.self.packages.${system})
                 // (lib.genAttrs (builtins.attrNames nixosConfigsCi.${system}) (n: toplevels."${n}")
               );

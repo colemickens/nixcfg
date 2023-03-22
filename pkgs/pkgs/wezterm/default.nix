@@ -9,6 +9,7 @@
 , fontconfig
 , installShellFiles
 , openssl
+, vulkan-loader
 , libGL
 , libX11
 , libxcb
@@ -106,7 +107,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   preFixup = lib.optionalString stdenv.isLinux ''
-    patchelf --add-needed "${libGL}/lib/libEGL.so.1" $out/bin/wezterm-gui
+    patchelf \
+      --add-needed "${libGL}/lib/libEGL.so.1" \
+      --add-needed "${vulkan-loader}/lib/libvulkan.so.1" \
+      $out/bin/wezterm-gui
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p "$out/Applications"
     OUT_APP="$out/Applications/WezTerm.app"

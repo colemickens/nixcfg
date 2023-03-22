@@ -1,20 +1,20 @@
 layout {
     pane command="./misc/syncthing-fwd.sh" {
-      args "18384" "carbon"
-	}
-    pane command="./misc/syncthing-fwd.sh" {
-      args "28384" "raisin"
-	}
-    pane command="./misc/syncthing-fwd.sh" {
-      args "38384" "xeep"
-	}
-    pane command="./misc/syncthing-fwd.sh" {
-      args "48384" "slynux"
-	}
-    pane command="./misc/syncthing-fwd.sh" {
-      args "58384" "jeffhyper"
+      args "8380" "carbon"
     }
     pane command="./misc/syncthing-fwd.sh" {
-      args "8389" "zeph"
+      args "8381" "jeffhyper"
+    }
+    pane command="./misc/syncthing-fwd.sh" {
+      args "8382" "raisin"
+    }
+    pane command="./misc/syncthing-fwd.sh" {
+      args "8383" "slynux"
+    }
+    pane command="./misc/syncthing-fwd.sh" {
+      args "8385" "xeep"
+    }
+    pane command="./misc/syncthing-fwd.sh" {
+      args "8386" "zeph"
     }
 }

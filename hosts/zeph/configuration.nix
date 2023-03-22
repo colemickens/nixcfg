@@ -40,6 +40,8 @@ in
   config = {
     nixpkgs.hostPlatform.system = "x86_64-linux";
 
+    console.earlySetup = lib.mkForce true;
+
     home-manager.users.cole = { pkgs, config, ... }@hm: {
       wayland.windowManager.sway.config = {
         startup = [
@@ -70,7 +72,7 @@ in
       "/mnt/games" = { fsType = "zfs"; device = "${hn}pool/games"; };
 
       "/mnt/data/t5" = { fsType = "zfs"; device = "${hn}pool/data/t5"; };
-      "/mnt/data/xeep_backup" = { fsType = "zfs"; device = "${hn}pool/data/xeep_backup"; };
+      # "/mnt/data/xeep_backup" = { fsType = "zfs"; device = "${hn}pool/data/xeep_backup"; };
     };
     swapDevices = [{ device = "/dev/disk/by-partlabel/${hn}-swap"; }];
 
@@ -82,7 +84,10 @@ in
         };
       };
       kernelPackages = lib.mkIf (kernelPackages != null) kernelPackages;
-      kernelModules = [ "iwlwifi" ];
+      kernelModules = [
+        "iwlwifi"
+        # "xpad"
+      ];
       kernelParams = [
         # "zfs.zfs_arc_max=${builtins.toString (1023 * 1024 * (1024 * 6))}"
       ];

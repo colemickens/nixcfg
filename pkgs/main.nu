@@ -10,7 +10,7 @@ let-env CACHIX_CACHE = (
 
 def header [ color: string text: string spacer="▒": string ] {
   let text = $"($text) "
-  let header = $"("" | str rpad -c $spacer -l 2) ($text | str rpad -c $spacer -l 100)"
+  let header = $"[pkgs] ("" | fill -a r -c $spacer -w 2) ($text | fill -a l -c $spacer -w 100)"
   print -e $"(ansi $color)($header)(ansi reset)"
 }
 

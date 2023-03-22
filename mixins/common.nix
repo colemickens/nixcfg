@@ -146,7 +146,13 @@ in
           ++ (if cfg.useXeepTimeserver then [ "192.168.1.10" ] else [ ])
           ++ defaultTimeServers;
       };
-      services.resolved.enable = true;
+      services.resolved = {
+        enable = true;
+        extraConfig = ''
+          [Resolve]
+          DNSSEC=false
+        '';
+      };
       services.timesyncd.enable = true;
       time.timeZone = lib.mkDefault "America/Los_Angeles";
 

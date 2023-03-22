@@ -1,15 +1,16 @@
-{
-  pkgs,
-  config,
-  inputs,
-  ...
-}: let
-  tomlFormat = pkgs.formats.toml {};
+{ pkgs
+, config
+, inputs
+, ...
+}:
+let
+  tomlFormat = pkgs.formats.toml { };
   gen = cfg: (tomlFormat.generate "helix-languages.toml" cfg);
   helixUnstable = inputs.helix.outputs.packages.${pkgs.stdenv.hostPlatform.system}.helix;
-in {
+in
+{
   config = {
-    home-manager.users.cole = {pkgs, ...}: {
+    home-manager.users.cole = { pkgs, ... }: {
       # xdg.configFile."helix/languages.toml".source = gen {
       #   languages = [
       #     {
@@ -53,10 +54,15 @@ in {
             };
             rulers = [ 80 120 ];
             bufferline = "always";
-            gutters = ["diagnostics" "line-numbers" "spacer" /*"git"*/ ];
+            gutters = [
+              "diagnostics"
+              "line-numbers"
+              "spacer"
+              /*"git"*/
+            ];
             statusline = {
               left = [ "mode" "file-name" ];
-              center = [];
+              center = [ ];
               right = [ "diagnostics" "selections" "position" "position-percentage" ];
             };
             true-color = true;
