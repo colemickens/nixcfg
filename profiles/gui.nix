@@ -88,6 +88,7 @@ in
           brightnessctl
           virt-viewer
           evince
+          ncspot
           pinta
 
           # pw-viz

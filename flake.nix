@@ -156,9 +156,8 @@
         # TODO: can we shallow eval nixos configs to get hostPlatform and avoid this?
         x86_64-linux = {
           inherit (nixosConfigs)
-            zeph carbon
-            slynux xeep raisin
-            jeffhyper
+            zeph xeep raisin
+            # jeffhyper slynux carbon
             # openstick
             ;
         };
