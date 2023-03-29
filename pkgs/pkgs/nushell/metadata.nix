@@ -1,10 +1,10 @@
 rec {
   domain = "github.com";
-  owner = "nushell";
+  owner = "colemickens";
   repo = "nushell";
-  repo_git = "https://${domain}/${owner}/${repo}";
+  # repo_git = "https://${domain}/${owner}/${repo}";
+  repo_git = "https://${domain}/colemickens/${repo}";
   branch = "main";
-  rev = "7ec5f2f2eb33e517d2390b1009bae76b5dbb9666";
-  sha256 = "sha256-tobNGneKzlfdIPe1BT0cob2XuQkyUUhmRWfeAbWbQkA=";
-  cargoSha256 = "sha256-6tAcq+JA4NgBe4dmPkVqRAwQIllG/IaBmQSYtXmGbw4=";
+  rev = "943d0d1b2dc83e89c5f87338505607e3beaf4222";
+  sha256 = "sha256-zwx2haHYI4l9tbTHgEF2odJY76K6oylsZFi08CieQqE=";
 }
