@@ -7,7 +7,9 @@ def main [] {
 def "main startvm" [] {
   main tails
   ^sudo setfacl -m g:qemu-libvirtd:r-x $env.HOME
-  ^sudo mount -t zfs zephpool/data/private /mnt/data/private
+  if ((do { ^findmnt --mountpoint /mnt/data/private } | complete).exit_code != 0) {
+    ^sudo mount -t zfs zephpool/data/private /mnt/data/private
+  }
   ^virsh -c 'qemu:///system' start linux2020
 }
 

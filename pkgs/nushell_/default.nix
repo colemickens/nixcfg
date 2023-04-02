@@ -26,23 +26,22 @@
 
 rustPlatform.buildRustPackage (
   let
-    version = "943d0d1b2dc83e89c5f87338505607e3beaf4222";
     owner = "colemickens";
     # owner = "nushell";
+    version = "0b9fc4ff3a502135be928fc09bfc9412c87fc5a6";
     pname = "nushell";
     src = fetchFromGitHub {
-      owner = pname;
+      owner = owner;
       repo = pname;
       rev = version;
-      sha256 = "sha256-zwx2haHYI4l9tbTHgEF2odJY76K6oylsZFi08CieQqE=";
+      sha256 = "sha256-pnRzCEdk+bochFsUug4YPlwfrHGIFyf8AgLS82d33Bw=";
     };
-  in
-  {
+  in {
     inherit version pname;
     inherit src;
 
     cargoLock = {
-      lockFile = src + "/Cargo.lock";
+      lockFile = "${src.out}/Cargo.lock";
       allowBuiltinFetchGit = true;
     };
 

@@ -29,16 +29,12 @@
 , vulkan-loader
 }:
 
-
-let
-  owner = "colemickens";
-  # owner = "wez";
-in rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "wezterm";
   version = "20230326-111934-3666303c";
 
   src = fetchFromGitHub {
-    owner = owner;
+    owner = "wez";
     repo = pname;
     rev = version;
     fetchSubmodules = true;

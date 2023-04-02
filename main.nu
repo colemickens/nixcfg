@@ -169,6 +169,9 @@ def "main inputup" [] {
     
     # nixpkgs-wayland
     "nixpkgs-wayland/master"
+
+    # extra packages that I might have forked
+    "nushell"
   ] | each { |it1| $it1 | each {|it| $"($env.HOME)/code/($it)" } })
 
   let srcdirs = ($srcdirs | append (["linux/master"] | each {|it| $"($env.HOME)/code-ext/($it)"}))
@@ -211,6 +214,15 @@ def "main pkgup" [] {
   for pkgname in $pkgs {
     header yellow_reverse $"pkgup: ($pkgname)"
 
+    if ($pkgname == "nushell") {
+      print -e "!!!!!!!!!!!!"
+      print -e "!!!!!!!!!!!!"
+      print -e "!!!!!! skipping nushell!"
+      print -e "!!!!!!!!!!!!"
+      print -e "!!!!!!!!!!!!"
+      continue
+    }
+    
     (nix-update
       --flake
       --version branch
