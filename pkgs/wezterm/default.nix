@@ -49,12 +49,13 @@ rustPlatform.buildRustPackage rec {
   '';
 
   cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "image-0.24.5" = "sha256-fTajVwm88OInqCPZerWcSAm1ga46ansQ3EzAmbT58Js=";
-      "libssh-rs-0.1.7" = "sha256-pLaWKk/iGy7FfoVafpPYzErnKudxeIWzssWv2Zlm58s=";
-      "xcb-imdkit-0.2.0" = "sha256-QOT9HLlA26DVPUF4ViKH2ckexUsu45KZMdJwoUhW+hA=";
-    };
+    lockFile = "${src.out}/Cargo.lock";
+    # outputHashes = {
+    #   "image-0.24.5" = "sha256-fTajVwm88OInqCPZerWcSAm1ga46ansQ3EzAmbT58Js=";
+    #   "libssh-rs-0.1.7" = "sha256-pLaWKk/iGy7FfoVafpPYzErnKudxeIWzssWv2Zlm58s=";
+    #   "xcb-imdkit-0.2.0" = "sha256-QOT9HLlA26DVPUF4ViKH2ckexUsu45KZMdJwoUhW+hA=";
+    # };
+    allowBuiltinFetchGit = true;
   };
 
   nativeBuildInputs = [
