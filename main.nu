@@ -197,7 +197,7 @@ def "main pkgup_old" [] {
 }
 
 def "main pkgup" [] {
-  header yellow_reverse "pkgup2"
+  header yellow_reverse "pkgup"
 
   let pkgs = (
     ^nix eval --json
@@ -206,8 +206,11 @@ def "main pkgup" [] {
     | str trim
     | from json)
 
+  print -e $pkgs
+
   for pkgname in $pkgs {
-    print -e $"pkgup: ($pkgname)"
+    header yellow_reverse $"pkgup: ($pkgname)"
+
     (nix-update
       --flake
       --version branch
