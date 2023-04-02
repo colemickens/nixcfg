@@ -128,6 +128,7 @@
             prs
 
             nix-output-monitor
+            ntfsprogs
 
             pipes-rs
 

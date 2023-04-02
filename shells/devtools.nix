@@ -1,64 +1,58 @@
-{
-  pkgs,
-  inputs,
-  ...
-}: let
-  minimalMkShell = import ./_minimal.nix {inherit pkgs;};
+{ pkgs
+, inputs
+, ...
+}:
+let
+  minimalMkShell = import ./_minimal.nix { inherit pkgs; };
 in
-  minimalMkShell {
-    name = "shell-devtools";
+minimalMkShell {
+  name = "shell-devtools";
 
-    nativeBuildInputs = with pkgs; [
-      (inputs.fenix.packages.${pkgs.stdenv.hostPlatform.system}.latest.withComponents [
-        "cargo"
-        "clippy"
-        "rust-src"
-        "rustc"
-        "rustfmt"
-      ])
+  nativeBuildInputs = with pkgs; [
+    (inputs.fenix.packages.${pkgs.stdenv.hostPlatform.system}.latest.withComponents [
+      "cargo"
+      "clippy"
+      "rust-src"
+      "rustc"
+      "rustfmt"
+    ])
 
-      inputs.fenix.packages.${pkgs.stdenv.hostPlatform.system}.rust-analyzer
-      bacon # TODO ??
+    inputs.fenix.packages.${pkgs.stdenv.hostPlatform.system}.rust-analyzer
+    bacon # TODO ??
 
-      fzf
-      skim
+    fzf
+    skim
 
-      /*
-      nix tools
-      */
-      nix
-      rnix-lsp
-      nil
-      nixpkgs-fmt
-      alejandra
-      nix-du
-      nix-tree
+    ## nix tools
+    nix
+    rnix-lsp
+    nil
+    nixpkgs-fmt
+    alejandra
+    nix-du
+    nix-tree
 
-      /*
-      tools
-      */
-      lldb
-      /*
-      nodejs
-      */
-      nodejs
-      yarn
-      /*
-      golang
-      */
-      go
-      go-outline
-      gotools
-      godef
-      /*
-      golint
-      */
-      gopls
+    nushell
 
-      gron
+    ## tools
+    lldb
+    ## nodejs
+    nodejs
+    yarn
 
-      inputs.nix-eval-jobs.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
-      # inputs.marksman.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
-      # marksman
-    ];
-  }
+    ## golang
+    go
+    go-outline
+    gotools
+    godef
+    
+    ## golint
+    gopls
+
+    gron
+
+    inputs.nix-eval-jobs.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
+    # inputs.marksman.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
+    # marksman
+  ];
+}

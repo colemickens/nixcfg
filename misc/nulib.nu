@@ -4,9 +4,15 @@ def main [] {
   print -e "commands: [ startvm, tails ]"
 }
 
-def "main startvm" [ vmname: string ] {
+def "main startvm" [] {
+  main tails
   ^sudo setfacl -m g:qemu-libvirtd:r-x $env.HOME
-  ^virsh -c 'qemu:///system' start $vmname
+  ^sudo mount -t zfs zephpool/data/private /mnt/data/private
+  ^virsh -c 'qemu:///system' start linux2020
+}
+
+def "main viewvm" [] {
+  ^virt-viewer -c "qemu:///system" linux2020
 }
 
 def "main tails" [] {

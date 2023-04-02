@@ -27,12 +27,8 @@ let
     # reboot
   '');
 
-  ssh-fix = (writeShellScriptBin "ssh-fix" ''
-    ent="$(ls -t /tmp/ssh-**/agent.* | head -1)"
-    ln -sf $ent /run/user/1000/sshagent
-    export SSH_AUTH_SOCK="/run/user/1000/sshagent"
-    ssh-add -L | ssh-add -T /dev/stdin
-    ssh-add -l
+  gpg-relearn = (writeShellScriptBin "gpg-relearn" ''
+    gpg-connect-agent "scd serialno" "learn --force" /bye
   '');
 
   _gpgssh = (writeShellScriptBin "gpgssh" ''
@@ -76,6 +72,14 @@ let
   fix-ssh = (writeShellScriptBin "fix-ssh" ''
     set -x
     ln -sf ${gpgSshSocket} /run/user/1000/sshagent
+  '');
+  fix-ssh-remote = (writeShellScriptBin "fix-ssh" ''
+    set -x
+    ent="$(ls -t /tmp/ssh-**/agent.* | head -1)"
+    ln -sf $ent /run/user/1000/sshagent
+    export SSH_AUTH_SOCK="/run/user/1000/sshagent"
+    ssh-add -L | ssh-add -T /dev/stdin
+    ssh-add -l
   '');
 
   fix-gpg =
@@ -135,9 +139,10 @@ in
     reboot-windows
 
     gssh
-    ssh-fix
+    gpg-relearn
     fix-gpg
     fix-ssh
+    fix-ssh-remote
     rec-cmd
     zj
     devenv

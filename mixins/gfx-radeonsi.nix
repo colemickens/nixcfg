@@ -1,11 +1,14 @@
 { pkgs, lib, config, inputs, ... }:
 
+
 {
   config = {
-    hardware.gpu.radeon = {
-      enable = true;
-      utils.enable = true;
-    };
+    hardware.opengl.enable = true;
+
+    # hardware.gpu.radeon = {
+    #   enable = true;
+    #   utils.enable = true;
+    # };
 
     environment.systemPackages = with pkgs; [
       nvtop

@@ -229,7 +229,7 @@
           # TODO: must be a better way?
           let
             __colemickens_nixcfg_pkgs = rec {
-              extract-xiso = prev.callPackage ./pkgs/pkgs/extract-xiso { };
+              # extract-xiso = prev.callPackage ./pkgs/pkgs/extract-xiso { };
               nushell = prev.callPackage ./pkgs/pkgs/nushell {
                 inherit (prev.darwin.apple_sdk.frameworks) AppKit Foundation Security;
                 inherit (prev.darwin.apple_sdk) sdk;
@@ -241,7 +241,7 @@
               wezterm = prev.darwin.apple_sdk_11_0.callPackage ./pkgs/pkgs/wezterm {
                 inherit (prev.darwin.apple_sdk_11_0.frameworks) Cocoa CoreGraphics Foundation UserNotifications;
               };
-              visualizer2 = prev.callPackage ./pkgs/pkgs/visualizer2 { };
+              # visualizer2 = prev.callPackage ./pkgs/pkgs/visualizer2 { };
             };
           in
           __colemickens_nixcfg_pkgs // { inherit __colemickens_nixcfg_pkgs; });

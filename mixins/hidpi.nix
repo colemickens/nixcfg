@@ -2,7 +2,8 @@
 
 {
   config = {
-    hardware.video.hidpi.enable = true;
+    # BUG
+    # hardware.video.hidpi.enable = true;
 
     # services = {
     #   kmscon.extraConfig = ''

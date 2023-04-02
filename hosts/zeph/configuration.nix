@@ -14,7 +14,7 @@ in
     ../../profiles/addon-asus.nix
     ../../profiles/addon-dev.nix
     ../../profiles/addon-laptop.nix
-    ../../profiles/addon-gaming.nix
+    # ../../profiles/addon-gaming.nix
 
     ../../mixins/gfx-radeonsi.nix
     ../../mixins/gfx-debug.nix
@@ -61,7 +61,6 @@ in
 
     time.timeZone = lib.mkForce null; # we're on the move
     services.tailscale.useRoutingFeatures = "client";
-    hardware.video.hidpi.enable = true;
 
     fileSystems = {
       "/efi" = { fsType = "vfat"; device = "/dev/nvme0n1p1"; neededForBoot = true; };
@@ -69,9 +68,9 @@ in
       "/" = { fsType = "zfs"; device = "${hn}pool/root"; neededForBoot = true; };
       "/nix" = { fsType = "zfs"; device = "${hn}pool/nix"; neededForBoot = true; };
       "/home" = { fsType = "zfs"; device = "${hn}pool/home"; neededForBoot = true; };
-      "/mnt/games" = { fsType = "zfs"; device = "${hn}pool/games"; };
 
       "/mnt/data/t5" = { fsType = "zfs"; device = "${hn}pool/data/t5"; };
+      # "/mnt/games" = { fsType = "zfs"; device = "${hn}pool/games"; };
       # "/mnt/data/xeep_backup" = { fsType = "zfs"; device = "${hn}pool/data/xeep_backup"; };
     };
     swapDevices = [{ device = "/dev/disk/by-partlabel/${hn}-swap"; }];

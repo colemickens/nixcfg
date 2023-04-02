@@ -15,6 +15,7 @@ let
   # out_aw2521h = "Dell Inc. Dell AW2521H #HLAYMxgwABDZ";
   # out_carbon = "SDC 0x4152 Unknown";
   # out_lgc165 = "Goldstar Company Ltd LG TV SSCR2 0x00000101";
+  out_zeph = "Thermotrex Corporation TL140ADXP01 Unknown";
 
   in_tp_carbon = "1739:52896:MSFT0001:00_06CB:CEA0_Touchpad";
   in_tp_zeph = "1267:12699:ASUE120A:00_04F3:319B_Touchpad";
@@ -96,14 +97,9 @@ in
 {
   imports = [
     ./gui-wayland.nix
-    # ../mixins/kanshi.nix
     ../mixins/waybar.nix
   ];
   config = {
-    # nixpkgs.overlays = [
-    #   inputs.nixpkgs-wayland.overlay
-    # ];
-
     xdg.portal.enable = true;
     xdg.portal.extraPortals = with pkgs; [
       xdg-desktop-portal-wlr
@@ -166,18 +162,20 @@ in
             ];
             startup = [
               { always = true; command = "${gsettings_auto}"; }
-              { always = true; command = "${pkgs.kanshi}/bin/kanshictl reload"; }
               { always = true; command = "${tryStartSteam}"; }
             ];
             input = {
-              "${in_tp_carbon}" = _touchpad;
               "${in_tp_zeph}" = _touchpad;
-              "${in_mouse_mxmaster3}" = _mouse;
               "${in_mouse_aerox3}" = _mouse;
-              "${in_touchscreen_carbon}" = { events = "disabled"; };
             };
             output = {
               "*" = { background = background; };
+              "${out_zeph}" = {
+                scale = "1.6";
+                mode = "2560x1600@120Hz";
+                adaptive_sync = "enable";
+                subpixel = "rgb";
+              };
             };
             bars = [ ];
             assigns = {
@@ -185,7 +183,8 @@ in
                 { class = "^steam_app_"; }
               ];
               "9" = [
-                { name = "^Steam$"; }
+                { app_id = "^Steam$"; }
+                # { class = "^steam$"; } # untested
                 { class = "^steamwebhelper$"; }
               ];
             };
@@ -201,7 +200,6 @@ in
               "${modifier}+F2" = "exec ${swaymsg} google-chrome-unstable";
               "${modifier}+F3" = "exec ${swaymsg} steam";
 
-              # "XF86MicMute" = "";
               "XF86AudioRaiseVolume" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume +2";
               "XF86AudioLowerVolume" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume -2";
               "XF86AudioMute" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --toggle-mute";

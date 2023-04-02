@@ -28,7 +28,7 @@ in
 
   config = {
     # hm, not sure about new name, does it convery that GUI is enabled with it?
-    hardware.drivers.enable = true;
+    # hardware.drivers.enable = true;
 
     hardware.bluetooth = {
       enable = true;
@@ -94,6 +94,9 @@ in
           # pw-viz
           qpwgraph
           # helvum
+
+          # EWWWWW
+          signal-desktop
 
           # libnotify # `notify-send`
           toastify

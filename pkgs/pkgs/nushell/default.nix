@@ -34,7 +34,10 @@ rustPlatform.buildRustPackage rec {
     inherit (metadata) rev sha256;
   };
 
-  cargoSha256 = metadata.cargoSha256;
+  cargoLock = {
+    lockFile = src + "/Cargo.lock";
+    allowBuiltinFetchGit = true;
+  };
 
   # enable pkg-config feature of zstd
   # cargoPatches = [ ./zstd-pkg-config.patch ];

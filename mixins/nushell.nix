@@ -9,6 +9,7 @@ let
   }).outPath;
   env_nu = _nu "env";
   config_nu = _nu "config";
+  prompt_nu = _nu "prompt";
 in
 {
   config = {
@@ -19,6 +20,8 @@ in
       {
         # home.file."${configDir}/env.nu".source = env_nu;
         # home.file."${configDir}/config.nu".source = config_nu;
+
+        home.file."${configDir}/prompt.nu".source = prompt_nu;
 
         programs.nushell = {
           enable = true;

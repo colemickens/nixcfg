@@ -4,6 +4,10 @@
   config = {
     environment.pathsToLink = [ "/share/zsh" ];
 
+    # BUG: come onnnnn nixpkgs
+    programs.zsh.enable = true;
+    # users.users.cole.ignoreShellProgramCheck = true;
+
     home-manager.users.cole = { pkgs, ... }@hm: {
       programs.zsh = {
         enable = true;
@@ -25,7 +29,7 @@
         # - tab-completion isn't color-highlighted
         # - can rev search + tab-completion use the same tool/path?
         # - better nix/lorri/direnv integration?
-        
+
         envExtra = ''
           export KEYTIMEOUT=10
           export MCFLY_RESULTS_SORT="LAST_RUN"

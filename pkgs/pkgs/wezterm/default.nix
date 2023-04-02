@@ -57,7 +57,10 @@ rustPlatform.buildRustPackage rec {
     rm -r wezterm-ssh/tests
   '';
 
-  cargoSha256 = metadata.cargoSha256;
+  cargoLock = {
+    lockFile = src + "/Cargo.lock";
+    allowBuiltinFetchGit = true;
+  };
 
   nativeBuildInputs = [
     installShellFiles
