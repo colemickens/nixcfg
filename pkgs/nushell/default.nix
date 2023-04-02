@@ -37,10 +37,11 @@ rustPlatform.buildRustPackage (
       sha256 = "sha256-pnRzCEdk+bochFsUug4YPlwfrHGIFyf8AgLS82d33Bw=";
     };
   in {
-    inherit version pname src;
+    inherit version pname;
+    inherit src;
 
     cargoLock = {
-      lockFile = src + "/Cargo.lock";
+    lockFile = "${src.out}/Cargo.lock";
       allowBuiltinFetchGit = true;
     };
 
