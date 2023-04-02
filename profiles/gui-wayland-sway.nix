@@ -1,6 +1,9 @@
 { pkgs, lib, config, inputs, ... }:
 
 let
+  color_cyan = "#33ccff";
+  color_pink = "#ee00ff";
+
   prefs = import ../mixins/_preferences.nix { inherit inputs config lib pkgs; };
   # term = "${pkgs.wezterm}/bin/wezterm";
   term = "${pkgs.alacritty}/bin/alacritty";
@@ -8,20 +11,13 @@ let
   # background = prefs.background;
   _bg = "#000000";
   background = "${_bg} solid_color";
-  borderActive = "#33ccff";
+  borderActive = color_pink;
   borderInactive = "#222222";
 
-  # out_aw3418dw = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
-  # out_aw2521h = "Dell Inc. Dell AW2521H #HLAYMxgwABDZ";
-  # out_carbon = "SDC 0x4152 Unknown";
-  # out_lgc165 = "Goldstar Company Ltd LG TV SSCR2 0x00000101";
   out_zeph = "Thermotrex Corporation TL140ADXP01 Unknown";
 
-  in_tp_carbon = "1739:52896:MSFT0001:00_06CB:CEA0_Touchpad";
   in_tp_zeph = "1267:12699:ASUE120A:00_04F3:319B_Touchpad";
-  in_mouse_mxmaster3 = "1133:16514:Logitech_MX_Master_3";
   in_mouse_aerox3 = "4152:6200:SteelSeries_SteelSeries_Aerox_3_Wireless";
-  in_touchscreen_carbon = "1267:11840:ELAN3915:00_04F3:2E40";
 
   _touchpad = {
     click_method = "clickfinger";
@@ -114,9 +110,6 @@ in
       })
     ];
 
-    #
-    #
-    # mixins/sway.nix:
     security.pam.services.swaylock = { };
 
     home-manager.users.cole = { pkgs, config, ... }@hm:
@@ -149,7 +142,7 @@ in
               "focused" = { border = borderActive; background = borderActive; text = "#ffffff"; indicator = "#ffffff"; childBorder = borderActive; };
               "unfocused" = { border = borderInactive; background = borderInactive; text = "#888888"; indicator = "#ffffff"; childBorder = borderInactive; };
             };
-            gaps = { inner = 2; outer = 0; };
+            # gaps = { inner = 2; outer = 0; };
             window.border = 4;
             window.titlebar = false;
             window.commands = [
@@ -178,16 +171,16 @@ in
               };
             };
             bars = [ ];
-            assigns = {
-              "8" = [
-                { class = "^steam_app_"; }
-              ];
-              "9" = [
-                { app_id = "^Steam$"; }
-                # { class = "^steam$"; } # untested
-                { class = "^steamwebhelper$"; }
-              ];
-            };
+            # assigns = {
+            #   "8" = [
+            #     { class = "^steam_app_"; }
+            #   ];
+            #   "9" = [
+            #     { app_id = "^Steam$"; }
+            #     # { class = "^steam$"; } # untested
+            #     { class = "^steamwebhelper$"; }
+            #   ];
+            # };
             keybindings = {
               "${modifier}+Return" = "exec ${term}";
               "${modifier}+Shift+q" = "kill";

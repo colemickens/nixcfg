@@ -31,6 +31,7 @@ minimalMkShell {
     alejandra
     nix-du
     nix-tree
+    nix-update
 
     nushell
 

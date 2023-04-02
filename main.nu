@@ -188,12 +188,35 @@ def "main inputup" [] {
   print -e "input: finished inputup"
 }
 
-def "main pkgup" [] {
+def "main pkgup_old" [] {
   header yellow_reverse "pkgup"
   do {
     cd pkgs
     ^./main.nu update
   }
+}
+
+def "main pkgup" [] {
+  header yellow_reverse "pkgup2"
+
+  let pkgs = (
+    ^nix eval --json
+      $".#packages.x86_64-linux"
+      --apply 'x: builtins.attrNames x'
+    | str trim
+    | from json)
+
+  for pkgname in $pkgs {
+    (nix-update
+      --flake
+      --version branch
+      $"pkgs.x86_64-linux.($pkgname)")
+
+    ^git commit --no-gpg-sign $"./pkgs/($pkgname)"
+  }
+
+  let pkgs_ = ($pkgs | each {|p| $".#packages.x86_64-linux.($p)" })
+  nix build $nixopts $pkgs_
 }
 
 def "main rpiup" [] {

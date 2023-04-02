@@ -22,19 +22,18 @@ let
     echo
     wait
   '';
-  # rdp-sly = writeShellScriptBin "rdp-sly" ''
-  #   RDPUSER="cole.mickens@gmail.com"
-  #   RDPPASS="$(gopass show -o "websites/microsoft.com/cole.mickens@gmail.com")"
+  rdp-sly = writeShellScriptBin "rdp-sly" ''
+    RDPUSER="cole.mickens@gmail.com"
+    RDPPASS="$(gopass show -o "websites/microsoft.com/cole.mickens@gmail.com")"
 
-  #   RDPHOST="''${RDPHOST:-"192.168.1.11"}"
+    RDPHOST="''${RDPHOST:-"192.168.1.11"}"
 
-  #   ${freerdp}/bin/wlfreerdp
-  #     /v:"''${RDPHOST}" \
-  #     /u:"''${RDPUSER}" \
-  #     /p:"''${RDPPASS}" \
-  #     /rfx +fonts /dynamic-resolution /compression-level:2
-  # '';
-
+    ${freerdp}/bin/wlfreerdp
+      /v:"''${RDPHOST}" \
+      /u:"''${RDPUSER}" \
+      /p:"''${RDPPASS}" \
+      /rfx +fonts /dynamic-resolution /compression-level:2
+  '';
   # gs = writeShellScriptBin "gs" ''
   #   set -x
   #   export ENABLE_GAMESCOPE_WSI=1
@@ -45,7 +44,7 @@ symlinkJoin {
   name = "commands-gui";
   paths = [
     wlproxylaunch
-    # rdp-sly
+    rdp-sly
     # gs
   ];
 }

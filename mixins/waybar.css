@@ -34,7 +34,7 @@ window#waybar.chromium {
     padding: 0px;
     color: #cccccc;
     min-height: 25px;
-    border-left: 3px solid transparent;
+    border-left: 2px solid transparent;
 }
 
 /* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
@@ -54,11 +54,11 @@ window#waybar.chromium {
 #workspaces button.focused {
     background-color: #aaa;
     color: #000000;
-    border-right: 3px solid #ee00ff;
+    border-right: 2px solid #ee00ff;
 }
 
 #workspaces button.focused.current_output {
-    border-left: 3px solid #ee00ff;
+    border-left: 2px solid #ee00ff;
 }
 
 #workspaces button.urgent {

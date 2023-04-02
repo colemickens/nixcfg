@@ -229,19 +229,14 @@
           # TODO: must be a better way?
           let
             __colemickens_nixcfg_pkgs = rec {
-              # extract-xiso = prev.callPackage ./pkgs/pkgs/extract-xiso { };
-              nushell = prev.callPackage ./pkgs/pkgs/nushell {
-                inherit (prev.darwin.apple_sdk.frameworks) AppKit Foundation Security;
-                inherit (prev.darwin.apple_sdk) sdk;
+              nushell = prev.callPackage ./pkgs/nushell {
+                inherit (prev.darwin.apple_sdk.frameworks) AppKit Security;
+                inherit (prev.darwin.apple_sdk_11_0) Libsystem;
               };
-              # space-cadet-pinball = prev.callPackage ./pkgs/pkgs/space-cadet-pinball { };
-              # space-cadet-pinball-unfree = prev.callPackage ./pkgs/pkgs/space-cadet-pinball {
-              #   _assets = import ./pkgs/pkgs/space-cadet-pinball/assets.nix { pkgs = prev; };
-              # };
-              wezterm = prev.darwin.apple_sdk_11_0.callPackage ./pkgs/pkgs/wezterm {
-                inherit (prev.darwin.apple_sdk_11_0.frameworks) Cocoa CoreGraphics Foundation UserNotifications;
+              wezterm = prev.darwin.apple_sdk_11_0.callPackage ./pkgs/wezterm {
+                inherit (prev.darwin.apple_sdk_11_0.frameworks)
+                  Cocoa CoreGraphics Foundation UserNotifications;
               };
-              # visualizer2 = prev.callPackage ./pkgs/pkgs/visualizer2 { };
             };
           in
           __colemickens_nixcfg_pkgs // { inherit __colemickens_nixcfg_pkgs; });
