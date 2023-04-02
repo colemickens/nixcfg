@@ -4,6 +4,6 @@ rec {
   repo = "wezterm";
   repo_git = "https://${domain}/${owner}/${repo}";
   branch = "main";
-  rev = "ee68e31bbd46e716876d9ceb044353ccdb7d8bdd";
-  sha256 = "sha256-XcnvR7/7pk3xHX1LUzh1Fiw1Aa0QnJ3ZvUb+qDVfM2M=";
+  rev = "000269261b31ce7cf51f5b197a5a5b7344ce5337";
+  sha256 = "sha256-uiesme7GT3eb8h1efWjR2Hrf5Ua1AqH6ek/yTaV/oUA=";
 }
