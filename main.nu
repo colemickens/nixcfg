@@ -207,6 +207,7 @@ def "main pkgup" [] {
     | from json)
 
   for pkgname in $pkgs {
+    print -e $"pkgup: ($pkgname)"
     (nix-update
       --flake
       --version branch
