@@ -33,16 +33,17 @@
 let
   owner = "colemickens";
   # owner = "wez";
-in rustPlatform.buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "d36ad7ca7f9054a9d2b49ffe8696c3e617623194";
+  version = "81d38e6b04d6b46bbcd57b127f3cf5b7a01dbd9a";
 
   src = fetchFromGitHub {
     owner = owner;
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-05gwW87yvLVanvReyZuEUxJqurIDJJT7YT+YoWepEp8=";
+    sha256 = "sha256-zYBClA34XRmmQK3NmMfYa/j6VZoswAe3JHtN/s8ux7I=";
   };
 
   postPatch = ''
@@ -54,12 +55,10 @@ in rustPlatform.buildRustPackage rec {
 
   cargoLock = {
     lockFile = "${src.out}/Cargo.lock";
-    # outputHashes = {
-    #   "image-0.24.5" = "sha256-fTajVwm88OInqCPZerWcSAm1ga46ansQ3EzAmbT58Js=";
-    #   "libssh-rs-0.1.7" = "sha256-pLaWKk/iGy7FfoVafpPYzErnKudxeIWzssWv2Zlm58s=";
-    #   "xcb-imdkit-0.2.0" = "sha256-QOT9HLlA26DVPUF4ViKH2ckexUsu45KZMdJwoUhW+hA=";
-    # };
-    allowBuiltinFetchGit = true;
+    outputHashes = {
+      "image-0.24.5" = "sha256-fTajVwm88OInqCPZerWcSAm1ga46ansQ3EzAmbT58Js=";
+      "xcb-imdkit-0.2.0" = "sha256-QOT9HLlA26DVPUF4ViKH2ckexUsu45KZMdJwoUhW+hA=";
+    };
   };
 
   nativeBuildInputs = [
