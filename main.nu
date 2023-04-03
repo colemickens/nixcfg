@@ -172,9 +172,14 @@ def "main inputup" [] {
 
     # extra packages that I might have forked
     "nushell"
+    "wezterm"
+    "nix-update"
   ] | each { |it1| $it1 | each {|it| $"($env.HOME)/code/($it)" } })
 
-  let srcdirs = ($srcdirs | append (["linux/master"] | each {|it| $"($env.HOME)/code-ext/($it)"}))
+  let extsrcdirs = [
+    "linux/master"
+  ];
+  let srcdirs = ($srcdirs | append ($extsrcdirs | each {|it| $"($env.HOME)/code-ext/($it)"}))
 
   for dir in $srcdirs {
   # $srcdirs | each { |dir|
@@ -225,6 +230,9 @@ def "main pkgup" [] {
     
     (nix-update
       --flake
+      --build
+      --format
+      --commit
       --version branch
       $"pkgs.x86_64-linux.($pkgname)")
 
@@ -271,7 +279,7 @@ def "main selfdeploy" [] {
 }
 def "main selfup" [] {
   main inputup
-  main pkgup
+  # main pkgup
   main rpiup
   main lockup
   main selfdeploy

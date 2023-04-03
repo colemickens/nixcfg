@@ -23,6 +23,7 @@
     ../mixins/nushell.nix
     ../mixins/pijul.nix
     ../mixins/skim.nix
+    ../mixins/spotify.nix
     ../mixins/ssh.nix
     ../mixins/xdg.nix
     # ../mixins/xplr.nix # TODO

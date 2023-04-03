@@ -107,6 +107,7 @@ in
     nixpkgs.overlays = [
       (final: prev: {
         sway-unwrapped = inputs.nixpkgs-wayland.packages.${pkgs.stdenv.hostPlatform.system}.sway-unwrapped;
+        xdg-desktop-portal-wlr = inputs.nixpkgs-wayland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-wlr;
       })
     ];
 
@@ -129,7 +130,7 @@ in
             base = false; # this should be the default (dbus activation, not sure where XDG_CURRENT_DESKTOP comes from)
             gtk = true; # I think this is also the default...
           };
-          xwayland = true;
+          xwayland = false;
           extraConfig = (lib.optionalString (prefs.cursor != null) ''
             seat seat0 xcursor_theme "${prefs.cursor.name}" ${builtins.toString prefs.cursorSize}
           '');
@@ -143,6 +144,7 @@ in
               "unfocused" = { border = borderInactive; background = borderInactive; text = "#888888"; indicator = "#ffffff"; childBorder = borderInactive; };
             };
             # gaps = { inner = 2; outer = 0; };
+            window.hideEdgeBorders = "smart";
             window.border = 4;
             window.titlebar = false;
             window.commands = [

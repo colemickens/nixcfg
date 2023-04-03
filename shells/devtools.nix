@@ -31,7 +31,7 @@ minimalMkShell {
     alejandra
     nix-du
     nix-tree
-    nix-update
+    inputs.nix-update.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
 
     nushell
 

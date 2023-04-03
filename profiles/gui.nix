@@ -88,7 +88,6 @@ in
           brightnessctl
           virt-viewer
           evince
-          ncspot
           pinta
 
           # pw-viz
@@ -105,7 +104,7 @@ in
           # pw-viz
           # ladybird # qt? long build anyway?
 
-          # valent # kde connect (gtk)
+          valent # kde connect (gtk)
           
           # communcation
           freerdp
