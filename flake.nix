@@ -37,8 +37,8 @@
     nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; inputs."nixpkgs".follows = "cmpkgs"; };
     # experimental:
     nix-netboot-server = { url = "github:DeterminateSystems/nix-netboot-serve"; };
-    # nix-update = { url = "github:colemickens/nix-update"; };
-    nix-update = { url = "github:Mic92/nix-update"; };
+    nix-update = { url = "github:colemickens/nix-update"; };
+    # nix-update = { url = "github:Mic92/nix-update"; };
 
     # random apps:
     jstest-gtk = { url = "gitlab:jstest-gtk/jstest-gtk"; inputs."nixpkgs".follows = "cmpkgs"; };
