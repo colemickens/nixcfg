@@ -138,12 +138,9 @@ def "main inputup" [] {
   let srcdirs = ([
     # nixpkgs and related branches
     "nixpkgs/master" "nixpkgs/cmpkgs"
-    # BUG: temp disable
-    # BUG: "nixpkgs/cmpkgs-cross" "nixpkgs/cmpkgs-cross-riscv64"
+    "nixpkgs/cmpkgs-cross" "nixpkgs/cmpkgs-cross-riscv64"
     
-    # exclude rpipkgs/cmpkgs-rpipkgs, that is managed by `rpiup`
-    
-    # home manager master/cmhm
+    # home-manager + my fork
     "home-manager/master" "home-manager/cmhm"
 
     # tow-boot and friends
