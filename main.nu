@@ -201,6 +201,9 @@ def "main pkgup" [] {
 
   print -e $pkgs
 
+  # BUG BUG BUG
+  return
+
   for pkgname in $pkgs {
     header yellow_reverse $"pkgup: ($pkgname)"
 
