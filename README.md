@@ -4,6 +4,7 @@
 <!--[![builds.sr.ht status](https://builds.sr.ht/~colemickens/nixcfg.svg)](https://builds.sr.ht/~colemickens/nixcfg?)-->
 
 - [Overview](#overview)
+- [Components](#components)
 - [Repo Layout](#repo-layout)
 - [Secrets](#secrets)
 - [Other Interesting Nix Repos](#other-interesting-nix-repos)
@@ -23,6 +24,9 @@
 * custom commands for easy gpg-over-ssh usage (`pkgs/commands.nix`)
 
 ## Repo Layout
+
+(this sometimes drifts, but should be roughly accurate as of April 2023)
+
 * `cloud`
   * automation and configuration for cloud servers
   * powered by `terranix`
@@ -59,15 +63,24 @@
   * tip-of-tree package overrides for:
     * `wezterm`
     * `nushell`
-* `profiles/` - these are the bits that primarily get pulled into a system configuration.
-  * `gui.nix` - all of my GUI related settings that only apply to machines that I sit in front of
-  * `interactive.nix` - anything related to a machine that I interact with regularly (and thus want `neovim`, etc)
+* `profiles/`
+  * bits that compose machine "personas"
+  * `core.nix` - core bits, see also `mixins/common.nix`
+  * `interactive.nix` - headless systems
+  * `gui.nix` - baseline for GUI systems
+  * `gui-wayland.nix` - common tools for wayland/wlroots compositors
+  * `gui-sway.nix` - the start of my `sway` GUI configuration
+  * `addon-dev.nix` - pull devtool's shell deps into system
+  * `addon-laptop.nix` - common laptop bits, power management, etc
+  * `addon-asus.nix` - extras for my ASUS laptop
+  * `user-cole.nix` - my base `cole` user configuration
 * `secrets/`
-  * `sops-nix` based secret management
-  * scripts to manage `sops`, sops-nix` is great, `sops` is questionable-code-quality abandonware with odd usage patterns
+  * scripts to manage `sops` for `sops-nix`
+  * `sops-nix` is great... but...
+  * `sops` is questionable-code-quality near-abandonware
 * `shells/`
   * nix shells for various scenarios
-    * `_minimal.nix` - minimal shell base (TODO: see where upstream is at with this)
+    * `_minimal.nix` - minimal shell base
     * `ci.nix` - tools needed to drive CI for this repo
     * `devenv.nix` - complete set of tools for Go/Rust/Nix development
     * `devtools.nix` - bare-essential dev tools for my dev machines

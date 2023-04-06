@@ -4,20 +4,12 @@
   imports = [
     ./gui.nix
 
-    # ../mixins/ironbar.nix # let child pick
-    # ../mixins/kanshi.nix # let child pick
-    # ../mixins/waybar.nix # let child pick
-    # ../mixins/wlsunset.nix # let child pick
-    ../mixins/mako.nix
     ../mixins/obs.nix
     ../mixins/sirula.nix
     ../mixins/wluma.nix
   ];
   config = {
     home-manager.users.cole = { pkgs, ... }: {
-      services = {
-        # poweralertd.enable = true;
-      };
       home.sessionVariables = {
         XDG_SESSION_TYPE = "wayland";
         NIXOS_OZONE_WL = "1";

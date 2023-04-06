@@ -5,12 +5,10 @@ let
 in
 {
   imports = [
-    # ../../profiles/gui-wayland-hyprland.nix
-    ../../profiles/gui-wayland-sway.nix
+    ../../profiles/gui-sway.nix
     ../../profiles/addon-asus.nix
     ../../profiles/addon-dev.nix
     ../../profiles/addon-laptop.nix
-    # ../../profiles/addon-gaming.nix
 
     ../../mixins/gfx-radeonsi.nix
     ../../mixins/gfx-debug.nix
