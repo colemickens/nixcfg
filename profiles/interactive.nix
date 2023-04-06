@@ -8,8 +8,6 @@
 
     ../secrets
 
-    # ../mixins/common.nix
-
     ../mixins/aria2.nix
     ../mixins/bottom.nix
     ../mixins/cachix.nix
@@ -89,15 +87,17 @@
         };
         home.packages = lib.mkMerge [
           (lib.mkIf (pkgs.hostPlatform.system == "x86_64-linux") (with pkgs; [
+            # x86_64-linux only
             zenith # uh oh, no aarch64 support? noooooo
           ]))
-          (lib.mkIf (pkgs.hostPlatform.system == "aarch_64-linux") (with pkgs; [ ]))
+          (lib.mkIf (pkgs.hostPlatform.system == "aarch_64-linux") (with pkgs; [
+            # aarch64-linux only
+          ]))
           # ++ inputs.self.devShells.${pkgs.stdenv.hostPlatform.system}.ci.nativeBuildInputs
           (with pkgs; [
             (pkgs.callPackage ../pkgs/commands.nix { })
 
             # <rust pkgs>
-            # https://zaiste.net/posts/shell-commands-rust/
             bat
             tealdeer
             du-dust
@@ -106,36 +106,24 @@
             exa
             fd
             gitui
-            # gex
+            gex
             grex
             hexyl
-            macchina # fine, I give in
             xh
-            # dogdns # build error and we dont use
-            ripasso-cursive
+            dogdns
             ripgrep
             jless
             sd
             procs
-            bandwhich
-            universal-archiver
-            rustscan
-            #sfz # simple file zerver? lol
-            # prs # gopass replacement, oh fuck thank god, but no TOTP or PASSWORD_STORE_DIR or sequoia support
-            # </rust pkgs>
-            watchman
-            watchexec
-
             prs
-
-            nix-output-monitor
-            ntfsprogs
-
+            bandwhich
             pipes-rs
+            rustscan
+            # </rust pkgs>
 
-            difftastic
-            just
-            pueue
+            # nix-related (TODO move to devtools shell that gets pulled in)
+            # nix-tree nix-du ncdu nix-prefetch nixpkgs-review
+            nix-output-monitor
 
             binwalk
             cpio # needed?
@@ -172,16 +160,22 @@
             curl
             jq
             openssh
+            watchman
+            watchexec
+            wireguard-tools
+            ntfsprogs
+            difftastic
+            just
+            # pueue
 
             linuxPackages.cpupower
-            linuxPackages.usbip
+            # linuxPackages.usbip
 
             # aria2 # mixins/aria2.nix: home-manager module now
             yt-dlp
             imgurbash2
 
             mosh
-            # nix-tree nix-du ncdu nix-prefetch nixpkgs-review
             # mitmproxy
             # ? git-absorb
           ])

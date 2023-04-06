@@ -16,7 +16,7 @@ minimalMkShell {
       cacert
       du-dust
       git
-      gh
+      # gh
       mercurial
       nushell
       sd

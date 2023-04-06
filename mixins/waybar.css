@@ -7,7 +7,7 @@
     /* font matches sway-config.nix */
     font-family: "Iosevka Comfy Fixed"; /* TODO: parameterize this? */
     font-weight: bold;
-    font-size: 9pt;
+    font-size: 12px;
     min-height: 0;
 
     padding: 0px;
@@ -16,7 +16,8 @@
 window#waybar {
     background-color: #111111;
     color: #666666;
-    min-width: 36px;
+    border-bottom: 2px double #fff;
+    border-bottom: 2px double #33ccff;
 }
 
 /*
@@ -32,9 +33,12 @@ window#waybar.chromium {
 
 #workspaces button {
     padding: 0px;
+    margin: 4px;
+    margin-left: 2px;
+    margin-right: 2px;
     color: #cccccc;
-    min-height: 25px;
-    border-left: 2px solid transparent;
+    min-width: 25px;
+    border: 1px solid transparent;
 }
 
 /* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
@@ -47,18 +51,21 @@ window#waybar.chromium {
 */
 
 #workspaces button.current_output {
-    border-right: 3px solid #ffffff;
+    border-color: #aaa;
+    border-style: dotted;
     color: #ffffff;
 }
 
 #workspaces button.focused {
     background-color: #aaa;
     color: #000000;
-    border-right: 2px solid #ee00ff;
+    border-color: #aaa;
+    border-style: solid;
 }
 
 #workspaces button.focused.current_output {
-    border-left: 2px solid #ee00ff;
+    border-color: #ee00ff;
+    border-style: solid;
 }
 
 #workspaces button.urgent {
@@ -67,7 +74,7 @@ window#waybar.chromium {
 
 #mode {
     background-color: #64727D;
-    border-right: 3px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
 }
 
 #tray {
@@ -75,6 +82,7 @@ window#waybar.chromium {
 }
 
 #clock,
+#clock-time,
 #battery,
 #cpu,
 #memory,
@@ -90,24 +98,12 @@ window#waybar.chromium {
 #mpd {
     /*padding: 2px;*/
     padding: 0px;
-    margin: 0px;
-    margin-top: 2px;
-    margin-bottom: 2px;
+    padding-left: 4px;
+    padding-right: 4px;
+    margin: 4px;
+    margin-right: 6px;
     color: #fff;
-    background-color: #222222;
-}
-
-#backlight,
-#pulseaudio,
-#idle_inhibitor {
     background-color: #333;
-}
-
-#clock {
-    background-color: #000000;
-}
-#clock-time {
-    font-size: 9pt;
 }
 
 #battery {
@@ -119,13 +115,21 @@ window#waybar.chromium {
 
 @keyframes blink {
     to {
-        background-color: #ffffff;
-        color: #000000;
+        background-color: #f53c3c;
+        color: #ffffff;
     }
 }
 
-/* #battery.critical:not(.charging) { */
-#battery.critical {
+#battery.Charging {
+    color: green;
+}
+#battery.Discharging {
+    color: blue;
+}
+#battery.Discharging.warning {
+    color: orange;
+}
+#battery.Discharging.critical {
     background-color: #f53c3c;
     color: #ffffff;
     animation-name: blink;
@@ -135,101 +139,8 @@ window#waybar.chromium {
     animation-direction: alternate;
 }
 
+/*
 label:focus {
     background-color: #000000;
 }
-/*
-
-#cpu {
-    background-color: #06989A;
-}
-
-#memory {
-    background-color: #2980b9;
-}
-
-#backlight {
-    background-color: #555753;
-}
-
-#network {
-    background-color: #4E9A06;
-}
-
-#network.disconnected {
-    background-color: #f53c3c;
-}
-
-#pulseaudio {
-    background-color: #75507B;
-}
-
-#pulseaudio.muted {
-    background-color: #90b1b1;
-    color: #2a5c45;
-}
-
-#custom-media {
-    background-color: #66cc99;
-    color: #2a5c45;
-    min-width: 10px;
-}
-
-#custom-media.custom-spotify {
-    background-color: #66cc99;
-}
-
-#custom-media.custom-vlc {
-    background-color: #ffa000;
-}
-
-#temperature {
-    background-color: #f0932b;
-}
-
-#temperature.critical {
-    background-color: #f53c3c;
-}
-
-
-#idle_inhibitor {
-    background-color: #2d3436;
-}
-#temperature {
-    background-color: #555753;
-}
-#temperature.critical {
-    background-color: #2d3436;
-}
-
-#idle_inhibitor.activated {
-    background-color: #ecf0f1;
-    color: #2d3436;
-}
-
-#mpd {
-    background-color: #66cc99;
-    color: #2a5c45;
-}
-
-#mpd.disconnected {
-    background-color: #f53c3c;
-}
-
-#mpd.stopped {
-    background-color: #90b1b1;
-}
-
-#mpd.paused {
-    background-color: #51a37a;
-}
-
-.srht-success {
-    background-color: #4E9A06;
-}
-
-.srht-failed {
-    background-color: #f53c3c;
-}
-
 */

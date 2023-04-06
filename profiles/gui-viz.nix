@@ -51,7 +51,7 @@ let
 in
 {
   imports = [
-    # ../../profiles/user.nix
+    # ../../profiles/user-cole.nix
     ../secrets
     ../mixins/common.nix
 

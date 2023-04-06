@@ -5,11 +5,11 @@ let
     set -euo pipefail
     val="$(${pkgs.asusctl}/bin/asusctl profile -p)"
     if [[ "''${val}" == *"Performance"* ]]; then
-      echo $'{"text": "rog\\nprf"}';
+      echo $'{"text": "rog prf"}';
     elif [[ "''${val}" == *"Balanced"* ]]; then
-      echo $'{"text": "rog\\nbal"}';
+      echo $'{"text": "rog bal"}';
     elif [[ "''${val}" == *"Quiet"* ]]; then
-      echo $'{"text": "rog\\nqui"}';
+      echo $'{"text": "rog qui"}';
     fi
   '';
 
@@ -17,11 +17,11 @@ let
     set -euo pipefail
     val="$(${pkgs.power-profiles-daemon}/bin/powerprofilesctl get)"
     if [[ "''${val}" == "performance" ]]; then
-      echo $'{"text": "ppp\\nprf"}';
+      echo $'{"text": "ppp prf"}';
     elif [[ "''${val}" == "balanced" ]]; then
-      echo $'{"text": "ppp\\nbal"}';
+      echo $'{"text": "ppp bal"}';
     elif [[ "''${val}" == "power-saver" ]]; then
-      echo $'{"text": "ppp\\npwr"}';
+      echo $'{"text": "ppp pwr"}';
     fi
   '';
   extraModules = if config.networking.hostName != "zeph" then { } else {
@@ -102,7 +102,7 @@ in
         settings = [{
           # ipc = true;
           layer = "top";
-          position = "left";
+          # position = "top";
           modules-left = [
             "sway/mode"
             "sway/workspaces"
@@ -112,10 +112,10 @@ in
           ];
           modules-right = [
             # "keyboard-state"
-            "tray"
-            "idle_inhibitor"
+            # "idle_inhibitor"
             "pulseaudio"
             "backlight"
+            "tray"
           ]
           ++ (builtins.attrNames extraModules)
           ++ [
@@ -149,42 +149,46 @@ in
             # };
             "wlr/taskbar" = { };
             temperature = {
-              format = "tmp\n{temperatureC}";
+              format = "tmp {temperatureC}";
             };
             idle_inhibitor = {
-              format = "iil\n{icon}";
+              format = "iil {icon}";
               format-icons = {
                 activated = "[x]";
                 deactivated = "[ ]";
               };
             };
             pulseaudio = {
-              format = "vol\n{volume}";
+              format = "vol {volume}";
               #on-click-middle = "${pkgs.sway}/bin/swaymsg exec \"${pkgs.alacritty}/bin/alacritty -e pulsemixer\"";
               on-click-middle = "${pkgs.sway}/bin/swaymsg exec \"${pkgs.pavucontrol}/bin/pavucontrol\"";
             };
             network = {
-              format-wifi = "net\n{signalStrength}";
+              format-wifi = "net {signalStrength}";
               format-ethernet = "eth";
             };
             cpu.interval = 2;
-            cpu.format = "cpu\n{usage}";
-            memory.format = "mem\n{}";
+            cpu.format = "cpu {usage}";
+            memory.format = "mem {}";
             backlight = {
-              format = "nit\n{percent}";
+              format = "nit {percent}";
               on-scroll-up = "${pkgs.brightnessctl}/bin/brightnessctl set 2%+";
               on-scroll-down = "${pkgs.brightnessctl}/bin/brightnessctl set 2%-";
             };
             tray.spacing = 10;
             # battery
             clock = {
-              format = "{:%m\n%d}";
+              format = "{:%d %b %Y}";
             };
             "clock#date" = {
-              format = "{:%H\n%M}";
+              format = "{:%H:%M %p}";
             };
             battery = {
-              format = "bat\n{}";
+              format = "bat {}";
+              states = {
+                warning = 25;
+                critical = 15;
+              };
             };
           } // extraModules);
         }];

@@ -183,17 +183,13 @@ def "main inputup" [] {
 
   for dir in $srcdirs {
   # $srcdirs | each { |dir|
-    print -e $"input: ($dir): (ansi yellow_dimmed)check(ansi reset)"
+    print -e $"(ansi yellow_dimmed)inputup: check:(ansi reset) ($dir)"
 
     # rebase, ignore if we're not rebasing
     do -i { ^git -C $dir rebase --abort }
     ^git -C $dir pull --rebase --no-gpg-sign
     ^git -C $dir push origin HEAD -f
-
-    print -e $"input: ($dir): (ansi green)ok(ansi reset)"
   }
-
-  print -e "input: finished inputup"
 }
 
 def "main pkgup_old" [] {
@@ -219,15 +215,6 @@ def "main pkgup" [] {
   for pkgname in $pkgs {
     header yellow_reverse $"pkgup: ($pkgname)"
 
-    if ($pkgname == "nushell") {
-      print -e "!!!!!!!!!!!!"
-      print -e "!!!!!!!!!!!!"
-      print -e "!!!!!! skipping nushell!"
-      print -e "!!!!!!!!!!!!"
-      print -e "!!!!!!!!!!!!"
-      continue
-    }
-    
     (nix-update
       --flake
       --build

@@ -42,12 +42,7 @@ in
 
     programs.noisetorch.enable = true;
 
-    services = {
-      mullvad-vpn = {
-        enable = true;
-        enableExcludeWrapper = false;
-      };
-    };
+    services = { };
 
     home-manager.users.cole = { pkgs, config, ... }@hm: {
       # home-manager/#2064
@@ -105,7 +100,7 @@ in
           # ladybird # qt? long build anyway?
 
           valent # kde connect (gtk)
-          
+
           # communcation
           freerdp
         ])

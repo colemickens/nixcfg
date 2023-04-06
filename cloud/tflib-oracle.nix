@@ -76,7 +76,7 @@ let
   };
 
   # sshpubkey = (builtins.elemAt (import ../data/sshkeys.nix) 0);
-  sshpubkey = (builtins.elemAt (import ../profiles/user.nix).config.users.extraUsers."cole".openssh.authorizedKeys.keys 0);
+  sshpubkey = (builtins.elemAt (import ../profiles/user-cole.nix).config.users.extraUsers."cole".openssh.authorizedKeys.keys 0);
 
   mkVm = oracle_config: name: v: {
     output."${oracle_config.uniqueid}_${name}_public_ip_addr".value = "\${oci_core_instance.${oracle_config.uniqueid}_${name}.public_ip}";

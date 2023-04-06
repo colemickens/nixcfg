@@ -4,6 +4,7 @@ let
   cfg = config.nixcfg.common;
   _kernelPackages = pkgs.linuxKernel.packages.linux_6_1;
   _zfsUnstable = true;
+
   # _defaultKernel = pkgs.linuxKernel.packagesFor
   #   (pkgs.linuxPackages_latest.kernel.override {
   #     structuredExtraConfig = {
@@ -28,13 +29,12 @@ let
   #       (x: lib.mkForce (lib.kernel.option lib.kernel.no))
   #     );
   #   });
-  hn = config.networking.hostName;
-  defaultTimeServers = options.networking.timeServers.default;
 in
 {
   imports = [
     ./nix.nix
-    ../profiles/user.nix
+    ../profiles/user-cole.nix
+    ../profiles/user-hole.nix
   ];
 
   options = {
@@ -60,20 +60,12 @@ in
         type = lib.types.bool;
         default = true;
       };
-      useXeepTimeserver = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-      };
       hostColor = lib.mkOption {
         type = lib.types.str;
         default = "grey";
         description = "this is used as a hostname-hint-accent in zellij/waybar/shell prompts";
       };
       skipMitigations = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-      };
-      sysdBoot = lib.mkOption {
         type = lib.types.bool;
         default = true;
       };
@@ -118,10 +110,8 @@ in
           timeout = 3;
         };
 
-        initrd = {
-          systemd.enable = cfg.sysdBoot;
-          supportedFilesystems = lib.optionals (cfg.useZfs) [ "zfs" ];
-        };
+        initrd.systemd.enable = true;
+        initrd.supportedFilesystems = lib.optionals (cfg.useZfs) [ "zfs" ];
 
         kernelPackages = lib.mkIf cfg.defaultKernel _kernelPackages;
         kernelParams = lib.mkIf cfg.skipMitigations [ "mitigations=off" ];
@@ -132,7 +122,17 @@ in
         };
       };
 
-      ## NETWORK + TIME ##############################################
+      ## LEGACYBOOT - we use stage-1/systemd so have a fallback ###############
+      specialisation."legacyboot" = {
+        inheritParentConfig = true;
+        configuration = {
+          boot.initrd.systemd.enable = lib.mkForce false;
+          boot.initrd.luks.devices."nixos-luksroot".fallbackToPassword = true;
+        };
+      };
+
+
+      ## NETWORK + TIME #######################################################
       networking = {
         hostId = pkgs.lib.concatStringsSep "" (pkgs.lib.take 8
           (pkgs.lib.stringToCharacters
@@ -142,9 +142,6 @@ in
         useNetworkd = lib.mkIf (cfg.defaultNetworking) true;
 
         firewall.logRefusedConnections = false;
-        timeServers = [ ]
-          ++ (if cfg.useXeepTimeserver then [ "192.168.1.10" ] else [ ])
-          ++ defaultTimeServers;
       };
       services.resolved = {
         enable = true;
@@ -213,17 +210,6 @@ in
         };
       });
 
-      nixpkgs.overlays = [
-        inputs.self.overlays.default
-      ];
-
-      # specialisation."oldboot" = lib.mkIf cfg.sysdBoot {
-      #   inheritParentConfig = true;
-      #   configuration = {
-      #     config.nixcfg.common.sysdBoot = lib.mkForce false;
-      #   };
-      # };
-
       security = {
         sudo.enable = true;
         sudo.wheelNeedsPassword = false;
@@ -234,7 +220,7 @@ in
 
       users = {
         mutableUsers = false;
-        users."root".initialHashedPassword = lib.mkForce "$6$k.vT0coFt3$BbZN9jqp6Yw75v9H/wgFs9MZfd5Ycsfthzt3Jdw8G93YhaiFjkmpY5vCvJ.HYtw0PZOye6N9tBjNS698tM3i/1";
+        users."root".initialHashedPassword = lib.mkForce "$6$Qxw65IlG0QZmI./Q$GkV4Ql3jIxWr2yfl.kHoCaEgF4E585l1foG0wdHAwAfy2GbdtalCQPc3gNVUcQ9Ea21kaYqM9GNujL8G.EqCM0";
         users."root".hashedPassword = config.users.users."root".initialHashedPassword;
       };
 

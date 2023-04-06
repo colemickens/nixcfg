@@ -2,10 +2,6 @@
 
 let
   hn = "zeph";
-
-  # kernel = pkgs.callPackage ./kernel-hdr.nix { };
-  # kernelPackages = pkgs.linuxKernel.packagesFor kernel;
-  kernelPackages = null;
 in
 {
   imports = [
@@ -57,7 +53,7 @@ in
     networking.hostName = "zeph";
     nixcfg.common.hostColor = "purple";
     nixcfg.common.skipMitigations = false;
-    nixcfg.common.defaultKernel = (kernelPackages == null);
+    nixcfg.common.defaultKernel = true;
 
     time.timeZone = lib.mkForce null; # we're on the move
     services.tailscale.useRoutingFeatures = "client";
@@ -70,8 +66,6 @@ in
       "/home" = { fsType = "zfs"; device = "${hn}pool/home"; neededForBoot = true; };
 
       "/mnt/data/t5" = { fsType = "zfs"; device = "${hn}pool/data/t5"; };
-      # "/mnt/games" = { fsType = "zfs"; device = "${hn}pool/games"; };
-      # "/mnt/data/xeep_backup" = { fsType = "zfs"; device = "${hn}pool/data/xeep_backup"; };
     };
     swapDevices = [{ device = "/dev/disk/by-partlabel/${hn}-swap"; }];
 
@@ -82,10 +76,8 @@ in
           entriesMountPoint = "/boot";
         };
       };
-      kernelPackages = lib.mkIf (kernelPackages != null) kernelPackages;
       kernelModules = [
         "iwlwifi"
-        # "xpad"
       ];
       kernelParams = [
         # "zfs.zfs_arc_max=${builtins.toString (1023 * 1024 * (1024 * 6))}"

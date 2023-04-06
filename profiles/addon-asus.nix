@@ -15,7 +15,7 @@
         settings = {
           always_reboot = false;
           no_logind = true;
-          mode = "Hybrid";
+          mode = "Integrated";
           vfio_enable = false;
           vfio_save = false;
           logout_timeout_s = 180;

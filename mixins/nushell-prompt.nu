@@ -7,7 +7,7 @@ def create_left_prompt [] {
     let hnseg = $"(ansi reset)(ansi $hcr) (^hostname | str trim) (ansi reset)"
     
     let line1 = $"(ansi reset)(ansi $hc)╭($hnseg)";
-    let line2 = $"(ansi reset)(ansi $hc)╰─▶ (ansi reset)";
+    let line2 = $"(ansi reset)(ansi $hc)╰─▶(ansi reset)";
     
     # let jj = (do -i { ^jj log --no-commit-working-copy --no-graph -T '"x"' }
     #   | complete 

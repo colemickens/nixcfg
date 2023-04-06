@@ -189,6 +189,7 @@ in
 
               "${modifier}+Escape" = "exec ${pkgs.sirula}/bin/sirula";
               "${modifier}+Ctrl+Alt+Delete" = "exec ${swaymsg} exit";
+              "Ctrl+Alt+Delete" = "exec ${swaymsg} exit";
               "${modifier}+Ctrl+Alt+Insert" = "exec ${swaymsg} reload";
 
               "${modifier}+F1" = "exec ${swaymsg} firefox";

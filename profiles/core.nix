@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./user.nix
+    ./user-cole.nix
     ../mixins/common.nix
 
     ../mixins/sshd.nix
