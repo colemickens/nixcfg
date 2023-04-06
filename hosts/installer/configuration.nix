@@ -13,10 +13,8 @@
     documentation.enable = lib.mkOverride 10 false;
     documentation.nixos.enable = lib.mkOverride 10 false;
 
-    environment.systemPackages = with pkgs; [
-      
-    ];
-    nixcfg.common.sysdBoot = false;
+    # BUG not sure if this works, at one point it was claimed it didn't...
+    boot.initrd.systemd.enable = lib.mkForce false;
 
     system.disableInstallerTools = lib.mkOverride 10 false;
 

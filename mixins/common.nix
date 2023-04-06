@@ -123,7 +123,7 @@ in
       };
 
       ## LEGACYBOOT - we use stage-1/systemd so have a fallback ###############
-      specialisation."legacyboot" = {
+      specialisation."legacyboot" = lib.mkIf (config.boot.initrd.systemd.enable) {
         inheritParentConfig = true;
         configuration = {
           boot.initrd.systemd.enable = lib.mkForce false;
