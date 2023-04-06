@@ -1,3 +1,0 @@
-- have a CI post-step that looks through my "to-build derivations"
-- try to parse any and all outputs, push what is there
-- which is actually what we already do in a sense.... we don't recurse, that should be the cache tool probably

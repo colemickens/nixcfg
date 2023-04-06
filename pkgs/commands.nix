@@ -54,7 +54,7 @@ let
     set -euo pipefail
     host="''${1}"; shift
     ip="$(${tailscale}/bin/tailscale ip --6 "$host")"
-    ${_gpgssh} cole@"$ip"
+    ${_gpgssh}/bin/gpgssh cole@"$ip"
   '');
 
   rec-cmd = (writeShellScriptBin "rec" ''
