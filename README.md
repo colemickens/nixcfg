@@ -16,6 +16,11 @@
 * guaranteed to be **reproducible**
 * **immutable** *full* system configuration (**dotfiles**, but on steroids)
 
+#### notes
+
+* some commits may have empty commit messages, this is from me attempting to
+  use and learn [`jj`](https://github.com/martinvonz/jj).
+
 ## Components
 
 * `home-manager` for user-based app/desktop configuration
@@ -46,7 +51,7 @@
   * `xeep` (laptop)
     * former-former-daily-driver **Dell XPS 9370**
     * remote (MO, USA) `zrepl`(`zfs`) and `syncthing` backup target
-  * `zeph`
+  * `zeph` (laptop)
     * current daily-driver
     * favorite, all-AMD, laptop ever
     * **ASUS Zephyrus G14 (2022) - GA402RJ**
