@@ -18,6 +18,16 @@ let-env BUILDER_A64 = $builder_a64 # Todo: lazy
 let cachix_cache = "colemickens"
 let-env CACHIX_SIGNING_KEY = (open $"/run/secrets/cachix_signing_key_colemickens" | str trim)
 
+def check [] {
+  let res = (^git status --porcelain | complete)
+  let len = ($res.stdout | str trim | str length)
+  if ($len) != 0 {
+    git status
+    print -e $"len=($len)"
+    error make { msg: $"!! ERR: git has untracked or uncommitted changes!!" }
+  }
+}
+
 def header [ color: string text: string spacer="▒": string ] {
   let text = $"("" | fill -a r -c $spacer -w 2) ($text) "
   let text = $"($text | fill -a l -c $spacer -w 50)"
@@ -230,9 +240,9 @@ def "main cache_a64" [] {
 def "main up" [] {
   header red_reverse "up" "▒"
 
+  check
   main inputup
   main pkgup
-  # main rpiup
   main lockup
   main cache_x86
   main deploy
@@ -246,6 +256,7 @@ def "main selfdeploy" [] {
   rm /tmp/selfup
 }
 def "main selfup" [] {
+  check
   main inputup
   main pkgup
   main lockup
