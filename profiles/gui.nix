@@ -99,8 +99,6 @@ in
           # pw-viz
           # ladybird # qt? long build anyway?
 
-          valent # kde connect (gtk)
-
           # communcation
           freerdp
         ])
