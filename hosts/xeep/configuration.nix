@@ -35,7 +35,6 @@ in
     ];
 
     nixcfg.common.hostColor = "yellow";
-    nixcfg.common.useXeepTimeserver = false;
 
     services.tailscale.useRoutingFeatures = "server";
 

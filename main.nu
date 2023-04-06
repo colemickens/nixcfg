@@ -1,8 +1,11 @@
 #!/usr/bin/env nu
 
 let cachixpkgs = "https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # used by nix-shell cachix
-let nix = "./misc/nix.sh"
-let nixopts = [ "--builders-use-substitutes" "--option" "narinfo-cache-negative-ttl" "0"
+# TODO: I think this bug got fixed???
+# let nix = "./misc/nix.sh"
+let nix = "nix"
+let nixopts = [
+  "--builders-use-substitutes" "--option" "narinfo-cache-negative-ttl" "0"
   "--option" "extra-substituters" "'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://unmatched.cachix.org https://nix-community.cachix.org'"
   "--option" "extra-trusted-public-keys" "'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= unmatched.cachix.org-1:F8TWIP/hA2808FDABsayBCFjrmrz296+5CQaysosTTc= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs='"
 ];
@@ -10,7 +13,7 @@ let builder_x86 = (if ("BUILDER_X86" in $env) { $env.BUILDER_X86 | str trim } el
 let builder_a64 = (if ("BUILDER_A64" in $env) { $env.BUILDER_A64 | str trim } else { $"colemickens@aarch64.nixos.community" })
 let-env BUILDER_X86 = $builder_x86 # lazy
 let-env BUILDER_A64 = $builder_a64 # Todo: lazy
-# let builder_r64 = (if ("BUILDER_R64" in $env) { $env.BUILDER_R64 | str trim } else { $"cole@(^tailscale ip --4 visionfive2 | str trim)" })
+# let BUILDER_R64 = (if ("BUILDER_R64" in $env) { $env.BUILDER_R64 | str trim } else { $"cole@(^tailscale ip --4 visionfive2 | str trim)" })
 
 let cachix_cache = "colemickens"
 let-env CACHIX_SIGNING_KEY = (open $"/run/secrets/cachix_signing_key_colemickens" | str trim)
@@ -26,11 +29,6 @@ def evalDrv [ ref: string ] {
   let eval = (^nix-eval-jobs
     --flake $ref
     --check-cache-status)
-  # let out = ($eval
-  #   | from ssv --noheaders
-  #   | get column1
-  #   | each { |it| ($it | from json ) })
-  # $out
   $eval
     | from ssv --noheaders
     | get column1
@@ -45,7 +43,6 @@ def buildDrvs [ drvs: table ] {
   for build in $builds {
     print -e $build
     buildDrvs__ $build.builder $build.drvs
-    # if ($env.LAST_EXIT_CODE != 0) { error make { msg: $"failed to buildRemoteDrvs" } }
   }
 }
 
@@ -95,7 +92,6 @@ def deployHost [ host: string ] {
   let drvs = (evalDrv $"/home/cole/code/nixcfg#toplevels.($host)")
   # NUSHELL BUG:
   let drvs = ($drvs | where { |it| $it.isCached == false or $it.isCached == true})
-  # print -e ($drvs | get outputs)
   buildDrvs $drvs
   cacheDrvs $drvs
   downDrvs $drvs $target
@@ -105,9 +101,7 @@ def deployHost [ host: string ] {
 
   header light_purple_reverse $"deploy: ($host): apply and switch"
   ^ssh $"cole@($target)" (([ "sudo" "nix" "build" "--no-link" "-j0" $nixopts "--profile" "/nix/var/nix/profiles/system" $topout ] | flatten) | str join ' ')
-  # if ($env.LAST_EXIT_CODE != 0) { error make { msg: $"failed to down to ($target)"} }
   ^ssh $"cole@($target)" $"sudo '($topout)/bin/switch-to-configuration' switch"
-  # if ($env.LAST_EXIT_CODE != 0) {  error make { msg: $"failed to switch for ($host)"} }
 }
 
 def "main build" [ drv: string ] {
@@ -117,6 +111,7 @@ def "main build" [ drv: string ] {
   buildDrvs $drvs
   downDrvs $drvs "localhost"
 }
+
 def "main cache" [ drv: string ] {
   let drvs = (evalDrv $drv)
   # NUSHELL BUG:
@@ -125,7 +120,6 @@ def "main cache" [ drv: string ] {
   cacheDrvs $drvs
 }
 
-# def "main deploy" [ h: list ] {
 def "main deploy" [...h] {
   let h = ($h | flatten)
   let h = (if ($h | length) != 0 { $h } else {
@@ -182,33 +176,21 @@ def "main inputup" [] {
   let srcdirs = ($srcdirs | append ($extsrcdirs | each {|it| $"($env.HOME)/code-ext/($it)"}))
 
   for dir in $srcdirs {
-  # $srcdirs | each { |dir|
     print -e $"(ansi yellow_dimmed)inputup: check:(ansi reset) ($dir)"
-
-    # rebase, ignore if we're not rebasing
     do -i { ^git -C $dir rebase --abort }
     ^git -C $dir pull --rebase --no-gpg-sign
     ^git -C $dir push origin HEAD -f
   }
 }
 
-def "main pkgup_old" [] {
-  header yellow_reverse "pkgup"
-  do {
-    cd pkgs
-    ^./main.nu update
-  }
-}
-
 def "main pkgup" [] {
   header yellow_reverse "pkgup"
 
-  let pkgs = (
-    ^nix eval --json
-      $".#packages.x86_64-linux"
-      --apply 'x: builtins.attrNames x'
-    | str trim
-    | from json)
+  let pkgs = (^nix eval
+    --json $".#packages.x86_64-linux"
+    --apply 'x: builtins.attrNames x'
+      | str trim
+      | from json)
 
   print -e $pkgs
 
@@ -219,8 +201,8 @@ def "main pkgup" [] {
       --flake
       --build
       --format
-      --commit
       --version branch
+      --commit
       $"pkgs.x86_64-linux.($pkgname)")
 
     ^git commit --no-gpg-sign $"./pkgs/($pkgname)"
@@ -230,13 +212,15 @@ def "main pkgup" [] {
   nix build $nixopts $pkgs_
 }
 
-def "main rpiup" [] {
-  header yellow_reverse "rpiup"
-  # ^./misc/rpi/rpi-update.nu
-}
+# TODO: rpi likely given up on, remove?
+# def "main rpiup" [] {
+#   header yellow_reverse "rpiup"
+#   # ^./misc/rpi/rpi-update.nu
+# }
+
 def "main lockup" [] {
   header yellow_reverse "lockup"
-  ^$nix flake lock --recreate-lock-file
+  ^$nix flake lock --recreate-lock-file --commit-lock-file
 }
 def "main cache_x86" [] {
   header yellow_reverse "cache_x86"
@@ -251,7 +235,7 @@ def "main up" [] {
 
   main inputup
   main pkgup
-  main rpiup
+  # main rpiup
   main lockup
   main cache_x86
   main deploy
@@ -266,74 +250,74 @@ def "main selfdeploy" [] {
 }
 def "main selfup" [] {
   main inputup
-  # main pkgup
-  main rpiup
+  main pkgup
   main lockup
   main selfdeploy
 }
 def main [] { main up }
 
-## action-rpiup ###############################################################
-def "main action-rpiup" [] {
-  # TODO: we gotta clone repos and stuff, right?
-  main rpiup
-}
+# TODO: revisit actions
+# ## action-rpiup ###############################################################
+# def "main action-rpiup" [] {
+#   # TODO: we gotta clone repos and stuff, right?
+#   main rpiup
+# }
 
-## action-nextci ###############################################################
-def updateInput [ name: string baseBr: string newBr: string upRemoteName: string upstreamUrl: string upstreamBr: string ] {
-  let originUrl = $"https://github.com/colemickens/($name)"
-  let baseDir = $"($env.PWD)/../($name)/($baseBr)"
-  let newDir = $"($env.PWD)/../($name)/($newBr)"
-  if (not ($baseDir | path exists)) {
-    do -c { mkdir $baseDir }
-    do -c { git clone $originUrl -b $baseBr $baseDir }
-  }
-  if (not ($newDir | path exists)) {
-    echo $"check ($newDir)"
-    (git -C $baseDir remote add "$upRemoteName" $upstreamUrl)
-    rm -rf $newDir
-    (git -C $baseDir worktree prune)
-    (git -C $baseDir branch -D $newBr)
-    do -c { git -C $baseDir worktree add $newDir }
-  }
+# ## action-nextci ###############################################################
+# def updateInput [ name: string baseBr: string newBr: string upRemoteName: string upstreamUrl: string upstreamBr: string ] {
+#   let originUrl = $"https://github.com/colemickens/($name)"
+#   let baseDir = $"($env.PWD)/../($name)/($baseBr)"
+#   let newDir = $"($env.PWD)/../($name)/($newBr)"
+#   if (not ($baseDir | path exists)) {
+#     do -c { mkdir $baseDir }
+#     do -c { git clone $originUrl -b $baseBr $baseDir }
+#   }
+#   if (not ($newDir | path exists)) {
+#     echo $"check ($newDir)"
+#     (git -C $baseDir remote add "$upRemoteName" $upstreamUrl)
+#     rm -rf $newDir
+#     (git -C $baseDir worktree prune)
+#     (git -C $baseDir branch -D $newBr)
+#     do -c { git -C $baseDir worktree add $newDir }
+#   }
 
-  do -c {
-    git -C $newDir reset --hard $baseBr
-    git -C $newDir rebase $"($upRemoteName)/($upstreamBr)"
-    git -C $newDir push origin HEAD
-  }
-}
+#   do -c {
+#     git -C $newDir reset --hard $baseBr
+#     git -C $newDir rebase $"($upRemoteName)/($upstreamBr)"
+#     git -C $newDir push origin HEAD
+#   }
+# }
 
-def "main action-nextci" [] {
-  let id = "xyz"
-  updateInput $"home-manager" "cmhm" $"cmhm-next-($id)" "nix-community" "https://github.com/nix-community/home-manager" "master"
-  updateInput $"nixpkgs" "cmpkgs" $"cmpkgs-next-($id)" "nixos" "https://github.com/nixos/nixpkgs" "nixos-unstable"
+# def "main action-nextci" [] {
+#   let id = "xyz"
+#   updateInput $"home-manager" "cmhm" $"cmhm-next-($id)" "nix-community" "https://github.com/nix-community/home-manager" "master"
+#   updateInput $"nixpkgs" "cmpkgs" $"cmpkgs-next-($id)" "nixos" "https://github.com/nixos/nixpkgs" "nixos-unstable"
   
-  let p = $"($env.PWD)/../nixcfg_main-next-($id)"
-  if (not ($p | path exists)) {
-    rm -rf $p
-    git worktree prune
-    git worktree add $p
-  }
+#   let p = $"($env.PWD)/../nixcfg_main-next-($id)"
+#   if (not ($p | path exists)) {
+#     rm -rf $p
+#     git worktree prune
+#     git worktree add $p
+#   }
   
-  do {
-    git -C $p rebase main
+#   do {
+#     git -C $p rebase main
 
-    do {
-      cd $p
-      let args = [
-        --recreate-lock-file
-        --override-input 'nixpkgs' $"github:colemickens/nixpkgs/cmpkgs-next-($id)"
-        --override-input 'home-manager' $"github:colemickens/home-manager/cmhm-next-($id)"
-        --commit-lock-file
-      ]
-      nix flake lock $args
+#     do {
+#       cd $p
+#       let args = [
+#         --recreate-lock-file
+#         --override-input 'nixpkgs' $"github:colemickens/nixpkgs/cmpkgs-next-($id)"
+#         --override-input 'home-manager' $"github:colemickens/home-manager/cmhm-next-($id)"
+#         --commit-lock-file
+#       ]
+#       nix flake lock $args
   
-      ./main.nu ci eval
-      ./main.nu ci build
-      ./main.nu ci push
-    }
+#       ./main.nu ci eval
+#       ./main.nu ci build
+#       ./main.nu ci push
+#     }
     
-    git push origin $"nixcfg_main-next-($id):main-next-($id)" -f
-  }
-}
+#     git push origin $"nixcfg_main-next-($id):main-next-($id)" -f
+#   }
+# }
