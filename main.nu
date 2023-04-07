@@ -201,9 +201,6 @@ def "main pkgup" [] {
 
   print -e $pkgs
 
-  # BUG BUG BUG
-  return
-
   for pkgname in $pkgs {
     header yellow_reverse $"pkgup: ($pkgname)"
 
@@ -245,7 +242,7 @@ def "main up" [] {
 
   check
   main inputup
-  main pkgup
+  # main pkgup
   main lockup
   main cache_x86
   main deploy
@@ -261,7 +258,7 @@ def "main selfdeploy" [] {
 def "main selfup" [] {
   check
   main inputup
-  main pkgup
+  # main pkgup
   main lockup
   main selfdeploy
 }
