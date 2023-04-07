@@ -93,6 +93,7 @@ in
 {
   imports = [
     ./gui-wayland.nix
+    ../mixins/mako.nix
     ../mixins/waybar.nix
   ];
   config = {
