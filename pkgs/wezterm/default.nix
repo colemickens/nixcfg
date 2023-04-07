@@ -27,6 +27,7 @@
 , nixosTests
 , runCommand
 , vulkan-loader
+, doCheck ? true
 }:
 
 
