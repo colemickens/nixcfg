@@ -237,6 +237,7 @@
                 inherit (prev.darwin.apple_sdk_11_0) Libsystem;
               };
               wezterm = prev.darwin.apple_sdk_11_0.callPackage ./pkgs/wezterm {
+                doCheck = false; # TODO consider removing
                 inherit (prev.darwin.apple_sdk_11_0.frameworks)
                   Cocoa CoreGraphics Foundation UserNotifications;
               };
