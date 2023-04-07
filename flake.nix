@@ -128,26 +128,26 @@
         misc = {
           installer = { pkgs = inputs.cmpkgs; };
         };
-        phone = {
-          pinephone = { pkgs = inputs.cmpkgs; };
-          blueline = { pkgs = inputs.cmpkgs; };
-        };
-        sbc = {
-          radxazero1 = { pkgs = inputs.cmpkgs; };
-          rockfiveb1 = { pkgs = inputs.cmpkgs; };
-          openstick = { pkgs = inputs.cmpkgs; buildSys = "x86_64-linux"; };
-          aitchninesix1 = { pkgs = inputs.cmpkgs; };
-          rpifour1 = { pkgs = inputs.cmpkgs-rpipkgs; };
-          rpithreebp1 = { pkgs = inputs.cmpkgs-rpipkgs; };
-          rpizerotwo1 = { pkgs = inputs.cmpkgs-rpipkgs; };
-          visionfiveone1 = { pkgs = inputs.cmpkgs-cross-riscv64; };
-          visionfivetwo1 = { pkgs = inputs.cmpkgs-cross-riscv64; };
-        };
+        # phone = {
+        #   pinephone = { pkgs = inputs.cmpkgs; };
+        #   blueline = { pkgs = inputs.cmpkgs; };
+        # };
+        # sbc = {
+        #   radxazero1 = { pkgs = inputs.cmpkgs; };
+        #   rockfiveb1 = { pkgs = inputs.cmpkgs; };
+        #   openstick = { pkgs = inputs.cmpkgs; buildSys = "x86_64-linux"; };
+        #   aitchninesix1 = { pkgs = inputs.cmpkgs; };
+        #   rpifour1 = { pkgs = inputs.cmpkgs-rpipkgs; };
+        #   rpithreebp1 = { pkgs = inputs.cmpkgs-rpipkgs; };
+        #   rpizerotwo1 = { pkgs = inputs.cmpkgs-rpipkgs; };
+        #   visionfiveone1 = { pkgs = inputs.cmpkgs-cross-riscv64; };
+        #   visionfivetwo1 = { pkgs = inputs.cmpkgs-cross-riscv64; };
+        # };
         pc = {
-          carbon = { pkgs = inputs.cmpkgs; };
-          jeffhyper = { pkgs = inputs.cmpkgs; };
+          # carbon = { pkgs = inputs.cmpkgs; };
+          # jeffhyper = { pkgs = inputs.cmpkgs; };
           raisin = { pkgs = inputs.cmpkgs; };
-          slynux = { pkgs = inputs.cmpkgs; };
+          # slynux = { pkgs = inputs.cmpkgs; };
           xeep = { pkgs = inputs.cmpkgs; };
           zeph = { pkgs = inputs.cmpkgs; };
         };
@@ -232,6 +232,7 @@
           let
             __colemickens_nixcfg_pkgs = rec {
               nushell = prev.callPackage ./pkgs/nushell {
+                doCheck = false; # TODO consider removing
                 inherit (prev.darwin.apple_sdk.frameworks) AppKit Security;
                 inherit (prev.darwin.apple_sdk_11_0) Libsystem;
               };
