@@ -168,6 +168,8 @@
             just
             # pueue
 
+            powertop
+
             linuxPackages.cpupower
             # linuxPackages.usbip
 
