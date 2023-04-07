@@ -32,6 +32,7 @@
 
 let
   owner = "colemickens";
+  doCheck_ = doCheck;
   # owner = "wez";
 in
 rustPlatform.buildRustPackage rec {
@@ -108,6 +109,8 @@ rustPlatform.buildRustPackage rec {
 
     install -Dm644 assets/wezterm-nautilus.py -t $out/share/nautilus-python/extensions
   '';
+
+  doCheck = doCheck_;
 
   preFixup = lib.optionalString stdenv.isLinux ''
     patchelf \
