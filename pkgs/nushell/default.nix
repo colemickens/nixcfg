@@ -26,7 +26,7 @@
 
 rustPlatform.buildRustPackage (
   let
-    version = "1b677f167ead53abf0872453cd6f4517b1b1967d";
+    version = "unstable-2023-04-07";
     owner = "colemickens";
     # owner = "nushell";
     pname = "nushell";
