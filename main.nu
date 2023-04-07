@@ -190,14 +190,19 @@ def "main inputup" [] {
   }
 }
 
-def "main pkgup" [] {
+def "main pkgup" [...pkglist] {
   header yellow_reverse "pkgup"
 
-  let pkgs = (^nix eval
-    --json $".#packages.x86_64-linux"
-    --apply 'x: builtins.attrNames x'
-      | str trim
-      | from json)
+  let pkgs = if ($pkglist | length) == 0 {
+    
+    (^nix eval
+      --json $".#packages.x86_64-linux"
+      --apply 'x: builtins.attrNames x'
+        | str trim
+        | from json)
+  } else {
+    $pkglist
+  }
 
   print -e $pkgs
 
