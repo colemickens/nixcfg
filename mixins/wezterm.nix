@@ -20,7 +20,6 @@ in
           default_prog = { "${prefs.shell.program}" },
           enable_tab_bar = false,
           use_fancy_tab_bar = false,
-          -- front_end = "WebGpu",
           front_end = "WebGpu",
           initial_rows = 24,
           initial_cols = 120,
@@ -60,8 +59,8 @@ in
           config.enable_wayland = ${enable_wayland}
           config.window_decorations = "RESIZE"
           config.window_close_confirmation = "NeverPrompt"
-          config.freetype_load_target = "Light"
-          config.freetype_render_target = "HorizontalLcd"
+          -- config.freetype_load_target = "Light"
+          -- config.freetype_render_target = "HorizontalLcd"
           local f = wezterm.font_with_fallback({
             {family="${prefs.font.monospace.family}", weight="Regular"},
             {family="Font Awesome", weight="Regular"},
