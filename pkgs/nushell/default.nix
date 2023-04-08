@@ -67,6 +67,7 @@ rustPlatform.buildRustPackage (
       echo "Running cargo test"
       HOME=$TMPDIR cargo test
       runHook postCheck
+      true
     '';
 
     meta = with lib; {
