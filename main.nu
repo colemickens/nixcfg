@@ -170,19 +170,18 @@ def "main inputup" [] {
     
     # nixpkgs-wayland
     "nixpkgs-wayland/master"
-
-    # extra packages that I might have forked
-    "nushell"
-    "wezterm"
-    "nix-update"
   ] | each { |it1| $it1 | each {|it| $"($env.HOME)/code/($it)" } })
 
-  let extsrcdirs = [
+  let extsrcdirs = ([
     "linux/master"
-  ];
-  let srcdirs = ($srcdirs | append ($extsrcdirs | each {|it| $"($env.HOME)/code-ext/($it)"}))
+  ] | each {|it| $"($env.HOME)/code-ext/($it)" })
+
+  let srcdirs = ($srcdirs | append $extsrcdirs)
 
   for dir in $srcdirs {
+    if (not ($dir | path exists)) {
+      print -e $"(ansi yellow_dimmed)inputup: warn: skipping non-existent $dir(ansi reset)"
+    }
     print -e $"(ansi yellow_dimmed)inputup: check:(ansi reset) ($dir)"
     do -i { ^git -C $dir rebase --abort }
     ^git -C $dir pull --rebase --no-gpg-sign
@@ -208,6 +207,13 @@ def "main pkgup" [...pkglist] {
 
   for pkgname in $pkgs {
     header yellow_reverse $"pkgup: ($pkgname)"
+
+    let maybefork = $"/home/cole/code/($pkgname)"
+    if ($maybefork | path exists) {
+      do -i { ^git -C $maybefork rebase --abort }
+      ^git -C $maybefork pull --rebase --no-gpg-sign
+      ^git -C $maybefork push origin HEAD -f
+    }
 
     (nix-update
       --flake
