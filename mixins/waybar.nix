@@ -160,7 +160,6 @@ in
             };
             pulseaudio = {
               format = "vol {volume}";
-              #on-click-middle = "${pkgs.sway}/bin/swaymsg exec \"${pkgs.alacritty}/bin/alacritty -e pulsemixer\"";
               on-click-middle = "${pkgs.sway}/bin/swaymsg exec \"${pkgs.pavucontrol}/bin/pavucontrol\"";
             };
             network = {
