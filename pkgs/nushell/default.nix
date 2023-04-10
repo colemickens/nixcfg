@@ -26,8 +26,8 @@
 
 rustPlatform.buildRustPackage (
   let
-    version = "unstable-2023-04-08";
-    rev = "d128c0e02b7ee239eebcb0695d61c05a0ebdd834";
+    version = "unstable-2023-04-10";
+    rev = "0e2340051019b581bdb3eeed37310d637b7255c1";
     owner = "colemickens";
     # owner = "nushell";
     pname = "nushell";
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (
       owner = owner;
       repo = pname;
       rev = rev;
-      sha256 = "sha256-s2LnuNt4CZ2n9nrh8dQODjGq39TCjUYad7/06J4mAls=";
+      sha256 = "sha256-aWAWDEVrGkOenpHYZyCpCkEgZ3LTdRKU0txsq/CxMfw=";
     };
   in
   {
