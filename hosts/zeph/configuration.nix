@@ -13,8 +13,8 @@ in
     ../../mixins/gfx-radeonsi.nix
     ../../mixins/gfx-debug.nix
 
-    ../../mixins/android.nix
-    ../../mixins/easyeffects.nix
+    # ../../mixins/android.nix
+    # ../../mixins/easyeffects.nix
     ../../mixins/hidpi.nix
     ../../mixins/ledger.nix
     ../../mixins/libvirt.nix
