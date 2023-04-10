@@ -3,16 +3,21 @@
 let-env NO_PAGER = 1
 let-env GH_PAGER = "cat"
 
+let keep_runs = 10
+
 let runurl = $"repos/($env.GITHUB_REPOSITORY)/actions/runs"
 
 loop {
   let runs = (^gh api $"($runurl)?per_page=100&status=completed" | from json)
-  print -e $runs
-  if $runs.total_count == 0 {
+
+  let wf_runs = ($runs | get -i workflow_runs | skip $keep_runs)
+
+  if ($wf_runs | length) == 0 {
+    print -e "nothing to do!"
     break
   }
-  ($runs
-    | get -i workflow_runs
+
+  ($wf_runs
     | select name id status node_id
     | each { |it|
       sleep 1sec
