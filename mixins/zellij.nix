@@ -8,51 +8,51 @@ in
 {
   config = {
     home-manager.users.cole = { pkgs, ... }: {
-      xdg.configFile."zellij/config.kdl".text = ''
-        default_shell "nu"
-        simplified_ui true
-        pane_frames true
-        theme "default"
-        default_layout "compact"
-        default_mode "normal"
-        // mouse_mode true # default=true
-        scroll_buffer_size 99999
-        scrollback_editor "hx"
-        ui {
-          pane_frames {
-            // rounded_corners true
-            rounded_corners false
-          }
-        }
-      '';
+      # xdg.configFile."zellij/config.kdl".text = ''
+      #   default_shell "nu"
+      #   simplified_ui true
+      #   pane_frames true
+      #   theme "default"
+      #   default_layout "compact"
+      #   default_mode "normal"
+      #   // mouse_mode true # default=true
+      #   scroll_buffer_size 99999
+      #   scrollback_editor "hx"
+      #   ui {
+      #     pane_frames {
+      #       // rounded_corners true
+      #       rounded_corners false
+      #     }
+      #   }
+      # '';
       programs.zellij = {
         enable = true;
-        # settings = {
-        #   default_mode = "normal";
-        #   ui.pane_frames.rounded_corners = true;
-        #   default_layout = "compact";
-        #   default_shell = "nu";
-        #   simplified_ui = true;
-        #   pane_frames = true;
-        #   scrollback_editor = "hx";
-        #   theme = "default";
-        # #   themes = {
-        # #     nixdefault = {
-        # #       fg = convert colors.foreground;
-        # #       bg = convert colors.background;
-        # #       gray = convert colors.background;
-        # #       black = convert colors.black;
-        # #       red = convert colors.red;
-        # #       green = convert colors.green;
-        # #       yellow = convert colors.yellow;
-        # #       blue = convert colors.blue;
-        # #       magenta = convert colors.purple;
-        # #       cyan = convert colors.cyan;
-        # #       white = convert colors.white;
-        # #       orange = convert colors.yellow;
-        # #     };
-        # #   };
-        # };
+        settings = {
+          default_mode = "normal";
+          ui.pane_frames.rounded_corners = true;
+          default_layout = "compact";
+          default_shell = "nu";
+          simplified_ui = true;
+          pane_frames = true;
+          scrollback_editor = "hx";
+          theme = "default";
+        #   themes = {
+        #     nixdefault = {
+        #       fg = convert colors.foreground;
+        #       bg = convert colors.background;
+        #       gray = convert colors.background;
+        #       black = convert colors.black;
+        #       red = convert colors.red;
+        #       green = convert colors.green;
+        #       yellow = convert colors.yellow;
+        #       blue = convert colors.blue;
+        #       magenta = convert colors.purple;
+        #       cyan = convert colors.cyan;
+        #       white = convert colors.white;
+        #       orange = convert colors.yellow;
+        #     };
+        #   };
+        };
       };
     };
   };
