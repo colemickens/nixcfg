@@ -52,6 +52,7 @@ in {
   
   os = {
     nixos_22_05 = "nixos_22_05";
+    nixos_22_11 = "nixos_22_11";
   };
 
   tfplan = packet_config: vms:

@@ -9,11 +9,22 @@ let nixopts = [
   "--option" "extra-substituters" "'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://unmatched.cachix.org https://nix-community.cachix.org'"
   "--option" "extra-trusted-public-keys" "'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= unmatched.cachix.org-1:F8TWIP/hA2808FDABsayBCFjrmrz296+5CQaysosTTc= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs='"
 ];
-let builder_x86 = (if ("BUILDER_X86" in $env) { $env.BUILDER_X86 | str trim } else { $"cole@localhost" })
-let builder_a64 = (if ("BUILDER_A64" in $env) { $env.BUILDER_A64 | str trim } else { $"colemickens@aarch64.nixos.community" })
-let-env BUILDER_X86 = $builder_x86 # lazy
-let-env BUILDER_A64 = $builder_a64 # Todo: lazy
-# let BUILDER_R64 = (if ("BUILDER_R64" in $env) { $env.BUILDER_R64 | str trim } else { $"cole@(^tailscale ip --4 visionfive2 | str trim)" })
+def guessbuilder [ arch: string ] {
+  let b = $"BUILDER_($arch | str upcase)"
+  if $b in $env {
+    return ($env | get $b)
+  } else if ($"/tmp/($b)" | path exists) {
+    let builder = (open $"/tmp/($b)" | str trim)
+    return $builder
+  } else {
+    return "cole@localhost" # TODO this isn't finished for aarch64
+  }
+}
+let-env BUILDER_X86 = (guessbuilder "x86")
+let-env BUILDER_A64 = (guessbuilder "a64")
+
+print -e $"BUILDER_X86 = ($env.BUILDER_X86)"
+print -e $"BUILDER_A64 = ($env.BUILDER_A64)"
 
 let cachix_cache = "colemickens"
 let-env CACHIX_SIGNING_KEY = (open $"/run/secrets/cachix_signing_key_colemickens" | str trim)
@@ -47,8 +58,8 @@ def evalDrv [ ref: string ] {
 
 def buildDrvs [ drvs: table ] {
   let builds = [
-    {builder: $builder_a64, drvs: ($drvs | where system == "aarch64-linux")}
-    {builder: $builder_x86, drvs: ($drvs | where system == "x86_64-linux")}
+    {builder: $env.BUILDER_A64, drvs: ($drvs | where system == "aarch64-linux")}
+    {builder: $env.BUILDER_X86, drvs: ($drvs | where system == "x86_64-linux")}
   ]
   for build in $builds {
     print -e $build
@@ -68,28 +79,30 @@ def buildDrvs__ [ buildHost: string drvs: list ] {
 
 def cacheDrvs [ drvs: list ] {
   let builds = [
-    {builder: $builder_a64, drvs: ($drvs | filter {|x| $x.system == "aarch64-linux"})}
-    {builder: $builder_x86, drvs: ($drvs | filter {|x| $x.system == "x86_64-linux"})}
+    {builder: $env.BUILDER_A64, drvs: ($drvs | filter {|x| $x.system == "aarch64-linux"})}
+    {builder: $env.BUILDER_X86, drvs: ($drvs | filter {|x| $x.system == "x86_64-linux"})}
   ]
-  ($builds | par-each { |it| 
-    if ($it.drvs | length) == 0 { return; }
+  print -e $builds
+  for b in $builds {
+    if ($b.drvs | length) == 0 { continue; }
     # TODO: we can do better, hunt for any downstream drvs and push them even if we failed o do full build
-    let outs = ($it.drvs | get outputs | flatten | get out | flatten)
-    let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str collect)
+    let outs = ($b.drvs | get outputs | flatten | get out | flatten)
+    let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str join)
     header "purple_reverse" $"cache: remote: ($outs | length) paths"
-    (^ssh $it.builder
+    (^ssh $b.builder
       ([
         $"printf '%s' '($outsStr)' | env CACHIX_SIGNING_KEY='($env.CACHIX_SIGNING_KEY)' "
         $"nix-shell -I nixpkgs=($cachixpkgs) -p cachix --command 'cachix push ($cachix_cache)'"
       ] | str join ' ')
     )
     # if ($env.LAST_EXIT_CODE != 0) { error make { msg: "failed to something..." } }
-  })
+  }
 }
 
 def downDrvs [ drvs: table target: string ] {
   header "purple_reverse" $"download: ($target): $drvs"
   let builds = ($drvs | get outputs | get out)
+  ^echo ^ssh $"cole@($target)" (([ "nix" "build" "--no-link" "-j0" $nixopts $builds ] | flatten) | str join ' ')
   ^ssh $"cole@($target)" (([ "nix" "build" "--no-link" "-j0" $nixopts $builds ] | flatten) | str join ' ')
   # if ($env.LAST_EXIT_CODE != 0) {
   #   error make { msg: $"failed to down to ($target)"}
@@ -119,7 +132,6 @@ def "main build" [ drv: string ] {
   # NUSHELL BUG:
   let drvs = ($drvs | where { |it| $it.isCached == false or $it.isCached == true})
   buildDrvs $drvs
-  downDrvs $drvs "localhost"
 }
 
 def "main cache" [ drv: string ] {
@@ -128,6 +140,16 @@ def "main cache" [ drv: string ] {
   let drvs = ($drvs | where { |it| $it.isCached == false or $it.isCached == true})
   buildDrvs $drvs
   cacheDrvs $drvs
+}
+
+def "main rbuild" [ drv: string ] {
+  let drvs = (evalDrv $drv)
+  # NUSHELL BUG:
+  let drvs = ($drvs | where { |it| $it.isCached == false or $it.isCached == true})
+  buildDrvs $drvs
+  cacheDrvs $drvs
+  let out = ($drvs | get "outputs" | flatten | get "out" | flatten | first)
+  ^nix build $nixopts -j0 $out
 }
 
 def "main deploy" [...h] {

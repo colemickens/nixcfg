@@ -67,6 +67,7 @@ let
         pktspot1 = {
           plan = tflib.equinix.plans.n3_xlarge_x86;
           os = tflib.equinix.os.nixos_22_05;
+          # os = tflib.equinix.os.nixos_22_11; # TODO
           loc = tflib.equinix.metros.dc10;
           bid = "0.50";
           payload = tflib.payloads.nixos-generic-config;
