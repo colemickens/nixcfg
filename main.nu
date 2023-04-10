@@ -246,8 +246,6 @@ def "main pkgup" [...pkglist] {
       --version branch
       --commit
       $"pkgs.x86_64-linux.($pkgname)")
-
-    ^git commit --no-gpg-sign $"./pkgs/($pkgname)"
   }
 
   let pkgs_ = ($pkgs | each {|p| $".#packages.x86_64-linux.($p)" })
