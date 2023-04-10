@@ -26,6 +26,8 @@ let-env BUILDER_A64 = (guessbuilder "a64")
 print -e $"BUILDER_X86 = ($env.BUILDER_X86)"
 print -e $"BUILDER_A64 = ($env.BUILDER_A64)"
 
+check
+
 let cachix_cache = "colemickens"
 let-env CACHIX_SIGNING_KEY = (open $"/run/secrets/cachix_signing_key_colemickens" | str trim)
 
@@ -72,7 +74,7 @@ def buildDrvs__ [ buildHost: string drvs: list ] {
   if ($drvs | length) == 0 { return; } # TODO_NUSHELL: xxx
   let drvPaths = ($drvs | get "drvPath") # TODO_NUSHELL: feels like this should be easier to deal with than having to length==0 guard against it
 
-  ^$nix copy --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvPaths
+  ^$nix copy $nixopts --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvPaths
 
   ^$nix build $nixopts --store $"ssh-ng://($buildHost)" -L $drvPaths
 }
@@ -273,7 +275,6 @@ def "main cache_a64" [] {
 def "main up" [] {
   header red_reverse "up" "▒"
 
-  check
   main inputup
   # main pkgup
   main lockup
@@ -289,7 +290,6 @@ def "main selfdeploy" [] {
   rm /tmp/selfup
 }
 def "main selfup" [] {
-  check
   main inputup
   # main pkgup
   main lockup
