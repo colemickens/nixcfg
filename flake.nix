@@ -175,11 +175,9 @@
         # TODO: replace this with a service that pulls latest built
         # dashboard to show what generation is deployed
         inherit (nixosConfigs)
-          zeph
-          jeffhyper
           raisin
-          slynux
           xeep
+          zeph
           ;
       };
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);
