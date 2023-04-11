@@ -80,11 +80,11 @@
     },
     "cmpkgs": {
       "locked": {
-        "lastModified": 1681148713,
-        "narHash": "sha256-Q/27q6WYY9b+DT4RgKE0adv9pozEqBc2OGda5uPZM6A=",
+        "lastModified": 1681185159,
+        "narHash": "sha256-SGJWKfvARCY5gVTbhX4ucph609OvYVJFo9COrNRDQdI=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "610a019bff2a1d93b5b810b8080b71d2bd149ac2",
+        "rev": "2daafb401c2ea34f5412be9f6c9ce2eaa264ec09",
         "type": "github"
       },
       "original": {
@@ -96,11 +96,11 @@
     },
     "cmpkgs-cross-riscv64": {
       "locked": {
-        "lastModified": 1681096232,
-        "narHash": "sha256-T3Wz63EGqakjoTb761odreSdVYmFnY4gp9WxjlNdgwI=",
+        "lastModified": 1681185169,
+        "narHash": "sha256-oaz0Gtk99dIvaxHBMQLdZ6DCQQRQCeMSJAAAfsak8a8=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "eb96e09508b930282c01fa8d034e3df84b556e78",
+        "rev": "c20409377dcf6844188105ac5cc6c19e359ff679",
         "type": "github"
       },
       "original": {
@@ -710,11 +710,11 @@
         "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1681141923,
-        "narHash": "sha256-PNHLOW1AQRd6PU2BoiGw8w1LWvCp5842sE4w1hfcAao=",
+        "lastModified": 1681174555,
+        "narHash": "sha256-lya479Aa50Ph7cd/k/wxQwEpadT3UmZW/s1lExdAHwI=",
         "owner": "helix-editor",
         "repo": "helix",
-        "rev": "686a1e2f311932c2fcfeee6e8384ab8ce959d618",
+        "rev": "b9b4ed5c6c68e8c2c744e779b5c4d1c148a60f47",
         "type": "github"
       },
       "original": {
@@ -731,11 +731,11 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1680890439,
-        "narHash": "sha256-WCX+XEAq6giE7yTqHjk+R8HXU3q0WVYRQKqdw3zJGTM=",
+        "lastModified": 1681185176,
+        "narHash": "sha256-PE/sjWtXl51soERDxCMYFxi+MqK7kK+v12ZSWDGfcC8=",
         "owner": "colemickens",
         "repo": "home-manager",
-        "rev": "b5149dae19f9e86a3d1d22be9e44b55c0e500152",
+        "rev": "a3b6a986149d7520942e2fe8a452425ac8f5b0d3",
         "type": "github"
       },
       "original": {
@@ -755,11 +755,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1681147596,
-        "narHash": "sha256-Y8EX1J6ExRBng+/6ADsUuEoPjMCorCWlO8MRT1TNvhM=",
+        "lastModified": 1681162925,
+        "narHash": "sha256-UbJLCD5/SxKQ9WQeX/LYltKKaFsx1TDRTsSguZCNUGI=",
         "owner": "hyprwm",
         "repo": "Hyprland",
-        "rev": "fa4aef4531d3ca138cc0c5a87768358fd5d7df7d",
+        "rev": "16a034a34a8e97aaeed6e3f46d04c87497313c20",
         "type": "github"
       },
       "original": {
@@ -797,11 +797,11 @@
         "rust-overlay": "rust-overlay_3"
       },
       "locked": {
-        "lastModified": 1681131762,
-        "narHash": "sha256-iiGuG+xQi1so+Cu+El7Ckjlhm436VXpKFFOIERVG10M=",
+        "lastModified": 1681154278,
+        "narHash": "sha256-41/NoQ77mY0u7IKY3S5POeOD4FsR4FV6J+ARsaf+Ob8=",
         "owner": "JakeStanger",
         "repo": "ironbar",
-        "rev": "b770ae716cd74471669d1db3b4b68b6fc68b13c4",
+        "rev": "2815cef44037af810db931a1701e562a3a50968c",
         "type": "github"
       },
       "original": {
@@ -1347,11 +1347,11 @@
     },
     "nixpkgs-stable": {
       "locked": {
-        "lastModified": 1681041438,
-        "narHash": "sha256-NmRGMklxBZ8Ol47CKMQxAU1F+v8ySpsHAAiC7ZL4vxY=",
+        "lastModified": 1681091990,
+        "narHash": "sha256-ifIzhksUBZKp5WgCuoVhDY32qaEplXp7khzrB6zkaFc=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "48dcbaf7fa799509cbec85d55b8d62dcf1477d57",
+        "rev": "ea96b4af6148114421fda90df33cf236ff5ecf1d",
         "type": "github"
       },
       "original": {
@@ -1387,11 +1387,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1681139493,
-        "narHash": "sha256-vNoib7DtiVLeMrn2Pu3YyH0IHesR6z9lT52313BO8iA=",
+        "lastModified": 1681178700,
+        "narHash": "sha256-msYb74EbARcLqrhNE5xarLrop3lTlztkafG38Qjs8O0=",
         "owner": "nix-community",
         "repo": "nixpkgs-wayland",
-        "rev": "38c71d36f86f8410a5d4e191b196ed6ec09504c7",
+        "rev": "4353c512e7304e20ca68b5307a374914ca7c816f",
         "type": "github"
       },
       "original": {
