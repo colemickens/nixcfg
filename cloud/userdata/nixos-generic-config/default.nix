@@ -32,19 +32,17 @@
       # i weep, i cry
       # https://nixos.org/manual/nix/unstable/advanced-topics/cores-vs-jobs.html
       # buildCores = 0; # YOLO
-      settings = {
-        trusted-public-keys = [
-          "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-          "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4="
-          "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
-        ];
-        substituters = [
-          "https://cache.nixos.org"
-          "https://colemickens.cachix.org"
-          "https://nixpkgs-wayland.cachix.org"
-        ];
-        trustedUsers = [ "@wheel" "root" ];
-      };
+      binaryCachePublicKeys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4="
+        "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
+      ];
+      binaryCaches = [
+        "https://cache.nixos.org"
+        "https://colemickens.cachix.org"
+        "https://nixpkgs-wayland.cachix.org"
+      ];
+      trustedUsers = [ "@wheel" "root" "cole" ];
       package = pkgs.nixUnstable;
       extraOptions = "experimental-features = nix-command flakes recursive-nix";
     };
