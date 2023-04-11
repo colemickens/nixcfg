@@ -64,7 +64,6 @@ in
         device = "/dev/disk/by-partlabel/${hn}-luksroot";
         allowDiscards = true;
         keyFile = "/lukskey";
-        fallbackToPassword = true; # doesn't work if keyfile is present, but not a valid luks key
       };
       initrd.secrets = {
         "/lukskey" = pkgs.writeText "lukskey" "test";

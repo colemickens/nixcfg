@@ -77,7 +77,6 @@ in
 
           keyFileSize = 4096;
           keyFile = "/dev/disk/by-id/mmc-EB1QT_0xa5f25355";
-          fallbackToPassword = true;
         };
       };
     };
