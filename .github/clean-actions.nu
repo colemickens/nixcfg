@@ -25,9 +25,6 @@ loop {
       let delurl = $"($runurl)/($id)"
       print -e $"(ansi red)delete ($delurl)(ansi reset)"
       ^gh api $"($delurl)" -X DELETE
-      if ($env.LAST_EXIT_CODE != 0) {
-        error make { msg: "failed" }
-      }
     }
   )
 }
