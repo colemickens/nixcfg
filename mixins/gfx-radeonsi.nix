@@ -1,6 +1,8 @@
 { pkgs, lib, config, inputs, ... }:
 
-
+let
+  _nvtop = pkgs.nvtop.override { nvidia = false; };
+in
 {
   config = {
     hardware.opengl.enable = true;
@@ -11,7 +13,7 @@
     # };
 
     environment.systemPackages = with pkgs; [
-      nvtop
+      _nvtop
     ];
 
     environment.sessionVariables = {
