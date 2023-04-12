@@ -279,7 +279,7 @@ def "main up" [...hosts] {
   main lockup
   main cache_x86
   main deploy $hosts
-  main cache_a64
+  # main cache_a64 #TODO: what do?
 }
 
 def main [] { main up }
