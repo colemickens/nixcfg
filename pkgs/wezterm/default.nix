@@ -32,21 +32,20 @@
 
 
 let
-  owner = "colemickens";
   doCheck_ = doCheck;
-  # owner = "wez";
+  owner = "wez";
 in
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "unstable-2023-04-11";
-  rev = "9dc8a4f2e005a15674bbb66ef84ce29243bede67";
+  version = "unstable-2023-04-10";
+  rev = "572c31fb30afeb5505042a4c8fe7f292d5c07680";
 
   src = fetchFromGitHub {
     owner = owner;
     repo = pname;
     rev = rev;
     fetchSubmodules = true;
-    sha256 = "sha256-Nn+x+eKLJ8c3Gpw/2R1HzWuBHSjkEgBzn8rMMkbQWLU=";
+    sha256 = "sha256-D9ZsQzTPsGVR6s888ja6EjF+afxp2U3sLXjQ9fkoh9E=";
   };
 
   postPatch = ''
@@ -57,7 +56,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   cargoLock = {
-    lockFile = "${src.out}/Cargo.lock";
+    lockFile = ./Cargo.lock;
     outputHashes = {
       "image-0.24.5" = "sha256-fTajVwm88OInqCPZerWcSAm1ga46ansQ3EzAmbT58Js=";
       "xcb-imdkit-0.2.0" = "sha256-QOT9HLlA26DVPUF4ViKH2ckexUsu45KZMdJwoUhW+hA=";
