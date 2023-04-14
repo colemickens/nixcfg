@@ -277,7 +277,10 @@
 
             ## DEVSHELLS # some of 'em kinda compose #############################
             devShells = (lib.genAttrs [ "ci" "devenv" "devtools" "gstreamer" "uutils" ] mkShell)
-              // { default = devShells.devtools; };
+              // { default = devShells.ci; };
+
+            shells = (lib.genAttrs [ "ci" "devenv" "devtools" "gstreamer" "uutils" ] mkShell)
+              // { default = shells.ci; };
 
             ## APPS ##############################################################
             apps = lib.recursiveUpdate {}
@@ -290,7 +293,7 @@
               );
 
             ## PACKAGES ##########################################################
-            packages = (pkgsUnfree.__colemickens_nixcfg_pkgs);
+            packages = (pkgsFree.__colemickens_nixcfg_pkgs);
 
             ## NETBOOTS (paused: add grub => nix-netboot-server) #################
             # netboots_ = lib.genAttrs

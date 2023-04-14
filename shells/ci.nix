@@ -19,10 +19,11 @@ minimalMkShell {
       # gh
       mercurial
       nushell
-      sd
-      ripgrep
+      # sd
+      # ripgrep
     ]) ++ [
       inputs.nix-eval-jobs.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
+      inputs.nix-update.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
     ]
   );
 }

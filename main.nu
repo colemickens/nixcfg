@@ -6,7 +6,7 @@ let cachixpkgs = "https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz
 let nix = "nix"
 let nixopts = [
   "--builders-use-substitutes" "--option" "narinfo-cache-negative-ttl" "0"
-  "--option" "extra-substituters" "'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://unmatched.cachix.org https://nix-community.cachix.org'"
+  "--option" "extra-trusted-substituters" "'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://unmatched.cachix.org https://nix-community.cachix.org'"
   "--option" "extra-trusted-public-keys" "'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= unmatched.cachix.org-1:F8TWIP/hA2808FDABsayBCFjrmrz296+5CQaysosTTc= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs='"
 ];
 
@@ -81,6 +81,10 @@ def buildDrvs__ [ buildHost: string drvs: list ] {
   ^$nix build $nixopts --store $"ssh-ng://($buildHost)" -L $drvPaths
 }
 
+def "main nixbuild" [ a: string ] {
+  ^nix build $nixopts $a
+}
+
 def cacheDrvs [ drvs: list ] {
   let builds = [
     {builder: $env.BUILDER_A64, drvs: ($drvs | filter {|x| $x.system == "aarch64-linux"})}
@@ -144,6 +148,10 @@ def "main cache" [ drv: string ] {
   let drvs = ($drvs | where { |it| $it.isCached == false or $it.isCached == true})
   buildDrvs $drvs
   cacheDrvs $drvs
+}
+
+def "main nix" [...args] {
+  ^nix $nixopts $args
 }
 
 def "main rbuild" [ drv: string ] {
@@ -241,13 +249,24 @@ def "main pkgup" [...pkglist] {
       ^git -C $maybefork push origin HEAD -f
     }
 
+    let t = $"/tmp/commit-msg-($pkgname)"
+    # TODO: see if this can be host agnostic, nix-update and main build should just work
+    let p = $"pkgs.x86_64-linux.($pkgname)"
+    let pf = $"/home/cole/code/nixcfg#($p)"
     (nix-update
       --flake
-      --build
       --format
       --version branch
-      --commit
-      $"pkgs.x86_64-linux.($pkgname)")
+      --write-commit-message $t
+      $p)
+
+    print -e ">>>>>>>>> main build"
+    let c = (nix build -j0 $nixopts $pf | complete)
+    if $c.exit_code != 0 {
+      main cache $pf
+    }
+
+    git commit -F $t $"./pkgs/($pkgname)"
   }
 
   let pkgs_ = ($pkgs | each {|p| $".#packages.x86_64-linux.($p)" })
