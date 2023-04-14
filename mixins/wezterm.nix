@@ -64,7 +64,6 @@ in
           local f = wezterm.font_with_fallback({
             {family="${prefs.font.monospace.family}", weight="Regular"},
             {family="Font Awesome", weight="Regular"},
-             --"Font Awesome",
           })
           config.font = f;
         end
