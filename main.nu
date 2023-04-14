@@ -10,19 +10,20 @@ let nixopts = [
   "--option" "extra-trusted-public-keys" "'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= unmatched.cachix.org-1:F8TWIP/hA2808FDABsayBCFjrmrz296+5CQaysosTTc= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs='"
 ];
 
-def guessbuilder [ arch: string ] {
-  let b = $"BUILDER_($arch | str upcase)"
+def getpref [ b: string ] {
+  let pp = $".pref.($b)"
   if $b in $env {
     return ($env | get $b)
-  } else if ($"/tmp/($b)" | path exists) {
-    let builder = (open $"/tmp/($b)" | str trim)
+  } else if ($pp | path exists) {
+    print -e $"getpref: ($b): check ($pp)"
+    let builder = (open $".pref.($b)" | str trim)
     return $builder
   } else {
     return "cole@localhost" # TODO this isn't finished for aarch64
   }
 }
-let-env BUILDER_X86 = (guessbuilder "x86")
-let-env BUILDER_A64 = (guessbuilder "a64")
+let-env BUILDER_X86 = (getpref "BUILDER_X86")
+let-env BUILDER_A64 = (getpref "BUILDER_A64")
 
 print -e $"BUILDER_X86 = ($env.BUILDER_X86)"
 print -e $"BUILDER_A64 = ($env.BUILDER_A64)"
