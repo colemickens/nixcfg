@@ -28,8 +28,7 @@ rustPlatform.buildRustPackage (
   let
     version = "unstable-2023-04-10";
     rev = "0e2340051019b581bdb3eeed37310d637b7255c1";
-    owner = "colemickens";
-    # owner = "nushell";
+    owner = "nushell";
     pname = "nushell";
     src = fetchFromGitHub {
       owner = owner;
@@ -43,7 +42,7 @@ rustPlatform.buildRustPackage (
     inherit src;
 
     cargoLock = {
-      lockFile = src + "/Cargo.lock";
+      lockFile = ./Cargo.lock;
     };
 
     nativeBuildInputs = [ pkg-config ]
