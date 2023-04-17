@@ -76,20 +76,12 @@ def buildDrvs__ [ buildHost: string drvs: list ] {
   header "light_blue_reverse" $"build: ($drvs | length) drvs on ($buildHost)]"
   if ($drvs | length) == 0 { return; } # TODO_NUSHELL: xxx
   let drvPaths = ($drvs | get "drvPath")
-  let drvCopy = ($drvPaths | each {|i| $"($i)^*"})
+  let drvBuilds = ($drvPaths | each {|i| $"($i)^*"})
 
   # TODO: try this in a loop a few times, sometimes it fails "too many root paths" <- TODO: File a bug for this
-  print -e ">>> nix copy"
-  ^$nix copy $nixopts --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvCopy
+  ^$nix copy $nixopts --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvBuilds
 
-  let buildPaths = ($drvPaths | each {|i| $"($i)!*"}) # TODO_NUSHELL: feels like this should be easier to deal with than having to length==0 guard against it
-
-  print -e ">>>> TO BUILD"
-  print -e $drvCopy
-  print -e "<<<< TO BUILD"
-
-  print -e ">>> nix build"
-  ^$nix build $nixopts --store $"ssh-ng://($buildHost)" -L $drvCopy
+  ^$nix build $nixopts --store $"ssh-ng://($buildHost)" -L $drvBuilds
 }
 
 def "main nixbuild" [ a: string ] {
@@ -101,16 +93,13 @@ def cacheDrvs [ drvs: list ] {
     {builder: $env.BUILDER_A64, drvs: ($drvs | filter {|x| $x.system == "aarch64-linux"})}
     {builder: $env.BUILDER_X86, drvs: ($drvs | filter {|x| $x.system == "x86_64-linux"})}
   ]
-  print -e $builds
   for b in $builds {
     if ($b.drvs | length) == 0 { continue; }
     # TODO: we can do better, hunt for any downstream drvs and push them even if we failed o do full build
     let outs = ($b.drvs | get outputs | flatten | get out | flatten)
     let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str join)
-    print -e "TO CACHE>>>>"
-    print -e $outs
-    print -e "<<<<<<<<TO CACHE"
     header "purple_reverse" $"cache: remote: ($outs | length) paths"
+    print -e $builds
     (^ssh $b.builder
       ([
         $"printf '%s' '($outsStr)' | env CACHIX_SIGNING_KEY='($env.CACHIX_SIGNING_KEY)' "
