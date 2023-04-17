@@ -169,7 +169,9 @@ def "main deploy" [...h] {
   let h = ($h | flatten)
   header light_gray_reverse $"DEPLOY"
   print -e $h
-  $h | flatten | each { |h| deployHost $h }
+  for h in ($h | flatten) {
+    deployHost $h
+  }
 }
 
 def "main inputup" [] {
