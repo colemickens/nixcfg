@@ -75,7 +75,7 @@ def buildDrvs [ drvs: table ] {
 def buildDrvs__ [ buildHost: string drvs: list ] {
   header "light_blue_reverse" $"build: ($drvs | length) drvs on ($buildHost)]"
   if ($drvs | length) == 0 { return; } # TODO_NUSHELL: xxx
-  let drvPaths = ($drvs | get "drvPath" | each {i})
+  let drvPaths = ($drvs | get "drvPath")
   let drvCopy = ($drvPaths | each {|i| $"($i)^*"})
 
   # TODO: try this in a loop a few times, sometimes it fails "too many root paths" <- TODO: File a bug for this
