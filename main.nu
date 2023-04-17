@@ -80,7 +80,7 @@ def buildDrvs__ [ doCache: bool buildHost: string drvs: list ] {
   # TODO: try this in a loop a few times, sometimes it fails "too many root paths" <- TODO: File a bug for this
   ^$nix copy $nixopts --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvBuilds
 
-  print -e $"BUILD ($drvBuilds)"
+  ^echo $nix build $nixopts --store $"ssh-ng://($buildHost)" -L $drvBuilds
   ^$nix build $nixopts --store $"ssh-ng://($buildHost)" -L $drvBuilds
 
   if $doCache {
