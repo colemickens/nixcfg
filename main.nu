@@ -253,6 +253,7 @@ def "main pkgup" [...pkglist] {
     # TODO: see if this can be host agnostic, nix-update and main build should just work
     let p = $"pkgs.x86_64-linux.($pkgname)"
     let pf = $"/home/cole/code/nixcfg#($p)"
+    rm -f $t
     (nix-update
       --flake
       --format
@@ -260,13 +261,15 @@ def "main pkgup" [...pkglist] {
       --write-commit-message $t
       $p)
 
-    print -e ">>>>>>>>> main build"
-    let c = (nix build -j0 $nixopts $pf | complete)
-    if $c.exit_code != 0 {
-      main cache $pf
+    if ($t | path exists) and (open $t | str trim | str length) != 0 {
+      let c = (nix build -j0 $nixopts $pf | complete)
+      if $c.exit_code != 0 {
+        main cache $pf
+      }
+      git commit -F $t $"./pkgs/($pkgname)"
+    } else {
+      print -e $"pkgup: ($pkgname): skip commit + build"
     }
-
-    git commit -F $t $"./pkgs/($pkgname)"
   }
 
   let pkgs_ = ($pkgs | each {|p| $".#packages.x86_64-linux.($p)" })
