@@ -87,8 +87,8 @@ def buildDrvs__ [ doCache: bool buildHost: string drvs: list ] {
     let outs = ($drvs | get outputs | flatten | get out | flatten)
     let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str join)
     header "purple_reverse" $"cache: remote: ($outs | length) paths"
-    print -e $builds
-    (^ssh $b.builder
+    print -e $outs
+    (^ssh $buildHost
       ([
         $"printf '%s' '($outsStr)' | env CACHIX_SIGNING_KEY='($env.CACHIX_SIGNING_KEY)' "
         $"nix-shell -I nixpkgs=($cachixpkgs) -p cachix --command 'cachix push ($cachix_cache)'"
@@ -119,8 +119,7 @@ def deployHost [ host: string ] {
   let drvs = (evalDrv $"/home/cole/code/nixcfg#toplevels.($host)")
   # NUSHELL BUG:
   let drvs = ($drvs | where { |it| $it.isCached == false or $it.isCached == true})
-  buildDrvs $drvs
-  cacheDrvs $drvs
+  buildDrvs true $drvs
   downDrvs $drvs $target
   let topout = ($drvs | get "outputs" | flatten | get "out" | flatten | first)
   let cs = (do -c { ^ssh $"cole@($target)" $"readlink -f /run/current-system" } | str trim)
@@ -135,15 +134,14 @@ def "main build" [ drv: string ] {
   let drvs = (evalDrv $drv)
   # NUSHELL BUG:
   let drvs = ($drvs | where { |it| $it.isCached == false or $it.isCached == true})
-  buildDrvs $drvs
+  buildDrvs false $drvs
 }
 
 def "main cache" [ drv: string ] {
   let drvs = (evalDrv $drv)
   # NUSHELL BUG:
   let drvs = ($drvs | where { |it| $it.isCached == false or $it.isCached == true})
-  buildDrvs $drvs
-  cacheDrvs $drvs
+  buildDrvs true $drvs
 }
 
 def "main nix" [...args] {
