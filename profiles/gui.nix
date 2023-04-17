@@ -62,6 +62,8 @@ in
       services = {
         pass-secret-service = {
           enable = true;
+          # copied from profiles/interactive -> PASSWORD_STORE_DIR
+          storePath = "${hm.config.xdg.dataHome}/password-store";
         };
       };
 
