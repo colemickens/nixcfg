@@ -66,13 +66,13 @@ def buildDrvs [ doCache: bool drvs: table ] {
     {builder: $env.BUILDER_X86, drvs: ($drvs | where system == "x86_64-linux")}
   ]
   for build in $builds {
-    print -e $build
     buildDrvs__ $doCache $build.builder $build.drvs
   }
 }
 
 def buildDrvs__ [ doCache: bool buildHost: string drvs: list ] {
   header "light_blue_reverse" $"build: ($drvs | length) drvs on ($buildHost)]"
+  print -e $drvs
   if ($drvs | length) == 0 { return; } # TODO_NUSHELL: xxx
   let drvPaths = ($drvs | get "drvPath")
   let drvBuilds = ($drvPaths | each {|i| $"($i)^*"})
