@@ -26,15 +26,15 @@
 
 rustPlatform.buildRustPackage (
   let
-    version = "unstable-2023-04-10";
-    rev = "0e2340051019b581bdb3eeed37310d637b7255c1";
+    version = "unstable-2023-04-17";
+    rev = "3b20d6890c5292903902d0f606dda517454fbab0";
     owner = "nushell";
     pname = "nushell";
     src = fetchFromGitHub {
       owner = owner;
       repo = pname;
       rev = rev;
-      sha256 = "sha256-aWAWDEVrGkOenpHYZyCpCkEgZ3LTdRKU0txsq/CxMfw=";
+      sha256 = "sha256-A26YY4EXdAlWT+Js5cdAdTr+IhCVdweIzaXu4ZD8sQk";
     };
   in
   {
@@ -43,6 +43,9 @@ rustPlatform.buildRustPackage (
 
     cargoLock = {
       lockFile = ./Cargo.lock;
+      outputHashes = {
+        "reedline-0.18.0" = "sha256-icyWTGyZ7a5PIF80WXQOFU5RvbdGwgBqFdj5CjOPMiY=";
+      };
     };
 
     nativeBuildInputs = [ pkg-config ]
