@@ -152,8 +152,7 @@ def "main rbuild" [ drv: string ] {
   let drvs = (evalDrv $drv)
   # NUSHELL BUG:
   let drvs = ($drvs | where { |it| $it.isCached == false or $it.isCached == true})
-  buildDrvs $drvs
-  cacheDrvs $drvs
+  buildDrvs true $drvs
   let out = ($drvs | get "outputs" | flatten | get "out" | flatten | first)
   ^nix build $nixopts -j0 $out
 }
@@ -228,7 +227,7 @@ def "main pkgup" [...pkglist] {
         | from json)
   }
 
-  print -e $pkgs
+  print -e $pkglist
 
   for pkgname in $pkglist {
     header yellow_reverse $"pkgup: ($pkgname)"
@@ -263,7 +262,7 @@ def "main pkgup" [...pkglist] {
     }
   }
 
-  let pkgs_ = ($pkgs | each {|p| $".#packages.x86_64-linux.($p)" })
+  let pkgs_ = ($pkglist | each {|p| $".#packages.x86_64-linux.($p)" })
   nix build $nixopts $pkgs_
 }
 
