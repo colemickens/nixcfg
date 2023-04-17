@@ -18,15 +18,15 @@ in
         configDir = "${hm.config.xdg.configHome}/nushell";
       in
       {
-        # home.file."${configDir}/env.nu".source = env_nu;
-        # home.file."${configDir}/config.nu".source = config_nu;
+        home.file."${configDir}/env.nu".source = env_nu;
+        home.file."${configDir}/config.nu".source = config_nu;
 
         home.file."${configDir}/prompt.nu".source = prompt_nu;
 
         programs.nushell = {
           enable = true;
-          envFile = env_nu;
-          configFile = config_nu;
+          # envFile = env_nu;
+          # configFile = config_nu;
           # envFile.source = env_nu;
           # configFile.source = config_nu;
         };
