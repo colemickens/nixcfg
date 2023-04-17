@@ -41,14 +41,14 @@ in
           "unmatched.cachix.org-1:F8TWIP/hA2808FDABsayBCFjrmrz296+5CQaysosTTc="
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         ];
-        trusted-substituters = [
+        substituters = [
           "https://cache.nixos.org"
           "https://colemickens.cachix.org"
           "https://nixpkgs-wayland.cachix.org"
           "https://unmatched.cachix.org"
           "https://nix-community.cachix.org"
         ];
-        trusted-users = [ "@wheel" "root" ];
+        trusted-users = [ "@wheel" "cole" "root" ];
       };
       package = _nix;
       extraOptions = ''
