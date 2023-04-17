@@ -170,8 +170,9 @@ def "main deploy" [...h] {
   let h = ($h | flatten)
   print -e $h
   header light_gray_reverse $"DEPLOY"
-  print -e $h
-  for h in ($h | flatten) {
+  let hh = ($h | flatten)
+  print -e $hh
+  for h in $hh {
     deployHost $h
   }
 }
