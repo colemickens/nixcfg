@@ -6,6 +6,7 @@ let cachixpkgs = "https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz
 let nix = "nix"
 let nixopts = [
   "--builders-use-substitutes" "--option" "narinfo-cache-negative-ttl" "0"
+  # TODO: files bugs such that we can exclusively use the flake's values??
   "--option" "extra-trusted-substituters" "'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://unmatched.cachix.org https://nix-community.cachix.org'"
   "--option" "extra-trusted-public-keys" "'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= unmatched.cachix.org-1:F8TWIP/hA2808FDABsayBCFjrmrz296+5CQaysosTTc= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs='"
 ];
@@ -76,6 +77,7 @@ def buildDrvs__ [ buildHost: string drvs: list ] {
   if ($drvs | length) == 0 { return; } # TODO_NUSHELL: xxx
   let drvPaths = ($drvs | get "drvPath") # TODO_NUSHELL: feels like this should be easier to deal with than having to length==0 guard against it
 
+  # TODO: try this in a loop a few times, sometimes it fails "too many root paths" <- TODO: File a bug for this
   ^$nix copy $nixopts --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvPaths
 
   ^$nix build $nixopts --store $"ssh-ng://($buildHost)" -L $drvPaths
