@@ -87,8 +87,9 @@ def buildDrvs__ [ doCache: bool buildHost: string drvs: list ] {
     # do caching here...
     let outs = ($drvs | get outputs | flatten | get out | flatten)
     let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str join)
-    header "purple_reverse" $"cache: remote: ($outs | length) paths"
+    header "purple_reverse" $"cache: ($outs | length) paths from ($buildHost)"
     print -e $outs
+    print -e $"CACHING: ($outsStr)"
     (^ssh $buildHost
       ([
         $"printf '%s' '($outsStr)' | env CACHIX_SIGNING_KEY='($env.CACHIX_SIGNING_KEY)' "
