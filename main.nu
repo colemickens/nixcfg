@@ -166,7 +166,9 @@ def "main deploy" [...h] {
     do -c { ^nix eval --json --apply "x: builtins.attrNames x" $ref }
       | complete | get stdout | from json
   })
+  print -e $h
   let h = ($h | flatten)
+  print -e $h
   header light_gray_reverse $"DEPLOY"
   print -e $h
   for h in ($h | flatten) {
