@@ -78,9 +78,13 @@ def buildDrvs__ [ buildHost: string drvs: list ] {
   let drvPaths = ($drvs | get "drvPath" | each {|i| $"($i)!*"}) # TODO_NUSHELL: feels like this should be easier to deal with than having to length==0 guard against it
 
   # TODO: try this in a loop a few times, sometimes it fails "too many root paths" <- TODO: File a bug for this
+  print -e ">>> nix copy"
   ^$nix copy $nixopts --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvPaths
 
-  ^$nix build $nixopts --store $"ssh-ng://($buildHost)" -L $drvPaths
+  let buildPaths = ($drvPaths | each {|i| $"($i)!*"}) # TODO_NUSHELL: feels like this should be easier to deal with than having to length==0 guard against it
+
+  print -e ">>> nix build"
+  ^$nix build $nixopts --store $"ssh-ng://($buildHost)" -L $buildPaths
 }
 
 def "main nixbuild" [ a: string ] {
