@@ -39,7 +39,6 @@ def check [] {
   let len = ($res.stdout | str trim | str length)
   if ($len) != 0 {
     git status
-    print -e $"len=($len)"
     error make { msg: $"!! ERR: git has untracked or uncommitted changes!!" }
   }
 }
@@ -61,18 +60,18 @@ def evalDrv [ ref: string ] {
     | each { |it| ($it | from json ) }
 }
 
-def buildDrvs [ drvs: table ] {
+def buildDrvs [ doCache: bool drvs: table ] {
   let builds = [
     {builder: $env.BUILDER_A64, drvs: ($drvs | where system == "aarch64-linux")}
     {builder: $env.BUILDER_X86, drvs: ($drvs | where system == "x86_64-linux")}
   ]
   for build in $builds {
     print -e $build
-    buildDrvs__ $build.builder $build.drvs
+    buildDrvs__ $doCache $build.builder $build.drvs
   }
 }
 
-def buildDrvs__ [ buildHost: string drvs: list ] {
+def buildDrvs__ [ doCache: bool buildHost: string drvs: list ] {
   header "light_blue_reverse" $"build: ($drvs | length) drvs on ($buildHost)]"
   if ($drvs | length) == 0 { return; } # TODO_NUSHELL: xxx
   let drvPaths = ($drvs | get "drvPath")
@@ -82,20 +81,9 @@ def buildDrvs__ [ buildHost: string drvs: list ] {
   ^$nix copy $nixopts --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvBuilds
 
   ^$nix build $nixopts --store $"ssh-ng://($buildHost)" -L $drvBuilds
-}
 
-def "main nixbuild" [ a: string ] {
-  ^nix build $nixopts $a
-}
-
-def cacheDrvs [ drvs: list ] {
-  let builds = [
-    {builder: $env.BUILDER_A64, drvs: ($drvs | filter {|x| $x.system == "aarch64-linux"})}
-    {builder: $env.BUILDER_X86, drvs: ($drvs | filter {|x| $x.system == "x86_64-linux"})}
-  ]
-  for b in $builds {
-    if ($b.drvs | length) == 0 { continue; }
-    # TODO: we can do better, hunt for any downstream drvs and push them even if we failed o do full build
+  if $doCache {
+    # do caching here...
     let outs = ($b.drvs | get outputs | flatten | get out | flatten)
     let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str join)
     header "purple_reverse" $"cache: remote: ($outs | length) paths"
@@ -106,13 +94,18 @@ def cacheDrvs [ drvs: list ] {
         $"nix-shell -I nixpkgs=($cachixpkgs) -p cachix --command 'cachix push ($cachix_cache)'"
       ] | str join ' ')
     )
-    # if ($env.LAST_EXIT_CODE != 0) { error make { msg: "failed to something..." } }
   }
 }
+
+# TODO: we shouldn't need this mostly...
+# def "main nixbuild" [ a: string ] {
+#   ^nix build $nixopts $a
+# }
 
 def downDrvs [ drvs: table target: string ] {
   header "purple_reverse" $"download: ($target): $drvs"
   let builds = ($drvs | get outputs | get out)
+  print -e $builds
   ^echo ^ssh $"cole@($target)" (([ "nix" "build" "--no-link" "-j0" $nixopts $builds ] | flatten) | str join ' ')
   ^ssh $"cole@($target)" (([ "nix" "build" "--no-link" "-j0" $nixopts $builds ] | flatten) | str join ' ')
   # if ($env.LAST_EXIT_CODE != 0) {
@@ -229,20 +222,17 @@ def "main inputup" [] {
 def "main pkgup" [...pkglist] {
   header yellow_reverse "pkgup"
 
-  let pkgs = if ($pkglist | length) == 0 {
-    
+  let pkglist = if ($pkglist | length) == 0 {
     (^nix eval
       --json $".#packages.x86_64-linux"
       --apply 'x: builtins.attrNames x'
         | str trim
         | from json)
-  } else {
-    $pkglist
   }
 
   print -e $pkgs
 
-  for pkgname in $pkgs {
+  for pkgname in $pkglist {
     header yellow_reverse $"pkgup: ($pkgname)"
 
     let maybefork = $"/home/cole/code/($pkgname)"
