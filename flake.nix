@@ -32,13 +32,13 @@
     nixos-riscv64 = { url = "github:colemickens/nixos-riscv64"; inputs."nixpkgs".follows = "cmpkgs-cross-riscv64"; };
 
     # devtools:
-    helix = { url = "github:helix-editor/helix"; inputs."nixpkgs".follows = "cmpkgs"; };
+    helix = { url = "github:helix-editor/helix"; };
+    # helix = { url = "github:helix-editor/helix"; inputs."nixpkgs".follows = "cmpkgs"; };
     jj = { url = "github:martinvonz/jj"; inputs."nixpkgs".follows = "cmpkgs"; };
     nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; inputs."nixpkgs".follows = "cmpkgs"; };
     # experimental:
     nix-netboot-server = { url = "github:DeterminateSystems/nix-netboot-serve"; };
-    nix-update = { url = "github:colemickens/nix-update"; };
-    # nix-update = { url = "github:Mic92/nix-update"; };
+    nix-update = { url = "github:Mic92/nix-update"; };
 
     # random apps:
     jstest-gtk = { url = "gitlab:jstest-gtk/jstest-gtk"; inputs."nixpkgs".follows = "cmpkgs"; };

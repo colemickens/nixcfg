@@ -87,8 +87,8 @@ in
       ## BOOT #################################################################
       console.earlySetup = true; # needed for LUKS
       boot = {
-        tmpOnTmpfs = lib.mkDefault false;
-        cleanTmpDir = true;
+        tmp.useTmpfs = lib.mkDefault false;
+        tmp.cleanOnBoot = true;
         zfs.enableUnstable = (cfg.useZfs && _zfsUnstable);
 
         loader = {
