@@ -73,7 +73,6 @@ in
           _chrome
           captive-browser
           jamesdsp
-          ripcord
 
           nheko
         ]))
