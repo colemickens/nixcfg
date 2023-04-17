@@ -84,7 +84,7 @@ def buildDrvs__ [ doCache: bool buildHost: string drvs: list ] {
 
   if $doCache {
     # do caching here...
-    let outs = ($b.drvs | get outputs | flatten | get out | flatten)
+    let outs = ($drvs | get outputs | flatten | get out | flatten)
     let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str join)
     header "purple_reverse" $"cache: remote: ($outs | length) paths"
     print -e $builds
