@@ -75,11 +75,12 @@ def buildDrvs [ drvs: table ] {
 def buildDrvs__ [ buildHost: string drvs: list ] {
   header "light_blue_reverse" $"build: ($drvs | length) drvs on ($buildHost)]"
   if ($drvs | length) == 0 { return; } # TODO_NUSHELL: xxx
-  let drvPaths = ($drvs | get "drvPath") # TODO_NUSHELL: feels like this should be easier to deal with than having to length==0 guard against it
+  let drvPaths = ($drvs | get "drvPath" | each {i})
+  let drvsCopy = ($drvPaths | each {|i| $"($i)^*"})
 
   # TODO: try this in a loop a few times, sometimes it fails "too many root paths" <- TODO: File a bug for this
   print -e ">>> nix copy"
-  ^$nix copy $nixopts --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvPaths
+  ^$nix copy $nixopts --no-check-sigs --to $"ssh-ng://($buildHost)" --derivation $drvCopy
 
   let buildPaths = ($drvPaths | each {|i| $"($i)!*"}) # TODO_NUSHELL: feels like this should be easier to deal with than having to length==0 guard against it
 
