@@ -85,7 +85,7 @@ def buildDrvs__ [ buildHost: string drvs: list ] {
   let buildPaths = ($drvPaths | each {|i| $"($i)!*"}) # TODO_NUSHELL: feels like this should be easier to deal with than having to length==0 guard against it
 
   print -e ">>> nix build"
-  ^$nix build $nixopts --store $"ssh-ng://($buildHost)" -L $buildPaths
+  ^$nix build $nixopts --store $"ssh-ng://($buildHost)" -L $drvCopy
 }
 
 def "main nixbuild" [ a: string ] {
