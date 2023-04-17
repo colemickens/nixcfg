@@ -21,8 +21,6 @@ in
     inputs.nixos-hardware.nixosModules.dell-xps-13-9370
 
     ./unfree.nix
-
-    inputs.nix-netboot-server.nixosModules.nix-netboot-serve
   ];
 
   config = {
