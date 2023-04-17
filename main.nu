@@ -103,6 +103,9 @@ def cacheDrvs [ drvs: list ] {
     # TODO: we can do better, hunt for any downstream drvs and push them even if we failed o do full build
     let outs = ($b.drvs | get outputs | flatten | get out | flatten)
     let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str join)
+    print -e "TO CACHE>>>>"
+    print -e $outs
+    print -e "<<<<<<<<TO CACHE"
     header "purple_reverse" $"cache: remote: ($outs | length) paths"
     (^ssh $b.builder
       ([
