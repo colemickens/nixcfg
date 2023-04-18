@@ -159,15 +159,15 @@ def "main rbuild" [ drv: string ] {
   ^nix build $nixopts -j0 $out
 }
 
-def "main deploy" [...h] {
-  let h = ($h | flatten)
-  let h = (if ($h | length) != 0 { $h } else {
+def "main deploy" [...hosts] {
+  let hosts = ($hosts | flatten)
+  let hosts = (if ($hosts | length) != 0 { $hosts } else {
     let ref = $".#deployConfigs"
     do -c { ^nix eval --json --apply "x: builtins.attrNames x" $ref }
       | complete | get stdout | from json
   })
   header light_gray_reverse $"DEPLOY"
-  for h in $h {
+  for h in $hosts {
     deployHost $h
   }
 }
