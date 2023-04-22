@@ -291,7 +291,7 @@ def "main up" [...hosts] {
   header red_reverse "up" "▒"
 
   main inputup
-  main pkgup
+  # main pkgup
   main lockup
   main cache_x86
   main deploy $hosts
