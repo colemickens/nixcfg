@@ -254,6 +254,7 @@ def "main pkgup" [...pkglist] {
       $p)
 
     if ($t | path exists) and (open $t | str trim | str length) != 0 {
+      print -e "pkgup> test if exists"
       let c = (nix build -j0 $nixopts $pf | complete)
       if $c.exit_code != 0 {
         main cache $pf
