@@ -86,7 +86,7 @@ in
           evince
           pinta
 
-          # pw-viz
+          pw-viz
           qpwgraph
           # helvum
 
@@ -97,7 +97,6 @@ in
           toastify
           # TODO: BROKEN WITH WAYLAND:?
           # qpwgraph
-          # pw-viz
           # ladybird # qt? long build anyway?
 
           # communcation
