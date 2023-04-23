@@ -103,7 +103,7 @@ in
           };
           systemd-boot = {
             enable = lib.mkDefault true;
-            configurationLimit = 20;
+            configurationLimit = 10;
             # memtest86.enable = (pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isx86);
             memtest86.entryFilename = "z-memtest86.conf";
           };
