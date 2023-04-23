@@ -70,9 +70,13 @@ def buildDrvs [ doCache: bool drvs: table ] {
   }
 }
 
+def printDrvs [ drvs: list ] {
+  print -e ($drvs | flatten out | select drvPath outputs)
+}
+
 def buildDrvs__ [ doCache: bool buildHost: string drvs: list ] {
   header "light_blue_reverse" $"build: ($drvs | length) drvs on ($buildHost)]"
-  print -e $drvs
+  printDrvs $drvs
   if ($drvs | length) == 0 { return; } # TODO_NUSHELL: xxx
   let drvPaths = ($drvs | get "drvPath")
   let drvBuilds = ($drvPaths | each {|i| $"($i)^*"})
@@ -88,7 +92,6 @@ def buildDrvs__ [ doCache: bool buildHost: string drvs: list ] {
     let outs = ($drvs | get outputs | flatten | get out | flatten)
     let outsStr = ($outs | each {|it| $"($it)(char nl)"} | str join)
     header "purple_reverse" $"cache: ($outs | length) paths from ($buildHost)"
-    print -e $outs
     print -e $"CACHING: ($outsStr)"
     (^ssh $buildHost
       ([
@@ -131,6 +134,11 @@ def deployHost [ host: string ] {
   ^ssh $"cole@($target)" (([ "sudo" "nix" "build" "--no-link" "-j0" $nixopts "--profile" "/nix/var/nix/profiles/system" $topout ] | flatten) | str join ' ')
   ^ssh $"cole@($target)" $"sudo '($topout)/bin/switch-to-configuration' switch"
 }
+
+# def "main eval" [ drv: string ] {
+#   let res = (evalDrv $drv)
+#   $res | flatten outputs
+# }
 
 def "main build" [ drv: string ] {
   let drvs = (evalDrv $drv)
