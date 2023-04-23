@@ -52,7 +52,7 @@ in
             },
           }
         }
-          
+
         if wezterm.target_triple == "x86_64-pc-windows-msvc" then
           config.default_prog = { "powershell.exe" }
         else
@@ -67,6 +67,23 @@ in
           })
           config.font = f;
         end
+
+        -- issue#3142 workaround START
+        local wezterm_action = wezterm.action
+        local act = wezterm.action
+        config.mouse_bindings = {
+          {
+            event = { Down = { streak = 1, button = { WheelUp = 1 } } },
+            mods = 'NONE',
+            action = wezterm_action.ScrollByLine(-3),
+          },
+          {
+            event = { Down = { streak = 1, button = { WheelDown = 1 } } },
+            mods = 'NONE',
+            action = wezterm_action.ScrollByLine(3),
+          },
+        }
+        -- issue#3142 workaround END
         
         return config
       '';
