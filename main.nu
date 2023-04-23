@@ -62,7 +62,7 @@ def evalDrv [ ref: string ] {
 
 def buildDrvs [ doCache: bool drvs: table ] {
   let builds = [
-    {builder: $env.BUILDER_A64, drvs: ($drvs | where system == "aarch64-linux")}
+    # {builder: $env.BUILDER_A64, drvs: ($drvs | where system == "aarch64-linux")}
     {builder: $env.BUILDER_X86, drvs: ($drvs | where system == "x86_64-linux")}
   ]
   for build in $builds {
@@ -71,12 +71,20 @@ def buildDrvs [ doCache: bool drvs: table ] {
 }
 
 def printDrvs [ drvs: list ] {
-  print -e ($drvs | flatten out | select drvPath outputs)
+  let im = ($drvs | flatten outputs | each { |it|
+    mut r = {}
+    $r.drvPath = ($it.drvPath | str replace "/nix/store/" "" )
+    $r.out = ($it.out | str replace "/nix/store/" "")
+    $r.isCached = $it.isCached
+    $r
+  })
+  print -e $im
 }
 
 def buildDrvs__ [ doCache: bool buildHost: string drvs: list ] {
   header "light_blue_reverse" $"build: ($drvs | length) drvs on ($buildHost)]"
   printDrvs $drvs
+
   if ($drvs | length) == 0 { return; } # TODO_NUSHELL: xxx
   let drvPaths = ($drvs | get "drvPath")
   let drvBuilds = ($drvPaths | each {|i| $"($i)^*"})
