@@ -2,7 +2,7 @@
 
 let
   cfg = config.nixcfg.common;
-  _kernelPackages = pkgs.linuxKernel.packages.linux_6_1;
+  _kernelPackages = pkgs.linuxKernel.packages.linux_6_2;
   _zfsUnstable = true;
 
   # _defaultKernel = pkgs.linuxKernel.packagesFor
