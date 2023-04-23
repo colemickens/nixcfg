@@ -41,8 +41,9 @@
     nix-update = { url = "github:Mic92/nix-update"; };
 
     # random apps:
-    jstest-gtk = { url = "gitlab:jstest-gtk/jstest-gtk"; inputs."nixpkgs".follows = "cmpkgs"; };
-    xboxdrv = { url = "gitlab:xboxdrv/xboxdrv"; /*inputs."nixpkgs".follows = "cmpkgs";*/ };
+    # TODO: remove, not used, no longer gaming in NixOS
+    # jstest-gtk = { url = "gitlab:jstest-gtk/jstest-gtk"; inputs."nixpkgs".follows = "cmpkgs"; };
+    # xboxdrv = { url = "gitlab:xboxdrv/xboxdrv"; /*inputs."nixpkgs".follows = "cmpkgs";*/ };
 
     # <maybe-unused>
     # impermanence = { url = "github:nix-community/impermanence"; }; # TODO: use it or lose it
