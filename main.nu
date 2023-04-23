@@ -1,6 +1,7 @@
 #!/usr/bin/env nu
 
-let cachixpkgs = "https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz" # used by nix-shell cachix
+# TODO: use a flake input for cachixpkgs and re-use?? except that we use this with NIX_PATH
+let cachixpkgs = "https://github.com/nixos/nixpkgs/archive/nixos-22.11.tar.gz" # used by nix-shell cachix
 # TODO: I think this bug got fixed???
 # let nix = "./misc/nix.sh"
 let nix = "nix"
