@@ -86,6 +86,8 @@ in
           evince
           pinta
 
+          gtkcord4
+
           pw-viz
           qpwgraph
           # helvum
