@@ -163,6 +163,14 @@ def "main cache" [ drv: string ] {
   buildDrvs true $drvs
 }
 
+def "main dl" [ drv: string ] {
+  let drvs = (evalDrv $drv)
+  # NUSHELL BUG:
+  let drvs = ($drvs | where { |it| $it.isCached == false or $it.isCached == true})
+  buildDrvs true $drvs
+  nix build -j0 $nixopts ($drvs | flatten outputs | get out)
+}
+
 def "main nix" [...args] {
   ^nix $nixopts $args
 }
