@@ -75,12 +75,12 @@ in
           {
             event = { Down = { streak = 1, button = { WheelUp = 1 } } },
             mods = 'NONE',
-            action = wezterm_action.ScrollByLine(-3),
+            action = wezterm_action.ScrollByLine(-1),
           },
           {
             event = { Down = { streak = 1, button = { WheelDown = 1 } } },
             mods = 'NONE',
-            action = wezterm_action.ScrollByLine(3),
+            action = wezterm_action.ScrollByLine(1),
           },
         }
         -- issue#3142 workaround END
