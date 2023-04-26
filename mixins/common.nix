@@ -194,7 +194,7 @@ in
           networkConfig = {
             DHCP = "yes";
             IPv6AcceptRA = true;
-            DHCPv6PrefixDelegation = "yes";
+            # DHCPv6PrefixDelegation = "yes";
             IPForward = "yes";
             # IPMasquerade = "both";
           };
