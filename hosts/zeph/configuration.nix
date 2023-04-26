@@ -32,6 +32,13 @@ in
   ];
 
   config = {
+    specialisation."sysd-netboot" = lib.mkIf (config.boot.initrd.systemd.enable) {
+      inheritParentConfig = true;
+      configuration = {
+        boot.initrd.systemd.network.enable = true;
+      };
+    };
+
     nixpkgs.hostPlatform.system = "x86_64-linux";
 
     console.earlySetup = lib.mkForce true;
