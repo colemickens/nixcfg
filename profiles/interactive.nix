@@ -102,6 +102,7 @@
             tealdeer
             du-dust
             dua
+            erdtree # erd - dua alternative
             dufs # rust static file server
             exa
             fd
