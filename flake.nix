@@ -26,7 +26,7 @@
 
     nix-rice = { url = "github:colemickens/nix-rice"; inputs."nixpkgs".follows = "cmpkgs"; };
     terranix = { url = "github:terranix/terranix"; inputs."nixpkgs".follows = "cmpkgs"; };
-    fenix = { url = "github:figsoda/fenix"; inputs."nixpkgs".follows = "cmpkgs"; }; # used for nightly rust devtools
+    fenix = { url = "github:nix-community/fenix"; inputs."nixpkgs".follows = "cmpkgs"; }; # used for nightly rust devtools
 
     visionfive-nix = { url = "github:colemickens/visionfive-nix"; inputs."nixpkgs".follows = "cmpkgs-cross-riscv64"; };
     nixos-riscv64 = { url = "github:colemickens/nixos-riscv64"; inputs."nixpkgs".follows = "cmpkgs-cross-riscv64"; };
