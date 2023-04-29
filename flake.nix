@@ -91,23 +91,23 @@
     # </mobile-nixos>
   };
 
-  nixConfig = {
-    extra-substituters = [
-      "https://cache.nixos.org"
-      "https://colemickens.cachix.org"
-      "https://nixpkgs-wayland.cachix.org"
-      "https://unmatched.cachix.org"
-      "https://nix-community.cachix.org"
-    ];
-    extra-trusted-public-keys = [
-      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-      "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4="
-      "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
-      "unmatched.cachix.org-1:F8TWIP/hA2808FDABsayBCFjrmrz296+5CQaysosTTc="
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-    ];
-    experimental-features = [ "nix-command" "flakes" "recursive-nix" ];
-  };
+  # nixConfig = {
+  #   extra-substituters = [
+  #     "https://cache.nixos.org"
+  #     "https://colemickens.cachix.org"
+  #     "https://nixpkgs-wayland.cachix.org"
+  #     "https://unmatched.cachix.org"
+  #     "https://nix-community.cachix.org"
+  #   ];
+  #   extra-trusted-public-keys = [
+  #     "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+  #     "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4="
+  #     "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
+  #     "unmatched.cachix.org-1:F8TWIP/hA2808FDABsayBCFjrmrz296+5CQaysosTTc="
+  #     "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+  #   ];
+  #   experimental-features = [ "nix-command" "flakes" "recursive-nix" ];
+  # };
 
   ## OUTPUTS ##################################################################
   outputs = inputs:
@@ -173,13 +173,22 @@
         };
       };
       deployConfigs = {
+        # NOTE: these are keyed off the build hosts, not the target arch
+        
         # TODO: replace this with a service that pulls latest built
         # dashboard to show what generation is deployed
-        inherit (nixosConfigs)
-          raisin
-          xeep
-          zeph
-          ;
+        aarch64-linux = {};
+        x86_64-linux = {
+          inherit (nixosConfigs)
+            # risky
+            ;
+          inherit (nixosConfigs)
+            raisin
+            # slynux
+            xeep
+            zeph
+            ;
+        };
       };
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);
       toplevels = (lib.mapAttrs (_: v: v.config.system.build.toplevel) nixosConfigurations);
@@ -284,7 +293,7 @@
               // { default = shells.ci; };
 
             ## APPS ##############################################################
-            apps = lib.recursiveUpdate {}
+            apps = lib.recursiveUpdate { }
               (
                 let tfout = import ./cloud { inherit (inputs) terranix; inherit pkgs; }; in {
                   tf = { type = "app"; program = tfout.tf.outPath; };
@@ -303,11 +312,13 @@
             #   (h: nixosConfigurations.${h}.config.system.build.extras.nfsboot);
 
             ## CI JOBS ###########################################################
-            ciBundles = builtins.mapAttrs (n: v: pkgs.buildEnv { name = "cibundle"; paths = (builtins.attrValues v); }) ciJobs;
+            # TODO: consider using flake-utils->flattenTree ?
+            ciBundles = (builtins.mapAttrs (n: v:
+              pkgs.linkFarmFromDrvs "cibundle" (builtins.attrValues v)
+            ) ciJobs);
             ciJobs = {
               default = { }
-                # // (lib.genAttrs [ "devtools" "ci" "devenv" ] (name: inputs.self.devShells.${system}.${name}.inputDerivation))
-                # // (lib.genAttrs [ "devtools" "ci" "devenv" ] (name: inputs.self.devShells.${system}.${name}))
+                // (lib.genAttrs [ "devtools" "ci" "devenv" ] (name: inputs.self.devShells.${system}.${name}.inputDerivation))
                 // (inputs.self.packages.${system})
                 // (lib.genAttrs (builtins.attrNames nixosConfigsCi.${system}) (n: toplevels."${n}")
               );

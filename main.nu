@@ -1,88 +1,109 @@
 #!/usr/bin/env nu
 
-# TODO: use a flake input for cachixpkgs and re-use?? except that we use this with NIX_PATH
-let cachixpkgs = "https://github.com/nixos/nixpkgs/archive/nixos-22.11.tar.gz" # used by nix-shell cachix
-# TODO: I think this bug got fixed???
-# let nix = "./misc/nix.sh"
-let nix = "nix"
-let nixopts = [
-  "--builders-use-substitutes" "--option" "narinfo-cache-negative-ttl" "0"
-  # TODO: files bugs such that we can exclusively use the flake's values??
-  "--option" "extra-substituters" "'https://cache.nixos.org https://colemickens.cachix.org https://nixpkgs-wayland.cachix.org https://unmatched.cachix.org https://nix-community.cachix.org'"
-  "--option" "extra-trusted-public-keys" "'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= unmatched.cachix.org-1:F8TWIP/hA2808FDABsayBCFjrmrz296+5CQaysosTTc= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs='"
-];
-
 source ./nixlib.nu
+
+let cachixpkgs_branch = "nixpkgs-stable"
+let cpm = (open ./flake.lock | from json | get nodes | get $cachixpkgs_branch | get locked)
+
+let options = {
+  builders: {
+    "x86_64-linux": "cole@147.28.150.135"
+    # "x86_64-linux": ""
+  },
+  cachix: {
+    pkgs: $"https://github.com/($cpm.owner)/($cpm.repo)/archive/($cpm.rev).tar.gz",
+    cache: "colemickens",
+    signkey: $"(open $"/run/secrets/cachix_signing_key_colemickens" | str trim)"
+  },
+  nixflags: [
+    # "--accept-flake-config",
+    "--builders-use-substitutes"
+    "--option" "narinfo-cache-negative-ttl" "0"
+    "--option" "extra-trusted-substituters" "https://cache.nixos.org https://colemickens.cachix.org https://nix-community.cachix.org https://nixpkgs-wayland.cachix.org https://unmatched.cachix.org"
+    "--option" "extra-substituters" "https://cache.nixos.org https://colemickens.cachix.org https://nix-community.cachix.org https://nixpkgs-wayland.cachix.org https://unmatched.cachix.org"
+    "--option" "extra-trusted-public-keys" "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= unmatched.cachix.org-1:F8TWIP/hA2808FDABsayBCFjrmrz296+5CQaysosTTc= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+  ],
+}
 
 check
 
-let-env CACHIX_CACHE = "colemickens"
-let-env CACHIX_SIGNING_KEY = (open $"/run/secrets/cachix_signing_key_colemickens" | str trim)
+# TODO: how to merge from another file
+# if ("./overrides.nu" | path exists) {
+#   (nu ./overrides.nu)
+# }
+
+############### Intenral lib #################
+def downPaths [ target:string, ...buildPaths ] {
+  let buildPaths = ($buildPaths | flatten)
+  header "light_gray_reverse" $"download: ($target)"
+  # let cmd = (^printf "'%s' " ([$"nix" "build" "--no-link" "-j0" $options.nixflags $buildPaths ] | flatten))
+  # ^ssh $"cole@($target)" $cmd
+  print -e $buildPaths
+  (^nix build -j0 --no-link --eval-store auto
+    --store $"ssh-ng://cole@($target)" $options.nixflags $buildPaths)
+}
+
+def deployHost [ arch: string, host: string ] {
+  let target = (tailscale ip --4 $host | str trim)
+  header "light_purple_reverse" $"deploy: ($host): START"
+
+  let buildPaths = (autoCacheDrvs $options $arch [$".#toplevels.($host)"])
+  let topout = ($buildPaths | first)
+
+  downPaths $target $topout
+
+  header "light_blue_reverse" $"deploy: ($host): switch: ($target)"
+  let cmd1 = (^printf "'%s' " ([$"sudo" "nix" "build" "--no-link" "-j0" $options.nixflags $"--profile" "/nix/var/nix/profiles/system" $topout ] | flatten))
+  let cmd2 =  $"sudo ($topout)/bin/switch-to-configuration switch"
+  let script = $"($cmd1) && echo 'setup profile' && ($cmd2)"
+  ^ssh $"cole@($target)" $script
+  header "light_green_reverse" $"deploy: ($host): DONE"
+  print -e $"(char nl)"
+}
+
+############### Intenral lib #################
 
 def check [] {
-  let res = (^git status --porcelain | complete)
-  let len = ($res.stdout | str trim | str length)
+  let len = (^git status --porcelain | complete | get stdout | str trim | str length)
   if ($len) != 0 {
     git status
     error make { msg: $"!! ERR: git has untracked or uncommitted changes!!" }
   }
 }
 
-# def "main eval" [ drv: string ] {
-#   let res = (evalDrv $drv)
-#   $res | flatten outputs
-# }
-
-def "main build" [ drv: string ] {
-  let drvs = (evalDrv $drv)
-  # NUSHELL BUG:
-  let drvs = ($drvs | where { |it| $it.isCached == false or $it.isCached == true})
-  buildDrvs false $drvs
+def "main build" [ arch: string, ...flakeRefs ] {
+  autoBuildDrvs $options $arch $flakeRefs
 }
 
-def "main cache" [ drv: string ] {
-  let drvs = (evalDrv $drv)
-  # NUSHELL BUG:
-  let drvs = ($drvs | where { |it| $it.isCached == false or $it.isCached == true})
-  buildDrvs true $drvs
+def "main cache" [ arch: string, ...flakeRefs ] {
+  autoCacheDrvs $options $arch $flakeRefs
 }
 
-def "main dl" [ drv: string ] {
-  let drvs = (evalDrv $drv)
-  # NUSHELL BUG:
-  let drvs = ($drvs | where { |it| $it.isCached == false or $it.isCached == true})
-  buildDrvs true $drvs
-  nix build -j0 $nixopts ($drvs | flatten outputs | get out)
+def "main dl" [ arch: string, ...flakeRefs ] {
+  let buildPaths = (autoCacheDrvs $options $arch $flakeRefs)
+  ^nix build -j0 $options.nixflags $buildPaths
 }
 
 def "main nix" [...args] {
-  ^nix $nixopts $args
+  ^nix $options.nixflags $args
 }
 
-def "main rbuild" [ drv: string ] {
-  let drvs = (evalDrv $drv)
-  # NUSHELL BUG:
-  let drvs = ($drvs | where { |it| $it.isCached == false or $it.isCached == true})
-  buildDrvs true $drvs
-  let out = ($drvs | get "outputs" | flatten | get "out" | flatten | first)
-  ^nix build $nixopts -j0 $out
-}
-
-def "main deploy" [...hosts] {
+def "main deploy" [ arch: string, ...hosts] {
   let hosts = ($hosts | flatten)
   let hosts = (if ($hosts | length) != 0 { $hosts } else {
-    let ref = $".#deployConfigs"
+    let ref = $".#deployConfigs.($arch)"
     do -c { ^nix eval --json --apply "x: builtins.attrNames x" $ref }
       | complete | get stdout | from json
   })
-  header light_gray_reverse $"DEPLOY"
+  header "light_yellow_reverse" $"DEPLOY"
+  print -e $hosts
   for h in $hosts {
-    deployHost $h
+    deployHost $arch $h
   }
 }
 
 def "main inputup" [] {
-  header yellow_reverse "inputup"
+  header "light_yellow_reverse" "inputup"
   let srcdirs = ([
     # nixpkgs and related branches
     "nixpkgs/master" "nixpkgs/cmpkgs"
@@ -128,7 +149,7 @@ def "main inputup" [] {
 }
 
 def "main pkgup" [...pkglist] {
-  header yellow_reverse "pkgup"
+  header "light_yellow_reverse" "pkgup"
 
   let pkglist = if ($pkglist | length) == 0 {
     (^nix eval
@@ -141,7 +162,7 @@ def "main pkgup" [...pkglist] {
   print -e $pkglist
 
   for pkgname in $pkglist {
-    header yellow_reverse $"pkgup: ($pkgname)"
+    header "light_yellow_reverse" $"pkgup: ($pkgname)"
 
     let maybefork = $"/home/cole/code/($pkgname)"
     if ($maybefork | path exists) {
@@ -164,50 +185,47 @@ def "main pkgup" [...pkglist] {
 
     if ($t | path exists) and (open $t | str trim | str length) != 0 {
       print -e "pkgup> test if exists"
-      let c = (nix build -j0 $nixopts $pf | complete)
+      let c = (nix build -j0 $options.nixflags $pf | complete)
       if $c.exit_code != 0 {
-        main cache $pf
+        main cache "x86_64-linux" $pf
       }
       git commit -F $t $"./pkgs/($pkgname)"
     } else {
       print -e $"pkgup: ($pkgname): skip commit + build"
     }
   }
-
-  let pkgs_ = ($pkglist | each {|p| $".#packages.x86_64-linux.($p)" })
-  nix build $nixopts $pkgs_
 }
-
-# TODO: rpi likely given up on, remove?
-# def "main rpiup" [] {
-#   header yellow_reverse "rpiup"
-#   # ^./misc/rpi/rpi-update.nu
-# }
 
 def "main lockup" [] {
-  header yellow_reverse "lockup"
-  ^$nix flake lock --recreate-lock-file --commit-lock-file
+  header "light_yellow_reverse" "lockup"
+  ^nix flake lock --recreate-lock-file --commit-lock-file
 }
 def "main cache_x86" [] {
-  header yellow_reverse "cache_x86"
-  main cache "'/home/cole/code/nixcfg#ciJobs.x86_64-linux.default'"
+  header "light_yellow_reverse" "cache_x86"
+  main cache "x86_64-linux" ".#ciBundles.x86_64-linux.default"
 }
 def "main cache_a64" [] {
-  header yellow_reverse "cache_a64"
-  main cache "'/home/cole/code/nixcfg#ciJobs.aarch64-linux.default'"
+  header "light_yellow_reverse" "cache_a64"
+  main cache "aarch_64-linux" ".#ciBundles.aarch64-linux.default"
 }
 def "main up" [...hosts] {
-  header red_reverse "up" "▒"
+  header "light_red_reverse" "up" "▒"
 
   main inputup
   main pkgup
   main lockup
   main cache_x86
-  main deploy $hosts
+  main deploy x86_64-linux $hosts
   # main cache_a64 #TODO: what do?
 }
 
 def main [] { main up }
+
+############
+
+# not used in nixpkgs-wayland:
+
+############
 
 # TODO: revisit actions
 # ## action-rpiup ###############################################################
