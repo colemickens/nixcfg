@@ -81,7 +81,8 @@ def "main cache" [ arch: string, ...flakeRefs ] {
 
 def "main dl" [ arch: string, ...flakeRefs ] {
   let buildPaths = (autoCacheDrvs $options $arch $flakeRefs)
-  ^nix build -j0 $options.nixflags $buildPaths
+  ^nix build -j0 --no-link $options.nixflags $buildPaths
+  $buildPaths
 }
 
 def "main nix" [...args] {
@@ -185,7 +186,7 @@ def "main pkgup" [...pkglist] {
 
     if ($t | path exists) and (open $t | str trim | str length) != 0 {
       print -e "pkgup> test if exists"
-      let c = (nix build -j0 $options.nixflags $pf | complete)
+      let c = (nix build -j0 --no-link $options.nixflags $pf | complete)
       if $c.exit_code != 0 {
         main cache "x86_64-linux" $pf
       }
