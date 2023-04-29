@@ -7,7 +7,7 @@ in
     users.extraGroups."${user}".gid = idno;
     users.extraUsers."${user}" = {
       isNormalUser = true;
-      home = "/home/${user}";
+      home = "/tmp/home-${user}";
       description = "vpn account";
       extraGroups = [
         "audio"
