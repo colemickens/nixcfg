@@ -35,15 +35,15 @@ let
 in
 rustPlatform.buildRustPackage (
   let
-    version = "unstable-2022-01-01";
-    rev = "956b1724263f253ee5a126dd5e228af9b2c85ad9";
+    version = "unstable-2023-02-07";
+    rev = "60a777276f7dcd841e9a11721084a4e8844cc69b";
     owner = "hakoerber";
     pname = "git-repo-manager";
     src = fetchFromGitHub {
       owner = owner;
       repo = pname;
       rev = rev;
-      hash = "sha256-RJbQ+mc220VS4KPvF1JBwnHxvl83C0QswsFgU2K9Wn0=";
+      hash = "sha256-fShwUpD3+EqD5RhsmHD7gt4V4hALLQ81cpptyWDCgFU=";
     };
   in
   {
@@ -52,7 +52,6 @@ rustPlatform.buildRustPackage (
 
     cargoLock = {
       lockFile = ./Cargo.lock;
-      outputHashes = { };
     };
 
     nativeBuildInputs = [ pkg-config ];
