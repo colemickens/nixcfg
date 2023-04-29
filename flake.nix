@@ -181,10 +181,10 @@
       };
       deployConfigs = {
         # NOTE: these are keyed off the build hosts, not the target arch
-        
+
         # TODO: replace this with a service that pulls latest built
         # dashboard to show what generation is deployed
-        aarch64-linux = {};
+        aarch64-linux = { };
         x86_64-linux = {
           inherit (nixosConfigs)
             # risky
@@ -250,6 +250,9 @@
                 doCheck = false; # TODO consider removing
                 inherit (prev.darwin.apple_sdk.frameworks) AppKit Security;
                 inherit (prev.darwin.apple_sdk_11_0) Libsystem;
+              };
+              git-repo-manager = prev.callPackage ./pkgs/git-repo-manager {
+                fenix = inputs.fenix;
               };
               wezterm = prev.darwin.apple_sdk_11_0.callPackage ./pkgs/wezterm {
                 doCheck = false; # TODO consider removing
@@ -320,9 +323,11 @@
 
             ## CI JOBS ###########################################################
             # TODO: consider using flake-utils->flattenTree ?
-            ciBundles = (builtins.mapAttrs (n: v:
-              pkgs.linkFarmFromDrvs "cibundle" (builtins.attrValues v)
-            ) ciJobs);
+            ciBundles = (builtins.mapAttrs
+              (n: v:
+                pkgs.linkFarmFromDrvs "cibundle" (builtins.attrValues v)
+              )
+              ciJobs);
             ciJobs = {
               default = { }
                 // (lib.genAttrs [ "devtools" "ci" "devenv" ] (name: inputs.self.devShells.${system}.${name}.inputDerivation))
