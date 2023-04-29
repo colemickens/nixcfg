@@ -78,6 +78,7 @@ in
       loader = {
         efi.efiSysMountPoint = "/efi";
         systemd-boot = {
+          configurationLimit = lib.mkForce 3;
           entriesMountPoint = "/boot";
         };
       };
