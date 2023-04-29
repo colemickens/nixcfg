@@ -1,0 +1,39 @@
+name: "action-push"
+concurrency: "action-push"
+on:
+  push:
+  # schedule:
+  #   - cron: '0 */12 * * *'
+  workflow_dispatch:
+  # allow user to override the inputs
+  # allow the user to override the remote builder?
+jobs:
+  "action-push":
+    runs-on: ubuntu-latest
+    env:
+      BUILDER_X86: "localhost"
+      CACHIX_SIGNING_KEY_COLEMICKENS: "${{ secrets.cachix_signing_key_colemickens }}"
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 # flakes doesn't work on shallow clones
+    - name: install-nix
+      uses: DeterminateSystems/nix-installer-action@main
+      with:
+        extra-conf: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+          experimental-features = nix-command flakes
+          extra-binary-caches = https://nixpkgs-wayland.cachix.org
+          extra-trusted-public-keys = nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA=
+          accept-flake-config = true
+          log-lines = 50
+    - name: shell
+      run: nix develop '.#ci' -c true
+    - name: prepare
+      run: nix develop '.#ci' -c .github/init
+    # - name: freeup
+    #   run: nix develop '.#ci' -c .github/freeup.nu
+    - name: ensure-packet
+      run: nix develop '.#ci' -c ./misc/equinix.nu ensure
+    - name: cache_x86
+      run: nix develop '.#ci' -c ./main.nu cache_x86
