@@ -15,10 +15,12 @@ def autoBuildDrvs [ options: record, arch: string flakeRefs: list] {
   header "light_gray_reverse" $"build: ($arch): ($flakeRefs | length) drvs on ($buildHost)"
   print -e $flakeRefs
   
-  let nf = ($options.nixflags | append [ "--print-out-paths" ])
-  let nf = (if ($buildHost == "") { $nf } else {
-    ($nf | append [ "--eval-store" "auto" "--store" $"ssh-ng://($buildHost)" ])
-  })
+  mut nf = ($options.nixflags | append [ "--print-out-paths" ])
+  if ($buildHost == "") { $nf } else {
+    $nf = ($nf | append [ "--eval-store" "auto" "--store" $"ssh-ng://($buildHost)" ])
+
+    nix copy --derivation --to $"ssh-ng://($buildHost)" --no-check-sigs $flakeRefs
+  }
   
   let buildPaths = (^nix build $nf -L $flakeRefs | from ssv -n | get column1)
 
