@@ -101,18 +101,15 @@
       };
       deployConfigs = {
         # NOTE: these are keyed off the build hosts, not the target arch
-        aarch64-linux = { };
-        x86_64-linux = {
-          inherit (nixosConfigs)
-            # risky
-            ;
-          inherit (nixosConfigs)
-            raisin
-            slynux
-            xeep
-            zeph
-            ;
-        };
+        inherit (nixosConfigs)
+          # risky
+          ;
+        inherit (nixosConfigs)
+          raisin
+          slynux
+          xeep
+          zeph
+          ;
       };
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);
       toplevels = (lib.mapAttrs (_: v: v.config.system.build.toplevel) nixosConfigurations);
@@ -239,7 +236,7 @@
             });
             # TODO: flesh out:
             # cyclopsJobs = {
-              
+
             # };
           })
       )
