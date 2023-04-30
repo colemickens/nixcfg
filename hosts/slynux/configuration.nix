@@ -8,10 +8,9 @@ in
     ../../mixins/common.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
-    #../../mixins/xmrig.nix
 
     ../../profiles/interactive.nix
-    ../../profiles/desktop-sway-unstable.nix
+    ../../profiles/gui-sway.nix
   ];
 
   config = {
