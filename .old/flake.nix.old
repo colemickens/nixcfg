@@ -27,6 +27,11 @@
     visionfive-nix = { url = "github:colemickens/visionfive-nix"; inputs."nixpkgs".follows = "cmpkgs-cross-riscv64"; };
     nixos-riscv64 = { url = "github:colemickens/nixos-riscv64"; inputs."nixpkgs".follows = "cmpkgs-cross-riscv64"; };
 
+    # apps
+    hyprland = { url = "github:hyprwm/Hyprland"; inputs."nixpkgs".follows = "cmpkgs"; };
+    ironbar = { url = "github:JakeStanger/ironbar"; inputs."nixpkgs".follows = "cmpkgs"; };
+    cosmic = { url = "github:pop-os/cosmic-comp"; inputs = { "fenix".follows = "fenix"; "nixpkgs".follows = "cmpkgs"; }; };
+
     # devtools:
     terranix = { url = "github:terranix/terranix"; inputs."nixpkgs".follows = "cmpkgs"; }; # packet/terraform deployments
     fenix = { url = "github:nix-community/fenix"; inputs."nixpkgs".follows = "cmpkgs"; }; # used for nightly rust devtools
@@ -38,6 +43,48 @@
     # experimental/unused:
     nix-netboot-server = { url = "github:DeterminateSystems/nix-netboot-serve"; };
     nix-rice = { url = "github:colemickens/nix-rice"; inputs."nixpkgs".follows = "cmpkgs"; };
+    # impermanence = { url = "github:nix-community/impermanence"; }; # TODO: use it or lose it
+    # nickel = { url = "github:tweag/nickel"; };
+    # rust-overlay = { url = ""; };
+
+    # <tow-boot>
+    # tow-boot-rpi = {
+    #   url = "github:colemickens/Tow-Boot/rpi";
+    #   inputs."nixpkgs".follows = "cmpkgs";
+    #   inputs.rpipkgs.follows = "cmpkgs-rpipkgs";
+    # };
+    # tow-boot-radxa-zero = {
+    #   url = "github:colemickens/Tow-Boot/radxa-zero";
+    #   inputs."nixpkgs".follows = "cmpkgs";
+    # };
+    # tow-boot-radxa-rock5b = {
+    #   url = "github:colemickens/Tow-Boot/radxa-rock5b";
+    #   inputs."nixpkgs".follows = "cmpkgs";
+    # };
+    # tow-boot-visionfive = {
+    #   url = "github:colemickens/Tow-Boot/visionfive";
+    #   inputs."nixpkgs".follows = "cmpkgs";
+    # };
+    # </tow-boot>
+
+    # # <mobile-nixos>
+    # mobile-nixos-sdm845 = {
+    #   url = "github:colemickens/mobile-nixos/sdm845-blue";
+    #   inputs."nixpkgs".follows = "cmpkgs";
+    # };
+    # mobile-nixos-reset-scripts = {
+    #   url = "github:colemickens/mobile-nixos/reset-scripts";
+    #   inputs."nixpkgs".follows = "cmpkgs";
+    # };
+    # mobile-nixos-pinephone = {
+    #   url = "github:colemickens/mobile-nixos/pinephone-emmc";
+    #   inputs."nixpkgs".follows = "cmpkgs";
+    # };
+    # mobile-nixos-openstick = {
+    #   url = "github:colemickens/mobile-nixos/openstick";
+    #   inputs."nixpkgs".follows = "cmpkgs";
+    # };
+    # # </mobile-nixos>
   };
 
   nixConfig = rec {
@@ -58,6 +105,13 @@
     # experimental-features = [ "nix-command" "flakes" "recursive-nix" ];
   };
 
+
+  # NOTES:
+  # - used to track frequently moving targets
+  # - this will be used by CI system to optimistically update inputs
+  # - and build them pre-emptively for CI
+
+
   ## OUTPUTS ##################################################################
   outputs = inputs:
     let
@@ -76,6 +130,21 @@
         misc = {
           installer = { pkgs = inputs.cmpkgs; };
         };
+        # phone = {
+        #   pinephone = { pkgs = inputs.cmpkgs; };
+        #   blueline = { pkgs = inputs.cmpkgs; };
+        # };
+        # sbc = {
+        #   radxazero1 = { pkgs = inputs.cmpkgs; };
+        #   rockfiveb1 = { pkgs = inputs.cmpkgs; };
+        #   openstick = { pkgs = inputs.cmpkgs; buildSys = "x86_64-linux"; };
+        #   aitchninesix1 = { pkgs = inputs.cmpkgs; };
+        #   rpifour1 = { pkgs = inputs.cmpkgs-rpipkgs; };
+        #   rpithreebp1 = { pkgs = inputs.cmpkgs-rpipkgs; };
+        #   rpizerotwo1 = { pkgs = inputs.cmpkgs-rpipkgs; };
+        #   visionfiveone1 = { pkgs = inputs.cmpkgs-cross-riscv64; };
+        #   visionfivetwo1 = { pkgs = inputs.cmpkgs-cross-riscv64; };
+        # };
         pc = {
           raisin = { pkgs = inputs.cmpkgs; };
           slynux = { pkgs = inputs.cmpkgs; };
@@ -177,6 +246,8 @@
           in
           __colemickens_nixcfg_pkgs // { inherit __colemickens_nixcfg_pkgs; });
       };
+
+      ## CYCLOPS ###############################################################
     in
     lib.recursiveUpdate
       ({
@@ -185,7 +256,7 @@
         inherit images nixosModules overlays;
       })
       (
-        ## SYSTEM-SPECIFIC OUTPUTS ############################################
+        ## SYSTEM-SPECIFIC OUTPUTS ##############################################
         lib.flake-utils.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
           let
             importPkgs = npkgs: extraCfg: (import npkgs {
@@ -214,7 +285,7 @@
             shells = (lib.genAttrs [ "ci" "devenv" "devtools" "gstreamer" "uutils" ] mkShell)
               // { default = shells.ci; };
 
-            ## APPS ###########################################################
+            ## APPS ##############################################################
             apps = lib.recursiveUpdate { }
               (
                 let tfout = import ./cloud { inherit (inputs) terranix; inherit pkgs; }; in {
@@ -224,10 +295,24 @@
                 }
               );
 
-            ## PACKAGES #######################################################
+            ## PACKAGES ##########################################################
             packages = (pkgs.__colemickens_nixcfg_pkgs);
 
-            ## CI #############################################################
+            ## NETBOOTS (paused: add grub => nix-netboot-server) #################
+            # netboots_ = lib.genAttrs
+            #   [ "rpifour1" ]
+            #   # [ "x_risky" "rpifour1" "rpithreebp1" "rpizerotwo1" ]
+            #   (h: nixosConfigurations.${h}.config.system.build.extras.nfsboot);
+
+            ## CI JOBS ###########################################################
+            # TODO: consider using flake-utils->flattenTree ?
+            # except it didn't work IIRC
+            # ciJobs = (builtins.mapAttrs
+            #   (n: v:
+            #     pkgs.linkFarmFromDrvs "cibundle" (builtins.attrValues v)
+            #   )
+            #   ciJobs);
+
             ciAttrs = let rc = { recurseForDerivations = true; }; in (rc // {
               shells = rc // (lib.genAttrs [ "devtools" "ci" "devenv" ]
                 (n: inputs.self.devShells.${system}.${n}.inputDerivation));
@@ -235,10 +320,6 @@
               toplevels = rc // (lib.genAttrs (builtins.attrNames nixosConfigsCi.${system})
                 (n: toplevels."${n}"));
             });
-            # TODO: flesh out:
-            # cyclopsJobs = {
-              
-            # };
           })
       )
   ;
