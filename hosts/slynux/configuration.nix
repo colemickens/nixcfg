@@ -14,6 +14,8 @@ in
   ];
 
   config = {
+    nixpkgs.hostPlatform.system = "x86_64-linux";
+
     system.stateVersion = "20.03"; # Did you read the comment?
     services.timesyncd.enable = true;
 
