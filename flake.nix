@@ -66,7 +66,9 @@
       mkSystem = n: v: (v.pkgs.lib.nixosSystem {
         modules = [
           ./hosts/${n}/configuration.nix
-          ({ config, lib, ... }: { config.nixpkgs.buildPlatform.system = lib.mkIf (builtins.hasAttr "buildSys" v) v.buildSys; })
+          # ({ config, lib, ... }: {
+          #   config.nixpkgs.buildPlatform.system =
+          #     lib.mkIf (builtins.hasAttr "buildSys" v) v.buildSys; })
         ];
         specialArgs = { inherit inputs; };
       });
