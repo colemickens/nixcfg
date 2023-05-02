@@ -1,7 +1,8 @@
 { pkgs, inputs }@args:
 
 let
-  llvmPackages = pkgs.llvmPackages_13;
+  # llvmPackages = pkgs.llvmPackages_13;
+  llvmPackages = pkgs.llvmPackages;
 
   # gst_new = gst_all_1.override{
   #   src = "";
@@ -87,7 +88,7 @@ minimalMkShell {
   name = "shell-gstreamer-devenv";
   hardeningDisable = [ "fortify" ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   RUST_BACKTRACE = 1;
   GST_PLUGIN_SYSTEM_PATH = gstreamerPath;
 

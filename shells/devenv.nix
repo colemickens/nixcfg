@@ -1,6 +1,7 @@
 { pkgs, inputs, ... }:
 
 let
+  # llvmPackages = pkgs.llvmPackages_13;
   llvmPackages = pkgs.llvmPackages_13;
 
   gstreamerPath = ""
@@ -17,7 +18,7 @@ minimalMkShell {
   name = "shell-devenv";
   hardeningDisable = [ "fortify" ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   RUST_BACKTRACE = 1;
   GST_PLUGIN_SYSTEM_PATH = gstreamerPath;
 
@@ -35,6 +36,7 @@ minimalMkShell {
   ]);
 
   buildInputs = with pkgs; [
+    llvmPackages.libclang
     freetype
     ncurses
     pcsclite
@@ -70,6 +72,8 @@ minimalMkShell {
     wayland-protocols # wezterm
     fontconfig
     libglvnd
+    opencv
+    ffmpeg
     egl-wayland # wezterm
     xorg.libX11
     xorg.libxcb
