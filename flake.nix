@@ -206,12 +206,13 @@
             inherit pkgsStable;
             inherit pkgsUnfree;
 
-            ## DEVSHELLS # some of 'em kinda compose #############################
-            devShells = (lib.genAttrs [ "ci" "devenv" "devtools" "gstreamer" "uutils" ] mkShell)
-              // { default = devShells.ci; };
-
-            shells = (lib.genAttrs [ "ci" "devenv" "devtools" "gstreamer" "uutils" ] mkShell)
-              // { default = shells.ci; };
+            ## DEVSHELLS # some of 'em kinda compose ##########################
+            devShells = (lib.flip lib.genAttrs mkShell [
+              "ci"
+              "devenv"
+              "devtools"
+              "uutils"
+            ]) // { default = devShells.ci; };
 
             ## APPS ###########################################################
             apps = lib.recursiveUpdate { }
