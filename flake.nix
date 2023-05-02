@@ -106,7 +106,7 @@
           ;
         inherit (nixosConfigs)
           raisin
-          slynux
+          # slynux
           xeep
           zeph
           ;
