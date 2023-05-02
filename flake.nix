@@ -228,6 +228,9 @@
             packages = (pkgs.__colemickens_nixcfg_pkgs);
 
             ## CI #############################################################
+            ciBundles = {
+              default = lib.flake-utils.flattenTree (with ciAttrs; (shells // packages // toplevels));
+            };
             ciAttrs = let rc = { recurseForDerivations = true; }; in (rc // {
               shells = rc // (lib.genAttrs [ "devtools" "ci" "devenv" ]
                 (n: inputs.self.devShells.${system}.${n}.inputDerivation));
@@ -235,10 +238,6 @@
               toplevels = rc // (lib.genAttrs (builtins.attrNames nixosConfigsCi.${system})
                 (n: toplevels."${n}"));
             });
-            # TODO: flesh out:
-            # cyclopsJobs = {
-
-            # };
           })
       )
   ;

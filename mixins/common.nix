@@ -98,7 +98,7 @@ in
           grub = {
             enable = lib.mkDefault false;
             # memtest86.enable = (pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isx86);
-            timeoutStyle = "hidden";
+            # timeoutStyle = "hidden"; # dropped from my nixpkgs
             configurationLimit = 10;
           };
           systemd-boot = {
