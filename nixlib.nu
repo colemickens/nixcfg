@@ -16,7 +16,7 @@ def autoBuildDrvs [ options: record, arch: string flakeRefs: list] {
   print -e $flakeRefs
   
   mut nf = ($options.nixflags | append [ "--print-out-paths" ])
-  if ($buildHost == "") { $nf } else {
+  if ($buildHost != "") {
     $nf = ($nf | append [ "--eval-store" "auto" "--store" $"ssh-ng://($buildHost)" ])
 
     nix copy --derivation --to $"ssh-ng://($buildHost)" --no-check-sigs $flakeRefs
