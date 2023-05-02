@@ -131,7 +131,6 @@ in
         };
       };
 
-
       ## NETWORK + TIME #######################################################
       networking = {
         hostId = pkgs.lib.concatStringsSep "" (pkgs.lib.take 8

@@ -32,16 +32,23 @@ in
   ];
 
   config = {
+    nixpkgs.hostPlatform.system = "x86_64-linux";
+    system.stateVersion = "21.05";
+
+    networking.hostName = hn;
+    nixcfg.common.hostColor = "purple";
+    nixcfg.common.skipMitigations = false;
+    nixcfg.common.defaultKernel = true;
+
+    time.timeZone = lib.mkForce null; # we're on the move
+    services.tailscale.useRoutingFeatures = "client";
+
     specialisation."sysd-netboot" = lib.mkIf (config.boot.initrd.systemd.enable) {
       inheritParentConfig = true;
       configuration = {
         boot.initrd.systemd.network.enable = true;
       };
     };
-
-    nixpkgs.hostPlatform.system = "x86_64-linux";
-
-    console.earlySetup = lib.mkForce true;
 
     home-manager.users.cole = { pkgs, config, ... }@hm: {
       wayland.windowManager.sway.config = {
@@ -53,16 +60,7 @@ in
         };
       };
     };
-
-    system.stateVersion = "21.05";
-    networking.hostName = "zeph";
-    nixcfg.common.hostColor = "purple";
-    nixcfg.common.skipMitigations = false;
-    nixcfg.common.defaultKernel = true;
-
-    time.timeZone = lib.mkForce null; # we're on the move
-    services.tailscale.useRoutingFeatures = "client";
-
+    
     fileSystems = {
       "/efi" = { fsType = "vfat"; device = "/dev/nvme0n1p1"; neededForBoot = true; };
       "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; neededForBoot = true; };

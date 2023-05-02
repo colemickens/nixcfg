@@ -5,6 +5,11 @@
   # TODO: promote nix-rice (rename to nix-iterm-themes) to nix-community
   # TODO: nix-rice is active?? do we want to collab? appearance module as a full idea?
 
+
+  # TODO: adopt lanzaboote / bootis / bootspec
+  # TODO: remove other SBC crap
+  # TODO: add firmware build for the Glove80 keyboard
+
   inputs = {
     lib-aggregate = { url = "github:nix-community/lib-aggregate"; }; #TODO: boo name! "libaggregate"?
 
@@ -40,23 +45,7 @@
     nix-rice = { url = "github:colemickens/nix-rice"; inputs."nixpkgs".follows = "cmpkgs"; };
   };
 
-  nixConfig = rec {
-    # trusted-substituters = [
-    #   "https://cache.nixos.org"
-    #   "https://colemickens.cachix.org"
-    #   "https://nixpkgs-wayland.cachix.org"
-    #   "https://unmatched.cachix.org"
-    #   "https://nix-community.cachix.org"
-    # ];
-    # extra-trusted-public-keys = [
-    #   "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-    #   "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4="
-    #   "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
-    #   "unmatched.cachix.org-1:F8TWIP/hA2808FDABsayBCFjrmrz296+5CQaysosTTc="
-    #   "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-    # ];
-    # experimental-features = [ "nix-command" "flakes" "recursive-nix" ];
-  };
+  # TODO: re-investigate nixConfig, maybe it will be less soul-crushing one day
 
   ## OUTPUTS ##################################################################
   outputs = inputs:
@@ -74,75 +63,24 @@
       });
 
       ## NIXOS CONFIGS + TOPLEVELS ############################################
-      nixosConfigsEx = {
-        misc = {
-          installer = { pkgs = inputs.cmpkgs; };
-        };
-        pc = {
-          raisin = { pkgs = inputs.cmpkgs; };
-          slynux = { pkgs = inputs.cmpkgs; };
-          xeep = { pkgs = inputs.cmpkgs; };
-          zeph = { pkgs = inputs.cmpkgs; };
-        };
+      nixosConfigs = {
+        # misc
+        installer = { pkgs = inputs.cmpkgs; };
+
+        # actual machines:
+        raisin = { pkgs = inputs.cmpkgs; };
+        slynux = { pkgs = inputs.cmpkgs; };
+        xeep = { pkgs = inputs.cmpkgs; };
+        zeph = { pkgs = inputs.cmpkgs; };
       };
 
-      nixosConfigs = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues nixosConfigsEx));
-      nixosConfigsCi = {
-        # TODO: can we shallow eval nixos configs to get hostPlatform and avoid this?
-        x86_64-linux = {
-          inherit (nixosConfigs)
-            zeph xeep raisin slynux
-            ;
-        };
-        aarch64-linux = {
-          inherit (nixosConfigs)
-            ;
-        };
-      };
-      deployConfigs = {
-        # NOTE: these are keyed off the build hosts, not the target arch
-        inherit (nixosConfigs)
-          # risky
-          ;
-        inherit (nixosConfigs)
-          raisin
-          # slynux
-          xeep
-          zeph
-          ;
-      };
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);
       toplevels = (lib.mapAttrs (_: v: v.config.system.build.toplevel) nixosConfigurations);
-
-      # TODO: automatic cross-compiling now made easy with {host,build}Platform
-      xnixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n (v // { buildSys = "x86_64-linux"; }))) nixosConfigs);
-      xtoplevels = (lib.mapAttrs (_: v: v.config.system.build.toplevel) xnixosConfigurations);
 
       ## SPECIAL OUTPUTS ######################################################
       images = let cfg = n: nixosConfigurations."${n}".config; in {
         installer = (cfg "installer").system.build.isoImage;
-        openstick = let o = (cfg "openstick"); in {
-          aboot = o.mobile.outputs.android.android-abootimg;
-          boot = o.mobile.outputs.android.android-bootimg;
-          # 'fastboot flash -S 100M $rootfs/NIXOS_SYSTEM.img'
-          rootfs = o.mobile.outputs.generatedFilesystems.rootfs;
-        };
-        rockfiveb1 = let o = (cfg "rockfiveb1"); in {
-          tbsd = o.system.build.tow-boot.outputs.diskImage;
-          installFiles = o.system.build.installFiles;
-        };
-        aitchninesix1 = let o = (cfg "aitchninesix1"); in {
-          tbsd = o.system.build.tow-boot.outputs.diskImage;
-          installFiles = o.system.build.installFiles;
-        };
-        rpizerotwo1 = let o = (cfg "rpizerotwo1"); in {
-          tbsd = o.system.build.tow-boot.outputs.diskImage;
-          installFiles = o.system.build.installFiles;
-        };
-        # blueline = let o = (mkSystem "blueline" { sys = "x86_64-linux"; pkgs = inputs."nixpkgs"; }).config; in {
-        blueline = let o = (cfg "blueline"); in {
-          boot = o.mobile.outputs.android.android-bootimg;
-        };
+        glove80firmware = {};
       };
 
       ## NIXOS_MODULES # TODO: we don't use these? #############################
@@ -150,7 +88,6 @@
         loginctl-linger = import ./modules/loginctl-linger.nix;
         ttys = import ./modules/ttys.nix;
         other-arch-vm = import ./modules/other-arch-vm.nix;
-        # webrtcsink = import ./modules/webrtcsink.nix;
       };
 
       ## OVERLAY ###############################################################
@@ -179,8 +116,7 @@
     in
     lib.recursiveUpdate
       ({
-        inherit nixosConfigsEx nixosConfigs nixosConfigurations deployConfigs toplevels;
-        inherit xnixosConfigurations xtoplevels;
+        inherit nixosConfigs nixosConfigurations toplevels;
         inherit images nixosModules overlays;
       })
       (
@@ -229,15 +165,16 @@
 
             ## CI #############################################################
             ciBundles = {
-              default = lib.flake-utils.flattenTree (with ciAttrs; (shells // packages // toplevels));
+              default = lib.flake-utils.flattenTree
+                (lib.mapAttrs (n: v: v // { recurseForDerivations = true; }) ciAttrs);
             };
-            ciAttrs = let rc = { recurseForDerivations = true; }; in (rc // {
-              shells = rc // (lib.genAttrs [ "devtools" "ci" "devenv" ]
+            ciAttrs = {
+              shells = (lib.genAttrs [ "devtools" "ci" "devenv" ]
                 (n: inputs.self.devShells.${system}.${n}.inputDerivation));
-              packages = rc // (inputs.self.packages.${system});
-              toplevels = rc // (lib.genAttrs (builtins.attrNames nixosConfigsCi.${system})
-                (n: toplevels."${n}"));
-            });
+              packages = (inputs.self.packages.${system});
+              # TODO: this probably evals ALL hosts... sadge
+              toplevels = builtins.filter (x: x.system == system) (builtins.attrValues toplevels);
+            };
           })
       )
   ;
