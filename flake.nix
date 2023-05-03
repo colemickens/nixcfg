@@ -165,10 +165,6 @@
             packages = (pkgs.__colemickens_nixcfg_pkgs);
 
             ## CI #############################################################
-            ciBundles = {
-              default = lib.flake-utils.flattenTree
-                (lib.mapAttrs (n: v: v // { recurseForDerivations = true; }) ciAttrs);
-            };
             ciAttrs = {
               shells = (lib.genAttrs [ "devtools" "ci" "devenv" ]
                 (n: inputs.self.devShells.${system}.${n}.inputDerivation));

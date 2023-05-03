@@ -202,14 +202,6 @@ def "main lockup" [] {
   header "light_yellow_reverse" "lockup"
   ^nix flake lock --recreate-lock-file --commit-lock-file
 }
-def "main cache_x86" [] {
-  header "light_yellow_reverse" "cache_x86"
-  main cache "x86_64-linux" ".#ciBundles.x86_64-linux.default"
-}
-def "main cache_a64" [] {
-  header "light_yellow_reverse" "cache_a64"
-  main cache "aarch_64-linux" ".#ciBundles.aarch64-linux.default"
-}
 def "main up" [...hosts] {
   header "light_red_reverse" "up" "▒"
 
@@ -217,9 +209,7 @@ def "main up" [...hosts] {
   main inputup
   main pkgup
   main lockup
-  main cache_x86
   main deploy x86_64-linux $hosts
-  # main cache_a64 #TODO: what do?
 }
 
 def main [] { main up }
