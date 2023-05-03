@@ -188,7 +188,8 @@ def "main pkgup" [...pkglist] {
       print -e "pkgup> test if exists"
       let c = (nix build -j0 --no-link $options.nixflags $pf | complete)
       if $c.exit_code != 0 {
-        main cache "x86_64-linux" $pf
+        main dl "x86_64-linux" $pf # this shouldn't be necessary...
+        # main cache "x86_64-linux" $pf
       }
       git commit -F $t $"./pkgs/($pkgname)"
     } else {
