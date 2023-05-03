@@ -7,6 +7,7 @@ in
   imports = [
     ../../mixins/common.nix
     ../../mixins/sshd.nix
+    ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
 
     ../../profiles/gui-sway-auto.nix
