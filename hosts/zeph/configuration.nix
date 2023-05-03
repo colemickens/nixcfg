@@ -42,8 +42,23 @@ in
     nixcfg.common.skipMitigations = false;
     nixcfg.common.defaultKernel = true;
 
-    time.timeZone = lib.mkForce null; # we're on the move
     services.tailscale.useRoutingFeatures = "client";
+
+    time.timeZone = lib.mkForce null; # we're on the move
+
+    fileSystems = {
+      "/efi" = { fsType = "vfat"; device = "/dev/nvme0n1p1"; neededForBoot = true; };
+      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; neededForBoot = true; };
+      "/" = { fsType = "zfs"; device = "${hn}pool/root"; neededForBoot = true; };
+      "/nix" = { fsType = "zfs"; device = "${hn}pool/nix"; neededForBoot = true; };
+      "/home" = { fsType = "zfs"; device = "${hn}pool/home"; neededForBoot = true; };
+
+      "/mnt/data/t5" = { fsType = "zfs"; device = "${hn}pool/data/t5"; };
+
+      "/efi/EFI/Linux" = { device = "/boot/EFI/Linux"; options = [ "bind" ]; };
+      "/efi/EFI/nixos" = { device = "/boot/EFI/nixos"; options = [ "bind" ]; };
+    };
+    swapDevices = [{ device = "/dev/disk/by-partlabel/${hn}-swap"; }];
 
     specialisation."sysd-netboot" = lib.mkIf (config.boot.initrd.systemd.enable) {
       inheritParentConfig = true;
@@ -62,20 +77,6 @@ in
         };
       };
     };
-    
-    fileSystems = {
-      "/efi" = { fsType = "vfat"; device = "/dev/nvme0n1p1"; neededForBoot = true; };
-      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; neededForBoot = true; };
-      "/" = { fsType = "zfs"; device = "${hn}pool/root"; neededForBoot = true; };
-      "/nix" = { fsType = "zfs"; device = "${hn}pool/nix"; neededForBoot = true; };
-      "/home" = { fsType = "zfs"; device = "${hn}pool/home"; neededForBoot = true; };
-
-      "/mnt/data/t5" = { fsType = "zfs"; device = "${hn}pool/data/t5"; };
-
-      "/efi/EFI/Linux" = { device = "/boot/EFI/Linux"; options = ["bind"];};
-      "/efi/EFI/nixos" = { device = "/boot/EFI/nixos"; options = ["bind"];};
-    };
-    swapDevices = [{ device = "/dev/disk/by-partlabel/${hn}-swap"; }];
 
     boot = {
       bootspec.enable = true;

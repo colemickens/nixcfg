@@ -23,10 +23,9 @@ in
 
   config = {
     nixpkgs.hostPlatform.system = "x86_64-linux";
-
     system.stateVersion = "21.05";
-    networking.hostName = "raisin";
 
+    networking.hostName = "raisin";
     nixcfg.common.hostColor = "green";
 
     services.tailscale.useRoutingFeatures = "server";
@@ -43,6 +42,7 @@ in
       "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; neededForBoot = true; };
     };
     swapDevices = [{ device = "/dev/disk/by-partlabel/swap"; }];
+
     boot = {
       kernelModules = [ "iwlwifi" "ideapad_laptop" ];
       kernelParams = [

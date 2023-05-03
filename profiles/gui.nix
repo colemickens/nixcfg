@@ -72,7 +72,6 @@ in
         (lib.mkIf (pkgs.hostPlatform.system == "x86_64-linux") (with pkgs; [
           _firefox
           _chrome
-          captive-browser
           jamesdsp
 
           nheko
@@ -81,26 +80,18 @@ in
           (pkgs.callPackage ../pkgs/commands-gui.nix { })
 
           # misc tools/utils
-          pavucontrol
           brightnessctl
-          virt-viewer
+          pavucontrol
           evince
+          freerdp
           pinta
-
-          gtkcord4
-
           pw-viz
           qpwgraph
-          # helvum
-
-          # libnotify # `notify-send`
           toastify
-          # TODO: BROKEN WITH WAYLAND:?
-          # qpwgraph
-          # ladybird # qt? long build anyway?
+          virt-viewer
 
-          # communcation
-          freerdp
+          # questionable...
+          gtkcord4
         ])
       ];
     };

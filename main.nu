@@ -209,6 +209,10 @@ def "main up" [...hosts] {
   main inputup
   main pkgup
   main lockup
+  main cache x86_64-linux '.#toplevels.zeph'
+  main cache x86_64-linux '.#toplevels.xeep'
+  main cache x86_64-linux '.#toplevels.raisin'
+  main cache x86_64-linux '.#toplevels.slynux'
   main deploy x86_64-linux $hosts
 }
 

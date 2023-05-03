@@ -1,4 +1,5 @@
 { config, pkgs, lib, inputs, ... }:
+
 let
   hn = "xeep";
   static_ip = "192.168.1.70/16";
@@ -9,15 +10,9 @@ in
     ../../profiles/addon-laptop.nix
 
     ../../mixins/iwd-networks.nix
-    # ../../mixins/plex.nix
-    # ../../mixins/rclone-googledrive-mounts.nix
     ../../mixins/syncthing.nix
-    # ../../mixins/unifi.nix
     ../../mixins/zfs.nix
-    # ./services/revproxy.nix
-    # ./services/home-assistant
 
-    # ../../mixins/gfx-intel.nix # TODO: nixosHardware?
     inputs.nixos-hardware.nixosModules.dell-xps-13-9370
 
     ./unfree.nix
@@ -25,14 +20,14 @@ in
 
   config = {
     nixpkgs.hostPlatform.system = "x86_64-linux";
+    system.stateVersion = "21.05";
 
     networking.hostName = hn;
-    system.stateVersion = "21.05";
+    nixcfg.common.hostColor = "yellow";
+    
     environment.systemPackages = with pkgs; [
       libsmbios # ? can't remember it
     ];
-
-    nixcfg.common.hostColor = "yellow";
 
     services.tailscale.useRoutingFeatures = "server";
 
@@ -48,6 +43,14 @@ in
         };
       };
     };
+
+    fileSystems = let zpool = "${hn}pool"; in {
+      "/" = { fsType = "zfs"; device = "${zpool}/root"; };
+      "/nix" = { fsType = "zfs"; device = "${zpool}/nix"; };
+      "/home" = { fsType = "zfs"; device = "${zpool}/home"; };
+      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; };
+    };
+    swapDevices = [ ];
 
     boot = {
       loader.systemd-boot.enable = true;
@@ -78,13 +81,5 @@ in
         };
       };
     };
-
-    fileSystems = let zpool = "${hn}pool"; in {
-      "/" = { fsType = "zfs"; device = "${zpool}/root"; };
-      "/nix" = { fsType = "zfs"; device = "${zpool}/nix"; };
-      "/home" = { fsType = "zfs"; device = "${zpool}/home"; };
-      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; };
-    };
-    swapDevices = [ ];
   };
 }

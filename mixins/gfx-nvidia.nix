@@ -22,14 +22,24 @@ in
       EGL_PLATFORM = "wayland";
     };
 
-    hardware.gpu.nvidia = {
-      enable = true;
-      package = nvidiaPkg;
+    # this requires "cmpkgs-opengl" which ... you know...
+    # hardware.gpu.nvidia = {
+    #   enable = true;
+    #   package = nvidiaPkg;
+    #   open = true;
+    #   modesetting.enable = true;
+    #   nvidiaSettings = false;
+    #   powerManagement.enable = true;
+    # };
 
+    hardware.opengl.enable = true;
+    hardware.nvidia = {
+      package = nvidiaPkg;
       open = true;
       modesetting.enable = true;
       nvidiaSettings = false;
-      powerManagement.enable = true;
+      powerManagement.enable = false;
     };
+
   };
 }
