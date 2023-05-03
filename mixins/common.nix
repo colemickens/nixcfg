@@ -193,7 +193,8 @@ in
           dhcpV6Config.PrefixDelegationHint = "::64";
         };
         networks."30-network-defaults-wireless" = {
-          matchConfig.Name = "wl*";
+          # matchConfig.Name = "wl*";
+          matchConfig.Type = "wlan";
           networkConfig = {
             DHCP = "yes";
             IPv6AcceptRA = true;
