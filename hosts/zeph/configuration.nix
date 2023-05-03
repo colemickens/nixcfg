@@ -71,20 +71,24 @@ in
       "/home" = { fsType = "zfs"; device = "${hn}pool/home"; neededForBoot = true; };
 
       "/mnt/data/t5" = { fsType = "zfs"; device = "${hn}pool/data/t5"; };
+
+      "/efi/EFI/Linux" = { device = "/boot/EFI/Linux"; options = ["bind"];};
+      "/efi/EFI/nixos" = { device = "/boot/EFI/nixos"; options = ["bind"];};
     };
     swapDevices = [{ device = "/dev/disk/by-partlabel/${hn}-swap"; }];
 
     boot = {
       bootspec.enable = true;
       lanzaboote = {
-        enable = true;
+        enable = false;
         pkiBundle = "/etc/secureboot";
         configurationLimit = 4;
+        # entriesMountPoint = "/boot"; # unsupported
       };
       loader = {
         efi.efiSysMountPoint = "/efi";
         systemd-boot = {
-          enable = lib.mkForce false;
+          enable = lib.mkForce (config.boot.lanzaboote.enable != true);
           configurationLimit = lib.mkForce 3;
           entriesMountPoint = "/boot";
         };
