@@ -155,7 +155,10 @@ in
       systemd.network = (lib.mkIf (cfg.defaultNetworking) {
         enable = true;
 
-        wait-online.anyInterface = true;
+        wait-online = {
+          anyInterface = true;
+          extraArgs = [ "--ipv4" ];
+        };
 
         # leave the kernel dummy devies unmanagaed
         networks."10-dummy" = {
@@ -174,7 +177,8 @@ in
         };
 
         networks."30-network-defaults-wired" = {
-          matchConfig.Name = "en* | eth* | usb*";
+          # matchConfig.Name = "en* | eth* | usb*";
+          matchConfig.Type = "ether";
           networkConfig = {
             DHCP = "yes";
             IPv6AcceptRA = true;
