@@ -25,6 +25,7 @@
     nixos-hardware = { url = "github:nixos/nixos-hardware"; };
     nixpkgs-wayland = { url = "github:nix-community/nixpkgs-wayland/master"; inputs."nixpkgs".follows = "cmpkgs"; };
     sops-nix = { url = "github:Mic92/sops-nix/master"; inputs."nixpkgs".follows = "cmpkgs"; };
+    lanzaboote = { url = "github:nix-community/lanzaboote"; inputs.nixpkgs.follows = "cmpkgs"; };
     # TODO: add lanzaboot
     # TODO: add bootis
 
@@ -80,7 +81,7 @@
       ## SPECIAL OUTPUTS ######################################################
       images = let cfg = n: nixosConfigurations."${n}".config; in {
         installer = (cfg "installer").system.build.isoImage;
-        glove80firmware = {};
+        glove80firmware = { };
       };
 
       ## NIXOS_MODULES # TODO: we don't use these? #############################

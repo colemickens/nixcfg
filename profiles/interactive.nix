@@ -121,6 +121,7 @@
             pipes-rs
             rustscan
             # </rust pkgs>
+            sbctl
 
             # nix-related (TODO move to devtools shell that gets pulled in)
             # nix-tree nix-du ncdu nix-prefetch nixpkgs-review

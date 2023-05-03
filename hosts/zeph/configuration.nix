@@ -25,6 +25,8 @@ in
     # ./experimental.nix
     ./unfree.nix
 
+    inputs.lanzaboote.nixosModules.lanzaboote
+
     inputs.nixos-hardware.nixosModules.common-cpu-amd
     inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
     inputs.nixos-hardware.nixosModules.common-gpu-amd
@@ -73,9 +75,16 @@ in
     swapDevices = [{ device = "/dev/disk/by-partlabel/${hn}-swap"; }];
 
     boot = {
+      bootspec.enable = true;
+      lanzaboote = {
+        enable = true;
+        pkiBundle = "/etc/secureboot";
+        configurationLimit = 4;
+      };
       loader = {
         efi.efiSysMountPoint = "/efi";
         systemd-boot = {
+          enable = lib.mkForce false;
           configurationLimit = lib.mkForce 3;
           entriesMountPoint = "/boot";
         };
