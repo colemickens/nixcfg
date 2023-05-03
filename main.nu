@@ -213,6 +213,7 @@ def "main cache_a64" [] {
 def "main up" [...hosts] {
   header "light_red_reverse" "up" "▒"
 
+  let hosts = [ "xeep" "raisin" "zeph" ]
   main inputup
   main pkgup
   main lockup
