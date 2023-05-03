@@ -1,6 +1,8 @@
 { config, pkgs, lib, modulesPath, ... }:
 
-{
+let
+  hn = "installer";
+in {
   imports = [
     "${modulesPath}/installer/cd-dvd/installation-cd-minimal.nix"
     ../../profiles/core.nix
@@ -8,6 +10,7 @@
 
   config = {
     nixpkgs.hostPlatform.system = "x86_64-linux";
+    networking.hostName = hn;
 
     boot.loader.timeout = lib.mkOverride 10 10;
     documentation.enable = lib.mkOverride 10 false;

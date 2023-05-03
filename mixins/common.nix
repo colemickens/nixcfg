@@ -2,8 +2,9 @@
 
 let
   cfg = config.nixcfg.common;
-  _kernelPackages = pkgs.linuxKernel.packages.linux_6_2;
-  _zfsUnstable = true;
+  # _kernelPackages = pkgs.linuxKernel.packages.linux_6_2;
+  _kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+  _zfsUnstable = false;
 
   # _defaultKernel = pkgs.linuxKernel.packagesFor
   #   (pkgs.linuxPackages_latest.kernel.override {
@@ -60,12 +61,20 @@ in
         type = lib.types.bool;
         default = true;
       };
+      autoHostId = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+      };
       hostColor = lib.mkOption {
         type = lib.types.str;
-        default = "grey";
+        default = "cyan";
         description = "this is used as a hostname-hint-accent in zellij/waybar/shell prompts";
       };
       skipMitigations = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+      };
+      addLegacyboot = lib.mkOption {
         type = lib.types.bool;
         default = true;
       };
@@ -82,11 +91,12 @@ in
         info.enable = false;
         nixos.enable = false;
       }));
-      system.disableInstallerTools = true;
+      system.disableInstallerTools = lib.mkDefault true;
 
       ## BOOT #################################################################
       console.earlySetup = true; # needed for LUKS
       boot = {
+        enableContainers = false;
         tmp.useTmpfs = lib.mkDefault false;
         tmp.cleanOnBoot = true;
         zfs.enableUnstable = (cfg.useZfs && _zfsUnstable);
@@ -110,7 +120,7 @@ in
           timeout = 3;
         };
 
-        initrd.systemd.enable = true;
+        initrd.systemd.enable = lib.mkDefault true;
         initrd.supportedFilesystems = lib.optionals (cfg.useZfs) [ "zfs" ];
 
         kernelPackages = lib.mkIf cfg.defaultKernel _kernelPackages;
@@ -123,7 +133,7 @@ in
       };
 
       ## LEGACYBOOT - we use stage-1/systemd so have a fallback ###############
-      specialisation."legacyboot" = lib.mkIf (config.boot.initrd.systemd.enable) {
+      specialisation."legacyboot" = lib.mkIf (config.boot.initrd.systemd.enable && config.nixcfg.common.addLegacyboot) {
         inheritParentConfig = true;
         configuration = {
           boot.initrd.systemd.enable = lib.mkForce false;
@@ -133,12 +143,14 @@ in
 
       ## NETWORK + TIME #######################################################
       networking = {
-        hostId = pkgs.lib.concatStringsSep "" (pkgs.lib.take 8
+        hostId = lib.mkIf cfg.autoHostId (pkgs.lib.concatStringsSep "" (pkgs.lib.take 8
           (pkgs.lib.stringToCharacters
-            (builtins.hashString "sha256" config.networking.hostName)));
+            (builtins.hashString "sha256" config.networking.hostName))));
         firewall.enable = true;
         useDHCP = lib.mkIf (cfg.defaultNetworking) false;
         useNetworkd = lib.mkIf (cfg.defaultNetworking) true;
+
+        resolvconf.dnsExtensionMechanism = false;
 
         firewall.logRefusedConnections = false;
       };
@@ -189,8 +201,10 @@ in
           # dhcpV4Config.ClientIdentifier = "mac";
           dhcpV4Config.Use6RD = "yes";
           dhcpV4Config.RouteMetric = 512;
+          dhcpV4Config.UseDNS = false;
           dhcpV6Config.RouteMetric = 512;
           dhcpV6Config.PrefixDelegationHint = "::64";
+          dhcpV6Config.UseDNS = false;
         };
         networks."30-network-defaults-wireless" = {
           # matchConfig.Name = "wl*";
@@ -204,7 +218,9 @@ in
           };
           # dhcpV4Config.ClientIdentifier = "mac";
           dhcpV4Config.RouteMetric = 1500;
+          dhcpV4Config.UseDNS = false;
           dhcpV6Config.RouteMetric = 1500;
+          dhcpV6Config.UseDNS = false;
           # routes = [
           #   { routeConfig = { Gateway = "_dhcp4"; Metric = 1500; }; }
           #   { routeConfig = { Gateway = "_ipv6ra"; Metric = 1500; }; }
@@ -217,9 +233,6 @@ in
       security = {
         sudo.enable = true;
         sudo.wheelNeedsPassword = false;
-
-        please.enable = true;
-        please.wheelNeedsPassword = false;
       };
 
       users = {
@@ -238,14 +251,11 @@ in
 
       environment = {
         systemPackages = with pkgs; [ coreutils ];
-        etc."flake.lock" = {
-          source = ../flake.lock;
-        };
       };
 
       ## SILLY CUSTOMIZATION ##################################################
       services.getty = {
-        greetingLine = ''\l  -  (kernel: \r) (label: ${config.system.nixos.label}) (arch: \m)'';
+        greetingLine = ''\l  -  (kernel: \r) (label: ${config.system.nixos.label}) (system: \m)'';
         helpLine = ''
           -... . / --. .- -.-- --..-- / -.. --- / -.-. .-. .. -- .
         '';

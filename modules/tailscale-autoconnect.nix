@@ -53,7 +53,7 @@ in {
 
         # otherwise authenticate with tailscale
         "${pkgs.coreutils}/bin/timeout" 10 "${pkgs.bash}/bin/bash" -c "
-          \"${pkgs.tailscale}/bin/tailscale\" up -authkey \"$(cat \"${cfg.tokenFile}\")\" \
+          \"${pkgs.tailscale}/bin/tailscale\" up -authkey \"$(cat ${cfg.tokenFile})\" \
         "
 
         # should we cleanup?

@@ -10,6 +10,8 @@ in
     ../../profiles/addon-dev.nix
     ../../profiles/addon-laptop.nix
 
+    ../../profiles/addon-nomad.nix
+
     ../../mixins/gfx-radeonsi.nix
     ../../mixins/gfx-debug.nix
 
@@ -22,8 +24,12 @@ in
     ../../mixins/syncthing.nix
     ../../mixins/zfs.nix
 
+    # ../../mixins/oavm-risky.nix
+
     # ./experimental.nix
     ./unfree.nix
+
+    ../../modules/other-arch-vm.nix
 
     inputs.lanzaboote.nixosModules.lanzaboote
 
@@ -32,15 +38,15 @@ in
     inputs.nixos-hardware.nixosModules.common-gpu-amd
     inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
   ];
-
   config = {
     nixpkgs.hostPlatform.system = "x86_64-linux";
     system.stateVersion = "21.05";
 
     networking.hostName = hn;
     nixcfg.common.hostColor = "purple";
-    nixcfg.common.skipMitigations = false;
+    nixcfg.common.skipMitigations = true;
     nixcfg.common.defaultKernel = true;
+    nixcfg.common.addLegacyboot = false;
 
     services.tailscale.useRoutingFeatures = "client";
 
@@ -60,12 +66,13 @@ in
     };
     swapDevices = [{ device = "/dev/disk/by-partlabel/${hn}-swap"; }];
 
-    specialisation."sysd-netboot" = lib.mkIf (config.boot.initrd.systemd.enable) {
-      inheritParentConfig = true;
-      configuration = {
-        boot.initrd.systemd.network.enable = true;
-      };
-    };
+    # TODO: re-enable if/when I'm actually going to test it
+    # specialisation."sysd-netboot" = lib.mkIf (config.boot.initrd.systemd.enable) {
+    #   inheritParentConfig = true;
+    #   configuration = {
+    #     boot.initrd.systemd.network.enable = true;
+    #   };
+    # };
 
     home-manager.users.cole = { pkgs, config, ... }@hm: {
       wayland.windowManager.sway.config = {
@@ -84,14 +91,12 @@ in
         enable = true;
         pkiBundle = "/etc/secureboot";
         configurationLimit = 4;
-        # entriesMountPoint = "/boot"; # unsupported
       };
       loader = {
         efi.efiSysMountPoint = "/efi";
         systemd-boot = {
           enable = lib.mkForce (config.boot.lanzaboote.enable != true);
           configurationLimit = lib.mkForce 3;
-          entriesMountPoint = "/boot";
         };
       };
       kernelModules = [

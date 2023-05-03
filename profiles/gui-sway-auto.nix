@@ -1,25 +1,31 @@
 { pkgs, lib, config, inputs, ... }:
 
 let
+  wlr_renderer = "vulkan";
   autostarts = {
+    # "vkcube" = ''
+    #   export VK_INSTANCE_LAYERS='VK_LAYER_MESA_overlay'
+    #   ${pkgs.vulkan-tools}/bin/vkcube-wayland
+    # '';
     "glmark2" = ''
       "${pkgs.glmark2}/bin/glmark2-wayland" --annotate
     '';
 
+    # "pipes" = ''
+    #   ${pkgs.alacritty}/bin/alacritty -e "${pkgs.pipes-rs}/bin/pipes-rs"
+    # '';
+
+    # "mpv" = ''
+    #   ${pkgs.mpv}/bin/mpv --loop 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+    # '';
+
     # wezterm doesn't work:
     # wezterm_gui::frontend > Failed to create window ...    # 
-    "pipes" = ''
-      ${pkgs.alacritty}/bin/alacritty -e "${pkgs.pipes-rs}/bin/pipes-rs"
-    '';
-
-    "mpv" = ''
-      ${pkgs.mpv}/bin/mpv --loop 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-    '';
   };
 in
 {
   imports = [
-    ../mixins/common.nix
+    ../profiles/hm.nix
   ];
   config = {
     services.getty.autologinUser = "cole";
@@ -51,6 +57,7 @@ in
         set -x;
         sleep 1;
         # timeout 10 sway -d &> sway.log
+        export WLR_RENDER="${wlr_renderer}";
         sway
       )
     '';

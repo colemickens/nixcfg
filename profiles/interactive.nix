@@ -5,8 +5,7 @@
   imports = [
     inputs.home-manager.nixosModules.default # "home-manager"
     ./core.nix # (common + bottom,ssh,sshd,tailscale)
-
-    ../secrets
+    ./hm.nix
 
     ../mixins/aria2.nix
     ../mixins/bottom.nix
@@ -43,25 +42,21 @@
     users.users.cole.shell = pkgs.zsh;
 
     sops.secrets = {
-      "nixup-secrets".owner = "cole";
-      "home-assistant-bearer-token".owner = "cole";
-      "tailscale-join-authkey".owner = "cole";
       "oraclecloud_colemickens_privkey".owner = "cole";
       "oraclecloud_colemickens2_privkey".owner = "cole";
     };
 
     services.dbus.packages = with pkgs; [ pkgs.dconf ];
+    security = {
+      please.enable = true;
+      please.wheelNeedsPassword = false;
+    };
     nix.extraOptions = ''
       keep-outputs = true
       keep-derivations = true
     '';
     home-manager = {
-      useGlobalPkgs = true;
-      useUserPackages = true;
-
       users.cole = { pkgs, ... }@hm: {
-        home.extraOutputsToInstall = [ "info" "man" "share" "icons" "doc" ];
-        home.stateVersion = "21.11";
         home.sessionVariables = {
           EDITOR = "hx";
           CARGO_HOME = "${hm.config.xdg.dataHome}/cargo";
@@ -72,8 +67,6 @@
           "${hm.config.home.sessionVariables.PARALLEL_HOME}/will-cite".text = "";
           "${hm.config.home.sessionVariables.PARALLEL_HOME}/runs-without-willing-to-cite".text = "10";
         };
-        manual = { manpages.enable = false; };
-        news.display = "silent";
         programs = {
           home-manager.enable = true;
           gpg.enable = true;
@@ -86,6 +79,11 @@
           neovim.enable = true;
         };
         home.packages = lib.mkMerge [
+          (lib.mkIf (pkgs.hostPlatform.system != "riscv64-linux") (with pkgs; [
+            # x86_64-linux only
+            zenith # uh oh, no aarch64 support? noooooo
+            bandwhich # TODO: check if it natively compiles?
+          ]))
           (lib.mkIf (pkgs.hostPlatform.system == "x86_64-linux") (with pkgs; [
             # x86_64-linux only
             zenith # uh oh, no aarch64 support? noooooo
@@ -117,7 +115,6 @@
             sd
             procs
             prs
-            bandwhich
             pipes-rs
             rustscan
             # </rust pkgs>

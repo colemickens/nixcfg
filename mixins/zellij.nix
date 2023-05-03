@@ -27,10 +27,12 @@ in
       # '';
       programs.zellij = {
         enable = true;
+        package = inputs.zellij.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default;
+        enableZshIntegration = false; # do NOT auto-start, thank you
         settings = {
           default_mode = "normal";
           ui.pane_frames.rounded_corners = true;
-          # default_layout = "compact"; # seems to break, I don't think the nix pkg has the default plugins
+          default_layout = "compact"; # seems to break, I don't think the nix pkg has the default plugins
           default_shell = "nu";
           simplified_ui = true;
           pane_frames = true;

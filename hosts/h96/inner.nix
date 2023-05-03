@@ -2,17 +2,16 @@
 
 let
   # eth_ip = "192.168.162.69/16";
-  kernel = pkgs.callPackage ./kernel.nix { };
+  # kernel = pkgs.callPackage ./kernel.nix { };
+  kernel = pkgs.callPackage ../rocky/kernel.nix { };
   kernelPackages = pkgs.linuxKernel.packagesFor kernel;
-  hn = "aitchninesix1";
+  hn = "h96";
 
   krnl = config.boot.kernelPackages.kernel;
 in
 {
   imports = [
-    ../rockfiveb1/unfree.nix
-
-    ../../modules/rsynstall.nix
+    ../rocky/unfree.nix
 
     ../../profiles/user-cole.nix
     ../../mixins/common.nix
@@ -37,25 +36,14 @@ in
       ripgrep
     ];
 
-    fileSystems = lib.mkDefault {
-      "/boot" = {
-        fsType = "vfat";
-        device = "/dev/disk/by-partlabel/${hn}-boot";
-      };
-      "/" = {
-        fsType = "ext4";
-        device = "/dev/disk/by-partlabel/${hn}-nixos";
-      };
-    };
-
-    # system.build.sdImageX = (mkSpecialisation).config.system.build.sdImage;
-
     nixcfg.common = {
       useZfs = false;
       defaultKernel = false;
       defaultNetworking = false;
-      sysdBoot = false;
+      addLegacyboot = false;
     };
+
+    # boot.initrd.systemd.enable = false;
 
     networking.hostName = hn;
     system.stateVersion = "21.11";
@@ -81,7 +69,7 @@ in
       config = {
         device.identifier = lib.mkForce "rockchip-rk3588-nvr-demo-v10";
         Tow-Boot = {
-          defconfig = lib.mkForce "rk3588_defconfig";
+          # defconfig = lib.mkForce "evb-rk3588_defconfig";
           config = [
             (helpers: with helpers; {
               # DEFAULT_DEVICE_TREE = "rk3558-nvr-demo-v10-android";

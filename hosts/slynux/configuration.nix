@@ -1,6 +1,7 @@
 { pkgs, lib, inputs, modulesPath, ... }:
 let
   hn = "slynux";
+  pp = "slynux"; # ?
   asVm = false;
 in
 {
@@ -9,9 +10,15 @@ in
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
+    ../../mixins/zfs.nix
 
     ../../profiles/gui-sway-auto.nix
     ../../profiles/interactive.nix
+
+    inputs.nixos-hardware.nixosModules.common-cpu-amd
+    inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
+    inputs.nixos-hardware.nixosModules.common-pc-ssd
+    # inputs.nixos-hardware.nixosModules.common-gpu-nvidia
   ] ++ (if asVm then [
     ../../profiles/addon-auto-vm.nix
   ] else [
@@ -27,14 +34,11 @@ in
 
     services.tailscale.useRoutingFeatures = "server";
 
-    # TODO: remove this is only for the VM
-    services.timesyncd.enable = lib.mkForce false;
-
     fileSystems = {
-      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/slynuxreborn_boot"; };
-      "/" = { fsType = "zfs"; device = "slynuxreborn/root"; };
-      "/home" = { fsType = "zfs"; device = "slynuxreborn/home"; };
-      "/nix" = { fsType = "zfs"; device = "slynuxreborn/nix"; };
+      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${pp}-boot"; };
+      "/" = { fsType = "zfs"; device = "${pp}pool/root"; };
+      "/nix" = { fsType = "zfs"; device = "${pp}pool/nix"; };
+      "/home" = { fsType = "zfs"; device = "${pp}pool/home"; };
     };
     swapDevices = [ ];
 
@@ -42,29 +46,26 @@ in
       # tmpOnTmpfs = true;  # re-enable when RAM RMA is complete and we're back to 64GB
       #zfs.requestEncryptionCredentials = true;
       initrd.availableKernelModules = [
+        "sd_mod"
+        "sr_mod"
+      ];
+      initrd.systemd.enable = lib.mkForce false;
+      kernelModules = [
         "xhci_pci"
         "nvme"
         "usb_storage"
         "sd_mod"
-        "rtsx_pci_sdmmc"
-        "intel_agp"
-        "i915"
+        "ehci_pci"
+        "uas"
       ];
       initrd.luks.devices = {
         "nixos-luksroot" = {
-          name = "nixos-luksroot";
-          device = "/dev/disk/by-partlabel/slynuxreborn_luks";
-          preLVM = true;
+          device = "/dev/disk/by-partlabel/${hn}-luks";
           allowDiscards = true;
-
-          # disabling this for now
-          # so that it doesn't work in Win10
-          # see if its the cause of corruption
-
-          #keyFile = "/dev/sdb";
-          #keyFileSize = 4096;
+          keyFile = "/lukskey";
         };
       };
+      initrd.secrets."/lukskey" = pkgs.writeText "lukskey" "test";
     };
   };
 }

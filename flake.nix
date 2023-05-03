@@ -1,3 +1,8 @@
+#WHY:
+# networkmanager
+# foot
+# in _ANY_ of our builds:
+
 {
   description = "colemickens-nixcfg";
 
@@ -11,34 +16,57 @@
   # TODO: add firmware build for the Glove80 keyboard
 
   inputs = {
+    systems = { url = "path:./flake.systems.nix"; flake = false; };
+    flake-utils = { url = "github:numtide/flake-utils"; inputs."systems".follows = "systems"; };
+
     lib-aggregate = { url = "github:nix-community/lib-aggregate"; }; #TODO: boo name! "libaggregate"?
 
     nixpkgs-stable = { url = "github:nixos/nixpkgs/nixos-22.11"; }; # any stable to use
 
     cmpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
+    cmpkgs-cross = { url = "github:colemickens/nixpkgs/cmpkgs-cross"; };
     cmpkgs-cross-riscv64 = { url = "github:colemickens/nixpkgs/cmpkgs-cross-riscv64"; };
     cmpkgs-rpipkgs = { url = "github:colemickens/nixpkgs/cmpkgs-rpipkgs"; }; # used only for tow-boot/rpi
+
+    mobile-nixos-openstick = {
+      url = "github:colemickens/mobile-nixos/openstick";
+      inputs."nixpkgs".follows = "cmpkgs";
+    };
+    # tow-boot-visionfive = {
+    #   url = "github:colemickens/tow-boot/visionfive";
+    #   inputs."nixpkgs".follows = "cmpkgs";
+    # };
+    tow-boot-radxa-rock5b = {
+      url = "github:colemickens/tow-boot/radxa-rock5b";
+      inputs."nixpkgs".follows = "cmpkgs";
+    };
 
     # core system/inputs
     firefox-nightly = { url = "github:colemickens/flake-firefox-nightly"; inputs."nixpkgs".follows = "cmpkgs"; };
     home-manager = { url = "github:colemickens/home-manager/cmhm"; inputs."nixpkgs".follows = "cmpkgs"; };
-    nixos-hardware = { url = "github:nixos/nixos-hardware"; };
+    nixos-hardware = { url = "github:colemickens/nixos-hardware"; };
     nixpkgs-wayland = { url = "github:nix-community/nixpkgs-wayland/master"; inputs."nixpkgs".follows = "cmpkgs"; };
     sops-nix = { url = "github:Mic92/sops-nix/master"; inputs."nixpkgs".follows = "cmpkgs"; };
     lanzaboote = { url = "github:nix-community/lanzaboote"; inputs.nixpkgs.follows = "cmpkgs"; };
-    # TODO: add lanzaboot
-    # TODO: add bootis
 
     # SBC-adjacent inputs
     visionfive-nix = { url = "github:colemickens/visionfive-nix"; inputs."nixpkgs".follows = "cmpkgs-cross-riscv64"; };
     nixos-riscv64 = { url = "github:colemickens/nixos-riscv64"; inputs."nixpkgs".follows = "cmpkgs-cross-riscv64"; };
+    # TODO: investigate THEIR nixpkgs........ riscv fork
+    nixos-riscv = { url = "github:NickCao/nixos-riscv"; inputs."nixpkgs".follows = "cmpkgs-cross-riscv64"; };
 
     # devtools:
     terranix = { url = "github:terranix/terranix"; inputs."nixpkgs".follows = "cmpkgs"; }; # packet/terraform deployments
     fenix = { url = "github:nix-community/fenix"; inputs."nixpkgs".follows = "cmpkgs"; }; # used for nightly rust devtools
     helix = { url = "github:helix-editor/helix"; };
-    jj = { url = "github:martinvonz/jj"; };
-    nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; };
+    # jj = { url = "github:martinvonz/jj"; inputs."flake-utils".inputs."systems".follows = "systems"; };
+    jj = { url = "github:martinvonz/jj"; inputs."flake-utils".follows = "flake-utils"; };
+    zellij = { url = "github:a-kenji/zellij-nix/bee0cae93b4cbcd0a1ad1a62e70709b9db0f5c7c"; inputs."flake-utils".follows = "flake-utils"; };
+    # TODO: un-pin this eventually...
+    # zellij = { url = "github:a-kenji/zellij-nix"; inputs."flake-utils".follows = "flake-utils"; };
+     # inputs."nixpkgs".follows = "cmpkgs"; };
+    # nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; };
+    nix-eval-jobs = { url = "github:colemickens/nix-eval-jobs"; };
     nix-update = { url = "github:Mic92/nix-update"; };
 
     # experimental/unused:
@@ -51,37 +79,130 @@
   ## OUTPUTS ##################################################################
   outputs = inputs:
     let
+      defaultSystems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        # "riscv64-linux"
+      ];
+
       lib = inputs.lib-aggregate.lib;
+
+      importPkgs = npkgs: extraCfg: (lib.genAttrs defaultSystems (system: import npkgs {
+        inherit system;
+        overlays = [ overlays.default ];
+        config = ({ allowAliases = false; } // extraCfg);
+      }));
+      pkgs = importPkgs inputs.cmpkgs { };
+      pkgsStable = importPkgs inputs.nixpkgs-stable { };
+      pkgsUnfree = importPkgs inputs.cmpkgs { allowUnfree = true; };
 
       mkSystem = n: v: (v.pkgs.lib.nixosSystem {
         modules = [
-          ./hosts/${n}/configuration.nix
-          # ({ config, lib, ... }: {
-          #   config.nixpkgs.buildPlatform.system =
-          #     lib.mkIf (builtins.hasAttr "buildSys" v) v.buildSys; })
-        ];
+          (v.path or (./hosts/${n}/configuration.nix))
+        ] ++ (if (! builtins.hasAttr "buildSys" v) then [ ] else [{
+          config.nixpkgs.buildPlatform.system = v.buildSys;
+        }]);
         specialArgs = { inherit inputs; };
       });
 
       ## NIXOS CONFIGS + TOPLEVELS ############################################
-      nixosConfigs = {
-        # misc
-        installer = { pkgs = inputs.cmpkgs; };
+      nixosConfigsEx = {
+        "x86_64-linux" = rec {
+          # misc
+          installer = { pkgs = inputs.cmpkgs; };
 
-        # actual machines:
-        raisin = { pkgs = inputs.cmpkgs; };
-        slynux = { pkgs = inputs.cmpkgs; };
-        xeep = { pkgs = inputs.cmpkgs; };
-        zeph = { pkgs = inputs.cmpkgs; };
+          # actual machines:
+          raisin = { pkgs = inputs.cmpkgs; };
+          slynux = { pkgs = inputs.cmpkgs; };
+          xeep = { pkgs = inputs.cmpkgs; };
+          zeph = { pkgs = inputs.cmpkgs; };
+
+          pktspot1 = { pkgs = inputs.cmpkgs; };
+
+          # used as cross-built bootstrap for getting a builder up, then pivoting to native builds
+          openstick-cross = {
+            pkgs = inputs.cmpkgs-cross;
+            path = ./hosts/openstick/cross.nix;
+            buildSys = "x86_64-linux";
+          };
+          rocky-cross = {
+            pkgs = inputs.cmpkgs-cross;
+            path = ./hosts/rocky/cross.nix;
+            buildSys = "x86_64-linux";
+          };
+          # rocky-sdcard = {
+          #   # TODO FIXME
+          #   # TODO: finish, must lay it out
+          #   pkgs = inputs.cmpkgs-cross;
+          #   path = ./hosts/rocky/sdcard.nix;
+          #   buildSys = "x86_64-linux";
+          # };
+          vf2 = {
+            pkgs = inputs.cmpkgs-cross-riscv64;
+            path = ./hosts/vf2/cross.nix;
+            buildSys = "x86_64-linux";
+          };
+          # vf2-netboot = {
+          #   pkgs = inputs.cmpkgs-cross-riscv64;
+          #   path = ./hosts/vf2/netboot.nix;
+          #   buildSys = "x86_64-linux";
+          # };
+          # vf2-sdcard = {
+          #   pkgs = inputs.cmpkgs-cross-riscv64;
+          #   path = ./hosts/vf2/sdcard.nix;
+          #   buildSys = "x86_64-linux";
+          # };
+          h96-cross = {
+            pkgs = inputs.cmpkgs-cross;
+            path = ./hosts/h96/cross.nix;
+            buildSys = "x86_64-linux";
+          };
+          h96-netboot = {
+            pkgs = inputs.cmpkgs-cross;
+            path = ./hosts/h96/netboot.nix;
+            buildSys = "x86_64-linux";
+          };
+        };
+        "aarch64-linux" = {
+          openstick = {
+            # PROBLEM!!
+            path = ./hosts/openstick/configuration.nix;
+            pkgs = inputs.cmpkgs-cross;
+          };
+          rocky = {
+            path = ./hosts/rocky/configuration.nix;
+            pkgs = inputs.cmpkgs;
+          };
+          h96 = {
+            pkgs = inputs.cmpkgs-cross;
+            path = ./hosts/h96/configuration.nix;
+          };
+        };
+        "riscv64-linux" = {
+          vf2-native = {
+            path = ./hosts/vf2/configuration.nix;
+            pkgs = inputs.cmpkgs-cross-riscv64;
+          };
+        };
       };
-
+      nixosConfigs = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues nixosConfigsEx));
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);
       toplevels = (lib.mapAttrs (_: v: v.config.system.build.toplevel) nixosConfigurations);
 
       ## SPECIAL OUTPUTS ######################################################
-      images = let cfg = n: nixosConfigurations."${n}".config; in {
-        installer = (cfg "installer").system.build.isoImage;
-        glove80firmware = { };
+      extra = {
+        # keyed by buildPlatform for usage by ciAttrs
+        x86_64-linux = {
+          installer = nixosConfigurations.installer.config.system.build.isoImage;
+          # vf2-firmware = pkgs.x86_64-linux.pkgsCross.riscv64.callPackage
+          #   "${inputs.nixos-hardware}/starfive/visionfive/v2/firmware.nix"
+          #   { };
+          # vf2-sdcard-sdimage = nixosConfigurations.vf2-sdcard.config.system.build.sdImage;
+          rocky-firmware = nixosConfigurations.rocky.config.system.build.tow-boot.outputs;
+          # rocky-sdcard-sdimage = nixosConfigurations.rocky-sdcard.config.system.build.sdImage;
+        };
+        aarch64-linux = { };
+        riscv64-linux = { };
       };
 
       ## NIXOS_MODULES # TODO: we don't use these? #############################
@@ -118,31 +239,21 @@
     lib.recursiveUpdate
       ({
         inherit nixosConfigs nixosConfigurations toplevels;
-        inherit images nixosModules overlays;
+        inherit nixosModules overlays;
+        inherit extra;
+        inherit pkgs pkgsUnfree;
       })
       (
         ## SYSTEM-SPECIFIC OUTPUTS ############################################
-        lib.flake-utils.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
+        lib.flake-utils.eachSystem defaultSystems (system:
           let
-            importPkgs = npkgs: extraCfg: (import npkgs {
-              inherit system;
-              overlays = [ overlays.default ];
-              config = ({ allowAliases = false; } // extraCfg);
-            });
-            pkgs = importPkgs inputs.cmpkgs { };
-            pkgsStable = importPkgs inputs.nixpkgs-stable { };
-            pkgsUnfree = importPkgs inputs.cmpkgs { allowUnfree = true; };
-            mkShell = (name: import ./shells/${name}.nix { inherit inputs pkgs; });
+            mkShell = (name: import ./shells/${name}.nix { inherit inputs; pkgs = pkgs.${system}; });
             mkAppScript = (name: script: {
               type = "app";
-              program = (pkgsStable.writeScript "${name}.sh" script).outPath;
+              program = (pkgsStable.${system}.writeScript "${name}.sh" script).outPath;
             });
           in
           rec {
-            inherit pkgs;
-            inherit pkgsStable;
-            inherit pkgsUnfree;
-
             ## DEVSHELLS # some of 'em kinda compose ##########################
             devShells = (lib.flip lib.genAttrs mkShell [
               "ci"
@@ -154,7 +265,8 @@
             ## APPS ###########################################################
             apps = lib.recursiveUpdate { }
               (
-                let tfout = import ./cloud { inherit (inputs) terranix; inherit pkgs; }; in {
+                let tfout = import ./cloud { inherit (inputs) terranix; pkgs = pkgs.${system}; }; in {
+
                   tf = { type = "app"; program = tfout.tf.outPath; };
                   tf-apply = { type = "app"; program = tfout.apply.outPath; };
                   tf-destroy = { type = "app"; program = tfout.destroy.outPath; };
@@ -162,15 +274,17 @@
               );
 
             ## PACKAGES #######################################################
-            packages = (pkgs.__colemickens_nixcfg_pkgs);
+            packages = (pkgs.${system}.__colemickens_nixcfg_pkgs);
 
             ## CI #############################################################
             ciAttrs = {
               shells = (lib.genAttrs [ "devtools" "ci" "devenv" ]
                 (n: inputs.self.devShells.${system}.${n}.inputDerivation));
               packages = (inputs.self.packages.${system});
-              # TODO: this probably evals ALL hosts... sadge
-              toplevels = lib.filterAttrs (n: v: v.system == system) toplevels;
+              extra = (inputs.self.extra.${system});
+              toplevels = lib.genAttrs
+                (builtins.attrNames nixosConfigsEx.${system})
+                (n: toplevels.${n});
             };
           })
       )

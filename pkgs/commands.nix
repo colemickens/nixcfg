@@ -69,6 +69,10 @@ let
     nix develop $HOME/code/nixcfg#devenv "''${@}"
   '');
 
+  nixcfg = (writeShellScriptBin "nixcfg" ''
+    nix develop $HOME/code/nixcfg -c /home/cole/code/nixcfg/main.nu "''${@}"
+  '');
+
   fix-ssh = (writeShellScriptBin "fix-ssh" ''
     set -x
     ln -sf ${gpgSshSocket} /run/user/1000/sshagent
@@ -146,6 +150,7 @@ in
     rec-cmd
     zj
     devenv
+    nixcfg
 
     zssh4
     zssh6

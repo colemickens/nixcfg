@@ -6,6 +6,8 @@
   ];
 
   config = {
+    services.timesyncd.enable = lib.mkForce false;
+
     virtualisation = {
       qemu.options = [
         "-vga none"

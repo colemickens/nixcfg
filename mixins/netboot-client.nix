@@ -196,7 +196,7 @@ in
               unitConfig.IgnoreOnIsolate = true;
             }];
             services.rw-store = {
-              after = [ "sysroot-nix-.rw\\x2dstore.mount" ];
+              after = [ "sysroot-nix-.ro\\x2dstore.mount" ];
               unitConfig.DefaultDependencies = false;
               serviceConfig = {
                 Type = "oneshot";

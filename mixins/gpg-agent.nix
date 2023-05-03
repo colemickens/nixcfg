@@ -1,9 +1,11 @@
-{ pkgs, inputs, ... }:
+{ pkgs, lib, inputs, ... }:
 
 let
   wayprompt = "${inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system}.wayprompt}";
-  pinentryProgram = "${wayprompt}/bin/pinentry-wayprompt";
-  # pinentryProgram = "${pkgs.pinentry-bemenu}/bin/pinentry-bemenu";
+
+  # pinentryProgram = "${wayprompt}/bin/pinentry-wayprompt";
+  # pinentryProgram = "${pkgs.pinentry-curses}/bin/pinentry-tty";
+  pinentryProgram = null;
 
   sysPkgs = with pkgs; [ gcr ];
   def = {
@@ -94,7 +96,7 @@ in {
       home.file."${hm.config.programs.gpg.homedir}/.keep".text = "";
       home.packages = with pkgs; [
         yubikey-personalization
-        yubikey-manager
+        # yubikey-manager
         yubico-piv-tool
       ];
       # programs.gpg.package = ecfg.gnupgPkg;
@@ -115,10 +117,10 @@ in {
         extraConfig = ''
           # enable-ssh-support
           allow-preset-passphrase
-          pinentry-program "${pinentryProgram}"
         '';
         # pinentryFlavor = "gnome3";
         pinentryFlavor = null;
+        pinentryBinary = lib.mkDefault pinentryProgram;
         defaultCacheTtl = 34560000;
         defaultCacheTtlSsh = 34560000;
         maxCacheTtl = 34560000;

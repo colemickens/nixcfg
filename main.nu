@@ -1,14 +1,39 @@
 #!/usr/bin/env nu
 
+let-env NIXLIB_OUTPUT_DIR = ([ ".outputs" (date now | date format "%s") ] | path join)
 source ./nixlib.nu
 
 let cachixpkgs_branch = "nixpkgs-stable"
 let cpm = (open ./flake.lock | from json | get nodes | get $cachixpkgs_branch | get locked)
+let defaultDeployHosts = [
+  "slynux"
+  "zeph"
+  "raisin"
+  "xeep"
+  "vf2"
+  "rocky"
+  "openstick"
+  # "h96"
+];
 
 let options = {
   builders: {
-    "x86_64-linux": "cole@147.28.150.135"
-    # "x86_64-linux": ""
+    "x86_64-linux": {
+      url: $"cole@(tailscale ip --4 pktspot1 | str trim)",
+      nixflags: [
+        # "--option" "max-jobs" "8"
+        # "--option" "cores" "8"
+      ],
+    },
+    "aarch64-linux": {
+      url: "colemickens@aarch64.nixos.community",
+      nixflags: [],
+    },
+    "riscv64-linux": {
+      # url: $"cole@(tailscale ip --4 vf2 | str trim)",
+      url: $"cole@(tailscale ip --4 pktspot1riscv | str trim)",
+      nixflags: [],
+    },
   },
   cachix: {
     pkgs: $"https://github.com/($cpm.owner)/($cpm.repo)/archive/($cpm.rev).tar.gz",
@@ -18,37 +43,35 @@ let options = {
   nixflags: [
     # "--accept-flake-config",
     "--builders-use-substitutes"
+    "--keep-going"
     "--option" "narinfo-cache-negative-ttl" "0"
     "--option" "extra-trusted-substituters" "https://cache.nixos.org https://colemickens.cachix.org https://nix-community.cachix.org https://nixpkgs-wayland.cachix.org https://unmatched.cachix.org"
     "--option" "extra-substituters" "https://cache.nixos.org https://colemickens.cachix.org https://nix-community.cachix.org https://nixpkgs-wayland.cachix.org https://unmatched.cachix.org"
     "--option" "extra-trusted-public-keys" "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= unmatched.cachix.org-1:F8TWIP/hA2808FDABsayBCFjrmrz296+5CQaysosTTc= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-  ],
+  ]
 }
 
 check
-
-# TODO: how to merge from another file
-# if ("./overrides.nu" | path exists) {
-#   (nu ./overrides.nu)
-# }
 
 ############### Intenral lib #################
 def downPaths [ target:string, ...buildPaths ] {
   let buildPaths = ($buildPaths | flatten)
   header "light_gray_reverse" $"download: ($target)"
-  # let cmd = (^printf "'%s' " ([$"nix" "build" "--no-link" "-j0" $options.nixflags $buildPaths ] | flatten))
-  # ^ssh $"cole@($target)" $cmd
-  print -e $buildPaths
-  (^nix build -j0 --no-link --eval-store auto
-    --store $"ssh-ng://cole@($target)" $options.nixflags $buildPaths)
+  let cmd = (^printf '%q ' ([$"nix" "build" "--no-link" "-j0" $options.nixflags $buildPaths ] | flatten))
+  ^ssh $"cole@($target)" $cmd
 }
 
-def deployHost [ arch: string, host: string ] {
+def deployHost [ options: record, host: string, topout: string = "" ] {
   let target = (tailscale ip --4 $host | str trim)
   header "light_purple_reverse" $"deploy: ($host): START"
 
-  let buildPaths = (autoCacheDrvs $options $arch [$".#toplevels.($host)"])
-  let topout = ($buildPaths | first)
+  let topout = (if $topout != "" { $topout} else {
+    let refs = [ $".#toplevels.($host)" ]
+    let drvs = (evalFlakeRefs $refs)
+    let drvs = ($drvs | where { true })
+    buildDrvs $options $drvs true
+    ($drvs | get outputs | get out | first)
+  })
 
   downPaths $target $topout
 
@@ -64,6 +87,9 @@ def deployHost [ arch: string, host: string ] {
 ############### Intenral lib #################
 
 def check [] {
+  if ("SKIP_GIT_CHECK" in $env) {
+    return
+  }
   let len = (^git status --porcelain | complete | get stdout | str trim | str length)
   if ($len) != 0 {
     git status
@@ -71,35 +97,43 @@ def check [] {
   }
 }
 
-def "main build" [ arch: string, ...flakeRefs ] {
-  autoBuildDrvs $options $arch $flakeRefs
-}
-
-def "main cache" [ arch: string, ...flakeRefs ] {
-  autoCacheDrvs $options $arch $flakeRefs
-}
-
-def "main dl" [ arch: string, ...flakeRefs ] {
-  let buildPaths = (autoCacheDrvs $options $arch $flakeRefs)
-  ^nix build -j0 --no-link $options.nixflags $buildPaths
-  $buildPaths
-}
-
 def "main nix" [...args] {
   ^nix $options.nixflags $args
 }
 
-def "main deploy" [ arch: string, ...hosts] {
-  let hosts = ($hosts | flatten)
-  let hosts = (if ($hosts | length) != 0 { $hosts } else {
-    let ref = $".#deployConfigs.($arch)"
-    do -c { ^nix eval --json --apply "x: builtins.attrNames x" $ref }
-      | complete | get stdout | from json
-  })
+def "main build" [ ...flakeRefs ] {
+  let drvs = (evalFlakeRefs $flakeRefs)
+  print -e ($drvs | columns)
+  buildDrvs $options $drvs false
+}
+
+def "main cache" [ ...flakeRefs ] {
+  let drvs = (evalFlakeRefs $flakeRefs)
+  # let drvs = ($drvs | where { true })
+  buildDrvs $options $drvs true
+}
+
+def "main dl" [ ...flakeRefs ] {
+  let drvs = (evalFlakeRefs $flakeRefs)
+  let drvs = ($drvs | where { true })
+  buildDrvs $options $drvs true
+
+  let outs = ($drvs | get outputs | get out)
+
+  header "light_yellow_reverse" $"downloads from cache..."
+  ^nix build -j0 --no-link $options.nixflags $outs
+  $outs
+}
+
+def "main deploy" [...hosts] {
   header "light_yellow_reverse" $"DEPLOY"
+  let hosts = (if ($hosts | length) > 0 { $hosts } else { $defaultDeployHosts })
   print -e $hosts
   for h in $hosts {
-    deployHost $arch $h
+    let drvs = (evalFlakeRefs [$".#toplevels.($h)"])
+    buildDrvs $options $drvs true
+    let out = ($drvs | get outputs | get out | first)
+    deployHost $options $h $out
   }
 }
 
@@ -115,21 +149,27 @@ def "main inputup" [] {
 
     # tow-boot and friends
     "tow-boot/development" "tow-boot/development-flakes"
-    # "tow-boot/rpi" "tow-boot/radxa-zero" "tow-boot/radxa-rock5b" "tow-boot/visionfive"
+    "tow-boot/radxa-rock5b" 
+    "tow-boot/visionfive"
+    # "tow-boot/rpi" "tow-boot/radxa-zero"
 
     # mobile-nixos and friends
     "mobile-nixos/master"
     "mobile-nixos/master-flakes"
-    # "mobile-nixos/openstick" "mobile-nixos/pinephone-emmc" "mobile-nixos/reset-scripts" "mobile-nixos/sdm845-blue"
+    "mobile-nixos/openstick"
+    # "mobile-nixos/pinephone-emmc" "mobile-nixos/reset-scripts" "mobile-nixos/sdm845-blue"
     
     # BUG: nixos-riscv64 - temporarily disabled
-    # "nixos-riscv64"
+    "nixos-riscv64"
 
     # flake-firefox-nightly (not checked out anymore unless troubleshooting)
     # "flake-firefox-nightly"
     
     # nixpkgs-wayland
     "nixpkgs-wayland/master"
+
+    # others, that I might (have) fork(ed)
+    "nixos-hardware"
   ] | each { |it1| $it1 | each {|it| $"($env.HOME)/code/($it)" } })
 
   let extsrcdirs = ([
@@ -143,9 +183,19 @@ def "main inputup" [] {
       print -e $"(ansi yellow_dimmed)inputup: warn: skipping non-existent $dir(ansi reset)"
     }
     print -e $"(ansi yellow_dimmed)inputup: check:(ansi reset) ($dir)"
-    do -i { ^git -C $dir rebase --abort }
-    ^git -C $dir pull --rebase --no-gpg-sign
-    ^git -C $dir push origin HEAD -f
+    do -i { ^git -C $dir rebase --abort err> /dev/null }
+    if (ls -D ([$dir ".git"] | path join) | get 0 | get type) == "dir" {
+      ^git -C $dir pull --rebase --no-gpg-sign
+    } else {
+      ^git -C $dir rebase --no-gpg-sign
+    }
+    let b = (git -C $dir rev-parse --abbrev-ref HEAD)
+    let remote = (git -C $dir rev-parse $"origin/($b)")
+    let local = (git -C $dir rev-parse $b)
+    print -e $"remote=($remote | str substring 0..6); local=($local | str substring 0..6)"
+    if ($local != $remote) {
+      ^git -C $dir push origin HEAD -f
+    }
   }
 }
 
@@ -188,7 +238,7 @@ def "main pkgup" [...pkglist] {
       print -e "pkgup> test if exists"
       let c = (nix build -j0 --no-link $options.nixflags $pf | complete)
       if $c.exit_code != 0 {
-        main dl "x86_64-linux" $pf # this shouldn't be necessary...
+        main dl $pf # this shouldn't be necessary...
         # main cache "x86_64-linux" $pf
       }
       git commit -F $t $"./pkgs/($pkgname)"
@@ -202,34 +252,55 @@ def "main lockup" [] {
   header "light_yellow_reverse" "lockup"
   ^nix flake lock --recreate-lock-file --commit-lock-file
 }
+
+def "main ciattrs" [] {
+  let drvs = (evalFlakeRefs ['.#ciAttrs'])
+  buildDrvs $options $drvs true
+  $drvs
+}
+
 def "main up" [...hosts] {
   header "light_red_reverse" "up" "▒"
 
-  let hosts = [ "xeep" "raisin" "zeph" ]
   main inputup
-  main pkgup
+  if (not ("SKIP_PKGUP" in $env)) {
+    main pkgup
+  }
   main lockup
-  main cache x86_64-linux '.#toplevels.zeph'
-  main cache x86_64-linux '.#toplevels.xeep'
-  main cache x86_64-linux '.#toplevels.raisin'
-  main cache x86_64-linux '.#toplevels.slynux'
-  main deploy x86_64-linux $hosts
+
+  let hosts = (if ($hosts | length) > 0 { $hosts } else { $defaultDeployHosts })
+  let drvs = (main ciattrs)
+
+  $hosts | par-each { |h|
+    ($drvs | get attr)
+    ($drvs | get attrPath)
+    ($drvs | get drvPath)
+    let top = ($drvs | where {|t| $t.name =~ $"nixos-system-($h)" } | first)
+    let topout = ($drvs | where {|t| $t.name =~ $"nixos-system-($h)" } | first | get outputs | get out)
+    deployHost $options $h $topout
+  }
 }
 
 def main [] { main up }
 
-############
+## CI #########################################################################
+# TODO: split to `ci.nu`?
 
-# not used in nixpkgs-wayland:
+let branch = 'ci-auto-update'
 
-############
+def action-post [] {
+  git push -f origin $branch
+}
 
-# TODO: revisit actions
-# ## action-rpiup ###############################################################
-# def "main action-rpiup" [] {
-#   # TODO: we gotta clone repos and stuff, right?
-#   main rpiup
-# }
+def action-ci-all [] {
+  # TODO: git-repo-manager?
+  git switch -c $branch
+  main inputup # should be a no-op even with nothing cloned
+  main pkgup
+  main lockup
+  main ciattrs
+  action-post
+}
 
 # ## action-nextci ###############################################################
 # def updateInput [ name: string baseBr: string newBr: string upRemoteName: string upstreamUrl: string upstreamBr: string ] {

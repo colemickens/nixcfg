@@ -39,36 +39,53 @@ in
           #theme = "base16_terminal";
 
           editor = {
-            line-number = "relative";
-            mouse = true;
-            indent-guides.render = true;
+            auto-pairs = false;
+            bufferline = "never";
+            # bufferline = "always";
             color-modes = true;
-            cursorline = true;
             cursor-shape = {
               normal = "block";
               insert = "bar";
               select = "underline";
             };
+            cursorcolumn = true;
+            cursorline = true;
+            # gutters = [
+            #   "diagnostics"
+            #   "line-numbers"
+            #   "spacer"
+            #   "diff"
+            # ];
             file-picker = {
               hidden = false;
             };
-            rulers = [ 80 120 ];
-            bufferline = "always";
-            gutters = [
-              "diagnostics"
-              "line-numbers"
-              "spacer"
-              /*"git"*/
-            ];
-            statusline = {
-              left = [ "mode" "file-name" ];
-              center = [ ];
-              right = [ "diagnostics" "selections" "position" "position-percentage" ];
+            indent-guides = {
+              render = true;
+              character = "┊";
             };
-            true-color = true;
+            line-number = "relative";
             lsp = {
               display-messages = true;
             };
+            mouse = true;
+            rulers = [ 80 120 ];
+            statusline = {
+              left = [
+                "mode"
+                "spinner"
+                "file-name"
+                "file-modification-indicator"
+              ];
+              center = [ ];
+              right = [
+                "file-type"
+                "diagnostics"
+                "selections"
+                "position"
+                "position-percentage"
+              ];
+            };
+            true-color = true;
             whitespace = {
               render.space = "all";
               render.tab = "all";

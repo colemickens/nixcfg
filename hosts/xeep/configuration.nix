@@ -2,7 +2,12 @@
 
 let
   hn = "xeep";
-  static_ip = "192.168.1.70/16";
+  static_ip = "192.168.1.99/16";
+
+  nb = n: inputs.self.outputs.nixosConfigurations."${n}-netboot".config.system.build;
+
+  enableNetboot = true;
+  nbhost = "h96";
 in
 {
   imports = [
@@ -19,12 +24,49 @@ in
   ];
 
   config = {
+    # TEMP START TO FIX vf2 via netboot
+    services.atftpd = lib.mkIf (enableNetboot) {
+      enable = true;
+      extraOptions = [ "--verbose=7" ];
+      # root = (pkgs.runCommand "atftpd-root" { } ''
+      #   mkdir $out
+      #   ln -s ${vf2.initrd} $out/initrd
+      #   ln -s ${vf2.kernel}/Image $out/kernel
+      #   ln -s ${vf2.kernel}/dtbs/starfive/jh7110-starfive-visionfive-2-v1.2a.dtb $out/dtb
+      #   printf "%s " "init=${vf2.toplevel.outPath}/init" > "$out/bootargs"
+      #   cat "${vf2.toplevel}/kernel-params" >> "$out/bootargs"
+      # '').outPath;
+      # cp -r "${vf2.netbootIpxeScript}" $out/ipxe
+      root = (pkgs.runCommand "atftpd-root" { } ''
+        mkdir $out
+        ln -s ${(nb nbhost).initrd} $out/initrd
+        ln -s ${(nb nbhost).kernel}/Image $out/kernel
+        ln -s ${(nb nbhost).kernel}/dtbs/rockchip/evb-rk3588.dtb $out/dtb
+      '').outPath;
+    };
+    services.nginx = lib.mkIf (enableNetboot) {
+      enable = true;
+      virtualHosts."default" = {
+        root = (pkgs.runCommand "nginx-root" { } ''
+          mkdir $out
+          ln -s "${(nb nbhost).squashfs}" "$out/${nbhost}-netboot-squashfs"
+        '').outPath;
+        extraConfig = ''
+          disable_symlinks off;
+        '';
+      };
+    };
+    # TODO: this isn't enough to get atftpd working...
+    networking.firewall.allowedTCPPorts = lib.mkIf (enableNetboot) [ 80 8099 ];
+    networking.firewall.allowedUDPPorts = lib.mkIf (enableNetboot) [ 67 69 4011 1758 ];
+    # TEMP END
+
     nixpkgs.hostPlatform.system = "x86_64-linux";
     system.stateVersion = "21.05";
 
     networking.hostName = hn;
     nixcfg.common.hostColor = "yellow";
-    
+
     environment.systemPackages = with pkgs; [
       libsmbios # ? can't remember it
     ];
@@ -38,8 +80,7 @@ in
         addresses = [{ addressConfig = { Address = static_ip; }; }];
         networkConfig = {
           Gateway = "192.168.1.1";
-          DNS = "192.168.1.1";
-          DHCP = "ipv6";
+          DHCP = "no";
         };
       };
     };
@@ -69,7 +110,9 @@ in
         "msr"
       ];
       kernelModules = config.boot.initrd.availableKernelModules;
-      kernelParams = [ "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}" ];
+      kernelParams = [
+        "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}"
+      ];
       initrd.luks.devices = {
         "nixos-luksroot" = {
           device = "/dev/disk/by-partlabel/${hn}-luks";
@@ -83,3 +126,4 @@ in
     };
   };
 }
+

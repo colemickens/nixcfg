@@ -6,21 +6,13 @@ in
 {
   imports = [
     ./unfree.nix
-    ../../profiles/addon-cross.nix
+    ../../profiles/core.nix
 
-    # ../../mixins/common.nix
-    # ../../mixins/helix.nix
-    # ../../mixins/ssh.nix
     ../../mixins/nix.nix
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
     ../../mixins/iwd-networks.nix
     ../../mixins/iwd-auto-ap.nix
-    # ../../mixins/wpa-slim.nix
-    # ../../mixins/zellij.nix
-    ../../profiles/user-cole.nix
-    # ../../profiles/core.nix
-    # ../../profiles/interactive.nix
 
     ../../secrets
 
@@ -31,6 +23,12 @@ in
 
   config = {
     nixpkgs.hostPlatform.system = "aarch64-linux";
+
+    boot.initrd.systemd.enable = lib.mkForce false;
+
+    nixcfg.common = {
+      defaultKernel = false;
+    };
 
     system.stateVersion = "22.05";
     networking.hostName = hostname;
@@ -52,7 +50,9 @@ in
 
     services.openssh = {
       enable = true;
-      passwordAuthentication = lib.mkForce true;
+      settings = {
+        PasswordAuthentication = lib.mkForce true;
+      };
     };
 
     # I think this is needed for firmware to be present in stage-2 when wpa/something

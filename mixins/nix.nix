@@ -31,8 +31,8 @@ in
       settings = rec {
         keep-derivations = true; # this is the default (?)
         builders-use-substitutes = true;
-        cores = 0;
-        max-jobs = "auto";
+        cores = lib.mkDefault 0;
+        max-jobs = lib.mkDefault "auto";
         use-xdg-base-directories = true;
         trusted-public-keys = [
           "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="

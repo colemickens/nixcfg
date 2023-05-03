@@ -147,6 +147,10 @@ in
             #     "unlocked" = "-";
             #   };
             # };
+            # TODO: finish this:
+            # "custom/scale" = {
+            #   exec = "${scaleScript}";
+            # };
             "wlr/taskbar" = { };
             temperature = {
               format = "tmp {temperatureC}";

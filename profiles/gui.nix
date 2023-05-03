@@ -62,10 +62,15 @@ in
       services = {
         pass-secret-service = {
           enable = true;
-          verbose = true;
+          # verbose = true;
           # copied from profiles/interactive -> PASSWORD_STORE_DIR
           storePath = "${hm.config.xdg.dataHome}/password-store";
         };
+        gpg-agent.pinentryBinary =
+          let
+            wayprompt = "${inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system}.wayprompt}";
+          in
+          "${wayprompt}/bin/pinentry-wayprompt";
       };
 
       home.packages = lib.mkMerge [

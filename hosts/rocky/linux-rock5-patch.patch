@@ -1,0 +1,23 @@
+From 3f636ea9db8c46e55349eb6e669ac501c1aba292 Mon Sep 17 00:00:00 2001
+From: Samuel Dionne-Riel <samuel@dionne-riel.com>
+Date: Thu, 21 Jul 2022 00:50:09 -0400
+Subject: [PATCH] BSP: disable vendor kludge around overlays
+
+Yuck. This made the build depend needlessly on U-Boot.
+---
+ arch/arm64/boot/dts/rockchip/Makefile | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
+index d3d7388ebf46e..49aa9998f0681 100644
+--- a/arch/arm64/boot/dts/rockchip/Makefile
++++ b/arch/arm64/boot/dts/rockchip/Makefile
+@@ -139,5 +139,3 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-rock-5a.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-tablet-rk806-single-v10.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-tablet-v10.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-tablet-v11.dtb
+-
+-subdir-y	:= $(dts-dirs) overlay
+-- 
+2.35.1
+

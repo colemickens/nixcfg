@@ -28,8 +28,10 @@ in {
       };
       autoSnapshot = {
         enable = true;
-        frequent = 8; # keep the latest eight 15-minute snapshots (instead of four)
-        monthly = 1; # keep only one monthly snapshot (instead of twelve)
+        frequent = (24*4); # keep the latest eight 15-minute snapshots (instead of four)
+        monthly = 12; # keep only one monthly snapshot (instead of twelve)
+        hourly = 96;
+        weekly = 8;
       };
     };
   };

@@ -1,0 +1,8 @@
+supportedFilesystems should be an attribute set so we can stop
+hacking this shit everywhere for zfs, xfs, etc.
+- tired of build failures for filesystems I don't even use/need/want
+
+pinentry is a cluster fuck. I need QT to build pinentry-curses?
+No. Hell no.
+
+
