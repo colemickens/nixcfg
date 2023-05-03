@@ -1,7 +1,7 @@
 { pkgs, lib, inputs, modulesPath, ... }:
 let
   hn = "slynux";
-  asVm = true;
+  asVm = false;
 in
 {
   imports = [
