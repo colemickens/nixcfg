@@ -93,9 +93,6 @@ in
           qpwgraph
           # helvum
 
-          # EWWWWW
-          signal-desktop
-
           # libnotify # `notify-send`
           toastify
           # TODO: BROKEN WITH WAYLAND:?

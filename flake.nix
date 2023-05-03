@@ -174,7 +174,7 @@
                 (n: inputs.self.devShells.${system}.${n}.inputDerivation));
               packages = (inputs.self.packages.${system});
               # TODO: this probably evals ALL hosts... sadge
-              toplevels = builtins.filter (x: x.system == system) (builtins.attrValues toplevels);
+              toplevels = lib.filterAttrs (n: v: v.system == system) toplevels;
             };
           })
       )
