@@ -3,17 +3,25 @@
 let-env NIXLIB_OUTPUT_DIR = ([ ".outputs" (date now | date format "%s") ] | path join)
 source ./nixlib.nu
 
+let-env CACHIX_SIGNING_KEY = (open ./.cachix_signing_key | str trim)
+let-env NIXCFG_BUILD_ID = (
+  if ("NIXCFG_BUILD_ID" in $env) { $env.NIXCFG_BUILD_ID }
+  else if ("GITHUB_ACTION_ID" in $env) { $env.GITHUB_ACTION_ID }
+  else { (date now | date format "%s") }
+)
+
 let cachixpkgs_branch = "nixpkgs-stable"
 let cpm = (open ./flake.lock | from json | get nodes | get $cachixpkgs_branch | get locked)
 let defaultDeployHosts = [
-  "slynux"
   "zeph"
+  "slynux"
   "raisin"
   "xeep"
-  "vf2"
   "rocky"
-  "openstick"
+  # "openstick"
   # "h96"
+  # "pktspot1"
+  # "vf2"
 ];
 
 let options = {
@@ -38,7 +46,6 @@ let options = {
   cachix: {
     pkgs: $"https://github.com/($cpm.owner)/($cpm.repo)/archive/($cpm.rev).tar.gz",
     cache: "colemickens",
-    signkey: $"(open $"/run/secrets/cachix_signing_key_colemickens" | str trim)"
   },
   nixflags: [
     # "--accept-flake-config",
@@ -295,6 +302,10 @@ def action-post [] {
 def action-ci-all [] {
   # TODO: git-repo-manager?
   git switch -c $branch
+  # TODO: eval each attr individually into a 'gcroots' dir...
+  # TODO: evaluate fanning out to multiple eval machines, then building?
+  ci-env
+  # ci-grm
   main inputup # should be a no-op even with nothing cloned
   main pkgup
   main lockup

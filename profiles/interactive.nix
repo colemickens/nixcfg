@@ -116,6 +116,7 @@
             procs
             prs
             pipes-rs
+            rage
             rustscan
             # </rust pkgs>
             sbctl
