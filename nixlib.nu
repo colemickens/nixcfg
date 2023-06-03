@@ -8,7 +8,7 @@ def header [ color: string text: string spacer="▒": string ] {
 def evalFlakeRefs [ refs: list<string> ] {
   header "light_cyan_reverse" $"eval: ($refs)"
 
-  let gcrootsdir = ([ $env.NIXLIB_OUTPUT_DIR "gcroots" ] | path join)
+  let gcrootsdir = ([ $env.LOGDIR "gcroots" ] | path join)
   mkdir $gcrootsdir
   let o = (^nix-eval-jobs $refs
     --flake
@@ -21,27 +21,28 @@ def evalFlakeRefs [ refs: list<string> ] {
   $o
 }
 
-def buildDrvs [ options: record, drvs: table, doCache: bool ] {
+def buildDrvs [ drvs: table, doCache: bool ] {
   let archs = ($drvs | uniq-by system | get system)
-  # let res = (for arch in $archs {
   $archs | par-each { |arch|
+    ## FILTER DRVS
     let fdrvs = ($drvs | where {|it| $it.system == $arch })
-    let builder = ($options.builders | get $arch)
-    let nf = ($options.nixflags | append $builder.nixflags)
-    let builder = ($builder | get url)
-
     let drvPaths = ($fdrvs | get drvPath)
     let outs = ($fdrvs | get outputs | get out)
 
+    ## BUILDER
+    let bp = $".builder.($arch)"
+    let builder = (
+      if ($bp | path exists) { (open $bp | str trim) }
+      else { "localhost" })
+
     ## LOGGING
-    let log = ([ $env.NIXLIB_OUTPUT_DIR "logs" ] | path join)
+    let log = ([ $env.LOGDIR "logs" ] | path join)
     mkdir $log
     let log = ([ $log $arch ] | path join)
     ^touch $"($log).out" $"($log).err"
 
     header "light_cyan_reverse" $"building on ($builder)"
     print -e { log: $log, builder: $builder }
-    zellij action new-pane -c -d down -- bash -c $"tail -f ($log).err & echo $! > ($log).pid; wait"
 
     ## COPY DERIVATIONS
     loop {
@@ -52,13 +53,9 @@ def buildDrvs [ options: record, drvs: table, doCache: bool ] {
             --no-check-sigs
             --to $"ssh-ng://($builder)"
             $drvPaths
-        ]
-        | flatten
-        #| str join ' '
-        )
+        ] | flatten)
 
         # TODO: nushell bug: run-external should take list<string>
-        
         with-env { LOG_OUT: $"($log).out", LOG_ERR: $"($log).err" } {
           ^./runlog.sh $copycmd
         }
@@ -76,31 +73,25 @@ def buildDrvs [ options: record, drvs: table, doCache: bool ] {
     ## note: use ssh so we are sure nix flags get used to fullest...
     # UGH: doesn't work with old nix...
     let buildPaths = ($drvPaths | each {|d| $"($d)^*" }) # FCCCCKKK
-    let cmd = ([ $"nix" "build" $nf $buildPaths "--no-link" "--print-out-paths"] | flatten)
+    let cmd = ([ $"nix" "build" $nixflags $buildPaths "--no-link" "--print-out-paths"] | flatten)
     let cmd = (^printf '%q ' $cmd)
 
     ## CACHING
-    let cmd = if (not $doCache) { $cmd } else {
-      # let outsStr = ($outs | str join $"(char nl)")
-      # print -e $"CACHE STR: ($outsStr)"
-          # $"set -e -o pipefail; x=$\(mktemp\); ($cmd) >$x; env CACHIX_SIGNING_KEY='($options.cachix.signkey)' "
-          # $"nix-shell -I nixpkgs=($options.cachix.pkgs) -p cachix --command \"cat $x | cachix push ($options.cachix.cache)\""
+    let cmd = (if (not $doCache) { $cmd } else {
       let cmd = ([
-          $"set -e -o pipefail;" $cmd $" | env CACHIX_SIGNING_KEY='($options.cachix.signkey)' "
-          $'nix-shell -I nixpkgs=($options.cachix.pkgs) -p cachix --command "cat $x | cachix push ($options.cachix.cache)"'
-        ]
-        |flatten
-        | str join ' ')
+          $"set -e -o pipefail;" $cmd $" | env CACHIX_SIGNING_KEY='($cachix_signing_key)' "
+          $'nix-shell -I nixpkgs=($cachixpkgs_url) -p cachix --command "cat $x | cachix push ($cachix_cache)"'
+        ] | flatten | str join ' ')
       let cmd = (^printf '%q ' $cmd)
       $cmd
-    }
+    })
 
-    let cmd = (if $builder == "" { $cmd } else {
+    let cmd = (if $builder == "localhost" { $cmd } else {
       ([ "ssh" $builder bash -c $cmd ] | flatten)
     })
     with-env { LOG_OUT: $"($log).out", LOG_ERR: $"($log).err" } {
       # TODO: connect to nushell bug above, this is awkward:
-      # if $builder == "" {
+      # if $builder == "localhost" {
       #   # ^sh -c $cmd out+err> $"($log)"
       #   (^sh -c $cmd
       #     | save -f $"($buildlog).out" --stderr $"($buildlog).err")
@@ -111,15 +102,20 @@ def buildDrvs [ options: record, drvs: table, doCache: bool ] {
       # }
       ^./runlog.sh $cmd
     }
-    let pid = (open $"($log).pid" | str trim)
     mut success = true
     if (open $"($log).err" | find "All done." | length) <= 0 {
       $success = false
     }
 
+    # TODO: ???
+    $success = true
+
     if $success {
-      print -e $"DEBUG: kill ($pid) since success"
-      ^kill $pid
+      do -i {
+        let pid = (open $"($log).pid" | str trim)
+        print -e $"DEBUG: kill ($pid) since success"
+        ^kill $pid
+      }
     } else {
       error make { msg: $"build failed, check log ($log).err" }
     }

@@ -64,7 +64,7 @@
     zellij = { url = "github:a-kenji/zellij-nix/bee0cae93b4cbcd0a1ad1a62e70709b9db0f5c7c"; inputs."flake-utils".follows = "flake-utils"; };
     # TODO: un-pin this eventually...
     # zellij = { url = "github:a-kenji/zellij-nix"; inputs."flake-utils".follows = "flake-utils"; };
-     # inputs."nixpkgs".follows = "cmpkgs"; };
+    # inputs."nixpkgs".follows = "cmpkgs"; };
     # nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; };
     nix-eval-jobs = { url = "github:colemickens/nix-eval-jobs"; };
     nix-update = { url = "github:Mic92/nix-update"; };
@@ -242,6 +242,7 @@
         inherit nixosModules overlays;
         inherit extra;
         inherit pkgs pkgsUnfree;
+        ## HM ENVS #####################################################
       })
       (
         ## SYSTEM-SPECIFIC OUTPUTS ############################################
@@ -260,7 +261,22 @@
               "devenv"
               "devtools"
               "uutils"
-            ]) // { default = devShells.ci; };
+            ]) // {
+              default = devShells.ci;
+            };
+
+            ## TODO: coercion is still so silly, I should be able to put
+            #        this at `outputs.homeConfigurations.x86_64-linux.env-ci`
+            ## HM ENVS ########################################################
+
+            homeConfigurations = (lib.genAttrs [ "env-ci" ]
+              (h: inputs.home-manager.lib.homeManagerConfiguration {
+                pkgs = pkgs.${system};
+                modules = [ ./hm/${h}.nix ];
+                extraSpecialArgs = { inherit inputs; };
+              })
+            );
+            tophomes = (lib.mapAttrs (_: v: v.activation-script) homeConfigurations);
 
             ## APPS ###########################################################
             apps = lib.recursiveUpdate { }
@@ -275,6 +291,7 @@
 
             ## PACKAGES #######################################################
             packages = (pkgs.${system}.__colemickens_nixcfg_pkgs);
+            legacyPackages = pkgs;
 
             ## CI #############################################################
             ciAttrs = {
@@ -287,6 +304,5 @@
                 (n: toplevels.${n});
             };
           })
-      )
-  ;
+      );
 }

@@ -1,0 +1,58 @@
+name: "nixcfg-up"
+concurrency: "nixcfg-up"
+on:
+  schedule:
+    - cron: '0 */12 * * *'
+  workflow_dispatch:
+  push:
+env:
+  NIXCFG_CI_BRANCH: "nixcfg-up-${{ github.run_id }}-${{ github.run_number }}"
+jobs:
+  "update":
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+      # this one checks out the default branch at first
+    - name: setup
+      uses: ./.github/actions/setup/
+      with:
+        SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+    - name: main-ci-update
+      run: ./main.nu ci update || sleep 100000
+    - name: gha-save-logs
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: "logs"
+        path: ".outputs/${{ env.NIXCFG_CI_BRANCH }}/logs"
+
+  "precache":
+    needs: "update"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        host:
+          # - "openstick"
+          - "pktspot1"
+          - "raisin"
+          - "rocky"
+          - "slynux"
+          # - "vf2"
+          - "xeep"
+          - "zeph"
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+      with:
+        branch: ${{ env.NIXCFG_CI_BRANCH }}
+    - name: setup
+      uses: ./.github/actions/setup/
+      with:
+        SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        PERSIST_CACHE: true
+    - name: main-ci-deploy-no-activate
+      shell: bash
+      run: |
+        ./main.nu ci precache ${{ matrix.host }}

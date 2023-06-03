@@ -17,6 +17,7 @@ in
           shell = prefs.shell;
           font = {
             normal.family = "${font.monospace.family}";
+            # normal.family = "IntelOne Mono";
             size = font.size;
           };
           #cursor.style = {
