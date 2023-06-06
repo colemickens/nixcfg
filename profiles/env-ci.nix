@@ -35,9 +35,9 @@ in
         path = "/home/${ciusername}/.ssh/id_rsa";
       };
       "cachix_signing_key" = {
-        sopsFile = ../secrets/ci/encrypted/cachix_signing_key_colemickens;
+        sopsFile = ../secrets/ci/encrypted/cachix_dhall_colemickens;
         format = "binary";
-        path = "/home/${ciusername}/nixcfg/.cachix_signing_key";
+        path = "/home/${ciusername}/.config/cachix/cachix.dhall";
       };
     };
     age = {
