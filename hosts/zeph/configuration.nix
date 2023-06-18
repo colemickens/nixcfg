@@ -85,6 +85,12 @@ in
       };
     };
 
+    networking.wireless.iwd.settings = {
+      General = {
+        AddressRandomization = "disabled";
+      };
+    };
+
     boot = {
       bootspec.enable = true;
       lanzaboote = {
@@ -102,6 +108,10 @@ in
       kernelModules = [
         "iwlwifi"
       ];
+      extraModprobeConfig = ''
+        options iwlwifi power_save=0
+        options iwlmvm power_scheme=1
+      '';
       kernelParams = [
         # "zfs.zfs_arc_max=${builtins.toString (1023 * 1024 * (1024 * 6))}"
       ];

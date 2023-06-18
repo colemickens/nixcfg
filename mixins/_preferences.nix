@@ -91,6 +91,8 @@ rec {
         ttf_bitstream_vera
         gelasio # metric-compatible with Georgia
         powerline-symbols
+        intel-one-mono
+        comic-mono
       ]);
   };
 }

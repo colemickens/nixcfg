@@ -1,7 +1,9 @@
 { pkgs, lib, inputs, config, ... }:
 
 let
-  hostname = "openstick";
+  hn = "openstick";
+  static_wifi_addr = "192.168.2.90";
+  static_wifi_prefix = 16;
 in
 {
   imports = [
@@ -31,12 +33,21 @@ in
     };
 
     system.stateVersion = "22.05";
-    networking.hostName = hostname;
     environment.systemPackages = with pkgs; [ usbutils lshw libqmi ];
 
-    networking.networkmanager = {
-      enable = true;
-      wifi.backend = "iwd";
+    networking = {
+      hostName = hn;
+      networkmanager = {
+        enable = true;
+        wifi.backend = "iwd";
+      };
+      interfaces."wlan0" = {
+        ipv4.addresses = [{
+          address = static_wifi_addr;
+          prefixLength = static_wifi_prefix;
+        }];
+      };
+      defaultGateway = "192.168.1.1";
     };
 
     boot.loader.generic-extlinux-compatible.configurationLimit = 2;

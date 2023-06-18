@@ -25,4 +25,4 @@ jobs:
     - name: shell
       run: nix develop '.#ci' -c true
     - name: freeup
-      run: nix develop '.#ci' -c .github/freeup.nu
+      run: nix develop '.#ci' -c .github/actions/action-freeup.nu

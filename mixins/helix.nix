@@ -34,7 +34,7 @@ in
           else pkgs.helix;
 
         settings = {
-          theme = "dark_plus";
+          theme = "ayu_evolve";
           #theme = "gruvbox";
           #theme = "base16_terminal";
 

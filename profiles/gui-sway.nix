@@ -126,7 +126,9 @@ in
 
         wayland.windowManager.sway = {
           enable = true;
-          systemdIntegration = true; # beta
+          systemd = {
+            enable = true; # beta
+          };
           wrapperFeatures = {
             base = false; # this should be the default (dbus activation, not sure where XDG_CURRENT_DESKTOP comes from)
             gtk = true; # I think this is also the default...

@@ -92,26 +92,26 @@ let
       # delete the entire compartment to start over:
       # to check on any instances:
       #  - oci list?
-      # (tflib.oracle.tfplan ociacct1 {
-      #   oci1arm1 = {
-      #     shape = tflib.oracle.shapes.freetier_a1flex_full;
-      #     ipxe_url = "http://netboot.cleo.cat/aarch64/generic/netboot.ipxe";
-      #   };
-      # })
-      # (let
-      #   tmpl = {
-      #     shape = tflib.oracle.shapes.freetier_a1flex_mini;
-      #     image = tflib.oracle.images.canonical_ubuntu_20_04__aarch64;
-      #     payload = tflib.payloads.ubuntu-nixos-infect;
-      #   };
-      # in
-      #   (tflib.oracle.tfplan ociacct2 {
-      #     oci2arm1 = tmpl;
-      #     oci2arm2 = tmpl;
-      #     oci2arm3 = tmpl;
-      #     oci2arm4 = tmpl;
-      #   })
-      # )
+      (tflib.oracle.tfplan ociacct1 {
+        oci1arm1 = {
+          shape = tflib.oracle.shapes.freetier_a1flex_full;
+          ipxe_url = "http://netboot.cleo.cat/aarch64/generic/netboot.ipxe";
+        };
+      })
+      (let
+        tmpl = {
+          shape = tflib.oracle.shapes.freetier_a1flex_mini;
+          image = tflib.oracle.images.canonical_ubuntu_20_04__aarch64;
+          payload = tflib.payloads.ubuntu-nixos-infect;
+        };
+      in
+        (tflib.oracle.tfplan ociacct2 {
+          oci2arm1 = tmpl;
+          oci2arm2 = tmpl;
+          oci2arm3 = tmpl;
+          oci2arm4 = tmpl;
+        })
+      )
     ];
   };
   ## </terranix>

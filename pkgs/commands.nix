@@ -70,7 +70,8 @@ let
   '');
 
   nixcfg = (writeShellScriptBin "nixcfg" ''
-    nix develop $HOME/code/nixcfg -c /home/cole/code/nixcfg/main.nu "''${@}"
+    cd $HOME/code/nixcfg
+    nix develop $HOME/code/nixcfg -c $HOME/code/nixcfg/main.nu "''${@}"
   '');
 
   fix-ssh = (writeShellScriptBin "fix-ssh" ''

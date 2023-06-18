@@ -164,6 +164,16 @@ in
       services.timesyncd.enable = true;
       time.timeZone = lib.mkDefault "America/Los_Angeles";
 
+      # TODO/WORKAROUND: https://github.com/NixOS/nixpkgs/issues/195777
+      system.activationScripts = {
+        workaroundWifi = {
+          text = ''
+            ${pkgs.systemd}/bin/systemctl restart systemd-udev-trigger
+          '';
+          deps = [ ];
+        };
+      };
+
       systemd.network = (lib.mkIf (cfg.defaultNetworking) {
         enable = true;
 

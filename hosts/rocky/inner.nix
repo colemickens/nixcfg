@@ -1,7 +1,7 @@
 { pkgs, lib, modulesPath, inputs, config, extendModules, ... }:
 
 let
-  # eth_ip = "192.168.162.69/16";
+  static_ip = "192.168.2.30/16";
   kernel = pkgs.callPackage ./kernel.nix { };
   kernelPackages = pkgs.linuxKernel.packagesFor kernel;
   hn = "rocky";
@@ -81,6 +81,18 @@ in
     networking.hostName = hn;
     system.build = rec {
       mbr_disk_id = "888885b1";
+    };
+
+    systemd.network = {
+      enable = true;
+      networks."15-eth0-static-ip" = {
+        matchConfig.Driver = "r8152";
+        addresses = [{ addressConfig = { Address = static_ip; }; }];
+        networkConfig = {
+          Gateway = "192.168.1.1";
+          DHCP = "no";
+        };
+      };
     };
 
     boot.kernelPackages = kernelPackages;

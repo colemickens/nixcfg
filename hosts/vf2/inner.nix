@@ -3,6 +3,7 @@
 let
   hn = "vf2";
   pp = "vf2";
+  static_ip = "192.168.2.40/16";
 in
 {
   imports = [
@@ -30,6 +31,19 @@ in
     nixcfg.common.defaultKernel = false;
     nixcfg.common.addLegacyboot = false;
     nixcfg.common.useZfs = false;
+
+    systemd.network = {
+      enable = true;
+      # TODO TODO TODO
+      # networks."15-eth0-static-ip" = {
+      #   matchConfig.Driver = TODO;
+      #   addresses = [{ addressConfig = { Address = static_ip; }; }];
+      #   networkConfig = {
+      #     Gateway = "192.168.1.1";
+      #     DHCP = "no";
+      #   };
+      # };
+    };
 
     # environment.systemPackages = with pkgs; [
     #   binutils
