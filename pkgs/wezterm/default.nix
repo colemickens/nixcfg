@@ -37,15 +37,15 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "unstable-2023-07-03";
-  rev = "9459f64cce393a56b9be6deddc6a622332aff7c8";
+  version = "unstable-2023-07-06";
+  rev = "18e4b9bad14743c96f53ce59b92a5a4bedf506ec";
 
   src = fetchFromGitHub {
     owner = owner;
     repo = pname;
     rev = rev;
     fetchSubmodules = true;
-    sha256 = "sha256-Ooa3QEgg4hLhIS+MOBDSfjcYNdl/81z4whgOYQDCeN0=";
+    sha256 = "sha256-mCChFHIQc7EXZPd8VwbwYBTJcGTq5yWfmo0FGmO9pE0=";
   };
 
   postPatch = ''
@@ -59,7 +59,8 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "image-0.24.5" = "sha256-fTajVwm88OInqCPZerWcSAm1ga46ansQ3EzAmbT58Js=";
-      "xcb-imdkit-0.2.0" = "sha256-QOT9HLlA26DVPUF4ViKH2ckexUsu45KZMdJwoUhW+hA=";
+      "xcb-1.2.1" = "sha256-zkuW5ATix3WXBAj2hzum1MJ5JTX3+uVQ01R1vL6F1rY=";
+      "xcb-imdkit-0.2.0" = "sha256-L+NKD0rsCk9bFABQF4FZi9YoqBHr4VAZeKAWgsaAegw=";
     };
   };
 
