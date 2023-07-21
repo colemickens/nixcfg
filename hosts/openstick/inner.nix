@@ -27,13 +27,14 @@ in
     nixpkgs.hostPlatform.system = "aarch64-linux";
 
     boot.initrd.systemd.enable = lib.mkForce false;
+    boot.kernelParams = [ "dyndbg=\"file drivers/base/firmware_loader/main.c +fmp\"" ];
 
     nixcfg.common = {
       defaultKernel = false;
     };
 
     system.stateVersion = "22.05";
-    environment.systemPackages = with pkgs; [ usbutils lshw libqmi ];
+    environment.systemPackages = with pkgs; [ /*usbutils lshw libqmi*/ ];
 
     networking = {
       hostName = hn;
@@ -42,6 +43,9 @@ in
         wifi.backend = "iwd";
       };
       interfaces."wlan0" = {
+        # doesn't work, not sure why
+        # maybe NM? who knows about nixos scripted network
+        # i would use networkd but idk how that plays with NM+MM...
         ipv4.addresses = [{
           address = static_wifi_addr;
           prefixLength = static_wifi_prefix;
@@ -50,7 +54,9 @@ in
       defaultGateway = "192.168.1.1";
     };
 
+    # boot.loader.generic-extlinux-compatible.enable = true;
     boot.loader.generic-extlinux-compatible.configurationLimit = 2;
+    boot.loader.systemd-boot.enable = lib.mkForce false;
     security.sudo.wheelNeedsPassword = false;
     systemd.network.wait-online.anyInterface = true;
 
@@ -70,7 +76,8 @@ in
     # fires it up?
     # COMPRESS_FW_LOADER was needed to be enabled in the kernel
     hardware.firmware = lib.mkBefore [ config.mobile.device.firmware ];
-    hardware.bluetooth.enable = true;
+    # hardware.bluetooth.enable = true;
+    hardware.bluetooth.enable = lib.mkForce false;
 
     # auto-start modem manager
     # networking.networkmanager.plugins = lib.mkForce []; # TODO: remove, I don't think this does anything

@@ -134,7 +134,14 @@ let
   zssh6 = (writeShellScriptBin "zssh6" ''
     ${_zssh} --6 "''${@}"
   '');
-
+  mickfwd = (writeShellScriptBin "mickfwd" ''
+    ssh  -L 3389:192.168.1.6:3389 -L 8443:192.168.1.9:8443 -L 8123:192.168.1.9:8123 "cole@$(tailscale ip --4 xeep)"
+  '');
+  nixclean = (writeShellScriptBin "nixclean" ''
+    sudo systemctl restart nix-daemon
+    sudo nix-collect-garbage -d
+    sudo nix-collect-garbage
+  '');
 in
 (symlinkJoin {
   name = "cole-custom-commands";
@@ -155,6 +162,9 @@ in
 
     zssh4
     zssh6
+
+    mickfwd
+    nixclean
   ];
 })
 

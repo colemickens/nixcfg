@@ -10,12 +10,12 @@ let
     };
 
     rclone-lim = pkgs.writeScriptBin "rclone-lim" ''
-      #!/usr/bin/env bash
+      #!${pkgs.bash}/bin/bash
       ${pkgs.rclone}/bin/rclone --config "${rcloneConfigFile}" "''${@}"
     '';
 
     rclone-lim-mount = readonly: (pkgs.writeScriptBin "rclone-lim-mount" ''
-      #!/usr/bin/env bash
+      #!${pkgs.bash}/bin/bash
       ${pkgs.rclone}/bin/rclone \
         --config ${rcloneConfigFile} \
         --fast-list \
@@ -40,7 +40,7 @@ let
     '');
 
     rclone-lim-mount-all = (pkgs.writeScriptBin "rclone-lim-mount-all" ''
-      #!/usr/bin/env bash
+      #!${pkgs.bash}/bin/bash
       set -x
       pids=()
       mnts=( "tvshows" "movies" "misc" "backups" "archives" )
@@ -58,15 +58,16 @@ let
   };
   mkMount = target: readonly: {
     description = "RCloneGoogDrv Mount Thing";
-    path = with pkgs; [ fuse bash ];
+    path = with pkgs; [ fuse3 bash ];
     serviceConfig = {
       Type = "simple";
       ExecStartPre = [
-        "-${pkgs.fuse}/bin/fusermount -uz /mnt/rclone/${target}"
+        "-${pkgs.fuse3}/bin/fusermount3 -uz /mnt/rclone/${target}"
         "${pkgs.coreutils}/bin/mkdir -p /mnt/rclone/${target}"
       ];
+      Environment = [ "PATH=${pkgs.fuse3}/bin:$PATH" ];
       ExecStart = "${c.rclone-lim-mount readonly}/bin/rclone-lim-mount --allow-other ${target}: /mnt/rclone/${target}";
-      ExecStop = "${pkgs.fuse}/bin/fusermount -uz /mnt/rclone/${target}";
+      ExecStop = "${pkgs.fuse3}/bin/fusermount3 -uz /mnt/rclone/${target}";
       Restart = "on-failure";
     };
     startLimitIntervalSec = 60;

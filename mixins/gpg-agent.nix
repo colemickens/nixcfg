@@ -7,7 +7,6 @@ let
   # pinentryProgram = "${pkgs.pinentry-curses}/bin/pinentry-tty";
   pinentryProgram = null;
 
-  sysPkgs = with pkgs; [ gcr ];
   def = {
     # gnupgPkg = pkgs.gnupg;
     #gnupgPkg = pkgs.callPackage "${inputs.temp-gpg-pr}/pkgs/tools/security/gnupg/23.nix" {};
@@ -36,7 +35,7 @@ let
     enablePcscd = true;
     disableCcid = true;
   };
-  ecfg = config3;
+  ecfg = config2;
 in {
   config = {
     # okay yikes, since some of this is dependent on scdaemon
@@ -85,7 +84,7 @@ in {
     services.pcscd.enable = ecfg.enablePcscd;
 
     # bring pcsclite's polkit rules into the environment, I guess
-    environment.systemPackages = sysPkgs ++ (if ecfg.enablePcscd then [ pkgs.pcsclite ] else []);
+    environment.systemPackages = (if ecfg.enablePcscd then [ pkgs.pcsclite ] else []);
 
     # if all three are disable then shit just don't work
     # neither ccid or pc/sc are able to work

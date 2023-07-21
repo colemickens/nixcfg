@@ -2,7 +2,7 @@
 
 let
   hn = "xeep";
-  static_ip = "192.168.2.20/16";
+  static_ip = "192.168.70.20/16";
 
   nb = n: inputs.self.outputs.nixosConfigurations."${n}-netboot".config.system.build;
 

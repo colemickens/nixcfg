@@ -121,7 +121,10 @@ in
         };
 
         initrd.systemd.enable = lib.mkDefault true;
-        initrd.supportedFilesystems = lib.optionals (cfg.useZfs) [ "zfs" ];
+        initrd.supportedFilesystems = (
+          [ "ntfs" ] ++
+          lib.optionals (cfg.useZfs) [ "zfs" ]
+        );
 
         kernelPackages = lib.mkIf cfg.defaultKernel _kernelPackages;
         kernelParams = lib.mkIf cfg.skipMitigations [ "mitigations=off" ];

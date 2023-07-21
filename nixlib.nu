@@ -10,7 +10,7 @@ def evalFlakeRefs [ refs: list<string> ] {
 
   let gcrootsdir = ([ $env.LOGDIR "gcroots" ] | path join)
   mkdir $gcrootsdir
-  let o = (^nix-eval-jobs $refs
+  let o = (nix-eval-jobs $refs
     --flake
     --gc-roots-dir $gcrootsdir
     --log-format bar-with-logs
@@ -39,7 +39,7 @@ def buildDrvs [ drvs: table, doCache: bool ] {
     let logdir = ([ $env.LOGDIR "logs" ] | path join)
     mkdir $logdir
     let log = ([ $logdir $arch ] | path join)
-    let-env LOG_FILE = $log
+    $env.LOG_FILE = $log
     ^touch $log
 
     header "light_cyan_reverse" $"building on ($builder)"
@@ -47,25 +47,31 @@ def buildDrvs [ drvs: table, doCache: bool ] {
     print -e ( $drvs | get drvPath )
 
     ## COPY DERIVATIONS
-    loop {
-      if ($builder != "") {
-        let copycmd = ([
-          nix copy
-            --derivation
-            --no-check-sigs
-            --to $"ssh-ng://($builder)"
-            $drvPaths
-        ] | flatten)
+    let copycmd = ([
+      nix copy
+        --derivation
+        --no-check-sigs
+        --to $"ssh-ng://($builder)"
+        $drvPaths
+    ] | flatten)
 
+    if ($builder != "") {
+      loop {
         # TODO: nushell bug: run-external should take list<string>
         ^./runlog.sh $copycmd
 
         # don't keep looping if it looks like the copy was okay
-        if (open $"($log)" | find "Too many root" | length) <= 0 {
+        let error_count = (open $"($log)" | find "Too many root" | length)
+        if ($error_count > 0) {
+          print -e "($arch): copy failed"
           rm $"($log)"
+          print -e "($arch): retrying copy"
+          continue
+        } else {
+          # we assume success
+          print -e "($arch): copy success"
           break
         }
-        print -e "($arch): retrying copy"
       }
     }
  

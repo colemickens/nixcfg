@@ -8,6 +8,7 @@ in
     ../../profiles/gui-sway.nix
     ../../profiles/addon-asus.nix
     ../../profiles/addon-dev.nix
+    ../../profiles/addon-gaming.nix
     ../../profiles/addon-laptop.nix
 
     ../../profiles/addon-nomad.nix
@@ -15,7 +16,7 @@ in
     ../../mixins/gfx-radeonsi.nix
     ../../mixins/gfx-debug.nix
 
-    # ../../mixins/android.nix
+    ../../mixins/android.nix
     # ../../mixins/easyeffects.nix
     ../../mixins/hidpi.nix
     ../../mixins/ledger.nix
@@ -92,6 +93,10 @@ in
     };
 
     boot = {
+      zfs = {
+       forceImportAll = true;
+       extraPools = [ "zfsin" ];
+      };
       bootspec.enable = true;
       lanzaboote = {
         enable = true;

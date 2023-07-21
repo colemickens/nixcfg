@@ -3,7 +3,8 @@
 {
   config = {
     services = {
-      automatic-timezoned.enable = true;
+      # LOL doesn't seem to get it right at all:
+      # automatic-timezoned.enable = true;
     };
   };
 }

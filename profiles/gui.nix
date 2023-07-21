@@ -79,7 +79,7 @@ in
           _chrome
           jamesdsp
 
-          nheko
+          # nheko # TODO: re-enable when build is fixed, poor nheko
         ]))
         (with pkgs; [
           (pkgs.callPackage ../pkgs/commands-gui.nix { })

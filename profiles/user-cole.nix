@@ -45,6 +45,7 @@ in {
         "lxd" # lxd lxc waydroid
         "flashrom"
         "rtkit" # rtkit stuff
+        "adbusers"
       ];
       uid = idno;
       group = user;

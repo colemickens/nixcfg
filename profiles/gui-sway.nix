@@ -5,16 +5,18 @@ let
   color_pink = "#ee00ff";
 
   prefs = import ../mixins/_preferences.nix { inherit inputs config lib pkgs; };
-  term = "${pkgs.wezterm}/bin/wezterm";
+  # term = "${pkgs.wezterm}/bin/wezterm";
   # term = "${pkgs.alacritty}/bin/alacritty";
+  term = "${pkgs.foot}/bin/foot";
 
   # background = prefs.background;
-  _bg = "#000000";
+  _bg = "#333333";
   background = "${_bg} solid_color";
   borderActive = color_pink;
   borderInactive = "#222222";
 
   out_zeph = "Thermotrex Corporation TL140ADXP01 Unknown";
+  out_aw34 = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
 
   in_tp_zeph = "1267:12699:ASUE120A:00_04F3:319B_Touchpad";
   in_mouse_aerox3 = "4152:6200:SteelSeries_SteelSeries_Aerox_3_Wireless";
@@ -133,7 +135,8 @@ in
             base = false; # this should be the default (dbus activation, not sure where XDG_CURRENT_DESKTOP comes from)
             gtk = true; # I think this is also the default...
           };
-          xwayland = false;
+          # xwayland = false;
+          xwayland = true;
           extraConfig = (lib.optionalString (prefs.cursor != null) ''
             seat seat0 xcursor_theme "${prefs.cursor.name}" ${builtins.toString prefs.cursorSize}
           '');
@@ -168,6 +171,12 @@ in
             };
             output = {
               "*" = { background = background; };
+              "${out_aw34}" = {
+                scale = "1.0";
+                mode = "3440x1440@120Hz";
+                adaptive_sync = "enable";
+                subpixel = "rgb";
+              };
               "${out_zeph}" = {
                 scale = "1.6";
                 mode = "2560x1600@120Hz";
@@ -176,16 +185,16 @@ in
               };
             };
             bars = [ ];
-            # assigns = {
-            #   "8" = [
-            #     { class = "^steam_app_"; }
-            #   ];
-            #   "9" = [
-            #     { app_id = "^Steam$"; }
-            #     # { class = "^steam$"; } # untested
-            #     { class = "^steamwebhelper$"; }
-            #   ];
-            # };
+            assigns = {
+              "8" = [
+                { class = "^steam_app_"; }
+              ];
+              "9" = [
+                { app_id = "^Steam$"; }
+                # { class = "^steam$"; } # untested
+                { class = "^steam$"; }
+              ];
+            };
             keybindings = {
               "${modifier}+Return" = "exec ${term}";
               "${modifier}+Shift+q" = "kill";

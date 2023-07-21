@@ -27,6 +27,7 @@
         grim # area selection
         slurp # screen capture
         wf-recorder # screen record
+        wl-screenrec # screen record (vaapi + rust)
         wev # event viewer
 
         inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system}.wl-gammarelay-rs

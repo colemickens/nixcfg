@@ -1,8 +1,8 @@
 #!/usr/bin/env nu
 
-let-env NIXCFG_CI_BRANCH = (if "NIXCFG_CI_BRANCH" in $env { $env.NIXCFG_CI_BRANCH } else { (date now | date format '%s') })
-let-env NIXCFG_CODE = (if "NIXCFG_CODE" in $env { $env.NIXCFG_CODE } else { "/home/cole/code" })
-let-env LOGDIR = ([ ".outputs" $env.NIXCFG_CI_BRANCH ] | path join)
+$env.NIXCFG_CI_BRANCH = (if "NIXCFG_CI_BRANCH" in $env { $env.NIXCFG_CI_BRANCH } else { (date now | date format '%s') })
+$env.NIXCFG_CODE = (if "NIXCFG_CODE" in $env { $env.NIXCFG_CODE } else { "/home/cole/code" })
+$env.LOGDIR = ([ ".outputs" $env.NIXCFG_CI_BRANCH ] | path join)
 
 let nixflags = [
   # "--accept-flake-config",
@@ -178,9 +178,10 @@ def "main inputup" [] {
 def "main pkgup" [...pkglist] {
   header "light_yellow_reverse" "pkgup"
 
+  let pkgref = $"($env.PWD)#packages.x86_64-linux"
   let pkglist = if ($pkglist | length) == 0 {
     (^nix eval
-      --json $".#packages.x86_64-linux"
+      --json $pkgref
       --apply 'x: builtins.attrNames x'
         | str trim
         | from json)
@@ -200,15 +201,14 @@ def "main pkgup" [...pkglist] {
 
     let t = $"/tmp/commit-msg-($pkgname)"
     # TODO: see if this can be host agnostic, nix-update and main build should just work
-    let p = $"pkgs.x86_64-linux.($pkgname)"
-    let pf = $"($env.PWD)#($p)"
+    let pf = $"($pkgref).($pkgname)"
     rm -f $t
     (nix-update
       --flake
       --format
       --version branch
       --write-commit-message $t
-      $p)
+      $pkgname)
       
     main dl $pf
     
@@ -263,6 +263,7 @@ def "main action-ci" [] {
   main pkgup
   main lockup
   main ciattrs
+  main dl '.#devShells.x86_64-linux.ci'
   # action-post
 }
 

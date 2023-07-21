@@ -17,7 +17,8 @@ rec {
   # all configured with HM, so just use binary name
   editor = "hx";
   shell = { program = "zsh"; args = [ ]; };
-  default_term = "wezterm";
+  # default_term = "wezterm";
+  default_term = "alacritty";
 
   gtk = {
     font = { name = "${font.default.family} 11"; package = font.default.package; };
@@ -65,7 +66,7 @@ rec {
   };
 
   font = rec {
-    size = 13;
+    size = 12;
     default = sans;
 
     sans = { family = "Noto Sans"; package = pkgs.noto-fonts; };

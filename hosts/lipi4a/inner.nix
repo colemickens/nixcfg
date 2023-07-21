@@ -1,14 +1,14 @@
 { pkgs, lib, modulesPath, inputs, config, ... }:
 
 let
-  hn = "vf2";
-  pp = "vf2";
-  static_ip = "192.168.70.40/16";
+  hn = "lipi4a";
+  pp = "lipi4a";
+  static_ip = "192.168.2.40/16";
 in
 {
   imports = [
     ../../profiles/core.nix
-    inputs.nixos-hardware.outputs.nixosModules.starfive-visionfive-2
+    inputs.nixos-hardware.outputs.nixosModules.sipeed-lipi4a
   ];
 
   config = {
@@ -23,7 +23,8 @@ in
     ];
 
     networking.hostName = hn;
-    hardware.deviceTree.name = "starfive/jh7110-starfive-visionfive-2-v1.2a.dtb";
+    hardware.deviceTree.name = "sipeed/lipi4a.dtb";
+    # "starfive/jh7110-starfive-visionfive-2-v1.2a.dtb";
 
     nix.nixPath = [ ];
     # nix.gc.automatic = true;
@@ -36,8 +37,7 @@ in
       enable = true;
       # TODO TODO TODO
       networks."15-eth0-static-ip" = {
-        matchConfig.Path = "platform-16030000.ethernet"; # end0
-        # matchConfig.Path = "platform-16040000.ethernet"; # end1 (100mbit)
+        matchConfig.Path = "platform-16040000.ethernet";
         addresses = [{ addressConfig = { Address = static_ip; }; }];
         networkConfig = {
           Gateway = "192.168.1.1";

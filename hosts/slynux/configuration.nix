@@ -6,13 +6,18 @@ let
 in
 {
   imports = [
+    ./unfree.nix
     ../../mixins/common.nix
+
+    ../../mixins/android.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
     ../../mixins/zfs.nix
 
     ../../profiles/gui-sway-auto.nix
+    # ../../profiles/gui-sway.nix
+    ../../profiles/addon-gaming.nix
     ../../profiles/interactive.nix
 
     inputs.nixos-hardware.nixosModules.common-cpu-amd
@@ -48,6 +53,12 @@ in
       initrd.availableKernelModules = [
         "sd_mod"
         "sr_mod"
+        "xhci_pci"
+        "nvme"
+        "usb_storage"
+        "sd_mod"
+        "ehci_pci"
+        "uas"
       ];
       initrd.systemd.enable = lib.mkForce false;
       kernelModules = [

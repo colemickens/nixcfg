@@ -22,7 +22,7 @@
             ../modules/tailscale-autoconnect.nix
           ];
           config = {
-            boot.kernelPackages = lib.mkForce inner.pkgs.linuxKernel.packages.linux_6_2;
+            # boot.kernelPackages = lib.mkForce inner.pkgs.linuxKernel.packages.linux_6_3;
             nixcfg.common = {
               defaultKernel = false;
               defaultNetworking = false;

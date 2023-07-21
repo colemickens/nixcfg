@@ -1,6 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 let
-  hn = config.networking.hostName;
+  hn = "raisin";
+  static_ip = "192.168.70.60/16";
 in
 {
   imports = [
@@ -25,7 +26,7 @@ in
     nixpkgs.hostPlatform.system = "x86_64-linux";
     system.stateVersion = "21.05";
 
-    networking.hostName = "raisin";
+    networking.hostName = hn;
     nixcfg.common.hostColor = "green";
 
     services.tailscale.useRoutingFeatures = "server";
@@ -34,6 +35,18 @@ in
       HandlePowerKey=ignore
       HandleLidSwitch=ignore
     '';
+    
+    systemd.network = {
+      enable = true;
+      networks."15-eth0-static-ip" = {
+        matchConfig.Path = "pci-0000:03:00.3-usb-0:1:1.0";
+        addresses = [{ addressConfig = { Address = static_ip; }; }];
+        networkConfig = {
+          Gateway = "192.168.1.1";
+          DHCP = "no";
+        };
+      };
+    };
 
     fileSystems = {
       "/" = { fsType = "zfs"; device = "${hn}pool/root"; neededForBoot = true; };

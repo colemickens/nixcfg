@@ -1,7 +1,7 @@
 { pkgs, lib, modulesPath, inputs, config, extendModules, ... }:
 
 let
-  static_ip = "192.168.2.30/16";
+  static_ip = "192.168.70.30/16";
   kernel = pkgs.callPackage ./kernel.nix { };
   kernelPackages = pkgs.linuxKernel.packagesFor kernel;
   hn = "rocky";
@@ -86,7 +86,7 @@ in
     systemd.network = {
       enable = true;
       networks."15-eth0-static-ip" = {
-        matchConfig.Driver = "r8152";
+        matchConfig.Path = "platform-fe190000.pcie-pci-0004:41:00.0";
         addresses = [{ addressConfig = { Address = static_ip; }; }];
         networkConfig = {
           Gateway = "192.168.1.1";

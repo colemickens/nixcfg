@@ -24,7 +24,7 @@ in
     ];
     nix = {
       gc = {
-        automatic = true;
+        # automatic = true;
         randomizedDelaySec = "30min";
       };
       nixPath = lib.mkForce []; # i doth protest

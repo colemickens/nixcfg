@@ -40,7 +40,7 @@ in
     home-manager.users.cole = { pkgs, config, ... }@hm: {
       wayland.windowManager.sway = {
         enable = true;
-        systemdIntegration = true; # beta
+        systemd.enable = true; # beta
         wrapperFeatures = {
           base = false; # this should be the default (dbus activation, not sure where XDG_CURRENT_DESKTOP comes from)
           gtk = true; # I think this is also the default...
@@ -56,9 +56,8 @@ in
       [[ "$(tty)" == /dev/tty1 ]] && (
         set -x;
         sleep 1;
-        # timeout 10 sway -d &> sway.log
         export WLR_RENDER="${wlr_renderer}";
-        sway
+        sway &> $HOME/sway.log
       )
     '';
 

@@ -32,7 +32,7 @@ in
       };
       gamescope = {
         enable = true;
-        enableRenice = true;
+        # enableRenice = true;
         # settings = {};
       };
       gamemode = {
@@ -42,7 +42,7 @@ in
     };
     hardware = {
       # xone.enable = true; # xbox one wired/wireless driver
-      xpad-tip.enable = true; # xpad-override
+      # xpad-tip.enable = true; # xpad-override
       # TODO: fork? test? try with regular xbox controller
       # xboxdrv.enable = true; # userspace xbox driver
     };
@@ -55,18 +55,18 @@ in
         vkbasalt
         goverlay
 
-        inputs.jstest-gtk.packages.${stdenv.hostPlatform.system}.default
-        inputs.xboxdrv.packages.${stdenv.hostPlatform.system}.default
+        # inputs.jstest-gtk.packages.${stdenv.hostPlatform.system}.default
+        # inputs.xboxdrv.packages.${stdenv.hostPlatform.system}.default
 
         # eh?
         # retroarchFull
 
         # emulators
-        dolphin-emu # gamecube emu
-        mupen64plus
+        # dolphin-emu # gamecube emu
+        # mupen64plus
         # simple64-gui # TODO
-        ryujinx # switch emu
-        _yuzu
+        # ryujinx # switch emu
+        # _yuzu
       ];
       programs = {
         mangohud = {

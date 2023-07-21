@@ -120,7 +120,7 @@
           xeep = { pkgs = inputs.cmpkgs; };
           zeph = { pkgs = inputs.cmpkgs; };
 
-          pktspot1 = { pkgs = inputs.cmpkgs; };
+          # pktspot1 = { pkgs = inputs.cmpkgs; };
 
           # used as cross-built bootstrap for getting a builder up, then pivoting to native builds
           openstick-cross = {
@@ -155,6 +155,16 @@
           #   path = ./hosts/vf2/sdcard.nix;
           #   buildSys = "x86_64-linux";
           # };
+          # lipi4a = {
+          #   pkgs = inputs.cmpkgs-cross-riscv64;
+          #   path = ./hosts/lipi4a/configuration.nix;
+          #   buildSys = "x86_64-linux";
+          # };
+          # lipi4a-sdcard = {
+          #   pkgs = inputs.cmpkgs-cross-riscv64;
+          #   path = ./hosts/lipi4a/sdcard.nix;
+          #   buildSys = "x86_64-linux";
+          # };
           h96-cross = {
             pkgs = inputs.cmpkgs-cross;
             path = ./hosts/h96/cross.nix;
@@ -167,10 +177,10 @@
           };
         };
         "aarch64-linux" = {
-          ocii = {
-            pkgs = inputs.cmpkgs;
-            path = ./images/ocii/oci-image.nix;
-          };
+          # ocii = {
+          #   pkgs = inputs.cmpkgs;
+          #   path = ./images/ocii/oci-image.nix;
+          # };
           openstick = {
             # PROBLEM!!
             path = ./hosts/openstick/configuration.nix;
@@ -205,6 +215,7 @@
           #   "${inputs.nixos-hardware}/starfive/visionfive/v2/firmware.nix"
           #   { };
           # vf2-sdcard-sdimage = nixosConfigurations.vf2-sdcard.config.system.build.sdImage;
+          # lipi4a-sdcard-sdimage = nixosConfigurations.lipi4a-sdcard.config.system.build.sdImage;
           rocky-firmware = nixosConfigurations.rocky.config.system.build.tow-boot.outputs;
           # rocky-sdcard-sdimage = nixosConfigurations.rocky-sdcard.config.system.build.sdImage;
         };

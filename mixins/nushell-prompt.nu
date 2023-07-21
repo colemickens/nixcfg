@@ -60,10 +60,10 @@ def create_left_prompt [] {
     ] | flatten | str join $"(ansi reset) ")
     $"\n($line1)\n($line2)(ansi reset)"
 }
-let-env PROMPT_COMMAND = { || create_left_prompt }
-let-env PROMPT_COMMAND_RIGHT = { || "" }
+$env.PROMPT_COMMAND = { || create_left_prompt }
+$env.PROMPT_COMMAND_RIGHT = { || "" }
 
-let-env PROMPT_INDICATOR = {|| " " }
-let-env PROMPT_INDICATOR_VI_INSERT = {|| ": " }
-let-env PROMPT_INDICATOR_VI_NORMAL = {|| "> " }
-let-env PROMPT_MULTILINE_INDICATOR = {|| "::: " }
+$env.PROMPT_INDICATOR = {|| " " }
+$env.PROMPT_INDICATOR_VI_INSERT = {|| ": " }
+$env.PROMPT_INDICATOR_VI_NORMAL = {|| "> " }
+$env.PROMPT_MULTILINE_INDICATOR = {|| "::: " }

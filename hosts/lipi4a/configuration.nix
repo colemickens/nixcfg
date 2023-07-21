@@ -1,12 +1,18 @@
-{ pkgs, lib, modulesPath, inputs, config, extendModules, ... }:
+{ pkgs, lib, modulesPath, inputs, config, ... }:
 
+let
+  pp = "lipi4a";
+in
 {
   imports = [
     ./inner.nix
+    ./fs.nix
+    ../../profiles/addon-cross.nix
     ../../profiles/interactive.nix
+    ../../mixins/gfx-visionfive2.nix
+    ../../profiles/gui-sway-auto.nix
   ];
   config = {
-    programs.adb.enable = true;
     environment.systemPackages = with pkgs; [
       picocom
       rkdeveloptool
