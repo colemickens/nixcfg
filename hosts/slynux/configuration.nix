@@ -15,8 +15,8 @@ in
     ../../mixins/tailscale.nix
     ../../mixins/zfs.nix
 
-    ../../profiles/gui-sway-auto.nix
-    # ../../profiles/gui-sway.nix
+    # ../../profiles/gui-sway-auto.nix
+    ../../profiles/gui-sway.nix
     ../../profiles/addon-gaming.nix
     ../../profiles/interactive.nix
 

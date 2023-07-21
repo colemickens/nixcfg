@@ -4,6 +4,8 @@
   imports = [
     ./inner.nix
     ../../profiles/interactive.nix
+
+    ../../mixins/pipewire.nix
   ];
   config = {
     programs.adb.enable = true;

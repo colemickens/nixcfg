@@ -1,8 +1,10 @@
 { stdenv, lib, buildPackages, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
 let
-  modDirVersion = "5.10.66";
-  tag = "c428536281d69aeb2b3480f65b2b227210b61535";
+  # modDirVersion = "5.10.66";
+  modDirVersion = "5.10.160";
+  # tag = "c428536281d69aeb2b3480f65b2b227210b61535";
+  tag = "f96638870c512fd94191e31b744f493af3594f96";
 in
 buildLinux (args // {
   version = "${modDirVersion}";
@@ -12,7 +14,7 @@ buildLinux (args // {
     owner = "radxa";
     repo = "kernel";
     rev = tag;
-    hash = "sha256-xLnuSbgarpFhyvGGHuF1/NsHMMkSwTcaTs/c33XliuA=";
+    hash = "sha256-+FI1Uzy2ROgrPGUNkZ5ZDQRgTMpGmJ/sPE2lXXPJ6bw=";
   };
 
   structuredExtraConfig = with lib.kernel; {
@@ -64,7 +66,7 @@ buildLinux (args // {
   };
 
   kernelPatches = [
-    { patch = ./linux-rock5-patch.patch; }
+    # { patch = ./linux-rock5-patch.patch; }
   ] ++ (with buildPackages.kernelPatches; [
     bridge_stp_helper
     request_key_helper

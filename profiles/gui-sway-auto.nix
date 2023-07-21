@@ -38,6 +38,9 @@ in
     ]));
 
     home-manager.users.cole = { pkgs, config, ... }@hm: {
+      home.sessionVariables = {
+        XDG_SESSION_TYPE = "wayland";
+      };
       wayland.windowManager.sway = {
         enable = true;
         systemd.enable = true; # beta
