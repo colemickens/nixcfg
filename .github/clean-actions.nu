@@ -1,7 +1,7 @@
 #!/usr/bin/env nu
 
-let-env NO_PAGER = 1
-let-env GH_PAGER = "cat"
+$env.NO_PAGER = 1
+$env.GH_PAGER = "cat"
 
 let keep_runs = 10
 

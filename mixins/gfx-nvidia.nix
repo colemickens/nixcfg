@@ -12,6 +12,7 @@ in
   config = {
     home-manager.users.cole = { pkgs, ... }: {
       wayland.windowManager.sway.extraOptions = [ "--unsupported-gpu" ];
+      home.sessionVariables.WLR_RENDERER = lib.mkForce "gles2";
     };
 
     environment.sessionVariables = {
@@ -33,6 +34,7 @@ in
     # };
 
     hardware.opengl.enable = true;
+    services.xserver.videoDrivers = ["nvidia"];
     hardware.nvidia = {
       package = nvidiaPkg;
       open = true;

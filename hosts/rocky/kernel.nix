@@ -1,10 +1,13 @@
 { stdenv, lib, buildPackages, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
 let
-  # modDirVersion = "5.10.66";
-  modDirVersion = "5.10.160";
-  # tag = "c428536281d69aeb2b3480f65b2b227210b61535";
-  tag = "f96638870c512fd94191e31b744f493af3594f96";
+  # https://github.com/radxa/kernel/blob/linux-5.10-gen-rkr4.1/Makefile
+  modDirVersion = "5.10.66";
+  tag = "c428536281d69aeb2b3480f65b2b227210b61535";
+  hash = "sha256-xLnuSbgarpFhyvGGHuF1/NsHMMkSwTcaTs/c33XliuA=";
+  # modDirVersion = "5.10.160";
+  # tag = "f96638870c512fd94191e31b744f493af3594f96";
+  # hash = "sha256-+FI1Uzy2ROgrPGUNkZ5ZDQRgTMpGmJ/sPE2lXXPJ6bw=";
 in
 buildLinux (args // {
   version = "${modDirVersion}";
@@ -14,7 +17,7 @@ buildLinux (args // {
     owner = "radxa";
     repo = "kernel";
     rev = tag;
-    hash = "sha256-+FI1Uzy2ROgrPGUNkZ5ZDQRgTMpGmJ/sPE2lXXPJ6bw=";
+    hash = hash;
   };
 
   structuredExtraConfig = with lib.kernel; {

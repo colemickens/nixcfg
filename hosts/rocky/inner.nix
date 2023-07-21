@@ -101,6 +101,7 @@ in
       systemd-boot.enable = false;
       generic-extlinux-compatible = {
         enable = true;
+        configurationLimit = 6;
       };
     };
 
