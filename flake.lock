@@ -50,11 +50,11 @@
     },
     "cmpkgs": {
       "locked": {
-        "lastModified": 1690051833,
-        "narHash": "sha256-XxxJPUpR3QTYkw1c9I4Emaz0kZ8tJkp2Ex92/mZx2FQ=",
+        "lastModified": 1690071682,
+        "narHash": "sha256-VIfnVWSsU+9kmn+g8tfTlKuRZRdK21mWcBfLplM1O0s=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "9a539559d01f9e401b68aec49803f87c55bd0710",
+        "rev": "ebcb9ab763e3d434d90aa24e1c10aac45bfba109",
         "type": "github"
       },
       "original": {
@@ -66,11 +66,11 @@
     },
     "cmpkgs-cross": {
       "locked": {
-        "lastModified": 1690051833,
-        "narHash": "sha256-XxxJPUpR3QTYkw1c9I4Emaz0kZ8tJkp2Ex92/mZx2FQ=",
+        "lastModified": 1690071682,
+        "narHash": "sha256-VIfnVWSsU+9kmn+g8tfTlKuRZRdK21mWcBfLplM1O0s=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "9a539559d01f9e401b68aec49803f87c55bd0710",
+        "rev": "ebcb9ab763e3d434d90aa24e1c10aac45bfba109",
         "type": "github"
       },
       "original": {
@@ -82,11 +82,11 @@
     },
     "cmpkgs-cross-riscv64": {
       "locked": {
-        "lastModified": 1690051847,
-        "narHash": "sha256-T+DVtAMJEhwOYIvkTKiFLvG+aLEgrwU4wjnPKFR8uVY=",
+        "lastModified": 1690071727,
+        "narHash": "sha256-8C4mY58vo2aax89iVSKI2k8I3YGExA5KJtRtAi85cSI=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "983bce820845d180d3950983353d26095747825c",
+        "rev": "8531d0fe2246d2e3c2d8f630dfe45be066ab727e",
         "type": "github"
       },
       "original": {
@@ -284,11 +284,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1690051464,
-        "narHash": "sha256-SYZ/4EaKinmnl3s1X4T1GH7vg/mS/GNUDwS4IGKSqxk=",
+        "lastModified": 1690070150,
+        "narHash": "sha256-bj6Wx6Dn6moacWLR9R/JbJJwCU/C0BKRSEVWu9BSzLw=",
         "owner": "colemickens",
         "repo": "flake-firefox-nightly",
-        "rev": "6b82931a6e00301efb2fe48af5604e669bd209ad",
+        "rev": "60890424f542ae26e58198ff314e0af576d276ce",
         "type": "github"
       },
       "original": {
@@ -1017,11 +1017,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1689358682,
-        "narHash": "sha256-qMSzUuwt82erfdqa3PHF7OtYQwWuNQwS+G/hqTrmqz0=",
+        "lastModified": 1690071750,
+        "narHash": "sha256-8EqBjoM7BSn1X5m5TjhaOprxxkWZcyOGtZz/aTazHzE=",
         "owner": "colemickens",
         "repo": "nixos-hardware",
-        "rev": "48f7a7d28019fee69909e1094fc43a1f74518224",
+        "rev": "f3ea04563f5e92542637886ac09a20f970d26976",
         "type": "github"
       },
       "original": {
