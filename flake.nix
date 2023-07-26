@@ -21,7 +21,7 @@
 
     lib-aggregate = { url = "github:nix-community/lib-aggregate"; }; #TODO: boo name! "libaggregate"?
 
-    nixpkgs-stable = { url = "github:nixos/nixpkgs/nixos-22.11"; }; # any stable to use
+    nixpkgs-stable = { url = "github:nixos/nixpkgs/nixos-23.05"; }; # any stable to use
 
     cmpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
     cmpkgs-cross = { url = "github:colemickens/nixpkgs/cmpkgs-cross"; };

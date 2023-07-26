@@ -1,5 +1,7 @@
 #!/usr/bin/env nu
 
+let spacer = "================================================================"
+
 def header [ color: string text: string spacer="▒": string ] {
   let text = $"("" | fill -a r -c $spacer -w 2) ($text | fill -a l -c ' ' -w 80)"
   print -e $"(ansi $color)($text)(ansi reset)"
@@ -58,6 +60,7 @@ def buildDrvs [ drvs: table, doCache: bool ] {
     if ($builder != "") {
       loop {
         # TODO: nushell bug: run-external should take list<string>
+        [ $spacer $copycmd $spacer ] | flatten | save -a $log
         ^./runlog.sh $copycmd
 
         # don't keep looping if it looks like the copy was okay
@@ -88,14 +91,19 @@ def buildDrvs [ drvs: table, doCache: bool ] {
           $"set -e -o pipefail;" $cmd $" | env CACHIX_SIGNING_KEY='($cachix_signing_key)' "
           $'nix-shell -I nixpkgs=($cachixpkgs_url) -p cachix --command "cat $x | cachix push ($cachix_cache)"'
         ] | flatten | str join ' ')
-      let cmd = (^printf '%q ' $cmd)
       $cmd
     })
+
+    let cmd = (^printf '%q ' $cmd)
+    $cmd
 
     let cmd = (if $builder == "localhost" { $cmd } else {
       ([ "ssh" $builder bash -c $cmd ] | flatten)
     })
 
+    # let cmd = (^printf '%q ' $cmd)
+    # ^sh -c $cmd out+err> $log
+    [ $spacer $cmd $spacer ] | flatten | save -a $log
     ^./runlog.sh $cmd
 
     mut success = true

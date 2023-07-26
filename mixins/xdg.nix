@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, lib, ... }:
 
 {
   config = {
@@ -6,9 +6,10 @@
 
     home-manager.users.cole = { pkgs, ... }: {
       home.packages = with pkgs; [
-        xdg-utils
         xdg-user-dirs
-      ];
+      ] ++ (lib.optionals (pkgs.stdenv.hostPlatform.system != "riscv64-linux") [
+        xdg-utils
+      ]);
       xdg = {
         enable = true;
         userDirs = {

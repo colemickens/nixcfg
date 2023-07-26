@@ -23,6 +23,7 @@ in
     ../mixins/gtk.nix
     ../mixins/mpv.nix
     ../mixins/pipewire.nix
+    ../mixins/rio.nix
     ../mixins/wezterm.nix
   ];
 
@@ -79,7 +80,7 @@ in
           _chrome
           jamesdsp
 
-          # nheko # TODO: re-enable when build is fixed, poor nheko
+          nheko
         ]))
         (with pkgs; [
           (pkgs.callPackage ../pkgs/commands-gui.nix { })
@@ -94,6 +95,8 @@ in
           qpwgraph
           toastify
           virt-viewer
+
+          thunderbird
 
           # questionable...
           gtkcord4

@@ -16,8 +16,8 @@
 window#waybar {
     background-color: #111111;
     color: #666666;
-    border-bottom: 2px double #fff;
-    border-bottom: 2px double #33ccff;
+    /* border-bottom: 2px double #fff; */
+    border-bottom: 2px double transparent;
 }
 
 /*

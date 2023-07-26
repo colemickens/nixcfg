@@ -10,13 +10,14 @@ let
   term = "${pkgs.foot}/bin/foot";
 
   # background = prefs.background;
-  _bg = "#333333";
+  _bg = "#008080";
   background = "${_bg} solid_color";
-  borderActive = color_pink;
+  borderActive = "#ffffff";
   borderInactive = "#222222";
 
   out_zeph = "Thermotrex Corporation TL140ADXP01 Unknown";
   out_aw34 = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
+  out_aw25 = "Dell Inc. Dell AW2521H #HLAYMxgwABDZ";
 
   in_tp_zeph = "1267:12699:ASUE120A:00_04F3:319B_Touchpad";
   in_mouse_aerox3 = "4152:6200:SteelSeries_SteelSeries_Aerox_3_Wireless";
@@ -35,10 +36,6 @@ let
   _mouse = {
     accel_profile = "flat";
   };
-
-  tryStartSteam = pkgs.writeShellScript "try-start-steam.sh" ''
-    which steam && steam
-  '';
 
   # silly gtk/gnome wayland schenanigans
   # TODO: see if this is necessary if we get HM to do it? or our own systemd user units?
@@ -163,7 +160,6 @@ in
             ];
             startup = [
               { always = true; command = "${gsettings_auto}"; }
-              { always = true; command = "${tryStartSteam}"; }
             ];
             input = {
               "${in_tp_zeph}" = _touchpad;
@@ -174,6 +170,12 @@ in
               "${out_aw34}" = {
                 scale = "1.0";
                 mode = "3440x1440@120Hz";
+                adaptive_sync = "enable";
+                subpixel = "rgb";
+              };
+              "${out_aw25}" = {
+                scale = "1.0";
+                mode = "1920x1080@240Hz";
                 adaptive_sync = "enable";
                 subpixel = "rgb";
               };

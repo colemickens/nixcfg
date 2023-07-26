@@ -77,9 +77,6 @@ in
 
     home-manager.users.cole = { pkgs, config, ... }@hm: {
       wayland.windowManager.sway.config = {
-        startup = [
-          { command = "${pkgs.asusctl}/bin/rog-control-center"; }
-        ];
         keybindings = {
           "XF86Launch1" = "exec ${pkgs.asusctl}/bin/rog-control-center";
         };

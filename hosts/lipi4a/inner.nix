@@ -8,7 +8,7 @@ in
 {
   imports = [
     ../../profiles/core.nix
-    inputs.nixos-hardware.outputs.nixosModules.sipeed-lipi4a
+    inputs.nixos-hardware.outputs.nixosModules.sipeed-licheepi4a
   ];
 
   config = {
@@ -52,6 +52,7 @@ in
     # ];
 
     boot = {
+      kernelPackages = pkgs.linuxKernel.packages.linux_6_5;
       # see: https://github.com/starfive-tech/linux/issues/101#issuecomment-1550787967
       blacklistedKernelModules = [ "clk-starfive-jh7110-vout" ];
       enableContainers = false;

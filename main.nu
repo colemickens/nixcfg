@@ -76,7 +76,10 @@ def "main nix" [...args] {
 
 def "main build" [ ...flakeRefs ] {
   let drvs = (evalFlakeRefs $flakeRefs)
-  print -e ($drvs | columns)
+  let drvs = ($drvs | where { true })
+  print -e "****"
+  print -e $drvs
+  print -e "****"
   buildDrvs $drvs false
 }
 

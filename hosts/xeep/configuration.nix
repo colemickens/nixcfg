@@ -5,6 +5,7 @@ let
   static_ip = "192.168.70.20/16";
 
   nb = n: inputs.self.outputs.nixosConfigurations."${n}-netboot".config.system.build;
+  lipi4a = inputs.self.outputs.nixosConfigurations.lipi4a.config.system;
 
   # enableNetboot = true;
   enableNetboot = false;
@@ -31,19 +32,19 @@ in
       extraOptions = [ "--verbose=7" ];
       # root = (pkgs.runCommand "atftpd-root" { } ''
       #   mkdir $out
-      #   ln -s ${vf2.initrd} $out/initrd
-      #   ln -s ${vf2.kernel}/Image $out/kernel
-      #   ln -s ${vf2.kernel}/dtbs/starfive/jh7110-starfive-visionfive-2-v1.2a.dtb $out/dtb
-      #   printf "%s " "init=${vf2.toplevel.outPath}/init" > "$out/bootargs"
-      #   cat "${vf2.toplevel}/kernel-params" >> "$out/bootargs"
+      #   ln -s ${lipi4a.initrd} $out/initrd
+      #   ln -s ${lipi4a.kernel}/Image $out/kernel
+      #   ln -s ${lipi4a.kernel}/dtbs/sipeed/sipeed-licheepi4a.dtb $out/dtb
+      #   printf "%s " "init=${lipi4a.toplevel.outPath}/init" > "$out/bootargs"
+      #   cat "${lipi4a.toplevel}/kernel-params" >> "$out/bootargs"
       # '').outPath;
       # cp -r "${vf2.netbootIpxeScript}" $out/ipxe
-      root = (pkgs.runCommand "atftpd-root" { } ''
-        mkdir $out
-        ln -s ${(nb nbhost).initrd} $out/initrd
-        ln -s ${(nb nbhost).kernel}/Image $out/kernel
-        ln -s ${(nb nbhost).kernel}/dtbs/rockchip/evb-rk3588.dtb $out/dtb
-      '').outPath;
+      # root = (pkgs.runCommand "atftpd-root" { } ''
+      #   mkdir $out
+      #   ln -s ${(nb nbhost).initrd} $out/initrd
+      #   ln -s ${(nb nbhost).kernel}/Image $out/kernel
+      #   ln -s ${(nb nbhost).kernel}/dtbs/rockchip/evb-rk3588.dtb $out/dtb
+      # '').outPath;
     };
     services.nginx = lib.mkIf (enableNetboot) {
       enable = true;

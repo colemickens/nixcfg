@@ -8,6 +8,7 @@ in
 {
   imports = [
     ../../profiles/core.nix
+    ../../mixins/iwd-networks.nix
     inputs.nixos-hardware.outputs.nixosModules.starfive-visionfive-2
   ];
 
@@ -51,6 +52,8 @@ in
     #   usbutils
     # ];
 
+    networking.wireless.iwd.enable = true;
+
     boot = {
       # see: https://github.com/starfive-tech/linux/issues/101#issuecomment-1550787967
       blacklistedKernelModules = [ "clk-starfive-jh7110-vout" ];
@@ -77,10 +80,13 @@ in
       # TODO: needed? upstream to nixos-hardware?
       initrd.kernelModules = [
         "motorcomm"
-        "nvme" "nvme_core"
+        "nvme"
+        "nvme_core"
         "pcie_starfive"
         "phy_jh7110_pcie"
-        "xhci_pci" "xhci_pci_renesas" "xhci_hcd"
+        "xhci_pci"
+        "xhci_pci_renesas"
+        "xhci_hcd"
         "dwmac-starfive"
 
         # pcie clocks for NVME (likely not all needed)
