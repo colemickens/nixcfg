@@ -215,9 +215,11 @@ in
           dhcpV4Config.Use6RD = "yes";
           dhcpV4Config.RouteMetric = 512;
           dhcpV4Config.UseDNS = false;
+          dhcpV4Config.DUIDType = "link-layer";
           dhcpV6Config.RouteMetric = 512;
           dhcpV6Config.PrefixDelegationHint = "::64";
           dhcpV6Config.UseDNS = false;
+          dhcpV6Config.DUIDType = "link-layer";
         };
         networks."30-network-defaults-wireless" = {
           # matchConfig.Name = "wl*";
@@ -232,8 +234,10 @@ in
           # dhcpV4Config.ClientIdentifier = "mac";
           dhcpV4Config.RouteMetric = 1500;
           dhcpV4Config.UseDNS = false;
+          dhcpV4Config.DUIDType = "link-layer";
           dhcpV6Config.RouteMetric = 1500;
           dhcpV6Config.UseDNS = false;
+          dhcpV6Config.DUIDType = "link-layer";
           # routes = [
           #   { routeConfig = { Gateway = "_dhcp4"; Metric = 1500; }; }
           #   { routeConfig = { Gateway = "_ipv6ra"; Metric = 1500; }; }
