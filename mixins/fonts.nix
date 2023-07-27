@@ -5,7 +5,7 @@ in
 {
   config = {
     fonts = {
-      fonts = prefs.font.allPackages;
+      packages = prefs.font.allPackages;
 
       fontconfig = {
         defaultFonts = {

@@ -141,6 +141,7 @@ let
     sudo systemctl restart nix-daemon
     sudo nix-collect-garbage -d
     sudo nix-collect-garbage
+    nix-env --profile ~/.local/state/nix/profiles/home-manager --delete-generations +1
   '');
 in
 (symlinkJoin {

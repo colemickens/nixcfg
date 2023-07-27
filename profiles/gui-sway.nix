@@ -178,6 +178,7 @@ in
                 mode = "1920x1080@240Hz";
                 adaptive_sync = "enable";
                 subpixel = "rgb";
+                render_bit_depth = "10";
               };
               "${out_zeph}" = {
                 scale = "1.6";

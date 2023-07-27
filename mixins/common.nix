@@ -91,7 +91,7 @@ in
         info.enable = false;
         nixos.enable = false;
       }));
-      system.disableInstallerTools = lib.mkDefault true;
+      # system.disableInstallerTools = lib.mkDefault true;
 
       ## BOOT #################################################################
       console.earlySetup = true; # needed for LUKS
