@@ -1,6 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 let
   hn = "raisin";
+  pool = "raisin2pool";
   static_ip = "192.168.70.60/16";
 in
 {
@@ -49,12 +50,12 @@ in
     };
 
     fileSystems = {
-      "/" = { fsType = "zfs"; device = "${hn}pool/root"; neededForBoot = true; };
-      "/home" = { fsType = "zfs"; device = "${hn}pool/home"; neededForBoot = true; };
-      "/nix" = { fsType = "zfs"; device = "${hn}pool/nix"; neededForBoot = true; };
-      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; neededForBoot = true; };
+      "/" = { fsType = "zfs"; device = "${pool}/root"; neededForBoot = true; };
+      "/home" = { fsType = "zfs"; device = "${pool}/home"; neededForBoot = true; };
+      "/nix" = { fsType = "zfs"; device = "${pool}/nix"; neededForBoot = true; };
+      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/raisin2-boot"; neededForBoot = true; };
     };
-    swapDevices = [{ device = "/dev/disk/by-partlabel/swap"; }];
+    swapDevices = [{ device = "/dev/disk/by-partlabel/raisin2-swap"; }];
 
     boot = {
       kernelModules = [ "iwlwifi" "ideapad_laptop" ];
