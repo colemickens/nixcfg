@@ -7,12 +7,13 @@ def header [ color: string text: string spacer="▒": string ] {
   print -e $"(ansi $color)($text)(ansi reset)"
 }
 
-def evalFlakeRefs [ refs: list<string> ] {
-  header "light_cyan_reverse" $"eval: ($refs)"
+# def evalFlakeRefs [ refs: list<string> ] {
+def evalFlakeRef [ ref: string ] {
+  header "light_cyan_reverse" $"eval: ($ref)"
 
   let gcrootsdir = ([ $env.LOGDIR "gcroots" ] | path join)
   mkdir $gcrootsdir
-  let o = (nix-eval-jobs $refs
+  let o = (nix-eval-jobs $ref
     --flake
     --gc-roots-dir $gcrootsdir
     --log-format bar-with-logs
@@ -45,8 +46,8 @@ def buildDrvs [ drvs: table, doCache: bool ] {
     ^touch $log
 
     header "light_cyan_reverse" $"building on ($builder)"
-    print -e { log: $log, builder: $builder }
-    print -e ( $drvs | get drvPath )
+    let x = ($fdrvs | each {|x| { drv: $x.drvPath, out: $x.outputs.out } | table })
+    print -e ({builder: $builder, arch: $arch, log: $log, drvs: $x} | table -e)
 
     ## COPY DERIVATIONS
     let copycmd = ([
@@ -61,18 +62,19 @@ def buildDrvs [ drvs: table, doCache: bool ] {
       loop {
         # TODO: nushell bug: run-external should take list<string>
         [ $spacer $copycmd $spacer ] | flatten | save -a $log
+        print -e $":: ($arch): copy start"
         ^./runlog.sh $copycmd
 
         # don't keep looping if it looks like the copy was okay
         let error_count = (open $"($log)" | find "Too many root" | length)
         if ($error_count > 0) {
-          print -e "($arch): copy failed"
-          rm $"($log)"
-          print -e "($arch): retrying copy"
+          print -e $":: ($arch): copy failed"
+          rm $log
+          print -e $":: ($arch): retrying copy"
           continue
         } else {
           # we assume success
-          print -e "($arch): copy success"
+          print -e $":: ($arch): copy success"
           break
         }
       }
@@ -95,7 +97,7 @@ def buildDrvs [ drvs: table, doCache: bool ] {
     })
 
     let cmd = (^printf '%q ' $cmd)
-    $cmd
+    # $cmd
 
     let cmd = (if $builder == "localhost" { $cmd } else {
       ([ "ssh" $builder bash -c $cmd ] | flatten)
@@ -104,6 +106,7 @@ def buildDrvs [ drvs: table, doCache: bool ] {
     # let cmd = (^printf '%q ' $cmd)
     # ^sh -c $cmd out+err> $log
     [ $spacer $cmd $spacer ] | flatten | save -a $log
+    print -e $":: ($arch): build start [($log)]"
     ^./runlog.sh $cmd
 
     mut success = true
@@ -131,9 +134,8 @@ def buildDrvs [ drvs: table, doCache: bool ] {
     #   error make { msg: "probably failed build" }
     # }
     let x = ($outs | each { |o| { arch: $arch, out: $o } })
-    print -e $x
+    print -e $":: ($arch): build done [($log)]"
     $x
-    print -e $":: done ok? on ($builder)"
   }
 
   header "light_cyan_reverse" $"builds finished"

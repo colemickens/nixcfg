@@ -138,10 +138,9 @@ let
     ssh  -L 3389:192.168.1.6:3389 -L 8443:192.168.1.9:8443 -L 8123:192.168.1.9:8123 "cole@$(tailscale ip --4 xeep)"
   '');
   nixclean = (writeShellScriptBin "nixclean" ''
-    sudo systemctl restart nix-daemon
+    nix-env --profile ~/.local/state/nix/profiles/home-manager --delete-generations +1
     sudo nix-collect-garbage -d
     sudo nix-collect-garbage
-    nix-env --profile ~/.local/state/nix/profiles/home-manager --delete-generations +1
   '');
 in
 (symlinkJoin {

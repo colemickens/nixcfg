@@ -65,8 +65,8 @@
     # TODO: un-pin this eventually...
     # zellij = { url = "github:a-kenji/zellij-nix"; inputs."flake-utils".follows = "flake-utils"; };
     # inputs."nixpkgs".follows = "cmpkgs"; };
-    # nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; };
-    nix-eval-jobs = { url = "github:colemickens/nix-eval-jobs"; };
+    nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; };
+    # nix-eval-jobs = { url = "github:colemickens/nix-eval-jobs"; };
     nix-update = { url = "github:Mic92/nix-update"; };
 
     # experimental/unused:
@@ -116,7 +116,6 @@
 
           # actual machines:
           raisin = { pkgs = inputs.cmpkgs; };
-          slynux = { pkgs = inputs.cmpkgs; };
           xeep = { pkgs = inputs.cmpkgs; };
           zeph = { pkgs = inputs.cmpkgs; };
 
@@ -124,16 +123,16 @@
 
           # used as cross-built bootstrap for getting a builder up, then pivoting to native builds
           # TODO
-          # # openstick-cross = {
-          # #   pkgs = inputs.cmpkgs-cross;
-          # #   path = ./hosts/openstick/cross.nix;
-          # #   buildSys = "x86_64-linux";
-          # # };
-          # # rocky-cross = {
-          # #   pkgs = inputs.cmpkgs-cross;
-          # #   path = ./hosts/rocky/cross.nix;
-          # #   buildSys = "x86_64-linux";
-          # # };
+          openstick-cross = {
+            pkgs = inputs.cmpkgs-cross;
+            path = ./hosts/openstick/cross.nix;
+            buildSys = "x86_64-linux";
+          };
+          rocky-cross = {
+            pkgs = inputs.cmpkgs-cross;
+            path = ./hosts/rocky/cross.nix;
+            buildSys = "x86_64-linux";
+          };
           # rocky-sdcard = {
           #   # TODO FIXME
           #   # TODO: finish, must lay it out
@@ -166,17 +165,16 @@
           #   path = ./hosts/lipi4a/sdcard.nix;
           #   buildSys = "x86_64-linux";
           # };
-          # TODO
-          # # h96-cross = {
-          # #   pkgs = inputs.cmpkgs-cross;
-          # #   path = ./hosts/h96/cross.nix;
-          # #   buildSys = "x86_64-linux";
-          # # };
-          # # h96-netboot = {
-          # #   pkgs = inputs.cmpkgs-cross;
-          # #   path = ./hosts/h96/netboot.nix;
-          # #   buildSys = "x86_64-linux";
-          # # };
+          h96-cross = {
+            pkgs = inputs.cmpkgs-cross;
+            path = ./hosts/h96/cross.nix;
+            buildSys = "x86_64-linux";
+          };
+          h96-netboot = {
+            pkgs = inputs.cmpkgs-cross;
+            path = ./hosts/h96/netboot.nix;
+            buildSys = "x86_64-linux";
+          };
         };
         "aarch64-linux" = {
           # ocii = {

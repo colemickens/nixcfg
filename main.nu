@@ -38,8 +38,8 @@ def deployHost [ activate: bool, host: string, topout: string = "" ] {
   header "light_purple_reverse" $"deploy: start: ($host)"
 
   let topout = (if $topout != "" { $topout} else {
-    let refs = [ $".#toplevels.($host)" ]
-    let drvs = (evalFlakeRefs $refs)
+    let ref = $".#toplevels.($host)"
+    let drvs = (evalFlakeRef $ref)
     let drvs = ($drvs | where { true })
     buildDrvs $drvs true
     ($drvs | get outputs | get out | first)
@@ -74,8 +74,8 @@ def "main nix" [...args] {
   ^nix $nixflags $args
 }
 
-def "main build" [ ...flakeRefs ] {
-  let drvs = (evalFlakeRefs $flakeRefs)
+def "main build" [ flakeRef: string ] {
+  let drvs = (evalFlakeRef $flakeRef)
   let drvs = ($drvs | where { true })
   print -e "****"
   print -e $drvs
@@ -83,8 +83,8 @@ def "main build" [ ...flakeRefs ] {
   buildDrvs $drvs false
 }
 
-def "main cache" [ ...flakeRefs ] {
-  let drvs = (evalFlakeRefs $flakeRefs)
+def "main cache" [ flakeRef: string ] {
+  let drvs = (evalFlakeRef $flakeRef)
   # let drvs = ($drvs | where { true })
   buildDrvs $drvs true
 }
@@ -94,8 +94,8 @@ def "main selfup" [] {
   sudo ./result/bin/switch-to-configuration switch
 }
 
-def "main dl" [ ...flakeRefs ] {
-  let drvs = (evalFlakeRefs $flakeRefs)
+def "main dl" [ flakeRef: string ] {
+  let drvs = (evalFlakeRef $flakeRef)
   let drvs = ($drvs | where { true })
   buildDrvs $drvs true
 
@@ -106,13 +106,16 @@ def "main dl" [ ...flakeRefs ] {
   $outs
 }
 
-def "main deploy" [host: string] {
+def "main deploy" [...hosts] {
   header "light_yellow_reverse" $"DEPLOY"
-  let drvs = (evalFlakeRefs [$".#toplevels.($host)"])
-  let drvs = ($drvs | where { true })
-  buildDrvs $drvs true
-  let out = ($drvs | get outputs | get out | first)
-  deployHost true $host $out
+  # $hosts | par-each { |h| # FUCKING NIX # TODO
+  $hosts | each { |h|
+    let drvs = (evalFlakeRef $".#toplevels.($h)")
+    let drvs = ($drvs | where { true })
+    buildDrvs $drvs true
+    let out = ($drvs | get outputs | get out | first)
+    deployHost true $h $out
+  }
 }
 
 def "main inputup" [] {
@@ -228,7 +231,7 @@ def "main lockup" [] {
 }
 
 def "main ciattrs" [] {
-  let drvs = (evalFlakeRefs ['.#ciAttrs'])
+  let drvs = (evalFlakeRef '.#ciAttrs')
   buildDrvs $drvs true
   $drvs
 }
@@ -238,11 +241,12 @@ def "main up" [...hosts] {
 
   main inputup
   main lockup
-  if (not ("SKIP_PKGUP" in $env)) {
-    main pkgup
-  }
+  main pkgup
+  main dl '.#devShells.x86_64-linux.ci'
 
-  let drvs = (main ciattrs)
+  main ciattrs
+
+  main deploy raisin xeep zeph vf2 rocky
 }
 
 def main [] { main up }

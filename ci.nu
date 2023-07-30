@@ -33,7 +33,7 @@ def "main ci update" [] {
 }
 
 def "main ci precache" [host: string] {
-  let drvs = (evalFlakeRefs [$".#toplevels.($host)"])
+  let drvs = (evalFlakeRef $".#toplevels.($host)")
   let drvs = ($drvs | where { true })
   buildDrvs $drvs true
   let out = ($drvs | get outputs | get out | first)
