@@ -191,11 +191,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1690929334,
-        "narHash": "sha256-fkoVjqgg1CsZRFcD/o2u/zkcXarZVeITeZWP+Q5JDN4=",
+        "lastModified": 1690939938,
+        "narHash": "sha256-9VhE7H8CKh+M0t/R+Cv2RcLla7Yk69k379nnlA5lItM=",
         "owner": "colemickens",
         "repo": "flake-firefox-nightly",
-        "rev": "af6c1e428417fda02673c8a86d100c4f7cc1d3bf",
+        "rev": "ee43d167844a72361817ce8bf861ad509d559559",
         "type": "github"
       },
       "original": {
@@ -1416,10 +1416,10 @@
     "systems_5": {
       "flake": false,
       "locked": {
-        "dirtyRev": "2ae423974a95511ba5575a51c6230548a5acbdd9-dirty",
-        "dirtyShortRev": "2ae42397-dirty",
-        "lastModified": 1690912909,
-        "narHash": "sha256-WNX1RLJwV/dsD8r42oVbl7c/yiiqZn7UpXv9LAX10OQ=",
+        "dirtyRev": "8cccf8e96fe7d3b5e13f910d2818028ab43ee5e7-dirty",
+        "dirtyShortRev": "8cccf8e9-dirty",
+        "lastModified": 1690933920,
+        "narHash": "sha256-RMemYpEeEMvIw8YFQ75WBIYBYCivPzom/4a761kNoA4=",
         "type": "git",
         "url": "file:.?path=flake.systems.nix"
       },
