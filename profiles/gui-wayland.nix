@@ -26,9 +26,13 @@
         oculante # image viewer (rust)
         grim # area selection
         slurp # screen capture
+        wallutils # wallpaper/monitor management tools
         wf-recorder # screen record
         wl-screenrec # screen record (vaapi + rust)
+        wlay # Graphical output management for Wayland.
         wev # event viewer
+
+        wshowkeys
 
         inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system}.wl-gammarelay-rs
 

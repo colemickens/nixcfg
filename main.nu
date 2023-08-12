@@ -1,16 +1,21 @@
 #!/usr/bin/env nu
 
-$env.NIXCFG_CI_BRANCH = (if "NIXCFG_CI_BRANCH" in $env { $env.NIXCFG_CI_BRANCH } else { (date now | date format '%s') })
+$env.NIXCFG_CI_BRANCH = (if "NIXCFG_CI_BRANCH" in $env { $env.NIXCFG_CI_BRANCH } else { (date now | format date '%s') })
 $env.NIXCFG_CODE = (if "NIXCFG_CODE" in $env { $env.NIXCFG_CODE } else { "/home/cole/code" })
 $env.LOGDIR = ([ ".outputs" $env.NIXCFG_CI_BRANCH ] | path join)
+
+let c1 = "http://192.168.70.20.nip.io:9999/colemickens-cachix-org"
+let c2 = "http://192.168.70.20.nip.io:9999/cache-nixos-org"
 
 let nixflags = [
   # "--accept-flake-config",
   "--builders-use-substitutes"
   "--keep-going"
   "--option" "narinfo-cache-negative-ttl" "0"
-  "--option" "extra-trusted-substituters" "https://cache.nixos.org https://colemickens.cachix.org https://nix-community.cachix.org https://nixpkgs-wayland.cachix.org https://unmatched.cachix.org"
-  "--option" "extra-substituters" "https://cache.nixos.org https://colemickens.cachix.org https://nix-community.cachix.org https://nixpkgs-wayland.cachix.org https://unmatched.cachix.org"
+  # "--option" "extra-trusted-substituters" $"($c1) ($c2) https://cache.nixos.org https://colemickens.cachix.org https://nix-community.cachix.org https://nixpkgs-wayland.cachix.org https://unmatched.cachix.org"
+  # "--option" "extra-substituters" $"($c1) ($c2) https://cache.nixos.org https://colemickens.cachix.org https://nix-community.cachix.org https://nixpkgs-wayland.cachix.org https://unmatched.cachix.org"
+  "--option" "extra-trusted-substituters" $"https://cache.nixos.org https://colemickens.cachix.org https://nix-community.cachix.org https://nixpkgs-wayland.cachix.org https://unmatched.cachix.org"
+  "--option" "extra-substituters" $"https://cache.nixos.org https://colemickens.cachix.org https://nix-community.cachix.org https://nixpkgs-wayland.cachix.org https://unmatched.cachix.org"
   "--option" "extra-trusted-public-keys" "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= unmatched.cachix.org-1:F8TWIP/hA2808FDABsayBCFjrmrz296+5CQaysosTTc= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
 ]
 
@@ -108,8 +113,7 @@ def "main dl" [ flakeRef: string ] {
 
 def "main deploy" [...hosts] {
   header "light_yellow_reverse" $"DEPLOY"
-  # $hosts | par-each { |h| # FUCKING NIX # TODO
-  $hosts | each { |h|
+  $hosts | par-each { |h|
     let drvs = (evalFlakeRef $".#toplevels.($h)")
     let drvs = ($drvs | where { true })
     buildDrvs $drvs true
@@ -236,17 +240,28 @@ def "main ciattrs" [] {
   $drvs
 }
 
+def "main upx" [ ...hosts ] {
+  loop {
+    do -i {
+      main up
+    }
+    sleep 120sec
+  }
+}
+
 def "main up" [...hosts] {
   header "light_red_reverse" "up" "▒"
 
   main inputup
   main lockup
-  main pkgup
+  # main pkgup
   main dl '.#devShells.x86_64-linux.ci'
 
   main ciattrs
 
-  main deploy raisin xeep zeph vf2 rocky
+  main deploy raisin xeep zeph
+  main deploy vf2 rocky
+  main deploy openstick
 }
 
 def main [] { main up }

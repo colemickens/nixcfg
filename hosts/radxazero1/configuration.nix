@@ -5,14 +5,14 @@ let
 in
 {
   imports = [
-    ../rpi-sdcard.nix
+    # TODO: no sdcard here...?
 
     ../../profiles/core.nix
     ../../mixins/iwd-networks.nix
 
     ./unfree.nix
 
-    inputs.tow-boot-radxa-zero.nixosModules.default
+    # inputs.tow-boot-radxa-zero.nixosModules.default
   ];
 
   config = {
@@ -22,7 +22,7 @@ in
     nixcfg.common.defaultNetworking = lib.mkForce true; # why rpi-sdcard??
 
     networking.hostName = "radxazero1";
-    system.stateVersion = "21.11";
+    system.stateVersion = "23.05";
 
     services.tailscale.useRoutingFeatures = "server";
     networking.wireless.iwd.enable = true;
@@ -43,16 +43,16 @@ in
       };
     };
 
-    tow-boot.enable = true;
-    tow-boot.autoUpdate = false;
-    tow-boot.device = "radxa-zero";
-    # configuration.config.Tow-Boot = {
-    tow-boot.config = ({
-      allowUnfree = true; # new, radxa specific
-      diskImage.mbr.diskID = config.system.build.mbr_disk_id;
-      uBootVersion = "2022.04";
-      useDefaultPatches = false;
-      withLogo = false;
-    });
+    # tow-boot.enable = true;
+    # tow-boot.autoUpdate = false;
+    # tow-boot.device = "radxa-zero";
+    # # configuration.config.Tow-Boot = {
+    # tow-boot.config = ({
+    #   allowUnfree = true; # new, radxa specific
+    #   diskImage.mbr.diskID = config.system.build.mbr_disk_id;
+    #   uBootVersion = "2022.04";
+    #   useDefaultPatches = false;
+    #   withLogo = false;
+    # });
   };
 }

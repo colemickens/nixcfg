@@ -98,6 +98,7 @@
             # <rust pkgs>
             bat
             tealdeer
+            cfspeedtest
             du-dust
             dua
             erdtree # erd - dua alternative
@@ -116,7 +117,7 @@
             procs
             prs
             pipes-rs
-            rage
+            rage age # need age (Age-keygen can do priv->pub)
             rustscan
             # </rust pkgs>
             sbctl

@@ -108,6 +108,7 @@ in
       (final: prev: {
         sway-unwrapped = inputs.nixpkgs-wayland.packages.${pkgs.stdenv.hostPlatform.system}.sway-unwrapped;
         xdg-desktop-portal-wlr = inputs.nixpkgs-wayland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-wlr;
+        sirula = inputs.nixpkgs-wayland.packages.${pkgs.stdenv.hostPlatform.system}.sirula;
       })
     ];
 
@@ -151,8 +152,8 @@ in
             window.border = 4;
             window.titlebar = false;
             window.commands = [
-              { criteria = { app_id = "mpv"; }; command = "sticky enable"; }
-              { criteria = { app_id = "mpv"; }; command = "floating enable"; }
+              # { criteria = { app_id = "mpv"; }; command = "sticky enable"; }
+              # { criteria = { app_id = "mpv"; }; command = "floating enable"; }
               { criteria = { title = "^(.*) Indicator"; }; command = "floating enable"; }
               { criteria = { app_id = "floatmeplz"; }; command = "floating enable"; }
               { criteria = { app_id = "prs-gtk3-copy"; }; command = "floating enable"; }
@@ -172,6 +173,7 @@ in
                 mode = "3440x1440@120Hz";
                 adaptive_sync = "enable";
                 subpixel = "rgb";
+                position = "1920 0";
               };
               "${out_aw25}" = {
                 scale = "1.0";
@@ -179,11 +181,13 @@ in
                 adaptive_sync = "enable";
                 subpixel = "rgb";
                 render_bit_depth = "10";
+                position = "0 0";
               };
               "${out_zeph}" = {
                 scale = "1.6";
                 mode = "2560x1600@120Hz";
                 adaptive_sync = "enable";
+                position = "5360 0";
                 subpixel = "rgb";
               };
             };

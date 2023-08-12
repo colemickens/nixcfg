@@ -14,7 +14,7 @@ in
     ../../mixins/sshd.nix
     ../../mixins/tailscale.nix
     ../../mixins/iwd-networks.nix
-    ../../mixins/iwd-auto-ap.nix
+    # ../../mixins/iwd-auto-ap.nix # not sure it works, worried it causes problems, but might be something else
 
     ../../secrets
 
@@ -29,12 +29,19 @@ in
     boot.initrd.systemd.enable = lib.mkForce false;
     boot.kernelParams = [ "dyndbg=\"file drivers/base/firmware_loader/main.c +fmp\"" ];
 
+    system.build.initialRamdisk = lib.mkForce (pkgs.writeText "test" "null").outPath;
+
     nixcfg.common = {
       defaultKernel = false;
     };
 
     system.stateVersion = "22.05";
-    environment.systemPackages = with pkgs; [ /*usbutils lshw libqmi*/ ];
+    environment.systemPackages = with pkgs; [
+      dua
+      # usbutils
+      # lshw
+      # libqmi
+    ];
 
     networking = {
       hostName = hn;

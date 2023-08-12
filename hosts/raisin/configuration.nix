@@ -1,8 +1,12 @@
 { config, pkgs, lib, inputs, ... }:
 let
   hn = "raisin";
-  pool = "raisin2pool";
-  static_ip = "192.168.70.60/16";
+  poolname = "raisin2pool";
+  bootpart = "raisin2-boot";
+  swappart = "raisin2-swap";
+  lukspart = "raisin-luksroot";
+  # ugh, bad idea, zaks network doesn't have this probably:
+  # static_ip = "192.168.70.60/16";
 in
 {
   imports = [
@@ -15,7 +19,8 @@ in
     ../../mixins/plex.nix
     ../../mixins/rclone-googledrive-mounts.nix
     ../../mixins/syncthing.nix
-    ../../mixins/zfs.nix
+
+    ./services/monitoring.nix
 
     inputs.nixos-hardware.nixosModules.common-cpu-amd
     inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
@@ -24,6 +29,16 @@ in
   ];
 
   config = {
+    # TODO extract
+    services = {
+      grafana = {
+        enable = true;
+      };
+    };
+    networking.firewall.allowedTCPPorts = [ 8096 ];
+    # TODO extract end
+
+
     nixpkgs.hostPlatform.system = "x86_64-linux";
     system.stateVersion = "21.05";
 
@@ -32,6 +47,8 @@ in
 
     services.tailscale.useRoutingFeatures = "server";
 
+    services.zfs.autoScrub.pools = [ poolname ];
+
     services.logind.extraConfig = ''
       HandlePowerKey=ignore
       HandleLidSwitch=ignore
@@ -39,23 +56,23 @@ in
     
     systemd.network = {
       enable = true;
-      networks."15-eth0-static-ip" = {
-        matchConfig.Path = "pci-0000:03:00.3-usb-0:1:1.0";
-        addresses = [{ addressConfig = { Address = static_ip; }; }];
-        networkConfig = {
-          Gateway = "192.168.1.1";
-          DHCP = "no";
-        };
-      };
+      # networks."15-eth0-static-ip" = {
+      #   matchConfig.Path = "pci-0000:03:00.3-usb-0:1:1.0";
+      #   addresses = [{ addressConfig = { Address = static_ip; }; }];
+      #   networkConfig = {
+      #     Gateway = "192.168.1.1";
+      #     DHCP = "no";
+      #   };
+      # };
     };
 
     fileSystems = {
-      "/" = { fsType = "zfs"; device = "${pool}/root"; neededForBoot = true; };
-      "/home" = { fsType = "zfs"; device = "${pool}/home"; neededForBoot = true; };
-      "/nix" = { fsType = "zfs"; device = "${pool}/nix"; neededForBoot = true; };
-      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/raisin2-boot"; neededForBoot = true; };
+      "/" = { fsType = "zfs"; device = "${poolname}/root"; neededForBoot = true; };
+      "/home" = { fsType = "zfs"; device = "${poolname}/home"; neededForBoot = true; };
+      "/nix" = { fsType = "zfs"; device = "${poolname}/nix"; neededForBoot = true; };
+      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${bootpart}"; neededForBoot = true; };
     };
-    swapDevices = [{ device = "/dev/disk/by-partlabel/raisin2-swap"; }];
+    swapDevices = [{ device = "/dev/disk/by-partlabel/${swappart}"; }];
 
     boot = {
       kernelModules = [ "iwlwifi" "ideapad_laptop" ];
@@ -75,7 +92,7 @@ in
         "usbnet"
       ];
       initrd.luks.devices."nixos-luksroot" = {
-        device = "/dev/disk/by-partlabel/${hn}-luksroot";
+        device = "/dev/disk/by-partlabel/${lukspart}";
         allowDiscards = true;
         keyFile = "/lukskey";
       };

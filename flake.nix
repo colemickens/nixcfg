@@ -16,7 +16,8 @@
   # TODO: add firmware build for the Glove80 keyboard
 
   inputs = {
-    systems = { url = "path:./flake.systems.nix"; flake = false; };
+    # systems = { url = "git+file:.?path=flake.systems.nix"; flake = false; };
+    systems = { url = "path:./flake.systems.nix"; flake = false; }; 
     flake-utils = { url = "github:numtide/flake-utils"; inputs."systems".follows = "systems"; };
 
     lib-aggregate = { url = "github:nix-community/lib-aggregate"; }; #TODO: boo name! "libaggregate"?
@@ -47,7 +48,8 @@
     nixos-hardware = { url = "github:colemickens/nixos-hardware"; };
     nixpkgs-wayland = { url = "github:nix-community/nixpkgs-wayland/master"; inputs."nixpkgs".follows = "cmpkgs"; };
     sops-nix = { url = "github:Mic92/sops-nix/master"; inputs."nixpkgs".follows = "cmpkgs"; };
-    lanzaboote = { url = "github:nix-community/lanzaboote"; inputs.nixpkgs.follows = "cmpkgs"; };
+    # lanzaboote = { url = "github:nix-community/lanzaboote"; inputs.nixpkgs.follows = "cmpkgs"; };
+    lanzaboote = { url = "github:nix-community/lanzaboote"; };
 
     # SBC-adjacent inputs
     visionfive-nix = { url = "github:colemickens/visionfive-nix"; inputs."nixpkgs".follows = "cmpkgs-cross-riscv64"; };
@@ -119,6 +121,16 @@
           xeep = { pkgs = inputs.cmpkgs; };
           zeph = { pkgs = inputs.cmpkgs; };
 
+          # SBCs that we're keeping:
+          # - licheepi4a - riscv64 seems neat, would be neat to have a native builder
+          # - radxazero1 - candidate for set-top-box thingy...
+          # - h96_max_v58 - candidate for a more powerful STB thingy
+          radxazero1 =  {
+            pkgs = inputs.cmpkgs;
+            path = ./hosts/radxazero1/configuration.nix;
+            buildSys = "x86_64-linux";
+          };
+
           # pktspot1 = { pkgs = inputs.cmpkgs; };
 
           # used as cross-built bootstrap for getting a builder up, then pivoting to native builds
@@ -150,11 +162,11 @@
           #   path = ./hosts/vf2/netboot.nix;
           #   buildSys = "x86_64-linux";
           # };
-          # vf2-sdcard = {
-          #   pkgs = inputs.cmpkgs-cross-riscv64;
-          #   path = ./hosts/vf2/sdcard.nix;
-          #   buildSys = "x86_64-linux";
-          # };
+          vf2-sdcard = {
+            pkgs = inputs.cmpkgs-cross-riscv64;
+            path = ./hosts/vf2/sdcard.nix;
+            buildSys = "x86_64-linux";
+          };
           # lipi4a = {
           #   pkgs = inputs.cmpkgs-cross-riscv64;
           #   path = ./hosts/lipi4a/configuration.nix;
@@ -214,7 +226,7 @@
           # vf2-firmware = pkgs.x86_64-linux.pkgsCross.riscv64.callPackage
           #   "${inputs.nixos-hardware}/starfive/visionfive/v2/firmware.nix"
           #   { };
-          # vf2-sdcard-sdimage = nixosConfigurations.vf2-sdcard.config.system.build.sdImage;
+          vf2-sdcard-sdimage = nixosConfigurations.vf2-sdcard.config.system.build.sdImage;
           # lipi4a-sdcard-sdimage = nixosConfigurations.lipi4a-sdcard.config.system.build.sdImage;
           rocky-firmware = nixosConfigurations.rocky.config.system.build.tow-boot.outputs;
           # rocky-sdcard-sdimage = nixosConfigurations.rocky-sdcard.config.system.build.sdImage;

@@ -67,6 +67,7 @@ in
         # simple64-gui # TODO
         # ryujinx # switch emu
         # _yuzu
+        xemu
       ];
       programs = {
         mangohud = {

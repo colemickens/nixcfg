@@ -1,10 +1,6 @@
 { pkgs, lib, inputs, ... }:
 
 let
-  wayprompt = "${inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system}.wayprompt}";
-
-  # pinentryProgram = "${wayprompt}/bin/pinentry-wayprompt";
-  # pinentryProgram = "${pkgs.pinentry-curses}/bin/pinentry-tty";
   pinentryProgram = null;
 
   def = {

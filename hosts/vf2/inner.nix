@@ -9,7 +9,11 @@ in
   imports = [
     ../../profiles/core.nix
     ../../mixins/iwd-networks.nix
-    inputs.nixos-hardware.outputs.nixosModules.starfive-visionfive-2
+
+    # this is rather interesting... if  do this "fix" then I don't
+    # get the complaint about kernelPackages being set twice (which isn't really true anyway)
+    # inputs.nixos-hardware.outputs.nixosModules.starfive-visionfive2
+    "${inputs.nixos-hardware}/starfive/visionfive/v2/default.nix"
   ];
 
   config = {

@@ -13,6 +13,10 @@ in {
         enable = true;
         openFirewall = false;
       };
+      jellyfin = {
+        enable = true;
+        openFirewall = true;
+      };
     };
   };
 }

@@ -2,6 +2,10 @@
 
 let
   hn = "xeep";
+  poolname = "xeeppool";
+  bootpart = "xeep-boot";
+  lukspart = "xeep-luks";
+
   static_ip = "192.168.70.20/16";
 
   nb = n: inputs.self.outputs.nixosConfigurations."${n}-netboot".config.system.build;
@@ -17,8 +21,12 @@ in
     ../../profiles/addon-laptop.nix
 
     ../../mixins/iwd-networks.nix
+    ../../mixins/plex.nix
     ../../mixins/syncthing.nix
-    ../../mixins/zfs.nix
+
+    ../../mixins/gfx-intel.nix
+
+    ../../modules/nadache.nix
 
     inputs.nixos-hardware.nixosModules.dell-xps-13-9370
 
@@ -26,6 +34,7 @@ in
   ];
 
   config = {
+    services.nadache.enable = true;
     # TEMP START TO FIX vf2 via netboot
     services.atftpd = lib.mkIf (enableNetboot) {
       enable = true;
@@ -73,6 +82,8 @@ in
       libsmbios # ? can't remember it
     ];
 
+    services.zfs.autoScrub.pools = [ poolname ];
+
     services.tailscale.useRoutingFeatures = "server";
 
     systemd.network = {
@@ -87,11 +98,11 @@ in
       };
     };
 
-    fileSystems = let zpool = "${hn}pool"; in {
-      "/" = { fsType = "zfs"; device = "${zpool}/root"; };
-      "/nix" = { fsType = "zfs"; device = "${zpool}/nix"; };
-      "/home" = { fsType = "zfs"; device = "${zpool}/home"; };
-      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; };
+    fileSystems = {
+      "/" = { fsType = "zfs"; device = "${poolname}/root"; };
+      "/nix" = { fsType = "zfs"; device = "${poolname}/nix"; };
+      "/home" = { fsType = "zfs"; device = "${poolname}/home"; };
+      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${bootpart}"; };
     };
     swapDevices = [ ];
 
@@ -117,7 +128,7 @@ in
       ];
       initrd.luks.devices = {
         "nixos-luksroot" = {
-          device = "/dev/disk/by-partlabel/${hn}-luks";
+          device = "/dev/disk/by-partlabel/${lukspart}";
           preLVM = true;
           allowDiscards = true;
 

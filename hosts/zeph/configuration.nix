@@ -2,6 +2,10 @@
 
 let
   hn = "zeph";
+  poolname = "zephpool";
+  bootpart = "zeph-boot";
+  swappart = "zeph-swap";
+  lukspart = "zeph-luksroot";
 in
 {
   imports = [
@@ -23,7 +27,8 @@ in
     ../../mixins/libvirt.nix
     ../../mixins/libvirtd.nix
     ../../mixins/syncthing.nix
-    ../../mixins/zfs.nix
+
+    ./zrepl.nix # TODO: make this device specific
 
     # ../../mixins/oavm-risky.nix
 
@@ -53,19 +58,20 @@ in
 
     time.timeZone = lib.mkForce null; # we're on the move
 
+    services.zfs.autoScrub.pools = [ poolname ];
     fileSystems = {
       "/efi" = { fsType = "vfat"; device = "/dev/nvme0n1p1"; neededForBoot = true; };
-      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${hn}-boot"; neededForBoot = true; };
-      "/" = { fsType = "zfs"; device = "${hn}pool/root"; neededForBoot = true; };
-      "/nix" = { fsType = "zfs"; device = "${hn}pool/nix"; neededForBoot = true; };
-      "/home" = { fsType = "zfs"; device = "${hn}pool/home"; neededForBoot = true; };
+      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${bootpart}"; neededForBoot = true; };
+      "/" = { fsType = "zfs"; device = "${poolname}/root"; neededForBoot = true; };
+      "/nix" = { fsType = "zfs"; device = "${poolname}/nix"; neededForBoot = true; };
+      "/home" = { fsType = "zfs"; device = "${poolname}/home"; neededForBoot = true; };
 
-      "/mnt/data/t5" = { fsType = "zfs"; device = "${hn}pool/data/t5"; };
+      "/mnt/data/t5" = { fsType = "zfs"; device = "${poolname}/data/t5"; };
 
       "/efi/EFI/Linux" = { device = "/boot/EFI/Linux"; options = [ "bind" ]; };
       "/efi/EFI/nixos" = { device = "/boot/EFI/nixos"; options = [ "bind" ]; };
     };
-    swapDevices = [{ device = "/dev/disk/by-partlabel/${hn}-swap"; }];
+    swapDevices = [{ device = "/dev/disk/by-partlabel/${swappart}"; }];
 
     # TODO: re-enable if/when I'm actually going to test it
     # specialisation."sysd-netboot" = lib.mkIf (config.boot.initrd.systemd.enable) {
@@ -78,7 +84,11 @@ in
     home-manager.users.cole = { pkgs, config, ... }@hm: {
       wayland.windowManager.sway.config = {
         keybindings = {
+          "XF86AudioRaiseVolume" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume +2";
+          "XF86AudioLowerVolume" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume -2";
+          "XF86AudioMicMute" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --toggle-mute";
           "XF86Launch1" = "exec ${pkgs.asusctl}/bin/rog-control-center";
+          "Mod4+XF86Launch1" = "exec ${pkgs.pavucontrol}/bin/pavucontrol";
         };
       };
     };
@@ -91,8 +101,8 @@ in
 
     boot = {
       zfs = {
-       forceImportAll = true;
-       extraPools = [ "zfsin" ];
+        forceImportAll = true;
+        extraPools = [ "zfsin" ];
       };
       bootspec.enable = true;
       lanzaboote = {
@@ -111,8 +121,8 @@ in
         "iwlwifi"
       ];
       extraModprobeConfig = ''
-        options iwlwifi power_save=0
-        options iwlmvm power_scheme=1
+options iwlwifi power_save=0
+options iwlmvm power_scheme=1
       '';
       kernelParams = [
         # "zfs.zfs_arc_max=${builtins.toString (1023 * 1024 * (1024 * 6))}"
@@ -128,7 +138,7 @@ in
         "usbnet"
       ];
       initrd.luks.devices."nixos-luksroot" = {
-        device = "/dev/disk/by-partlabel/${hn}-luksroot";
+        device = "/dev/disk/by-partlabel/${lukspart}";
         allowDiscards = true;
         crypttabExtraOpts = [ "fido2-device=auto" ];
       };

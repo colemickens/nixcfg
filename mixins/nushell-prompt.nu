@@ -39,7 +39,8 @@ def create_left_prompt [] {
     let psc = if (is-admin) { "red_bold" } else { "default_bold" }
     let pathseg = $"(ansi default_underline)(ansi $psc)($env.PWD | str replace $env.HOME "~")"
 
-    let duration = (($env.CMD_DURATION_MS + "ms") | into duration --convert sec | str replace " sec" "s" | str trim)
+    # let duration = (($env.CMD_DURATION_MS + "ms") | into duration --convert sec | str replace " sec" "s" | str trim) # TODO?
+    let duration = (($env.CMD_DURATION_MS + "ms") | into duration | str trim)
     let duration = $"(ansi dark_gray_italic)($duration)"
 
     # let builder1 = $"x86:($env.BUILDER_X86 | string split "." | string replace "(.+)@" "")"

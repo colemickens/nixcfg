@@ -1,0 +1,95 @@
+{ config, pkgs, lib, ... }:
+
+{
+  config = {
+    services.zrepl = {
+      enable = true;
+      settings = {
+        jobs = [
+          #
+          # SNAPSHOT JOB
+          {
+            name = "snaplocal";
+            type = "snap";
+            filesystems = {
+              "zephpool/data<" = true;
+              "zephpool/home<" = true;
+            };
+            snapshotting = {
+              type = "periodic";
+              interval = "10m";
+              prefix = "zrepl_snaplocal_";
+            };
+            pruning = {
+              keep = [
+                {
+                  type = "grid";
+                  # keep all created in last hour
+                  # keep 168 (24*7) hourly snapshots
+                  # keep 30 daily snapshots
+                  # we can handle all of this locally, we can probably do more on the external drive sink
+                  grid = "1x1h(keep=all) | 168x1h | 30x1d | 26x1w";
+                  regex = "^zrepl_snaplocal_.*";
+                }
+                {
+                  type = "regex";
+                  negate = true;
+                  regex = "^zrepl_snaplocal_.*";
+                }
+              ];
+            };
+          }
+          #
+          # PUSH JOB
+          {
+            name = "push_to_orion";
+            type = "push";
+            connect = {
+              type = "local";
+              listener_name = "sink_orion";
+              client_identity = "zeph";
+            };
+            filesystems = {
+              "zephpool/data<" = true;
+              "zephpool/home<" = true;
+            };
+            replication = {
+              protection = {
+                initial = "guarantee_resumability";
+                incremental = "guarantee_incremental";
+              };
+            };
+            send = {
+              encrypted = false;
+            };
+            snapshotting = {
+              type = "manual";
+            };
+            pruning = {
+              keep_sender = [{
+                type = "regex";
+                regex = ".*";
+              }];
+              keep_receiver = [{
+                # TODO: we don't really need pruning for now probably
+                type = "regex";
+                regex = ".*";
+              }];
+            };
+          }
+          # #
+          # # SINK JOB
+          {
+            name = "sink_orion";
+            type = "sink";
+            root_fs = "orionpool/backups";
+            serve = {
+              type = "local";
+              listener_name = "sink_orion";
+            };
+          }
+        ];
+      };
+    };
+  };
+}

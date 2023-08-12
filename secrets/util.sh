@@ -34,15 +34,23 @@ function regen_sops() {
 creation_rules:
   - path_regex: .*\$
     key_groups:
-      - age: [ AUTO_KEYS ]
+      - pgp: [ AUTO_GPG_KEYS ]
+        age: [ AUTO_AGE_KEYS ]
 EOF
-  AUTO_KEYS=""
+  AUTO_AGE_KEYS=""
   for f in *.age.pub; do
     fp="$(cat "${f}" | tr -d '\n' | tr -d '\r')"
-    AUTO_KEYS="$(printf '%s %s, ' "$AUTO_KEYS" "${fp}")"
-    
+    AUTO_AGE_KEYS="$(printf '%s %s, ' "$AUTO_AGE_KEYS" "${fp}")"
   done
-  sed -i "s/AUTO_KEYS/${AUTO_KEYS::-1}/g" "${sops}"
+
+  AUTO_GPG_KEYS=""
+  for f in *.gpg.fp; do
+    fp="$(cat "${f}" | tr -d '\n' | tr -d '\r')"
+    AUTO_GPG_KEYS="$(printf '%s %s, ' "$AUTO_GPG_KEYS" "${fp}")"
+  done
+  
+  sed -i "s/AUTO_AGE_KEYS/${AUTO_AGE_KEYS::-1}/g" "${sops}"
+  sed -i "s/AUTO_GPG_KEYS/${AUTO_GPG_KEYS::-1}/g" "${sops}"
 }
 
 function __new_host() {

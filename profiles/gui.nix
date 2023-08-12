@@ -21,6 +21,7 @@ in
     ../mixins/alacritty.nix
     ../mixins/fonts.nix
     ../mixins/gtk.nix
+    ../mixins/kitty.nix
     ../mixins/mpv.nix
     ../mixins/pipewire.nix
     ../mixins/rio.nix
@@ -72,6 +73,7 @@ in
             wayprompt = "${inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system}.wayprompt}";
           in
           "${wayprompt}/bin/pinentry-wayprompt";
+        # gpg-agent.pinentryBinary = "${pkgs.pinentry-qt}/bin/pinentry";
       };
 
       home.packages = lib.mkMerge [
@@ -100,6 +102,8 @@ in
 
           # questionable...
           gtkcord4
+
+          wine
         ])
       ];
     };

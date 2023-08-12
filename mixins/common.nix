@@ -4,7 +4,7 @@ let
   cfg = config.nixcfg.common;
   # _kernelPackages = pkgs.linuxKernel.packages.linux_6_2;
   _kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
-  _zfsUnstable = false;
+  _zfsUnstable = true;
 
   # _defaultKernel = pkgs.linuxKernel.packagesFor
   #   (pkgs.linuxPackages_latest.kernel.override {
@@ -170,8 +170,25 @@ in
       # TODO/WORKAROUND: https://github.com/NixOS/nixpkgs/issues/195777
       system.activationScripts = {
         workaroundWifi = {
+          # dude, bash and linux are just real pieces of shit sometimes
+          # uptime is unparseable garbage
+          # well, so is /proc/uptime too, fucking returning floats that I have to cut apart
+          # seriously, I know some of this is old stuff but were they even thinking?
+          # then again lots of unix types seem to love "cutting" everywhere instead of real, explicit safe CLI APIs
+          # UGGGGGGGGGGGGGH
+          # it'd be cool to see a nulib stdlib that alleviated some of this bullshit
           text = ''
-            ${pkgs.systemd}/bin/systemctl restart systemd-udev-trigger
+            (
+            set -x 
+            uptime_ms="$(cat /proc/uptime | cut -d ' ' -f 1)"
+            uptime_ms="$(echo $uptime_ms | cut -d '.' -f 1)"
+            if [[ ''${uptime_ms} -gt ${ toString (60 * 2) } ]]; then 
+              echo "workaround_wifi_issue: trigger"
+              ${pkgs.systemd}/bin/systemctl restart systemd-udev-trigger
+            else
+              echo "workaround_wifi_issue: skip"
+            fi
+            )
           '';
           deps = [ ];
         };
@@ -261,6 +278,8 @@ in
       ## MISC HARDWARE RELATED ################################################
       services.fwupd.enable = true;
       services.udisks2.enable = true;
+      services.zfs.trim.enable = cfg.useZfs;
+      services.zfs.autoScrub.enable = cfg.useZfs;
       hardware.enableRedistributableFirmware = true;
       hardware.usb-modeswitch.enable = true; # dual role usb/cdrom stick thing
       hardware.cpu.amd.updateMicrocode = (pkgs.hostPlatform.system == "x86_64-linux");

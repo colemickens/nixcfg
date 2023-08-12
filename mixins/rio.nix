@@ -11,6 +11,9 @@ in
       programs.rio = {
         enable = true;
         settings = {
+          font = prefs.font.monospace.family;
+          font-size = 20;
+          
           # env = {
           #   TERM = "xterm-256color";
           # };

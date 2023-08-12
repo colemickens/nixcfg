@@ -2,9 +2,11 @@
 
 {
   config = {
-    hardware.intelgpu = {
-      enable = true;
-      utils.enable = true;
-    };
+    hardware.opengl.enable = true;
+    
+    # hardware.intelgpu = {
+    #   enable = true;
+    #   utils.enable = true;
+    # };
   };
 }

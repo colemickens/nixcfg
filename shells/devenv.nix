@@ -62,6 +62,8 @@ minimalMkShell {
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
 
+    atk # sirula
+    gdk-pixbuf # sirula
     udev
     mesa
     libinput # Anodium
