@@ -4,10 +4,10 @@
   imports = [
     ./inner.nix
     ../../profiles/addon-cross.nix
-    "${inputs.nixos-hardware}/sipeed/licheepi4a/sd-image.nix"
+    "${inputs.nixos-licheepi4a}/modules/sd-image/sd-image-lp4a.nix"
   ];
   config = {
-    networking.hostName = lib.mkForce "lipi4a-sdcard";
+    networking.hostName = lib.mkForce "licheepi4a-sdcard";
 
     boot.initrd.systemd.enable = lib.mkForce false;
   };

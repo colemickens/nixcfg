@@ -29,6 +29,11 @@
     cmpkgs-cross-riscv64 = { url = "github:colemickens/nixpkgs/cmpkgs-cross-riscv64"; };
     cmpkgs-rpipkgs = { url = "github:colemickens/nixpkgs/cmpkgs-rpipkgs"; }; # used only for tow-boot/rpi
 
+    nixos-licheepi4a = {
+      url = "github:colemickens/nixos-licheepi4a";
+      inputs."nixpkgs".follows = "cmpkgs-cross-riscv64";
+    };
+
     mobile-nixos-openstick = {
       url = "github:colemickens/mobile-nixos/openstick";
       inputs."nixpkgs".follows = "cmpkgs";
@@ -128,10 +133,13 @@
           radxazero1 =  {
             pkgs = inputs.cmpkgs;
             path = ./hosts/radxazero1/configuration.nix;
-            buildSys = "x86_64-linux";
+            # buildSys = "x86_64-linux";
           };
-
-          # pktspot1 = { pkgs = inputs.cmpkgs; };
+          radxazero1-cross = {
+            pkgs = inputs.cmpkgs;
+            path = ./hosts/radxazero1/cross.nix;
+            # buildSys = "x86_64-linux";
+          };
 
           # used as cross-built bootstrap for getting a builder up, then pivoting to native builds
           # TODO
@@ -167,16 +175,16 @@
             path = ./hosts/vf2/sdcard.nix;
             buildSys = "x86_64-linux";
           };
-          # lipi4a = {
-          #   pkgs = inputs.cmpkgs-cross-riscv64;
-          #   path = ./hosts/lipi4a/configuration.nix;
-          #   buildSys = "x86_64-linux";
-          # };
-          # lipi4a-sdcard = {
-          #   pkgs = inputs.cmpkgs-cross-riscv64;
-          #   path = ./hosts/lipi4a/sdcard.nix;
-          #   buildSys = "x86_64-linux";
-          # };
+          licheepi4a-cross = {
+            pkgs = inputs.cmpkgs-cross-riscv64;
+            path = ./hosts/licheepi4a/configuration.nix;
+            buildSys = "x86_64-linux";
+          };
+          licheepi4a-cross-sdcard = {
+            pkgs = inputs.cmpkgs-cross-riscv64;
+            path = ./hosts/licheepi4a/sdcard.nix;
+            buildSys = "x86_64-linux";
+          };
           h96-cross = {
             pkgs = inputs.cmpkgs-cross;
             path = ./hosts/h96/cross.nix;
@@ -230,6 +238,8 @@
           # lipi4a-sdcard-sdimage = nixosConfigurations.lipi4a-sdcard.config.system.build.sdImage;
           rocky-firmware = nixosConfigurations.rocky.config.system.build.tow-boot.outputs;
           # rocky-sdcard-sdimage = nixosConfigurations.rocky-sdcard.config.system.build.sdImage;
+
+          licheepi4a-sdcard-sdimage = nixosConfigurations.licheepi4a-cross-sdcard.config.system.build.sdImage;
         };
         aarch64-linux = { };
         riscv64-linux = { };

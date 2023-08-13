@@ -16,6 +16,8 @@ in
     system.stateVersion = "22.11";
 
     nixpkgs.overlays = [
+      inputs.nixos-licheepi4a.overlays.default
+
       (final: super: {
         makeModulesClosure = x:
           super.makeModulesClosure (x // { allowMissing = true; });
@@ -52,7 +54,7 @@ in
     # ];
 
     boot = {
-      kernelPackages = pkgs.linuxKernel.packages.linux_6_5;
+      kernelPackages = pkgs.linuxPackages_thead;
       # see: https://github.com/starfive-tech/linux/issues/101#issuecomment-1550787967
       blacklistedKernelModules = [ "clk-starfive-jh7110-vout" ];
       enableContainers = false;

@@ -21,7 +21,7 @@ in
     ../../profiles/addon-laptop.nix
 
     ../../mixins/iwd-networks.nix
-    ../../mixins/plex.nix
+    # ../../mixins/plex.nix
     ../../mixins/syncthing.nix
 
     ../../mixins/gfx-intel.nix

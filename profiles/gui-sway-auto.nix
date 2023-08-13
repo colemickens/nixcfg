@@ -7,13 +7,13 @@ let
     #   export VK_INSTANCE_LAYERS='VK_LAYER_MESA_overlay'
     #   ${pkgs.vulkan-tools}/bin/vkcube-wayland
     # '';
-    "glmark2" = ''
-      "${pkgs.glmark2}/bin/glmark2-wayland" --annotate
-    '';
-
-    # "pipes" = ''
-    #   ${pkgs.alacritty}/bin/alacritty -e "${pkgs.pipes-rs}/bin/pipes-rs"
+    # "glmark2" = ''
+    #   "${pkgs.glmark2}/bin/glmark2-wayland" --annotate
     # '';
+
+    "pipes" = ''
+      ${pkgs.alacritty}/bin/alacritty -e "${pkgs.pipes-rs}/bin/pipes-rs"
+    '';
 
     # "mpv" = ''
     #   ${pkgs.mpv}/bin/mpv --loop 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -26,6 +26,7 @@ in
 {
   imports = [
     ../profiles/hm.nix
+    ../mixins/pipewire.nix
   ];
   config = {
     services.getty.autologinUser = "cole";
@@ -59,7 +60,9 @@ in
       [[ "$(tty)" == /dev/tty1 ]] && (
         set -x;
         sleep 1;
-        export WLR_RENDER="${wlr_renderer}";
+        echo "wtf"
+        # export WLR_RENDER="${wlr_renderer}";
+        export WLR_LIBINPUT_NO_DEVICES=1
         sway &> $HOME/sway.log
       )
     '';

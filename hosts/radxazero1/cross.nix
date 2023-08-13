@@ -3,8 +3,7 @@
 {
   imports = [
     ./inner.nix
-    ../../profiles/interactive.nix
-    ../../profiles/gui-sway-auto.nix
+    ../../profiles/addon-tiny.nix
   ];
 
   config = {

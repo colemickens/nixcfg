@@ -82,11 +82,11 @@
     },
     "cmpkgs-cross-riscv64": {
       "locked": {
-        "lastModified": 1691766756,
-        "narHash": "sha256-Wl7S46xxKewErw3ZLFVOkO72hU1hbyHoj85b977/v9E=",
+        "lastModified": 1691880082,
+        "narHash": "sha256-hD3+DwWqynLLtjXnxRmuIaF6LXcPTm3J13eRBRLTVuQ=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "b17f830b88ccab03f892c7f677dd11adb8ba6440",
+        "rev": "945d80983b8f0a9a82c4b363cb0c5e2150ac828e",
         "type": "github"
       },
       "original": {
@@ -649,11 +649,11 @@
         "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1691815651,
-        "narHash": "sha256-VjnZFmE6UPO8egtvPamxhA+iULY1t9je8Pw2ZIVfH5I=",
+        "lastModified": 1691877404,
+        "narHash": "sha256-lUJ5PrqcBRLFiGF5JdGK1w7x3sJVRlOcuOsq7HR694k=",
         "owner": "martinvonz",
         "repo": "jj",
-        "rev": "28633bb754348bd183654f9e65f9ccb68ad25e1c",
+        "rev": "d57237af5d13d26a098bdee74d973b6623b0a4bf",
         "type": "github"
       },
       "original": {
@@ -904,6 +904,27 @@
       "original": {
         "owner": "NixOS",
         "repo": "nixos-hardware",
+        "type": "github"
+      }
+    },
+    "nixos-licheepi4a": {
+      "inputs": {
+        "nixpkgs": [
+          "cmpkgs-cross-riscv64"
+        ],
+        "thead-kernel": "thead-kernel"
+      },
+      "locked": {
+        "dirtyRev": "b4468555b53ce3da68b535c185cdd881b7e90f9a-dirty",
+        "dirtyShortRev": "b446855-dirty",
+        "lastModified": 1691879488,
+        "narHash": "sha256-Oi+Xka8lUqxfkDyNeBNZgOZbGrhl0Iu74bNfaIzYghw=",
+        "type": "git",
+        "url": "file:///home/cole/code/nixos-licheepi4a"
+      },
+      "original": {
+        "owner": "colemickens",
+        "repo": "nixos-licheepi4a",
         "type": "github"
       }
     },
@@ -1261,6 +1282,7 @@
         "nix-rice": "nix-rice",
         "nix-update": "nix-update",
         "nixos-hardware": "nixos-hardware",
+        "nixos-licheepi4a": "nixos-licheepi4a",
         "nixos-riscv": "nixos-riscv",
         "nixos-riscv64": "nixos-riscv64",
         "nixpkgs-stable": "nixpkgs-stable_2",
@@ -1508,6 +1530,23 @@
       "original": {
         "owner": "terranix",
         "repo": "terranix-examples",
+        "type": "github"
+      }
+    },
+    "thead-kernel": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1687607314,
+        "narHash": "sha256-9R+XY18uDuMWjVzLkg4lTmxDltsvyI51qvm34SNVI4I=",
+        "owner": "revyos",
+        "repo": "thead-kernel",
+        "rev": "9c58afc7addc5a4a5deef24dfe6a4a103549d3da",
+        "type": "github"
+      },
+      "original": {
+        "owner": "revyos",
+        "ref": "lpi4a",
+        "repo": "thead-kernel",
         "type": "github"
       }
     },

@@ -136,7 +136,8 @@ def "main inputup" [] {
     "tow-boot/development" "tow-boot/development-flakes"
     "tow-boot/radxa-rock5b" 
     "tow-boot/visionfive"
-    # "tow-boot/rpi" "tow-boot/radxa-zero"
+    # "tow-boot/rpi"
+    "tow-boot/radxa-zero"
 
     # mobile-nixos and friends
     "mobile-nixos/master"

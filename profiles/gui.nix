@@ -83,6 +83,7 @@ in
           jamesdsp
 
           nheko
+          wine
         ]))
         (with pkgs; [
           (pkgs.callPackage ../pkgs/commands-gui.nix { })
@@ -103,7 +104,6 @@ in
           # questionable...
           gtkcord4
 
-          wine
         ])
       ];
     };
