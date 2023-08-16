@@ -40,6 +40,8 @@
   * who knows what "great" ideas and tidbits it contains
 * `hosts` 
   * toplevel machine definitions
+  * `openstick`
+    * configuration for a $10USD LTE USB Modem Stick
   * `installer` (meta, iso)
     * configuration for a custom `x86_64-linux` installer image
     * includes my SSH key and `sshd` enabled and most used programs
