@@ -191,11 +191,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1692140710,
-        "narHash": "sha256-htkme7+D/NzLJgWHYPeuaRfep5f6vEIKxZI+8T94Tnk=",
+        "lastModified": 1692149533,
+        "narHash": "sha256-OHAExL55cOBwuwZ5BBZAvlmMKcIhNaYI/xDfRp2m0m0=",
         "owner": "colemickens",
         "repo": "flake-firefox-nightly",
-        "rev": "09335edef37b5b19984850fea39f4feb2f2273f1",
+        "rev": "06af65a22f2ff73e3c0eb570ad8439f946260aa3",
         "type": "github"
       },
       "original": {
@@ -1140,6 +1140,7 @@
         "sops-nix": "sops-nix",
         "systems": "systems_5",
         "terranix": "terranix",
+        "tow-boot-radxa-rock5b": "tow-boot-radxa-rock5b",
         "zellij": "zellij"
       }
     },
@@ -1378,6 +1379,27 @@
       "original": {
         "owner": "terranix",
         "repo": "terranix-examples",
+        "type": "github"
+      }
+    },
+    "tow-boot-radxa-rock5b": {
+      "inputs": {
+        "nixpkgs": [
+          "cmpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1691987695,
+        "narHash": "sha256-sR4Vr8c6VozrxhgK86jUzb7lOITIc/gMszecRe0g8+4=",
+        "owner": "colemickens",
+        "repo": "tow-boot",
+        "rev": "1ef5674122e651946a36f06c357efd5626507683",
+        "type": "github"
+      },
+      "original": {
+        "owner": "colemickens",
+        "ref": "radxa-rock5b",
+        "repo": "tow-boot",
         "type": "github"
       }
     },
