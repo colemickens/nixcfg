@@ -135,7 +135,7 @@ def "main inputup" [] {
     # tow-boot and friends
     "tow-boot/development" "tow-boot/development-flakes"
     "tow-boot/radxa-rock5b" 
-    "tow-boot/visionfive"
+    # "tow-boot/visionfive" # TODO: drop lol
     # "tow-boot/rpi"
     "tow-boot/radxa-zero"
 
@@ -261,7 +261,7 @@ def "main up" [...hosts] {
   main ciattrs
 
   main deploy raisin xeep zeph
-  main deploy vf2 rocky
+  # main deploy vf2 rocky
   main deploy openstick
 }
 

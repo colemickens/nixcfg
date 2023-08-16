@@ -588,58 +588,6 @@
         "type": "github"
       }
     },
-    "jh7100_ddrinit": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-pOlg3FtFdFhHHnE16izS26RkJ7RbQpglDKgpVRdyAso=",
-        "type": "file",
-        "url": "https://github.com/starfive-tech/JH7100_ddrinit/releases/download/ddrinit-2133-211102/ddrinit-2133-211102.bin.out"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://github.com/starfive-tech/JH7100_ddrinit/releases/download/ddrinit-2133-211102/ddrinit-2133-211102.bin.out"
-      }
-    },
-    "jh7100_recovery_binary": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-T3vqaelqwXiOqD8yRHw899A5GI2J+hU/5l5S3euIs2g=",
-        "type": "file",
-        "url": "https://github.com/starfive-tech/bootloader_recovery/releases/download/JH7100_recovery_binary/jh7100_recovery_boot.bin"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://github.com/starfive-tech/bootloader_recovery/releases/download/JH7100_recovery_binary/jh7100_recovery_boot.bin"
-      }
-    },
-    "jh7100_secondBoot": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-Ek8RK8t3y9JfpVfey1X9yZn9OIbOj/EJokUeWbZWZGU=",
-        "type": "file",
-        "url": "https://github.com/starfive-tech/JH7100_secondBoot/releases/download/bootloader-211102_VisionFive_JH7100/bootloader-JH7100-211102.bin.out"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://github.com/starfive-tech/JH7100_secondBoot/releases/download/bootloader-211102_VisionFive_JH7100/bootloader-JH7100-211102.bin.out"
-      }
-    },
-    "jh71xx-tools": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1644591616,
-        "narHash": "sha256-eCOI/kYmkSxL4HPqBPoJFWa6qJwqafPOxS8KhIuMF4s=",
-        "owner": "xypron",
-        "repo": "jh71xx-tools",
-        "rev": "afe3328923d6c3883886a00c4ed10eda019f2db1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "xypron",
-        "repo": "jh71xx-tools",
-        "type": "github"
-      }
-    },
     "jj": {
       "inputs": {
         "flake-utils": [
@@ -719,23 +667,6 @@
       "original": {
         "owner": "nix-community",
         "repo": "lib-aggregate",
-        "type": "github"
-      }
-    },
-    "meta-sifive": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1691497925,
-        "narHash": "sha256-9nwjEOJoieiE0BFZZ3ABLHw7IFDJ9jPWMplaw8R7rhE=",
-        "owner": "sifive",
-        "repo": "meta-sifive",
-        "rev": "80a979fd222623b56e44493cf92bd9e276a65453",
-        "type": "github"
-      },
-      "original": {
-        "owner": "sifive",
-        "ref": "master",
-        "repo": "meta-sifive",
         "type": "github"
       }
     },
@@ -889,84 +820,6 @@
       "original": {
         "owner": "colemickens",
         "repo": "nixos-hardware",
-        "type": "github"
-      }
-    },
-    "nixos-hardware_2": {
-      "locked": {
-        "lastModified": 1691566999,
-        "narHash": "sha256-c4G++nXzVgJbXe5tuUZxSS+SbDqynO/nG3wocRcP6YE=",
-        "owner": "NixOS",
-        "repo": "nixos-hardware",
-        "rev": "8ff521acd2c8132c62141c2990deb7406e32b335",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "repo": "nixos-hardware",
-        "type": "github"
-      }
-    },
-    "nixos-licheepi4a": {
-      "inputs": {
-        "nixpkgs": [
-          "cmpkgs-cross-riscv64"
-        ],
-        "thead-kernel": "thead-kernel"
-      },
-      "locked": {
-        "lastModified": 1691879488,
-        "narHash": "sha256-PNVpCcRmLfoYJvy5XUXxyCqsREQ9AX0EMzSqRW1hN20=",
-        "owner": "colemickens",
-        "repo": "nixos-licheepi4a",
-        "rev": "b4468555b53ce3da68b535c185cdd881b7e90f9a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "repo": "nixos-licheepi4a",
-        "type": "github"
-      }
-    },
-    "nixos-riscv": {
-      "inputs": {
-        "meta-sifive": "meta-sifive",
-        "nixos-hardware": "nixos-hardware_2",
-        "nixpkgs": [
-          "cmpkgs-cross-riscv64"
-        ]
-      },
-      "locked": {
-        "lastModified": 1691673833,
-        "narHash": "sha256-GhCSss13pjlf92oKdxv0jkLBnWx/BNB2HOus+qrHQVA=",
-        "owner": "NickCao",
-        "repo": "nixos-riscv",
-        "rev": "f0ae403934eca0ac9bb08b096495b307b91fac16",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NickCao",
-        "repo": "nixos-riscv",
-        "type": "github"
-      }
-    },
-    "nixos-riscv64": {
-      "inputs": {
-        "nixpkgs": [
-          "cmpkgs-cross-riscv64"
-        ]
-      },
-      "locked": {
-        "lastModified": 1684112993,
-        "narHash": "sha256-oS4zbKmjyvHHtDmWW/yX/wLcpjH9YcIjzU/2GcJeSio=",
-        "owner": "colemickens",
-        "repo": "nixos-riscv64",
-        "rev": "269bbd6d27bed3c9f91318cb1369650405708374",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "repo": "nixos-riscv64",
         "type": "github"
       }
     },
@@ -1282,16 +1135,11 @@
         "nix-rice": "nix-rice",
         "nix-update": "nix-update",
         "nixos-hardware": "nixos-hardware",
-        "nixos-licheepi4a": "nixos-licheepi4a",
-        "nixos-riscv": "nixos-riscv",
-        "nixos-riscv64": "nixos-riscv64",
         "nixpkgs-stable": "nixpkgs-stable_2",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "sops-nix": "sops-nix",
         "systems": "systems_5",
         "terranix": "terranix",
-        "tow-boot-radxa-rock5b": "tow-boot-radxa-rock5b",
-        "visionfive-nix": "visionfive-nix",
         "zellij": "zellij"
       }
     },
@@ -1533,44 +1381,6 @@
         "type": "github"
       }
     },
-    "thead-kernel": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1687607314,
-        "narHash": "sha256-9R+XY18uDuMWjVzLkg4lTmxDltsvyI51qvm34SNVI4I=",
-        "owner": "revyos",
-        "repo": "thead-kernel",
-        "rev": "9c58afc7addc5a4a5deef24dfe6a4a103549d3da",
-        "type": "github"
-      },
-      "original": {
-        "owner": "revyos",
-        "ref": "lpi4a",
-        "repo": "thead-kernel",
-        "type": "github"
-      }
-    },
-    "tow-boot-radxa-rock5b": {
-      "inputs": {
-        "nixpkgs": [
-          "cmpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1691987695,
-        "narHash": "sha256-sR4Vr8c6VozrxhgK86jUzb7lOITIc/gMszecRe0g8+4=",
-        "owner": "colemickens",
-        "repo": "tow-boot",
-        "rev": "1ef5674122e651946a36f06c357efd5626507683",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "ref": "radxa-rock5b",
-        "repo": "tow-boot",
-        "type": "github"
-      }
-    },
     "treefmt-nix": {
       "inputs": {
         "nixpkgs": [
@@ -1632,47 +1442,6 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
-        "type": "github"
-      }
-    },
-    "vendor-kernel": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1659367815,
-        "narHash": "sha256-OuyXh73TmWEKZAfUw4PwxiNH78rfxnLHNQeS3UbVweE=",
-        "owner": "starfive-tech",
-        "repo": "linux",
-        "rev": "4333f325dfcc11817be234d93fcc9ce7efb4203c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "starfive-tech",
-        "repo": "linux",
-        "type": "github"
-      }
-    },
-    "visionfive-nix": {
-      "inputs": {
-        "jh7100_ddrinit": "jh7100_ddrinit",
-        "jh7100_recovery_binary": "jh7100_recovery_binary",
-        "jh7100_secondBoot": "jh7100_secondBoot",
-        "jh71xx-tools": "jh71xx-tools",
-        "nixpkgs": [
-          "cmpkgs-cross-riscv64"
-        ],
-        "vendor-kernel": "vendor-kernel"
-      },
-      "locked": {
-        "lastModified": 1660355392,
-        "narHash": "sha256-lc6vPE5hmugNhQM62qvpPcA4GTYkVThfDinb5z6qSlA=",
-        "owner": "colemickens",
-        "repo": "visionfive-nix",
-        "rev": "c41133828ad80eb785f2404ea9a35787cd409905",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "repo": "visionfive-nix",
         "type": "github"
       }
     },

@@ -25,7 +25,7 @@ in
     ];
 
     networking.hostName = hn;
-    hardware.deviceTree.name = "sipeed/lipi4a.dtb";
+    # hardware.deviceTree.name = "sipeed/lipi4a.dtb";
     # "starfive/jh7110-starfive-visionfive-2-v1.2a.dtb";
 
     nix.nixPath = [ ];

@@ -19,42 +19,42 @@ in
 
   config = {
     # try to fix hdmi audio:
-    hardware.deviceTree.overlays = [
-      {
-        name = "fix-hdmi-audio";
-        dtsText = ''
-          /dts-v1/;
-          /plugin/;
-          / {
-          	compatible = "radxa,zero", "amlogic,g12a";
-          	fragment@0 {
-          		target-path = "/soc/bus@ff800000/i2c@5000";
-          		__overlay__ {
-          			status = "okay";
-          		};
-          	};
-          	fragment@1 {
-          		target-path = "/soc/bus@ffd00000/i2c@1d000";
-          		__overlay__ {
-          			status = "okay";
-          		};
-          	};
-          	fragment@2 {
-          		target-path = "/soc/bus@ffd00000/i2c@1f000";
-          		__overlay__ {
-          			status = "okay";
-          		};
-          	};
-          	fragment@3 {
-          		target-path = "/soc/bus@ffd00000/i2c@1e000";
-          		__overlay__ {
-          			status = "okay";
-          		};
-          	};
-          };
-        '';
-      }
-    ];
+    # hardware.deviceTree.overlays = [
+    #   {
+    #     name = "fix-hdmi-audio";
+    #     dtsText = ''
+    #       /dts-v1/;
+    #       /plugin/;
+    #       / {
+    #       	compatible = "radxa,zero", "amlogic,g12a";
+    #       	fragment@0 {
+    #       		target-path = "/soc/bus@ff800000/i2c@5000";
+    #       		__overlay__ {
+    #       			status = "okay";
+    #       		};
+    #       	};
+    #       	fragment@1 {
+    #       		target-path = "/soc/bus@ffd00000/i2c@1d000";
+    #       		__overlay__ {
+    #       			status = "okay";
+    #       		};
+    #       	};
+    #       	fragment@2 {
+    #       		target-path = "/soc/bus@ffd00000/i2c@1f000";
+    #       		__overlay__ {
+    #       			status = "okay";
+    #       		};
+    #       	};
+    #       	fragment@3 {
+    #       		target-path = "/soc/bus@ffd00000/i2c@1e000";
+    #       		__overlay__ {
+    #       			status = "okay";
+    #       		};
+    #       	};
+    #       };
+    #     '';
+    #   }
+    # ];
 
     nixpkgs.hostPlatform.system = "aarch64-linux";
 

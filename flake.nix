@@ -29,21 +29,8 @@
     cmpkgs-cross-riscv64 = { url = "github:colemickens/nixpkgs/cmpkgs-cross-riscv64"; };
     cmpkgs-rpipkgs = { url = "github:colemickens/nixpkgs/cmpkgs-rpipkgs"; }; # used only for tow-boot/rpi
 
-    nixos-licheepi4a = {
-      url = "github:colemickens/nixos-licheepi4a";
-      inputs."nixpkgs".follows = "cmpkgs-cross-riscv64";
-    };
-
     mobile-nixos-openstick = {
       url = "github:colemickens/mobile-nixos/openstick";
-      inputs."nixpkgs".follows = "cmpkgs";
-    };
-    # tow-boot-visionfive = {
-    #   url = "github:colemickens/tow-boot/visionfive";
-    #   inputs."nixpkgs".follows = "cmpkgs";
-    # };
-    tow-boot-radxa-rock5b = {
-      url = "github:colemickens/tow-boot/radxa-rock5b";
       inputs."nixpkgs".follows = "cmpkgs";
     };
 
@@ -55,12 +42,6 @@
     sops-nix = { url = "github:Mic92/sops-nix/master"; inputs."nixpkgs".follows = "cmpkgs"; };
     # lanzaboote = { url = "github:nix-community/lanzaboote"; inputs.nixpkgs.follows = "cmpkgs"; };
     lanzaboote = { url = "github:nix-community/lanzaboote"; };
-
-    # SBC-adjacent inputs
-    visionfive-nix = { url = "github:colemickens/visionfive-nix"; inputs."nixpkgs".follows = "cmpkgs-cross-riscv64"; };
-    nixos-riscv64 = { url = "github:colemickens/nixos-riscv64"; inputs."nixpkgs".follows = "cmpkgs-cross-riscv64"; };
-    # TODO: investigate THEIR nixpkgs........ riscv fork
-    nixos-riscv = { url = "github:NickCao/nixos-riscv"; inputs."nixpkgs".follows = "cmpkgs-cross-riscv64"; };
 
     # devtools:
     terranix = { url = "github:terranix/terranix"; inputs."nixpkgs".follows = "cmpkgs"; }; # packet/terraform deployments
@@ -126,73 +107,9 @@
           xeep = { pkgs = inputs.cmpkgs; };
           zeph = { pkgs = inputs.cmpkgs; };
 
-          # SBCs that we're keeping:
-          # - licheepi4a - riscv64 seems neat, would be neat to have a native builder
-          # - radxazero1 - candidate for set-top-box thingy...
-          # - h96_max_v58 - candidate for a more powerful STB thingy
-          radxazero1 =  {
-            pkgs = inputs.cmpkgs;
-            path = ./hosts/radxazero1/configuration.nix;
-            # buildSys = "x86_64-linux";
-          };
-          radxazero1-cross = {
-            pkgs = inputs.cmpkgs;
-            path = ./hosts/radxazero1/cross.nix;
-            # buildSys = "x86_64-linux";
-          };
-
-          # used as cross-built bootstrap for getting a builder up, then pivoting to native builds
-          # TODO
           openstick-cross = {
             pkgs = inputs.cmpkgs-cross;
             path = ./hosts/openstick/cross.nix;
-            buildSys = "x86_64-linux";
-          };
-          rocky-cross = {
-            pkgs = inputs.cmpkgs-cross;
-            path = ./hosts/rocky/cross.nix;
-            buildSys = "x86_64-linux";
-          };
-          # rocky-sdcard = {
-          #   # TODO FIXME
-          #   # TODO: finish, must lay it out
-          #   pkgs = inputs.cmpkgs-cross;
-          #   path = ./hosts/rocky/sdcard.nix;
-          #   buildSys = "x86_64-linux";
-          # };
-          vf2 = {
-            pkgs = inputs.cmpkgs-cross-riscv64;
-            path = ./hosts/vf2/cross.nix;
-            buildSys = "x86_64-linux";
-          };
-          # vf2-netboot = {
-          #   pkgs = inputs.cmpkgs-cross-riscv64;
-          #   path = ./hosts/vf2/netboot.nix;
-          #   buildSys = "x86_64-linux";
-          # };
-          vf2-sdcard = {
-            pkgs = inputs.cmpkgs-cross-riscv64;
-            path = ./hosts/vf2/sdcard.nix;
-            buildSys = "x86_64-linux";
-          };
-          licheepi4a-cross = {
-            pkgs = inputs.cmpkgs-cross-riscv64;
-            path = ./hosts/licheepi4a/configuration.nix;
-            buildSys = "x86_64-linux";
-          };
-          licheepi4a-cross-sdcard = {
-            pkgs = inputs.cmpkgs-cross-riscv64;
-            path = ./hosts/licheepi4a/sdcard.nix;
-            buildSys = "x86_64-linux";
-          };
-          h96-cross = {
-            pkgs = inputs.cmpkgs-cross;
-            path = ./hosts/h96/cross.nix;
-            buildSys = "x86_64-linux";
-          };
-          h96-netboot = {
-            pkgs = inputs.cmpkgs-cross;
-            path = ./hosts/h96/netboot.nix;
             buildSys = "x86_64-linux";
           };
         };
@@ -206,19 +123,9 @@
             path = ./hosts/openstick/configuration.nix;
             pkgs = inputs.cmpkgs-cross;
           };
-          rocky = {
-            path = ./hosts/rocky/configuration.nix;
-            pkgs = inputs.cmpkgs;
-          };
           h96 = {
             pkgs = inputs.cmpkgs-cross;
             path = ./hosts/h96/configuration.nix;
-          };
-        };
-        "riscv64-linux" = {
-          vf2-native = {
-            path = ./hosts/vf2/configuration.nix;
-            pkgs = inputs.cmpkgs-cross-riscv64;
           };
         };
       };
@@ -231,15 +138,6 @@
         # keyed by buildPlatform for usage by ciAttrs
         x86_64-linux = {
           installer = nixosConfigurations.installer.config.system.build.isoImage;
-          # vf2-firmware = pkgs.x86_64-linux.pkgsCross.riscv64.callPackage
-          #   "${inputs.nixos-hardware}/starfive/visionfive/v2/firmware.nix"
-          #   { };
-          vf2-sdcard-sdimage = nixosConfigurations.vf2-sdcard.config.system.build.sdImage;
-          # lipi4a-sdcard-sdimage = nixosConfigurations.lipi4a-sdcard.config.system.build.sdImage;
-          rocky-firmware = nixosConfigurations.rocky.config.system.build.tow-boot.outputs;
-          # rocky-sdcard-sdimage = nixosConfigurations.rocky-sdcard.config.system.build.sdImage;
-
-          licheepi4a-sdcard-sdimage = nixosConfigurations.licheepi4a-cross-sdcard.config.system.build.sdImage;
         };
         aarch64-linux = { };
         riscv64-linux = { };
