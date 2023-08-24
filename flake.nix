@@ -109,7 +109,6 @@
 
           # actual machines:
           raisin = { pkgs = inputs.cmpkgs; };
-          xeep = { pkgs = inputs.cmpkgs; };
           zeph = { pkgs = inputs.cmpkgs; };
 
           openstick-cross = {
