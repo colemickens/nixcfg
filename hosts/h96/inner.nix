@@ -3,7 +3,7 @@
 let
   # eth_ip = "192.168.162.69/16";
   # kernel = pkgs.callPackage ./kernel.nix { };
-  kernel = pkgs.callPackage ../rocky/kernel.nix { };
+  kernel = pkgs.callPackage ./kernel.nix { };
   kernelPackages = pkgs.linuxKernel.packagesFor kernel;
   hn = "h96";
 
@@ -11,7 +11,7 @@ let
 in
 {
   imports = [
-    ../rocky/unfree.nix
+    ./unfree.nix
 
     ../../profiles/user-cole.nix
     ../../mixins/common.nix

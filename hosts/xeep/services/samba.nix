@@ -13,7 +13,7 @@
       sambaUserSetup = {
         text = ''
           PATH=$PATH:${lib.makeBinPath [ pkgs.samba ]}
-          printf "cole\ncole\n" | pdbedit -a -u cole -t -b tdbsam:/var/lib/samba/private/passdb.tdb                                                                       
+          printf "cole\ncole\n" | pdbedit -a -u cole -t -b tdbsam:/var/lib/samba/private/passdb.tdb
         '';
         deps = [ ];
       };
@@ -30,8 +30,9 @@
 
       # TODO: why can't I restrict to SMB4?
       extraConfig = ''
-        client min protocol SMB3_11
-        server min protocol = SMB3_11
+        # TODO: this Raven scanner needs SMB2
+        # client min protocol SMB3_11
+        # server min protocol = SMB3_11
         server smb encrypt = desired
         server multi channel support = yes
         deadtime = 30
@@ -41,39 +42,40 @@
         aio read size = 1
         aio write size = 1
         socket options = IPTOS_LOWDELAY TCP_NODELAY IPTOS_THROUGHPUT SO_RCVBUF=131072 SO_SNDBUF=131072
+        max protocol
       '';
 
       shares = {
-        "cole" = {
-          path = "/home/cole";
-          browseable = "yes";
-          "read only" = "yes";
-          "guest ok" = "no";
-          "create mask" = "0644";
-          "directory mask" = "0755";
-          "force user" = "cole";
-          "force group" = "cole";
-        };
-        "var" = {
-          path = "/var/";
-          browseable = "no";
-          "read only" = "yes";
-          "guest ok" = "no";
-          "create mask" = "0644";
-          "directory mask" = "0755";
-          "force user" = "cole";
-          "force group" = "cole";
-        };
-        "rclone" = {
-          path = "/mnt/rclone";
-          browseable = "yes";
-          "read only" = "yes";
-          "guest ok" = "yes";
-          "create mask" = "0644";
-          "directory mask" = "0755";
-          "force user" = "cole";
-          "force group" = "cole";
-        };
+        # "cole" = {
+        #   path = "/home/cole";
+        #   browseable = "yes";
+        #   "read only" = "yes";
+        #   "guest ok" = "no";
+        #   "create mask" = "0644";
+        #   "directory mask" = "0755";
+        #   "force user" = "cole";
+        #   "force group" = "cole";
+        # };
+        # "var" = {
+        #   path = "/var/";
+        #   browseable = "no";
+        #   "read only" = "yes";
+        #   "guest ok" = "no";
+        #   "create mask" = "0644";
+        #   "directory mask" = "0755";
+        #   "force user" = "cole";
+        #   "force group" = "cole";
+        # };
+        # "rclone" = {
+        #   path = "/mnt/rclone";
+        #   browseable = "yes";
+        #   "read only" = "yes";
+        #   "guest ok" = "yes";
+        #   "create mask" = "0644";
+        #   "directory mask" = "0755";
+        #   "force user" = "cole";
+        #   "force group" = "cole";
+        # };
         "paperless-consume" = {
           path = "/var/lib/paperless/consume";
           browseable = "yes";

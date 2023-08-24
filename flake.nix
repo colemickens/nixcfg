@@ -17,7 +17,7 @@
 
   inputs = {
     # systems = { url = "git+file:.?path=flake.systems.nix"; flake = false; };
-    systems = { url = "path:./flake.systems.nix"; flake = false; }; 
+    systems = { url = "path:./flake.systems.nix"; flake = false; };
     flake-utils = { url = "github:numtide/flake-utils"; inputs."systems".follows = "systems"; };
 
     lib-aggregate = { url = "github:nix-community/lib-aggregate"; }; #TODO: boo name! "libaggregate"?
@@ -31,6 +31,10 @@
 
     mobile-nixos-openstick = {
       url = "github:colemickens/mobile-nixos/openstick";
+      inputs."nixpkgs".follows = "cmpkgs";
+    };
+    tow-boot-radxa-rock5b = {
+      url = "github:colemickens/tow-boot/radxa-rock5b";
       inputs."nixpkgs".follows = "cmpkgs";
     };
 
@@ -78,7 +82,8 @@
       importPkgs = npkgs: extraCfg: (lib.genAttrs defaultSystems (system: import npkgs {
         inherit system;
         overlays = [ overlays.default ];
-        config = ({ allowAliases = false; } // extraCfg);
+        # config = let cfg = ({ allowAliases = false; } // extraCfg); in (builtins.trace cfg cfg);
+        config = let cfg = ({ allowAliases = false; } // extraCfg); in cfg;
       }));
       pkgs = importPkgs inputs.cmpkgs { };
       pkgsStable = importPkgs inputs.nixpkgs-stable { };

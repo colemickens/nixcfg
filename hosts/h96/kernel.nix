@@ -1,18 +1,23 @@
 { stdenv, lib, buildPackages, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
 let
-  modDirVersion = "5.10.110";
-  tag = "a4423c56f430bfc7c75dbb68d4a9a1a0ef62b371";
+  # https://github.com/radxa/kernel/blob/linux-5.10-gen-rkr4.1/Makefile
+  modDirVersion = "5.10.66";
+  tag = "c428536281d69aeb2b3480f65b2b227210b61535";
+  hash = "sha256-xLnuSbgarpFhyvGGHuF1/NsHMMkSwTcaTs/c33XliuA=";
+  # modDirVersion = "5.10.160";
+  # tag = "f96638870c512fd94191e31b744f493af3594f96";
+  # hash = "sha256-+FI1Uzy2ROgrPGUNkZ5ZDQRgTMpGmJ/sPE2lXXPJ6bw=";
 in
 buildLinux (args // {
   version = "${modDirVersion}";
   inherit modDirVersion;
 
   src = fetchFromGitHub {
-    owner = "rockchip-linux";
+    owner = "radxa";
     repo = "kernel";
     rev = tag;
-    hash = "sha256-IvLpUoNZHJWTmqxrA7tkP8mTESIeFl1Y6bJWeDi/hAw=";
+    hash = hash;
   };
 
   structuredExtraConfig = with lib.kernel; {
@@ -49,12 +54,6 @@ buildLinux (args // {
     DRM_RCAR_DW_HDMI = no;
     DEBUG_INFO_BTF = lib.mkForce no;
     DEBUG_INFO_BTF_MODULES = lib.mkForce no;
-    
-    DRM_ITE_IT6161 = yes;
-    BCMDHD_PCIE = yes;
-    MALI_CSF_SUPPORT = yes;
-    
-    TOUCHSCREEN_FTS = lib.mkForce no;
     
     # This is not a good console...
     # FIQ_DEBUGGER = no;

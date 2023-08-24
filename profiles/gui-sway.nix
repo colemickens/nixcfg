@@ -105,11 +105,15 @@ in
     ];
 
     nixpkgs.overlays = [
-      (final: prev: {
-        sway-unwrapped = inputs.nixpkgs-wayland.packages.${pkgs.stdenv.hostPlatform.system}.sway-unwrapped;
-        xdg-desktop-portal-wlr = inputs.nixpkgs-wayland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-wlr;
-        sirula = inputs.nixpkgs-wayland.packages.${pkgs.stdenv.hostPlatform.system}.sirula;
-      })
+      (final: prev:
+        let nwPkgs = inputs.nixpkgs-wayland.packages.${pkgs.stdenv.hostPlatform.system}; in
+        {
+          inherit (nwPkgs)
+            sway-unwrapped
+            xdg-desktop-portal-wlr
+            sirula;
+          # wayland-protocols = nwPkgs.new-wayland-protocols;
+        })
     ];
 
     security.pam.services.swaylock = { };
@@ -193,10 +197,8 @@ in
             };
             bars = [ ];
             assigns = {
-              "8" = [
-                { class = "^steam_app_"; }
-              ];
               "9" = [
+                { class = "^steam_app_"; }
                 { app_id = "^Steam$"; }
                 # { class = "^steam$"; } # untested
                 { class = "^steam$"; }

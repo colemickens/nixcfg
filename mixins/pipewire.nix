@@ -20,10 +20,16 @@
 
   systemd.user.services.pipewire-pulse.path = [ pkgs.pulseaudio ];
 
+  environment.etc."pipewire/pipewire.conf.d/log.conf".text = ''
+    context.properties = {
+      log.level = 5
+    }
+  '';
+
   services.pipewire = {
     enable = true;
     alsa.enable = true;
-    # alsa.support32Bit = true; # ?
+    alsa.support32Bit = true; # ?
     pulse.enable = true;
     jack.enable = true;
 

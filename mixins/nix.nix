@@ -16,12 +16,14 @@ in
 {
   config = {
     environment.systemPackages = [ _nix ];
-    nixpkgs.config = {
-      allowAliases = false;
+    nixpkgs = {
+      config = {
+        allowAliases = false;
+      };
+      overlays = [
+        inputs.self.overlays.default
+      ];
     };
-    nixpkgs.overlays = [
-      inputs.self.overlays.default
-    ];
     nix = {
       gc = {
         # automatic = true;

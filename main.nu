@@ -255,7 +255,7 @@ def "main up" [...hosts] {
 
   main inputup
   main lockup
-  # main pkgup
+  main pkgup
   main dl '.#devShells.x86_64-linux.ci'
 
   main ciattrs

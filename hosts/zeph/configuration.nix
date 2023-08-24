@@ -108,7 +108,7 @@ in
       lanzaboote = {
         enable = true;
         pkiBundle = "/etc/secureboot";
-        configurationLimit = 4;
+        configurationLimit = 20;
       };
       loader = {
         efi.efiSysMountPoint = "/efi";

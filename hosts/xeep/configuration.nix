@@ -23,10 +23,11 @@ in
     ../../mixins/iwd-networks.nix
     # ../../mixins/plex.nix
     ../../mixins/syncthing.nix
-
     ../../mixins/gfx-intel.nix
+    # ../../modules/nadache.nix
 
-    ../../modules/nadache.nix
+    # ./services/paperless.nix # paperless needs samba for scanner to ingest
+    # ./services/samba.nix
 
     inputs.nixos-hardware.nixosModules.dell-xps-13-9370
 
@@ -34,7 +35,6 @@ in
   ];
 
   config = {
-    services.nadache.enable = true;
     # TEMP START TO FIX vf2 via netboot
     services.atftpd = lib.mkIf (enableNetboot) {
       enable = true;

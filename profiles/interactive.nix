@@ -15,7 +15,7 @@
     ../mixins/gopass.nix
     ../mixins/gpg-agent.nix
     ../mixins/helix.nix
-    ../mixins/jj.nix
+    # ../mixins/jj.nix
     ../mixins/joshuto.nix
     ../mixins/nushell.nix
     ../mixins/pijul.nix

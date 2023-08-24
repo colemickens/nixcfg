@@ -72,7 +72,6 @@ in {
       if ecfg.enableYubikeyRules
       then [
         pkgs.yubikey-personalization
-        pkgs.yubico-piv-tool
       ]
       else [];
 
@@ -82,16 +81,13 @@ in {
     # bring pcsclite's polkit rules into the environment, I guess
     environment.systemPackages = (if ecfg.enablePcscd then [ pkgs.pcsclite ] else []);
 
-    # if all three are disable then shit just don't work
-    # neither ccid or pc/sc are able to work
-
     home-manager.users.cole = { pkgs, ... }@hm: {
       programs.gpg.enable = true;
       programs.gpg.homedir = "${hm.config.xdg.dataHome}/gnupg";
       home.file."${hm.config.programs.gpg.homedir}/.keep".text = "";
       home.packages = with pkgs; [
         yubikey-personalization
-        # yubikey-manager
+        yubikey-manager
         yubico-piv-tool
       ];
       # programs.gpg.package = ecfg.gnupgPkg;
