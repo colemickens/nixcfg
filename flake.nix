@@ -127,9 +127,9 @@
             path = ./hosts/openstick/configuration.nix;
             pkgs = inputs.cmpkgs-cross;
           };
-          h96 = {
+          h96v58 = {
             pkgs = inputs.cmpkgs-cross;
-            path = ./hosts/h96/configuration.nix;
+            path = ./hosts/h96v58/configuration.nix;
           };
         };
       };

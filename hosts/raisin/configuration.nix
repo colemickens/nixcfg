@@ -20,7 +20,7 @@ in
     ../../mixins/rclone-googledrive-mounts.nix
     ../../mixins/syncthing.nix
 
-    ./services/monitoring.nix
+    # ./services/monitoring.nix
 
     inputs.nixos-hardware.nixosModules.common-cpu-amd
     inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
@@ -29,16 +29,6 @@ in
   ];
 
   config = {
-    # TODO extract
-    services = {
-      grafana = {
-        enable = true;
-      };
-    };
-    networking.firewall.allowedTCPPorts = [ 8096 ];
-    # TODO extract end
-
-
     nixpkgs.hostPlatform.system = "x86_64-linux";
     system.stateVersion = "21.05";
 
