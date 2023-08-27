@@ -21,6 +21,7 @@ let
 
   in_tp_zeph = "1267:12699:ASUE120A:00_04F3:319B_Touchpad";
   in_mouse_aerox3 = "4152:6200:SteelSeries_SteelSeries_Aerox_3_Wireless";
+  in_mouse_gpro = "1133:16505:Logitech_G_Pro";
 
   _touchpad = {
     click_method = "clickfinger";
@@ -169,6 +170,7 @@ in
             input = {
               "${in_tp_zeph}" = _touchpad;
               "${in_mouse_aerox3}" = _mouse;
+              "${in_mouse_gpro}" = _mouse;
             };
             output = {
               "*" = { background = background; };
