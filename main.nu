@@ -260,8 +260,8 @@ def "main up" [...hosts] {
 
   main ciattrs
 
-  main deploy raisin xeep zeph
-  # main deploy vf2 rocky
+  main deploy raisin
+  main deploy zeph
   main deploy openstick
 }
 
