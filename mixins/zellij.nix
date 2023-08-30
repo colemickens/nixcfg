@@ -4,6 +4,11 @@ let
   prefs = import ./_preferences.nix { inherit pkgs inputs; };
   convert = color: let c = inputs.nix-rice.lib.${pkgs.stdenv.hostPlatform.system}.color.hexToRgba color; in [ c.r c.g c.b ];
   colors = prefs.themes.zellij;
+
+  flakeZellij = inputs.zellij.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  nixpkgsZellij = pkgs.zellij;
+  
+  zellijPkg = (if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then flakeZellij else nixpkgsZellij);
 in
 {
   config = {
@@ -27,7 +32,7 @@ in
       # '';
       programs.zellij = {
         enable = true;
-        package = inputs.zellij.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default;
+        package = zellijPkg;
         enableZshIntegration = false; # do NOT auto-start, thank you
         settings = {
           default_mode = "normal";
