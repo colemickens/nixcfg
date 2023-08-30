@@ -48,18 +48,15 @@
     lanzaboote = { url = "github:nix-community/lanzaboote"; };
 
     # devtools:
+    crate2nix = { url = "github:kolloch/crate2nix"; flake = false; };
     terranix = { url = "github:terranix/terranix"; inputs."nixpkgs".follows = "cmpkgs"; }; # packet/terraform deployments
     fenix = { url = "github:nix-community/fenix"; inputs."nixpkgs".follows = "cmpkgs"; }; # used for nightly rust devtools
     helix = { url = "github:helix-editor/helix"; };
-    # jj = { url = "github:martinvonz/jj"; inputs."flake-utils".inputs."systems".follows = "systems"; };
     jj = { url = "github:martinvonz/jj"; inputs."flake-utils".follows = "flake-utils"; };
-    zellij = { url = "github:a-kenji/zellij-nix/bee0cae93b4cbcd0a1ad1a62e70709b9db0f5c7c"; inputs."flake-utils".follows = "flake-utils"; };
-    # TODO: un-pin this eventually...
-    # zellij = { url = "github:a-kenji/zellij-nix"; inputs."flake-utils".follows = "flake-utils"; };
-    # inputs."nixpkgs".follows = "cmpkgs"; };
     nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; };
-    # nix-eval-jobs = { url = "github:colemickens/nix-eval-jobs"; };
     nix-update = { url = "github:Mic92/nix-update"; };
+    # zellij = { url = "github:a-kenji/zellij-nix/bee0cae93b4cbcd0a1ad1a62e70709b9db0f5c7c"; inputs."flake-utils".follows = "flake-utils"; };
+    zellij = { url = "github:a-kenji/zellij-nix"; inputs."flake-utils".follows = "flake-utils"; };
 
     # experimental/unused:
     nix-netboot-server = { url = "github:DeterminateSystems/nix-netboot-serve"; };
@@ -111,11 +108,11 @@
           raisin = { pkgs = inputs.cmpkgs; };
           zeph = { pkgs = inputs.cmpkgs; };
 
-          openstick-cross = {
-            pkgs = inputs.cmpkgs-cross;
-            path = ./hosts/openstick/cross.nix;
-            buildSys = "x86_64-linux";
-          };
+          # openstick-cross = {
+          #   pkgs = inputs.cmpkgs-cross;
+          #   path = ./hosts/openstick/cross.nix;
+          #   buildSys = "x86_64-linux";
+          # };
         };
         "aarch64-linux" = {
           # ocii = {

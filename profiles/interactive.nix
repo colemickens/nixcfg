@@ -42,8 +42,16 @@
     users.users.cole.shell = pkgs.zsh;
 
     sops.secrets = {
-      "oraclecloud_colemickens_privkey".owner = "cole";
-      "oraclecloud_colemickens2_privkey".owner = "cole";
+      "oraclecloud_colemickens_privkey" = {
+        owner = "cole";
+        sopsFile = ../secrets/encrypted/oraclecloud_colemickens_privkey;
+        format = "binary";
+      };
+      "oraclecloud_colemickens2_privkey" = {
+        owner = "cole";
+        sopsFile = ../secrets/encrypted/oraclecloud_colemickens2_privkey;
+        format = "binary";
+      };
     };
 
     services.dbus.packages = with pkgs; [ pkgs.dconf ];

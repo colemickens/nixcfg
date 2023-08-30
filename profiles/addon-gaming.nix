@@ -1,9 +1,12 @@
 { pkgs, config, inputs, ... }:
 
 let
-  # _yuzu = pkgs.yuzu-mainline.override { qtwebengine = null; };
-  # _yuzu = pkgs.yuzu-mainline;
-  _yuzu = pkgs.yuzu-early-access;
+  # __yuzu = pkgs.yuzu-mainline;
+  __yuzu = pkgs.yuzu-early-access;
+  __yuzu1 = (__yuzu.override { qtwebengine = null; });
+  _yuzu = __yuzu1.overrideAttrs (old: {
+    cmakeFlags = old.cmakeFlags ++ [ "-DYUZU_USE_QT_WEB_ENGINE=OFF" ];
+  });
 in
 {
   config = {
@@ -62,12 +65,14 @@ in
         # retroarchFull
 
         # emulators
-        # dolphin-emu # gamecube emu
+        dolphin-emu # gamecube emu
         # mupen64plus
         # simple64-gui # TODO
         # ryujinx # switch emu
-        # _yuzu
+        _yuzu
         xemu
+
+        airshipper
       ];
       programs = {
         mangohud = {

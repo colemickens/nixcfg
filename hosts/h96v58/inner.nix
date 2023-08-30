@@ -60,23 +60,15 @@ in
       };
     };
 
-    hardware.deviceTree.name = "rockchip/rk3588-nvr-demo-v10-android.dtb";
+    # hardware.deviceTree.name = "rockchip/rk3588-nvr-demo-v10-android.dtb";
+    hardware.deviceTree.name = "rockchip/rk3588-evb1-v10.dtb";
 
-    tow-boot = {
-      enable = true;
-      autoUpdate = false;
-      device = "radxa-rock5b";
-      config = {
-        device.identifier = lib.mkForce "rockchip-rk3588-nvr-demo-v10";
-        Tow-Boot = {
-          # defconfig = lib.mkForce "evb-rk3588_defconfig";
-          config = [
-            (helpers: with helpers; {
-              # DEFAULT_DEVICE_TREE = "rk3558-nvr-demo-v10-android";
-            })
-          ];
-        };
-      };
-    };
+    # tow-boot = {
+    #   enable = true;
+    #   autoUpdate = false;
+    #   # override the rock5b build to use the stuff for the evb instead?
+    #   # device = "rk3588-evb1-v10";
+    #   # defconfig = "evb-rk3588_defconfig";
+    # };
   };
 }

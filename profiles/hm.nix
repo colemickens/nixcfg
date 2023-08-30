@@ -4,7 +4,7 @@
 {
   imports = [
     inputs.home-manager.nixosModules.default # "home-manager"
-    ../secrets
+    inputs.sops-nix.nixosModules.default # "sops"
   ];
 
   config = {

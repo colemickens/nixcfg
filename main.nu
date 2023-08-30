@@ -127,7 +127,7 @@ def "main inputup" [] {
   let srcdirs = ([
     # nixpkgs and related branches
     "nixpkgs/master" "nixpkgs/cmpkgs"
-    "nixpkgs/cmpkgs-cross" "nixpkgs/cmpkgs-cross-riscv64"
+    "nixpkgs/cmpkgs-cross-riscv64"
     
     # home-manager + my fork
     "home-manager/master" "home-manager/cmhm"
@@ -135,9 +135,6 @@ def "main inputup" [] {
     # tow-boot and friends
     "tow-boot/development" "tow-boot/development-flakes"
     "tow-boot/radxa-rock5b" 
-    # "tow-boot/visionfive" # TODO: drop lol
-    # "tow-boot/rpi"
-    "tow-boot/radxa-zero"
 
     # mobile-nixos and friends
     "mobile-nixos/master"
@@ -146,7 +143,7 @@ def "main inputup" [] {
     # "mobile-nixos/pinephone-emmc" "mobile-nixos/reset-scripts" "mobile-nixos/sdm845-blue"
     
     # BUG: nixos-riscv64 - temporarily disabled
-    "nixos-riscv64"
+    # "nixos-riscv64"
 
     # flake-firefox-nightly (not checked out anymore unless troubleshooting)
     # "flake-firefox-nightly"
@@ -196,7 +193,7 @@ def "main pkgup" [...pkglist] {
       --apply 'x: builtins.attrNames x'
         | str trim
         | from json)
-  }
+  } else { $pkglist }
 
   print -e $pkglist
 
@@ -263,6 +260,10 @@ def "main up" [...hosts] {
   main deploy raisin
   main deploy zeph
   main deploy openstick
+
+  print -e "openstick: reboot"
+  ssh $"cole@(tailscale ip --4 openstick)" "sudo reboot"
+  
 }
 
 def main [] { main up }

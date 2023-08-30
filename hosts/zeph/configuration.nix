@@ -11,7 +11,6 @@ in
   imports = [
     ../../profiles/gui-sway.nix
     ../../profiles/addon-asus.nix
-    ../../profiles/addon-dev.nix
     ../../profiles/addon-gaming.nix
     ../../profiles/addon-laptop.nix
 

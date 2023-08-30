@@ -3,6 +3,8 @@
 let
   # llvmPackages = pkgs.llvmPackages_13;
   llvmPackages = pkgs.llvmPackages_13;
+  crate2nix = import inputs.crate2nix { inherit pkgs; nixpkgs = null; };
+  
 
   gstreamerPath = ""
     + ":" + "${pkgs.gst_all_1.gst-plugins-base}/lib/gstreamer-1.0"
@@ -61,6 +63,8 @@ minimalMkShell {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
+
+    crate2nix
 
     atk # sirula
     gdk-pixbuf # sirula

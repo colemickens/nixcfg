@@ -16,8 +16,6 @@ in
     ../../mixins/iwd-networks.nix
     # ../../mixins/iwd-auto-ap.nix # not sure it works, worried it causes problems, but might be something else
 
-    ../../secrets
-
     (import "${inputs.mobile-nixos-openstick}/lib/configuration.nix" {
       device = "openstick";
     })
@@ -27,12 +25,18 @@ in
     nixpkgs.hostPlatform.system = "aarch64-linux";
 
     boot.initrd.systemd.enable = lib.mkForce false;
-    boot.kernelParams = [ "dyndbg=\"file drivers/base/firmware_loader/main.c +fmp\"" ];
 
     system.build.initialRamdisk = lib.mkForce (pkgs.writeText "test" "null").outPath;
 
     nixcfg.common = {
       defaultKernel = false;
+    };
+
+    nix = {
+      gc = {
+        automatic = true;
+        persistent = true;
+      };
     };
 
     system.stateVersion = "22.05";

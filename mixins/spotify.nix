@@ -2,7 +2,13 @@
 
 {
   config = {
-    sops.secrets."spotifypw.txt".owner = "cole";
+    sops.secrets = {
+      "spotifypw.txt" = {
+        owner = "cole";
+        sopsFile = ../secrets/encrypted/spotifypw.txt;
+        format = "binary";
+      };
+    };
 
     home-manager.users.cole = { pkgs, ... }: {
       services.spotifyd = {

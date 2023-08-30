@@ -1,23 +1,18 @@
 { lib, pkgs, config, ... }:
 
 let
+  rcloneConfPath = config.sops.secrets."rclone.conf".path;
+  
   c = rec {
-    rcloneConfigFile = config.sops.secrets."rclone.conf".path;
-
-    sops.secrets."rclone.conf" = {
-      owner = "cole";
-      group = "cole";
-    };
-
     rclone-lim = pkgs.writeScriptBin "rclone-lim" ''
       #!${pkgs.bash}/bin/bash
-      ${pkgs.rclone}/bin/rclone --config "${rcloneConfigFile}" "''${@}"
+      ${pkgs.rclone}/bin/rclone --config "${rcloneConfPath}" "''${@}"
     '';
 
     rclone-lim-mount = readonly: (pkgs.writeScriptBin "rclone-lim-mount" ''
       #!${pkgs.bash}/bin/bash
       ${pkgs.rclone}/bin/rclone \
-        --config ${rcloneConfigFile} \
+        --config ${rcloneConfPath} \
         --fast-list \
         --drive-skip-gdocs \
         --vfs-read-chunk-size=64M \
@@ -76,6 +71,13 @@ let
   };
 in
 {
+  sops.secrets."rclone.conf" = {
+    owner = "cole";
+    group = "cole";
+    sopsFile = ../secrets/encrypted/rclone.conf;
+    format = "binary";
+  };
+
   systemd.services = {
     rclone-misc = mkMount "misc" true;
     rclone-tvshows = mkMount "tvshows" true;
