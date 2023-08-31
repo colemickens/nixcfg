@@ -134,7 +134,7 @@ def "main inputup" [] {
 
     # tow-boot and friends
     "tow-boot/development" "tow-boot/development-flakes"
-    "tow-boot/radxa-rock5b" 
+    "tow-boot/alirock-h96maxv58"
 
     # mobile-nixos and friends
     "mobile-nixos/master"
@@ -254,6 +254,8 @@ def "main up" [...hosts] {
   main lockup
   main pkgup
   main dl '.#devShells.x86_64-linux.ci'
+  main dl '.#devShells.x86_64-linux.devtools'
+  main dl '.#devShells.x86_64-linux.devenv'
 
   main ciattrs
 

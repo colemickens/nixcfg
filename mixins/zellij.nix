@@ -42,23 +42,10 @@ in
           # pane_frames = true;
           pane_frames = false;
           scrollback_editor = "hx";
-          theme = "default";
-          # theme = "tokyo-night-light2";
-          # themes = {
-          #   tokyo-night-light2 = {
-          #     fg = [ 52 59 88 ];
-          #     bg = [ 213 214 219 ];
-          #     black = [ 15 15 20 ];
-          #     red = [ 186 75 96 ];
-          #     green = [ 72 94 48 ];
-          #     yellow = [ 143 94 21 ];
-          #     blue = [ 52 84 138 ];
-          #     magenta = [ 90 74 120 ];
-          #     cyan = [ 15 75 110 ];
-          #     white = [ 130 137 172 ];
-          #     orange = [ 150 80 39 ];
-          #   };
-          # };
+          # theme = "default";
+          theme = "tokyo-night-storm";
+          # theme = "catppuccin-mocha"; # todo; try
+          # theme = "nord"; # not enough pane-frame contrast
         };
       };
     };

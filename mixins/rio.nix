@@ -11,8 +11,20 @@ in
       programs.rio = {
         enable = true;
         settings = {
-          font = prefs.font.monospace.family;
-          font-size = 20;
+          fonts = {
+            size = 20;
+            regular = {
+              family = prefs.font.monospace.family;
+              style = "normal";
+              weight = 400;
+              size = 20;
+            };
+            # bold = {
+            #   family = prefs.font.monospace.family;
+            #   style = "normal";
+            #   weight = 400;
+            # };
+          };
         };
       };
     };

@@ -34,7 +34,7 @@
       inputs."nixpkgs".follows = "cmpkgs";
     };
     tow-boot-radxa-rock5b = {
-      url = "github:colemickens/tow-boot/radxa-rock5b";
+      url = "github:colemickens/tow-boot/alirock-h96maxv58";
       inputs."nixpkgs".follows = "cmpkgs";
     };
 
