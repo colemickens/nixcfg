@@ -19,21 +19,16 @@
     # systems = { url = "git+file:.?path=flake.systems.nix"; flake = false; };
     systems = { url = "path:./flake.systems.nix"; flake = false; };
     flake-utils = { url = "github:numtide/flake-utils"; inputs."systems".follows = "systems"; };
-
     lib-aggregate = { url = "github:nix-community/lib-aggregate"; }; #TODO: boo name! "libaggregate"?
-
+    
     nixpkgs-stable = { url = "github:nixos/nixpkgs/nixos-23.05"; }; # any stable to use
-
     cmpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
-    cmpkgs-cross = { url = "github:colemickens/nixpkgs/cmpkgs-cross"; };
-    cmpkgs-cross-riscv64 = { url = "github:colemickens/nixpkgs/cmpkgs-cross-riscv64"; };
-    cmpkgs-rpipkgs = { url = "github:colemickens/nixpkgs/cmpkgs-rpipkgs"; }; # used only for tow-boot/rpi
 
     mobile-nixos-openstick = {
       url = "github:colemickens/mobile-nixos/openstick";
       inputs."nixpkgs".follows = "cmpkgs";
     };
-    tow-boot-radxa-rock5b = {
+    tow-boot-alirock-h96maxv58 = {
       url = "github:colemickens/tow-boot/alirock-h96maxv58";
       inputs."nixpkgs".follows = "cmpkgs";
     };
@@ -122,11 +117,11 @@
           openstick = {
             # PROBLEM!!
             path = ./hosts/openstick/configuration.nix;
-            pkgs = inputs.cmpkgs-cross;
+            pkgs = inputs.cmpkgs;
           };
-          h96v58 = {
-            pkgs = inputs.cmpkgs-cross;
-            path = ./hosts/h96v58/configuration.nix;
+          h96maxv58 = {
+            pkgs = inputs.cmpkgs;
+            path = ./hosts/h96maxv58/configuration.nix;
           };
         };
       };
@@ -140,7 +135,11 @@
         x86_64-linux = {
           installer = nixosConfigurations.installer.config.system.build.isoImage;
         };
-        aarch64-linux = { };
+        aarch64-linux = {
+          # openstick-aboot = ?? # TODO
+          # openstick-boot = # ? # TODO
+          h96maxv58-uboot = inputs.tow-boot-alirock-h96maxv58.outputs.packages.aarch64-linux.radxa-rock5b.outputs.firmware;
+        };
         riscv64-linux = { };
       };
 

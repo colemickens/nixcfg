@@ -1,8 +1,8 @@
 { pkgs, lib, modulesPath, inputs, config, extendModules, ... }:
 
 let
-  hn = "h96";
-  pp = "h96";
+  hn = "h96maxv58";
+  pp = "h96maxv58";
 in
 {
   imports = [

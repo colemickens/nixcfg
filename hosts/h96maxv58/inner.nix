@@ -5,7 +5,7 @@ let
   # kernel = pkgs.callPackage ./kernel.nix { };
   kernel = pkgs.callPackage ./kernel.nix { };
   kernelPackages = pkgs.linuxKernel.packagesFor kernel;
-  hn = "h96";
+  hn = "h96maxv58";
 
   krnl = config.boot.kernelPackages.kernel;
 in

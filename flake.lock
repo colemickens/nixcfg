@@ -64,54 +64,6 @@
         "type": "github"
       }
     },
-    "cmpkgs-cross": {
-      "locked": {
-        "lastModified": 1693336832,
-        "narHash": "sha256-eM7Zm0a+J/ycMnpMyp2X/p5nu/Ij2r4p9n1LATmp3+c=",
-        "owner": "colemickens",
-        "repo": "nixpkgs",
-        "rev": "9aafe6ca85369d90d27955a9e0287023a0fc2c48",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "ref": "cmpkgs-cross",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "cmpkgs-cross-riscv64": {
-      "locked": {
-        "lastModified": 1693463329,
-        "narHash": "sha256-RKcxWqe8IU1QS5qhDuPEk74jAqWI4gy9vDqbvbMZvu4=",
-        "owner": "colemickens",
-        "repo": "nixpkgs",
-        "rev": "58bee68a4af33ec56fd2088c65e3d31660039d36",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "ref": "cmpkgs-cross-riscv64",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "cmpkgs-rpipkgs": {
-      "locked": {
-        "lastModified": 1677359729,
-        "narHash": "sha256-3M+s5mvbqU78AZaV95nWAkcRGCvSOKR2SI+4NrcRLys=",
-        "owner": "colemickens",
-        "repo": "nixpkgs",
-        "rev": "c747fefe1a7ee915b9b5aa8ba4a5fa479fe79b17",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "ref": "cmpkgs-rpipkgs",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "cpiotools": {
       "inputs": {
         "nixpkgs": "nixpkgs_5"
@@ -1169,9 +1121,6 @@
     "root": {
       "inputs": {
         "cmpkgs": "cmpkgs",
-        "cmpkgs-cross": "cmpkgs-cross",
-        "cmpkgs-cross-riscv64": "cmpkgs-cross-riscv64",
-        "cmpkgs-rpipkgs": "cmpkgs-rpipkgs",
         "crate2nix": "crate2nix",
         "fenix": "fenix",
         "firefox-nightly": "firefox-nightly",
@@ -1192,7 +1141,7 @@
         "sops-nix": "sops-nix",
         "systems": "systems_5",
         "terranix": "terranix",
-        "tow-boot-radxa-rock5b": "tow-boot-radxa-rock5b",
+        "tow-boot-alirock-h96maxv58": "tow-boot-alirock-h96maxv58",
         "zellij": "zellij"
       }
     },
@@ -1459,7 +1408,7 @@
         "type": "github"
       }
     },
-    "tow-boot-radxa-rock5b": {
+    "tow-boot-alirock-h96maxv58": {
       "inputs": {
         "nixpkgs": [
           "cmpkgs"
