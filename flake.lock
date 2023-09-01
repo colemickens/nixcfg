@@ -596,11 +596,11 @@
         "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1693524403,
-        "narHash": "sha256-sTFZNU1ePmI5zvmRDJMPMvTj2DPO7wFupjCKjpKJwpE=",
+        "lastModified": 1693539848,
+        "narHash": "sha256-HHZ91lkrwLXgS5SZh+w76DgMnF3Qigkjpn4McuzSHFk=",
         "owner": "martinvonz",
         "repo": "jj",
-        "rev": "b18c97aa126fec5442e5313b6fe834673a44bbd0",
+        "rev": "772e2b8be64b016da5061f98f01e6f5fcd6f4ec3",
         "type": "github"
       },
       "original": {
@@ -1503,11 +1503,11 @@
         "zellij": "zellij_2"
       },
       "locked": {
-        "lastModified": 1693445167,
-        "narHash": "sha256-C2Lq5jd36J71BCC/NBY64qZvrz6Di8QL/75FxTSK0sQ=",
+        "lastModified": 1693531701,
+        "narHash": "sha256-WvNG2cfTqBk+nys2/hSNiXyx746EsX2q3GLXqVDutsM=",
         "owner": "a-kenji",
         "repo": "zellij-nix",
-        "rev": "3a2b66b98325d091c6c9b6cfea7f0f1550f0ad1c",
+        "rev": "4f3a9c729ef2d6f45efe20ddd0fc66d659314d52",
         "type": "github"
       },
       "original": {
@@ -1519,11 +1519,11 @@
     "zellij_2": {
       "flake": false,
       "locked": {
-        "lastModified": 1693385269,
-        "narHash": "sha256-78wvcoj4uPLZPHwHwCp0fmw8oqpwJbnjQL2EfR9mgu0=",
+        "lastModified": 1693475008,
+        "narHash": "sha256-WndiFhzXg+Y12i4HbFD8q1ekSNTPb8BFWw6RX/HTzA8=",
         "owner": "zellij-org",
         "repo": "zellij",
-        "rev": "6116195a29e2ac1c7e7b24c88bb6f9592c3399c6",
+        "rev": "697723ddd30715e2997ad12352ea3c89ebdb7e17",
         "type": "github"
       },
       "original": {
