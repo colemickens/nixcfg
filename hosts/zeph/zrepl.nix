@@ -1,5 +1,36 @@
 { config, pkgs, lib, ... }:
 
+let
+  _pushSettings = {
+    filesystems = {
+      "zephpool/data<" = true;
+      "zephpool/home<" = true;
+    };
+    replication = {
+      protection = {
+        initial = "guarantee_resumability";
+        incremental = "guarantee_incremental";
+      };
+    };
+    send = {
+      encrypted = false;
+    };
+    snapshotting = {
+      type = "manual";
+    };
+    pruning = {
+      keep_sender = [{
+        type = "regex";
+        regex = ".*";
+      }];
+      keep_receiver = [{
+        # TODO: we don't really need pruning for now probably
+        type = "regex";
+        regex = ".*";
+      }];
+    };
+  };
+in
 {
   config = {
     services.zrepl = {
@@ -39,9 +70,22 @@
               ];
             };
           }
+
+          # PUSH JOB (TCP->RAISIN)
+          #
+          ({
+            name = "push_to_raisin";
+            type = "push";
+            connect = {
+              type = "tcp";
+              address = "100.112.194.64:8888";
+              dial_timeout = "10s";
+            };
+          } // _pushSettings)
+
           #
           # PUSH JOB
-          {
+          ({
             name = "push_to_orion";
             type = "push";
             connect = {
@@ -49,34 +93,8 @@
               listener_name = "sink_orion";
               client_identity = "zeph";
             };
-            filesystems = {
-              "zephpool/data<" = true;
-              "zephpool/home<" = true;
-            };
-            replication = {
-              protection = {
-                initial = "guarantee_resumability";
-                incremental = "guarantee_incremental";
-              };
-            };
-            send = {
-              encrypted = false;
-            };
-            snapshotting = {
-              type = "manual";
-            };
-            pruning = {
-              keep_sender = [{
-                type = "regex";
-                regex = ".*";
-              }];
-              keep_receiver = [{
-                # TODO: we don't really need pruning for now probably
-                type = "regex";
-                regex = ".*";
-              }];
-            };
-          }
+          } // _pushSettings)
+
           # #
           # # SINK JOB
           {

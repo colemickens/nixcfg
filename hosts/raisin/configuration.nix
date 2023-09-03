@@ -20,6 +20,7 @@ in
     ../../mixins/rclone-googledrive-mounts.nix
     ../../mixins/syncthing.nix
 
+    ./zrepl.nix
     # ./services/monitoring.nix
 
     inputs.nixos-hardware.nixosModules.common-cpu-amd
