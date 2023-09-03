@@ -927,15 +927,14 @@
         "nix-eval-jobs": "nix-eval-jobs_2",
         "nixpkgs": [
           "cmpkgs"
-        ],
-        "nixpkgs_sirula": "nixpkgs_sirula"
+        ]
       },
       "locked": {
-        "lastModified": 1693750358,
-        "narHash": "sha256-cY78rUjFFQoPPYS/jbsf+ZgHIoq0v0iGTg04A6GqWdY=",
+        "lastModified": 1693770864,
+        "narHash": "sha256-mU/x1QRrgL7uL4fSMyLCwieLPM4TLviXIcR4hCPC1ug=",
         "owner": "nix-community",
         "repo": "nixpkgs-wayland",
-        "rev": "6f50ad392ef5edd64a750653651965fdeff1e734",
+        "rev": "33171dc622c5f60ddf8e7f1a8ca296711532c8bf",
         "type": "github"
       },
       "original": {
@@ -1068,22 +1067,6 @@
         "owner": "nixos",
         "ref": "nixos-unstable",
         "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_sirula": {
-      "locked": {
-        "lastModified": 1682879489,
-        "narHash": "sha256-sASwo8gBt7JDnOOstnps90K1wxmVfyhsTPPNTGBPjjg=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "da45bf6ec7bbcc5d1e14d3795c025199f28e0de0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "da45bf6ec7bbcc5d1e14d3795c025199f28e0de0",
         "type": "github"
       }
     },
