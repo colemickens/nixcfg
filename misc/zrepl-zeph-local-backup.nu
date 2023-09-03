@@ -5,8 +5,9 @@ let hdr = "/home/cole/Sync/ORION_NVME_SSD/header.img"
 
 let luksdev = "orion"
 let backup_pool = "orionpool"
+let secret = "orion_luks"
 
-let pass = (prs show orion | complete | get stdout | str trim)
+let pass = (prs show $secret | complete | get stdout | str trim)
 
 print -e "::: close backup pool"
 do -i { sudo sync; sync }
@@ -26,6 +27,6 @@ sudo zrepl signal wakeup 'push_to_orion'
 
 print -e ""
 print -e "::: running, run these commands when it's done"
-print -e $"sudo sync; sudo zpool export ($backup_pool); sudo cryptsetup luksClose ($luksdev)"
+print -e $"sudo sync; sudo zpool export ($backup_pool); sudo cryptsetup luksClose ($luksdev); sudo sync"
 
 sudo zrepl status
