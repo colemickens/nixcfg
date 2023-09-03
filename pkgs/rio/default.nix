@@ -43,13 +43,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "unstable-2023-09-01";
+  version = "unstable-2023-09-02";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
-    rev = "0a0ceedcf784c600ffb45cb8681628036bb4880f";
-    hash = "sha256-Kq9uhL15PEdQw+fauqxuMiquzXlz223M7SpPNyiHPpY=";
+    rev = "71d2528371a49683502d72bd2ced21fb38bdf1bc";
+    hash = "sha256-Oz1NGjXK04TZD3/KyJZa4hrvXCW3AnDP2U2AcTqae4k=";
   };
 
   # cargoHash = "sha256-jev4fMwCygVzvrkI1nSE5tx59nGqNKQUHCNHvkr9R90=";
@@ -81,6 +81,9 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
+    install -D misc/rio.desktop -t $out/share/applications/
+    install -D misc/logo.svg -t $out/share/icons/hicolor/scalable/apps/rio.svg
+
     install -dm 755 "$terminfo/share/terminfo/r/"
     tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
     mkdir -p $out/nix-support
