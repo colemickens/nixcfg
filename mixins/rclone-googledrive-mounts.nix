@@ -77,6 +77,18 @@ in
     sopsFile = ../secrets/encrypted/rclone.conf;
     format = "binary";
   };
+  sops.secrets."rclone-reader-sa.json" = {
+    owner = "cole";
+    group = "cole";
+    sopsFile = ../secrets/encrypted/rclone-reader-sa.json;
+    format = "binary";
+  };
+  sops.secrets."rclone-writer-sa.json" = {
+    owner = "cole";
+    group = "cole";
+    sopsFile = ../secrets/encrypted/rclone-writer-sa.json;
+    format = "binary";
+  };
 
   systemd.services = {
     rclone-misc = mkMount "misc" true;
