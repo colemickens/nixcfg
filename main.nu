@@ -264,8 +264,8 @@ def "main up" [...hosts] {
   main deploy openstick
 
   print -e "openstick: reboot"
+  ssh $"cole@(tailscale ip --4 openstick)" "nix-env --profile /home/cole/.local/state/nix/profiles/home-manager --delete-generations +1"
   ssh $"cole@(tailscale ip --4 openstick)" "sudo reboot"
-  
 }
 
 def main [] { main up }
