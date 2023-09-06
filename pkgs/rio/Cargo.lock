@@ -480,7 +480,7 @@ checksum = "acbf1af155f9b9ef647e42cdc158db4b64a1b61f743629225fde6f3e0be2a7c7"
 
 [[package]]
 name = "colors"
-version = "0.0.1"
+version = "0.0.18"
 dependencies = [
  "log 0.4.19",
  "regex",
@@ -506,7 +506,7 @@ dependencies = [
 
 [[package]]
 name = "config"
-version = "0.0.1"
+version = "0.0.18"
 dependencies = [
  "colors",
  "dirs",
@@ -544,7 +544,7 @@ checksum = "ed3d0b5ff30645a68f35ece8cea4556ca14ef8a1651455f789a099a0513532a6"
 
 [[package]]
 name = "copa"
-version = "0.11.1"
+version = "0.12.0"
 dependencies = [
  "arrayvec",
  "rio_proc_macros",
@@ -2422,7 +2422,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "216080ab382b992234dda86873c18d4c48358f5cfcb70fd693d7f6f2131b628b"
 
 [[package]]
-name = "rio"
+name = "rio-terminal"
 version = "0.0.18"
 dependencies = [
  "base64",
