@@ -88,6 +88,9 @@ in
         (with pkgs; [
           (pkgs.callPackage ../pkgs/commands-gui.nix { })
 
+          # yay, discord pos
+          dorion
+
           # misc tools/utils
           brightnessctl
           pavucontrol

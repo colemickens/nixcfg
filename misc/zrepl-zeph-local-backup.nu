@@ -46,9 +46,7 @@ def main [ job: string ] {
   # TODO: how to wait for replication to finish?
   print -e ""
   print -e "::: running, run these commands when it's done"
-  print -e $"sudo sync"
-  print -e $"sudo zpool export ($cfg.bp)"
-  print -e $"sudo sync; sudo cryptsetup luksClose ($luksdev); sudo sync"
+  print -e $"ssh ($cfg.remote) 'sudo sync; sudo zpool export ($cfg.bp); sudo sync; sudo cryptsetup luksClose ($luksdev); sudo sync; echo done'"
   
   sudo zrepl status
 }

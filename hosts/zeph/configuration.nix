@@ -38,10 +38,11 @@ in
 
     inputs.lanzaboote.nixosModules.lanzaboote
 
-    inputs.nixos-hardware.nixosModules.common-cpu-amd
-    inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
-    inputs.nixos-hardware.nixosModules.common-gpu-amd
-    inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
+    # inputs.nixos-hardware.nixosModules.common-cpu-amd
+    # inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
+    # inputs.nixos-hardware.nixosModules.common-gpu-amd
+    # inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
+    inputs.nixos-hardware.nixosModules.asus-zephyrus-ga402
   ];
   config = {
     nixpkgs.hostPlatform.system = "x86_64-linux";
@@ -119,10 +120,10 @@ in
       kernelModules = [
         "iwlwifi"
       ];
-      extraModprobeConfig = ''
-options iwlwifi power_save=0
-options iwlmvm power_scheme=1
-      '';
+#       extraModprobeConfig = ''
+# options iwlwifi power_save=0
+# options iwlmvm power_scheme=1
+#       '';
       kernelParams = [
         # "zfs.zfs_arc_max=${builtins.toString (1023 * 1024 * (1024 * 6))}"
       ];

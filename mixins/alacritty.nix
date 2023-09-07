@@ -26,12 +26,12 @@ in
           #  blinking = "Always";
           #};
           #cursor.blink_interval = 250;
-          draw_bold_text_with_bright_colors = colors.bold_as_bright;
           window = {
             opacity = 1.0;
             padding = { x = 5; y = 5; };
           };
           colors = rec {
+            draw_bold_text_with_bright_colors = colors.bold_as_bright;
             primary.foreground = colors.foreground;
             # primary.background = colors.background;
             primary.background = "#111111";

@@ -15,15 +15,19 @@ in
             size = 20;
             regular = {
               family = prefs.font.monospace.family;
-              style = "normal";
+              style = "Regular";
               weight = 400;
-              size = 20;
             };
-            # bold = {
-            #   family = prefs.font.monospace.family;
-            #   style = "normal";
-            #   weight = 400;
-            # };
+            bold = {
+              family = prefs.font.monospace.family;
+              style = "Bold";
+              weight = 600;
+            };
+            italic = {
+              family = prefs.font.monospace.family;
+              style = "Italic";
+              weight = 400;
+            };
           };
         };
       };

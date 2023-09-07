@@ -16,9 +16,10 @@ in
     ../../mixins/iwd-networks.nix
     # ../../mixins/iwd-auto-ap.nix # not sure it works, worried it causes problems, but might be something else
 
-    (import "${inputs.mobile-nixos-openstick}/lib/configuration.nix" {
-      device = "openstick";
-    })
+    # (import "${inputs.mobile-nixos-openstick}/lib/configuration.nix" {
+    #   device = "openstick";
+    # })
+    inputs.mobile-nixos-openstick.nixosModules.devices.openstick
   ];
 
   config = {

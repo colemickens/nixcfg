@@ -9,6 +9,7 @@
 
     ../mixins/aria2.nix
     ../mixins/bottom.nix
+    ../mixins/broot.nix
     ../mixins/cachix.nix
     ../mixins/gh.nix
     ../mixins/git.nix
@@ -111,7 +112,8 @@
             dua
             erdtree # erd - dua alternative
             dufs # rust static file server
-            exa
+            eza # eza-community replacement for exa
+            lsd # another fancier `ls`
             fd
             gitui
             gex

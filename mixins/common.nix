@@ -182,7 +182,7 @@ in
             set -x 
             uptime_ms="$(cat /proc/uptime | cut -d ' ' -f 1)"
             uptime_ms="$(echo $uptime_ms | cut -d '.' -f 1)"
-            if [[ ''${uptime_ms} -gt ${ toString (60 * 2) } ]]; then 
+            if [[ ''${uptime_ms} -gt ${ toString (60 * 5) } ]]; then 
               echo "workaround_wifi_issue: trigger"
               ${pkgs.systemd}/bin/systemctl restart systemd-udev-trigger
             else
@@ -231,11 +231,11 @@ in
           # dhcpV4Config.ClientIdentifier = "mac";
           dhcpV4Config.Use6RD = "yes";
           dhcpV4Config.RouteMetric = 512;
-          dhcpV4Config.UseDNS = false;
+          # dhcpV4Config.UseDNS = false;
           dhcpV4Config.DUIDType = "link-layer";
           dhcpV6Config.RouteMetric = 512;
           dhcpV6Config.PrefixDelegationHint = "::64";
-          dhcpV6Config.UseDNS = false;
+          # dhcpV6Config.UseDNS = false;
           dhcpV6Config.DUIDType = "link-layer";
         };
         networks."30-network-defaults-wireless" = {
@@ -250,10 +250,10 @@ in
           };
           # dhcpV4Config.ClientIdentifier = "mac";
           dhcpV4Config.RouteMetric = 1500;
-          dhcpV4Config.UseDNS = false;
+          # dhcpV4Config.UseDNS = false;
           dhcpV4Config.DUIDType = "link-layer";
           dhcpV6Config.RouteMetric = 1500;
-          dhcpV6Config.UseDNS = false;
+          # dhcpV6Config.UseDNS = false;
           dhcpV6Config.DUIDType = "link-layer";
           # routes = [
           #   { routeConfig = { Gateway = "_dhcp4"; Metric = 1500; }; }

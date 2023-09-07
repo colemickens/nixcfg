@@ -20,11 +20,11 @@
 
   systemd.user.services.pipewire-pulse.path = [ pkgs.pulseaudio ];
 
-  environment.etc."pipewire/pipewire.conf.d/log.conf".text = ''
-    context.properties = {
-      log.level = 5
-    }
-  '';
+  # environment.etc."pipewire/pipewire.conf.d/log.conf".text = ''
+  #   context.properties = {
+  #     log.level = 5
+  #   }
+  # '';
 
   services.pipewire = {
     enable = true;

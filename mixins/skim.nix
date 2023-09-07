@@ -9,7 +9,7 @@
         fileWidgetCommand = "fd --type f";
         fileWidgetOptions = [ "--preview 'bat --color always {}'" ];
         changeDirWidgetCommand = "fd --type d";
-        changeDirWidgetOptions = [ "--preview 'exa --la | head -100'" ];
+        changeDirWidgetOptions = [ "--preview 'eza --la | head -100'" ];
         enableBashIntegration = true;
         enableZshIntegration = true;
         enableFishIntegration = true;

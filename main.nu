@@ -82,9 +82,7 @@ def "main nix" [...args] {
 def "main build" [ flakeRef: string ] {
   let drvs = (evalFlakeRef $flakeRef)
   let drvs = ($drvs | where { true })
-  print -e "****"
   print -e $drvs
-  print -e "****"
   buildDrvs $drvs false
 }
 
@@ -95,7 +93,7 @@ def "main cache" [ flakeRef: string ] {
 }
 
 def "main selfup" [] {
-  nix build $".#toplevels.(^hostname | str trim)"
+  sudo nix build --profile "/nix/var/nix/profiles/system" $".#toplevels.(^hostname | str trim)"
   sudo ./result/bin/switch-to-configuration switch
 }
 
@@ -125,34 +123,12 @@ def "main deploy" [...hosts] {
 def "main inputup" [] {
   header "light_yellow_reverse" "inputup"
   let srcdirs = ([
-    # nixpkgs and related branches
-    "nixpkgs/master" "nixpkgs/cmpkgs"
-    "nixpkgs/cmpkgs-cross-riscv64"
-    
-    # home-manager + my fork
-    "home-manager/master" "home-manager/cmhm"
-
-    # tow-boot and friends
-    "tow-boot/development" "tow-boot/development-flakes"
-    "tow-boot/alirock-h96maxv58"
-
-    # mobile-nixos and friends
-    "mobile-nixos/master"
-    "mobile-nixos/master-flakes"
-    "mobile-nixos/openstick"
-    # "mobile-nixos/pinephone-emmc" "mobile-nixos/reset-scripts" "mobile-nixos/sdm845-blue"
-    
-    # BUG: nixos-riscv64 - temporarily disabled
-    # "nixos-riscv64"
-
-    # flake-firefox-nightly (not checked out anymore unless troubleshooting)
-    # "flake-firefox-nightly"
-    
-    # nixpkgs-wayland
-    "nixpkgs-wayland/master"
-
-    # others, that I might (have) fork(ed)
-    "nixos-hardware"
+    "nixpkgs/master" "nixpkgs/cmpkgs" "nixpkgs/cmpkgs-cross-riscv64"                  # nixpkgs
+    "home-manager/master" "home-manager/cmhm"                                         # home-manager
+    "tow-boot/development" "tow-boot/development-flakes" "tow-boot/alirock-h96maxv58" # tow-boot
+    "mobile-nixos/master" "mobile-nixos/master-flakes" "mobile-nixos/openstick"       # mobile-nixos
+    "nixpkgs-wayland/master"                                                          # nixpkgs-wayland
+    "nixos-hardware"                                                                  # nixos-hardware
   ] | each { |it1| $it1 | each {|it| $"($env.NIXCFG_CODE)/($it)" } })
 
   let extsrcdirs = ([
@@ -238,33 +214,27 @@ def "main ciattrs" [] {
   $drvs
 }
 
-def "main upx" [ ...hosts ] {
-  loop {
-    do -i {
-      main up
-    }
-    sleep 120sec
-  }
-}
-
 def "main up" [...hosts] {
-  header "light_red_reverse" "up" "▒"
+  # header "light_red_reverse" "up" "▒"
 
   main inputup
   main lockup
   main pkgup
-  main dl '.#devShells.x86_64-linux.ci'
-  main dl '.#devShells.x86_64-linux.devtools'
-  main dl '.#devShells.x86_64-linux.devenv'
 
   main ciattrs
+
+  main dl ".#devShells.x86_64-linux.ci"
+  main dl '.#devShells.x86_64-linux.devtools'
+  main dl '.#devShells.x86_64-linux.devenv'
 
   main deploy raisin
   main deploy zeph
   main deploy openstick
 
-  print -e "openstick: reboot"
+  print -e "openstick: cleanup"
   ssh $"cole@(tailscale ip --4 openstick)" "nix-env --profile /home/cole/.local/state/nix/profiles/home-manager --delete-generations +1"
+  ssh $"cole@(tailscale ip --4 openstick)" "sudo nix-collect-garbage -d"
+  print -e "openstick: reboot"
   ssh $"cole@(tailscale ip --4 openstick)" "sudo reboot"
 }
 

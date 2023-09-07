@@ -1,19 +1,7 @@
-#WHY:
-# networkmanager
-# foot
-# in _ANY_ of our builds:
-
 {
-  description = "colemickens-nixcfg";
-
   # TODO: revisit/checkout: mic92/envfs, nickel, wfvm
-  # TODO: promote nix-rice (rename to nix-iterm-themes) to nix-community
-  # TODO: nix-rice is active?? do we want to collab? appearance module as a full idea?
 
-
-  # TODO: adopt lanzaboote / bootis / bootspec
-  # TODO: remove other SBC crap
-  # TODO: add firmware build for the Glove80 keyboard
+  description = "colemickens - nixos configs, custom packges, misc";
 
   inputs = {
     # systems = { url = "git+file:.?path=flake.systems.nix"; flake = false; };
@@ -115,7 +103,6 @@
           #   path = ./images/ocii/oci-image.nix;
           # };
           openstick = {
-            # PROBLEM!!
             path = ./hosts/openstick/configuration.nix;
             pkgs = inputs.cmpkgs;
           };
@@ -136,8 +123,8 @@
           installer = nixosConfigurations.installer.config.system.build.isoImage;
         };
         aarch64-linux = {
-          # openstick-aboot = ?? # TODO
-          # openstick-boot = # ? # TODO
+          openstick-abootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-abootimg;
+          openstick-bootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-bootimg;
           h96maxv58-uboot = inputs.tow-boot-alirock-h96maxv58.outputs.packages.aarch64-linux.radxa-rock5b.outputs.firmware;
         };
         riscv64-linux = { };
@@ -156,6 +143,11 @@
           # TODO: must be a better way?
           let
             __colemickens_nixcfg_pkgs = rec {
+              alacritty = prev.callPackage ./pkgs/alacritty {
+                inherit (prev.darwin.apple_sdk.frameworks)
+                  AppKit CoreGraphics CoreServices CoreText
+                  Foundation OpenGL;
+              };
               nushell = prev.callPackage ./pkgs/nushell {
                 doCheck = false; # TODO consider removing
                 inherit (prev.darwin.apple_sdk.frameworks) AppKit Security;

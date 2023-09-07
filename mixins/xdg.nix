@@ -16,7 +16,7 @@
           enable = true;
           desktop = "\$HOME/desktop";
           documents = "\$HOME/documents";
-          download = "\$HOME/downloads";
+          download = "/unzfs/cole/downloads";
           music = "\$HOME/documents/music";
           pictures = "\$HOME/documents/pictures";
           publicShare = "\$HOME/documents/public";
