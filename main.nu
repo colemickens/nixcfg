@@ -3,6 +3,9 @@
 $env.NIXCFG_CI_BRANCH = (if "NIXCFG_CI_BRANCH" in $env { $env.NIXCFG_CI_BRANCH } else { (date now | format date '%s') })
 $env.NIXCFG_CODE = (if "NIXCFG_CODE" in $env { $env.NIXCFG_CODE } else { "/home/cole/code" })
 $env.LOGDIR = ([ ".outputs" $env.NIXCFG_CI_BRANCH ] | path join)
+mkdir $env.LOGDIR
+touch $"($env.LOGDIR)/aarch64-linux"
+touch $"($env.LOGDIR)/x86_64-linux"
 
 let c1 = "http://192.168.70.20.nip.io:9999/colemickens-cachix-org"
 let c2 = "http://192.168.70.20.nip.io:9999/cache-nixos-org"
@@ -123,10 +126,10 @@ def "main deploy" [...hosts] {
 def "main inputup" [] {
   header "light_yellow_reverse" "inputup"
   let srcdirs = ([
-    "nixpkgs/master" "nixpkgs/cmpkgs" "nixpkgs/cmpkgs-cross-riscv64"                  # nixpkgs
+    "nixpkgs/master" "nixpkgs/nixos-unstable" "nixpkgs/cmpkgs" "nixpkgs/cmpkgs-cross-riscv64"                  # nixpkgs
     "home-manager/master" "home-manager/cmhm"                                         # home-manager
     "tow-boot/development" "tow-boot/development-flakes" "tow-boot/alirock-h96maxv58" # tow-boot
-    "mobile-nixos/master" "mobile-nixos/master-flakes" "mobile-nixos/openstick"       # mobile-nixos
+    "mobile-nixos/development" "mobile-nixos/development-flakes" "mobile-nixos/openstick"       # mobile-nixos
     "nixpkgs-wayland/master"                                                          # nixpkgs-wayland
     "nixos-hardware"                                                                  # nixos-hardware
   ] | each { |it1| $it1 | each {|it| $"($env.NIXCFG_CODE)/($it)" } })
@@ -234,6 +237,7 @@ def "main up" [...hosts] {
   print -e "openstick: cleanup"
   ssh $"cole@(tailscale ip --4 openstick)" "nix-env --profile /home/cole/.local/state/nix/profiles/home-manager --delete-generations +1"
   ssh $"cole@(tailscale ip --4 openstick)" "sudo nix-collect-garbage -d"
+  ssh $"cole@(tailscale ip --4 openstick)" "sudo journalctl --vacuum-size=5M"
   print -e "openstick: reboot"
   ssh $"cole@(tailscale ip --4 openstick)" "sudo reboot"
 }

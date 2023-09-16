@@ -21,7 +21,7 @@ in
     ../mixins/alacritty.nix
     ../mixins/fonts.nix
     ../mixins/gtk.nix
-    ../mixins/kitty.nix
+    # ../mixins/kitty.nix # eh, no rust, </3. :(
     ../mixins/mpv.nix
     ../mixins/pipewire.nix
     ../mixins/rio.nix
@@ -101,6 +101,9 @@ in
           qpwgraph
           toastify
           virt-viewer
+
+          sssnake
+          mission-center
 
           thunderbird
 

@@ -9,6 +9,9 @@ in {
   ];
 
   config = {
+    system.stateVersion = "23.11";
+    boot.swraid.enable = lib.mkForce false;
+
     nixpkgs.hostPlatform.system = "x86_64-linux";
     networking.hostName = hn;
 

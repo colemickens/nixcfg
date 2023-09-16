@@ -1,28 +1,36 @@
 #!/usr/bin/env nu
 
 def main [ job: string ] {
-  let cfg = {
-    job:  "push_to_raisin"
-    # use ssd+hdr on remote to unlock, bp to import
-    remote: $"(tailscale ip --4 raisin)"
-    ssd: "/dev/disk/by-id/usb-Realtek_RTL9210B-CG_012345678904-0:0"
-    hdr: "/home/cole/SyncThingData/Sync/ORION_NVME_SSD/header_raisin.img"
-    bp: "orionraisinpool"
-    secret: "orionraisin_luks"
-  }
-  
-  # if job == "push_to_orion" {
-  #   $cfg = {
-  #     job:  "push_to_orion"
-  #     remote: "localhost"
-  #     ssd: "/dev/disk/by-id/usb-Realtek_RTL9210_NVME_012345678903-0:0"
-  #     hdr: "/home/cole/Sync/ORION_NVME_SSD/header.img"
-  #     bp: "orionpool"
-  #     secret: "orion_luks"
-  #   }
-  # }
+  let cfg = (if ($job == "push_remote_raisin") {
+    {
+      job:  "push_to_raisin"
+      # TODO: rename the zrepl job
+      # job: "push_remote_raisin"
+      # use ssd+hdr on remote to unlock, bp to import
+      remote: $"(tailscale ip --4 raisin)"
+      ssd: "/dev/disk/by-id/usb-Realtek_RTL9210B-CG_012345678904-0:0"
+      hdr: "/home/cole/SyncThingData/Sync/ORION_NVME_SSD/header_raisin.img"
+      bp: "orionraisinpool"
+      secret: "orionraisin_luks"
+    }
+  } else if ($job == "push_local") {
+    {
+      job:  "push_to_orion"
+      # TODO: rename the zrepl job
+      # job: "push_local"
+      remote: "localhost"
+      ssd: "/dev/disk/by-id/usb-Realtek_RTL9210_NVME_012345678903-0:0"
+      hdr: "/home/cole/SyncThingData/Sync/ORION_NVME_SSD/header.img"
+      bp: "orionpool"
+      secret: "orion_luks"
+    }
+  } else {
+    print -e "invalid job"
+    exit -1
+  })
 
   print -e $cfg
+  # exit -1 # debug
   
   let luksdev = "orion"
   

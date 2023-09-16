@@ -40,7 +40,7 @@ in
       };
     };
 
-    system.stateVersion = "22.05";
+    system.stateVersion = "23.11";
     environment.systemPackages = with pkgs; [
       dua
       # usbutils

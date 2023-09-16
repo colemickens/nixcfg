@@ -76,7 +76,7 @@ rec {
     # monospace = { family = "Go Mono"; package = pkgs.go-font; };
     # monospace = { family = "Jetbrains Mono"; package = pkgs.jetbrains-mono; };
     fallback = { family = "Font Awesome 5 Free"; package = pkgs.font-awesome; };
-    emoji = { family = "Noto Color Emoji"; package = pkgs.noto-fonts-emoji; };
+    emoji = { family = "Noto Color Emoji"; package = pkgs.noto-fonts-color-emoji; };
     
     allPackages = (map (p: p.package)
       [

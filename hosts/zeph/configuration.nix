@@ -21,6 +21,7 @@ in
 
     ../../mixins/android.nix
     # ../../mixins/easyeffects.nix
+    ../../mixins/cfdyndns.nix
     ../../mixins/hidpi.nix
     ../../mixins/ledger.nix
     ../../mixins/libvirt.nix
@@ -46,12 +47,13 @@ in
   ];
   config = {
     nixpkgs.hostPlatform.system = "x86_64-linux";
-    system.stateVersion = "21.05";
+    system.stateVersion = "23.11";
 
     networking.hostName = hn;
     nixcfg.common.hostColor = "purple";
     nixcfg.common.skipMitigations = true;
     nixcfg.common.defaultKernel = true;
+    nixcfg.common.kernelPatchHDR = true;
     nixcfg.common.addLegacyboot = false;
 
     services.tailscale.useRoutingFeatures = "client";

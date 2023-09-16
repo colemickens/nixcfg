@@ -45,7 +45,7 @@ in
     # boot.initrd.systemd.enable = false;
 
     networking.hostName = hn;
-    system.stateVersion = "21.11";
+    system.stateVersion = "23.11";
     system.build = rec {
       mbr_disk_id = "888885b1";
     };

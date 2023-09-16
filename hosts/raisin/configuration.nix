@@ -15,6 +15,8 @@ in
     ../../profiles/interactive.nix
     ../../profiles/addon-laptop.nix
 
+    ../../mixins/cfdyndns.nix
+    ../../mixins/github-runner.nix
     ../../mixins/iwd-networks.nix
     ../../mixins/plex.nix
     ../../mixins/rclone-googledrive-mounts.nix
@@ -31,7 +33,7 @@ in
 
   config = {
     nixpkgs.hostPlatform.system = "x86_64-linux";
-    system.stateVersion = "21.05";
+    system.stateVersion = "23.11";
 
     networking.hostName = hn;
     nixcfg.common.hostColor = "green";

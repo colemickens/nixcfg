@@ -42,17 +42,18 @@
   * toplevel machine definitions
   * `openstick`
     * configuration for a $10USD LTE USB Modem Stick
+    * utilizes:
+      * [my fork of mobile-nixos](https://github.com/colemickens/mobile-nixos/tree/openstick)
+      * [my forked/hacked up copy of openstick's lk2nd with patches for my stick](https://github.com/colemickens/openstick-lk2nd)
+      * [my forked/hacked up copy of openstick's linux, can't remember why I have my own fork](https://github.com/colemickens/linux/tree/openstick)
   * `installer` (meta, iso)
     * configuration for a custom `x86_64-linux` installer image
     * includes my SSH key and `sshd` enabled and most used programs
-    * see: `nix build .#images.installer`
+    * see: `nix build .#extra.x86_64-linux.installer`
   * `raisin` (laptop)
     * former-daily-driver
     * **Lenovo "Yoga Slim 7 Pro-14ACH5 Laptop (ideapad) - Type 82MS"**
-    * remote (KS, USA) `zrepl`(`zfs`) and `syncthing` backup target
-  * `xeep` (laptop)
-    * former-former-daily-driver **Dell XPS 9370**
-    * remote (MO, USA) `zrepl`(`zfs`) and `syncthing` backup target
+    * remote (KS, USA) `zrepl` (`zfs`) and `syncthing` backup target
   * `zeph` (laptop)
     * current daily-driver
     * favorite, all-AMD, laptop ever
@@ -63,13 +64,16 @@
   * buyer beware
 * `mixins/`
   * individual application configuration (mostly via `home-manager`)
+  * mix of `home-manager` and `nixos` configuration
   * (`libvirt`, `prs`/`gopass`, `git`, `gnupg`, `spotifyd`, `tailscale`, `wezterm`, etc)
 * `pkgs/`
   * my own "packages"
   * custom shell commands (gpg+ssh wrapper, etc)
   * tip-of-tree package overrides for:
-    * `wezterm`
+    * `git-repo-manager`
     * `nushell`
+    * `rio`
+    * `wezterm`
 * `profiles/`
   * bits that compose machine "personas"
   * `core.nix` - core bits, see also `mixins/common.nix`
@@ -83,8 +87,8 @@
   * `user-cole.nix` - my base `cole` user configuration
 * `secrets/`
   * scripts to manage `sops` for `sops-nix`
-  * `sops-nix` is great... but...
-  * `sops` is questionable-code-quality near-abandonware
+  * `sops-nix` is great...
+  * but `sops` is questionable-code-quality near-abandonware
 * `shells/`
   * nix shells for various scenarios
     * `_minimal.nix` - minimal shell base
@@ -98,6 +102,7 @@
   * updates/rebases my flake inputs
   * updates/rebases my custom packages to tip-of-branch
   * updates the lock file
+  * handles remote building and caching (without using nix's "remote builders")
 
 ## Other Interesting Nix Repos
 

@@ -71,6 +71,9 @@
           CARGO_HOME = "${hm.config.xdg.dataHome}/cargo";
           PARALLEL_HOME = "${hm.config.xdg.configHome}/parallel";
           PASSWORD_STORE_DIR = "${hm.config.xdg.dataHome}/password-store";
+          # TODO: this is used for both zsh/bash? ???
+          # also, zsh doesn't mkdir -p on it, I guess... bleh
+          # HISTFILE = "${hm.config.xdg.stateHome}/bash/history";
         };
         home.file = {
           "${hm.config.home.sessionVariables.PARALLEL_HOME}/will-cite".text = "";
@@ -120,6 +123,7 @@
             grex
             hexyl
             xh
+            lazygit
             dogdns
             ripgrep
             jless

@@ -38,6 +38,15 @@ let
     accel_profile = "flat";
   };
 
+  screenshot = pkgs.writeShellScript "screenshot.sh" ''
+    mkdir -p "''${HOME}/screenshots"
+    ${pkgs.grim}/bin/grim "''${HOME}/screenshots/screenshot-$(date '+%s').png"
+  '';
+  screenshotArea = pkgs.writeShellScript "screenshot-area.sh" ''
+    mkdir -p "''${HOME}/screenshots"
+    ${pkgs.grim}/bin/grim -g "$(slurp)" "''${HOME}/screenshots/screenshot-$(date '+%s').png"
+  '';
+
   # silly gtk/gnome wayland schenanigans
   # TODO: see if this is necessary if we get HM to do it? or our own systemd user units?
   gsettings_auto =
@@ -280,8 +289,10 @@ in
               "${modifier}+Ctrl+Alt+equal" = "exec ${outputScale} +.1";
               "${modifier}+Ctrl+Alt+minus" = "exec ${outputScale} -.1";
 
-              "${modifier}+F12" = ''exec ${pkgs.grim}/bin/grim \"''${HOME}/screenshot-$(date '+%s').png\"'';
-              "${modifier}+Shift+F12" = ''exec ${pkgs.grim}/bin/grim  -g \"$(slurp)\" \"''${HOME}/screenshot-$(date '+%s').png\"'';
+              # "${modifier}+F12" = ''exec ${pkgs.grim}/bin/grim \"''${HOME}/screenshots/screenshot-$(date '+%s').png\"'';
+              # "${modifier}+Shift+F12" = ''exec ${pkgs.grim}/bin/grim  -g \"$(slurp)\" \"''${HOME}/screenshots/screenshot-$(date '+%s').png\"'';
+              "${modifier}+F12" = "exec ${screenshot}";
+              "${modifier}+Shift+F12" = "exec ${screenshotArea}";
 
               "${modifier}+Ctrl+Alt+Up" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +10";
               "${modifier}+Ctrl+Alt+Down" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 10-";

@@ -1,47 +1,36 @@
 { pkgs, config, inputs, ... }:
 
 let
-  # __yuzu = pkgs.yuzu-mainline;
-  __yuzu = pkgs.yuzu-early-access;
-  __yuzu1 = (__yuzu.override { qtwebengine = null; });
-  _yuzu = __yuzu1.overrideAttrs (old: {
-    cmakeFlags = old.cmakeFlags ++ [ "-DYUZU_USE_QT_WEB_ENGINE=OFF" ];
-  });
+  yuzu_noQtWeb =
+    (pkgs.yuzu-early-access.override { qtwebengine = null; })
+      .overrideAttrs (old: {
+        cmakeFlags = old.cmakeFlags ++ [ "-DYUZU_USE_QT_WEB_ENGINE=OFF" ];
+      });
 in
 {
   config = {
-    boot.blacklistedKernelModules = [
-      "hid-nintendo"
-    ];
     networking.firewall = {
       # https://portforward.com/halo-infinite/
       allowedTCPPorts = [ 3074 ];
       allowedUDPPorts = [ 88 500 3074 2075 3544 4500 ];
     };
-    services = {
-      # replay-sorcery = {
-      #   enable = true;
-      #   enableSysAdminCapability = true;
-      #   # autostart = {};
-      #   # setting = {};
-      # };
-      # joycond = {
-      #   enable = true;
-      # };
-    };
+    hardware.opengl.extraPackages = [ pkgs.gamescope ];
     programs = {
       steam = {
         enable = true;
+        gamescopeSession = {
+          enable = true;
+          args = [ "--hdr-enabled" ];
+        };
       };
       gamescope = {
         enable = true;
-        # enableRenice = true;
-        # settings = {};
+        capSysNice = true;
       };
-      gamemode = {
-        enable = true;
-        enableRenice = true;
-      };
+      # gamemode = {
+      #   enable = true;
+      #   enableRenice = true;
+      # };
     };
     hardware = {
       # xone.enable = true; # xbox one wired/wireless driver
@@ -58,18 +47,8 @@ in
         vkbasalt
         goverlay
 
-        # inputs.jstest-gtk.packages.${stdenv.hostPlatform.system}.default
-        # inputs.xboxdrv.packages.${stdenv.hostPlatform.system}.default
-
-        # eh?
-        # retroarchFull
-
-        # emulators
         dolphin-emu # gamecube emu
-        # mupen64plus
-        # simple64-gui # TODO
-        # ryujinx # switch emu
-        _yuzu
+        yuzu_noQtWeb
         xemu
 
         airshipper

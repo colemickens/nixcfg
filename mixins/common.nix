@@ -49,6 +49,10 @@ in
           # TODO: it would be nice if mobile-nixos didn't make me need this...
         '';
       };
+      kernelPatchHDR = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+      };
       defaultNoDocs = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -127,6 +131,15 @@ in
         );
 
         kernelPackages = lib.mkIf cfg.defaultKernel _kernelPackages;
+        kernelPatches = lib.mkIf cfg.kernelPatchHDR [
+          {
+            name = "amd-hdr-patch";
+            patch = (pkgs.fetchpatch {
+              url = "https://raw.githubusercontent.com/CachyOS/kernel-patches/d792451352838e29b6b0e4a297e897bf1bb975fe/6.4/0005-HDR.patch";
+              hash = "sha256-fGbb3NCyuryXDDtD14GDhc4AK/Ho3I0M1tLOkgJeRdQ=";
+            });
+          }
+        ];
         kernelParams = lib.mkIf cfg.skipMitigations [ "mitigations=off" ];
         kernel.sysctl = {
           "fs.file-max" = 100000;
@@ -198,6 +211,7 @@ in
         enable = true;
 
         wait-online = {
+          enable = false;
           anyInterface = true;
           extraArgs = [ "--ipv4" ];
         };

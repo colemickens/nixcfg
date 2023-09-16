@@ -42,7 +42,6 @@
     zellij = { url = "github:a-kenji/zellij-nix"; inputs."flake-utils".follows = "flake-utils"; };
 
     # experimental/unused:
-    nix-netboot-server = { url = "github:DeterminateSystems/nix-netboot-serve"; };
     nix-rice = { url = "github:colemickens/nix-rice"; inputs."nixpkgs".follows = "cmpkgs"; };
   };
 
@@ -153,9 +152,9 @@
                 inherit (prev.darwin.apple_sdk.frameworks) AppKit Security;
                 inherit (prev.darwin.apple_sdk_11_0) Libsystem;
               };
-              # git-repo-manager = prev.callPackage ./pkgs/git-repo-manager {
-              #   fenix = inputs.fenix;
-              # };
+              git-repo-manager = prev.callPackage ./pkgs/git-repo-manager {
+                fenix = inputs.fenix;
+              };
               rio = prev.callPackage ./pkgs/rio {
                 withX11 = false;
               };
