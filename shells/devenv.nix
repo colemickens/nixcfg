@@ -41,6 +41,7 @@ minimalMkShell {
   buildInputs = with pkgs; [
     llvmPackages.libclang
     llvmPackages.libclang.lib
+    pipewire
     freetype
     ncurses
     pcsclite

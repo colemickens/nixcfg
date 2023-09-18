@@ -8,6 +8,7 @@
     ./hm.nix
 
     ../mixins/aria2.nix
+    ../mixins/bash.nix
     ../mixins/bottom.nix
     ../mixins/broot.nix
     ../mixins/cachix.nix
@@ -16,7 +17,7 @@
     ../mixins/gopass.nix
     ../mixins/gpg-agent.nix
     ../mixins/helix.nix
-    # ../mixins/jj.nix
+    ../mixins/jj.nix
     ../mixins/joshuto.nix
     ../mixins/nushell.nix
     ../mixins/pijul.nix
