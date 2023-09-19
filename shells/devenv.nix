@@ -26,6 +26,10 @@ minimalMkShell {
 
   nativeBuildInputs = inputs.self.devShells.${pkgs.stdenv.hostPlatform.system}.devtools.nativeBuildInputs ++ (with pkgs; [
     pkg-config
+    cmake
+    gnumake
+    nasm
+    perl
 
     /* coreboot */
     # flashrom # use nixos module for udev rules
@@ -66,6 +70,10 @@ minimalMkShell {
     gst_all_1.gst-libav
 
     crate2nix
+
+    glslang
+    gtk3
+    gtk4
 
     atk # sirula
     gdk-pixbuf # sirula

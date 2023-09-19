@@ -35,8 +35,7 @@
     terranix = { url = "github:terranix/terranix"; inputs."nixpkgs".follows = "cmpkgs"; }; # packet/terraform deployments
     fenix = { url = "github:nix-community/fenix"; inputs."nixpkgs".follows = "cmpkgs"; }; # used for nightly rust devtools
     helix = { url = "github:helix-editor/helix"; };
-    # jj = { url = "github:martinvonz/jj"; inputs."flake-utils".follows = "flake-utils"; };
-    jj = { url = "github:martinvonz/jj/push-untysktpqvzy"; inputs."flake-utils".follows = "flake-utils"; };
+    jj = { url = "github:martinvonz/jj"; inputs."flake-utils".follows = "flake-utils"; };
     nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; };
     nix-update = { url = "github:Mic92/nix-update"; };
     # zellij = { url = "github:a-kenji/zellij-nix/bee0cae93b4cbcd0a1ad1a62e70709b9db0f5c7c"; inputs."flake-utils".follows = "flake-utils"; };

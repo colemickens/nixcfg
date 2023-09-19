@@ -89,7 +89,7 @@ in
           (pkgs.callPackage ../pkgs/commands-gui.nix { })
 
           # yay, discord pos
-          dorion
+          # dorion # TODO: temp disable, this pulls in webkitgtk
 
           # misc tools/utils
           brightnessctl

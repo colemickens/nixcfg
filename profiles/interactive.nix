@@ -56,6 +56,8 @@
       };
     };
 
+    programs.bandwhich.enable = true;
+
     services.dbus.packages = with pkgs; [ pkgs.dconf ];
     security = {
       please.enable = true;
@@ -95,7 +97,6 @@
           (lib.mkIf (pkgs.hostPlatform.system != "riscv64-linux") (with pkgs; [
             # x86_64-linux only
             zenith # uh oh, no aarch64 support? noooooo
-            bandwhich # TODO: check if it natively compiles?
           ]))
           (lib.mkIf (pkgs.hostPlatform.system == "x86_64-linux") (with pkgs; [
             # x86_64-linux only
@@ -119,6 +120,7 @@
             eza # eza-community replacement for exa
             lsd # another fancier `ls`
             fd
+            fx
             gitui
             gex
             grex

@@ -6,6 +6,7 @@ $env.LOGDIR = ([ ".outputs" $env.NIXCFG_CI_BRANCH ] | path join)
 mkdir $env.LOGDIR
 touch $"($env.LOGDIR)/aarch64-linux"
 touch $"($env.LOGDIR)/x86_64-linux"
+print -e $"LOGDIR: ($env.LOGDIR)"
 
 let c1 = "http://192.168.70.20.nip.io:9999/colemickens-cachix-org"
 let c2 = "http://192.168.70.20.nip.io:9999/cache-nixos-org"
