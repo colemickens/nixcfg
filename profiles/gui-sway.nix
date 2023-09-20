@@ -5,8 +5,8 @@ let
   color_pink = "#ee00ff";
 
   prefs = import ../mixins/_preferences.nix { inherit inputs config lib pkgs; };
-  # term = "${pkgs.wezterm}/bin/wezterm";
-  term = "${pkgs.alacritty}/bin/alacritty";
+  term = "${pkgs.wezterm}/bin/wezterm";
+  # term = "${pkgs.alacritty}/bin/alacritty";
   # term = "${pkgs.foot}/bin/foot";
 
   # background = prefs.background;
