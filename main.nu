@@ -127,38 +127,48 @@ def "main deploy" [...hosts] {
 def "main inputup" [] {
   header "light_yellow_reverse" "inputup"
   let srcdirs = ([
-    "nixpkgs/master" "nixpkgs/nixos-unstable" "nixpkgs/cmpkgs" "nixpkgs/cmpkgs-cross-riscv64"                  # nixpkgs
-    "home-manager/master" "home-manager/cmhm"                                         # home-manager
-    "tow-boot/development" "tow-boot/development-flakes" "tow-boot/alirock-h96maxv58" # tow-boot
-    "mobile-nixos/development" "mobile-nixos/development-flakes" "mobile-nixos/openstick"       # mobile-nixos
-    "nixpkgs-wayland/master"                                                          # nixpkgs-wayland
-    "nixos-hardware"                                                                  # nixos-hardware
+    [
+      "nixpkgs/master"
+      "nixpkgs/nixos-unstable"
+      "nixpkgs/cmpkgs"
+      # "nixpkgs/cmpkgs-cross-riscv64"
+    ]
+    [ "home-manager/master" "home-manager/cmhm" ]
+    [ "tow-boot/development" "tow-boot/development-flakes" "tow-boot/alirock-h96maxv58" ]
+    [ "mobile-nixos/development" "mobile-nixos/development-flakes" "mobile-nixos/openstick" ]
+    [ "nixpkgs-wayland/master" ]
+    [ "nixos-hardware" ]
   ] | each { |it1| $it1 | each {|it| $"($env.NIXCFG_CODE)/($it)" } })
 
   let extsrcdirs = ([
-    "linux/master"
-  ] | each {|it| $"($env.HOME)/code-ext/($it)" })
+    [
+      "linux/master"
+      # "linux/openstick"
+    ]
+  ] | each { |it1| $it1 | each {|it| $"($env.HOME)/code-ext/($it)" } })
 
   let srcdirs = ($srcdirs | append $extsrcdirs)
 
-  for dir in $srcdirs {
-    if (not ($dir | path exists)) {
-      print -e $"(ansi yellow_dimmed)inputup: skip:(ansi reset) ($dir)"
-      continue
-    }
-    print -e $"(ansi yellow_dimmed)inputup: check:(ansi reset) ($dir)"
-    do -i { ^git -C $dir rebase --abort err> /dev/null }
-    if (ls -D ([$dir ".git"] | path join) | get 0 | get type) == "dir" {
-      ^git -C $dir pull --rebase --no-gpg-sign
-    } else {
-      ^git -C $dir rebase --no-gpg-sign
-    }
-    let b = (git -C $dir rev-parse --abbrev-ref HEAD)
-    let remote = (git -C $dir rev-parse $"origin/($b)")
-    let local = (git -C $dir rev-parse $b)
-    print -e $"remote=($remote | str substring 0..6); local=($local | str substring 0..6)"
-    if ($local != $remote) {
-      ^git -C $dir push origin HEAD -f
+  $srcdirs | par-each { |dirGroup|
+    for dir in $dirGroup {
+      if (not ($dir | path exists)) {
+        print -e $"(ansi yellow_dimmed)inputup: skip:(ansi reset) ($dir)"
+        continue
+      }
+      print -e $"(ansi yellow_dimmed)inputup: check:(ansi reset) ($dir)"
+      do -i { ^git -C $dir rebase --abort err> /dev/null }
+      if (ls -D ([$dir ".git"] | path join) | get 0 | get type) == "dir" {
+        ^git -C $dir pull --rebase --no-gpg-sign
+      } else {
+        ^git -C $dir rebase --no-gpg-sign
+      }
+      let b = (git -C $dir rev-parse --abbrev-ref HEAD)
+      let remote = (git -C $dir rev-parse $"origin/($b)")
+      let local = (git -C $dir rev-parse $b)
+      print -e $"remote=($remote | str substring 0..6); local=($local | str substring 0..6)"
+      if ($local != $remote) {
+        ^git -C $dir push origin HEAD -f
+      }
     }
   }
 }

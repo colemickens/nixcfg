@@ -38,7 +38,7 @@ in
           default_mode = "normal";
           default_layout = "compact"; # seems to break, I don't think the nix pkg has the default plugins
           default_shell = "nu";
-          # simplified_ui = true;
+          simplified_ui = true;
           pane_frames = true;
           scrollback_editor = "hx";
           # theme = "default";

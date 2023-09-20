@@ -157,10 +157,10 @@ in
             terminal = prefs.default_term;
             fonts = prefs.swayfonts;
             focus.followMouse = "always";
-            colors = {
-              "focused" = { border = borderActive; background = borderActive; text = "#ffffff"; indicator = "#ffffff"; childBorder = borderActive; };
-              "unfocused" = { border = borderInactive; background = borderInactive; text = "#888888"; indicator = "#ffffff"; childBorder = borderInactive; };
-            };
+            # colors = {
+            #   "focused" = { border = borderActive; background = borderActive; text = "#ffffff"; indicator = "#ffffff"; childBorder = borderActive; };
+            #   "unfocused" = { border = borderInactive; background = borderInactive; text = "#888888"; indicator = "#ffffff"; childBorder = borderInactive; };
+            # };
             # gaps = { inner = 2; outer = 0; };
             window.hideEdgeBorders = "smart";
             window.border = 4;
@@ -175,6 +175,7 @@ in
             ];
             startup = [
               { always = true; command = "${gsettings_auto}"; }
+              { always = true; command = "${pkgs.asusctl}/bin/rog-control-center"; }
             ];
             input = {
               "${in_tp_zeph}" = _touchpad;

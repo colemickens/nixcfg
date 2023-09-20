@@ -22,7 +22,10 @@
     };
 
     # core system/inputs
-    firefox-nightly = { url = "github:colemickens/flake-firefox-nightly"; inputs."nixpkgs".follows = "cmpkgs"; };
+    # TODO: undo this!!!!!!
+    firefox-nightly = { url = "github:nix-community/flake-firefox-nightly"; inputs."nixpkgs".follows = "cmpkgs"; };
+    # firefox-nightly = { url = "github:nix-community/flake-firefox-nightly"; };
+    # firefox-nightly = { url = "github:nix-community/flake-firefox-nightly/e3dd5f7a722b0a08f6c97ca51ac21bc9db6b9788"; inputs."nixpkgs".follows = "cmpkgs"; };
     home-manager = { url = "github:colemickens/home-manager/cmhm"; inputs."nixpkgs".follows = "cmpkgs"; };
     nixos-hardware = { url = "github:colemickens/nixos-hardware"; };
     nixpkgs-wayland = { url = "github:nix-community/nixpkgs-wayland/master"; inputs."nixpkgs".follows = "cmpkgs"; };

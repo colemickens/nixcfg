@@ -1,5 +1,0 @@
-- mkdir /cache/${user}
-- sudo chown cole:cole /cache/cole
-- sudo mkdir /cache/cole/.cache # todo revisit "home-.cache"? canonicallically nest these??? am i over thinking it?
-
-
