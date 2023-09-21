@@ -121,8 +121,7 @@ in
           inherit (nwPkgs)
             sway-unwrapped
             xdg-desktop-portal-wlr
-            sirula;
-          # wayland-protocols = nwPkgs.new-wayland-protocols;
+          ;
         })
     ];
 
