@@ -29,6 +29,9 @@ in
       #     ];
       #   };
       # };
+
+      # TODO:
+      # - not sure what format_space does?
       xdg.configFile."zellij/layouts/default_zjstatus.kdl".text = ''
         layout {
           pane {}
@@ -36,23 +39,23 @@ in
             plugin location="file:${plugin_zjstatus}/bin/zjstatus.wasm" {
               format_left  "{mode} #[fg=#89B4FA,bold]{session} {tabs}"
               format_right "{datetime}"
-              format_space ""
+              format_space "|"
 
               hide_frame_for_single_pane "false"
 
               mode_normal  "#[bg=#89B4FA] "
               mode_tmux    "#[bg=#ffc387] "
 
-              tab_normal              "#[fg=#6C7086] {index} :: {name} "
-              tab_normal_fullscreen   "#[fg=#6C7086] {index} :: {name} [] "
-              tab_normal_sync         "#[fg=#6C7086] {index} :: {name} <> "
+              tab_normal              "#[fg=#6C7086] {name} "
+              tab_normal_fullscreen   "#[fg=#6C7086] {name} [] "
+              tab_normal_sync         "#[fg=#6C7086] {name} <> "
 
-              tab_active              "#[fg=#9399B2,bold,italic] {name} "
-              tab_active_fullscreen   "#[fg=#9399B2,bold,italic] {name} [] "
-              tab_active_sync         "#[fg=#9399B2,bold,italic] {name} <> "
+              tab_active              "#[bg=#6C7086,fg=#000000,bold] {name} "
+              tab_active_fullscreen   "#[bg=#6C7086,fg=#000000] {name} [] "
+              tab_active_sync         "#[bg=#6C7086,fg=#000000,bold] {name} <> "
 
-              datetime        "#[fg=#6C7086] {format} "
-              datetime_format "%Y-%m-%b %H:%M"
+              datetime          "#[fg=#6C7086] {format} "
+              datetime_format   "%Y-%m-%b %H:%M"
               datetime_timezone "Europe/Berlin"
             }
           }
