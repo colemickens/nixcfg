@@ -20,6 +20,7 @@ minimalMkShell {
   name = "shell-devenv";
   hardeningDisable = [ "fortify" ];
 
+  LD_LIBRARY_PATH = "${pkgs.libglvnd}/lib";
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   RUST_BACKTRACE = 1;
   GST_PLUGIN_SYSTEM_PATH = gstreamerPath;
