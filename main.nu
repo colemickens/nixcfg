@@ -126,7 +126,7 @@ def "main deploy" [...hosts] {
 def "main inputup" [] {
   header "light_yellow_reverse" "inputup"
   let srcdirs = ([
-    "nixpkgs/master" "nixpkgs/nixos-unstable" "nixpkgs/cmpkgs" "nixpkgs/cmpkgs-cross-riscv64"                  # nixpkgs
+    "nixpkgs/master" "nixpkgs/nixos-unstable" "nixpkgs/cmpkgs"                        # nixpkgs
     "home-manager/master" "home-manager/cmhm"                                         # home-manager
     "tow-boot/development" "tow-boot/development-flakes" "tow-boot/alirock-h96maxv58" # tow-boot
     "mobile-nixos/development" "mobile-nixos/development-flakes" "mobile-nixos/openstick"       # mobile-nixos
@@ -169,7 +169,6 @@ def "main inputup2" [] {
       "nixpkgs/master"
       "nixpkgs/nixos-unstable"
       "nixpkgs/cmpkgs"
-      # "nixpkgs/cmpkgs-cross-riscv64"
     ]
     [ "home-manager/master" "home-manager/cmhm" ]
     [ "tow-boot/development" "tow-boot/development-flakes" "tow-boot/alirock-h96maxv58" ]
