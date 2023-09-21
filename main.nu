@@ -275,14 +275,16 @@ def "main up" [...hosts] {
 
   main inputup
   main lockup
-  main pkgup
-
-  main ciattrs
 
   main dl ".#devShells.x86_64-linux.ci"
   main dl '.#devShells.x86_64-linux.devenv'
 
+  main pkgup
+
+  main ciattrs
+
   main deploy raisin
+  # main deploy slynux
   main deploy zeph
   main deploy openstick
 
