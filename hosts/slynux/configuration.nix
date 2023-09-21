@@ -14,17 +14,10 @@ in
     ./unfree.nix
     ../../mixins/common.nix
 
-    ../../mixins/android.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
-    ../../mixins/zfs.nix
 
-    ../../mixins/gfx-nvidia.nix
-
-    # ../../profiles/gui-sway-auto.nix
-    # ../../profiles/gui-sway.nix
-    # ../../profiles/addon-gaming.nix
     ../../profiles/interactive.nix
 
     inputs.nixos-hardware.nixosModules.common-cpu-amd
@@ -34,18 +27,8 @@ in
   ];
 
   config = {
-    services.getty.autologinUser = "cole";
-    environment.loginShellInit = ''
-      [[ "$(tty)" == /dev/tty1 ]] && (
-        set -x;
-        sleep 1;
-        # export WLR_RENDER="vulkan"
-        sway &> $HOME/sway.log
-      )
-    '';
-
     nixpkgs.hostPlatform.system = "x86_64-linux";
-    system.stateVersion = "22.11";
+    system.stateVersion = "23.11";
 
     networking.hostName = hn;
     nixcfg.common.hostColor = "blue";
