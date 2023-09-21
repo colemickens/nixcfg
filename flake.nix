@@ -91,6 +91,7 @@
 
           # actual machines:
           raisin = { pkgs = inputs.cmpkgs; };
+          slynux = { pkgs = inputs.cmpkgs; };
           zeph = { pkgs = inputs.cmpkgs; };
 
           # openstick-cross = {
