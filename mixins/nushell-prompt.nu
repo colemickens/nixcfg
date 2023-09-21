@@ -5,7 +5,9 @@ def create_left_prompt [] {
     let hc = "@host_color@"
     let hcr = $"@host_color@_reverse"
     let hnseg = $"(ansi reset)(ansi $hcr) (^hostname | str trim) (ansi reset)"
-    
+
+    let nixshell = (if ("name" in $env) { $"(ansi red)($env.name)(ansi reset)" } else { "" })
+
     let line1 = $"(ansi reset)(ansi $hc)╭($hnseg)";
     let line2 = $"(ansi reset)(ansi $hc)╰─▶(ansi reset)";
     
@@ -54,6 +56,7 @@ def create_left_prompt [] {
     let line1 = ([
       $line1
       $pathseg
+      $nixshell
       # $jj
       # $git
       $duration

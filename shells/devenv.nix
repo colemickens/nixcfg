@@ -23,11 +23,11 @@ let
   ]);
 in
 minimalMkShell {
-  name = "shell-devenv";
+  name = "dev";
   hardeningDisable = [ "fortify" ];
 
   shellHook = ''
-    ${pkgs.nushell}/bin/nu
+    exec nu
   '';
 
   LD_LIBRARY_PATH = "${pkgs.libglvnd}/lib";
