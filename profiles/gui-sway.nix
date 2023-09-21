@@ -164,7 +164,7 @@ in
             # gaps = { inner = 2; outer = 0; };
             window.hideEdgeBorders = "smart";
             window.border = 4;
-            window.titlebar = false;
+            window.titlebar = true;
             window.commands = [
               # { criteria = { app_id = "mpv"; }; command = "sticky enable"; }
               # { criteria = { app_id = "mpv"; }; command = "floating enable"; }
