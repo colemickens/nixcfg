@@ -192,9 +192,9 @@
           in
           rec {
             ## FORMATTER ######################################################
-            # formatter = pkgs.${system}.nixpkgs-fmt;
+            formatter = pkgs.${system}.nixpkgs-fmt;
             # formatter = pkgs.${system}.nixfmt;
-            formatter = pkgs.${system}.alejandra;
+            # formatter = pkgs.${system}.alejandra;
 
             ## DEVSHELLS # some of 'em kinda compose ##########################
             devShells = (lib.flip lib.genAttrs mkShell [
