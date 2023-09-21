@@ -1,8 +1,9 @@
 { pkgs, lib, inputs, ... }:
 
 let
-  secrets = import ./secretdata.nix {lib=lib;};
-in {
+  secrets = import ./secretdata.nix { lib = lib; };
+in
+{
   imports = [
     inputs.sops-nix.nixosModules.sops
   ];

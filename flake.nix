@@ -8,7 +8,7 @@
     systems = { url = "path:./flake.systems.nix"; flake = false; };
     flake-utils = { url = "github:numtide/flake-utils"; inputs."systems".follows = "systems"; };
     lib-aggregate = { url = "github:nix-community/lib-aggregate"; }; #TODO: boo name! "libaggregate"?
-    
+
     nixpkgs-stable = { url = "github:nixos/nixpkgs/nixos-23.05"; }; # any stable to use
     cmpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
 

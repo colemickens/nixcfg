@@ -2,7 +2,7 @@
 
 {
   config = {
-    home-manager.users.cole = { pkgs, ... }: {  
+    home-manager.users.cole = { pkgs, ... }: {
       home.packages = with pkgs; [
         breeze-gtk
         breeze-qt5

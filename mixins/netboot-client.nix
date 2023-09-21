@@ -45,7 +45,7 @@ in
         top = config.system.build.toplevel;
         piser = config.system.build.sbc_serial;
         tci = config.system.build.extras.nfsboot-dbexport;
-        
+
         hasTb_ = builtins.hasAttr "towbootBuild" config.system.build;
         tb = config.system.build.towbootBuild;
         hasTb = hasTb_ && (builtins.hasAttr "firmwareContents" tb.config.Tow-Boot.outputs.extra);
@@ -54,32 +54,33 @@ in
       in
       pkgs.runCommand "nfsboot-env-${hn}" { } (
         ''
-        set -x
-        mkdir $out
+          set -x
+          mkdir $out
         
         '' + (if hasTb then ''
-        # POPULATE NETBOOT WITH RPI-FW FILES
-        cp -rs "${firmware}"/* $out/
+          # POPULATE NETBOOT WITH RPI-FW FILES
+          cp -rs "${firmware}"/* $out/
 
-        # POPULATE NETBOOT WITH EEPROM UPDATE FILES
-        cp -rs "${eeprom}"/* $out/
+          # POPULATE NETBOOT WITH EEPROM UPDATE FILES
+          cp -rs "${eeprom}"/* $out/
         '' else
-        ''
+          ''
         '') +
         ''
-        cp -a \
-          "${pkgs.closureInfo { rootPaths = config.system.build.toplevel; }}" \
-          $out/dbexport
+          cp -a \
+            "${pkgs.closureInfo { rootPaths = config.system.build.toplevel; }}" \
+            $out/dbexport
         
-        # POPULATE NETBOOT WITH EXTLINUX
-        ${config.boot.loader.generic-extlinux-compatible.populateCmd} -d $out/ -c "${top}"
+          # POPULATE NETBOOT WITH EXTLINUX
+          ${config.boot.loader.generic-extlinux-compatible.populateCmd} -d $out/ -c "${top}"
         
-        # FIXUP "relative" extlinux.conf paths
-        cp \
-          $out/extlinux/extlinux.conf \
-          $out/extlinux/extlinux.back
-        sed -i 's|\.\./|${piser}/|g' $out/extlinux/extlinux.conf
-      '')
+          # FIXUP "relative" extlinux.conf paths
+          cp \
+            $out/extlinux/extlinux.conf \
+            $out/extlinux/extlinux.back
+          sed -i 's|\.\./|${piser}/|g' $out/extlinux/extlinux.conf
+        ''
+      )
     );
     fileSystems = {
       "/" = lib.mkForce {
@@ -152,7 +153,8 @@ in
 
       initrd = {
         kernelModules = [
-          "nfs" "nfsv4"
+          "nfs"
+          "nfsv4"
         ];
         systemd = lib.mkMerge ([
           ({

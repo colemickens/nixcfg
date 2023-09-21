@@ -42,27 +42,34 @@ let
       initrd = "(loop)/casper/initrd";
     };
   };
-in {
+in
+{
   config = {
-    boot.loader.grub.extraPrepareConfig = (pkgs.lib.concatStrings ([ ''
-      mkdir -p /boot/nix/store
-    ''] ++ (builtins.attrValues (builtins.mapAttrs (k: v: ''
-      if [[ ! -f "/boot/${v.iso}" ]]; then
-        cp "${v.iso}" "/boot/${v.iso}"
-      fi
-    '') isos))));
+    boot.loader.grub.extraPrepareConfig = (pkgs.lib.concatStrings ([
+      ''
+        mkdir -p /boot/nix/store
+      ''
+    ] ++ (builtins.attrValues (builtins.mapAttrs
+      (k: v: ''
+        if [[ ! -f "/boot/${v.iso}" ]]; then
+          cp "${v.iso}" "/boot/${v.iso}"
+        fi
+      '')
+      isos))));
 
     # note, no /boot in the isofile name path since that's its mount point (prefix)
     # the linux ... line is basically entirely copied from the <tails-iso>/isolinux/live.cfg
-    boot.loader.grub.extraEntries = (pkgs.lib.concatStrings (builtins.attrValues (builtins.mapAttrs (k: v: ''
-      menuentry "${k}" {
-        rmmod tpm
-        search --set=drive1 --fs-uuid ${BOOT_FS_UUID}
-          set isofile="($drive1)/${v.iso}"
-          loopback loop $isofile
-          linux ${v.linux}
-          initrd ${v.initrd}
-      }
-    '') isos)));
+    boot.loader.grub.extraEntries = (pkgs.lib.concatStrings (builtins.attrValues (builtins.mapAttrs
+      (k: v: ''
+        menuentry "${k}" {
+          rmmod tpm
+          search --set=drive1 --fs-uuid ${BOOT_FS_UUID}
+            set isofile="($drive1)/${v.iso}"
+            loopback loop $isofile
+            linux ${v.linux}
+            initrd ${v.initrd}
+        }
+      '')
+      isos)));
   };
 }

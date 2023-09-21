@@ -12,7 +12,8 @@ let
   #    "${wayprompt}/bin/pinentry-wayprompt";
 
   pinentryProgram = null;
-in {
+in
+{
   config = {
     # try to enable gnupg's udev rules
     # to allow it to do ccid stuffs

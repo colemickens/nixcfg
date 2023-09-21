@@ -7,9 +7,9 @@
       requires = [ "pipewire.service" ];
       after = [ "pipewire.service" ];
       path = with pkgs; [ gawk pulseaudio ];
-      
+
       # TODO: server probably needs to listen on PA and redirect itself to whatever sink snapserver makes
-      script  = ''
+      script = ''
         set -x
         pactl unload-module module-simple-protocol-tcp || true
         sleep 1

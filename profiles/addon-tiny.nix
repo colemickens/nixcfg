@@ -2,7 +2,7 @@
 
 {
   config = {
-    networking.networkmanager.plugins = lib.mkForce [];
+    networking.networkmanager.plugins = lib.mkForce [ ];
 
     services.fwupd.enable = lib.mkForce false;
     services.udisks2.enable = lib.mkForce false;
@@ -15,7 +15,7 @@
 
     # TODO: not sure about this one
     fonts.fontconfig.enable = false;
-    
+
     nixpkgs.overlays = [
       (final: prev: {
         gnupg23 = prev.gnupg23.override { openldap = null; };

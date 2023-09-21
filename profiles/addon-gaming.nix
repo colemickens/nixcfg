@@ -2,10 +2,9 @@
 
 let
   yuzu_noQtWeb =
-    (pkgs.yuzu-early-access.override { qtwebengine = null; })
-      .overrideAttrs (old: {
-        cmakeFlags = old.cmakeFlags ++ [ "-DYUZU_USE_QT_WEB_ENGINE=OFF" ];
-      });
+    (pkgs.yuzu-early-access.override { qtwebengine = null; }).overrideAttrs (old: {
+      cmakeFlags = old.cmakeFlags ++ [ "-DYUZU_USE_QT_WEB_ENGINE=OFF" ];
+    });
 in
 {
   config = {

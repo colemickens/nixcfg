@@ -6,7 +6,7 @@
       "nvidia-x11"
       "nvidia-settings"
       "cudatoolkit"
-      
+
       # profiles/gui
       "ripcord"
       "steam"

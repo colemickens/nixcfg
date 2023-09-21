@@ -2,7 +2,8 @@
 
 let
   host = "192.168.1.10";
-in {
+in
+{
   config = {
     systemd.user.services.snapclient-local = rec {
       # wantedBy = [ "basic.target" ];

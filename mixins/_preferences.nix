@@ -26,26 +26,26 @@ rec {
 
     # iconTheme = { name = "Numix Circle"; package = pkgs.numix-icon-theme; };
     iconTheme = { name = "Tela-circle-dark"; package = pkgs.tela-circle-icon-theme; };
-# T # iconTheme = { name = "Fluent"; package = pkgs.fluent-icon-theme; };
-# T # iconTheme = { name = "Colloid"; package = pkgs.colloid-icon-theme; };
+    # T # iconTheme = { name = "Fluent"; package = pkgs.fluent-icon-theme; };
+    # T # iconTheme = { name = "Colloid"; package = pkgs.colloid-icon-theme; };
     # iconTheme = { name = "WhiteSur-dark"; package = pkgs.whitesur-icon-theme; };
-# T # iconTheme = { name = "McMojave-circle"; package = pkgs.mcmojave-icon-theme; };
+    # T # iconTheme = { name = "McMojave-circle"; package = pkgs.mcmojave-icon-theme; };
 
     theme = { name = "Arc-Dark"; package = pkgs.arc-theme; };
     # theme = { name = "Orchis-purple-dark-compact"; package = pkgs.orchis-theme; };
     # theme = { name = "WhiteSur-dark-solid"; package = pkgs.whitesur-gtk-theme; };
     # theme = { name = "Mojave-dark-solid"; package = pkgs.mojave-gtk-theme; };
-#ew # theme = { name = "Marwaita Color Dark"; package = pkgs.marwaita; };
+    #ew # theme = { name = "Marwaita Color Dark"; package = pkgs.marwaita; };
     # theme = { name = "Qogir-dark"; package = pkgs.qogir-theme; };
   };
-  
+
   ## cursor
   # cursor = { name = "capitaine-cursors-white"; package = pkgs.capitaine-cursors; };
   # cursor = { name = "Bibata-Original-Amber"; package = pkgs.bibata-cursors; };
   # cursor = { name = "Catppuccin-Latte-Pink-Cursors"; package = pkgs.catppuccin-cursors.lattePink; };
   cursor = { name = "macOS-BigSur-White"; package = pkgs.apple-cursor; };
   cursorSize = 48;
-  
+
   themes = {
     alacritty = colorscheme // colordefs;
     sway = colorscheme // colordefs;
@@ -77,7 +77,7 @@ rec {
     # monospace = { family = "Jetbrains Mono"; package = pkgs.jetbrains-mono; };
     fallback = { family = "Font Awesome 5 Free"; package = pkgs.font-awesome; };
     emoji = { family = "Noto Color Emoji"; package = pkgs.noto-fonts-color-emoji; };
-    
+
     allPackages = (map (p: p.package)
       [
         default
@@ -87,13 +87,13 @@ rec {
         fallback
         emoji
       ]) ++
-      (with pkgs; [
-        liberation_ttf # free corefonts-metric-compatible replacement
-        ttf_bitstream_vera
-        gelasio # metric-compatible with Georgia
-        powerline-symbols
-        intel-one-mono
-        comic-mono
-      ]);
+    (with pkgs; [
+      liberation_ttf # free corefonts-metric-compatible replacement
+      ttf_bitstream_vera
+      gelasio # metric-compatible with Georgia
+      powerline-symbols
+      intel-one-mono
+      comic-mono
+    ]);
   };
 }

@@ -3,7 +3,7 @@
 let
   fmt = pkgs.formats.yaml { };
   gen = cfg: (fmt.generate "gopass-config.yml" cfg);
-  
+
   gopassPkg = pkgs.gopass;
   # gopassPkg = inputs.stable.outputs.legacyPackages.${pkgs.stdenv.hostPlatform.system}.gopass;
 in

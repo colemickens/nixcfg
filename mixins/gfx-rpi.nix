@@ -17,7 +17,8 @@ in
             "wayland"
           ];
           galliumDrivers = [
-            "swrast" "virgl"
+            "swrast"
+            "virgl"
             "kmsro" # cargo culted?
             "vc4" # rpi
             "v3d"

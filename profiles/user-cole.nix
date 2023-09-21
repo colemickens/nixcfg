@@ -2,7 +2,8 @@ let
   user = "cole";
   name = "Cole Mickens";
   idno = 1000;
-in {
+in
+{
   config = {
     nix.settings.trusted-users = [ user ];
 

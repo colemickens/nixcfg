@@ -13,9 +13,7 @@
         script = ''
         '';
       };
-      timers."cfspeedtest" = {
-
-      };
+      timers."cfspeedtest" = { };
     };
     services = {
       nginx = {

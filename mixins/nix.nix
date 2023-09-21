@@ -29,7 +29,7 @@ in
         # automatic = true;
         randomizedDelaySec = "30min";
       };
-      nixPath = lib.mkForce []; # i doth protest
+      nixPath = lib.mkForce [ ]; # i doth protest
       settings = rec {
         keep-derivations = true; # this is the default (?)
         builders-use-substitutes = true;

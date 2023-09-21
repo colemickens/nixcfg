@@ -45,7 +45,7 @@ minimalMkShell {
     go-outline
     gotools
     godef
-    
+
     ## golint
     gopls
 

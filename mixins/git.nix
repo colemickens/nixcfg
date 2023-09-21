@@ -9,7 +9,7 @@
         signing.signByDefault = true;
         userEmail = "cole.mickens@gmail.com";
         userName = "Cole Mickens";
-        
+
         extraConfig = {
           core = {
             untrackedCache = true;
@@ -19,14 +19,14 @@
             directory = "/home/cole/code/nixcfg";
           };
         };
-        
+
         # delta = {
         #   enable = true;
         #   options = {
         #     features = "decorations side-by-side navigate";
         #   };
         # };
-        
+
         difftastic = {
           enable = true;
         };

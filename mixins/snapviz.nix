@@ -22,7 +22,7 @@ let
     sleep 2
     ${pkgs.systemd}/bin/systemctl --user restart snapclient-local
   '';
-  
+
   # <sway config>
   out_rpi4_lgc165 = "LG Electronics LG TV SSCR2 0x00000101";
   out_rpi3b_sony55 = "HDMI-A-1";

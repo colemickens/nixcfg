@@ -2,7 +2,7 @@
 
 {
   /*
-  environment.systemPackages = let
+    environment.systemPackages = let
     # Replace a file(tree) with an ipfs symlink
     toipfs = pkgs.writeScriptBin "toipfs" ''
       #!${pkgs.execline}/bin/execlineb -WS1
@@ -54,7 +54,7 @@
       if { umount /var/empty }
       ${pkgs.brig}/bin/brig $@
     '';
-  in [ brig toipfs fromipfs ];
+    in [ brig toipfs fromipfs ];
   */
 
   services.ipfs = {
@@ -69,7 +69,7 @@
       };
       Discovery = {
         MDNS.Enabled = true;
-       #Swarm.AddrFilters = null;
+        #Swarm.AddrFilters = null;
       };
       Experimental.FilestoreEnabled = true;
     };

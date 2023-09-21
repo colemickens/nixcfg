@@ -34,7 +34,7 @@ in
     # };
 
     hardware.opengl.enable = true;
-    services.xserver.videoDrivers = ["nvidia"];
+    services.xserver.videoDrivers = [ "nvidia" ];
     hardware.nvidia = {
       package = nvidiaPkg;
       open = true;

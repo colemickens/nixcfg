@@ -2,7 +2,7 @@
 
 let
   rcloneConfPath = config.sops.secrets."rclone.conf".path;
-  
+
   c = rec {
     rclone-lim = pkgs.writeScriptBin "rclone-lim" ''
       #!${pkgs.bash}/bin/bash

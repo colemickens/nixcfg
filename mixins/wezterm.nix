@@ -3,7 +3,7 @@
 let
   prefs = import ./_preferences.nix { inherit pkgs inputs; };
   colors = prefs.themes.wezterm;
-  
+
   enable_wayland = "true";
 in
 {

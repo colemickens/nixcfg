@@ -54,7 +54,7 @@ buildLinux (args // {
     DRM_RCAR_DW_HDMI = no;
     DEBUG_INFO_BTF = lib.mkForce no;
     DEBUG_INFO_BTF_MODULES = lib.mkForce no;
-    
+
     # This is not a good console...
     # FIQ_DEBUGGER = no;
     # TODO: Fix 8250 console not binding as a console

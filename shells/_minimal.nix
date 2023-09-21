@@ -10,6 +10,7 @@ let
       pkgs.stdenvNoCC.initialPath;
     extraNativeBuildInputs = [ ];
   };
-in pkgs.mkShell.override {
+in
+pkgs.mkShell.override {
   stdenv = stdenvMinimal;
 }

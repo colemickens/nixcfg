@@ -1,14 +1,15 @@
-{
-  pkgs,
-  lib,
-  inputs,
-  modulesPath,
-  ...
-}: let
+{ pkgs
+, lib
+, inputs
+, modulesPath
+, ...
+}:
+let
   hn = "slynux";
   pp = "slynux"; # ?
   asVm = false;
-in {
+in
+{
   imports = [
     ./unfree.nix
     ../../mixins/common.nix
@@ -69,7 +70,7 @@ in {
         device = "${pp}pool/home";
       };
     };
-    swapDevices = [];
+    swapDevices = [ ];
 
     boot = {
       # tmpOnTmpfs = true;  # re-enable when RAM RMA is complete and we're back to 64GB

@@ -134,7 +134,8 @@
             procs
             prs
             pipes-rs
-            rage age # need age (Age-keygen can do priv->pub)
+            rage
+            age # need age (Age-keygen can do priv->pub)
             rustscan
             # </rust pkgs>
             sbctl

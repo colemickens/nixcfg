@@ -1,11 +1,11 @@
-{
-  config,
-  pkgs,
-  lib,
-  modulesPath,
-  inputs,
-  ...
-}: let
+{ config
+, pkgs
+, lib
+, modulesPath
+, inputs
+, ...
+}:
+let
   hs = "nixoorrxe2yyjab7ufuua6dsbcrbxe4ysb7q3t4iirxtvpa7d6bebxad";
 
   template = pkgs.writeText "template.html" ''
@@ -19,7 +19,8 @@
     dir = "/";
     systemLabel = config.system.nixos.label;
   };
-in {
+in
+{
   config = {
     services.nginx.enable = true;
     services.nginx.virtualHosts."default" = {
@@ -42,9 +43,9 @@ in {
 
     # doesn't work for us
     systemd.services.tor = {
-      serviceConfig.SupplementaryGroups = [config.users.groups.keys.name]; # we shouldn't need this AND owner/mode below tho?
+      serviceConfig.SupplementaryGroups = [ config.users.groups.keys.name ]; # we shouldn't need this AND owner/mode below tho?
     };
-    users.extraUsers.tor.extraGroups = [config.users.groups.keys.name];
+    users.extraUsers.tor.extraGroups = [ config.users.groups.keys.name ];
 
     sops.secrets."${hs}.key" = {
       owner = "tor";

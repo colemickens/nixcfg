@@ -16,9 +16,9 @@
         # # bax instead?
         #  pkgs.fishPlugins.foreign-env
 
-          # jethrokuan/fzf
+        # jethrokuan/fzf
 
-          #  acomagu/fish-async-prompt
+        #  acomagu/fish-async-prompt
         #];
       };
     };

@@ -3,52 +3,53 @@
 let
   tomlFormat = pkgs.formats.toml { };
   gen = cfg: (tomlFormat.generate "jj-config.toml" cfg);
-in {
+in
+{
   config.home-manager.users.cole = { pkgs, ... }: {
     xdg.configFile."sirula/style.css".text = ''
-        * {
-          font-family: "Iosevka";        
-          /*
-            font-family: "OpenSans";
-          */
-        }
-        .app-row {
-            transition: unset;
-            padding: 5px 0 5px 10px;
-            background-color: #263238;
-        }
+      * {
+        font-family: "Iosevka";        
+        /*
+          font-family: "OpenSans";
+        */
+      }
+      .app-row {
+          transition: unset;
+          padding: 5px 0 5px 10px;
+          background-color: #263238;
+      }
         
-        .app-row:selected {
-              background-color: #37474F;
-        }
+      .app-row:selected {
+            background-color: #37474F;
+      }
         
-        .app-label {
-            margin-left: 10px;
-            font-family: "Open Sans";
-            font-size: 0.75em;
-            font-weight: 300;
-        }
+      .app-label {
+          margin-left: 10px;
+          font-family: "Open Sans";
+          font-size: 0.75em;
+          font-weight: 300;
+      }
         
-        .app-list {
-              background-color: #f00;
-         }
+      .app-list {
+            background-color: #f00;
+       }
         
-        #root-box {
-            border: 3px solid #263238;
-            border-radius: 5px 5px 5px 5px;
-            box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
-            margin: 100px;
-            background-color: #263238;
-            font-size: 2em;
-            font-weight: bold;
-        }
+      #root-box {
+          border: 3px solid #263238;
+          border-radius: 5px 5px 5px 5px;
+          box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+          margin: 100px;
+          background-color: #263238;
+          font-size: 2em;
+          font-weight: bold;
+      }
         
-        #search {
-            font-size: 0.75em;
-            font-weight: bold;
-            padding: 2px 8px;
-            margin: 5px;
-        }
+      #search {
+          font-size: 0.75em;
+          font-weight: bold;
+          padding: 2px 8px;
+          margin: 5px;
+      }
     '';
     xdg.configFile."sirula/config.toml".source = (gen {
       markup_highlight = "underline='low' weight='bold'";

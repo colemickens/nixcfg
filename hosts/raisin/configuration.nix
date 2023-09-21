@@ -46,7 +46,7 @@ in
       HandlePowerKey=ignore
       HandleLidSwitch=ignore
     '';
-    
+
     systemd.network = {
       enable = true;
       # networks."15-eth0-static-ip" = {

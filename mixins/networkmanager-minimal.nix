@@ -6,11 +6,13 @@ in
 {
   config = {
     networking.networkmanager.useMinimalBasePackages = true;
-    nixpkgs.overlays = [(final: prev: {
-      networkmanager = prev.networkmanager.override {
-        openconnect = prev.runCommand "openconnect-fake" {} "mkdir -p $out";
-      };
-    })];
+    nixpkgs.overlays = [
+      (final: prev: {
+        networkmanager = prev.networkmanager.override {
+          openconnect = prev.runCommand "openconnect-fake" { } "mkdir -p $out";
+        };
+      })
+    ];
   };
 }
 

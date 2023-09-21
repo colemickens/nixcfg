@@ -4,7 +4,7 @@ let
   # llvmPackages = pkgs.llvmPackages_13;
   llvmPackages = pkgs.llvmPackages_13;
   crate2nix = import inputs.crate2nix { inherit pkgs; nixpkgs = null; };
-  
+
 
   gstreamerPath = ""
     + ":" + "${pkgs.gst_all_1.gst-plugins-base}/lib/gstreamer-1.0"

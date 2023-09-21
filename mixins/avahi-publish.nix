@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 
-{ 
+{
   config = {
     services.avahi = {
       enable = true;

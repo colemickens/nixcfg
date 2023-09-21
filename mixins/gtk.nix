@@ -7,7 +7,7 @@ in
   config = {
     home-manager.users.cole = { pkgs, ... }@hm: {
       # home.sessionVariables = {
-        # XCURSOR_PATH = prefs.cursor.package.outPath;
+      # XCURSOR_PATH = prefs.cursor.package.outPath;
       # };
       # home.file.".icons/default/index.theme".text = ''
       #   [icon theme]

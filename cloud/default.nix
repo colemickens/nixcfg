@@ -3,13 +3,13 @@
 let
   tflib = import ./tflib.nix { inherit pkgs; };
   tfpkg = (pkgs.terraform_1.withPlugins (p:
-  [
-    # these should be included, maybe via option/modules
-    # from the tflib-*.nix
-    p.equinix
-    p.oci
-    /* p.sops */
-  ]));
+    [
+      # these should be included, maybe via option/modules
+      # from the tflib-*.nix
+      p.equinix
+      p.oci
+      /* p.sops */
+    ]));
   tf = "${tfpkg}/bin/terraform"; # "${tf}"
   tfstate = "./cloud/_state";
 
@@ -98,13 +98,14 @@ let
           ipxe_url = "http://netboot.cleo.cat/aarch64/generic/netboot.ipxe";
         };
       })
-      (let
-        tmpl = {
-          shape = tflib.oracle.shapes.freetier_a1flex_mini;
-          image = tflib.oracle.images.canonical_ubuntu_20_04__aarch64;
-          payload = tflib.payloads.ubuntu-nixos-infect;
-        };
-      in
+      (
+        let
+          tmpl = {
+            shape = tflib.oracle.shapes.freetier_a1flex_mini;
+            image = tflib.oracle.images.canonical_ubuntu_20_04__aarch64;
+            payload = tflib.payloads.ubuntu-nixos-infect;
+          };
+        in
         (tflib.oracle.tfplan ociacct2 {
           oci2arm1 = tmpl;
           oci2arm2 = tmpl;
@@ -115,7 +116,8 @@ let
     ];
   };
   ## </terranix>
-in {
+in
+{
   # TODO: replace with lovesegfault's sanity checked saneScript writer
   tf = (pkgs.writeShellScript "apply" ''
     set -euo pipefail; set -x

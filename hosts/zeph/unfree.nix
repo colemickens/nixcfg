@@ -8,7 +8,9 @@
       # "ripcord"
 
       ### gaming
-      "steam" "steam-run" "steam-original"
+      "steam"
+      "steam-run"
+      "steam-original"
       # "xow_dongle-firmware"
     ];
   };

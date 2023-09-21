@@ -32,7 +32,8 @@ let
     disableCcid = true;
   };
   ecfg = config2;
-in {
+in
+{
   config = {
     # okay yikes, since some of this is dependent on scdaemon
     # conf and state, let's make sure we reset (kill) scdaemon each time
@@ -73,13 +74,13 @@ in {
       then [
         pkgs.yubikey-personalization
       ]
-      else [];
+      else [ ];
 
     # using this requires use of `disable-ccid` in scdaemon.conf!
     services.pcscd.enable = ecfg.enablePcscd;
 
     # bring pcsclite's polkit rules into the environment, I guess
-    environment.systemPackages = (if ecfg.enablePcscd then [ pkgs.pcsclite ] else []);
+    environment.systemPackages = (if ecfg.enablePcscd then [ pkgs.pcsclite ] else [ ]);
 
     home-manager.users.cole = { pkgs, ... }@hm: {
       programs.gpg.enable = true;
@@ -94,7 +95,7 @@ in {
       programs.gpg.scdaemonSettings =
         if ecfg.disableCcid
         then { disable-ccid = true; }
-        else {};
+        else { };
 
       # nixpkgs.overlays = [ pinentryOverlay ];
 
