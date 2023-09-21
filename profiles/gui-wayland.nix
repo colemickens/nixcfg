@@ -8,6 +8,15 @@
     ../mixins/sirula.nix
   ];
   config = {
+    # nixpkgs.overlays = [
+    #   (final: prev:
+    #     let nwPkgs = inputs.nixpkgs-wayland.packages.${pkgs.stdenv.hostPlatform.system}; in
+    #     {
+    #       inherit (nwPkgs)
+    #         wl-screenrec;
+    #     })
+    # ];
+  
     programs = {
       wshowkeys.enable = true;
     };
