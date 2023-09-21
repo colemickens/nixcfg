@@ -30,7 +30,6 @@ let cachix_cache = "colemickens"
 let cachix_signing_key = (open $"($env.HOME)/.cachix_signing_key" | str trim)
 
 source ./nixlib.nu
-source ./ci.nu
 
 check
 
@@ -282,7 +281,6 @@ def "main up" [...hosts] {
   main ciattrs
 
   main dl ".#devShells.x86_64-linux.ci"
-  main dl '.#devShells.x86_64-linux.devtools'
   main dl '.#devShells.x86_64-linux.devenv'
 
   main deploy raisin

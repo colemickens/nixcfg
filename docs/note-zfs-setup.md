@@ -15,4 +15,3 @@ sudo zfs create -o mountpoint=legacy -o compression=zstd -o xattr=sa -o acltype=
   -o relatime=on orionraisinpool/backups/zeph/zephpool
 ```
 
-

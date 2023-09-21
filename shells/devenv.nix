@@ -1,10 +1,11 @@
-{ pkgs, inputs, ... }:
-
+{ pkgs
+, inputs
+, ...
+}:
 let
-  # llvmPackages = pkgs.llvmPackages_13;
-  llvmPackages = pkgs.llvmPackages_13;
-  crate2nix = import inputs.crate2nix { inherit pkgs; nixpkgs = null; };
+  minimalMkShell = import ./_minimal.nix { inherit pkgs; };
 
+  llvmPackages = pkgs.llvmPackages_13;
 
   gstreamerPath = ""
     + ":" + "${pkgs.gst_all_1.gst-plugins-base}/lib/gstreamer-1.0"
@@ -13,35 +14,72 @@ let
     + ":" + "${pkgs.gst_all_1.gst-plugins-ugly}/lib/gstreamer-1.0"
   ;
 
-  minimalMkShell = import ./_minimal.nix { inherit pkgs; };
+  _rustBuild = (inputs.fenix.packages.${pkgs.stdenv.hostPlatform.system}.latest.withComponents [
+    "cargo"
+    "clippy"
+    "rust-src"
+    "rustc"
+    "rustfmt"
+  ]);
 in
 minimalMkShell {
-  # TODO use something else for system?
   name = "shell-devenv";
   hardeningDisable = [ "fortify" ];
+
+  shellHook = ''
+    ${pkgs.nushell}/bin/nu
+  '';
 
   LD_LIBRARY_PATH = "${pkgs.libglvnd}/lib";
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   RUST_BACKTRACE = 1;
   GST_PLUGIN_SYSTEM_PATH = gstreamerPath;
 
-  nativeBuildInputs = inputs.self.devShells.${pkgs.stdenv.hostPlatform.system}.devtools.nativeBuildInputs ++ (with pkgs; [
+  nativeBuildInputs = with pkgs; [
+    _rustBuild
+
+    inputs.fenix.packages.${pkgs.stdenv.hostPlatform.system}.rust-analyzer
+
+    inputs.nix-eval-jobs.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
+
+    nix
+
+    ## nix lsp
+    rnix-lsp
+    nil
+
+    ## nix space usage / visualizers
+    nix-du
+    nix-tree
+
+    # nix formatters
+    nixpkgs-fmt
+    nixfmt
+    alejandra
+
+    ## tools
+    lldb
+
+    ## nodejs
+    nodejs
+    yarn
+
+    ## golang
+    go
+    go-outline
+    gotools
+    godef
+    gopls
+
+    # generic build essentials
     pkg-config
     cmake
     gnumake
     nasm
     perl
 
-    /* coreboot */
-    # flashrom # use nixos module for udev rules
     gst_all_1.gstreamer
-    # gst_all_1
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-plugins-rs
-  ]);
+  ];
 
   buildInputs = with pkgs; [
     llvmPackages.libclang
@@ -60,7 +98,6 @@ minimalMkShell {
     dbus # passrs libsecret
     nettle # pass-rust (sequoia->nettle-sys)
     gst_all_1.gstreamer
-    # gst_all_1
     libnice
     pango
     cairo

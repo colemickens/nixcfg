@@ -10,36 +10,23 @@
     ../mixins/aria2.nix
     ../mixins/bash.nix
     ../mixins/bottom.nix
-    ../mixins/broot.nix
     ../mixins/cachix.nix
     ../mixins/gh.nix
     ../mixins/git.nix
-    ../mixins/gopass.nix
     ../mixins/gpg-agent.nix
     ../mixins/helix.nix
     ../mixins/jj.nix
     ../mixins/joshuto.nix
     ../mixins/nushell.nix
     ../mixins/pijul.nix
-    ../mixins/skim.nix
     ../mixins/spotify.nix
     ../mixins/ssh.nix
     ../mixins/xdg.nix
-    # ../mixins/xplr.nix # TODO
     ../mixins/zellij.nix
-    # ../mixins/zenith.nix
     ../mixins/zsh.nix
   ];
-  # unusedImports = [
-  #   ../mixins/ion.nix
-  #   ../mixins/lorri.nix
-  #   ../mixins/solo2.nix
-  #   ../mixins/starship.nix
-  #   ../mixins/zoxide.nix
-  # ];
 
   config = {
-    # I don't think my user dbus socket is here without this?????
     users.users.cole.linger = true;
     users.users.cole.shell = pkgs.zsh;
 
@@ -59,10 +46,6 @@
     programs.bandwhich.enable = true;
 
     services.dbus.packages = with pkgs; [ pkgs.dconf ];
-    security = {
-      please.enable = true;
-      please.wheelNeedsPassword = false;
-    };
     nix.extraOptions = ''
       keep-outputs = true
       keep-derivations = true
@@ -91,13 +74,8 @@
         };
         programs = {
           git.enable = true;
-          neovim.enable = true;
         };
         home.packages = lib.mkMerge [
-          (lib.mkIf (pkgs.hostPlatform.system != "riscv64-linux") (with pkgs; [
-            # x86_64-linux only
-            zenith # uh oh, no aarch64 support? noooooo
-          ]))
           (lib.mkIf (pkgs.hostPlatform.system == "x86_64-linux") (with pkgs; [
             # x86_64-linux only
             zenith # uh oh, no aarch64 support? noooooo
@@ -118,11 +96,9 @@
             erdtree # erd - dua alternative
             dufs # rust static file server
             eza # eza-community replacement for exa
-            lsd # another fancier `ls`
             fd
             fx
             gitui
-            gex
             grex
             hexyl
             xh
@@ -137,12 +113,10 @@
             rage
             age # need age (Age-keygen can do priv->pub)
             rustscan
+            xplr
             # </rust pkgs>
-            sbctl
 
-            # nix-related (TODO move to devtools shell that gets pulled in)
-            # nix-tree nix-du ncdu nix-prefetch nixpkgs-review
-            nix-output-monitor
+            sbctl
 
             binwalk
             cpio # needed?
@@ -158,8 +132,8 @@
             file
             lsof
             unar
-            p7zip # needed with unar??
-            sops # age ?rage?
+            p7zip
+            sops
             step-cli
             gptfdisk
             parted
@@ -184,21 +158,15 @@
             wireguard-tools
             ntfsprogs
             difftastic
-            just
-            # pueue
 
             powertop
 
             linuxPackages.cpupower
-            # linuxPackages.usbip
 
-            # aria2 # mixins/aria2.nix: home-manager module now
             yt-dlp
             imgurbash2
 
             mosh
-            # mitmproxy
-            # ? git-absorb
           ])
         ];
       };

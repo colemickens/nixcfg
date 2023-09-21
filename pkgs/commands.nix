@@ -11,22 +11,6 @@ let
   gpgCardId = "D2760001240100000006071267080000";
   gpgSshSocket = "/run/user/1000/gnupg/d.kbocp7uc7zjy47nnek3436ij/S.gpg-agent.ssh";
 
-  reboot-linux-dgpu = (writeShellScriptBin "reboot-linux-dgpu" ''
-    # set dGPU extreme
-    # set next boot
-    # reboot
-  '');
-  reboot-linux-igpu = (writeShellScriptBin "reboot-linux-igpu" ''
-    # set dGPU off
-    # set next boot
-    # reboot
-  '');
-  reboot-windows = (writeShellScriptBin "reboot-windows" ''
-    # set dGPU extreme
-    # set next boot
-    # reboot
-  '');
-
   gpg-relearn = (writeShellScriptBin "gpg-relearn" ''
     gpg-connect-agent "scd serialno" "learn --force" /bye
   '');
@@ -146,10 +130,6 @@ in
 (symlinkJoin {
   name = "cole-custom-commands";
   paths = [
-    reboot-linux-dgpu
-    reboot-linux-igpu
-    reboot-windows
-
     gssh
     gpg-relearn
     fix-gpg

@@ -1,7 +1,0 @@
-Notes on nixpkgs branches that I'm keeping an eye on, or keeping around:
-
-- ffmpeg-armv6l = branch with a patch for ffmpeg to cross-compile on armv6l (but otherwise is just a wasteful large-ish rebuild, and I no longer care about this cc)
-- doctest-meson = move doctest to meson (no idea why I ever made this commit)
-- drafting-mono = Drafting Mono (I don't actually like at all)
-- syncthing-gtk = a syncthing-gtk PR to change to Debian's fork  on salsa (I just use web ui now)
-- gpg* = WIP pull requests for GPG

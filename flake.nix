@@ -200,7 +200,6 @@
             devShells = (lib.flip lib.genAttrs mkShell [
               "ci"
               "devenv"
-              "devtools"
               "uutils"
             ]) // {
               default = devShells.ci;
@@ -235,9 +234,12 @@
             legacyPackages = pkgs;
 
             ## CI #############################################################
+            # TODO: move these to checks? implement checks?
+            # how to use these with nix-fast-build etc?
             ciAttrs = {
-              shells = (lib.genAttrs [ "devtools" "ci" "devenv" ]
-                (n: inputs.self.devShells.${system}.${n}.inputDerivation));
+              shells = lib.genAttrs
+                (builtins.attrNames devShells)
+                (n: inputs.self.devShells.${system}.${n}.inputDerivation);
               packages = (inputs.self.packages.${system});
               extra = (inputs.self.extra.${system});
               toplevels = lib.genAttrs

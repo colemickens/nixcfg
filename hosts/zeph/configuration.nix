@@ -14,8 +14,6 @@ in
     ../../profiles/addon-gaming.nix
     ../../profiles/addon-laptop.nix
 
-    ../../profiles/addon-nomad.nix
-
     ../../mixins/gfx-radeonsi.nix
     ../../mixins/gfx-debug.nix
 

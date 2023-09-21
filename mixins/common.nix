@@ -2,40 +2,13 @@
 
 let
   cfg = config.nixcfg.common;
-  # _kernelPackages = pkgs.linuxKernel.packages.linux_6_2;
   _kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
   _zfsUnstable = true;
-
-  # _defaultKernel = pkgs.linuxKernel.packagesFor
-  #   (pkgs.linuxPackages_latest.kernel.override {
-  #     structuredExtraConfig = {
-  #       FB = lib.mkForce lib.kernel.no;
-  #       FB_SIMPLE = lib.mkForce lib.kernel.option lib.kernel.no;
-  #       FB_EFI = lib.mkForce lib.kernel.option lib.kernel.no;
-
-  #       AGP = lib.mkForce lib.kernel.no;
-  #       HAS_IOMEM = lib.mkForce lib.kernel.yes;
-  #       HAS_DMA = lib.mkForce lib.kernel.yes;
-  #       MMU = lib.mkForce lib.kernel.yes;
-  #       DRM = lib.mkForce lib.kernel.yes;
-  #       DRM_SIMPLEDRM = lib.mkForce lib.kernel.yes;
-  #       SYSFB_SIMPLEFB = lib.mkForce lib.kernel.yes;
-  #     } // (lib.genAttrs
-  #       (
-  #         [ "DRM_VMWGFX_FBCON" "LOGO" ]
-  #           ++ [ "FRAMEBUFFER_CONSOLE" "FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER" "FRAMEBUFFER_CONSOLE_ROTATION" ]
-  #           ++ [ "FB_3DFX_ACCEL" "FB_ATY_CT" "FB_ATY_GX" "FB_EFI" "FB_NVIDIA_I2C" "FB_RIVA_I2C" ]
-  #           ++ [ "FB_SAVAGE_ACCEL" "FB_SAVAGE_I2C" "FB_SIMPLE" "FB_SIS_300" "FB_SIS_315" "FB_VESA" ]
-  #       )
-  #       (x: lib.mkForce (lib.kernel.option lib.kernel.no))
-  #     );
-  #   });
 in
 {
   imports = [
     ./nix.nix
     ../profiles/user-cole.nix
-    ../profiles/user-hole.nix
   ];
 
   options = {
@@ -51,7 +24,11 @@ in
       };
       kernelPatchHDR = lib.mkOption {
         type = lib.types.bool;
-        default = false;
+        default = true;
+        description = ''
+          patch the kernel with amd-hdr patches
+          used to enable the patch but disable it in a specialisation
+        '';
       };
       defaultNoDocs = lib.mkOption {
         type = lib.types.bool;
@@ -138,6 +115,9 @@ in
       };
     };
 
+    # default boot kernel is patched, see the "no-amd-hdr" specialisation
+    nixcfg.common.kernelPatchHDR = true;
+
     ## LEGACYBOOT - we use stage-1/systemd so have a fallback ###############
     specialisation = {
       "legacyboot" = lib.mkIf (config.boot.initrd.systemd.enable && config.nixcfg.common.addLegacyboot) {
@@ -150,7 +130,7 @@ in
       "no-amd-hdr" = {
         inheritParentConfig = true;
         configuration = {
-          nixcfg.common.kernelPatchHDR = true;
+          nixcfg.common.kernelPatchHDR = lib.mkForce false;
         };
       };
     };
@@ -191,13 +171,9 @@ in
     # TODO/WORKAROUND: https://github.com/NixOS/nixpkgs/issues/195777
     system.activationScripts = {
       workaroundWifi = {
-        # dude, bash and linux are just real pieces of shit sometimes
-        # uptime is unparseable garbage
-        # well, so is /proc/uptime too, fucking returning floats that I have to cut apart
-        # seriously, I know some of this is old stuff but were they even thinking?
-        # then again lots of unix types seem to love "cutting" everywhere instead of real, explicit safe CLI APIs
-        # UGGGGGGGGGGGGGH
-        # it'd be cool to see a nulib stdlib that alleviated some of this bullshit
+        # sometimes, I wonder if Linux is worth it:
+        # - uptime is unparseable garbage
+        # -/proc/uptime is of course floats that are space separated
         text = ''
           (
           set -x 

@@ -94,8 +94,6 @@
     * `_minimal.nix` - minimal shell base
     * `ci.nix` - tools needed to drive CI for this repo
     * `devenv.nix` - complete set of tools for Go/Rust/Nix development
-    * `devtools.nix` - bare-essential dev tools for my dev machines
-    * `gstreamer.nix` - old, for tinkering with rust+gstreamer stuff
     * `uutils.nix` - experimentation with rust-based coreutils
 * `main.nu`
   * a homegrown `nushell` (❤️) script for managing this repo

@@ -2,8 +2,7 @@
 
 let
   firefoxFlake = inputs.firefox-nightly.packages.${pkgs.stdenv.hostPlatform.system};
-  # _firefox = pkgs.firefox-wayland;
-  _firefox = lib.hiPrio firefoxFlake.firefox-nightly-bin;
+  _firefox = firefoxFlake.firefox-nightly-bin;
 
   # _chrome = pkgs.ungoogled-chromium;
   _chrome = pkgs.google-chrome-dev.override {
@@ -21,7 +20,6 @@ in
     ../mixins/alacritty.nix
     ../mixins/fonts.nix
     ../mixins/gtk.nix
-    # ../mixins/kitty.nix # eh, no rust, </3. :(
     ../mixins/mpv.nix
     ../mixins/pipewire.nix
     ../mixins/rio.nix
@@ -43,15 +41,15 @@ in
     };
 
     environment.variables = {
+      # better fonts:
+      #  
       FREETYPE_PROPERTIES = "cff:no-stem-darkening=0 autofitter:no-stem-darkening=0";
     };
 
     programs.noisetorch.enable = true;
 
-    services = { };
-
     home-manager.users.cole = { pkgs, config, ... }@hm: {
-      # home-manager/#2064
+      # https://github.com/nix-community/home-manager/issues/2064
       systemd.user.targets.tray = {
         Unit = {
           Description = "Home Manager System Tray";
@@ -61,8 +59,6 @@ in
 
       home.sessionVariables = {
         BROWSER = "firefox";
-        # TERMINAL = "nu";
-        # MOZ_USE_XINPUT2 = "1";
       };
 
       services = {
@@ -77,43 +73,41 @@ in
             wayprompt = "${inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system}.wayprompt}";
           in
           "${wayprompt}/bin/pinentry-wayprompt";
-        # gpg-agent.pinentryBinary = "${pkgs.pinentry-qt}/bin/pinentry";
       };
 
       home.packages = lib.mkMerge [
         (lib.mkIf (pkgs.hostPlatform.system == "x86_64-linux") (with pkgs; [
+          # browsers
           _firefox
           _chrome
+
+          # audio/video
           jamesdsp
 
+          # communication
           nheko
+
+          # misc tools/utils
           wine
         ]))
         (with pkgs; [
+          # my custom GUI-related commands, might pull in extra gui packages
           (pkgs.callPackage ../pkgs/commands-gui.nix { })
-
-          # yay, discord pos
-          # dorion # TODO: temp disable, this pulls in webkitgtk
 
           # misc tools/utils
           brightnessctl
-          pavucontrol
           evince
           freerdp
           pinta
-          pw-viz
-          qpwgraph
-          toastify
           virt-viewer
 
-          sssnake
-          mission-center
+          # audio/video
+          pavucontrol
+          pw-viz
+          qpwgraph
 
+          # communication
           thunderbird
-
-          # questionable...
-          gtkcord4
-
         ])
       ];
     };
