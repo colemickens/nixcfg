@@ -57,7 +57,7 @@ in
           config.default_prog = { "powershell.exe" }
         else
           config.enable_wayland = ${enable_wayland}
-          config.window_decorations = "RESIZE"
+          -- config.window_decorations = "TITLE"
           config.window_close_confirmation = "NeverPrompt"
           -- config.freetype_load_target = "Light"
           -- config.freetype_render_target = "HorizontalLcd"
