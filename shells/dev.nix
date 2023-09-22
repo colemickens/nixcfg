@@ -78,6 +78,9 @@ minimalMkShell {
     nasm
     perl
 
+    # json tools
+    gron
+
     gst_all_1.gstreamer
   ];
 
