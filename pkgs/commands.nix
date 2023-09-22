@@ -50,7 +50,7 @@ let
   '');
 
   devenv = (writeShellScriptBin "devenv" ''
-    nix develop $HOME/code/nixcfg#devenv "''${@}"
+    nix develop $HOME/code/nixcfg#dev "''${@}"
   '');
 
   nixcfg = (writeShellScriptBin "nixcfg" ''
