@@ -221,11 +221,27 @@
             ## APPS ###########################################################
             apps = lib.recursiveUpdate { }
               (
-                let tfout = import ./cloud { inherit (inputs) terranix; pkgs = pkgs.${system}; }; in {
-
+                let
+                  pkgs_ = pkgs.${system};
+                  tfout = import ./cloud { inherit (inputs) terranix; pkgs = pkgs_; };
+                  installer = nixosConfigurations.installer.config.system.build;
+                  installerIsoName = installer.isoImage.isoName;
+                  installerIso = "${installer.isoImage}/iso/${installer.isoImage.isoName}";
+                in
+                {
                   tf = { type = "app"; program = tfout.tf.outPath; };
                   tf-apply = { type = "app"; program = tfout.apply.outPath; };
                   tf-destroy = { type = "app"; program = tfout.destroy.outPath; };
+
+                  test-installer = {
+                    type = "app";
+                    program = (pkgs_.writeShellScript "test-vm" ''
+                      ${pkgs_.qemu}/bin/qemu-img create -f qcow2 /tmp/installer-vm-vdisk1 10G
+                      ${pkgs_.qemu}/bin/qemu-system-x86_64 -enable-kvm -nographic -m 2048 -boot d \
+                        -cdrom "${installerIso}" -hda /tmp/installer-vm-vdisk1 \
+                        -net user,hostfwd=tcp::10022-:22 -net nic
+                    '').outPath;
+                  };
                 }
               );
 
