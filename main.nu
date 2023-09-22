@@ -277,7 +277,7 @@ def "main up" [...hosts] {
   main lockup
 
   main dl ".#devShells.x86_64-linux.ci"
-  main dl '.#devShells.x86_64-linux.devenv'
+  main dl '.#devShells.x86_64-linux.dev'
 
   main pkgup
 

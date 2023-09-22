@@ -199,7 +199,7 @@
             ## DEVSHELLS # some of 'em kinda compose ##########################
             devShells = (lib.flip lib.genAttrs mkShell [
               "ci"
-              "devenv"
+              "dev"
               "uutils"
             ]) // {
               default = devShells.ci;
