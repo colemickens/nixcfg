@@ -18,7 +18,11 @@ in
 
     boot.loader.timeout = lib.mkOverride 10 10;
     documentation.enable = lib.mkOverride 10 false;
+    documentation.info.enable = lib.mkOverride 10 false;
+    documentation.man.enable = lib.mkOverride 10 false;
     documentation.nixos.enable = lib.mkOverride 10 false;
+
+    services.fwupd.enable = lib.mkForce false;
 
     # BUG not sure if this works, at one point it was claimed it didn't...
     boot.initrd.systemd.enable = lib.mkForce false;
