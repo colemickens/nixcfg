@@ -906,6 +906,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3f9eec918d3f24069decb9af1554cad7c880e2da24a9afd88aca000531ab82c1"
 
 [[package]]
+name = "fontconfig-parser"
+version = "0.5.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "674e258f4b5d2dcd63888c01c68413c51f565e8af99d2f7701c7b81d79ef41c4"
+dependencies = [
+ "roxmltree",
+]
+
+[[package]]
 name = "foreign-types"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1579,9 +1588,9 @@ dependencies = [
 
 [[package]]
 name = "memmap2"
-version = "0.6.2"
+version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6d28bba84adfe6646737845bc5ebbfa2c08424eb1c37e94a1fd2a82adb56a872"
+checksum = "f49388d20533534cd19360ad3d6a7dadc885944aa802ba3995040c5ec11288c6"
 dependencies = [
  "libc",
 ]
@@ -2407,6 +2416,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "roxmltree"
+version = "0.18.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d8f595a457b6b8c6cda66a48503e92ee8d19342f905948f29c383200ec9eb1d8"
+dependencies = [
+ "xmlparser",
+]
+
+[[package]]
 name = "rustc-demangle"
 version = "0.1.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2660,19 +2678,20 @@ dependencies = [
  "console_log",
  "criterion",
  "deflate",
+ "fontconfig-parser",
  "futures",
  "glyph_brush",
  "guillotiere",
  "image",
  "js-sys",
  "log 0.4.19",
- "memmap2 0.6.2",
+ "memmap2 0.7.1",
  "png",
  "serde",
  "slotmap",
  "tinyvec",
  "tokio",
- "ttf-parser 0.19.1",
+ "ttf-parser 0.19.2",
  "twox-hash",
  "unicode-width",
  "wasm-bindgen",
@@ -2893,9 +2912,9 @@ checksum = "7b3e06c9b9d80ed6b745c7159c40b311ad2916abb34a49e9be2653b90db0d8dd"
 
 [[package]]
 name = "ttf-parser"
-version = "0.19.1"
+version = "0.19.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a464a4b34948a5f67fddd2b823c62d9d92e44be75058b99939eae6c5b6960b33"
+checksum = "49d64318d8311fc2668e48b63969f4343e0a85c4a109aa8460d6672e364b8bd1"
 
 [[package]]
 name = "twox-hash"
@@ -3732,6 +3751,12 @@ name = "xml-rs"
 version = "0.8.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d2d7d3948613f75c98fd9328cfdcc45acc4d360655289d0a7d4ec931392200a3"
+
+[[package]]
+name = "xmlparser"
+version = "0.13.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4d25c75bf9ea12c4040a97f829154768bbbce366287e2dc044af160cd79a13fd"
 
 [[package]]
 name = "zune-inflate"
