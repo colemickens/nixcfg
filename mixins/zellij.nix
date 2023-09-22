@@ -48,8 +48,8 @@ in
               hide_frame_for_single_pane "false"
 
               mode_normal  "#[bg=${hostColor},fg=#000000] "
-              mode_tmux    "#[bg=${hostColor},fg=#000000] {name}"
-              mode_locked  "#[bg=${hostColor},fg=#000000] {name}"
+              mode_tmux    "#[bg=${hostColor},fg=#000000] tmux "
+              mode_locked  "#[bg=${hostColor},fg=#000000] locked "
 
               tab_normal              "#[fg=#6C7086] {name} "
               tab_normal_fullscreen   "#[fg=#6C7086] {name} [] "
