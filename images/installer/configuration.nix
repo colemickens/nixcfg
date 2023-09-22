@@ -6,12 +6,27 @@ in
 {
   imports = [
     "${modulesPath}/installer/cd-dvd/installation-cd-minimal.nix"
+
     ../../profiles/core.nix
   ];
 
   config = {
+    ## <tailscale auto-login-qr>
+    services.tailscale.enable = true;
+    environment.loginShellInit = ''
+      [[ "$(tty)" == "/dev/tty1" || "$(tty)" == "/dev/ttyS0" ]] && (
+        sudo tailscale login --qr
+      )
+    '';
+    ## </tailscale auto-login-qr>
+
     system.stateVersion = "23.11";
+
     boot.swraid.enable = lib.mkForce false;
+
+    # TODO: remove when not debugging:
+    # ref: https://github.com/NixOS/nixpkgs/pull/256709
+    # isoImage.squashfsCompression = "none";
 
     nixpkgs.hostPlatform.system = "x86_64-linux";
     networking.hostName = hn;
