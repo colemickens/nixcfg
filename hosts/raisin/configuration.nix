@@ -36,7 +36,8 @@ in
     system.stateVersion = "23.11";
 
     networking.hostName = hn;
-    nixcfg.common.hostColor = "green";
+    # nixcfg.common.hostColor = "green";
+    nixcfg.common.hostColor = "#59d600";
 
     services.tailscale.useRoutingFeatures = "server";
 

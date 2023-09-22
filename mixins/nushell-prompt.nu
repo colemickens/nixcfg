@@ -3,14 +3,18 @@
 
 def create_left_prompt [] {
     let hc = "@host_color@"
-    let hcr = $"@host_color@_reverse"
-    let hnseg = $"(ansi reset)(ansi $hcr) (^hostname | str trim) (ansi reset)"
+
+    let hsc = { # host slug color
+      fg: "#000000"
+      bg: $hc
+      attr: "b"
+    }
+
+    let line1 = $"(ansi reset)(ansi $hc)╭(ansi $hsc) (hostname) (ansi reset)";
+    let line2 = $"(ansi reset)(ansi $hc)╰─▶(ansi reset)";
 
     let nixshell = (if ("name" in $env) { $"(ansi red)($env.name)(ansi reset)" } else { "" })
 
-    let line1 = $"(ansi reset)(ansi $hc)╭($hnseg)";
-    let line2 = $"(ansi reset)(ansi $hc)╰─▶(ansi reset)";
-    
     # let jj = (do -i { ^jj log --no-commit-working-copy --no-graph -T '"x"' }
     #   | complete 
     #   | get -i stdout

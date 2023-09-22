@@ -48,7 +48,7 @@ in
     system.stateVersion = "23.11";
 
     networking.hostName = hn;
-    nixcfg.common.hostColor = "purple";
+    nixcfg.common.hostColor = "#c17ecc"; # tango magenta
     nixcfg.common.skipMitigations = true;
     nixcfg.common.defaultKernel = true;
     nixcfg.common.kernelPatchHDR = true;

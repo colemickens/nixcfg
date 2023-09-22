@@ -5,10 +5,14 @@ let
   convert = color: let c = inputs.nix-rice.lib.${pkgs.stdenv.hostPlatform.system}.color.hexToRgba color; in [ c.r c.g c.b ];
   colors = prefs.themes.zellij;
 
-  flakeZellij = inputs.zellij.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default;
-  nixpkgsZellij = pkgs.zellij;
+  hostColor = config.nixcfg.common.hostColor;
 
-  zellijPkg = (if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then flakeZellij else nixpkgsZellij);
+  zellijPkg =
+    let
+      zellijFlake = inputs.zellij.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default;
+      zellijNixpkgs = pkgs.zellij;
+    in
+    (if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then zellijFlake else zellijNixpkgs);
 
   plugin_zjstatus = inputs.zjstatus.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in
@@ -37,14 +41,15 @@ in
           pane {}
           pane size=1 borderless=true {
             plugin location="file:${plugin_zjstatus}/bin/zjstatus.wasm" {
-              format_left  "{mode} #[fg=#89B4FA,bold]{session} {tabs}"
+              format_left  "{mode} #[fg=${hostColor},bold]{session} {tabs}"
               format_right "{datetime}"
               format_space "|"
 
               hide_frame_for_single_pane "false"
 
-              mode_normal  "#[bg=#89B4FA] "
-              mode_tmux    "#[bg=#ffc387] "
+              mode_normal  "#[bg=${hostColor},fg=#000000] "
+              mode_tmux    "#[bg=${hostColor},fg=#000000] {name}"
+              mode_locked  "#[bg=${hostColor},fg=#000000] {name}"
 
               tab_normal              "#[fg=#6C7086] {name} "
               tab_normal_fullscreen   "#[fg=#6C7086] {name} [] "
