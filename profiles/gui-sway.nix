@@ -121,7 +121,7 @@ in
           inherit (nwPkgs)
             sway-unwrapped
             xdg-desktop-portal-wlr
-          ;
+            ;
         })
     ];
 

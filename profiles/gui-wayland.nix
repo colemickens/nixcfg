@@ -16,7 +16,7 @@
     #         wl-screenrec;
     #     })
     # ];
-  
+
     programs = {
       wshowkeys.enable = true;
     };
