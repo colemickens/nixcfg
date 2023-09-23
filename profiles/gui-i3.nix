@@ -6,8 +6,12 @@
   ];
   config = {
     environment.pathsToLink = [ "/libexec" ]; # links /libexec from derivations to /run/current-system/sw 
+
+    systemd.services."display-manager".wantedBy = lib.mkForce [ ];
+
     services.xserver = {
       enable = true;
+      autorun = false;
 
       desktopManager = {
         xterm.enable = false;
