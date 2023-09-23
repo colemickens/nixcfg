@@ -22,7 +22,6 @@ in
     ../../mixins/android.nix
     # ../../mixins/easyeffects.nix
     ../../mixins/cfdyndns.nix
-    ../../mixins/hidpi.nix
     ../../mixins/ledger.nix
     ../../mixins/libvirt.nix
     ../../mixins/libvirtd.nix
@@ -34,8 +33,6 @@ in
 
     # ./experimental.nix
     ./unfree.nix
-
-    ../../modules/other-arch-vm.nix
 
     inputs.lanzaboote.nixosModules.lanzaboote
 
@@ -119,9 +116,9 @@ in
           configurationLimit = lib.mkForce 3;
         };
       };
-      kernelModules = [
-        "iwlwifi"
-      ];
+      # kernelModules = [
+      #   "iwlwifi"
+      # ];
       #       extraModprobeConfig = ''
       # options iwlwifi power_save=0
       # options iwlmvm power_scheme=1
