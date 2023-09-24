@@ -139,8 +139,13 @@ in
       {
         name = "amd-hdr-patch";
         patch = (pkgs.fetchpatch {
-          url = "https://raw.githubusercontent.com/CachyOS/kernel-patches/d792451352838e29b6b0e4a297e897bf1bb975fe/6.4/0005-HDR.patch";
-          hash = "sha256-fGbb3NCyuryXDDtD14GDhc4AK/Ho3I0M1tLOkgJeRdQ=";
+          # # linux-6.4
+          # url = "https://raw.githubusercontent.com/CachyOS/kernel-patches/d792451352838e29b6b0e4a297e897bf1bb975fe/6.4/0005-HDR.patch";
+          # hash = "sha256-fGbb3NCyuryXDDtD14GDhc4AK/Ho3I0M1tLOkgJeRdQ=";
+
+          # linux-6.5
+          url = "https://raw.githubusercontent.com/CachyOS/kernel-patches/b847c50e2a859c9cedb92827d3ca8163d55ef687/6.5/0001-amd-hdr.patch";
+          hash = "sha256-/G48qHCYrsk6PQp5IaTBgfo4XjLcoJxa/LkTr2si2/4=";
         });
       }
     ];
