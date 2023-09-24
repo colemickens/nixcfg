@@ -5,9 +5,10 @@ def create_left_prompt [] {
     let hc = "@host_color@"
 
     let hsc = { # host slug color
-      fg: "#000000"
-      bg: $hc
-      attr: "b"
+      # fg: "#000000"
+      # bg: $hc
+      fg: $"($hc)_reverse"
+      attr: "br"
     }
 
     let line1 = $"(ansi reset)(ansi $hc)╭(ansi $hsc) (hostname) (ansi reset)";
