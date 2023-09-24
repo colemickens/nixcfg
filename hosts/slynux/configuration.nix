@@ -31,9 +31,9 @@ in
     system.stateVersion = "23.11";
 
     networking.hostName = hn;
-    # nixcfg.common.hostColor = "blue";
     # https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/alacritty/Tango%20Adapted.yml
-    nixcfg.common.hostColor = "#00a2ff";
+    # nixcfg.common.hostColor = "#00a2ff";
+    nixcfg.common.hostColor = "blue";
 
     services.tailscale.useRoutingFeatures = "server";
 
