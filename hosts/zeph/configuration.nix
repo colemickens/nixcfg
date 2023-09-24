@@ -20,8 +20,6 @@ in
     ../../mixins/gfx-debug.nix
 
     ../../mixins/android.nix
-    # ../../mixins/easyeffects.nix
-    ../../mixins/cfdyndns.nix
     ../../mixins/ledger.nix
     ../../mixins/libvirt.nix
     ../../mixins/libvirtd.nix
@@ -36,10 +34,7 @@ in
 
     inputs.lanzaboote.nixosModules.lanzaboote
 
-    # inputs.nixos-hardware.nixosModules.common-cpu-amd
-    # inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
-    # inputs.nixos-hardware.nixosModules.common-gpu-amd
-    # inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
+    inputs.nixos-hardware.nixosModules.common-hidpi
     inputs.nixos-hardware.nixosModules.asus-zephyrus-ga402
   ];
   config = {
@@ -72,14 +67,6 @@ in
     };
     swapDevices = [{ device = "/dev/disk/by-partlabel/${swappart}"; }];
 
-    # TODO: re-enable if/when I'm actually going to test it
-    # specialisation."sysd-netboot" = lib.mkIf (config.boot.initrd.systemd.enable) {
-    #   inheritParentConfig = true;
-    #   configuration = {
-    #     boot.initrd.systemd.network.enable = true;
-    #   };
-    # };
-
     home-manager.users.cole = { pkgs, config, ... }@hm: {
       wayland.windowManager.sway.config = {
         keybindings = {
@@ -92,11 +79,11 @@ in
       };
     };
 
-    networking.wireless.iwd.settings = {
-      General = {
-        AddressRandomization = "disabled";
-      };
-    };
+    # networking.wireless.iwd.settings = {
+    #   General = {
+    #     AddressRandomization = "disabled";
+    #   };
+    # };
 
     boot = {
       zfs = {
@@ -133,8 +120,10 @@ in
         "usb_storage"
         "sd_mod" # nvme / external usb storage
         "rtsx_pci_sdmmc" # sdcard
-        "intel_agp"
         "usbnet"
+        "amdgpu"
+        "spl" # try to fix systemd-udev-settle issue
+        "zfs" # try to fix systemd-udev-settle issue
       ];
       initrd.luks.devices."nixos-luksroot" = {
         device = "/dev/disk/by-partlabel/${lukspart}";
