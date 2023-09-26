@@ -228,6 +228,7 @@
                   installer = nixosConfigurations.installer.config.system.build;
                   installerIsoName = installer.isoImage.isoName;
                   installerIso = "${installer.isoImage}/iso/${installer.isoImage.isoName}";
+                  nfb = inputs.nix-fast-build.outputs.packages.${system}.default;
                 in
                 {
                   tf = { type = "app"; program = tfout.tf.outPath; };
@@ -241,6 +242,13 @@
                       ${pkgs_.qemu}/bin/qemu-system-x86_64 -enable-kvm -nographic -m 2048 -boot d \
                         -cdrom "${installerIso}" -hda /tmp/installer-vm-vdisk1 \
                         -net user,hostfwd=tcp::10022-:22 -net nic
+                    '').outPath;
+                  };
+                  cacheme = {
+                    type = "app";
+                    program = (pkgs_.writeShellScript "build-cache-me" ''
+                      ${nfb}/bin/nix-fast-build --flake '${inputs.self}#ciAttrs'
+                      ls 'result*' | cachix push colemickens
                     '').outPath;
                   };
                 }
