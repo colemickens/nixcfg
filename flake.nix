@@ -39,6 +39,7 @@
     jj = { url = "github:martinvonz/jj"; inputs."flake-utils".follows = "flake-utils"; };
     nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; };
     nix-update = { url = "github:Mic92/nix-update"; };
+    nix-fast-build = { url ="github:Mic92/nix-fast-build"; };
 
     # zellij
     zellij = { url = "github:a-kenji/zellij-nix"; inputs."flake-utils".follows = "flake-utils"; };
