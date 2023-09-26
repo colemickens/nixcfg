@@ -81,7 +81,7 @@ in
       ];
       initrd.luks.devices = {
         "nixos-luksroot" = {
-          device = "/dev/disk/by-partlabel/${hn}-luks";
+          device = "/dev/disk/by-partlabel/${hn}-luksroot";
           allowDiscards = true;
           keyFile = "/lukskey";
         };
