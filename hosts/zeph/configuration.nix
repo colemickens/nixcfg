@@ -104,13 +104,19 @@ in
           configurationLimit = lib.mkForce 3;
         };
       };
-      # kernelModules = [
-      #   "iwlwifi"
-      # ];
-      #       extraModprobeConfig = ''
-      # options iwlwifi power_save=0
-      # options iwlmvm power_scheme=1
-      #       '';
+      kernelModules = [
+        "iwlwifi"
+        "iwlmvm"
+        "mac80211"
+        "cfg80211"
+        "ptp"
+        "asus_wmi"
+        "hid_asus"
+      ];
+      # extraModprobeConfig = ''
+      #   options iwlwifi power_save=0
+      #   options iwlmvm power_scheme=1
+      # '';
       kernelParams = [
         # "zfs.zfs_arc_max=${builtins.toString (1023 * 1024 * (1024 * 6))}"
       ];
