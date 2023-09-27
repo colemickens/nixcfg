@@ -128,6 +128,7 @@ def "main inputup" [] {
     "mobile-nixos/development" "mobile-nixos/development-flakes" "mobile-nixos/openstick"       # mobile-nixos
     "nixpkgs-wayland/master"                                                          # nixpkgs-wayland
     "nixos-hardware"                                                                  # nixos-hardware
+    "flake-firefox-nightly-fork"
   ] | each { |it1| $it1 | each {|it| $"($env.NIXCFG_CODE)/($it)" } })
 
   let extsrcdirs = ([
@@ -171,6 +172,7 @@ def "main inputup2" [] {
     [ "mobile-nixos/development" "mobile-nixos/development-flakes" "mobile-nixos/openstick" ]
     [ "nixpkgs-wayland/master" ]
     [ "nixos-hardware" ]
+    [ "flake-firefox-nightly-fork" ]
   ] | each { |it1| $it1 | each {|it| $"($env.NIXCFG_CODE)/($it)" } })
 
   let extsrcdirs = ([
