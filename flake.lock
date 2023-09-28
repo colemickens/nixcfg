@@ -199,11 +199,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1695885836,
-        "narHash": "sha256-YIN3Yf911bs564GcfK5+u2PEvPQEaKDwD1+TImOJvH8=",
+        "lastModified": 1695907648,
+        "narHash": "sha256-BHSRT9VcE5fdJCdBVGglGLpTs5/FUYXS7M+KcuuF6Eo=",
         "owner": "nix-community",
         "repo": "flake-firefox-nightly",
-        "rev": "8f762bc36f7c0ef5695b070a8a4303c918be7aa8",
+        "rev": "c74b7b7a1c4bcf7baa2f8256c581e966f80555eb",
         "type": "github"
       },
       "original": {
@@ -654,11 +654,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1695749416,
-        "narHash": "sha256-Wd0zqv5AII7gVAOg6Z+3LKzcrwMYWh22LcHYBpJBzos=",
+        "lastModified": 1695909187,
+        "narHash": "sha256-ggrl0I1sgiDOox8DIC561CMeJEh8hul08PXy6CV+xoY=",
         "owner": "colemickens",
         "repo": "home-manager",
-        "rev": "c95c01da97e160f5c5bbfe8244d0cc49c264a27c",
+        "rev": "110a40edd3965cd0e6bd1c11b1f790de82226661",
         "type": "github"
       },
       "original": {
@@ -693,11 +693,11 @@
         "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1695891625,
-        "narHash": "sha256-511WTONEL3WSVOOt+sn6h7+KgMkHcOMqJaoac50EEp4=",
+        "lastModified": 1695916513,
+        "narHash": "sha256-kb2fTvUVQCGPKHEuu9577NreMRZqcDGZpNoP7bP7a8I=",
         "owner": "martinvonz",
         "repo": "jj",
-        "rev": "ce0821f06d5b1af96db3cb135168d3f1ecfe3caf",
+        "rev": "db538bd0f4f9be66a5e984f856888776c9408f9b",
         "type": "github"
       },
       "original": {
