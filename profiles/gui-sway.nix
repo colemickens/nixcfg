@@ -102,6 +102,7 @@ in
 {
   imports = [
     ./gui-wayland.nix
+    # ../mixins/i3status-rust.nix
     ../mixins/mako.nix
     ../mixins/waybar.nix
   ];
@@ -207,6 +208,12 @@ in
                 subpixel = "rgb";
               };
             };
+            # bars = [
+            #   {
+            #     statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ~/.config/i3status-rust/config-default.toml";
+            #     position = "top";
+            #   }
+            # ];
             bars = [ ];
             assigns = {
               "9" = [
