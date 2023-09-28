@@ -282,7 +282,7 @@ def "main up" [...hosts] {
   main ciattrs
 
   main deploy raisin
-  # main deploy slynux
+  main deploy slynux
   main deploy zeph
   main deploy openstick
 
