@@ -122,14 +122,10 @@ def "main deploy" [...hosts] {
 def "main inputup" [] {
   header "light_yellow_reverse" "inputup"
   let srcdirs = ([
-    "nixpkgs/master" "nixpkgs/nixos-unstable" "nixpkgs/cmpkgs"                        # nixpkgs
-    "home-manager/master" "home-manager/cmhm"                                         # home-manager
-    "tow-boot/development" "tow-boot/development-flakes" "tow-boot/alirock-h96maxv58" # tow-boot
-    "mobile-nixos/development" "mobile-nixos/development-flakes" "mobile-nixos/openstick"       # mobile-nixos
-    "nixpkgs-wayland/master"                                                          # nixpkgs-wayland
-    "nixos-hardware"                                                                  # nixos-hardware
-    "flake-firefox-nightly-fork"
-  ] | each { |it1| $it1 | each {|it| $"($env.NIXCFG_CODE)/($it)" } })
+    "nixpkgs/master" "nixpkgs/nixos-unstable" "nixpkgs/cmpkgs"
+    "home-manager/master" "home-manager/cmhm"
+    "mobile-nixos/development" "mobile-nixos/development-flakes" "mobile-nixos/openstick"
+  ] | each { |it1| $it1 | each {|it| $"($env.HOME)/code/($it)" } })
 
   let extsrcdirs = ([
     "linux/master"
@@ -162,18 +158,10 @@ def "main inputup" [] {
 def "main inputup2" [] {
   header "light_yellow_reverse" "inputup"
   let srcdirs = ([
-    [
-      "nixpkgs/master"
-      "nixpkgs/nixos-unstable"
-      "nixpkgs/cmpkgs"
-    ]
+    [ "nixpkgs/master" "nixpkgs/nixos-unstable" "nixpkgs/cmpkgs" ]
     [ "home-manager/master" "home-manager/cmhm" ]
-    [ "tow-boot/development" "tow-boot/development-flakes" "tow-boot/alirock-h96maxv58" ]
     [ "mobile-nixos/development" "mobile-nixos/development-flakes" "mobile-nixos/openstick" ]
-    [ "nixpkgs-wayland/master" ]
-    [ "nixos-hardware" ]
-    [ "flake-firefox-nightly-fork" ]
-  ] | each { |it1| $it1 | each {|it| $"($env.NIXCFG_CODE)/($it)" } })
+  ] | each { |it1| $it1 | each {|it| $"($env.HOME)/code/($it)" } })
 
   let extsrcdirs = ([
     [
