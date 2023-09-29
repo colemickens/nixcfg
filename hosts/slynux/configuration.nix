@@ -15,6 +15,8 @@ in
     ./unfree.nix
     ../../mixins/common.nix
 
+    ../../mixins/github-runner.nix
+
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
