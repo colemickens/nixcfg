@@ -7,6 +7,7 @@
 let
   hn = "slynux";
   pp = "slynux"; # ?
+  swappart = "slynux-swap";
   asVm = false;
 in
 {
@@ -55,7 +56,7 @@ in
         device = "${pp}pool/home";
       };
     };
-    swapDevices = [ ];
+    swapDevices = [{ device = "/dev/disk/by-partlabel/${swappart}"; }];
 
     boot = {
       # tmpOnTmpfs = true;  # re-enable when RAM RMA is complete and we're back to 64GB
