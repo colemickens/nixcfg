@@ -1,5 +1,9 @@
 { config, pkgs, lib, ... }:
 
+
+let
+  runnerName = "${config.networking.hostName}-default";
+in
 {
   config = {
     sops.secrets = {
@@ -12,12 +16,12 @@
     };
     services = {
       github-runners = {
-        "default" = {
+        "${runnerName}" = {
           enable = true;
           url = "https://github.com/colemickens/nixcfg";
           tokenFile = config.sops.secrets."github-runner-token".path;
           replace = true;
-          name = "${config.networking.hostName}-default";
+          name = runnerName;
         };
       };
     };
