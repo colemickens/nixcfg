@@ -282,6 +282,10 @@ def "main up" [...hosts] {
   ssh $"cole@(tailscale ip --4 openstick)" "sudo reboot"
 }
 
+def "main loopup" [] {
+ loop { do -i { sleep 2sec; nixcfg inputup; nixcfg lockup; nixcfg pkgup; nixcfg ciattrs; } }
+}
+
 def main [] { main up }
 
 ## CI #########################################################################
