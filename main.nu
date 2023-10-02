@@ -236,11 +236,16 @@ def "main pkgup" [...pkglist] {
       --write-commit-message $t
       $pkgname)
       
-    main dl $pf
+    try {
+      main dl $pf
     
-    if ($t | path exists) and (open $t | str trim | str length) != 0) {
-      print -e $"pkgup: ($pkgname): commiting..."
-      git commit -F $t $"./pkgs/($pkgname)"
+      if ($t | path exists) and (open $t | str trim | str length) != 0) {
+        print -e $"pkgup: ($pkgname): commiting..."
+        git commit -F $t $"./pkgs/($pkgname)"
+      }
+    } catch {
+      git restore $"./pkgs/($pkgname)"
+      print -e $"pkgup: ($pkgname): restoring/undoing"
     }
   }
 }
