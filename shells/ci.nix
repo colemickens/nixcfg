@@ -19,6 +19,7 @@ minimalMkShell {
       # gh
       mercurial
       nushell
+      openssh
       # sd
       # ripgrep
       nixpkgs-fmt

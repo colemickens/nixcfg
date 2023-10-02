@@ -13,6 +13,16 @@ in
         sopsFile = ../secrets/encrypted/github-runner-token;
         format = "binary";
       };
+      "github-colebot-sshkey" = {
+        mode = "0666";
+        sopsFile = ../secrets/encrypted/github-colebot-sshkey;
+        format = "binary";
+      };
+      "cachix_signkey_colemickens" = {
+        mode = "0666";
+        sopsFile = ../secrets/encrypted/cachix_signkey_colemickens;
+        format = "binary";
+      };
     };
     services = {
       github-runners = {
