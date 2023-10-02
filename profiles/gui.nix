@@ -88,7 +88,7 @@ in
           nheko
 
           # misc tools/utils
-          wine
+          # wine-wayland # oof TODO: nixpkgs wine packages need some ... attention
         ]))
         (with pkgs; [
           # my custom GUI-related commands, might pull in extra gui packages
