@@ -61,6 +61,8 @@ in
       "/nix" = { fsType = "zfs"; device = "${poolname}/nix"; neededForBoot = true; };
       "/home" = { fsType = "zfs"; device = "${poolname}/home"; neededForBoot = true; };
 
+      "/var/lib/containers/storage" = { fsType = "zfs"; device = "${poolname}/podman"; };
+
       "/mnt/data/t5" = { fsType = "zfs"; device = "${poolname}/data/t5"; };
 
       "/efi/EFI/Linux" = { device = "/boot/EFI/Linux"; options = [ "bind" ]; };
