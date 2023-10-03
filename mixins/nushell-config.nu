@@ -169,9 +169,9 @@ let light_theme = {
 }
 
 # External completer example
-# let carapace_completer = {|spans|
-#     carapace $spans.0 nushell $spans | from json
-# }
+let carapace_completer = {|spans|
+    carapace $spans.0 nushell $spans | from json
+}
 
 
 # The default config record. This is where much of your global configuration is setup.
@@ -186,7 +186,8 @@ $env.config = {
     always_trash: false # always act as if -t was given. Can be overridden with -p
   }
   cd: {
-    abbreviations: false # allows `cd s/o/f` to expand to `cd some/other/folder`
+    # TODO: replace this with default config again?
+    # abbreviations: false # allows `cd s/o/f` to expand to `cd some/other/folder`
   }
   table: {
     mode: rounded # basic, compact, compact_double, light, thin, with_love, rounded, reinforced, heavy, none, other
