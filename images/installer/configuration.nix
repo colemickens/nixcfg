@@ -25,8 +25,7 @@ in
     boot.swraid.enable = lib.mkForce false;
 
     # TODO: remove when not debugging:
-    # ref: https://github.com/NixOS/nixpkgs/pull/256709
-    # isoImage.squashfsCompression = "none";
+    # isoImage.squashfsCompression = null;
 
     nixpkgs.hostPlatform.system = "x86_64-linux";
     networking.hostName = hn;
