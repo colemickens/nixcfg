@@ -6,7 +6,9 @@
       programs = {
         carapace = {
           enable = true;
-          enableNushellIntegration = true;
+          # TODO: causes error
+          # TODO: manually enable in my own config
+          # enableNushellIntegration = true;
         };
       };
     };
