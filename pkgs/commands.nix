@@ -71,8 +71,16 @@ let
     ssh-add -l
   '');
 
-  fix-gpg =
-    (writeShellScriptBin "fix-gpg" ''
+  fix-gpg = (writeShellScriptBin "fix-gpg" ''
+    set -x
+    ln -sf ${gpgSshSocket} /run/user/1000/sshagent
+    gpg --card-status >/dev/null
+    echo "foo" | gpg --sign &>/dev/null # somehow fixes some weird cases where remote gpg gets hung up when it hasn't been used locally
+    ssh localhost true
+  '');
+
+  fix-gpg2 =
+    (writeShellScriptBin "fix-gpg2" ''
       set -x
       ln -sf ${gpgSshSocket} /run/user/1000/sshagent
       sudo systemctl stop pcscd.service >/dev/null
@@ -133,6 +141,8 @@ in
     gssh
     gpg-relearn
     fix-gpg
+    fix-gpg2
+
     fix-ssh
     fix-ssh-remote
     rec-cmd
