@@ -84,7 +84,7 @@ do {
     --recreate-lock-file
     --commit-lock-file
     --override-input cmpkgs github:colemickens/nixpkgs/cmpkgs-next-wip
-    --override-input cmhm github:colemickens/home-manager/cmhm-next-wip
+    --override-input home-manager github:colemickens/home-manager/cmhm-next-wip
   )
 
   git push origin HEAD
@@ -151,8 +151,8 @@ do {
   (nix flake lock
     --recreate-lock-file 
     --commit-lock-file
-    --override-input cmpkgs github:colemickens/cmpkgs-next
-    --override-input cmhm github:colemickens/cmhm-next
+    --override-input cmpkgs github:colemickens/nixpkgs/cmpkgs-next
+    --override-input home-manager github:colemickens/home-manager/cmhm-next
   )
 
   git push origin HEAD -f
