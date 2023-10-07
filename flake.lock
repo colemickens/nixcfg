@@ -693,11 +693,11 @@
         "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1696700480,
-        "narHash": "sha256-O20T3Xyk7abfsNmRwrdq0TQW36SG34rMHZxW9vO5vUU=",
+        "lastModified": 1696713093,
+        "narHash": "sha256-LdUNJLiO6wpy24bR1J0pRBvDE20oa/ikOH0iOvEEOPM=",
         "owner": "martinvonz",
         "repo": "jj",
-        "rev": "7f4fe22a987e33cb2d2ef5976080f6f9a1da7024",
+        "rev": "4acdf7260194f629557cdbe9aa583594621876a1",
         "type": "github"
       },
       "original": {
@@ -852,11 +852,11 @@
         "treefmt-nix": "treefmt-nix_4"
       },
       "locked": {
-        "lastModified": 1696468017,
-        "narHash": "sha256-sj0SD5pxQexr1RuOYJG/gSHWZ7ZtHmxFs9yNBZjPRuE=",
+        "lastModified": 1696712215,
+        "narHash": "sha256-znUR51gbpoqm79FKVyVl9V4va6P5bTr7tohPPW+iydU=",
         "owner": "nix-community",
         "repo": "nix-eval-jobs",
-        "rev": "6841d05ad796d57ecb34e8f5a3910f8fe5211b84",
+        "rev": "26af7cabdb7ee637dc9b63f1ce609a467534713c",
         "type": "github"
       },
       "original": {
@@ -1078,11 +1078,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1696709687,
-        "narHash": "sha256-dqEATLsYyU/S+vFmiPHXHkQf14LpB9BYwgf2GwNtN9s=",
+        "lastModified": 1696713148,
+        "narHash": "sha256-HRx93KCAlxDbqchkGOww2toLso87A8oyyCVSBNqj1B0=",
         "owner": "nix-community",
         "repo": "nixpkgs-wayland",
-        "rev": "d23384f1f3ae853b93605d6b43d6fd2b947a8075",
+        "rev": "8a7eab62d76d843c6dfe9ef2d510ce33e31615df",
         "type": "github"
       },
       "original": {
