@@ -56,7 +56,7 @@
     let
       defaultSystems = [
         "x86_64-linux"
-        "aarch64-linux"
+        # "aarch64-linux"
         # "riscv64-linux"
       ];
 
@@ -95,25 +95,25 @@
           slynux = { pkgs = inputs.cmpkgs; };
           zeph = { pkgs = inputs.cmpkgs; };
 
-          # openstick-cross = {
-          #   pkgs = inputs.cmpkgs-cross;
-          #   path = ./hosts/openstick/cross.nix;
-          #   buildSys = "x86_64-linux";
-          # };
+          openstick = {
+            pkgs = inputs.cmpkgs;
+            path = ./hosts/openstick/cross.nix;
+            buildSys = "x86_64-linux";
+          };
         };
         "aarch64-linux" = {
           # ocii = {
           #   pkgs = inputs.cmpkgs;
           #   path = ./images/ocii/oci-image.nix;
           # };
-          openstick = {
-            path = ./hosts/openstick/configuration.nix;
-            pkgs = inputs.cmpkgs;
-          };
-          h96maxv58 = {
-            pkgs = inputs.cmpkgs;
-            path = ./hosts/h96maxv58/configuration.nix;
-          };
+          # openstick = {
+          #   path = ./hosts/openstick/configuration.nix;
+          #   pkgs = inputs.cmpkgs;
+          # };
+          # h96maxv58 = {
+          #   pkgs = inputs.cmpkgs;
+          #   path = ./hosts/h96maxv58/configuration.nix;
+          # };
         };
       };
       nixosConfigs = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues nixosConfigsEx));

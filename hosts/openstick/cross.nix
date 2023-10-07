@@ -4,6 +4,6 @@
   imports = [
     ./inner.nix
     ../../profiles/core.nix
-    ../../profiles/addon-cross.nix
+    ../../profiles/addon-tiny.nix
   ];
 }
