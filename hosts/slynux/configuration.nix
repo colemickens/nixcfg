@@ -73,7 +73,6 @@ in
         "ehci_pci"
         "uas"
       ];
-      initrd.systemd.enable = lib.mkForce false;
       kernelModules = [
         "xhci_pci"
         "nvme"
