@@ -31,6 +31,7 @@ do {
   git remote set-url origin $url
 
   git remote update
+  do -i { git rebase --abort }
 
   git switch -C main-next-wip
   git reset --hard origin/main
@@ -46,6 +47,7 @@ do {
   do -i { git remote add origin $url }
   do -i { git remote set-url origin $url }
   git remote update
+  do -i { git rebase --abort }
 
   git switch -C cmpkgs-next-wip
   git reset --hard origin/cmpkgs
@@ -66,6 +68,7 @@ do {
   do -i { git remote add origin $url }
   do -i { git remote set-url origin $url }
   git remote update
+  do -i { git rebase --abort }
 
   git switch -C cmhm-next-wip
   git reset --hard origin/cmhm
