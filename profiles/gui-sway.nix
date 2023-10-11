@@ -14,7 +14,7 @@ let
     url = "https://raw.githubusercontent.com/gytis-ivaskevicius/high-quality-nix-content/master/wallpapers/nix-glow.png";
     hash = "sha256-5zE0fRfudEW9eapx+AkaYArO6ECFrnrNHE+een7pC+E=";
   };
-  background = "${bgimg} fit #1A1A1B";
+  background = "${bgimg} fit #191A1A";
 
   # _bg = "#008080";
   # background = "${_bg} solid_color";
