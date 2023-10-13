@@ -61,7 +61,7 @@ in
       "/nix" = { fsType = "zfs"; device = "${poolname}/nix"; neededForBoot = true; };
       "/home" = { fsType = "zfs"; device = "${poolname}/home"; neededForBoot = true; };
 
-      "/zfsin" = { fsType = "zfs"; device = "zfsin"; neededForBoot = false; };
+      "/zfsin" = { fsType = "zfs"; device = "zfsin"; neededForBoot = true; };
 
       "/var/lib/containers/storage" = { fsType = "zfs"; device = "${poolname}/podman"; };
 
