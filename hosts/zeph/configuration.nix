@@ -89,10 +89,10 @@ in
     # };
 
     boot = {
-      zfs = {
-        forceImportAll = true;
-        extraPools = [ "zfsin" ];
-      };
+      # zfs = {
+      #   forceImportAll = true;
+      #   extraPools = [ "zfsin" ];
+      # };
       bootspec.enable = true;
       lanzaboote = {
         enable = true;
