@@ -82,6 +82,9 @@ minimalMkShell {
     gron
 
     gst_all_1.gstreamer
+
+    # not a good sign
+    dos2unix
   ];
 
   buildInputs = with pkgs; [
