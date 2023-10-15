@@ -7,9 +7,12 @@ let
   nwpkgs = inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system};
 
   prefs = import ../mixins/_preferences.nix { inherit inputs config lib pkgs; };
-  term = "${pkgs.wezterm}/bin/wezterm";
-  # term = "${pkgs.alacritty}/bin/alacritty";
-  # term = "${pkgs.foot}/bin/foot";
+
+  # term
+  # - sigh, wezterm scrolling on wayland is a nightmare, so flip back to alacritty again
+  term = "${pkgs.alacritty}/bin/alacritty";
+  # term = "${pkgs.rio}/bin/rio";
+  # term = "${pkgs.wezterm}/bin/wezterm";
 
   # background = prefs.background;
   bgimg = pkgs.fetchurl {
