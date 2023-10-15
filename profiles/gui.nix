@@ -21,6 +21,7 @@ in
     ../mixins/fonts.nix
     ../mixins/gtk.nix
     ../mixins/mpv.nix
+    ../mixins/pam-u2f.nix
     ../mixins/pipewire.nix
     ../mixins/rio.nix
     ../mixins/wezterm.nix
