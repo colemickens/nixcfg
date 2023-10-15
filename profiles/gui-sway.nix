@@ -4,6 +4,8 @@ let
   color_cyan = "#33ccff";
   color_pink = "#ee00ff";
 
+  nwpkgs = inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system};
+
   prefs = import ../mixins/_preferences.nix { inherit inputs config lib pkgs; };
   term = "${pkgs.wezterm}/bin/wezterm";
   # term = "${pkgs.alacritty}/bin/alacritty";
@@ -14,7 +16,8 @@ let
     url = "https://raw.githubusercontent.com/gytis-ivaskevicius/high-quality-nix-content/master/wallpapers/nix-glow.png";
     hash = "sha256-5zE0fRfudEW9eapx+AkaYArO6ECFrnrNHE+een7pC+E=";
   };
-  background = "${bgimg} fit #191A1A";
+  bgcolor = "#19191A";
+  background = "${bgimg} fit ${bgcolor}";
 
   # _bg = "#008080";
   # background = "${_bg} solid_color";
@@ -51,6 +54,10 @@ let
   screenshotArea = pkgs.writeShellScript "screenshot-area.sh" ''
     mkdir -p "''${HOME}/screenshots"
     ${pkgs.grim}/bin/grim -g "$(slurp)" "''${HOME}/screenshots/screenshot-$(date '+%s').png"
+  '';
+
+  swaylock_cmd = pkgs.writeShellScript "swaylock-cmd.sh" ''
+    ${pkgs.swaylock}/bin/swaylock -i "${bgimg}" -c "#000000" -s "fit"
   '';
 
   # silly gtk/gnome wayland schenanigans
@@ -122,14 +129,13 @@ in
     ];
 
     nixpkgs.overlays = [
-      (final: prev:
-        let nwPkgs = inputs.nixpkgs-wayland.packages.${pkgs.stdenv.hostPlatform.system}; in
-        {
-          inherit (nwPkgs)
-            sway-unwrapped
-            xdg-desktop-portal-wlr
-            ;
-        })
+      (final: prev: {
+        inherit (nwpkgs)
+          sway-unwrapped
+          swaylock
+          xdg-desktop-portal-wlr
+          ;
+      })
     ];
 
     security.pam.services.swaylock = { };
@@ -139,6 +145,8 @@ in
         swaymsg = "${hm.config.wayland.windowManager.sway.package}/bin/swaymsg";
       in
       {
+        home.packages = with pkgs; [ ];
+
         home.sessionVariables = {
           WLR_RENDERER = "vulkan";
           XDG_CURRENT_DESKTOP = "sway";
@@ -232,6 +240,8 @@ in
             keybindings = {
               "${modifier}+Return" = "exec ${term}";
               "${modifier}+Shift+q" = "kill";
+
+              "${modifier}+Delete" = "exec ${swaylock_cmd}";
 
               "${modifier}+Escape" = "exec ${pkgs.sirula}/bin/sirula";
               "${modifier}+Ctrl+Alt+Delete" = "exec ${swaymsg} exit";
