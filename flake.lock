@@ -154,11 +154,11 @@
     "crate2nix": {
       "flake": false,
       "locked": {
-        "lastModified": 1697358338,
-        "narHash": "sha256-CKmY3z/Wne7KJFXoH6jLglibEl3Ky26VgjPrgxG8H7c=",
+        "lastModified": 1697441856,
+        "narHash": "sha256-EbMzpBCiBo2118qMOmwBUIY1TtIQAkVzRPpyVL2NKO4=",
         "owner": "kolloch",
         "repo": "crate2nix",
-        "rev": "68ec88c1a1753ef449001c5f1f8b8e82ed29f862",
+        "rev": "37684f2718e8ba19b0a6f2fd737ad1db67186eca",
         "type": "github"
       },
       "original": {
@@ -717,11 +717,11 @@
         "rust-overlay": "rust-overlay_3"
       },
       "locked": {
-        "lastModified": 1697381239,
-        "narHash": "sha256-eWq9IToEq8wVpmREERX89EhHJzCBFc63J82o3sl2z0o=",
+        "lastModified": 1697447002,
+        "narHash": "sha256-SEirTeG4nOa78j8f/bvwyykUiURYPIQc/gkdxycDKSc=",
         "owner": "nix-community",
         "repo": "lanzaboote",
-        "rev": "82530e530b8aba52ded2b124c978ed663c6b6a2c",
+        "rev": "778e21733b2b7d11771caee2b4678524042dfd51",
         "type": "github"
       },
       "original": {
