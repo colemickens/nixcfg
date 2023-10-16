@@ -109,28 +109,24 @@ window#waybar.chromium {
 #battery {
 }
 
-#battery.charging {
-    color: #26A65B;
-}
-
 @keyframes blink {
     to {
-        background-color: #f53c3c;
-        color: #ffffff;
+        background-color: #ffffff;
+        color: #a83e32;
     }
 }
 
-#battery.Charging {
-    color: green;
+#battery.charging {
+    color: #26A65B;
 }
-#battery.Discharging {
-    color: blue;
+#battery.discharging {
+    color: #a87332;
 }
-#battery.Discharging.warning {
-    color: orange;
+#battery.discharging.warning {
+    background-color: #a87332;
 }
-#battery.Discharging.critical {
-    background-color: #f53c3c;
+#battery.discharging.critical {
+    background-color: #a83e32;
     color: #ffffff;
     animation-name: blink;
     animation-duration: 0.5s;
