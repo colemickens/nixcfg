@@ -15,10 +15,10 @@ let
   # term = "${pkgs.wezterm}/bin/wezterm";
 
   # background = prefs.background;
-  bgimg = pkgs.fetchurl {
+  bgimg = (pkgs.fetchurl {
     url = "https://raw.githubusercontent.com/gytis-ivaskevicius/high-quality-nix-content/master/wallpapers/nix-glow.png";
     hash = "sha256-5zE0fRfudEW9eapx+AkaYArO6ECFrnrNHE+een7pC+E=";
-  };
+  }).outPath;
   bgcolor = "#19191A";
   background = "${bgimg} fit ${bgcolor}";
 
@@ -57,10 +57,6 @@ let
   screenshotArea = pkgs.writeShellScript "screenshot-area.sh" ''
     mkdir -p "''${HOME}/screenshots"
     ${pkgs.grim}/bin/grim -g "$(slurp)" "''${HOME}/screenshots/screenshot-$(date '+%s').png"
-  '';
-
-  swaylock_cmd = pkgs.writeShellScript "swaylock-cmd.sh" ''
-    ${pkgs.swaylock}/bin/swaylock -i "${bgimg}" -c "#000000" -s "fit"
   '';
 
   # silly gtk/gnome wayland schenanigans
@@ -155,6 +151,15 @@ in
           XDG_CURRENT_DESKTOP = "sway";
         };
 
+        programs.swaylock = {
+          enable = true;
+          settings = {
+            image = bgimg;
+            scaling = "fit";
+            color = "000000";
+          };
+        };
+
         wayland.windowManager.sway = {
           enable = true;
           systemd = {
@@ -244,7 +249,7 @@ in
               "${modifier}+Return" = "exec ${term}";
               "${modifier}+Shift+q" = "kill";
 
-              "${modifier}+Delete" = "exec ${swaylock_cmd}";
+              "${modifier}+Delete" = "exec ${pkgs.swaylock}/bin/swaylock";
 
               "${modifier}+Escape" = "exec ${pkgs.sirula}/bin/sirula";
               "${modifier}+Ctrl+Alt+Delete" = "exec ${swaymsg} exit";
