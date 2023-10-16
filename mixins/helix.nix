@@ -41,9 +41,9 @@ in
           else pkgs.helix;
 
         settings = {
-          theme = "ayu_evolve";
-          #theme = "gruvbox";
-          #theme = "base16_terminal";
+          # theme = "ayu_evolve";
+          theme = "ayu_dark";
+          # theme = "everblush";
 
           editor = {
             auto-pairs = false;
