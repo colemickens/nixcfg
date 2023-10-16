@@ -138,13 +138,14 @@ in
     ];
 
     security.pam.services.swaylock = { };
+    security.pam.services.waylock = { }; # TODO: what is this actually doing? match binary name?
 
     home-manager.users.cole = { pkgs, config, ... }@hm:
       let
         swaymsg = "${hm.config.wayland.windowManager.sway.package}/bin/swaymsg";
       in
       {
-        home.packages = with pkgs; [ ];
+        home.packages = with pkgs; [ waylock ];
 
         home.sessionVariables = {
           WLR_RENDERER = "vulkan";
