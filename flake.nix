@@ -4,9 +4,7 @@
   description = "colemickens - nixos configs, custom packges, misc";
 
   inputs = {
-    # systems = { url = "git+file:.?path=flake.systems.nix"; flake = false; };
-    systems = { url = "path:./flake.systems.nix"; flake = false; };
-    flake-utils = { url = "github:numtide/flake-utils"; inputs."systems".follows = "systems"; };
+    flake-utils = { url = "github:numtide/flake-utils"; };
     lib-aggregate = { url = "github:nix-community/lib-aggregate"; }; #TODO: boo name! "libaggregate"?
 
     nixpkgs-stable = { url = "github:nixos/nixpkgs/nixos-23.05"; }; # any stable to use
