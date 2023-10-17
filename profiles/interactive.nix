@@ -88,6 +88,9 @@
           (with pkgs; [
             (pkgs.callPackage ../pkgs/commands.nix { })
 
+            direnv
+            nix-direnv
+
             # <rust pkgs>
             bat
             tealdeer
