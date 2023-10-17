@@ -11,7 +11,8 @@ let
   #     sha256 = "sha256-HNU+jltYw3gdt9ApI21zUoojy0aJ4y1x7kidkWZkKg0=";
   #   };
   # });
-  _nix = pkgs.nixVersions.unstable;
+  # _nix = pkgs.nixVersions.unstable;
+  _nix = pkgs.nixVersions.nix_2_18;
 in
 {
   config = {
@@ -30,6 +31,7 @@ in
         randomizedDelaySec = "30min";
       };
       nixPath = lib.mkForce [ ]; # i doth protest
+      package = _nix;
       settings = rec {
         keep-derivations = true; # this is the default (?)
         builders-use-substitutes = true;
@@ -53,7 +55,6 @@ in
         substituters = trusted-substituters;
         trusted-users = [ "@wheel" "cole" "root" ];
       };
-      package = _nix;
       extraOptions = ''
         experimental-features = nix-command flakes recursive-nix
       '';
