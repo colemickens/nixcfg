@@ -23,7 +23,7 @@ let
   ]);
 in
 minimalMkShell {
-  name = "dev";
+  name = "cole-nixcfg-dev";
   hardeningDisable = [ "fortify" ];
 
   shellHook = ''
