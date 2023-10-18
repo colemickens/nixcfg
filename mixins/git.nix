@@ -20,6 +20,17 @@
           };
         };
 
+        includes = [
+          {
+            condition = "gitdir:~/work/";
+            contents = {
+              user = {
+                name = "Cole Mickens";
+                email = "cole.mickens@determinate.systems";
+              };
+            };
+          }
+        ];
         # delta = {
         #   enable = true;
         #   options = {
