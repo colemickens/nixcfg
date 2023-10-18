@@ -5,11 +5,14 @@
     home-manager.users.cole = { pkgs, ... }: {
       programs.direnv = {
         enable = true;
-        nix-direnv = {
-          enable = true;
-          # TODO: investigate if we can use nushellIntegration here
-          # or if it conflicts with my stuff?
-        };
+        # TODO: investigate if we can use nushellIntegration here
+        # enableNushellIntegration = true;
+        
+        # REVISIT: disable nix-direnv, since it uses a specific nix, that hits issues with lastModified
+        # nix-direnv = {
+        #   enable = true;
+        # };
+
         # use global gitignore so we keep GC roots per-project instead
         # stdlib = ''
         #   # $HOME/.config/direnv/direnvrc
