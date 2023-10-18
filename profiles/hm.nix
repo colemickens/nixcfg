@@ -12,6 +12,11 @@
     home-manager = {
       useGlobalPkgs = true;
       useUserPackages = true;
+
+      sharedModules = [
+        inputs.sops-nix.homeManagerModules.sops
+      ];
+      
       users.cole = { pkgs, ... }@hm: {
         home.extraOutputsToInstall = [ "info" "man" "share" "icons" "doc" ];
         home.stateVersion = "21.11";
@@ -19,6 +24,10 @@
         news.display = "silent";
         programs = {
           home-manager.enable = true;
+        };
+
+        sops = {
+          gnupg.home = hm.config.programs.gpg.homedir;
         };
       };
     };
