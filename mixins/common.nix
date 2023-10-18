@@ -157,7 +157,7 @@ in
           (builtins.hashString "sha256" config.networking.hostName))));
       firewall.enable = true;
       useDHCP = lib.mkIf (cfg.defaultNetworking) false;
-      useNetworkd = lib.mkIf (cfg.defaultNetworking) true;
+      # useNetworkd = lib.mkIf (cfg.defaultNetworking) true;
 
       resolvconf.dnsExtensionMechanism = false;
 
