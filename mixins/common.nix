@@ -3,7 +3,7 @@
 let
   cfg = config.nixcfg.common;
   _kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
-  _zfsUnstable = true;
+  _zfsUnstable = false;
 in
 {
   imports = [
