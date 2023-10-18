@@ -47,8 +47,7 @@ in
 
           editor = {
             auto-pairs = false;
-            bufferline = "never";
-            # bufferline = "always";
+            bufferline = "always";
             color-modes = true;
             cursor-shape = {
               normal = "block";
