@@ -12,6 +12,7 @@
     ../mixins/bottom.nix
     ../mixins/carapace.nix
     ../mixins/cachix.nix
+    ../mixins/direnv.nix
     ../mixins/gh.nix
     ../mixins/git.nix
     ../mixins/gpg-agent.nix
@@ -87,9 +88,6 @@
           # ++ inputs.self.devShells.${pkgs.stdenv.hostPlatform.system}.ci.nativeBuildInputs
           (with pkgs; [
             (pkgs.callPackage ../pkgs/commands.nix { })
-
-            direnv
-            nix-direnv
 
             # <rust pkgs>
             bat
