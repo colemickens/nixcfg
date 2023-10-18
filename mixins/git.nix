@@ -20,6 +20,8 @@
           };
         };
 
+        ignores = [ ".direnv" ];
+
         includes = [
           {
             condition = "gitdir:~/work/";
