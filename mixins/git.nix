@@ -3,6 +3,13 @@
 {
   config = {
     home-manager.users.cole = { pkgs, ... }: {
+      sops.secrets = {
+        "github-signingkey-detsys" = {
+          format = "binary";
+          sopsFile = ../secrets/encrypted/github-signingkey-detsys;
+        };
+      };
+
       programs.git = {
         enable = true;
         signing.key = "8329C1934DA5D818AE35F174B475C2955744A019";
@@ -29,6 +36,10 @@
               user = {
                 name = "Cole Mickens";
                 email = "cole.mickens@determinate.systems";
+                signingkey = "/run/user/1000/secrets/github-signingkey-detsys";
+              };
+              gpg = {
+                format = "ssh";
               };
             };
           }
