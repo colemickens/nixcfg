@@ -534,7 +534,7 @@ dependencies = [
 
 [[package]]
 name = "copa"
-version = "0.0.22"
+version = "0.0.23"
 dependencies = [
  "arrayvec",
  "rio-proc-macros",
@@ -557,7 +557,7 @@ dependencies = [
 
 [[package]]
 name = "corcovado"
-version = "0.0.22"
+version = "0.0.23"
 dependencies = [
  "bytes 0.3.0",
  "cfg-if 0.1.10",
@@ -2367,9 +2367,9 @@ dependencies = [
 
 [[package]]
 name = "regex"
-version = "1.9.6"
+version = "1.10.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ebee201405406dbf528b8b672104ae6d6d63e6d118cb10e4d51abbc7b58044ff"
+checksum = "380b951a9c5e80ddfd6136919eef32310721aa4aacd4889a8d39124b026ab343"
 dependencies = [
  "aho-corasick",
  "memchr",
@@ -2379,9 +2379,9 @@ dependencies = [
 
 [[package]]
 name = "regex-automata"
-version = "0.3.9"
+version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "59b23e92ee4318893fa3fe3e6fb365258efbfe6ac6ab30f090cdcbb7aa37efa9"
+checksum = "5f804c7828047e88b2d32e2d7fe5a105da8ee3264f01902f796c8e067dc2483f"
 dependencies = [
  "aho-corasick",
  "memchr",
@@ -2390,9 +2390,9 @@ dependencies = [
 
 [[package]]
 name = "regex-syntax"
-version = "0.7.5"
+version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dbb5fb1acd8a1a18b3dd5be62d25485eb770e05afb408a9627d14d451bae12da"
+checksum = "c08c74e62047bb2de4ff487b251e4a92e24f48745648451635cec7d591162d9f"
 
 [[package]]
 name = "remove_dir_all"
@@ -2411,7 +2411,7 @@ checksum = "216080ab382b992234dda86873c18d4c48358f5cfcb70fd693d7f6f2131b628b"
 
 [[package]]
 name = "rio-config"
-version = "0.0.22"
+version = "0.0.23"
 dependencies = [
  "dirs",
  "log 0.4.20",
@@ -2424,7 +2424,7 @@ dependencies = [
 
 [[package]]
 name = "rio-proc-macros"
-version = "0.0.22"
+version = "0.0.23"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2432,7 +2432,7 @@ dependencies = [
 
 [[package]]
 name = "rioterm"
-version = "0.0.22"
+version = "0.0.23"
 dependencies = [
  "ahash 0.8.3",
  "base64",
@@ -2727,7 +2727,7 @@ checksum = "73473c0e59e6d5812c5dfe2a064a6444949f089e20eec9a2e5506596494e4623"
 
 [[package]]
 name = "sugarloaf"
-version = "0.0.22"
+version = "0.0.23"
 dependencies = [
  "ab_glyph",
  "approx",
@@ -2769,7 +2769,7 @@ dependencies = [
 
 [[package]]
 name = "sugarloaf-styled-text"
-version = "0.0.22"
+version = "0.0.23"
 dependencies = [
  "console_error_panic_hook",
  "console_log",
@@ -2814,7 +2814,7 @@ dependencies = [
 
 [[package]]
 name = "teletypewriter"
-version = "0.0.22"
+version = "0.0.23"
 dependencies = [
  "corcovado",
  "dirs",
