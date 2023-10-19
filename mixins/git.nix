@@ -46,16 +46,17 @@
             };
           }
         ];
-        # delta = {
-        #   enable = true;
-        #   options = {
-        #     features = "decorations side-by-side navigate";
-        #   };
-        # };
-
-        difftastic = {
+        delta = {
           enable = true;
+          options = {
+            features = "decorations side-by-side navigate";
+            syntax-theme = "TwoDark";
+          };
         };
+
+        # difftastic = {
+        #   enable = true;
+        # };
       };
     };
   };

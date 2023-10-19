@@ -9,6 +9,7 @@
 
     ../mixins/aria2.nix
     ../mixins/bash.nix
+    ../mixins/bat.nix
     ../mixins/bottom.nix
     ../mixins/carapace.nix
     ../mixins/cachix.nix
@@ -90,7 +91,7 @@
             (pkgs.callPackage ../pkgs/commands.nix { })
 
             # <rust pkgs>
-            bat
+            delta
             tealdeer
             cfspeedtest
             du-dust
@@ -113,11 +114,11 @@
             prs
             pipes-rs
             rage
-            age # need age (Age-keygen can do priv->pub)
             rustscan
             xplr
             # </rust pkgs>
 
+            age # need age (Age-keygen can do priv->pub)
             sbctl
 
             binwalk
