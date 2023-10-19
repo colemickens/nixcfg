@@ -124,7 +124,8 @@ def "main inputup" [] {
   let srcdirs = ([
     "nixpkgs/master" "nixpkgs/nixos-unstable" "nixpkgs/cmpkgs"
     "home-manager/master" "home-manager/cmhm"
-    "mobile-nixos/development" "mobile-nixos/development-flakes" "mobile-nixos/openstick"
+    # "mobile-nixos/development" "mobile-nixos/development-flakes"
+    # "mobile-nixos/openstick"
   ] | each { |it1| $it1 | each {|it| $"($env.HOME)/code/($it)" } })
 
   let extsrcdirs = ([
@@ -160,7 +161,7 @@ def "main inputup2" [] {
   let srcdirs = ([
     [ "nixpkgs/master" "nixpkgs/nixos-unstable" "nixpkgs/cmpkgs" ]
     [ "home-manager/master" "home-manager/cmhm" ]
-    [ "mobile-nixos/development" "mobile-nixos/development-flakes" "mobile-nixos/openstick" ]
+    #[ "mobile-nixos/development" "mobile-nixos/development-flakes" "mobile-nixos/openstick" ]
   ] | each { |it1| $it1 | each {|it| $"($env.HOME)/code/($it)" } })
 
   let extsrcdirs = ([
@@ -277,14 +278,14 @@ def "main up" [...hosts] {
   main deploy raisin
   main deploy slynux
   main deploy zeph
-  main deploy openstick
+  # main deploy openstick
 
-  print -e "openstick: cleanup"
-  ssh $"cole@(tailscale ip --4 openstick)" "nix-env --profile /home/cole/.local/state/nix/profiles/home-manager --delete-generations +1"
-  ssh $"cole@(tailscale ip --4 openstick)" "sudo nix-collect-garbage -d"
-  ssh $"cole@(tailscale ip --4 openstick)" "sudo journalctl --vacuum-size=5M"
-  print -e "openstick: reboot"
-  ssh $"cole@(tailscale ip --4 openstick)" "sudo reboot"
+  # print -e "openstick: cleanup"
+  # ssh $"cole@(tailscale ip --4 openstick)" "nix-env --profile /home/cole/.local/state/nix/profiles/home-manager --delete-generations +1"
+  # ssh $"cole@(tailscale ip --4 openstick)" "sudo nix-collect-garbage -d"
+  # ssh $"cole@(tailscale ip --4 openstick)" "sudo journalctl --vacuum-size=5M"
+  # print -e "openstick: reboot"
+  # ssh $"cole@(tailscale ip --4 openstick)" "sudo reboot"
 }
 
 def "main loopup" [] {
