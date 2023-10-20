@@ -189,7 +189,7 @@ in
             battery = {
               format = "bat {}";
               states = {
-                warning = 35;
+                warning = 25;
                 critical = 15;
               };
             };
