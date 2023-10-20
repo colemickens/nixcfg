@@ -123,7 +123,9 @@ window#waybar.chromium {
     color: #a87332;
 }
 #battery.discharging.warning {
-    background-color: #a87332;
+    /* color: #ffffff; */ /* TODO: would be better if non-warning discharge selector was more specific */
+    /* background-color: #a87332; */
+    color: #a83e32;
 }
 #battery.discharging.critical {
     background-color: #a83e32;
