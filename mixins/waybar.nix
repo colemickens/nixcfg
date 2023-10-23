@@ -125,7 +125,6 @@ in
             "temperature"
             "battery"
             "clock"
-            "clock#date"
           ];
 
           modules = ({
@@ -181,10 +180,7 @@ in
             tray.spacing = 10;
             # battery
             clock = {
-              format = "{:%d %b %Y}";
-            };
-            "clock#date" = {
-              format = "{:%H:%M %p}";
+              format = "{:%b-%d %H:%M}";
             };
             battery = {
               format = "bat {}";

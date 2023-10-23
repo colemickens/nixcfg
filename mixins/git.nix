@@ -20,6 +20,9 @@
         userName = "Cole Mickens";
 
         extraConfig = {
+          init = {
+            defaultBranch = "main";
+          };
           core = {
             untrackedCache = true;
             fsmonitor = "${pkgs.rs-git-fsmonitor}/bin/rs-git-fsmonitor";
