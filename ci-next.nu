@@ -132,6 +132,12 @@ let attr = ".#ciAttrs.x86_64-linux"
 )
 ^ls -d result* | cachix push colemickens
 
+print -e "********** build results (start) **********"
+^ls -d result*
+^ls -al result
+^ls -al result/
+print -e "********** build results (end) ************"
+
 ## NOW UPDATE BRANCHES
 do {
   cd $"($ROOT)/nixpkgs/cmpkgs"
