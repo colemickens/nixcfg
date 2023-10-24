@@ -5,6 +5,7 @@
 , nix-update-script
 
 , autoPatchelfHook
+, cmake
 , ncurses
 , pkg-config
 
@@ -59,6 +60,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    cmake
     ncurses
     pkg-config
   ];
