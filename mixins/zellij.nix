@@ -75,7 +75,7 @@ in
           default_mode = "normal";
           # default_layout = "compact";
           default_layout = "default_zjstatus";
-          default_shell = "nu";
+          default_shell = prefs.default_shell;
           simplified_ui = true;
           pane_frames = true;
           scrollback_editor = "hx";

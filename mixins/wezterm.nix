@@ -17,7 +17,7 @@ in
         wezterm.add_to_config_reload_watch_list("${hm.config.xdg.configHome}/wezterm")
 
         local config = {
-          default_prog = { "${prefs.shell.program}" },
+          default_prog = { "${prefs.default_shell}" },
           enable_tab_bar = false,
           use_fancy_tab_bar = false,
           front_end = "WebGpu",

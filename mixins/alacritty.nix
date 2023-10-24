@@ -14,7 +14,7 @@ in
           env = {
             TERM = "xterm-256color";
           };
-          shell = prefs.shell;
+          shell = prefs.default_shell;
           font = {
             normal.family = "${font.monospace.family}";
             # normal.family = "IntelOne Mono";

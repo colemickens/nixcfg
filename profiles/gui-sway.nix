@@ -247,7 +247,7 @@ in
               ];
             };
             keybindings = {
-              "${modifier}+Return" = "exec ${term}";
+              "${modifier}+Return" = "exec ${prefs.default_term}";
               "${modifier}+Shift+q" = "kill";
 
               "${modifier}+Delete" = "exec ${pkgs.swaylock}/bin/swaylock";
