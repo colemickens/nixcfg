@@ -142,11 +142,11 @@
     "crate2nix": {
       "flake": false,
       "locked": {
-        "lastModified": 1698058767,
-        "narHash": "sha256-MdUhfvYRStbpiVTQNHz1Pq2Pg0LYQ6JnRQlF9/j3zic=",
+        "lastModified": 1698172456,
+        "narHash": "sha256-tgoBRuWTbXdjk1mWkf6XBuJxt0tzZC79VTkZbVWGROc=",
         "owner": "kolloch",
         "repo": "crate2nix",
-        "rev": "0e89b575a28d950ff8821d22cef4ba68f66438d9",
+        "rev": "04ef2bd59ce4fecef831a1799f08a1ea84793fb3",
         "type": "github"
       },
       "original": {
@@ -624,11 +624,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1698150042,
-        "narHash": "sha256-B/4k9jCZxYoJ1csNA/CB4yXESREZocZhAts6v+E3aeY=",
+        "lastModified": 1698183111,
+        "narHash": "sha256-OSebG7CSLao6DH9msKjgSrxbA+cQruY8g6cFYLcA6YA=",
         "owner": "colemickens",
         "repo": "home-manager",
-        "rev": "8d2ec08a77501733031f2f4bcea00ff87f04faa6",
+        "rev": "22e25ed6afa9f33ee1d9430d3d9338485522635e",
         "type": "github"
       },
       "original": {
@@ -663,11 +663,11 @@
         "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1698163995,
-        "narHash": "sha256-6awrzv/1z8iwbF+LIRtU9PM85+A4V9TdHCeQNvaz5zI=",
+        "lastModified": 1698176246,
+        "narHash": "sha256-JI96osZIo0u7PrOiFyP4Xh5E8+Rn7gHrppSkrVHA6o0=",
         "owner": "martinvonz",
         "repo": "jj",
-        "rev": "0319b1c67f7d70d3dc9498ceca0d605b16394d45",
+        "rev": "5e407982b19793a7e240b2010e837e3b148a973f",
         "type": "github"
       },
       "original": {
