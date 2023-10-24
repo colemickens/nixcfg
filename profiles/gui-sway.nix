@@ -271,7 +271,10 @@ in
               "${modifier}+k" = "focus up";
               "${modifier}+l" = "focus right";
 
-              "${modifier}+Tab" = "${pkgs.sway}/bin/swaymsg seat '*' pointer_constraint escape";
+              "${modifier}+Home" = "${pkgs.sway}/bin/swaymsg seat '*' pointer_constraint escape";
+
+              "${modifier}+Tab" = "workspace next";
+              "${modifier}+Shift+Tab" = "workspace prev";
 
               "${modifier}+Shift+h" = "move left";
               "${modifier}+Shift+j" = "move down";
