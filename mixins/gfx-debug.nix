@@ -7,6 +7,7 @@
       glxinfo
       vulkan-tools
       glmark2
+      mesa-demos
     ];
   };
 }
