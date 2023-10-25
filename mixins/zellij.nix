@@ -84,6 +84,7 @@ in
           pane_frames = true;
           scrollback_editor = "hx";
           theme = "tokyo-night-storm";
+          session_serialization = false;
         };
       };
     };
