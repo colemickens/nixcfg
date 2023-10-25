@@ -14,10 +14,6 @@
       url = "github:colemickens/mobile-nixos/openstick";
       inputs."nixpkgs".follows = "cmpkgs";
     };
-    tow-boot-alirock-h96maxv58 = {
-      url = "github:colemickens/tow-boot/alirock-h96maxv58";
-      inputs."nixpkgs".follows = "cmpkgs";
-    };
 
     # core system/inputs
     # TODO: undo this!!!!!!
@@ -108,10 +104,6 @@
           #   path = ./hosts/openstick/configuration.nix;
           #   pkgs = inputs.cmpkgs;
           # };
-          # h96maxv58 = {
-          #   pkgs = inputs.cmpkgs;
-          #   path = ./hosts/h96maxv58/configuration.nix;
-          # };
         };
       };
       nixosConfigs = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues nixosConfigsEx));
@@ -127,7 +119,6 @@
         aarch64-linux = {
           openstick-abootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-abootimg;
           openstick-bootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-bootimg;
-          h96maxv58-uboot = inputs.tow-boot-alirock-h96maxv58.outputs.packages.aarch64-linux.radxa-rock5b.outputs.firmware;
         };
         riscv64-linux = { };
       };

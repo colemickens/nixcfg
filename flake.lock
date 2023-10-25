@@ -1241,7 +1241,6 @@
         "nixpkgs-wayland": "nixpkgs-wayland",
         "sops-nix": "sops-nix",
         "terranix": "terranix",
-        "tow-boot-alirock-h96maxv58": "tow-boot-alirock-h96maxv58",
         "zellij": "zellij",
         "zjstatus": "zjstatus"
       }
@@ -1605,27 +1604,6 @@
       "original": {
         "owner": "terranix",
         "repo": "terranix-examples",
-        "type": "github"
-      }
-    },
-    "tow-boot-alirock-h96maxv58": {
-      "inputs": {
-        "nixpkgs": [
-          "cmpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1693456517,
-        "narHash": "sha256-7MA47usdjmWEPOA/g5Y12plL11kzBupFU+kOf8JGpFc=",
-        "owner": "colemickens",
-        "repo": "tow-boot",
-        "rev": "6c363e9bd5d4e1b927d38572277b2ebfd8507004",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "ref": "alirock-h96maxv58",
-        "repo": "tow-boot",
         "type": "github"
       }
     },
