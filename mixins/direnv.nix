@@ -7,7 +7,7 @@
         enable = true;
         # TODO: investigate if we can use nushellIntegration here
         # enableNushellIntegration = true;
-        
+
         # REVISIT: disable nix-direnv, since it uses a specific nix, that hits issues with lastModified
         # nix-direnv = {
         #   enable = true;
