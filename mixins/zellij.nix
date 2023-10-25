@@ -81,7 +81,7 @@ in
           default_layout = "default_zjstatus"; # previously "compact"
           default_shell = prefs.default_shell;
           simplified_ui = true;
-          pane_frames = true;
+          pane_frames = false;
           scrollback_editor = "hx";
           theme = "tokyo-night-storm";
           session_serialization = false;
