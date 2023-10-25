@@ -43,6 +43,7 @@ in
     system.stateVersion = "23.11";
     environment.systemPackages = with pkgs; [
       dua
+      macchina
       # usbutils
       # lshw
       # libqmi
