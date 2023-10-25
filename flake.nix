@@ -16,13 +16,11 @@
     };
 
     # core system/inputs
-    # TODO: undo this!!!!!!
     firefox-nightly = { url = "github:nix-community/flake-firefox-nightly"; inputs."nixpkgs".follows = "cmpkgs"; };
     home-manager = { url = "github:colemickens/home-manager/cmhm"; inputs."nixpkgs".follows = "cmpkgs"; };
     nixos-hardware = { url = "github:NixOS/nixos-hardware"; };
     nixpkgs-wayland = { url = "github:nix-community/nixpkgs-wayland/master"; inputs."nixpkgs".follows = "cmpkgs"; };
     sops-nix = { url = "github:Mic92/sops-nix/master"; inputs."nixpkgs".follows = "cmpkgs"; };
-    # lanzaboote = { url = "github:nix-community/lanzaboote"; inputs.nixpkgs.follows = "cmpkgs"; };
     lanzaboote = { url = "github:nix-community/lanzaboote"; };
 
     # devtools:
@@ -95,16 +93,7 @@
             buildSys = "x86_64-linux";
           };
         };
-        "aarch64-linux" = {
-          # ocii = {
-          #   pkgs = inputs.cmpkgs;
-          #   path = ./images/ocii/oci-image.nix;
-          # };
-          # openstick = {
-          #   path = ./hosts/openstick/configuration.nix;
-          #   pkgs = inputs.cmpkgs;
-          # };
-        };
+        "aarch64-linux" = { };
       };
       nixosConfigs = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues nixosConfigsEx));
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);
