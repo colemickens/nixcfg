@@ -129,6 +129,7 @@ def "main inputup" [] {
 
   let extsrcdirs = ([
     "linux/master"
+    # "linux/openstick"
   ] | each {|it| $"($env.HOME)/code-ext/($it)" })
 
   let srcdirs = ($srcdirs | append $extsrcdirs)
