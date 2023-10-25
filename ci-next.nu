@@ -129,6 +129,7 @@ do {
 let attr = ".#ciAttrs.x86_64-linux"
 (nix-fast-build
   --flake $attr
+  --debug
   --no-nom
 )
 ^ls -d result* | cachix push colemickens
