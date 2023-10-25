@@ -28,6 +28,7 @@ let dir = $"($ROOT)/nixcfg"
 mkdir $dir
 do {
   cd $dir
+  rm -f result*
   git remote set-url origin $url
 
   git remote update
@@ -132,11 +133,13 @@ let attr = ".#ciAttrs.x86_64-linux"
 )
 ^ls -d result* | cachix push colemickens
 
-print -e "********** build results (start) **********"
-^ls -d result*
-^ls -al result
-^ls -al result/
-print -e "********** build results (end) ************"
+do -i {
+  print -e "********** build results (start) **********"
+  ^ls -d result*
+  ^ls -al result
+  ^ls -al result/
+  print -e "********** build results (end) ************"
+}
 
 ## NOW UPDATE BRANCHES
 do {
