@@ -78,16 +78,12 @@ in
         enableZshIntegration = false; # do NOT auto-start, thank you
         settings = {
           default_mode = "normal";
-          # default_layout = "compact";
-          default_layout = "default_zjstatus";
+          default_layout = "default_zjstatus"; # previously "compact"
           default_shell = prefs.default_shell;
           simplified_ui = true;
           pane_frames = true;
           scrollback_editor = "hx";
-          # theme = "default";
           theme = "tokyo-night-storm";
-          # theme = "catppuccin-mocha"; # todo; try
-          # theme = "nord"; # not enough pane-frame contrast
         };
       };
     };
