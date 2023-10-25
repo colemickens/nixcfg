@@ -10,14 +10,14 @@
     nixpkgs-stable = { url = "github:nixos/nixpkgs/nixos-23.05"; }; # any stable to use
     cmpkgs = { url = "github:colemickens/nixpkgs/cmpkgs"; };
 
-    # mobile-nixos-openstick = {
-    #   url = "github:colemickens/mobile-nixos/openstick";
-    #   inputs."nixpkgs".follows = "cmpkgs";
-    # };
-    # tow-boot-alirock-h96maxv58 = {
-    #   url = "github:colemickens/tow-boot/alirock-h96maxv58";
-    #   inputs."nixpkgs".follows = "cmpkgs";
-    # };
+    mobile-nixos-openstick = {
+      url = "github:colemickens/mobile-nixos/openstick";
+      inputs."nixpkgs".follows = "cmpkgs";
+    };
+    tow-boot-alirock-h96maxv58 = {
+      url = "github:colemickens/tow-boot/alirock-h96maxv58";
+      inputs."nixpkgs".follows = "cmpkgs";
+    };
 
     # core system/inputs
     # TODO: undo this!!!!!!
@@ -93,11 +93,11 @@
           slynux = { pkgs = inputs.cmpkgs; };
           zeph = { pkgs = inputs.cmpkgs; };
 
-          # openstick = {
-          #   pkgs = inputs.cmpkgs;
-          #   path = ./hosts/openstick/cross.nix;
-          #   buildSys = "x86_64-linux";
-          # };
+          openstick = {
+            pkgs = inputs.cmpkgs;
+            path = ./hosts/openstick/cross.nix;
+            buildSys = "x86_64-linux";
+          };
         };
         "aarch64-linux" = {
           # ocii = {
@@ -124,12 +124,12 @@
         x86_64-linux = {
           installer = nixosConfigurations.installer.config.system.build.isoImage;
         };
-        # # aarch64-linux = {
-        # #   # openstick-abootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-abootimg;
-        # #   # openstick-bootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-bootimg;
-        # #   # h96maxv58-uboot = inputs.tow-boot-alirock-h96maxv58.outputs.packages.aarch64-linux.radxa-rock5b.outputs.firmware;
-        # # };
-        # riscv64-linux = { };
+        aarch64-linux = {
+          openstick-abootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-abootimg;
+          openstick-bootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-bootimg;
+          h96maxv58-uboot = inputs.tow-boot-alirock-h96maxv58.outputs.packages.aarch64-linux.radxa-rock5b.outputs.firmware;
+        };
+        riscv64-linux = { };
       };
 
       ## NIXOS_MODULES # TODO: we don't use these? #############################
