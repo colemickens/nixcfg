@@ -109,6 +109,8 @@ in
 
           # communication
           thunderbird
+
+          vscodium
         ])
       ];
     };
