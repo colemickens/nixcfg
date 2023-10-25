@@ -65,7 +65,7 @@ in
               tab_active_sync         "#[bg=#6C7086,fg=#000000,bold] {name} <> "
 
               datetime          "#[fg=#6C7086] {format} "
-              datetime_format   "%Y-%m-%b %H:%M"
+              datetime_format   "%Y-%m-%d %H:%M"
               datetime_timezone "Europe/Berlin"
             }
           }
