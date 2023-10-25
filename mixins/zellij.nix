@@ -39,7 +39,7 @@ in
       xdg.configFile."zellij/layouts/default_zjstatus.kdl".text = ''
         layout {
           pane {}
-          pane size=1 borderless=true {
+          pane size=2 borderless=true {
             plugin location="file:${plugin_zjstatus}/bin/zjstatus.wasm" {
               format_left  "{mode} #[fg=${hostColor},bold]{session} {tabs}"
               format_right "{datetime}"
@@ -50,6 +50,11 @@ in
               mode_normal  "#[bg=${hostColor},fg=#000000] "
               mode_tmux    "#[bg=${hostColor},fg=#000000] tmux "
               mode_locked  "#[bg=${hostColor},fg=#000000] locked "
+
+              border_enabled   "true"
+              border_char      "─"
+              border_format    "#[fg=${hostColor}]"
+              border_position  "top"
 
               tab_normal              "#[fg=#6C7086] {name} "
               tab_normal_fullscreen   "#[fg=#6C7086] {name} [] "
