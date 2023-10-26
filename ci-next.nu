@@ -134,11 +134,7 @@ let attr = ".#ciAttrs.x86_64-linux"
 nix eval --json $attr
 # TODO: remove: end
 
-(nix-fast-build
-  --flake $attr
-  --debug
-  --no-nom
-)
+nix-fast-build --flake $attr --no-nom
 ^ls -d result* | cachix push colemickens
 
 do -i {
