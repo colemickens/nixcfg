@@ -249,6 +249,16 @@
                 (builtins.attrNames nixosConfigsEx.${system})
                 (n: toplevels.${n});
             };
+
+            ## CHECKS ########################################################
+            checks =
+              let
+                extra = lib.mapAttrs' (n: lib.nameValuePair "extra-${n}") inputs.self.extra;
+                packages = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") inputs.self.packages;
+                devShells = lib.mapAttrs' (n: lib.nameValuePair "devShell-${n}") inputs.self.devShells;
+                toplevels = lib.mapAttrs' (n: lib.nameValuePair "toplevels-${n}") inputs.self.toplevels;
+              in
+              extra // packages // devShells // toplevels;
           })
       );
 }
