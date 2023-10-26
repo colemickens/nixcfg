@@ -149,6 +149,19 @@ do -i {
   print -e "********** build results (end) ************"
 }
 
+rm -f result*
+
+nix-fast-build --debug --no-nom
+^ls -d result* | cachix push colemickens
+
+do -i {
+  print -e "********** round2 build results (start) **********"
+  ^ls -d result*
+  ^ls -al result
+  ^ls -al result/
+  print -e "********** round2 build results (end) ************"
+}
+
 ## NOW UPDATE BRANCHES
 do {
   cd $"($ROOT)/nixpkgs/cmpkgs"
