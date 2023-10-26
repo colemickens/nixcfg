@@ -6,7 +6,9 @@
 let
   tomlFormat = pkgs.formats.toml { };
   gen = cfg: (tomlFormat.generate "helix-languages.toml" cfg);
-  helixUnstable = inputs.helix.outputs.packages.${pkgs.stdenv.hostPlatform.system}.helix;
+  # helixUnstable = inputs.helix.outputs.packages.${pkgs.stdenv.hostPlatform.system}.helix;
+  # helixPkg = helixUnstable;
+  helixPkg = pkgs.helix;
 in
 {
   config = {
@@ -22,22 +24,22 @@ in
       xdg.configFile."helix/languages.toml".text = ''
         [[language]]
         name = "nix"
-        # formatter = { command = "alejandra" }
+        auto-format = true
         formatter = { command = "nixpkgs-fmt" }
 
-        [language-server.nuls]
-        command = "${pkgs.nuls}/bin/nuls"
+        # [language-server.nuls]
+        # command = "${pkgs.nuls}/bin/nuls"
 
-        [[language]]
-        name = "nu"
-        language-servers = [ "nuls" ]
+        # [[language]]
+        # name = "nu"
+        # language-servers = [ "nuls" ]
       '';
       programs.helix = {
         # TODO: temp workaround for cross-arch eval with cargo-nix-integration
         enable = true;
         package =
           if pkgs.hostPlatform.system == "x86_64-linux"
-          then helixUnstable
+          then helixPkg
           else pkgs.helix;
 
         settings = {
