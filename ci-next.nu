@@ -127,6 +127,13 @@ do {
 ## NIX-FAST-BUILD
 
 let attr = ".#ciAttrs.x86_64-linux"
+
+# TODO: remove: start
+# - see: https://github.com/Mic92/nix-fast-build/issues/31
+# - this is quite annoying, we have to eval twice
+nix eval --json $attr
+# TODO: remove: end
+
 (nix-fast-build
   --flake $attr
   --debug
