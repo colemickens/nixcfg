@@ -8,6 +8,7 @@
     home-manager.users.cole = { pkgs, config, ... }@hm: {
       home.packages = with pkgs; [
         nil
+        nixpkgs-fmt
       ];
     };
   };
