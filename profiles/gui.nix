@@ -109,6 +109,7 @@ in
 
           # communication
           thunderbird
+          linphone
 
           vscodium
         ])
