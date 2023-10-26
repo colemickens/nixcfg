@@ -26,13 +26,6 @@ in
         name = "nix"
         auto-format = true
         formatter = { command = "nixpkgs-fmt" }
-
-        # [language-server.nuls]
-        # command = "${pkgs.nuls}/bin/nuls"
-
-        # [[language]]
-        # name = "nu"
-        # language-servers = [ "nuls" ]
       '';
       programs.helix = {
         # TODO: temp workaround for cross-arch eval with cargo-nix-integration
