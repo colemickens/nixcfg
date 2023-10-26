@@ -56,8 +56,8 @@ in
 
     services.zfs.autoScrub.pools = [ poolname ];
     fileSystems = {
-      "/efi" = { fsType = "vfat"; device = "/dev/nvme0n1p1"; neededForBoot = true; };
-      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${bootpart}"; neededForBoot = true; };
+      "/efi" = { fsType = "vfat"; device = "/dev/nvme0n1p1"; };
+      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${bootpart}"; };
       "/" = { fsType = "zfs"; device = "${poolname}/root"; neededForBoot = true; };
       "/nix" = { fsType = "zfs"; device = "${poolname}/nix"; neededForBoot = true; };
       "/home" = { fsType = "zfs"; device = "${poolname}/home"; neededForBoot = true; };
