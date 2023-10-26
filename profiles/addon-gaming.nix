@@ -51,6 +51,9 @@ in
         xemu
 
         airshipper
+
+        # okay, gotta see what these crazy kids are building...
+        grapejuice
       ];
       programs = {
         mangohud = {
