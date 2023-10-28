@@ -31,6 +31,7 @@ in
 
     nixcfg.common = {
       defaultKernel = false;
+      wifiWorkaround = true;
     };
 
     nix = {
