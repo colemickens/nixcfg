@@ -5,7 +5,12 @@ let
   _firefox = firefoxFlake.firefox-nightly-bin;
 
   # _chrome = pkgs.ungoogled-chromium;
-  _chrome = pkgs.google-chrome-dev.override {
+
+  # we need stable chrome for work:
+  # _chrome = pkgs.google-chrome-dev.override {
+  #   commandLineArgs = [ "--force-dark-mode" ];
+  # };
+  _chrome = pkgs.google-chrome.override {
     commandLineArgs = [ "--force-dark-mode" ];
   };
 
@@ -110,8 +115,6 @@ in
           # communication
           thunderbird
           linphone
-
-          vscodium
         ])
       ];
     };

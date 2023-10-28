@@ -4,6 +4,7 @@
   config = {
     nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
       ### misc
+      "google-chrome"
       "google-chrome-dev"
       # "ripcord"
 
