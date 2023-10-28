@@ -5,7 +5,9 @@
 let
   minimalMkShell = import ./_minimal.nix { inherit pkgs; };
 
-  llvmPackages = pkgs.llvmPackages_13;
+  # 16 is broken: https://github.com/NixOS/nixpkgs/issues/244609
+  # llvmPackages = pkgs.llvmPackages_16;
+  llvmPackages = pkgs.llvmPackages_15;
 
   gstreamerPath = ""
     + ":" + "${pkgs.gst_all_1.gst-plugins-base}/lib/gstreamer-1.0"
@@ -14,13 +16,23 @@ let
     + ":" + "${pkgs.gst_all_1.gst-plugins-ugly}/lib/gstreamer-1.0"
   ;
 
-  _rustBuild = (inputs.fenix.packages.${pkgs.stdenv.hostPlatform.system}.latest.withComponents [
+  _rustBuildFenix = (inputs.fenix.packages.${pkgs.stdenv.hostPlatform.system}.latest.withComponents [
     "cargo"
     "clippy"
     "rust-src"
     "rustc"
     "rustfmt"
+    "rust-analyzer"
   ]);
+
+  _rustBuildOxalica = inputs.rust-overlay.packages.${pkgs.stdenv.hostPlatform.system}.rust.override {
+    extensions = [ "rust-src" "rust-analyzer" "clippy" ];
+  };
+
+  # so far I can't tell a big difference...
+  _rustBuild = _rustBuildOxalica;
+  # _rustBuild = _rustBuildFenix;
+
 in
 minimalMkShell {
   name = "cole-nixcfg-dev";
@@ -37,8 +49,7 @@ minimalMkShell {
 
   nativeBuildInputs = with pkgs; [
     _rustBuild
-
-    inputs.fenix.packages.${pkgs.stdenv.hostPlatform.system}.rust-analyzer
+    llvmPackages.lldb
 
     inputs.nix-eval-jobs.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
 
@@ -56,9 +67,6 @@ minimalMkShell {
     nixpkgs-fmt
     nixfmt
     alejandra
-
-    ## tools
-    lldb
 
     ## nodejs
     nodejs
