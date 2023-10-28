@@ -14,6 +14,7 @@ in
       allowedUDPPorts = [ 88 500 3074 2075 3544 4500 ];
     };
     hardware.opengl.extraPackages = [ pkgs.gamescope ];
+    hardware.opengl.driSupport32Bit = true;
     programs = {
       steam = {
         enable = true;
@@ -53,6 +54,7 @@ in
         airshipper
 
         # okay, gotta see what these crazy kids are building...
+        # TODO: check out vinegar whenever it ... gets merged into nixpkgs
         grapejuice
       ];
       programs = {
