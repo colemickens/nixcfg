@@ -27,6 +27,7 @@
     crate2nix = { url = "github:kolloch/crate2nix"; flake = false; };
     terranix = { url = "github:terranix/terranix"; inputs."nixpkgs".follows = "cmpkgs"; }; # packet/terraform deployments
     fenix = { url = "github:nix-community/fenix"; inputs."nixpkgs".follows = "cmpkgs"; }; # used for nightly rust devtools
+    rust-overlay = { url = "github:oxalica/rust-overlay"; inputs."nixpkgs".follows = "cmpkgs"; };
     helix = { url = "github:helix-editor/helix"; };
     jj = { url = "github:martinvonz/jj"; inputs."flake-utils".follows = "flake-utils"; };
     nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; };
@@ -154,7 +155,7 @@
     in
     lib.recursiveUpdate
       ({
-        inherit nixosConfigs nixosConfigurations toplevels;
+        inherit nixosConfigs nixosConfigsEx nixosConfigurations toplevels;
         inherit nixosModules overlays;
         inherit extra;
         inherit pkgs pkgsUnfree;
@@ -205,7 +206,6 @@
                   pkgs_ = pkgs.${system};
                   tfout = import ./cloud { inherit (inputs) terranix; pkgs = pkgs_; };
                   installer = nixosConfigurations.installer.config.system.build;
-                  installerIsoName = installer.isoImage.isoName;
                   installerIso = "${installer.isoImage}/iso/${installer.isoImage.isoName}";
                   nfb = inputs.nix-fast-build.outputs.packages.${system}.default;
                 in
@@ -240,26 +240,34 @@
             ## CI #############################################################
             # TODO: move these to checks? implement checks?
             # how to use these with nix-fast-build etc?
-            ciAttrs = {
-              shells = lib.genAttrs
-                (builtins.attrNames devShells)
-                (n: inputs.self.devShells.${system}.${n}.inputDerivation);
-              packages = (inputs.self.packages.${system});
-              extra = (inputs.self.extra.${system});
-              toplevels = lib.genAttrs
-                (builtins.attrNames nixosConfigsEx.${system})
-                (n: toplevels.${n});
-            };
+            # ciAttrs = {
+            #   shells = lib.genAttrs
+            #     (builtins.attrNames devShells)
+            #     (n: inputs.self.devShells.${system}.${n}.inputDerivation);
+            #   packages = (inputs.self.packages.${system});
+            #   extra = (inputs.self.extra.${system});
+            #   toplevels = lib.genAttrs
+            #     (builtins.attrNames nixosConfigsEx.${system})
+            #     (n: toplevels.${n});
+            # };
 
             ## CHECKS ########################################################
+            # TODO: ask mic92 about this pattern, he doesn't just build .${system} even though these checks are persystem
+            # TODO: also: we don't filter out toplevels... maybe toplevels.zeph should actually be toplevels.x86_64-linux.zeph ?
+            # ??? revisit...
+            # also, we're probably fine to remove ciAttrs now, nix-fast-build does recursive-ness, and ciAttrs doesn't even buildFarm anymore
+            # TODO: we're still preferring local builds for somemthings, do we need to add back the wrapper?????
+            # TODO: or look into the allowSubstitutesAlways new flag that lovesegfault commented about?
             checks =
               let
-                extra = lib.mapAttrs' (n: lib.nameValuePair "extra-${n}") inputs.self.extra;
-                packages = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") inputs.self.packages;
-                devShells = lib.mapAttrs' (n: lib.nameValuePair "devShell-${n}") inputs.self.devShells;
-                toplevels = lib.mapAttrs' (n: lib.nameValuePair "toplevels-${n}") inputs.self.toplevels;
+                c_extra = lib.mapAttrs' (n: lib.nameValuePair "extra-${n}") inputs.self.extra.${system};
+                c_packages = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") inputs.self.packages.${system};
+                c_devShells = lib.mapAttrs' (n: lib.nameValuePair "devShell-${n}") inputs.self.devShells.${system};
+                c_toplevels = lib.mapAttrs'
+                  (n: v: lib.nameValuePair "toplevel-${n}" toplevels.${n})
+                  inputs.self.nixosConfigsEx.${system};
               in
-              extra // packages // devShells // toplevels;
+              c_extra // c_packages // c_devShells // c_toplevels;
           })
       );
 }
