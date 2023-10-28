@@ -42,6 +42,11 @@ in
     nixpkgs.hostPlatform.system = "x86_64-linux";
     system.stateVersion = "23.11";
 
+    # TODO: evaluate if this is worth the cost in closure size
+    # https://linus.schreibt.jetzt/posts/include-build-dependencies.html
+    # TODO: re-evaluate, too much to shove through cachix, and slow internetzzz
+    # system.includeBuildDependencies = true;
+
     networking.hostName = hn;
     # nixcfg.common.hostColor = "#c17ecc"; # tango magenta
     nixcfg.common.hostColor = "magenta";
