@@ -33,7 +33,7 @@ check
 def downPaths [ target:string, ...buildPaths ] {
   let buildPaths = ($buildPaths | flatten)
   header "light_gray_reverse" $"deploy: download: ($target)"
-  let cmd = (^printf '%q ' ([$"nix" "build" "--no-link" "-j0" $nixflags $buildPaths ] | flatten))
+  let cmd = ^printf '%q ' ([$"nix" "build" "--no-link" "-j0" $nixflags $buildPaths ] | flatten)
   ^ssh $"cole@($target)" $cmd
 }
 
@@ -52,7 +52,7 @@ def deployHost [ activate: bool, host: string, topout: string = "" ] {
   downPaths $target $topout
 
   header "light_blue_reverse" $"deploy: switch: ($host): ($target)"
-  let cmd = (^printf "'%s' " ([$"sudo" "nix" "build" "--no-link" "-j0" $nixflags $"--profile" "/nix/var/nix/profiles/system" $topout ] | flatten))
+  let cmd = ^printf "'%s' " ([$"sudo" "nix" "build" "--no-link" "-j0" $nixflags $"--profile" "/nix/var/nix/profiles/system" $topout ] | flatten)
   let cmd = if (not $activate) { $cmd } else {
     $"echo 'profile link...' && ($cmd) && echo 'switching...' && sudo ($topout)/bin/switch-to-configuration switch"
   }
@@ -67,7 +67,7 @@ def check [] {
   if ("SKIP_GIT_CHECK" in $env) {
     return
   }
-  let len = (^git status --porcelain | complete | get stdout | str trim | str length)
+  let len = ^git status --porcelain | complete | get stdout | str trim | str length
   if ($len) != 0 {
     git status
     error make { msg: $"!! ERR: git has untracked or uncommitted changes!!" }
@@ -207,11 +207,11 @@ def "main pkgup" [...pkglist] {
 
   let pkgref = $"($env.PWD)#packages.x86_64-linux"
   let pkglist = if ($pkglist | length) == 0 {
-    (^nix eval
+    ^nix [eval
       --json $pkgref
       --apply 'x: builtins.attrNames x'
         | str trim
-        | from json)
+        | from json]
   } else { $pkglist }
 
   print -e $pkglist
@@ -230,12 +230,13 @@ def "main pkgup" [...pkglist] {
     # TODO: see if this can be host agnostic, nix-update and main build should just work
     let pf = $"($pkgref).($pkgname)"
     rm -f $t
-    (nix-update
+    nix-update [
       --flake
       --format
       --version branch
       --write-commit-message $t
-      $pkgname)
+      $pkgname
+    ]
       
     try {
       main dl $pf
@@ -293,85 +294,3 @@ def "main loopup" [] {
 }
 
 def main [] { main up }
-
-## CI #########################################################################
-# TODO: split to `ci.nu`?
-
-let branch = 'ci-auto-update'
-
-def action-post [] {
-  git push -f origin $branch
-}
-
-def "main action-ci" [] {
-  # TODO: git-repo-manager?
-  git switch -c $branch
-  # TODO: eval each attr individually into a 'gcroots' dir...
-  # TODO: evaluate fanning out to multiple eval machines, then building?
-  # ci-grm
-  main inputup # should be a no-op even with nothing cloned
-  main pkgup
-  main lockup
-  main ciattrs
-  main dl '.#devShells.x86_64-linux.ci'
-  # action-post
-}
-
-# ## action-nextci ###############################################################
-# def updateInput [ name: string baseBr: string newBr: string upRemoteName: string upstreamUrl: string upstreamBr: string ] {
-#   let originUrl = $"https://github.com/colemickens/($name)"
-#   let baseDir = $"($env.PWD)/../($name)/($baseBr)"
-#   let newDir = $"($env.PWD)/../($name)/($newBr)"
-#   if (not ($baseDir | path exists)) {
-#     do -c { mkdir $baseDir }
-#     do -c { git clone $originUrl -b $baseBr $baseDir }
-#   }
-#   if (not ($newDir | path exists)) {
-#     echo $"check ($newDir)"
-#     (git -C $baseDir remote add "$upRemoteName" $upstreamUrl)
-#     rm -rf $newDir
-#     (git -C $baseDir worktree prune)
-#     (git -C $baseDir branch -D $newBr)
-#     do -c { git -C $baseDir worktree add $newDir }
-#   }
-
-#   do -c {
-#     git -C $newDir reset --hard $baseBr
-#     git -C $newDir rebase $"($upRemoteName)/($upstreamBr)"
-#     git -C $newDir push origin HEAD
-#   }
-# }
-
-# def "main action-nextci" [] {
-#   let id = "xyz"
-#   updateInput $"home-manager" "cmhm" $"cmhm-next-($id)" "nix-community" "https://github.com/nix-community/home-manager" "master"
-#   updateInput $"nixpkgs" "cmpkgs" $"cmpkgs-next-($id)" "nixos" "https://github.com/nixos/nixpkgs" "nixos-unstable"
-  
-#   let p = $"($env.PWD)/../nixcfg_main-next-($id)"
-#   if (not ($p | path exists)) {
-#     rm -rf $p
-#     git worktree prune
-#     git worktree add $p
-#   }
-  
-#   do {
-#     git -C $p rebase main
-
-#     do {
-#       cd $p
-#       let args = [
-#         --recreate-lock-file
-#         --override-input 'nixpkgs' $"github:colemickens/nixpkgs/cmpkgs-next-($id)"
-#         --override-input 'home-manager' $"github:colemickens/home-manager/cmhm-next-($id)"
-#         --commit-lock-file
-#       ]
-#       nix flake lock $args
-  
-#       ./main.nu ci eval
-#       ./main.nu ci build
-#       ./main.nu ci push
-#     }
-    
-#     git push origin $"nixcfg_main-next-($id):main-next-($id)" -f
-#   }
-# }
