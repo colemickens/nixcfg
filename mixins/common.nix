@@ -30,6 +30,14 @@ in
           used to enable the patch but disable it in a specialisation
         '';
       };
+      wifiWorkaround = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          whether to restart systemd-udev-trigger on new generation activation
+          (use this on wifi-only, non-gui hosts, aka openstick)
+        '';
+      };
       defaultNoDocs = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -174,26 +182,26 @@ in
     time.timeZone = lib.mkDefault "America/Los_Angeles";
 
     # TODO/WORKAROUND: https://github.com/NixOS/nixpkgs/issues/195777
-    system.activationScripts = {
-      # workaroundWifi = {
-      #   # sometimes, I wonder if Linux is worth it:
-      #   # - uptime is unparseable garbage
-      #   # -/proc/uptime is of course floats that are space separated
-      #   text = ''
-      #     (
-      #     set -x 
-      #     uptime_ms="$(cat /proc/uptime | cut -d ' ' -f 1)"
-      #     uptime_ms="$(echo $uptime_ms | cut -d '.' -f 1)"
-      #     if [[ ''${uptime_ms} -gt ${ toString (60 * 5) } ]]; then 
-      #       echo "workaround_wifi_issue: trigger"
-      #       ${pkgs.systemd}/bin/systemctl restart systemd-udev-trigger
-      #     else
-      #       echo "workaround_wifi_issue: skip"
-      #     fi
-      #     )
-      #   '';
-      #   deps = [ ];
-      # };
+    system.activationScripts = lib.mkIf cfg.wifiWorkaround {
+      workaroundWifi = {
+        # sometimes, I wonder if Linux is worth it:
+        # - uptime is unparseable garbage
+        # -/proc/uptime is of course floats that are space separated
+        text = ''
+          (
+          set -x 
+          uptime_ms="$(cat /proc/uptime | cut -d ' ' -f 1)"
+          uptime_ms="$(echo $uptime_ms | cut -d '.' -f 1)"
+          if [[ ''${uptime_ms} -gt ${ toString (60 * 5) } ]]; then 
+            echo "workaround_wifi_issue: trigger"
+            ${pkgs.systemd}/bin/systemctl restart systemd-udev-trigger
+          else
+            echo "workaround_wifi_issue: skip"
+          fi
+          )
+        '';
+        deps = [ ];
+      };
     };
 
     systemd.network = (lib.mkIf (cfg.defaultNetworking) {
