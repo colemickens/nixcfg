@@ -6,6 +6,10 @@
 {
   config = {
     home-manager.users.cole = { pkgs, config, ... }@hm: {
+      programs.vscode = {
+        enable = true;
+        package = pkgs.vscodium.fhs;
+      };
       home.packages = with pkgs; [
         nil
         nixpkgs-fmt
