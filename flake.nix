@@ -34,6 +34,7 @@
     nix-update = { url = "github:Mic92/nix-update"; };
     # nix-fast-build = { url = "github:Mic92/nix-fast-build"; };
     nix-fast-build = { url = "github:colemickens/nix-fast-build"; };
+    fast-flake-update = { url = "github:Mic92/fast-flake-update"; };
 
     # zellij
     zellij = { url = "github:a-kenji/zellij-nix"; inputs."flake-utils".follows = "flake-utils"; };
