@@ -258,7 +258,7 @@ def "main lockup" [] {
 }
 
 def "main ciattrs" [] {
-  let drvs = (evalFlakeRef '.#ciAttrs')
+  let drvs = evalFlakeRef ".#ciAttrs"
   buildDrvs $drvs true
   $drvs
 }
@@ -274,7 +274,7 @@ def "main up" [...hosts] {
 
   main pkgup
 
-  main ciattrs
+  # main cache ".#bundle.x86_64-linux"
 
   main deploy raisin
   main deploy slynux
@@ -287,10 +287,6 @@ def "main up" [...hosts] {
   ssh $"cole@(tailscale ip --4 openstick)" "sudo journalctl --vacuum-size=5M"
   print -e "openstick: reboot"
   ssh $"cole@(tailscale ip --4 openstick)" "sudo reboot"
-}
-
-def "main loopup" [] {
- loop { do -i { sleep 2sec; nixcfg inputup; nixcfg lockup; nixcfg pkgup; nixcfg ciattrs; } }
 }
 
 def main [] { main up }
