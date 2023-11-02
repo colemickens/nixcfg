@@ -12,8 +12,7 @@ let
       zellijFlake = inputs.zellij.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default;
       zellijNixpkgs = pkgs.zellij;
     in
-    zellijFlake;
-  # (if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then zellijFlake else zellijNixpkgs);
+    (if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then zellijFlake else zellijNixpkgs);
 
   _defaultShell =
     (if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then prefs.default_shell else "${pkgs.bash}/bin/bash");
