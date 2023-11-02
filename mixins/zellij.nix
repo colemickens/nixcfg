@@ -12,7 +12,11 @@ let
       zellijFlake = inputs.zellij.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default;
       zellijNixpkgs = pkgs.zellij;
     in
-    (if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then zellijFlake else zellijNixpkgs);
+    zellijFlake;
+  # (if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then zellijFlake else zellijNixpkgs);
+
+  _defaultShell =
+    (if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then prefs.default_shell else "${pkgs.bash}/bin/bash");
 
   plugin_zjstatus = inputs.zjstatus.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in
@@ -79,7 +83,7 @@ in
         settings = {
           default_mode = "normal";
           default_layout = "default_zjstatus"; # previously "compact"
-          default_shell = prefs.default_shell;
+          default_shell = _defaultShell;
           simplified_ui = true;
           pane_frames = false;
           scrollback_editor = "hx";
