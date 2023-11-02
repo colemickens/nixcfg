@@ -22,10 +22,18 @@ in
       #   ];
       # };
       xdg.configFile."helix/languages.toml".text = ''
+        [language-server.nu-lsp]
+        command = "nu"
+        args = [ "--lsp" ]
+        
         [[language]]
         name = "nix"
         auto-format = true
         formatter = { command = "nixpkgs-fmt" }
+
+        [[language]]
+        name = "nu"
+        language-servers = [ "nu-lsp" ]
       '';
       programs.helix = {
         # TODO: temp workaround for cross-arch eval with cargo-nix-integration
