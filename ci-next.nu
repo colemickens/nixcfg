@@ -111,9 +111,7 @@ do {
     eval
     --json $pkgref
     --apply "x: builtins.attrNames x"
-      | str trim
-      | from json
-  ]
+  ] | str trim | from json
 
   for pkgname in $pkglist {
     try {
