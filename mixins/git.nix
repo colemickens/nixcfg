@@ -32,7 +32,7 @@
           };
         };
 
-        ignores = [ ".direnv" ];
+        ignores = [ ".direnv" ".vscode" ];
 
         includes = [
           {
