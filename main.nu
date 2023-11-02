@@ -210,8 +210,7 @@ def "main pkgup" [...pkglist] {
     ^nix [eval
       --json $pkgref
       --apply 'x: builtins.attrNames x'
-        | str trim
-        | from json]
+    ] | str trim | from json
   } else { $pkglist }
 
   print -e $pkglist
@@ -242,7 +241,7 @@ def "main pkgup" [...pkglist] {
       main dl $pf
     
       if ($t | path exists) and (open $t | str trim | str length) != 0) {
-        print -e $"pkgup: ($pkgname): commiting..."
+        # print -e $"pkgup: ($pkgname): commiting..."
         git commit -F $t $"./pkgs/($pkgname)"
       }
     } catch {
