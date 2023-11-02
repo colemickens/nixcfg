@@ -93,6 +93,7 @@ rec {
       powerline-symbols
       intel-one-mono
       comic-mono
+      geist-font
     ]);
   };
 }
