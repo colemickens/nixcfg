@@ -7,11 +7,15 @@ let
   tomlFormat = pkgs.formats.toml { };
   gen = cfg: (tomlFormat.generate "helix-languages.toml" cfg);
   # helixUnstable = inputs.helix.outputs.packages.${pkgs.stdenv.hostPlatform.system}.helix;
-  # helixPkg = helixUnstable;
-  helixPkg = pkgs.helix;
+  # _helixPkg = helixUnstable;
+  _helixPkg = pkgs.helix;
 in
 {
   config = {
+    # this didn't work any better for cross-compilation
+    # nixpkgs.overlays = [
+    #   inputs.helix.outputs.overlays.default
+    # ];
     home-manager.users.cole = { pkgs, ... }: {
       # xdg.configFile."helix/languages.toml".source = gen {
       #   languages = [
@@ -38,10 +42,7 @@ in
       programs.helix = {
         # TODO: temp workaround for cross-arch eval with cargo-nix-integration
         enable = true;
-        package =
-          if pkgs.hostPlatform.system == "x86_64-linux"
-          then helixPkg
-          else pkgs.helix;
+        package = _helixPkg;
 
         settings = {
           # theme = "ayu_evolve";
