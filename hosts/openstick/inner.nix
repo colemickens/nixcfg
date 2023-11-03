@@ -16,8 +16,6 @@ in
     ../../mixins/iwd-networks.nix
     # ../../mixins/iwd-auto-ap.nix # not sure it works, worried it causes problems, but might be something else
 
-    ../../mixins/zellij.nix
-
     # (import "${inputs.mobile-nixos-openstick}/lib/configuration.nix" {
     #   device = "openstick";
     # })
