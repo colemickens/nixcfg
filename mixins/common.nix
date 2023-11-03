@@ -24,7 +24,7 @@ in
       };
       kernelPatchHDR = lib.mkOption {
         type = lib.types.bool;
-        default = true;
+        default = false;
         description = ''
           patch the kernel with amd-hdr patches
           used to enable the patch but disable it in a specialisation
@@ -123,9 +123,6 @@ in
       };
     };
 
-    # default boot kernel is patched, see the "no-amd-hdr" specialisation
-    nixcfg.common.kernelPatchHDR = true;
-
     ## LEGACYBOOT - we use stage-1/systemd so have a fallback ###############
     specialisation = {
       "legacyboot" = lib.mkIf (config.boot.initrd.systemd.enable && config.nixcfg.common.addLegacyboot) {
@@ -135,7 +132,7 @@ in
           boot.initrd.luks.devices."nixos-luksroot".fallbackToPassword = true;
         };
       };
-      "no-amd-hdr" = {
+      "no-amd-hdr" = lib.mkIf cfg.kernelPatchHDR {
         inheritParentConfig = true;
         configuration = {
           nixcfg.common.kernelPatchHDR = lib.mkForce false;
