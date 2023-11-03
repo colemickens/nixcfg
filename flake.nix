@@ -28,16 +28,40 @@
     terranix = { url = "github:terranix/terranix"; inputs."nixpkgs".follows = "cmpkgs"; }; # packet/terraform deployments
     fenix = { url = "github:nix-community/fenix"; inputs."nixpkgs".follows = "cmpkgs"; }; # used for nightly rust devtools
     rust-overlay = { url = "github:oxalica/rust-overlay"; inputs."nixpkgs".follows = "cmpkgs"; };
-    helix = { url = "github:helix-editor/helix"; };
-    jj = { url = "github:martinvonz/jj"; inputs."flake-utils".follows = "flake-utils"; };
-    nix-eval-jobs = { url = "github:nix-community/nix-eval-jobs"; };
-    nix-update = { url = "github:Mic92/nix-update"; };
+    # also, there's crane, crates2nix, cargo2nix, ??
+    helix = {
+      url = "github:helix-editor/helix";
+      inputs."nixpkgs".follows = "cmpkgs";
+    };
+    jj = {
+      url = "github:martinvonz/jj";
+      inputs."flake-utils".follows = "flake-utils";
+      inputs."nixpkgs".follows = "cmpkgs";
+    };
+    nix-eval-jobs = {
+      url = "github:nix-community/nix-eval-jobs";
+      # inputs."nixpkgs".follows = "cmpkgs";
+    };
+    nix-update = {
+      url = "github:Mic92/nix-update";
+      inputs."nixpkgs".follows = "cmpkgs";
+    };
     # nix-fast-build = { url = "github:Mic92/nix-fast-build"; };
-    nix-fast-build = { url = "github:colemickens/nix-fast-build"; };
-    fast-flake-update = { url = "github:Mic92/fast-flake-update"; };
+    nix-fast-build = {
+      url = "github:colemickens/nix-fast-build";
+      inputs."nixpkgs".follows = "cmpkgs";
+    };
+    fast-flake-update = {
+      url = "github:Mic92/fast-flake-update";
+      inputs."nixpkgs".follows = "cmpkgs";
+    };
 
     # zellij
-    zellij = { url = "github:a-kenji/zellij-nix"; inputs."flake-utils".follows = "flake-utils"; };
+    zellij = {
+      url = "github:a-kenji/zellij-nix";
+      inputs."flake-utils".follows = "flake-utils";
+      inputs."nixpkgs".follows = "cmpkgs";
+    };
     zjstatus = { url = "github:dj95/zjstatus"; inputs."nixpkgs".follows = "cmpkgs"; };
 
     # experimental/unused:
