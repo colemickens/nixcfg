@@ -40,6 +40,8 @@ in
   ];
   config = {
     nixpkgs.hostPlatform.system = "x86_64-linux";
+    # TODO: why does this cause inf recursion with mangohud?
+    # nixpkgs.buildPlatform.system = "x86_64-linux";
     system.stateVersion = "23.11";
 
     # TODO: evaluate if this is worth the cost in closure size
