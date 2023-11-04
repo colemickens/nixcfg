@@ -132,12 +132,13 @@ in
           boot.initrd.luks.devices."nixos-luksroot".fallbackToPassword = true;
         };
       };
-      "no-amd-hdr" = lib.mkIf cfg.kernelPatchHDR {
-        inheritParentConfig = true;
-        configuration = {
-          nixcfg.common.kernelPatchHDR = lib.mkForce false;
-        };
-      };
+      ## we've had no issues, let's get rid of an extra big eval
+      # "no-amd-hdr" = lib.mkIf cfg.kernelPatchHDR {
+      #   inheritParentConfig = true;
+      #   configuration = {
+      #     nixcfg.common.kernelPatchHDR = lib.mkForce false;
+      #   };
+      # };
     };
 
     boot.kernelPatches = lib.mkIf (cfg.kernelPatchHDR) [
