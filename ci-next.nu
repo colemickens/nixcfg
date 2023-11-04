@@ -3,6 +3,8 @@
 # TODO:
 # - follow up on self-hosted runners being weird about HOME + sshkeys
 # - figure out a strategy for pinning the most recent build with a gcroot so we can enable GC again
+let ROOT = ([$env.FILE_PWD "../" ] | path join)
+let gcrootdir = $"($ROOT)/_gcroots"
 
 git config --global user.name 'Cole Botkens'
 git config --global user.email 'cole.mickens+colebot@gmail.com'
@@ -35,8 +37,6 @@ let runid = $"($env.GITHUB_RUN_ID)-($env.GITHUB_RUN_NUMBER)-($env.GITHUB_RUN_ATT
 
 let sshargs = [ "-i" "/run/secrets/github-colebot-sshkey" "-o" $"UserKnownHostsFile=($env.HOME)/.ssh/known_hosts" ]
 $env.GIT_SSH_COMMAND = $"ssh ($sshargs | str join ' ')"
-
-let ROOT = ([$env.FILE_PWD "../" ] | path join)
 
 def "main deploy" [host: string] {
   let out = (open $".latest/result-nixos-system-($host)*")
@@ -162,11 +162,14 @@ def "main update" [] {
   # collect results
   rm -rf .latest/
   mkdir .latest/
+  rm -rf $gcrootdir
+  mkdir $gcrootdir
   let results = (ls -l "result-*")
   for res in $results {
     let filename = $".latest/($res.name)"
     print -e $"saving ($res.target) in ($filename)"
     $res.target | save $filename
+    nix build -j0 --out-link $"($gcrootdir)/($res.name)" $res.target
   }
   ^git add -f ./.latest
   ^git commit -m $".latest: latest build results ($runid)" ./.latest
