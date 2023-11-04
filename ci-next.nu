@@ -162,7 +162,9 @@ def "main update" [] {
   # collect results
   rm -rf .latest/
   mkdir .latest/
-  rm -rf $gcrootdir
+  do -i {
+    mv $gcrootdir $"($gcrootdir)_old"
+  }
   mkdir $gcrootdir
   let results = (ls -l "result-*")
   for res in $results {
@@ -174,7 +176,7 @@ def "main update" [] {
   ^git add -f ./.latest
   ^git commit -m $".latest: latest build results ($runid)" ./.latest
   git push origin HEAD
-
+  rm -rf $"($gcrootdir)_old"
 
   ## NOW UPDATE BRANCHES
   do {
