@@ -13,6 +13,26 @@ jobs:
     steps:
     - name: checkout
       uses: actions/checkout@v4
+      with:
+        ref: main
     - name: next
       run: |
-        nix develop .#ci -c ./ci-next.nu
+        nix develop .#ci -c ./ci-next.nu update
+    # TODO: matrix/parallelize this
+  "deploy":
+    strategy:
+      matrix:
+        host:
+          - "slynux"
+          - "raisin"
+          - "openstick"
+    runs-on: "slynux-default"
+    needs: [ "update" ]
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+      with:
+        ref: main-next
+    - name: deploy-${{matrix.host}}
+      run: |
+        nix develop .#ci -c ./ci-next.nu deploy ${{matrix.host}}

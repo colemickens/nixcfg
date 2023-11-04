@@ -20,6 +20,7 @@ minimalMkShell {
       nushell
       nixpkgs-fmt
       openssh
+      tailscale # so the github action job can deploy
     ]) ++ [
       inputs.nix-eval-jobs.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
       inputs.nix-update.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
