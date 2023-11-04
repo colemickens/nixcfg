@@ -161,6 +161,17 @@ in
           };
         };
 
+        services.swayidle = {
+          enable = true;
+          events = [
+            { event = "before-sleep"; command = "${pkgs.swaylock}/bin/swaylock -f"; }
+            { event = "lock"; command = "${pkgs.swaylock}/bin/swaylock -f"; }
+          ];
+          timeouts = [
+            { timeout = 360; command = "${pkgs.swaylock}/bin/swaylock"; }
+          ];
+        };
+
         wayland.windowManager.sway = {
           enable = true;
           systemd = {
