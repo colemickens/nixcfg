@@ -18,7 +18,6 @@ jobs:
     - name: next
       run: |
         nix develop .#ci -c ./ci-next.nu update
-    # TODO: matrix/parallelize this
   "deploy":
     strategy:
       matrix:
