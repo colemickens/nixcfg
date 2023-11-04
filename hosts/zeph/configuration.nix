@@ -93,11 +93,10 @@ in
       };
     };
 
-    # networking.wireless.iwd.settings = {
-    #   General = {
-    #     AddressRandomization = "disabled";
-    #   };
-    # };
+    nix.gc = {
+      automatic = true;
+      persistent = true;
+    };
 
     boot = {
       # zfs = {
