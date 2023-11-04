@@ -45,6 +45,14 @@ def "main deploy" [host: string] {
 
   ^ssh $sshargs $"cole@($addr)" $"sudo nix build -j0 --no-link --profile /nix/var/nix/profiles/system ($out)"
   ^ssh $sshargs $"cole@($addr)" $"sudo ($out)/bin/switch-to-configuration switch"
+
+  # TODO: better way to do per-host post-deploy commands
+  if $host == "openstick" {
+    do -i {
+      print -e "rebooting openstick"
+      ^ssh $sshargs $"cole@($addr)" "sudo reboot"
+    }
+  }
 }
 
 def "main update" [] {
