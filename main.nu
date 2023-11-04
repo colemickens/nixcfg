@@ -273,19 +273,16 @@ def "main up" [...hosts] {
 
   main pkgup
 
-  # main cache ".#bundle.x86_64-linux"
+  main cache ".#bundle.x86_64-linux"
 
-  main deploy raisin
-  main deploy slynux
   main deploy zeph
-  main deploy openstick
 
-  print -e "openstick: cleanup"
-  ssh $"cole@(tailscale ip --4 openstick)" "nix-env --profile /home/cole/.local/state/nix/profiles/home-manager --delete-generations +1"
-  ssh $"cole@(tailscale ip --4 openstick)" "sudo nix-collect-garbage -d"
-  ssh $"cole@(tailscale ip --4 openstick)" "sudo journalctl --vacuum-size=5M"
-  print -e "openstick: reboot"
-  ssh $"cole@(tailscale ip --4 openstick)" "sudo reboot"
+  # print -e "openstick: cleanup"
+  # ssh $"cole@(tailscale ip --4 openstick)" "nix-env --profile /home/cole/.local/state/nix/profiles/home-manager --delete-generations +1"
+  # ssh $"cole@(tailscale ip --4 openstick)" "sudo nix-collect-garbage -d"
+  # ssh $"cole@(tailscale ip --4 openstick)" "sudo journalctl --vacuum-size=5M"
+  # print -e "openstick: reboot"
+  # ssh $"cole@(tailscale ip --4 openstick)" "sudo reboot"
 }
 
 def main [] { main up }

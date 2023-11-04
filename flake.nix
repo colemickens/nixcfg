@@ -262,21 +262,13 @@
             packages = (pkgs.${system}.__colemickens_nixcfg_pkgs);
             legacyPackages = pkgs;
 
-            ## CI #############################################################
-            # TODO: move these to checks? implement checks?
-            # how to use these with nix-fast-build etc?
-            # ciAttrs = {
-            #   shells = lib.genAttrs
-            #     (builtins.attrNames devShells)
-            #     (n: inputs.self.devShells.${system}.${n}.inputDerivation);
-            #   packages = (inputs.self.packages.${system});
-            #   extra = (inputs.self.extra.${system});
-            #   toplevels = lib.genAttrs
-            #     (builtins.attrNames nixosConfigsEx.${system})
-            #     (n: toplevels.${n});
-            # };
+            ## CI (sorta) #####################################################
+            bundle = pkgs.${system}.buildEnv {
+              name = "nixcfg-bundle";
+              paths = builtins.attrValues checks;
+            };
 
-            ## CHECKS ########################################################
+            ## CHECKS #########################################################
             # TODO: ask mic92 about this pattern, he doesn't just build .${system} even though these checks are persystem
             # TODO: also: we don't filter out toplevels... maybe toplevels.zeph should actually be toplevels.x86_64-linux.zeph ?
             # ??? revisit...
