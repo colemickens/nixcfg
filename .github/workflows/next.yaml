@@ -19,12 +19,15 @@ jobs:
       run: |
         nix develop .#ci -c ./ci-next.nu update
   "deploy":
+    continue-on-error: ${{matrix.host.continueOnError}}
     strategy:
+      fail-fast: false
       matrix:
         host:
-          - "slynux"
-          - "raisin"
-          - "openstick"
+          - { "name": "slynux", "activate": true, "continueOnError": false }
+          - { "name": "raisin", "activate": true, "continueOnError": false }
+          - { "name": "openstick", "activate": true, "continueOnError": false }
+          - { "name": "zeph", "activate": false, "continueOnError": true }
     runs-on: "slynux-default"
     needs: [ "update" ]
     steps:
@@ -32,6 +35,6 @@ jobs:
       uses: actions/checkout@v4
       with:
         ref: main-next
-    - name: deploy-${{matrix.host}}
+    - name: deploy-${{matrix.host.name}}
       run: |
-        nix develop .#ci -c ./ci-next.nu deploy ${{matrix.host}}
+        nix develop .#ci -c ./ci-next.nu deploy --activate ${{matrix.host.activate}} ${{matrix.host.name}}

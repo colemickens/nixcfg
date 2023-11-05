@@ -19,6 +19,8 @@ rm -f $ssh_hosts
   "github.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg="
   "github.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mHBL9j1aNUkY4Ue1gvwnGLVlOhGeYrnZaMgRK6+PKCUXaDbC7qtbW8gIkhL7aGCsOr/C56SJMy/BCZfxd1nWzAOxSDPgVsmerOBYfNqltV9/hWCqBywINIR+5dIg6JTJ72pcEpEjcYgXkE2YEFXV1JHnsKgbLWNlhScqb2UmyRkQyytRLtL+38TGxkxCflmO+5Z8CSSNY7GidjMIZ7Q4zMjA2n1nGrlTDkzwDCsw+wqFPGQA179cnfGWOWRVruj16z6XyvxvjJwbz0wQZ75XK5tKSb7FNyeIEs4TT4jk+S4dhPeAUC5y+bDYirYgM4GC7uEnztnZyaVWQ7B381AK4Qdrwt51ZqExKbQpTUNn+EjqoTwvqNj4kqx5QUCI0ThS/YkOxJCXmPUWZbhjpCg56i+2aB6CmK2JGhn57K5mj0MNdBXA4/WnwH6XoPWJzK5Nyu2zB3nAZp+S5hpQs+p1vN1/wsjk="
 
+  # zeph
+  "100.109.239.83 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA8xzm2cJvb/6bLBjVaMsFHc50BOUQdcQv7EZgvk8QR8"
   # slynux
   "100.85.243.118 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICWb7+dSGw/St8AGhtoSOlnDIfTjQGEJ6mWuOv49hFpA"
   # raisin
@@ -38,10 +40,15 @@ let runid = $"($env.GITHUB_RUN_ID)-($env.GITHUB_RUN_NUMBER)-($env.GITHUB_RUN_ATT
 let sshargs = [ "-i" "/run/secrets/github-colebot-sshkey" "-o" $"UserKnownHostsFile=($env.HOME)/.ssh/known_hosts" ]
 $env.GIT_SSH_COMMAND = $"ssh ($sshargs | str join ' ')"
 
-def "main deploy" [host: string] {
+def "main deploy" [host: string --activate: bool = true] {
   let out = (open $".latest/result-nixos-system-($host)*")
   let addr = ^tailscale ip --4 $host
   print -e $"deploy ($out) to ($addr)"
+
+  if (not $activate) {
+    ^ssh $sshargs $"cole@($addr)" $"sudo nix build -j0 --no-link ($out)"
+    return
+  }
 
   ^ssh $sshargs $"cole@($addr)" $"sudo nix build -j0 --no-link --profile /nix/var/nix/profiles/system ($out)"
   ^ssh $sshargs $"cole@($addr)" $"sudo ($out)/bin/switch-to-configuration switch"
@@ -165,15 +172,20 @@ def "main update" [] {
 
   ## NIX-FAST-BUILD
 
-  nix-fast-build --no-nom
+  try {
+    nix-fast-build --no-nom
+  } catch {
+    ls -l result* | print -e
+    ^ls -d result* | cachix push colemickens
+    print -e "nix-fast-build failed, but we cached something"
+    exit -1
+  }
   ^ls -d result* | cachix push colemickens
 
   # collect results
   rm -rf .latest/
   mkdir .latest/
-  do -i {
-    mv $gcrootdir $"($gcrootdir)_old"
-  }
+  rm -rf $gcrootdir
   mkdir $gcrootdir
   let results = (ls -l "result-*")
   for res in $results {
@@ -185,7 +197,6 @@ def "main update" [] {
   ^git add -f ./.latest
   ^git commit -m $".latest: latest build results ($runid)" ./.latest
   git push origin HEAD
-  rm -rf $"($gcrootdir)_old"
 
   ## NOW UPDATE BRANCHES
   do {
