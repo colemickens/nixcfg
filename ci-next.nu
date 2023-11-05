@@ -50,6 +50,7 @@ def "main deploy" [host: string] {
   if $host == "openstick" {
     do -i {
       print -e "rebooting openstick"
+      ^ssh $sshargs $"cole@($addr)" "nix-env --profile ~/.local/state/nix/profiles/home-manager --delete-generations +1"
       ^ssh $sshargs $"cole@($addr)" "sudo reboot"
     }
   }
