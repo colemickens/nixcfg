@@ -12,5 +12,9 @@ minimalMkShell {
 
   nativeBuildInputs = with pkgs; [
     (uutils-coreutils.override { prefix = ""; })
+    # (pkgs.runCommand "sleep" { } ''
+    #   ${pkgs.coreutils}/bin/sleep 11
+    #   echo "out" >$out
+    # '')
   ];
 }
