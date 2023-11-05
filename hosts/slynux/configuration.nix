@@ -61,8 +61,10 @@ in
     swapDevices = [{ device = "/dev/disk/by-partlabel/${swappart}"; }];
 
     boot = {
-      # tmpOnTmpfs = true;  # re-enable when RAM RMA is complete and we're back to 64GB
-      #zfs.requestEncryptionCredentials = true;
+      tmp = {
+        useTmpfs = false; # this seems to not give enough RAM for a kernel build
+        cleanOnBoot = true;
+      };
       initrd.availableKernelModules = [
         "sd_mod"
         "sr_mod"
