@@ -152,7 +152,8 @@ in
           # hash = "sha256-fGbb3NCyuryXDDtD14GDhc4AK/Ho3I0M1tLOkgJeRdQ=";
 
           # linux-6.5
-          url = "https://raw.githubusercontent.com/CachyOS/kernel-patches/b847c50e2a859c9cedb92827d3ca8163d55ef687/6.5/0001-amd-hdr.patch";
+          # https://github.com/CachyOS/kernel-patches/blob/master/6.5/0001-amd-hdr.patch
+          url = "https://raw.githubusercontent.com/CachyOS/kernel-patches/ea4aa71f452203bc7be29ca8ccd2b1ca16ecee14/6.5/0001-amd-hdr.patch";
           hash = "sha256-/G48qHCYrsk6PQp5IaTBgfo4XjLcoJxa/LkTr2si2/4=";
         });
       }
