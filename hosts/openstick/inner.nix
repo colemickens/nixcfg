@@ -56,16 +56,16 @@ in
         enable = true;
         wifi.backend = "iwd";
       };
-      interfaces."wlan0" = {
-        # doesn't work, not sure why
-        # maybe NM? who knows about nixos scripted network
-        # i would use networkd but idk how that plays with NM+MM...
-        ipv4.addresses = [{
-          address = static_wifi_addr;
-          prefixLength = static_wifi_prefix;
-        }];
-      };
-      defaultGateway = "192.168.1.1";
+      # interfaces."wlan0" = {
+      #   # doesn't work, not sure why
+      #   # maybe NM? who knows about nixos scripted network
+      #   # i would use networkd but idk how that plays with NM+MM...
+      #   ipv4.addresses = [{
+      #     address = static_wifi_addr;
+      #     prefixLength = static_wifi_prefix;
+      #   }];
+      # };
+      # defaultGateway = "192.168.1.1";
     };
 
     # boot.loader.generic-extlinux-compatible.enable = true;
