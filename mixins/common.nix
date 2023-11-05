@@ -85,8 +85,10 @@ in
     console.earlySetup = true; # needed for LUKS
     boot = {
       enableContainers = false;
-      tmp.useTmpfs = lib.mkDefault false;
-      tmp.cleanOnBoot = true;
+      tmp = {
+        useTmpfs = lib.mkDefault false;
+        cleanOnBoot = true;
+      };
       zfs.enableUnstable = (cfg.useZfs && _zfsUnstable);
 
       loader = {
