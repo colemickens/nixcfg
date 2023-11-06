@@ -212,6 +212,14 @@ def "main nfb" [--download: bool = false --cache: bool = false buildable: string
   $res
 }
 
+def "main dumpdeps" [ buildable: string ] {
+  let res = ^nix-eval-jobs --flake $buildable | split row -r '\n' | each { |x| $x | from json }
+  print -e $res
+  let res2 = ($res | get inputDrvs)
+  print -e $res2
+  print -e ($res2 | to json)
+}
+
 def "main up" [...hosts] {
   # header "light_red_reverse" "up" "▒"
 
@@ -220,11 +228,9 @@ def "main up" [...hosts] {
   main nfb --download true ".#devShells.x86_64-linux"
   main pkgup
 
-  main deploy zeph
-
-  # $all = main nfb --cache true
-  # let zeph = ($all | find zeph | first)  # print -e $zeph
-  # main deployPath zeph $zeph
+  let all = main nfb --cache true ".#checks.x86_64-linux"
+  let zeph = ($all | find zeph | first)  # print -e $zeph
+  main deployPath zeph $zeph
   
   # NOTE: deploying other hosts is done in a github action
 }
