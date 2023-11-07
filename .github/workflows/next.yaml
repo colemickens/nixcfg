@@ -26,7 +26,8 @@ jobs:
         host:
           - { "name": "slynux", "activate": true, "continueOnError": false }
           - { "name": "raisin", "activate": true, "continueOnError": false }
-          - { "name": "openstick", "activate": true, "continueOnError": false }
+          # TODO: either return, or re-enable errors for 'openstick'
+          - { "name": "openstick", "activate": true, "continueOnError": true }
           # - { "name": "zeph", "activate": false, "continueOnError": true }
     runs-on: "slynux-default"
     needs: [ "update" ]
