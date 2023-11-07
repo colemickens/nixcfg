@@ -72,7 +72,7 @@ in
     boot.loader.generic-extlinux-compatible.configurationLimit = 2;
     boot.loader.systemd-boot.enable = lib.mkForce false;
     security.sudo.wheelNeedsPassword = false;
-    systemd.network.wait-online.anyInterface = true;
+    systemd.network.wait-online.enable = false;
 
     users.users."openstick" = {
       isNormalUser = true;
