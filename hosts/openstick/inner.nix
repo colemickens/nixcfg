@@ -56,6 +56,7 @@ in
         enable = true;
         wifi.backend = "iwd";
       };
+      interfaces."wlan0".useDHCP = true; # not deploy, might've broken it unrepairably... :( or maybe :)
       # interfaces."wlan0" = {
       #   # doesn't work, not sure why
       #   # maybe NM? who knows about nixos scripted network
