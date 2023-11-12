@@ -1,12 +1,12 @@
 name: "nixcfg-test"
 concurrency: "nixcfg-test"
 on:
-  schedule:
-    - cron: '0/20 * * * *'
   workflow_dispatch:
-  push:
-    branches:
-      - "main"
+  # schedule:
+  #   - cron: '0/20 * * * *'
+  # push:
+  #   branches:
+  #     - "main"
 jobs:
   "test":
     runs-on: "slynux-default"
