@@ -46,8 +46,12 @@ in
 
         settings = {
           # theme = "ayu_evolve";
-          theme = "ayu_dark";
           # theme = "everblush";
+
+          # like, but no constrast on bar for open file
+          # theme = "ayu_dark";
+
+          theme = "dark_plus";
 
           editor = {
             auto-pairs = false;
@@ -100,7 +104,7 @@ in
               render.space = "all";
               render.tab = "all";
               render.newline = "all";
-              characters.space = "·";
+              characters.space = " ";
               characters.nbsp = "⍽";
               characters.tab = "→";
               characters.newline = "⏎";
