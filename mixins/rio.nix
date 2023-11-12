@@ -2,7 +2,7 @@
 
 let
   prefs = import ./_preferences.nix { inherit pkgs inputs; };
-  font = prefs.font;
+  font = prefs.font.monospace.family;
   colors = prefs.themes.alacritty;
 in
 {
@@ -14,17 +14,17 @@ in
           fonts = {
             size = 20;
             regular = {
-              family = prefs.font.monospace.family;
+              family = font;
               style = "Regular";
               weight = 400;
             };
             bold = {
-              family = prefs.font.monospace.family;
+              family = font;
               style = "Bold";
               weight = 600;
             };
             italic = {
-              family = prefs.font.monospace.family;
+              family = font;
               style = "Italic";
               weight = 400;
             };
