@@ -114,11 +114,13 @@
           slynux = { pkgs = inputs.cmpkgs; };
           zeph = { pkgs = inputs.cmpkgs; };
 
-          openstick = {
-            pkgs = inputs.cmpkgs;
-            path = ./hosts/openstick/cross.nix;
-            buildSys = "x86_64-linux";
-          };
+          # TODO: decide what the future of this is, I like having a cross-compile targe
+          # to tinker with, but the device is finnicky when I break it :|
+          # openstick = {
+          #   pkgs = inputs.cmpkgs;
+          #   path = ./hosts/openstick/cross.nix;
+          #   buildSys = "x86_64-linux";
+          # };
         };
         "aarch64-linux" = { };
       };
