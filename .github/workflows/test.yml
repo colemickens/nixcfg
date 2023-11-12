@@ -1,0 +1,19 @@
+name: "nixcfg-test"
+concurrency: "nixcfg-test"
+on:
+  schedule:
+    - cron: '0/20 * * * *'
+  workflow_dispatch:
+  push:
+    branches:
+      - "main"
+jobs:
+  "test":
+    runs-on: "slynux-default"
+    steps:
+    - name: next
+      run: |
+        set -x
+        echo $STATE_DIRECTORY >&2
+        echo $RUNTIME_DIRECTORY >&2
+        echo $LOGS_DIRECTORY >&2
