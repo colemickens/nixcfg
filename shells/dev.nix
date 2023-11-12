@@ -91,6 +91,8 @@ minimalMkShell {
 
     gst_all_1.gstreamer
 
+    protobuf
+
     # not a good sign
     dos2unix
   ];
