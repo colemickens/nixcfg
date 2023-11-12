@@ -28,7 +28,7 @@ def header [ color: string text: string spacer="▒": string ] {
 }
 
 def "main deploy" [ host: string ] {
-  let res = main nfb $".#toplevels.($host)"
+  let res = main nfb --cache true $".#toplevels.($host)"
   let top = $res | find $host | first
   main deployPath $host $top
 }
@@ -40,6 +40,7 @@ def "main deployPath" [ host: string, topout: string ] {
   header "light_blue_reverse" $"deploy: profile dl: ($host): ($topout)"
   let profile_cmd = (^printf "'%s' " ([
     $"sudo" "nix" "build" "--no-link" "-j0" $nixflags
+    "--option" "narinfo-cache-negative-ttl" "0"
     $"--profile" "/nix/var/nix/profiles/system" $topout
   ] | flatten))
   let switch_cmd = (^printf "'%s' " ([
@@ -181,7 +182,7 @@ def "main pkgup" [...pkglist] {
     ]
 
     try {
-      main nfb $flakepkg
+      main nfb --download true $flakepkg
       if ($t | path exists) and (open $t | str trim | str length) != 0) {
         git commit -F $t $"./pkgs/($pkgname)"
 │     }
@@ -229,8 +230,7 @@ def "main up" [...hosts] {
   main pkgup
 
   let all = main nfb --cache true ".#checks.x86_64-linux"
-  let zeph = ($all | find zeph | first)  # print -e $zeph
-  main deployPath zeph $zeph
+  main deployPath zeph ($all | find zeph | first)
   
   # NOTE: deploying other hosts is done in a github action
 }
