@@ -15,8 +15,6 @@ let
       zellijNixpkgs = pkgs.zellij;
     in
     (if !crossBuild then zellijFlake else zellijNixpkgs);
-  # zellijFlake;
-  # zellijNixpkgs;
 
   _defaultShell =
     prefs.default_shell;

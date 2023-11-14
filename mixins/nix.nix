@@ -21,9 +21,6 @@ in
       config = {
         allowAliases = false;
       };
-      overlays = [
-        inputs.self.overlays.default
-      ];
     };
     nix = {
       gc = {

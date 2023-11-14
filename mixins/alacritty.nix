@@ -4,12 +4,21 @@ let
   prefs = import ./_preferences.nix { inherit pkgs inputs; };
   font = prefs.font;
   colors = prefs.themes.alacritty;
+
+  # alacrittyPkg = pkgs.alacritty;
+  alacrittyPkg = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.alacritty;
 in
 {
   config = {
+    # nixpkgs.overlays = [
+    #   (prev: final: {
+    #     alacritty = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.alacritty;
+    #   })
+    # ];
     home-manager.users.cole = { pkgs, ... }: {
       programs.alacritty = {
         enable = true;
+        package = alacrittyPkg;
         settings = {
           env = {
             TERM = "xterm-256color";
@@ -33,8 +42,7 @@ in
           colors = rec {
             draw_bold_text_with_bright_colors = colors.bold_as_bright;
             primary.foreground = colors.foreground;
-            # primary.background = colors.background;
-            primary.background = "#111111";
+            primary.background = colors.background;
 
             normal = {
               black = colors.black;

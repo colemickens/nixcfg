@@ -20,6 +20,8 @@ in
     ../../mixins/gfx-radeonsi.nix
     ../../mixins/gfx-debug.nix
 
+    ../../mixins/github-runner.nix
+
     ../../mixins/android.nix
     ../../mixins/ledger.nix
     ../../mixins/libvirt.nix

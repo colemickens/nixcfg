@@ -5,11 +5,19 @@ let
   colors = prefs.themes.wezterm;
 
   enable_wayland = "true";
+
+  # weztermPkg = pkgs.wezterm;
+  weztermPkg = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.wezterm;
 in
 {
   config = {
+    # nixpkgs.overlays = [
+    #   (prev: final: {
+    #     wezterm = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.wezterm;
+    #   })
+    # ];
     home-manager.users.cole = { pkgs, ... }@hm: {
-      home.packages = with pkgs; [ wezterm ];
+      home.packages = [ weztermPkg ];
 
       xdg.configFile."wezterm/wezterm.lua".text = ''
         local wezterm = require 'wezterm';
@@ -29,7 +37,7 @@ in
           default_cursor_style = 'BlinkingBar',
           colors = {
             foreground = "${colors.foreground}",
-            background = "#000000",
+            background = "${colors.background}",
             ansi = {
               "${colors.black}",
               "${colors.red}",
@@ -67,6 +75,22 @@ in
           })
           config.font = f;
         end
+
+        wezterm.on('format-window-title', function(tab, pane, tabs, panes, config)
+          local zoomed = ""
+          if tab.active_pane.is_zoomed then
+            zoomed = "[Z] "
+          end
+
+          local index = ""
+          if #tabs > 1 then
+            index = string.format("[%d/%d] ", tab.tab_index + 1, #tabs)
+          end
+
+          local title = string.format("%s - wezterm", tab.active_pane.title)
+
+          return zoomed .. index .. title
+        end)
 
         -- issue#3142 workaround START
         local wezterm_action = wezterm.action

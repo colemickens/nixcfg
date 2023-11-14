@@ -1,5 +1,7 @@
 #!/usr/bin/env nu
 
+let nixcfg_root = $env.FILE_PWD
+
 let nixflags = [
   # "--accept-flake-config",
   "--builders-use-substitutes"
@@ -11,43 +13,55 @@ let nixflags = [
   "--option" "extra-substituters" $"https://cache.nixos.org https://colemickens.cachix.org https://nix-community.cachix.org https://nixpkgs-wayland.cachix.org https://unmatched.cachix.org"
   "--option" "extra-trusted-public-keys" "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA= unmatched.cachix.org-1:F8TWIP/hA2808FDABsayBCFjrmrz296+5CQaysosTTc= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
 ]
-let builder = ^tailscale ip --4 slynux
-let nfbargs = [ "--remote" $builder --eval-max-memory-size 4096 --eval-workers 12 --no-nom --no-download ]
+
+let builder_local = {
+  host: "localhost",
+  nfbargs: [ --no-nom ],
+}
+let builder_name = (if "NIXCFG_BUILDER" in $env { $env.NIXCFG_BUILDER } else { "slynux" })
+let builder = if $builder_name == "local" { $builder_local } else {
+  let host = ^tailscale ip --4 "slynux"
+  {
+    host: $host
+    nfbargs: [ "--remote" $host --eval-max-memory-size 4096 --eval-workers 12 --no-nom --no-download ],
+  }
+}
 
 let cachixpkgs_branch = "nixpkgs-stable"
-let cpm = (open ./flake.lock | from json | get nodes | get $cachixpkgs_branch | get locked)
+let cpm = (open $"($nixcfg_root)/flake.lock" | from json | get nodes | get $cachixpkgs_branch | get locked)
 let cachixpkgs_url = $"https://github.com/($cpm.owner)/($cpm.repo)/archive/($cpm.rev).tar.gz"
 let cachix_cache = "colemickens"
 let cachix_signing_key = (open $"($env.HOME)/.cachix_signing_key" | str trim)
 
-############### Intenral lib #################
+############### Internal lib #################
 
 def header [ color: string text: string spacer="▒": string ] {
   let text = $"("" | fill -a r -c $spacer -w 2) ($text | fill -a l -c ' ' -w 80)"
   print -e $"(ansi $color)($text)(ansi reset)"
 }
 
-def "main deploy" [ host: string ] {
-  let res = main nfb --cache true $".#toplevels.($host)"
-  let top = $res | find $host | first
-  main deployPath $host $top
-}
-
-def "main deployPath" [ host: string, topout: string ] {
+def "main deploy" [ host: string, --activate: bool = true, --toplevel: string = ""] {
   let target = (tailscale ip --4 $host | str trim)
+  let toplevel = (if $toplevel != "" { $toplevel } else {
+    let res = main nfb --cache true $".#toplevels.($host)"
+    $res | find $host | first
+  })
   header "light_purple_reverse" $"deploy: start: ($host)"
 
-  header "light_blue_reverse" $"deploy: profile dl: ($host): ($topout)"
-  let profile_cmd = (^printf "'%s' " ([
+  header "light_blue_reverse" $"deploy: profile dl: ($host): ($toplevel) ($activate)"
+  # TODO: better way to interop into shellex?
+  let cmd = (^printf "'%s' " ([
     $"sudo" "nix" "build" "--no-link" "-j0" $nixflags
     "--option" "narinfo-cache-negative-ttl" "0"
-    $"--profile" "/nix/var/nix/profiles/system" $topout
+    $"--profile" "/nix/var/nix/profiles/system" $toplevel
   ] | flatten))
-  let switch_cmd = (^printf "'%s' " ([
-    "sudo" $"($topout)/bin/switch-to-configuration" "switch"
-  ] | flatten))
-  let cmd = $"($profile_cmd) && ($switch_cmd)"
-  print -e $"running cmd: ($cmd)"
+  let cmd = (if (not $activate) { $cmd } else {
+    let $switch_cmd = (^printf "'%s' " ([
+      "sudo" $"($toplevel)/bin/switch-to-configuration" "switch"
+    ] | flatten))
+    $"($cmd) && ($switch_cmd)"
+  })
+  print -e $"(ansi grey)running cmd: ($cmd)(ansi reset)"
 
   ^ssh $"cole@($target)" -- $cmd
   header "light_green_reverse" $"deploy: ($host): DONE"
@@ -176,7 +190,7 @@ def "main pkgup" [...pkglist] {
     ^nix-update [
       --flake
       --format
-      --version branch
+      --version "branch"
       --write-commit-message $t
       $pkgname
     ]
@@ -195,17 +209,17 @@ def "main pkgup" [...pkglist] {
 
 def "main lockup" [] {
   header "light_yellow_reverse" "lockup"
-  ^nix flake lock --recreate-lock-file --commit-lock-file
+  ^nix [ flake lock --recreate-lock-file --commit-lock-file ]
 }
 
 def "main nfb" [--download: bool = false --cache: bool = false buildable: string] {
   header "light_yellow_reverse" $"nfb: ($buildable)"
   # TODO: why is this randomly swallowing errors???
-  ^nix-fast-build $nfbargs --flake $buildable out> /tmp/x
+  ^nix-fast-build ($builder.nfbargs) --flake $buildable out> /tmp/x
   let res = open /tmp/x | split row -r '\n'
   let resp = ($res | str join (char newline))
   if ($cache or $download) {
-    let res = $resp | ^ssh $builder "cachix push colemickens"
+    let res = $resp | ^ssh ($builder.host) "cachix push colemickens"
   }
   if $download {
     $resp | nix build --stdin --no-link -j0
@@ -230,7 +244,7 @@ def "main up" [...hosts] {
   main pkgup
 
   let all = main nfb --cache true ".#checks.x86_64-linux"
-  main deployPath zeph ($all | find zeph | first)
+  main deploy zeph --toplevel ($all | find zeph | first)
   
   # NOTE: deploying other hosts is done in a github action
 }
