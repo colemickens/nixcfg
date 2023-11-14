@@ -19,15 +19,15 @@ jobs:
       run: |
         nix develop .#ci -c ./ci-next.nu update
   "deploy":
-    continue-on-error: ${{matrix.host.continueOnError}}
+    # continue-on-error: ${{matrix.host.continueOnError}}
     strategy:
       fail-fast: false
       matrix:
         host:
-          - { "name": "slynux", "activate": true, "continueOnError": false }
-          - { "name": "raisin", "activate": true, "continueOnError": false }
+          - { "name": "slynux", "activate": true }
+          - { "name": "raisin", "activate": true }
           # TODO: either return, or re-enable errors for 'openstick'
-          - { "name": "openstick", "activate": true, "continueOnError": true }
+          # - { "name": "openstick", "activate": true, "continueOnError": true }
           # - { "name": "zeph", "activate": false, "continueOnError": true }
     runs-on: "slynux-default"
     needs: [ "update" ]
