@@ -37,6 +37,7 @@ in
     networking.hostName = hn;
     # nixcfg.common.hostColor = "#59d600";
     nixcfg.common.hostColor = "green";
+    nixcfg.common.wifiWorkaround = true;
 
     services.tailscale.useRoutingFeatures = "server";
 
