@@ -54,7 +54,6 @@ let
   '');
 
   nixcfg = (writeShellScriptBin "nixcfg" ''
-    cd $HOME/code/nixcfg
     nix develop $HOME/code/nixcfg -c $HOME/code/nixcfg/main.nu "''${@}"
   '');
 
