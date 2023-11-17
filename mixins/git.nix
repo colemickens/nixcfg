@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   config = {
@@ -8,6 +8,12 @@
         sopsFile = ../secrets/encrypted/github-signingkey-detsys;
         owner = "cole";
         group = "cole";
+        mode = "0600";
+      };
+      "github-colebot-sshkey" = {
+        mode = "0666";
+        sopsFile = ../secrets/encrypted/github-colebot-sshkey;
+        format = "binary";
       };
     };
 
@@ -41,12 +47,28 @@
               user = {
                 name = "Cole Mickens";
                 email = "cole.mickens@determinate.systems";
-                signingkey = "/run/secrets/github-signingkey-detsys";
+                # signingkey = "/run/secrets/github-signingkey-detsys";
+                signingkey = config.sops.secrets."github-signingkey-detsys".path;
               };
-              gpg = {
-                format = "ssh";
-              };
+              gpg.format = "ssh";
             };
+          }
+          {
+            condition = "gitdir:~/work/_colebot/code/";
+            contents =
+              let
+                idfile = config.sops.secrets."github-colebot-sshkey".path; # TODO: this only works because its set with github-runner
+              in
+              {
+                core = {
+                  sshCommand = "ssh -v -o IdentitiesOnly=true -i ${pkgs.lib.escapeShellArgs [ idfile] }";
+                };
+                user = {
+                  # TODO: does this erroneously misrepresent my manual actions as the bot?/
+                  name = "colebot";
+                  email = "colemickens+colebot@gmail.com";
+                };
+              };
           }
         ];
         delta = {
