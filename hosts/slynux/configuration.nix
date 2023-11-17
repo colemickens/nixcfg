@@ -38,6 +38,11 @@ in
     # nixcfg.common.hostColor = "#00a2ff";
     nixcfg.common.hostColor = "blue";
 
+    nix.gc = {
+      automatic = true;
+      persistent = true;
+    };
+
     services.tailscale.useRoutingFeatures = "server";
 
     fileSystems = {
