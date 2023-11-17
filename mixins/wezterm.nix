@@ -11,11 +11,11 @@ let
 in
 {
   config = {
-    # nixpkgs.overlays = [
-    #   (prev: final: {
-    #     wezterm = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.wezterm;
-    #   })
-    # ];
+    nixpkgs.overlays = [
+      (prev: final: {
+        wezterm = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.wezterm;
+      })
+    ];
     home-manager.users.cole = { pkgs, ... }@hm: {
       home.packages = [ weztermPkg ];
 
