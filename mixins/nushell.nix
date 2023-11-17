@@ -1,4 +1,4 @@
-{ config, pkgs, ... }@args:
+{ config, pkgs, inputs, ... }@args:
 
 let
   host_color = config.nixcfg.common.hostColor;
@@ -13,6 +13,11 @@ let
 in
 {
   config = {
+    nixpkgs.overlays = [
+      (prev: final: {
+        alacritty = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.nushell;
+      })
+    ];
     home-manager.users.cole = { pkgs, ... }@hm:
       let
         configDir = "${hm.config.xdg.configHome}/nushell";
