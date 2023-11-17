@@ -10,15 +10,15 @@ let
 in
 {
   config = {
-    # nixpkgs.overlays = [
-    #   (prev: final: {
-    #     alacritty = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.alacritty;
-    #   })
-    # ];
+    nixpkgs.overlays = [
+      (prev: final: {
+        alacritty = alacrittyPkg;
+      })
+    ];
     home-manager.users.cole = { pkgs, ... }: {
       programs.alacritty = {
         enable = true;
-        package = alacrittyPkg;
+        # package = alacrittyPkg;
         settings = {
           env = {
             TERM = "xterm-256color";
