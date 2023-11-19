@@ -11,7 +11,7 @@ in
 {
   config = {
     nixpkgs.overlays = [
-      (prev: final: {
+      (final: prev: {
         alacritty = alacrittyPkg;
       })
     ];

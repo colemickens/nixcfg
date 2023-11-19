@@ -14,8 +14,8 @@ in
 {
   config = {
     nixpkgs.overlays = [
-      (prev: final: {
-        alacritty = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.nushell;
+      (final: prev: {
+        nushell = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.nushell;
       })
     ];
     home-manager.users.cole = { pkgs, ... }@hm:

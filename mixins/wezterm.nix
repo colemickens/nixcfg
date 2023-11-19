@@ -12,7 +12,7 @@ in
 {
   config = {
     nixpkgs.overlays = [
-      (prev: final: {
+      (final: prev: {
         wezterm = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.wezterm;
       })
     ];
