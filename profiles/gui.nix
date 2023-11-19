@@ -109,7 +109,7 @@ in
 
           # audio/video
           pavucontrol
-          pw-viz
+          # pw-viz # also failing to build again
           qpwgraph
 
           # communication
