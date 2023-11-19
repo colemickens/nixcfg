@@ -25,6 +25,14 @@ in
       #     }
       #   ];
       # };
+      xdg.configFile."helix/themes/zed_onedark_custom.toml".text = ''
+        inherits = "zed_onedark"
+
+        "ui.statusline.inactive" = { fg = "#546178", bg = "#21252B" }
+        "ui.statusline" = { bg = "#181a1f" }
+      '';
+      # "ui.statusline" = "#000000"
+      # "ui.statusline.inactive" = "#000000"
       xdg.configFile."helix/languages.toml".text = ''
         [language-server.nu-lsp]
         command = "nu"
@@ -51,7 +59,10 @@ in
           # like, but no constrast on bar for open file
           # theme = "ayu_dark";
 
-          theme = "dark_plus";
+          # like, but I think "dark_modern" should be added, maybe it has better highlighting?
+
+          # theme = "dark_plus";
+          theme = "zed_onedark_custom";
 
           editor = {
             auto-pairs = false;
@@ -64,18 +75,18 @@ in
             };
             cursorcolumn = true;
             cursorline = true;
-            # gutters = [
-            #   "diagnostics"
-            #   "line-numbers"
-            #   "spacer"
-            #   "diff"
-            # ];
+            gutters = [
+              "diagnostics"
+              "line-numbers"
+              "spacer"
+              "diff"
+            ];
             file-picker = {
               hidden = false;
             };
             indent-guides = {
               render = true;
-              character = "┊";
+              character = "│";
             };
             line-number = "relative";
             lsp = {
@@ -87,11 +98,14 @@ in
               left = [
                 "mode"
                 "spinner"
+                "version-control"
                 "file-name"
                 "file-modification-indicator"
+                "read-only-indicator"
               ];
               center = [ ];
               right = [
+                "register"
                 "file-type"
                 "diagnostics"
                 "selections"
