@@ -81,7 +81,7 @@
         home.packages = lib.mkMerge [
           (lib.mkIf (pkgs.hostPlatform.system == "x86_64-linux") (with pkgs; [
             # x86_64-linux only
-            zenith # uh oh, no aarch64 support? noooooo
+            # zenith # broken, again # uh oh, no aarch64 support? noooooo
           ]))
           (lib.mkIf (pkgs.hostPlatform.system == "aarch_64-linux") (with pkgs; [
             # aarch64-linux only
