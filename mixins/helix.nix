@@ -12,10 +12,11 @@ let
 in
 {
   config = {
-    # this didn't work any better for cross-compilation
-    # nixpkgs.overlays = [
-    #   inputs.helix.outputs.overlays.default
-    # ];
+    nixpkgs.overlays = [
+      (final: prev: {
+        helix = inputs.helix.packages.${pkgs.stdenv.hostPlatform.system}.helix;
+      })
+    ];
     home-manager.users.cole = { pkgs, ... }: {
       # xdg.configFile."helix/languages.toml".source = gen {
       #   languages = [
