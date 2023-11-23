@@ -107,6 +107,8 @@ in
           pinta
           virt-viewer
 
+          lapce
+
           # audio/video
           pavucontrol
           # pw-viz # also failing to build again
