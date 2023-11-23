@@ -16,6 +16,7 @@ in
     ../../profiles/addon-laptop.nix
 
     ../../mixins/cfdyndns.nix
+    ../../mixins/github-runner.nix
     ../../mixins/iwd-networks.nix
     ../../mixins/plex.nix
     ../../mixins/rclone-googledrive-mounts.nix
