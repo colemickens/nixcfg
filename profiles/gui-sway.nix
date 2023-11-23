@@ -1,31 +1,8 @@
 { pkgs, lib, config, inputs, ... }:
 
 let
-  color_cyan = "#33ccff";
-  color_pink = "#ee00ff";
-
-  nwpkgs = inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system};
 
   prefs = import ../mixins/_preferences.nix { inherit inputs config lib pkgs; };
-
-  # term
-  # - sigh, wezterm scrolling on wayland is a nightmare, so flip back to alacritty again
-  term = "${pkgs.alacritty}/bin/alacritty";
-  # term = "${pkgs.rio}/bin/rio";
-  # term = "${pkgs.wezterm}/bin/wezterm";
-
-  # background = prefs.background;
-  bgimg = (pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/gytis-ivaskevicius/high-quality-nix-content/master/wallpapers/nix-glow.png";
-    hash = "sha256-5zE0fRfudEW9eapx+AkaYArO6ECFrnrNHE+een7pC+E=";
-  }).outPath;
-  bgcolor = "#19191A";
-  background = "${bgimg} fit ${bgcolor}";
-
-  # _bg = "#008080";
-  # background = "${_bg} solid_color";
-  borderActive = "#ffffff";
-  borderInactive = "#222222";
 
   out_zeph = "Thermotrex Corporation TL140ADXP01 Unknown";
   out_aw34 = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
@@ -128,13 +105,17 @@ in
     ];
 
     nixpkgs.overlays = [
-      (final: prev: {
-        inherit (nwpkgs)
-          sway-unwrapped
-          swaylock
-          xdg-desktop-portal-wlr
-          ;
-      })
+      (final: prev:
+        let
+          nwpkgs = inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system};
+        in
+        {
+          inherit (nwpkgs)
+            sway-unwrapped
+            swaylock
+            xdg-desktop-portal-wlr
+            ;
+        })
     ];
 
     security.pam.services.swaylock = { };
@@ -155,9 +136,7 @@ in
         programs.swaylock = {
           enable = true;
           settings = {
-            image = bgimg;
-            scaling = "fit";
-            color = "000000";
+            inherit (prefs.background) image scaling color;
           };
         };
 
@@ -203,9 +182,6 @@ in
               # { criteria = { app_id = "mpv"; }; command = "sticky enable"; }
               # { criteria = { app_id = "mpv"; }; command = "floating enable"; }
               { criteria = { title = "^(.*) Indicator"; }; command = "floating enable"; }
-              { criteria = { app_id = "floatmeplz"; }; command = "floating enable"; }
-              { criteria = { app_id = "prs-gtk3-copy"; }; command = "floating enable"; }
-              { criteria = { app_id = "gcr-prompter"; }; command = "border pixel 400"; }
             ];
             startup = [
               { always = true; command = "${gsettings_auto}"; }
@@ -217,7 +193,9 @@ in
               "${in_mouse_gpro}" = _mouse;
             };
             output = {
-              "*" = { background = background; };
+              "*" = let b = prefs.background; in {
+                background = "${b.image} ${b.scaling} #${b.color}";
+              };
               # "${out_aw34}" = {
               #   scale = "1.0";
               #   mode = "3440x1440@120Hz";
