@@ -5,7 +5,17 @@
 , xwayland
 }:
 
+# note: we intentionally don't use full paths so that these scripts
+# don't accidentallly pull in crap (for example, asus-dgpu is only relevant
+# for 'zeph', etc)
 let
+  asus-dgpu = writeShellScriptBin "asus-dgpu" ''
+    sudo asusctl bios -D 0; sudo efibootmgr --bootnext 0000
+  '';
+  asus-igpu = writeShellScriptBin "asus-igpu" ''
+    sudo asusctl bios -D 1; sudo efibootmgr --bootnext 0000
+  '';
+
   wlproxylaunch = writeShellScriptBin "wlproxylaunch" ''
     pkill -9 -f wayland-proxy-virtwl
     ${wayland-proxy-virtwl}/bin/wayland-proxy-virtwl \
@@ -45,6 +55,9 @@ symlinkJoin {
   name = "commands-gui";
   paths = [
     wlproxylaunch
+
+    asus-dgpu
+    asus-igpu
     # rdp-sly
     # gs
   ];
