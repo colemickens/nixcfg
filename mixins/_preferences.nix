@@ -4,13 +4,12 @@ let
   # colorscheme = inputs.nix-rice.colorschemes."purplepeter";
   # colorscheme = inputs.nix-rice.colorschemes."GruvboxDark";
   # colorscheme = inputs.nix-rice.colorschemes."Builtin Tango Dark";
-  colorscheme = inputs.nix-rice.colorschemes."Wombat";
-  # colorscheme = inputs.nix-rice.colorschemes."Ocean";
+  # colorscheme = inputs.nix-rice.colorschemes."Wombat";
+  # colorscheme = inputs.nix-rice.colorschemes."ayu";
+  # colorscheme = inputs.nix-rice.colorschemes."flexoki-dark";
+  # colorscheme = inputs.nix-rice.colorschemes."iTerm2 Tango Dark";
+  colorscheme = inputs.nix-rice.colorschemes."MaterialDarker";
 
-  bg_gruvbox_rainbow = builtins.fetchurl {
-    url = "https://raw.githubusercontent.com/lunik1/nixos-logo-gruvbox-wallpaper/0797f8f90a440fbc1c0a412c133e4814034b0b50/png/gruvbox-dark-rainbow-square.png";
-    sha256 = "1qggwqx0flqxk0ckv4x0a1gbhpchbaqvlpm8xc7xys1kbgwh4d45";
-  };
   colordefs = {
     bold_as_bright = true;
   };
@@ -18,8 +17,8 @@ in
 rec {
   # all configured with HM, so just use binary name
   editor = "hx";
-  default_term = "${pkgs.alacritty}/bin/alacritty";
-  default_shell = "${pkgs.nushell}/bin/nu";
+  default_term = "alacritty";
+  default_shell = "nu";
 
   gtk = {
     font = { name = "${font.default.family} 11"; package = font.default.package; };
@@ -57,8 +56,28 @@ rec {
 
   bgcolor = "#000000";
   # background = "${bgcolor} solid_color";
-  background = "${bg_gruvbox_rainbow} fit #282828";
-  wallpaper = bg_gruvbox_rainbow;
+  background =
+    let
+      gruvbox_rainbow = {
+        image = (builtins.fetchurl {
+          url = "https://raw.githubusercontent.com/lunik1/nixos-logo-gruvbox-wallpaper/0797f8f90a440fbc1c0a412c133e4814034b0b50/png/gruvbox-dark-rainbow-square.png";
+          sha256 = "1qggwqx0flqxk0ckv4x0a1gbhpchbaqvlpm8xc7xys1kbgwh4d45";
+        }).outPath;
+        scaling = "fit";
+        color = "282828";
+      };
+      niw_glow = {
+        image = (pkgs.fetchurl {
+          url = "https://raw.githubusercontent.com/gytis-ivaskevicius/high-quality-nix-content/master/wallpapers/nix-glow.png";
+          hash = "sha256-5zE0fRfudEW9eapx+AkaYArO6ECFrnrNHE+een7pC+E=";
+        }).outPath;
+        scaling = "fit";
+        color = "19191A";
+      };
+    in
+    niw_glow;
+
+  # wallpaper = bg_gruvbox_rainbow;
 
   swayfonts = {
     names = [ font.default.family font.fallback.family ];
@@ -74,9 +93,8 @@ rec {
     serif = { family = "Noto Serif"; package = pkgs.noto-fonts; };
 
     # monospace = { family = "Iosevka Fixed"; package = pkgs.iosevka-bin; };
-    monospace = { family = "Iosevka Comfy Fixed"; package = pkgs.iosevka-comfy.comfy-fixed; };
-    # monospace = { family = "Go Mono"; package = pkgs.go-font; };
-    # monospace = { family = "Jetbrains Mono"; package = pkgs.jetbrains-mono; };
+    # monospace = { family = "Iosevka Comfy Fixed"; package = pkgs.iosevka-comfy.comfy-fixed; };
+    monospace = { family = "Iosevka Comfy Motion"; package = pkgs.iosevka-comfy.comfy-motion; };
 
     fallback = { family = "Font Awesome 5 Free"; package = pkgs.font-awesome; };
     emoji = { family = "Noto Color Emoji"; package = pkgs.noto-fonts-color-emoji; };
@@ -101,6 +119,7 @@ rec {
       geist-font
       iosevka-bin
       iosevka-comfy.comfy-fixed # always include our favesies
+      iosevka-comfy.comfy-motion # always include our favesies
     ]);
   };
 }
