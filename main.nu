@@ -20,7 +20,7 @@ let builder_local = {
 }
 let builder_name = (if "NIXCFG_BUILDER" in $env { $env.NIXCFG_BUILDER } else { "slynux" })
 let builder = if $builder_name == "local" { $builder_local } else {
-  let host = ^tailscale ip --4 "slynux"
+  let host = ^tailscale ip --4 $builder_name
   {
     host: $host
     nfbargs: [ "--remote" $host --eval-max-memory-size 4096 --eval-workers 12 --no-nom --no-download ],
@@ -242,6 +242,10 @@ def "main up" [...hosts] {
   main lockup
   main nfb --download true ".#devShells.x86_64-linux"
   main pkgup
+  # we need to do both before and after because
+  # devShells contains somethings that might've been bumped
+  # if pkgup breaks, we want to still have as much devshell as possible though
+  main nfb --download true ".#devShells.x86_64-linux"
 
   let all = main nfb --cache true ".#checks.x86_64-linux"
   main deploy zeph --toplevel ($all | find zeph | first)
