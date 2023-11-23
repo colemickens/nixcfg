@@ -12,7 +12,7 @@ def create_left_prompt [] {
     }
 
     let line1 = $"(ansi reset)(ansi $hc)╭(ansi $hsc) (hostname) (ansi reset)";
-    let line2 = $"(ansi reset)(ansi $hc)╰─▶(ansi reset)";
+    let line2 = $"(ansi reset)(ansi $hc)╰🡒 (ansi reset)";
 
     let nixshell = (if ("name" in $env) { $"(ansi red)($env.name)(ansi reset)" } else { "" })
 
