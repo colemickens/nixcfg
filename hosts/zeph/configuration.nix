@@ -95,11 +95,6 @@ in
       };
     };
 
-    nix.gc = {
-      automatic = true;
-      persistent = true;
-    };
-
     boot = {
       # zfs = {
       #   forceImportAll = true;
