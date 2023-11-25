@@ -42,10 +42,10 @@ def header [ color: string text: string spacer="▒": string ] {
 
 def "main deploy" [ host: string, --activate: bool = true, --toplevel: string = ""] {
   let target = (tailscale ip --4 $host | str trim)
-  let toplevel = (if $toplevel != "" { $toplevel } else {
+  let toplevel = if $toplevel != "" { $toplevel } else {
     let res = main nfb --cache true $".#toplevels.($host)"
     $res | find $host | first
-  })
+  }
   header "light_purple_reverse" $"deploy: start: ($host)"
 
   header "light_blue_reverse" $"deploy: profile dl: ($host): ($toplevel) ($activate)"
@@ -214,8 +214,11 @@ def "main lockup" [] {
 
 def "main nfb" [--download: bool = false --cache: bool = false buildable: string] {
   header "light_yellow_reverse" $"nfb: ($buildable)"
-  # TODO: why is this randomly swallowing errors???
-  ^nix-fast-build ($builder.nfbargs) --flake $buildable out> /tmp/x
+  # TODO: input reidrection breaks error handling: https://github.com/nushell/nushell/issues/11153
+  ^nix-fast-build $builder.nfbargs --flake $buildable out> /tmp/x
+  if ($env.LAST_EXIT_CODE != 0) {
+    error make {msg: "nfb failed!"}
+  }
   let res = open /tmp/x | split row -r '\n'
   let resp = ($res | str join (char newline))
   if ($cache or $download) {
