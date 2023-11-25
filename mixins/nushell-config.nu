@@ -185,12 +185,8 @@ $env.config = {
   rm: {
     always_trash: false # always act as if -t was given. Can be overridden with -p
   }
-  cd: {
-    # TODO: replace this with default config again?
-    # abbreviations: false # allows `cd s/o/f` to expand to `cd some/other/folder`
-  }
   table: {
-    mode: rounded # basic, compact, compact_double, light, thin, with_love, rounded, reinforced, heavy, none, other
+    mode: compact # basic, compact, compact_double, light, thin, with_love, rounded, reinforced, heavy, none, other
     index_mode: always # "always" show indexes, "never" show indexes, "auto" = show indexes when a table has "index" column
     show_empty: true # show 'empty list' and 'empty record' placeholders for command output
     trim: {
