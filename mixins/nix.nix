@@ -25,6 +25,7 @@ in
     nix = {
       gc = {
         # automatic = true;
+        options = "--delete-older-than 7d";
         randomizedDelaySec = "30min";
       };
       nixPath = lib.mkForce [ ]; # i doth protest
