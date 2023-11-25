@@ -54,16 +54,9 @@ in
         package = _helixPkg;
 
         settings = {
-          # theme = "ayu_evolve";
-          # theme = "everblush";
-
-          # like, but no constrast on bar for open file
-          # theme = "ayu_dark";
-
-          # like, but I think "dark_modern" should be added, maybe it has better highlighting?
-
-          # theme = "dark_plus";
-          theme = "zed_onedark_custom";
+          # see "custom..." blah blah stuff for overriding the bar on a given theme to give extra contrast:
+          # TODO: add "Modern Dark" from modern VSCode to Helix
+          theme = "catppuccin_mocha";
 
           editor = {
             auto-pairs = false;
