@@ -37,7 +37,6 @@ in
         "dialout"
         "keys"
         "ipfs"
-        "plugdev"
         "networkmanager"
         "scard"
         "tss"
