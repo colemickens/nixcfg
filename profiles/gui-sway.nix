@@ -96,13 +96,29 @@ in
     ../mixins/waybar.nix
   ];
   config = {
-    xdg.portal.enable = true;
-    xdg.portal.extraPortals = with pkgs; [
-      xdg-desktop-portal-wlr
-      (xdg-desktop-portal-gtk.override {
-        buildPortalsInGnome = false;
-      })
-    ];
+    xdg.portal = {
+      enable = true;
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-gtk
+        xdg-desktop-portal-wlr
+      ];
+      config = {
+        common = {
+          default = [ "gtk" ];
+        };
+        sway = {
+          default = [ "gtk" ];
+          "org.freedesktop.impl.portal.Screencast" = [ "wlr" ];
+          "org.freedesktop.impl.portal.Screenshot" = [ "wlr" ];
+        };
+      };
+      #   extraPortal = with pkgs; [
+      #     xdg-desktop-portal-wlr
+      #     (xdg-desktop-portal-gtk.override {
+      #       buildPortalsInGnome = false;
+      #     })
+      #   ];
+    };
 
     nixpkgs.overlays = [
       (final: prev:
@@ -241,14 +257,13 @@ in
 
               "${modifier}+Delete" = "exec ${pkgs.swaylock}/bin/swaylock";
 
+              "${modifier}+F1" = "exec ${pkgs.systemd}/bin/systemctl --user restart waybar";
+              "${modifier}+F2" = "exec ${pkgs.systemd}/bin/systemctl --user stop waybar";
+
               "${modifier}+Escape" = "exec ${pkgs.sirula}/bin/sirula";
               "${modifier}+Ctrl+Alt+Delete" = "exec ${swaymsg} exit";
               "Ctrl+Alt+Delete" = "exec ${swaymsg} exit";
               "${modifier}+Ctrl+Alt+Insert" = "exec ${swaymsg} reload";
-
-              "${modifier}+F1" = "exec ${swaymsg} firefox";
-              "${modifier}+F2" = "exec ${swaymsg} google-chrome-unstable";
-              "${modifier}+F3" = "exec ${swaymsg} steam";
 
               "XF86AudioRaiseVolume" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume +2";
               "XF86AudioLowerVolume" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume -2";
