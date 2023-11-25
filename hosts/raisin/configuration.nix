@@ -40,6 +40,11 @@ in
     nixcfg.common.hostColor = "green";
     nixcfg.common.wifiWorkaround = true;
 
+    nix.gc = {
+      automatic = true;
+      persistent = true;
+    };
+
     services.tailscale.useRoutingFeatures = "server";
 
     services.zfs.autoScrub.pools = [ poolname ];
