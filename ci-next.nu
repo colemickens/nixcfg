@@ -43,7 +43,9 @@ let sshargs = [ "-i" "/run/secrets/github-colebot-sshkey" "-o" $"UserKnownHostsF
 $env.GIT_SSH_COMMAND = $"ssh ($sshargs | str join ' ')"
 
 def "main deploy" [host: string --activate: bool = true] {
-  let out = (open $".latest/result-nixos-system-($host)*")
+  ls -al .latest | print -e
+
+  let out = open $".latest/result-nixos-system-($host)*"
   let addr = ^tailscale ip --4 $host
   print -e $"deploy ($out) to ($addr)"
 
