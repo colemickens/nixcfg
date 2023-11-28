@@ -78,32 +78,15 @@ let
     ssh localhost true
   '');
 
-  fix-gpg2 =
-    (writeShellScriptBin "fix-gpg2" ''
+  fix-gpg-key =
+    (writeShellScriptBin "fix-gpg-key" ''
       set -x
-      ln -sf ${gpgSshSocket} /run/user/1000/sshagent
-      sudo systemctl stop pcscd.service >/dev/null
-        sudo systemctl stop pcscd.socket >/dev/null
-        systemctl --user stop gpg-agent.service 2>/dev/null
-        sudo pkill -f scdaemon
-        sudo pkill -f gpg-agent
-        systemctl --user restart gpg-agent.socket 2>/dev/null
-        systemctl --user restart gpg-agent-extra.socket 2>/dev/null
-        systemctl --user restart gpg-agent-ssh.socket 2>/dev/null
-        export GPG_TTY=$(tty)
-        gpg-connect-agent updatestartuptty /bye >/dev/null 2>&1
-        sleep 0.1
-        sudo systemctl start pcscd.service >/dev/null
-        sleep 0.1
-        # check if key is known
-        if ! gpg --list-keys "${gpgKeyId}" | grep "${gpgKeyId}" ; then
-          curl -L https://github.com/colemickens.gpg | gpg --import
-          (echo 5; echo y; echo save) |
-            gpg --command-fd 0 --no-tty --no-greeting -q --edit-key "${gpgKeyId}" trust >/dev/null 2>&1
-        fi
-        gpg --card-status >/dev/null
-        echo "foo" | gpg --sign &>/dev/null # somehow fixes some weird cases where remote gpg gets hung up when it hasn't been used locally
-        ssh localhost true
+      # check if key is known
+      if ! gpg --list-keys "${gpgKeyId}" | grep "${gpgKeyId}" ; then
+        curl -L https://github.com/colemickens.gpg | gpg --import
+        (echo 5; echo y; echo save) |
+          gpg --command-fd 0 --no-tty --no-greeting -q --edit-key "${gpgKeyId}" trust >/dev/null 2>&1
+      fi
     '');
 
   _zssh = (writeShellScriptBin "_zssh" ''
@@ -140,7 +123,7 @@ in
     gssh
     gpg-relearn
     fix-gpg
-    fix-gpg2
+    fix-gpg-key
 
     fix-ssh
     fix-ssh-remote
