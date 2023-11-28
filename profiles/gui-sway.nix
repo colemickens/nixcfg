@@ -249,6 +249,7 @@ in
                 { app_id = "^Steam$"; }
                 # { class = "^steam$"; } # untested
                 { class = "^steam$"; }
+                { class = "^Steam$"; }
               ];
             };
             keybindings = {
