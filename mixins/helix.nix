@@ -34,20 +34,51 @@ in
       '';
       # "ui.statusline" = "#000000"
       # "ui.statusline.inactive" = "#000000"
-      xdg.configFile."helix/languages.toml".text = ''
-        [language-server.nu-lsp]
-        command = "nu"
-        args = [ "--lsp" ]
-        
-        [[language]]
-        name = "nix"
-        auto-format = true
-        formatter = { command = "nixpkgs-fmt" }
+      xdg.configFile."helix/languages.toml".text =
+        let
+          # lldbRustcScript = pkgs.writeShellScript "lldb-rustc-prelude.py" ''
+          #   import subprocess
+          #   import pathlib
+          #   import lldb
 
-        [[language]]
-        name = "nu"
-        language-servers = [ "nu-lsp" ]
-      '';
+          #   # determine the sysroot for the active rust interpreter
+          #   rustlib_etc = pathlib.Path(subprocess.getoutput('rustc --print sysroot')) / 'lib' / 'rustlib' / 'etc'
+          #   if not rustlib_etc.exists():
+          #       raise RuntimeError('Unable to determine rustc sysroot')
+
+          #   # load lldb_lookup.py and execute lldb_commands with the correct path
+          #   lldb.debugger.HandleCommand(f"""command script import "{rustlib_etc / 'lldb_lookup.py'}" """)
+          #   lldb.debugger.HandleCommand(f"""command source -s 0 "{rustlib_etc / 'lldb_commands'}" """)
+          # '';
+        in
+        ''
+          [language-server.nu-lsp]
+          command = "nu"
+          args = [ "--lsp" ]
+        
+          [[language]]
+          name = "nix"
+          auto-format = true
+          formatter = { command = "nixpkgs-fmt" }
+
+          [[language]]
+          name = "nu"
+          language-servers = [ "nu-lsp" ]
+        '';
+
+          # [[language]]
+          # name = "rust"
+
+          # [language.debugger]
+          # name = "lldb-vscode"
+          # transport = "stdio"
+          # command = "lldb-vscode"
+      #   [[langauge.debugger.templates]]
+      #   name = "binary"
+      #   request = "launch"
+      #   completion = [ { name = "binary", completion = "filename" } ]
+      #   args = { program = "{0}", initCommands = [ "command script import ${lldbRustcScript}" ] }
+      # '';
       programs.helix = {
         # TODO: temp workaround for cross-arch eval with cargo-nix-integration
         enable = true;
