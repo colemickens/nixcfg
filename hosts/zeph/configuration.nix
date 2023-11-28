@@ -72,11 +72,8 @@ in
       "/nix" = { fsType = "zfs"; device = "${poolname}/nix"; neededForBoot = true; };
       "/home" = { fsType = "zfs"; device = "${poolname}/home"; neededForBoot = true; };
 
-      "/zfsin" = { fsType = "zfs"; device = "zfsin"; neededForBoot = true; };
-
-      "/var/lib/containers/storage" = { fsType = "zfs"; device = "${poolname}/podman"; };
-
-      "/mnt/data/t5" = { fsType = "zfs"; device = "${poolname}/data/t5"; };
+      # "/mnt/data/t5" = { fsType = "zfs"; device = "${poolname}/data/t5"; };
+      "/mnt/games" = { fsType = "zfs"; device = "${poolname}/games"; neededForBoot = true; };
 
       "/efi/EFI/Linux" = { device = "/boot/EFI/Linux"; options = [ "bind" ]; };
       "/efi/EFI/nixos" = { device = "/boot/EFI/nixos"; options = [ "bind" ]; };
