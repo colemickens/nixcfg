@@ -44,21 +44,18 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "unstable-2023-11-17";
+  version = "unstable-2023-11-28";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
-    rev = "558e8ebbb3f0594d039d98a05d5416aab4db81ba";
-    hash = "sha256-16jRHTRc/TL3q7raR8fHB9s/YDUkL2O/3o7hntocQTA=";
+    rev = "a6a0fcea83b5e80cc2467779b2ce873c347a2ed1";
+    hash = "sha256-SO4WGIQbguhxXSY2yAtYs44KHyq2xTC2U4EtkD4qcAo=";
   };
 
   # cargoHash = "sha256-jev4fMwCygVzvrkI1nSE5tx59nGqNKQUHCNHvkr9R90=";
   cargoLock = {
     lockFile = ./Cargo.lock;
-    outputHashes = {
-      "winit-0.29.3" = "sha256-nAN/Xayv7B71eS4dbRgT12ELCQGkqpxBaFgURDZCx1U=";
-    };
   };
 
   nativeBuildInputs = [
