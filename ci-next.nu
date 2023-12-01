@@ -32,11 +32,6 @@ rm -f $ssh_hosts
   "100.121.148.102 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCfYSjPHl9PERzgJ1G5iPj431YKO1PvBGfpGfvOQekAWcdnD0s7eY/cAfTnGZ9C3+z/5stXx6XCPL683rk8SacvHVENIpfccZUyXNsruRUDiVFvJrZLX9jZDbREPxIXHRI0pckcLp4S43+ogzkD9B+7yTBe3h48vA+DMubXT3Gk72z/HUSfOFeJqRb9HpNtMa8+F6MAjk1BOaL62IJBekI5qTJV/r+6eWxfq11hIs1ADuawhqu2/c6ATMD4ILb/qa4F+sPDCHlnxz+wlOkqyKRoyf48JLJE4jJx3Vo4Za90YOAOpTxz2NRQTMzMvtTiFxg2NDLF4AB2We1dzzlGiNayi2cZsD9xQxGvmzrZhk1JW17XIcH9e04gH9GafGH74t3v5Jkrri4Q4wHD3tri8MSgMctH9cQ2SzEEQHlu02vSGIaEGR/akXzixq1ymPNUy49IdxudNCKxjEFiO95WagTD+s/bn91ex633h8/ay9JS20omsXGJYYZIzmKOTS32um0uoIhh5FozKi+yKiZ8/ZiGgnm+gC7ZzIxK91Q1OR41wfTQZ+6ABsaCcGjpjH38loTiI3dy/duBYlwLFTGsiV1GbKJuhVDKuEKzm2TADxvnv6FffYQ0tvSFTz+UTEzqzxMaFLYhFoX28Eml1cwH7+4Z7/lB9HlU4xJQbcamTEDtKQ=="
 ] | save -a $ssh_hosts
 
-# print "XXXXXXXXXXXXXXXXX"
-# echo $ssh_hosts
-# cat $ssh_hosts
-# print "XXXXXXXXXXXXXXXXX"
-
 let runid = $"($env.GITHUB_RUN_ID)-($env.GITHUB_RUN_NUMBER)-($env.GITHUB_RUN_ATTEMPT)"
 
 let sshargs = [ "-i" "/run/secrets/github-colebot-sshkey" "-o" $"UserKnownHostsFile=($env.HOME)/.ssh/known_hosts" ]
@@ -45,7 +40,7 @@ $env.GIT_SSH_COMMAND = $"ssh ($sshargs | str join ' ')"
 def "main deploy" [host: string --activate: bool = true] {
   ls -al .latest | print -e
 
-  let out = open $".latest/result-nixos-system-($host)*"
+  let out = open $".latest/result-x86_64-linux.toplevel-($host)"
   let addr = ^tailscale ip --4 $host
   print -e $"deploy ($out) to ($addr)"
 
