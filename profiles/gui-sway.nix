@@ -261,6 +261,8 @@ in
               "${modifier}+F1" = "exec ${pkgs.systemd}/bin/systemctl --user restart waybar";
               "${modifier}+F2" = "exec ${pkgs.systemd}/bin/systemctl --user stop waybar";
 
+              "${modifier}+F3" = "exec ${pkgs.systemd}/bin/busctl --user call rs.wl-gammarelay / rs.wl.gammarelay ToggleInverted";
+
               "${modifier}+Escape" = "exec ${pkgs.sirula}/bin/sirula";
               "${modifier}+Ctrl+Alt+Delete" = "exec ${swaymsg} exit";
               "Ctrl+Alt+Delete" = "exec ${swaymsg} exit";
