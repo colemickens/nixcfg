@@ -58,7 +58,7 @@ in
         
           [[language]]
           name = "nix"
-          auto-format = true
+          auto-format = false
           formatter = { command = "nixpkgs-fmt" }
 
           [[language]]
