@@ -5,6 +5,8 @@ let
     (pkgs.yuzu-early-access.override { qtwebengine = null; }).overrideAttrs (old: {
       cmakeFlags = old.cmakeFlags ++ [ "-DYUZU_USE_QT_WEB_ENGINE=OFF" ];
     });
+
+  vkdevice = "1002:73ef";
 in
 {
   config = {
@@ -20,7 +22,23 @@ in
         enable = true;
         gamescopeSession = {
           enable = true;
-          args = [ "--hdr-enabled" ];
+          env = {
+            WLR_RENDERER = "vulkan";
+            DXVK_HDR = "1";
+            ENABLE_GAMESCOPE_WSI = "1";
+            WINE_FULLSCREEN_FSR = "1";
+          };
+          args = [
+            "--hdr-enabled"
+            "--output-width" "1920"
+            "--output-height" "1080"
+            "--adaptive-sync"
+            "--steam"
+            "--hdr-enabled"
+            "--hdr-itm-enable"
+            "--prefer-output" "HDMI-A-1"
+            "--prefer-vk-device" vkdevice
+          ];
         };
       };
       gamescope = {
