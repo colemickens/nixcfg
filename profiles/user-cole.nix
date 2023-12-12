@@ -24,14 +24,17 @@ in
       hashedPassword = "$6$k.vT0coFt3$BbZN9jqp6Yw75v9H/wgFs9MZfd5Ycsfthzt3Jdw8G93YhaiFjkmpY5vCvJ.HYtw0PZOye6N9tBjNS698tM3i/1";
       extraGroups = [
         "wheel"
+
         "kvm"
         "libvirtd"
         "qemu-libvirtd"
         "docker"
+        "podman"
+
         "audio"
         "video"
         "sound"
-        "pulse"
+        "pulse" # ??
         "input"
         "render"
         "dialout"
@@ -41,7 +44,7 @@ in
         "scard"
         "tss"
         "tty"
-        "users"
+        "users" #??
         "network" # ? networkctl
         "netdev" # actually networkctl
         "lxd" # lxd lxc waydroid
