@@ -92,6 +92,7 @@ in
   imports = [
     ./gui-wayland.nix
     # ../mixins/i3status-rust.nix
+    ../mixins/kanshi.nix
     ../mixins/mako.nix
     ../mixins/waybar.nix
   ];
