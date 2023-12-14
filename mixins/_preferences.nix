@@ -116,7 +116,6 @@ rec {
       intel-one-mono
       commit-mono
       comic-mono
-      geist-font
       iosevka-bin
       iosevka-comfy.comfy-fixed # always include our favesies
       iosevka-comfy.comfy-motion # always include our favesies
