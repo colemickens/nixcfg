@@ -30,14 +30,18 @@ in
           };
           args = [
             "--hdr-enabled"
-            "--output-width" "1920"
-            "--output-height" "1080"
+            "--output-width"
+            "1920"
+            "--output-height"
+            "1080"
             "--adaptive-sync"
             "--steam"
             "--hdr-enabled"
             "--hdr-itm-enable"
-            "--prefer-output" "HDMI-A-1"
-            "--prefer-vk-device" vkdevice
+            "--prefer-output"
+            "HDMI-A-1"
+            "--prefer-vk-device"
+            vkdevice
           ];
         };
       };

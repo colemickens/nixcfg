@@ -66,13 +66,13 @@ in
           language-servers = [ "nu-lsp" ]
         '';
 
-          # [[language]]
-          # name = "rust"
+      # [[language]]
+      # name = "rust"
 
-          # [language.debugger]
-          # name = "lldb-vscode"
-          # transport = "stdio"
-          # command = "lldb-vscode"
+      # [language.debugger]
+      # name = "lldb-vscode"
+      # transport = "stdio"
+      # command = "lldb-vscode"
       #   [[langauge.debugger.templates]]
       #   name = "binary"
       #   request = "launch"
