@@ -9,7 +9,8 @@ on:
       - "main"
 jobs:
   "update":
-    runs-on: "slynux-default"
+    # runs-on: "slynux-default"
+    runs-on: "raisin-default"
     steps:
     - name: checkout
       uses: actions/checkout@v4

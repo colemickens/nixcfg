@@ -15,6 +15,8 @@ in
     ../../profiles/interactive.nix
     ../../profiles/addon-laptop.nix
 
+    ../../mixins/github-runner.nix
+
     ../../mixins/cfdyndns.nix
     ../../mixins/iwd-networks.nix
     ../../mixins/plex.nix
