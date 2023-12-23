@@ -11,6 +11,11 @@ git config --global user.email 'cole.mickens+colebot@gmail.com'
 
 $env.CACHIX_SIGNING_KEY = (open "/run/secrets/cachix_signkey_colemickens")
 
+let nfbflags = [
+  --no-nom
+  --eval-workers 2
+]
+
 let ssh_hosts = $"($env.HOME)/.ssh/known_hosts"
 mkdir $"($env.HOME)/.ssh"
 rm -f $ssh_hosts
@@ -169,7 +174,7 @@ def "main update" [] {
   ## NIX-FAST-BUILD
 
   try {
-    nix-fast-build --no-nom
+    nix-fast-build $nfbflags
   } catch {
     ls -l result* | print -e
     ^ls -d result* | cachix push colemickens

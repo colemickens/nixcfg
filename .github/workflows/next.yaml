@@ -9,7 +9,6 @@ on:
       - "main"
 jobs:
   "update":
-    # runs-on: "slynux-default"
     runs-on: "raisin-default"
     steps:
     - name: checkout
@@ -25,12 +24,11 @@ jobs:
       fail-fast: false
       matrix:
         host:
-          - { "name": "slynux", "activate": true }
           - { "name": "raisin", "activate": true }
           # TODO: either return, or re-enable errors for 'openstick'
           # - { "name": "openstick", "activate": true, "continueOnError": true }
           # - { "name": "zeph", "activate": false, "continueOnError": true }
-    runs-on: "slynux-default"
+    runs-on: "raisin-default"
     needs: [ "update" ]
     steps:
     - name: checkout
