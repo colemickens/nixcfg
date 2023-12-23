@@ -17,7 +17,6 @@ in
 
     ../../mixins/github-runner.nix
 
-    ../../mixins/cfdyndns.nix
     ../../mixins/iwd-networks.nix
     ../../mixins/plex.nix
     ../../mixins/rclone-googledrive-mounts.nix
