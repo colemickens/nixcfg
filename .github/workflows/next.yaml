@@ -25,6 +25,7 @@ jobs:
       matrix:
         host:
           - { "name": "raisin", "activate": true }
+          - { "name": "xeep", "activate": true }
           # TODO: either return, or re-enable errors for 'openstick'
           # - { "name": "openstick", "activate": true, "continueOnError": true }
           # - { "name": "zeph", "activate": false, "continueOnError": true }
