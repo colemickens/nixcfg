@@ -111,7 +111,7 @@
 
           # actual machines:
           raisin = { pkgs = inputs.cmpkgs; };
-          slynux = { pkgs = inputs.cmpkgs; };
+          xeep = { pkgs = inputs.cmpkgs; };
           zeph = { pkgs = inputs.cmpkgs; };
 
           # TODO: decide what the future of this is, I like having a cross-compile targe
