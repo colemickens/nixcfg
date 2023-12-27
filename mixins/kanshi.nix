@@ -14,12 +14,26 @@ in
           systemdTarget = "graphical-session.target";
           profiles = {
             "zeph_undocked".outputs = [
-              { criteria = out_zeph; status = "enable"; scale = 1.7; adaptive_sync = "enable"; }
+              {
+                criteria = out_zeph;
+                status = "enable";
+                scale = 1.7;
+                adaptive_sync = "enable";
+                position = "0 0";
+              }
+            ];
+            "zeph_docked_both".outputs = [
+              { criteria = out_zeph; status = "disable"; }
+              { criteria = out_aw3418dw; status = "enable"; position = "1920 0"; }
+              { criteria = out_aw2521h; status = "enable"; position = "0 0"; }
+            ];
+            "zeph_docked_aw25".outputs = [
+              { criteria = out_zeph; status = "disable"; }
+              { criteria = out_aw2521h; status = "enable"; position = "0 0"; }
             ];
             "zeph_docked_aw34".outputs = [
               { criteria = out_zeph; status = "disable"; }
-              { criteria = out_aw3418dw; position = "1920,0"; mode = "3440x1440@120Hz"; adaptive_sync = "enable"; }
-              { criteria = out_aw2521h; position = "0,0"; mode = "1920x1080@240Hz"; adaptive_sync = "enable"; }
+              { criteria = out_aw3418dw; status = "enable"; position = "0 0"; }
             ];
           };
         };

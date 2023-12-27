@@ -213,27 +213,27 @@ in
               "*" = let b = prefs.background; in {
                 background = "${b.image} ${b.scaling} #${b.color}";
               };
-              # "${out_aw34}" = {
-              #   scale = "1.0";
-              #   mode = "3440x1440@120Hz";
-              #   adaptive_sync = "enable";
-              #   subpixel = "rgb";
-              #   position = "1920 0";
-              # };
-              # "${out_aw25}" = {
-              #   scale = "1.0";
-              #   mode = "1920x1080@240Hz";
-              #   adaptive_sync = "enable";
-              #   subpixel = "rgb";
-              #   render_bit_depth = "10";
-              #   position = "0 0";
-              # };
+              "${out_aw34}" = {
+                scale = "1.0";
+                mode = "3440x1440@120Hz";
+                adaptive_sync = "enable";
+                subpixel = "rgb";
+                # position = "1920 0";
+              };
+              "${out_aw25}" = {
+                scale = "1.0";
+                mode = "1920x1080@240Hz";
+                adaptive_sync = "enable";
+                subpixel = "rgb";
+                render_bit_depth = "10";
+                # position = "0 0";
+              };
               "${out_zeph}" = {
                 scale = "1.6";
                 mode = "2560x1600@120Hz";
                 adaptive_sync = "enable";
                 # position = "5360 0";
-                position = "0 0";
+                # position = "0 0";
                 subpixel = "rgb";
               };
             };
