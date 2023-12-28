@@ -32,6 +32,8 @@ rm -f $ssh_hosts
   "100.85.243.118 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICWb7+dSGw/St8AGhtoSOlnDIfTjQGEJ6mWuOv49hFpA"
   # raisin
   "100.112.194.64 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICFL0c9gNJWpGPyyQgWLbao6zSNMAMFDmwQQGHeOcVCU"
+  # xeep
+  "100.72.11.62 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFzCYIpoxOMwsHMKGTcpmtAuu+yTfkP6ZhaF/YjWAzFI"
   # openstick
   "100.121.148.102 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDUYISzsaKXXf0OTojyzpbsA8M4p9+DjQ+PHZ2aLUrT6"
   "100.121.148.102 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCfYSjPHl9PERzgJ1G5iPj431YKO1PvBGfpGfvOQekAWcdnD0s7eY/cAfTnGZ9C3+z/5stXx6XCPL683rk8SacvHVENIpfccZUyXNsruRUDiVFvJrZLX9jZDbREPxIXHRI0pckcLp4S43+ogzkD9B+7yTBe3h48vA+DMubXT3Gk72z/HUSfOFeJqRb9HpNtMa8+F6MAjk1BOaL62IJBekI5qTJV/r+6eWxfq11hIs1ADuawhqu2/c6ATMD4ILb/qa4F+sPDCHlnxz+wlOkqyKRoyf48JLJE4jJx3Vo4Za90YOAOpTxz2NRQTMzMvtTiFxg2NDLF4AB2We1dzzlGiNayi2cZsD9xQxGvmzrZhk1JW17XIcH9e04gH9GafGH74t3v5Jkrri4Q4wHD3tri8MSgMctH9cQ2SzEEQHlu02vSGIaEGR/akXzixq1ymPNUy49IdxudNCKxjEFiO95WagTD+s/bn91ex633h8/ay9JS20omsXGJYYZIzmKOTS32um0uoIhh5FozKi+yKiZ8/ZiGgnm+gC7ZzIxK91Q1OR41wfTQZ+6ABsaCcGjpjH38loTiI3dy/duBYlwLFTGsiV1GbKJuhVDKuEKzm2TADxvnv6FffYQ0tvSFTz+UTEzqzxMaFLYhFoX28Eml1cwH7+4Z7/lB9HlU4xJQbcamTEDtKQ=="
@@ -50,19 +52,19 @@ def "main deploy" [host: string --activate: bool = true] {
   print -e $"deploy ($out) to ($addr)"
 
   if (not $activate) {
-    ^ssh $sshargs $"cole@($addr)" $"sudo nix build -j0 --no-link ($out)"
+    ^ssh ...$sshargs $"cole@($addr)" $"sudo nix build -j0 --no-link ($out)"
     return
   }
 
-  ^ssh $sshargs $"cole@($addr)" $"sudo nix build -j0 --no-link --profile /nix/var/nix/profiles/system ($out)"
-  ^ssh $sshargs $"cole@($addr)" $"sudo ($out)/bin/switch-to-configuration switch"
+  ^ssh ...$sshargs $"cole@($addr)" $"sudo nix build -j0 --no-link --profile /nix/var/nix/profiles/system ($out)"
+  ^ssh ...$sshargs $"cole@($addr)" $"sudo ($out)/bin/switch-to-configuration switch"
 
   # TODO: better way to do per-host post-deploy commands
   if $host == "openstick" {
     do -i {
       print -e "rebooting openstick"
-      ^ssh $sshargs $"cole@($addr)" "nix-env --profile ~/.local/state/nix/profiles/home-manager --delete-generations +1"
-      ^ssh $sshargs $"cole@($addr)" "sudo reboot"
+      ^ssh ...$sshargs $"cole@($addr)" "nix-env --profile ~/.local/state/nix/profiles/home-manager --delete-generations +1"
+      ^ssh ...$sshargs $"cole@($addr)" "sudo reboot"
     }
   }
 }
@@ -128,7 +130,7 @@ def "main update" [] {
   do {
     cd $"($ROOT)/nixcfg"
 
-    ^nix [
+    ^nix ...[
       flake lock
       --recreate-lock-file
       --commit-lock-file
@@ -145,7 +147,7 @@ def "main update" [] {
     cd $"($ROOT)/nixcfg"
 
     let pkgref = $"($env.PWD)#packages.x86_64-linux"
-    let pkglist = ^nix [
+    let pkglist = ^nix ...[
       eval
       --json $pkgref
       --apply "x: builtins.attrNames x"
@@ -153,7 +155,7 @@ def "main update" [] {
 
     for pkgname in $pkglist {
       try {
-        ^nix-update [
+        ^nix-update ...[
           --flake
           --build
           --commit
@@ -174,7 +176,7 @@ def "main update" [] {
   ## NIX-FAST-BUILD
 
   try {
-    nix-fast-build $nfbflags
+    nix-fast-build ...$nfbflags
   } catch {
     ls -l result* | print -e
     ^ls -d result* | cachix push colemickens
@@ -218,7 +220,7 @@ def "main update" [] {
     git switch -C main-next
     git reset --hard main-next-wip
 
-    ^nix [
+    ^nix ...[
       flake lock
       --recreate-lock-file 
       --commit-lock-file

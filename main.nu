@@ -173,7 +173,7 @@ def "main pkgup" [...pkglist] {
 
   let pkgref = $"($env.PWD)#packages.x86_64-linux"
   let pkglist = if ($pkglist | length) == 0 {
-    ^nix [eval
+    ^nix ...[eval
       --json $pkgref
       --apply 'x: builtins.attrNames x'
     ] | str trim | from json
@@ -209,13 +209,13 @@ def "main pkgup" [...pkglist] {
 
 def "main lockup" [] {
   header "light_yellow_reverse" "lockup"
-  ^nix [ flake lock --recreate-lock-file --commit-lock-file ]
+  ^nix ...[ flake lock --recreate-lock-file --commit-lock-file ]
 }
 
 def "main nfb" [--download: bool = false --cache: bool = false buildable: string] {
   header "light_yellow_reverse" $"nfb: ($buildable)"
   # TODO: input reidrection breaks error handling: https://github.com/nushell/nushell/issues/11153
-  ^nix-fast-build $builder.nfbargs --flake $buildable out> /tmp/x
+  ^nix-fast-build ...$builder.nfbargs --flake $buildable out> /tmp/x
   if ($env.LAST_EXIT_CODE != 0) {
     error make {msg: "nfb failed!"}
   }
