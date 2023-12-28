@@ -107,6 +107,8 @@ in
           pinta
           virt-viewer
 
+          glide-media-player
+
           lapce
 
           # audio/video
