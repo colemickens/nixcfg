@@ -38,7 +38,7 @@ in
       home.packages = with pkgs; [
         yubikey-personalization
         yubikey-manager
-        yubico-piv-tool
+        # yubico-piv-tool # seems to fail to cross-compile
       ];
 
       services.gpg-agent = {
