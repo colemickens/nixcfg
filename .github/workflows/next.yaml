@@ -19,16 +19,13 @@ jobs:
       run: |
         nix develop .#ci -c ./ci-next.nu update
   "deploy":
-    # continue-on-error: ${{matrix.host.continueOnError}}
     strategy:
       fail-fast: false
       matrix:
         host:
-          - { "name": "raisin", "activate": true }
-          - { "name": "xeep", "activate": true }
-          # TODO: either return, or re-enable errors for 'openstick'
-          # - { "name": "openstick", "activate": true, "continueOnError": true }
-          # - { "name": "zeph", "activate": false, "continueOnError": true }
+          - { "name": "raisin" }
+          - { "name": "xeep" }
+          - { "name": "openstick" }
     runs-on: "raisin-default"
     needs: [ "update" ]
     steps:
@@ -38,4 +35,4 @@ jobs:
         ref: main-next
     - name: deploy-${{matrix.host.name}}
       run: |
-        nix develop .#ci -c ./ci-next.nu deploy --activate ${{matrix.host.activate}} ${{matrix.host.name}}
+        nix develop .#ci -c ./ci-next.nu deploy --activate true ${{matrix.host.name}}
