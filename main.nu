@@ -23,7 +23,12 @@ let builder = if $builder_name == "local" { $builder_local } else {
   let host = ^tailscale ip --4 $builder_name
   {
     host: $host
-    nfbargs: [ "--remote" $host --eval-max-memory-size 4096 --eval-workers 4 --no-nom --no-download ],
+    nfbargs: [
+      --remote $host
+      --eval-workers 2
+      --no-nom
+      --no-download
+    ],
   }
 }
 
