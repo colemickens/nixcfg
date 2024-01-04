@@ -55,15 +55,13 @@ def "main deploy" [ host: string, --activate: bool = true, --toplevel: string = 
 
   header "light_blue_reverse" $"deploy: profile dl: ($host): ($toplevel) ($activate)"
   # TODO: better way to interop into shellex?
-  let cmd = (^printf "'%s' " ([
-    $"sudo" "nix" "build" "--no-link" "-j0" $nixflags
+  let cmd = (^printf "'%s' " ...[
+    $"sudo" "nix" "build" "--no-link" "-j0" ...$nixflags
     "--option" "narinfo-cache-negative-ttl" "0"
     $"--profile" "/nix/var/nix/profiles/system" $toplevel
-  ] | flatten))
+  ])
   let cmd = (if (not $activate) { $cmd } else {
-    let $switch_cmd = (^printf "'%s' " ([
-      "sudo" $"($toplevel)/bin/switch-to-configuration" "switch"
-    ] | flatten))
+    let $switch_cmd = (^printf "'%s' " ...[ "sudo" $"($toplevel)/bin/switch-to-configuration" "switch" ])
     $"($cmd) && ($switch_cmd)"
   })
   print -e $"(ansi grey)running cmd: ($cmd)(ansi reset)"
@@ -73,18 +71,7 @@ def "main deploy" [ host: string, --activate: bool = true, --toplevel: string = 
   print -e $"(char nl)"
 }
 
-############### Intenral lib #################
-
-def check [] {
-  if ("SKIP_GIT_CHECK" in $env) {
-    return
-  }
-  let len = ^git status --porcelain | complete | get stdout | str trim | str length
-  if ($len) != 0 {
-    git status
-    error make { msg: $"!! ERR: git has untracked or uncommitted changes!!" }
-  }
-}
+############### Internal lib #################
 
 def "main nix" [...args] {
   ^nix $nixflags $args
@@ -131,47 +118,6 @@ def "main inputup" [] {
     }
   }
 }
-
-# def "main inputup2" [] {
-#   header "light_yellow_reverse" "inputup"
-#   let srcdirs = ([
-#     [ "nixpkgs/master" "nixpkgs/nixos-unstable" "nixpkgs/cmpkgs" ]
-#     [ "home-manager/master" "home-manager/cmhm" ]
-#     [ "mobile-nixos/development" "mobile-nixos/development-flakes" "mobile-nixos/openstick" ]
-#   ] | each { |it1| $it1 | each {|it| $"($env.HOME)/code/($it)" } })
-
-#   let extsrcdirs = ([
-#     [
-#       "linux/master"
-#       # "linux/openstick"
-#     ]
-#   ] | each { |it1| $it1 | each {|it| $"($env.HOME)/code-ext/($it)" } })
-
-#   let srcdirs = ($srcdirs | append $extsrcdirs)
-
-#   $srcdirs | par-each { |dirGroup|
-#     for dir in $dirGroup {
-#       if (not ($dir | path exists)) {
-#         print -e $"(ansi yellow_dimmed)inputup: skip:(ansi reset) ($dir)"
-#         continue
-#       }
-#       print -e $"(ansi yellow_dimmed)inputup: check:(ansi reset) ($dir)"
-#       do -i { ^git -C $dir rebase --abort err> /dev/null }
-#       if (ls -D ([$dir ".git"] | path join) | get 0 | get type) == "dir" {
-#         ^git -C $dir pull --rebase --no-gpg-sign
-#       } else {
-#         ^git -C $dir rebase --no-gpg-sign
-#       }
-#       let b = (git -C $dir rev-parse --abbrev-ref HEAD)
-#       let remote = (git -C $dir rev-parse $"origin/($b)")
-#       let local = (git -C $dir rev-parse $b)
-#       print -e $"remote=($remote | str substring 0..6); local=($local | str substring 0..6)"
-#       if ($local != $remote) {
-#         ^git -C $dir push origin HEAD -f
-#       }
-#     }
-#   }
-# }
 
 def "main pkgup" [...pkglist] {
   header "light_yellow_reverse" "pkgup"
@@ -235,30 +181,16 @@ def "main nfb" [--download: bool = false --cache: bool = false buildable: string
   $res
 }
 
-def "main dumpdeps" [ buildable: string ] {
-  let res = ^nix-eval-jobs --flake $buildable | split row -r '\n' | each { |x| $x | from json }
-  print -e $res
-  let res2 = ($res | get inputDrvs)
-  print -e $res2
-  print -e ($res2 | to json)
-}
-
 def "main up" [...hosts] {
-  # header "light_red_reverse" "up" "▒"
-
   main inputup
   main lockup
   main nfb --download true ".#devShells.x86_64-linux"
   main pkgup
-  # we need to do both before and after because
-  # devShells contains somethings that might've been bumped
-  # if pkgup breaks, we want to still have as much devshell as possible though
+
   main nfb --download true ".#devShells.x86_64-linux"
 
   let all = main nfb --cache true ".#checks.x86_64-linux"
   main deploy zeph --toplevel ($all | find zeph | first)
-  
-  # NOTE: deploying other hosts is done in a github action
 }
 
 def main [] { main up }
