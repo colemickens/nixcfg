@@ -2,9 +2,11 @@
 
 let
   yuzu_noQtWeb =
-    (pkgs.yuzu-early-access.override { qtwebengine = null; }).overrideAttrs (old: {
+    (pkgs.yuzuPackages.early-access.override { qtwebengine = null; }).overrideAttrs (old: {
       cmakeFlags = old.cmakeFlags ++ [ "-DYUZU_USE_QT_WEB_ENGINE=OFF" ];
     });
+  # _yuzu = yuzu_noQtWeb;
+  _yuzu = pkgs.yuzuPackages.early-access;
 
   vkdevice = "1002:73ef";
 in
@@ -70,7 +72,7 @@ in
         goverlay
 
         dolphin-emu # gamecube emu
-        yuzu_noQtWeb
+        _yuzu
         xemu
 
         airshipper
