@@ -1,8 +1,11 @@
+# source: https://raw.githubusercontent.com/wimpysworld/nix-config/main/nixos/_mixins/services/clamav.nix
+# modifications: change sus-user-dirs
+
 { config, pkgs, lib, ... }:
 with lib;
 let
   sus-user-dirs = [
-    "Downloads"
+    "downloads"
   ];
   all-normal-users = attrsets.filterAttrs (_username: config: config.isNormalUser) config.users.users;
   all-sus-dirs = builtins.concatMap (dir:
