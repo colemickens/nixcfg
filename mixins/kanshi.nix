@@ -13,14 +13,13 @@ in
           enable = true;
           systemdTarget = "graphical-session.target";
           profiles = {
+            "zeph_all".outputs = [
+              { criteria = out_aw2521h; status = "enable"; position = "0,0"; }
+              { criteria = out_aw3418dw; status = "enable"; position = "1920,0"; }
+              { criteria = out_zeph; status = "enable"; position = "${builtins.toString (1920+3440)},0"; }
+            ];
             "zeph_undocked".outputs = [
-              {
-                criteria = out_zeph;
-                status = "enable";
-                scale = 1.7;
-                adaptive_sync = "enable";
-                position = "0 0";
-              }
+              { criteria = out_zeph; status = "enable"; scale = 1.7; }
             ];
             "zeph_docked_both".outputs = [
               { criteria = out_zeph; status = "disable"; }
