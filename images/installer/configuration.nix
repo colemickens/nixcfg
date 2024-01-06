@@ -3,6 +3,8 @@
 let
   hn = "installer";
 
+  # MAKE SURE IWL IS ON THERE
+
   cm-nixos-prep = pkgs.writeShellScriptBin "cm-nixos-prep" ''
     #!/usr/bin/env bash
     set -x
@@ -90,6 +92,8 @@ in
 
     ../../profiles/core.nix
     ../../profiles/interactive.nix
+
+    ../../mixins/android.nix
   ];
 
   config = {
@@ -121,7 +125,10 @@ in
     # isoImage.squashfsCompression = null;
 
     nixpkgs.hostPlatform.system = "x86_64-linux";
+    
     networking.hostName = hn;
+    networking.wireless.enable = lib.mkForce false;
+    networking.wireless.iwd.enable = true;
 
     boot.loader.timeout = lib.mkOverride 10 10;
     documentation.enable = lib.mkOverride 10 false;
@@ -139,8 +146,4 @@ in
     systemd.services.sshd.wantedBy = pkgs.lib.mkOverride 10 [ "multi-user.target" ];
   };
 }
-
-
-
-
 
