@@ -78,6 +78,8 @@ in
     networking.hostName = hn;
     nixcfg.common.hostColor = "yellow";
 
+    nixcfg.common.wifiWorkaround = true;
+
     environment.systemPackages = with pkgs; [
       libsmbios # ? can't remember it
     ];
