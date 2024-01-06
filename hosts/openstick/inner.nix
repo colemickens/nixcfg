@@ -34,6 +34,8 @@ in
       wifiWorkaround = true;
     };
 
+    boot.kernelParams = [ "loglevel=7" ];
+
     nix = {
       gc = {
         automatic = true;
