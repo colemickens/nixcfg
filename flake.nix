@@ -130,13 +130,12 @@
 
       ## SPECIAL OUTPUTS ######################################################
       extra = {
-        # keyed by buildPlatform for usage by ciAttrs
+        # must be manually included in ciAttrs
         x86_64-linux = {
           installer = nixosConfigurations.installer.config.system.build.isoImage;
-        };
-        aarch64-linux = {
           openstick-abootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-abootimg;
           openstick-bootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-bootimg;
+          openstick-rootfs = nixosConfigurations.openstick.config.mobile.outputs.generatedFilesystems.rootfs;
         };
         riscv64-linux = { };
       };
@@ -279,14 +278,15 @@
             # TODO: or look into the allowSubstitutesAlways new flag that lovesegfault commented about?
             checks =
               let
-                c_extra = lib.mapAttrs' (n: lib.nameValuePair "extra-${n}") inputs.self.extra.${system};
                 c_packages = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") inputs.self.packages.${system};
                 c_devShells = lib.mapAttrs' (n: lib.nameValuePair "devShell-${n}") inputs.self.devShells.${system};
                 c_toplevels = lib.mapAttrs'
                   (n: v: lib.nameValuePair "toplevel-${n}" toplevels.${n})
                   inputs.self.nixosConfigsEx.${system};
+                # c_extra = lib.mapAttrs' (n: lib.nameValuePair "extra-${n}") inputs.self.extra.${system};
+                c_extra = { inherit (extra.x86_64-linux) installer; };
               in
-              c_extra // c_packages // c_devShells // c_toplevels;
+              c_packages // c_devShells // c_toplevels // c_extra;
           })
       );
 }
