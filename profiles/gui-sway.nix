@@ -7,6 +7,7 @@ let
   out_zeph = "Thermotrex Corporation TL140ADXP01 Unknown";
   out_aw34 = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
   out_aw25 = "Dell Inc. Dell AW2521H #HLAYMxgwABDZ";
+  out_extdisp = "Unknown Unknown Unknown";
 
   in_tp_zeph = "1267:12699:ASUE120A:00_04F3:319B_Touchpad";
   in_mouse_aerox3 = "4152:6200:SteelSeries_SteelSeries_Aerox_3_Wireless";
@@ -218,7 +219,6 @@ in
                 mode = "3440x1440@120Hz";
                 adaptive_sync = "enable";
                 subpixel = "rgb";
-                # position = "1920 0";
               };
               "${out_aw25}" = {
                 scale = "1.0";
@@ -226,14 +226,17 @@ in
                 adaptive_sync = "enable";
                 subpixel = "rgb";
                 render_bit_depth = "10";
-                # position = "0 0";
               };
               "${out_zeph}" = {
                 scale = "1.6";
                 mode = "2560x1600@120Hz";
                 adaptive_sync = "enable";
-                # position = "5360 0";
-                # position = "0 0";
+                subpixel = "rgb";
+              };
+              "${out_extdisp}" = {
+                scale = "1.3";
+                mode = "2560x1600@144Hz";
+                adaptive_sync = "enable";
                 subpixel = "rgb";
               };
             };
