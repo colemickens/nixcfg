@@ -3,6 +3,10 @@
 set -x
 
 # NOTE: must flash openstick build first:
+- https://github.com/OpenStick/OpenStick/releases/download/v1/base-generic.zip
+- https://github.com/OpenStick/OpenStick/releases/download/v1/debian.zip
+
+# NOTE: this is a backup of a stock ROM dump, usable with EDL:
 # https://archive.org/details/uf-896-v-1.1-dumps-20240107-t-053928-z-001
 
 # download, unzip, fixup ./flash.sh scripts

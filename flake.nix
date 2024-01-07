@@ -121,6 +121,11 @@
             path = ./hosts/openstick/cross.nix;
             buildSys = "x86_64-linux";
           };
+          openstick2 = {
+            pkgs = inputs.cmpkgs;
+            path = ./hosts/openstick2/cross.nix;
+            buildSys = "x86_64-linux";
+          };
         };
         "aarch64-linux" = { };
       };
