@@ -80,7 +80,8 @@ rec {
   # wallpaper = bg_gruvbox_rainbow;
 
   swayfonts = {
-    names = [ font.default.family font.fallback.family ];
+    # names = [ font.default.family font.fallback.family ];
+    names = [ "Lexend" font.fallback.family ];
     style = "Heavy";
     size = 10.0;
   };
@@ -116,6 +117,7 @@ rec {
       intel-one-mono
       commit-mono
       comic-mono
+      lexend
       iosevka-bin
       iosevka-comfy.comfy-fixed # always include our favesies
       iosevka-comfy.comfy-motion # always include our favesies
