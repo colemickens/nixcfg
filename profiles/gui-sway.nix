@@ -98,30 +98,6 @@ in
     ../mixins/waybar.nix
   ];
   config = {
-    xdg.portal = {
-      enable = true;
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-gtk
-        xdg-desktop-portal-wlr
-      ];
-      config = {
-        common = {
-          default = [ "gtk" ];
-        };
-        sway = {
-          default = [ "gtk" ];
-          "org.freedesktop.impl.portal.Screencast" = [ "wlr" ];
-          "org.freedesktop.impl.portal.Screenshot" = [ "wlr" ];
-        };
-      };
-      #   extraPortal = with pkgs; [
-      #     xdg-desktop-portal-wlr
-      #     (xdg-desktop-portal-gtk.override {
-      #       buildPortalsInGnome = false;
-      #     })
-      #   ];
-    };
-
     nixpkgs.overlays = [
       (final: prev:
         let
@@ -149,6 +125,30 @@ in
         home.sessionVariables = {
           WLR_RENDERER = "vulkan";
           XDG_CURRENT_DESKTOP = "sway";
+        };
+
+        xdg.portal = {
+          enable = true;
+          extraPortals = with pkgs; [
+            xdg-desktop-portal-gtk
+            xdg-desktop-portal-wlr
+          ];
+          config = {
+            common = {
+              default = [ "gtk" ];
+            };
+            sway = {
+              default = [ "gtk" ];
+              "org.freedesktop.impl.portal.Screencast" = [ "wlr" ];
+              "org.freedesktop.impl.portal.Screenshot" = [ "wlr" ];
+            };
+          };
+          #   extraPortal = with pkgs; [
+          #     xdg-desktop-portal-wlr
+          #     (xdg-desktop-portal-gtk.override {
+          #       buildPortalsInGnome = false;
+          #     })
+          #   ];
         };
 
         programs.swaylock = {
