@@ -10,7 +10,7 @@ in
 {
   imports = [
     ../../profiles/gui-sway.nix
-    ../../profiles/gui-i3.nix
+    # ../../profiles/gui-i3.nix
 
     ../../profiles/addon-asus.nix
     ../../profiles/addon-devtools.nix
