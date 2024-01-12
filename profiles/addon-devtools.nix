@@ -10,11 +10,16 @@
         enable = true;
         package = pkgs.vscodium.fhs;
       };
-      home.packages = with pkgs; [
-        alejandra
-        nil
-        nixpkgs-fmt
-      ];
+      home = {
+        packages = with pkgs; [
+          alejandra
+          nil
+          nixpkgs-fmt
+        ];
+        sessionVariables = {
+          ENVRC_USE_FLAKE = 1;
+        };
+      };
     };
   };
 }
