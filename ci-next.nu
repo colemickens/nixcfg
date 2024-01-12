@@ -13,7 +13,7 @@ $env.CACHIX_SIGNING_KEY = (open "/run/secrets/cachix_signkey_colemickens")
 
 let nfbflags = [
   --no-nom
-  --eval-workers 2
+  --eval-workers 1 # we keep getting killed in the GHA (on raisin) :(
 ]
 
 let ssh_hosts = $"($env.HOME)/.ssh/known_hosts"
