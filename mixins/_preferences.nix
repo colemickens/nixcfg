@@ -80,8 +80,7 @@ rec {
   # wallpaper = bg_gruvbox_rainbow;
 
   swayfonts = {
-    # names = [ font.default.family font.fallback.family ];
-    names = [ "Lexend" font.fallback.family ];
+    names = [ font.default.family font.fallback.family ];
     style = "Heavy";
     size = 10.0;
   };
