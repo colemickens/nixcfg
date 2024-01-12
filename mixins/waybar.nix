@@ -15,7 +15,7 @@ let
 
   pppScript = pkgs.writeShellScript "waybar-ppp.sh" ''
     set -euo pipefail
-    val="$(${pkgs.power-profiles-daemon}/bin/powerprofilesctl get)"
+    val="$(timeout 5 ${pkgs.power-profiles-daemon}/bin/powerprofilesctl get)"
     if [[ "''${val}" == "performance" ]]; then
       echo $'{"text": "ppp prf"}';
     elif [[ "''${val}" == "balanced" ]]; then
