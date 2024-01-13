@@ -14,6 +14,10 @@
       url = "github:colemickens/mobile-nixos/openstick";
       inputs."nixpkgs".follows = "cmpkgs";
     };
+    tow-boot-alirock-h96maxv58 = {
+      url = "github:colemickens/tow-boot/alirock-h96maxv58";
+      inputs."nixpkgs".follows = "cmpkgs";
+    };
 
     # core system/inputs
     firefox-nightly = { url = "github:nix-community/flake-firefox-nightly"; inputs."nixpkgs".follows = "cmpkgs"; };
@@ -126,8 +130,12 @@
             path = ./hosts/openstick2/cross.nix;
             buildSys = "x86_64-linux";
           };
+          h96maxv58 = {
+            pkgs = inputs.cmpkgs;
+            path = ./hosts/h96maxv58/cross.nix;
+            buildSys = "x86_64-linux";
+          };
         };
-        "aarch64-linux" = { };
       };
       nixosConfigs = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues nixosConfigsEx));
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);
@@ -141,6 +149,7 @@
           openstick-abootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-abootimg;
           openstick-bootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-bootimg;
           openstick-rootfs = nixosConfigurations.openstick.config.mobile.outputs.generatedFilesystems.rootfs;
+          h96maxv58-uboot = inputs.tow-boot-alirock-h96maxv58.outputs.packages.aarch64-linux.radxa-rock5b.outputs.firmware;
         };
         riscv64-linux = { };
       };
@@ -289,7 +298,14 @@
                   (n: v: lib.nameValuePair "toplevel-${n}" toplevels.${n})
                   inputs.self.nixosConfigsEx.${system};
                 # c_extra = lib.mapAttrs' (n: lib.nameValuePair "extra-${n}") inputs.self.extra.${system};
-                c_extra = { inherit (extra.x86_64-linux) installer; };
+                c_extra = {
+                  inherit (extra.x86_64-linux)
+                    installer
+                    openstick-abootimg
+                    openstick-bootimg
+                    # h96maxv58-uboot
+                  ;
+                };
               in
               c_packages // c_devShells // c_toplevels // c_extra;
           })
