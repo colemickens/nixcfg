@@ -44,6 +44,10 @@ let runid = $"($env.GITHUB_RUN_ID)-($env.GITHUB_RUN_NUMBER)-($env.GITHUB_RUN_ATT
 let sshargs = [ "-i" "/run/secrets/github-colebot-sshkey" "-o" $"UserKnownHostsFile=($env.HOME)/.ssh/known_hosts" ]
 $env.GIT_SSH_COMMAND = $"ssh ($sshargs | str join ' ')"
 
+def "main extra" [] {
+  print -e "doing extra things"
+}
+
 def "main deploy" [host: string --activate: bool = true] {
   ls -al .latest | print -e
 
