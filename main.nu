@@ -138,7 +138,7 @@ def "main pkgup" [...pkglist] {
     let flakepkg = $"($pkgref).($pkgname)"
     let t = $"/tmp/commit-msg-($pkgname)"
     rm -f $t
-    ^nix-update [
+    ^nix-update ...[
       --flake
       --format
       --version "branch"
