@@ -222,7 +222,7 @@ in
               };
               "${out_aw25}" = {
                 scale = "1.0";
-                mode = "1920x1080@240Hz";
+                mode = "1920x1080@360Hz";
                 adaptive_sync = "enable";
                 subpixel = "rgb";
                 render_bit_depth = "10";
