@@ -13,6 +13,7 @@ in
     # ../../profiles/gui-i3.nix
 
     ../../profiles/addon-asus.nix
+    ../../profiles/addon-clouddev.nix
     ../../profiles/addon-devtools.nix
     ../../profiles/addon-gaming.nix
     ../../profiles/addon-laptop.nix
