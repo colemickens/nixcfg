@@ -294,18 +294,29 @@
               let
                 c_packages = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") inputs.self.packages.${system};
                 c_devShells = lib.mapAttrs' (n: lib.nameValuePair "devShell-${n}") inputs.self.devShells.${system};
-                c_toplevels = lib.mapAttrs'
-                  (n: v: lib.nameValuePair "toplevel-${n}" toplevels.${n})
-                  inputs.self.nixosConfigsEx.${system};
-                # c_extra = lib.mapAttrs' (n: lib.nameValuePair "extra-${n}") inputs.self.extra.${system};
-                c_extra = {
+                # c_toplevels = lib.mapAttrs'
+                #   (n: v: lib.nameValuePair "toplevel-${n}" toplevels.${n})
+                #   inputs.self.nixosConfigsEx.${system};
+                c_toplevels = lib.concatMapAttrs (n: v: { "toplevel-${n}" = v; })
+                  ({
+                    inherit (toplevels)
+                      xeep
+                      raisin
+                      zeph
+                      openstick
+                      openstick2/* h96maxv58 */
+                      installer
+                      ;
+                  });
+
+                c_extra = lib.concatMapAttrs (n: v: { "x86_64-linux-${n}" = v; }) ({
                   inherit (extra.x86_64-linux)
                     installer
                     openstick-abootimg
                     openstick-bootimg
                     # h96maxv58-uboot
-                  ;
-                };
+                    ;
+                });
               in
               c_packages // c_devShells // c_toplevels // c_extra;
           })
