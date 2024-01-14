@@ -92,9 +92,9 @@ rec {
     sans = { family = "Noto Sans"; package = pkgs.noto-fonts; };
     serif = { family = "Noto Serif"; package = pkgs.noto-fonts; };
 
-    # monospace = { family = "Iosevka Fixed"; package = pkgs.iosevka-bin; };
+    monospace = { family = "Iosevka Fixed"; package = pkgs.iosevka-bin; };
     # monospace = { family = "Iosevka Comfy Fixed"; package = pkgs.iosevka-comfy.comfy-fixed; };
-    monospace = { family = "Iosevka Comfy Motion"; package = pkgs.iosevka-comfy.comfy-motion; };
+    # monospace = { family = "Iosevka Comfy Motion"; package = pkgs.iosevka-comfy.comfy-motion; };
 
     fallback = { family = "Font Awesome 5 Free"; package = pkgs.font-awesome; };
     emoji = { family = "Noto Color Emoji"; package = pkgs.noto-fonts-color-emoji; };
