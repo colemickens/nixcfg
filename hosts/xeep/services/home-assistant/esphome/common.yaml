@@ -1,0 +1,24 @@
+wifi:
+  ssid: "GoonNet"
+  password: "REDACTED"
+
+  # manual_ip:
+  #   static_ip: 192.168.69.${ipnum}
+  #   gateway: 192.168.1.1
+  #   subnet: 255.255.0.0
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "ESPHome Fallback ${devname}"
+    password: "mickensfallback"
+
+captive_portal:
+
+api:
+  encryption:
+    key: "XCp344wm9pHVRgul/i5YQUgDQxJ5a05TkQIK28Ym/UU="
+
+logger:
+
+ota:
+
