@@ -58,6 +58,8 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
   };
 
+  cargoBuildFlags = ["-p" "rioterm"];
+
   nativeBuildInputs = [
     autoPatchelfHook
     cmake
