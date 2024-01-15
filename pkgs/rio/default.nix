@@ -44,13 +44,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "unstable-2023-12-19";
+  version = "unstable-2024-01-14";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
-    rev = "7f86ae6b841433348033b467f70fec5d7fb62ae0";
-    hash = "sha256-qiDXAAWZAz03fFHq6/VkZwG2tMJhJ+dIwuPv3tpWqjM=";
+    rev = "063f6f55fd16607f6932aed00cead3dd30436f4b";
+    hash = "sha256-PtQEqw5Xgyi+vqfXicaZkH7NptXXoFvXlI/y80zPAl4=";
   };
 
   # cargoHash = "sha256-jev4fMwCygVzvrkI1nSE5tx59nGqNKQUHCNHvkr9R90=";
@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
   };
 
-  cargoBuildFlags = ["-p" "rioterm"];
+  cargoBuildFlags = [ "-p" "rioterm" ];
 
   nativeBuildInputs = [
     autoPatchelfHook
