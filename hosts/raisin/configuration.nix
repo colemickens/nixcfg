@@ -40,9 +40,14 @@ in
     nixcfg.common.hostColor = "green";
     nixcfg.common.wifiWorkaround = true;
 
-    nix.gc = {
-      automatic = true;
-      persistent = true;
+    nix = {
+      gc = {
+        automatic = true;
+        persistent = true;
+      };
+      settings = {
+        max-jobs = lib.mkForce 2;
+      };
     };
 
     services.tailscale.useRoutingFeatures = "server";
