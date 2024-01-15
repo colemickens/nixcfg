@@ -1,54 +1,6 @@
 substitutions:
   ipnum: "106"
-  devname:  wp6_sw${ipnum}
+  device_name:  wp6_sw${ipnum}
+  friendly_name:  wp6_sw${ipnum}
 
 <<: !include wp6_sw_common.yaml
-
-### END COMMON
-
-# GOSUND WP6 NOTE: I don't think the LEDs are configured correctly.
-
-binary_sensor:
-  - platform: gpio
-    pin:
-      number: GPIO3
-      mode: INPUT_PULLUP
-    id: ${devname}_button
-    on_press:
-      - switch.toggle: ${devname}_relay
-
-switch:
-  - platform: gpio
-    id: ${devname}_relay_led
-    name: ${devname}_relay_led
-    pin:
-      number: GPIO12
-      inverted: true
-  - platform: gpio
-    id: ${devname}_relay
-    name: ${devname}_relay
-    pin: GPIO14
-    on_turn_on:
-      - switch.turn_off: ${devname}_relay_led
-    on_turn_off:
-      - switch.turn_on: ${devname}_relay_led
-
-status_led:
-  pin:
-    number: GPIO13
-    inverted: yes
-
-sensor:
-  - platform: wifi_signal
-    id: ${devname}_wifi_signal
-    name: ${devname}_wifi_signal
-    update_interval: 60s
-
-  - platform: uptime
-    id: ${devname}_uptime_val
-    name: ${devname}_uptime_val
-
-text_sensor:
-  - platform: version
-    id: ${devname}_esphome_version
-    name: ${devname}_esphome_version

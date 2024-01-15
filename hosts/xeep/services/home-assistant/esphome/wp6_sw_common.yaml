@@ -1,12 +1,26 @@
-### START COMMON (TODO extract, make sure interpolation happens after concat)
-### END COMMON
-
 <<: !include common.yaml
 
 esphome:
-  name: ${devname}
+  name: ${device_name}
   platform: ESP8266
   board: esp8285
+
+# <debug>
+  on_boot:
+    priority: 20
+    then:
+      - switch.toggle: "${device_name}_relay"
+
+web_server:
+  port: 9111
+
+debug:
+  update_interval: 5s
+
+
+logger:
+  level: debug
+# </debug>
 
 binary_sensor:
   - platform: gpio
@@ -51,6 +65,17 @@ sensor:
     name: "${friendly_name} Uptime"
     id: "${device_name}_uptime"
     update_interval: 60s
+  # <more debug>
+  - platform: debug
+    free:
+      name: "Heap Free"
+    fragmentation:
+      name: "Heap Fragmentation"
+    block:
+      name: "Heap Max Block"
+    loop_time:
+      name: "Loop Time"
+  # </more debug>
 
 text_sensor:
   - platform: version
