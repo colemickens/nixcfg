@@ -8,6 +8,10 @@
     networking.firewall.interfaces."tailscale0".allowedTCPPorts = [
       3000
     ];
+    environment.systemPackages = with pkgs; [
+      openvscode-server
+      # code-server # TODO: seems broken
+    ];
     services = {
       openvscode-server = {
         enable = true;
