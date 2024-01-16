@@ -54,9 +54,9 @@ rec {
   };
   inherit colorscheme;
 
-  bgcolor = "#000000";
-  # background = "${bgcolor} solid_color";
-  background =
+  bgcolor = "#00807F";
+  sway_background = "${bgcolor} solid_color";
+  swaylock_background =
     let
       gruvbox_rainbow = {
         image = (builtins.fetchurl {
@@ -66,7 +66,7 @@ rec {
         scaling = "fit";
         color = "282828";
       };
-      niw_glow = {
+      nix_glow = {
         image = (pkgs.fetchurl {
           url = "https://raw.githubusercontent.com/gytis-ivaskevicius/high-quality-nix-content/master/wallpapers/nix-glow.png";
           hash = "sha256-5zE0fRfudEW9eapx+AkaYArO6ECFrnrNHE+een7pC+E=";
@@ -75,7 +75,7 @@ rec {
         color = "19191A";
       };
     in
-    niw_glow;
+    nix_glow;
 
   # wallpaper = bg_gruvbox_rainbow;
 

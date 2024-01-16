@@ -154,7 +154,7 @@ in
         programs.swaylock = {
           enable = true;
           settings = {
-            inherit (prefs.background) image scaling color;
+            inherit (prefs.swaylock_background) image scaling color;
           };
         };
 
@@ -212,7 +212,7 @@ in
             };
             output = {
               "*" = let b = prefs.background; in {
-                background = "${b.image} ${b.scaling} #${b.color}";
+                background = prefs.sway_background;
               };
               "${out_aw34}" = {
                 scale = "1.0";
