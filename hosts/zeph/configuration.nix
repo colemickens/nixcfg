@@ -64,6 +64,10 @@ in
 
     time.timeZone = lib.mkForce null; # we're on the move
 
+    ## TODO: experimental
+    services.dbus.implementation = "broker";
+    ## END experimental
+
     services.zfs.autoScrub.pools = [ poolname ];
     fileSystems = {
       "/efi" = { fsType = "vfat"; device = "/dev/nvme0n1p1"; };
