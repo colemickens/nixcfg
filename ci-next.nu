@@ -53,7 +53,24 @@ def "main deploy" [host: string --activate: bool = true] {
 
   let out = open $".latest/result-x86_64-linux.toplevel-($host)"
   let addr = ^tailscale ip --4 $host
+  let xeep_addr = ^tailscale ip --4 xeep
   print -e $"deploy ($out) to ($addr)"
+
+  if $host == "openstick" {
+    do -i {
+      print -e "*force* rebooting openstick"
+      ^ssh ...[...$sshargs $"cole@($xeep_addr)" 
+        curl -d 'true' -X POST "http://192.168.1.166:9111/switch/wp6_sw102_relay/turn_off"]
+      sleep 2sec
+      ^ssh ...[...$sshargs $"cole@($xeep_addr)" 
+        curl -d 'true' -X POST "http://192.168.1.166:9111/switch/wp6_sw102_relay/turn_on"]
+      sleep 60sec
+      ^ssh ...[...$sshargs $"cole@($addr)"
+        uname -a] 
+      
+    }
+  }
+
 
   if (not $activate) {
     ^ssh ...$sshargs $"cole@($addr)" $"sudo nix build -j0 --no-link ($out)"
