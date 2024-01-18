@@ -1719,11 +1719,11 @@
         "zellij": "zellij_2"
       },
       "locked": {
-        "lastModified": 1705336777,
-        "narHash": "sha256-YiXAtCB1VWGYvTxnJkjmATHHyBH0NzdduYNA75jNswM=",
+        "lastModified": 1705545402,
+        "narHash": "sha256-HPQ1Rl29f17F+8I9+IUKTABB2AApxyDt6vWKyTvF4qc=",
         "owner": "a-kenji",
         "repo": "zellij-nix",
-        "rev": "2d6c474674e4da2dc7f5628b27ff277e99e3c0ab",
+        "rev": "3342748516cb106ff70ee377504c6fff4a1ae43b",
         "type": "github"
       },
       "original": {
@@ -1735,11 +1735,11 @@
     "zellij_2": {
       "flake": false,
       "locked": {
-        "lastModified": 1704732961,
-        "narHash": "sha256-TkfxqUHQhqifFfALAlHktnn/0SUksNoA+68XY7zAU/Q=",
+        "lastModified": 1705489928,
+        "narHash": "sha256-DP0bsCpU6JJGGChWbaD+W648mEc8N52/J8ZQXIYobJ4=",
         "owner": "zellij-org",
         "repo": "zellij",
-        "rev": "f6d57295a02393e26c74afb007bf673bcbb454e8",
+        "rev": "ba43a4cbc06fb63438f40d816120755a3166b876",
         "type": "github"
       },
       "original": {
