@@ -15,6 +15,9 @@
           alejandra
           nil
           nixpkgs-fmt
+
+          # misc tools that I probably only need from primary dev machine:
+          ventoy-full
         ];
         sessionVariables = {
           ENVRC_USE_FLAKE = 1;
