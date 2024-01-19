@@ -98,6 +98,8 @@ def "main update" [] {
   let url = $"git@github.com:colemickens/nixcfg"
   let dir = $"($ROOT)/nixcfg"
   mkdir $dir
+
+  print -e "::group::init"
   do {
     cd $dir
     git remote set-url origin $url
@@ -151,6 +153,7 @@ def "main update" [] {
 
     git push origin HEAD -f
   }
+  print -e "::endgroup"
 
   do {
     cd $"($ROOT)/nixcfg"
@@ -179,22 +182,26 @@ def "main update" [] {
     ] | str trim | from json
 
     for pkgname in $pkglist {
-      try {
-        ^nix-update ...[
-          --flake
-          --build
-          --commit
-          --format
-          --version branch
-          $pkgname
-        ]
-
-        git push origin HEAD
-        print -e $"pushed ($pkgname)"
-      } catch {
-        git restore $"./pkgs/($pkgname)"
-        print -e $"pkgup: ($pkgname): restoring/undoing"
+      print -e $"::group::pkgup ($pkgname)"
+      do {
+        try {
+          ^nix-update ...[
+            --flake
+            --build
+            --commit
+            --format
+            --version branch
+            $pkgname
+          ]
+  
+          git push origin HEAD
+          print -e $"pushed ($pkgname)"
+        } catch {
+          git restore $"./pkgs/($pkgname)"
+          print -e $"pkgup: ($pkgname): restoring/undoing"
+        }
       }
+      print -e "::endgroup"
     }
   }
 
@@ -208,25 +215,40 @@ def "main update" [] {
     print -e "nix-fast-build failed, but we cached something"
     exit -1
   }
-  ^ls -d result* | cachix push colemickens
+
+  print -e "::group::cachix push"
+  do {
+    ^ls -d result* | tee /dev/stderr | cachix push colemickens
+  }
+  print -e "::endgroup"
 
   # collect results
-  rm -rf .latest/
-  mkdir .latest/
-  rm -rf $gcrootdir
-  mkdir $gcrootdir
-  let results = (ls -l "result-*")
-  for res in $results {
-    let filename = $".latest/($res.name)"
-    print -e $"saving ($res.target) in ($filename)"
-    $res.target | save $filename
-    nix build -j0 --out-link $"($gcrootdir)/($res.name)" $res.target
+  print -e "::group::save results"
+  do {
+    rm -rf .latest/
+    mkdir .latest/
+    rm -rf $gcrootdir
+    mkdir $gcrootdir
+    let results = (ls -l "result-*")
+    for res in $results {
+      let filename = $".latest/($res.name)"
+      print -e $"saving ($res.target) in ($filename)"
+      $res.target | save $filename
+      nix build -j0 --out-link $"($gcrootdir)/($res.name)" $res.target
+    }
   }
-  ^git add -f ./.latest
-  ^git commit -m $".latest: latest build results ($runid)" ./.latest
-  git push origin HEAD
+  print -e "::endgroup"
+
+  print -e "::group::git commit-push"
+  do {
+    ^git add -f ./.latest
+    ^git commit -m $".latest: latest build results ($runid)" ./.latest
+    git push origin HEAD
+  }
+  print -e "::endgroup"
 
   ## NOW UPDATE BRANCHES
+  print -e "::group::git update branches"
   do {
     cd $"($ROOT)/nixpkgs/cmpkgs"
     git switch -C cmpkgs-next
@@ -255,6 +277,7 @@ def "main update" [] {
 
     git push origin HEAD -f
   }
+  print -e "::endgroup"
 }
 
 def main [] {
