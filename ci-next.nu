@@ -99,7 +99,7 @@ def "main update" [] {
   let dir = $"($ROOT)/nixcfg"
   mkdir $dir
 
-  print -e "::group::init"
+  print "::group::init"
   do {
     cd $dir
     git remote set-url origin $url
@@ -153,7 +153,7 @@ def "main update" [] {
 
     git push origin HEAD -f
   }
-  print -e "::endgroup"
+  print "::endgroup"
 
   do {
     cd $"($ROOT)/nixcfg"
@@ -201,7 +201,7 @@ def "main update" [] {
           print -e $"pkgup: ($pkgname): restoring/undoing"
         }
       }
-      print -e "::endgroup"
+      print "::endgroup"
     }
   }
 
@@ -216,14 +216,14 @@ def "main update" [] {
     exit -1
   }
 
-  print -e "::group::cachix push"
+  print "::group::cachix push"
   do {
     ^ls -d result* | tee /dev/stderr | cachix push colemickens
   }
-  print -e "::endgroup"
+  print "::endgroup"
 
   # collect results
-  print -e "::group::save results"
+  print "::group::save results"
   do {
     rm -rf .latest/
     mkdir .latest/
@@ -237,18 +237,18 @@ def "main update" [] {
       nix build -j0 --out-link $"($gcrootdir)/($res.name)" $res.target
     }
   }
-  print -e "::endgroup"
+  print "::endgroup"
 
-  print -e "::group::git commit-push"
+  print "::group::git commit-push"
   do {
     ^git add -f ./.latest
     ^git commit -m $".latest: latest build results ($runid)" ./.latest
     git push origin HEAD
   }
-  print -e "::endgroup"
+  print "::endgroup"
 
   ## NOW UPDATE BRANCHES
-  print -e "::group::git update branches"
+  print "::group::git update branches"
   do {
     cd $"($ROOT)/nixpkgs/cmpkgs"
     git switch -C cmpkgs-next
@@ -277,7 +277,7 @@ def "main update" [] {
 
     git push origin HEAD -f
   }
-  print -e "::endgroup"
+  print "::endgroup"
 }
 
 def main [] {
