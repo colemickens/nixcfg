@@ -28,6 +28,7 @@ in
     ../../mixins/libvirtd.nix
     ../../mixins/podman.nix
     ../../mixins/syncthing.nix
+    ../../mixins/trezor.nix
 
     ./zrepl.nix # TODO: make this device specific
 

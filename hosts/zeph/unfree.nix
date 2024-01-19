@@ -8,6 +8,9 @@
       "google-chrome-dev"
       # "ripcord"
 
+      # trezor-suite... is unfree?
+      "trezor-suite-23.12.3" # why's the version inside?
+
       ### gaming
       "steam"
       "steam-run"
