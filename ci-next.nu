@@ -58,6 +58,9 @@ def "main deploy" [host: string --activate: bool = true] {
 
   if $host == "openstick" {
     do -i {
+      ^ssh ...$sshargs $"cole@($addr)" "nix-env --profile ~/.local/state/nix/profiles/home-manager --delete-generations +1"
+      ^ssh ...$sshargs $"cole@($addr)" "sudo nix-collect-garbage -d"
+
       print -e "*force* rebooting openstick"
       ^ssh ...[...$sshargs $"cole@($xeep_addr)" 
         curl -d 'true' -X POST "http://192.168.1.166:9111/switch/wp6_sw102_relay/turn_off"]
@@ -85,6 +88,7 @@ def "main deploy" [host: string --activate: bool = true] {
     do -i {
       print -e "rebooting openstick"
       ^ssh ...$sshargs $"cole@($addr)" "nix-env --profile ~/.local/state/nix/profiles/home-manager --delete-generations +1"
+      ^ssh ...$sshargs $"cole@($addr)" "sudo nix-collect-garbage -d"
       ^ssh ...$sshargs $"cole@($addr)" "sudo reboot"
     }
   }
