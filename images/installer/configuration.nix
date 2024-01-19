@@ -94,6 +94,8 @@ in
     ../../profiles/interactive.nix
 
     ../../mixins/android.nix
+
+    ./unfree.nix
   ];
 
   config = {
@@ -140,6 +142,18 @@ in
 
     # BUG not sure if this works, at one point it was claimed it didn't...
     boot.initrd.systemd.enable = lib.mkForce false;
+
+    specialisation = {
+      "nvidia" = {
+        inheritParentConfig = true;
+        configuration = ({ pkgs, config, ...}: {
+          imports = [
+            ../../mixins/gfx-nvidia.nix
+            # ../../profiles/addon-ai.nix
+          ];
+        });
+      };
+    };
 
     system.disableInstallerTools = lib.mkOverride 10 false;
 
