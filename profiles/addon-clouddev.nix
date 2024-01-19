@@ -13,16 +13,16 @@
       # code-server # TODO: seems broken
     ];
     services = {
-      openvscode-server = {
-        enable = true;
-        user = "cole";
-        group = "cole";
-        host = "0.0.0.0"; # firewall protects us, we only allow in tailscale0
-        port = 7777;
-        extraEnvironment = {
-          NIX_PATH = "nixpkgs=/home/cole/code/nixpkgs/cmpkgs";
-        };
-      };
+      # openvscode-server = {
+      #   enable = true;
+      #   user = "cole";
+      #   group = "cole";
+      #   host = "0.0.0.0"; # firewall protects us, we only allow in tailscale0
+      #   port = 7777;
+      #   extraEnvironment = {
+      #     NIX_PATH = "nixpkgs=/home/cole/code/nixpkgs/cmpkgs";
+      #   };
+      # };
     };
   };
 }
