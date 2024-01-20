@@ -200,6 +200,7 @@ in
               # { criteria = { app_id = "mpv"; }; command = "sticky enable"; }
               # { criteria = { app_id = "mpv"; }; command = "floating enable"; }
               { criteria = { title = "^(.*) Indicator"; }; command = "floating enable"; }
+              { criteria = { title = "Picture-in-Picture"; }; command = "floating enable"; }
             ];
             startup = [
               { always = true; command = "${gsettings_auto}"; }
