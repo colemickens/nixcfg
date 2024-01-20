@@ -61,6 +61,12 @@ in
     nixcfg.common.kernelPatchHDR = true;
     nixcfg.common.addLegacyboot = false;
 
+    nix = {
+      settings = {
+        max-jobs = lib.mkForce 4;
+      };
+    };
+
     services.tailscale.useRoutingFeatures = "client";
 
     time.timeZone = lib.mkForce null; # we're on the move
