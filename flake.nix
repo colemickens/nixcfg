@@ -263,12 +263,15 @@
                         -net user,hostfwd=tcp::10022-:22 -net nic
                     '').outPath;
                   };
-                  cacheme = {
+                  test-installer-gui = {
                     type = "app";
-                    program = (pkgs_.writeShellScript "build-cache-me" ''
-                      ${nfb}/bin/nix-fast-build --flake '${inputs.self}#ciAttrs'
-                      ls 'result*' | cachix push colemickens
+                    program = (pkgs_.writeShellScript "test-vm" ''
+                      ${pkgs_.qemu}/bin/qemu-img create -f qcow2 /tmp/installer-vm-vdisk1 10G
+                      ${pkgs_.qemu}/bin/qemu-system-x86_64 -enable-kvm -m 2048 -boot d \
+                        -cdrom "${installerIso}" -hda /tmp/installer-vm-vdisk1 \
+                        -net user,hostfwd=tcp::10022-:22 -net nic
                     '').outPath;
+                    # TODO: add a variant that uses libvirt/virsh so we can test libvirt's funshit too
                   };
                 }
               );
@@ -311,7 +314,7 @@
 
                 c_extra = lib.concatMapAttrs (n: v: { "x86_64-linux-${n}" = v; }) ({
                   inherit (extra.x86_64-linux)
-                    installer
+                    # installer
                     openstick-abootimg
                     openstick-bootimg
                     # h96maxv58-uboot
