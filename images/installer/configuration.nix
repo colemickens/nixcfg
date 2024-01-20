@@ -93,6 +93,8 @@ in
     ../../profiles/core.nix
     ../../profiles/interactive.nix
 
+    ../../profiles/gui-cosmic.nix
+
     ../../mixins/android.nix
 
     ./unfree.nix
@@ -124,7 +126,7 @@ in
     boot.swraid.enable = lib.mkForce false;
 
     # TODO: remove when not debugging:
-    # isoImage.squashfsCompression = null;
+    isoImage.squashfsCompression = null;
 
     nixpkgs.hostPlatform.system = "x86_64-linux";
     
@@ -143,17 +145,17 @@ in
     # BUG not sure if this works, at one point it was claimed it didn't...
     boot.initrd.systemd.enable = lib.mkForce false;
 
-    specialisation = {
-      "nvidia" = {
-        inheritParentConfig = true;
-        configuration = ({ pkgs, config, ...}: {
-          imports = [
-            ../../mixins/gfx-nvidia.nix
-            # ../../profiles/addon-ai.nix
-          ];
-        });
-      };
-    };
+    # specialisation = {
+    #   "nvidia" = {
+    #     inheritParentConfig = true;
+    #     configuration = ({ pkgs, config, ...}: {
+    #       imports = [
+    #         ../../mixins/gfx-nvidia.nix
+    #         # ../../profiles/addon-ai.nix
+    #       ];
+    #     });
+    #   };
+    # };
 
     system.disableInstallerTools = lib.mkOverride 10 false;
 
