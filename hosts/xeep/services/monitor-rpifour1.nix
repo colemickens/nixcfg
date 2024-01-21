@@ -5,19 +5,19 @@ in
 {
   config = {
     systemd.services."justdoit-auto" = {
-        # disable basically all sandboxing for this service
-        path = [
-          pkgs.util-linux
-          config.system.build.justdoit
-        ];
+      # disable basically all sandboxing for this service
+      path = [
+        pkgs.util-linux
+        config.system.build.justdoit
+      ];
 
-        script = ''
+      script = ''
         if blkid | grep "NIXOS"; then
             exit 0
         else
             justdoit
         fi
-        '';
+      '';
     };
   };
 }

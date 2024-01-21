@@ -434,33 +434,33 @@ in
             ];
           }
 
-              # {
-              #   title = "Kitchen Table";
-              #   type = "entities";
-              #   entities = [
-              #     {
-              #       type = "section";
-              #       label = "Television";
-              #     }
-              #     {
-              #       name = "Sony Bravia 55";
-              #       entity = "media_player.braviatv";
-              #     }
-              #     {
-              #       name = "Dab Rig";
-              #       entity = _ent.dabrig;
-              #     }
-              #     {
-              #       type = "section";
-              #       label = "Cleo";
-              #     }
-              #     {
-              #       name = "Cleo Lamp";
-              #       entity = "switch.wp6_sw102_relay";
-              #       icon = "mdi:lightbulb";
-              #     }
-              #   ];
-              # }
+          # {
+          #   title = "Kitchen Table";
+          #   type = "entities";
+          #   entities = [
+          #     {
+          #       type = "section";
+          #       label = "Television";
+          #     }
+          #     {
+          #       name = "Sony Bravia 55";
+          #       entity = "media_player.braviatv";
+          #     }
+          #     {
+          #       name = "Dab Rig";
+          #       entity = _ent.dabrig;
+          #     }
+          #     {
+          #       type = "section";
+          #       label = "Cleo";
+          #     }
+          #     {
+          #       name = "Cleo Lamp";
+          #       entity = "switch.wp6_sw102_relay";
+          #       icon = "mdi:lightbulb";
+          #     }
+          #   ];
+          # }
 
           #     {
           #       title = "Bedroom";

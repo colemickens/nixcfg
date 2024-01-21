@@ -181,6 +181,22 @@ def "main nfb" [--download = false --cache = false buildable: string] {
   $res
 }
 
+def "main clean" [] {
+  nix build --out-link .outputs/toplevel-installer-standard ".#toplevels.installer-standard"
+  nix build --out-link .outputs/toplevel-installer-cosmic ".#toplevels.installer-cosmic"
+  nix build --out-link .outputs/toplevel-installer-nvidia-ai ".#toplevels.installer-nvidia-ai"
+  nix build --out-link .outputs/toplevel-installer-standard-aarch64 ".#toplevels.installer-standard-aarch64"
+  nix build --out-link .outputs/toplevel-xeep ".#toplevels.xeep"
+  nix build --out-link .outputs/toplevel-raisin ".#toplevels.raisin"
+  nix build --out-link .outputs/toplevel-zeph ".#toplevels.zeph"
+  nix build --out-link .outputs/toplevel-rock5b ".#toplevels.rock5b"
+  nix build --out-link .outputs/toplevel-h96maxv58 ".#toplevels.h96maxv58"
+
+  nix-env --profile ~/.local/state/nix/profiles/home-manager --delete-generations +1
+  sudo nix-collect-garbage -d
+  sudo nix-collect-garbage
+}
+
 def "main up" [...hosts] {
   main inputup
   main lockup

@@ -15,7 +15,7 @@ in
 
     home-manager.users.cole = { pkgs, config, ... }@hm:
       {
-        home.packages = with pkgs; [  ];
+        home.packages = with pkgs; [ ];
 
         home.sessionVariables = {
           # WLR_RENDERER = "vulkan";
@@ -45,6 +45,6 @@ in
         #   #     })
         #   #   ];
         # };
-    };
+      };
   };
 }

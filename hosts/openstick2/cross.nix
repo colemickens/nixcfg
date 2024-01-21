@@ -2,7 +2,7 @@
 
 {
   imports = [
-   ../openstick/cross.nix
+    ../openstick/cross.nix
   ];
 
   config = {

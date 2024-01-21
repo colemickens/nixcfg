@@ -26,6 +26,8 @@ jobs:
           - { "name": "raisin" }
           - { "name": "xeep" }
           - { "name": "openstick" }
+          - { "name": "rock5b" }
+          - { "name": "radxazero1" }
     runs-on: "raisin-default"
     needs: [ "update" ]
     steps:

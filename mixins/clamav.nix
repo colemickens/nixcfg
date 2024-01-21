@@ -8,12 +8,14 @@ let
     "downloads"
   ];
   all-normal-users = attrsets.filterAttrs (_username: config: config.isNormalUser) config.users.users;
-  all-sus-dirs = builtins.concatMap (dir:
-    attrsets.mapAttrsToList
-      (_username: config: config.home + "/" + dir)
-      all-normal-users
-  ) sus-user-dirs;
-  all-user-folders = attrsets.mapAttrsToList(_username: config: config.home) all-normal-users;
+  all-sus-dirs = builtins.concatMap
+    (dir:
+      attrsets.mapAttrsToList
+        (_username: config: config.home + "/" + dir)
+        all-normal-users
+    )
+    sus-user-dirs;
+  all-user-folders = attrsets.mapAttrsToList (_username: config: config.home) all-normal-users;
   all-system-folders = [
     "/boot"
     "/etc"
@@ -22,32 +24,33 @@ let
     "/usr"
   ];
   notify-all-users = pkgs.writeScript "notify-all-users-of-sus-file"
-  ''
-    #!/usr/bin/env bash
-    ALERT="Signature detected by clamav: $CLAM_VIRUSEVENT_VIRUSNAME in $CLAM_VIRUSEVENT_FILENAME"
-    # Send an alert to all graphical users.
-    for ADDRESS in /run/user/*; do
-        USERID=''${ADDRESS#/run/user/}
-       /run/wrappers/bin/sudo -u "#$USERID" DBUS_SESSION_BUS_ADDRESS="unix:path=$ADDRESS/bus" ${pkgs.libnotify}/bin/notify-send -i dialog-warning "Sus file" "$ALERT"
-    done
-  '';
-in {
-  security.sudo = {
-    extraConfig  =
     ''
-      clamav ALL = (ALL) NOPASSWD: SETENV: ${pkgs.libnotify}/bin/notify-send
+      #!/usr/bin/env bash
+      ALERT="Signature detected by clamav: $CLAM_VIRUSEVENT_VIRUSNAME in $CLAM_VIRUSEVENT_FILENAME"
+      # Send an alert to all graphical users.
+      for ADDRESS in /run/user/*; do
+          USERID=''${ADDRESS#/run/user/}
+         /run/wrappers/bin/sudo -u "#$USERID" DBUS_SESSION_BUS_ADDRESS="unix:path=$ADDRESS/bus" ${pkgs.libnotify}/bin/notify-send -i dialog-warning "Sus file" "$ALERT"
+      done
     '';
+in
+{
+  security.sudo = {
+    extraConfig =
+      ''
+        clamav ALL = (ALL) NOPASSWD: SETENV: ${pkgs.libnotify}/bin/notify-send
+      '';
   };
 
   services = {
     clamav = {
       daemon = {
-        enable  = true;
+        enable = true;
         settings = {
           OnAccessIncludePath = all-sus-dirs;
           OnAccessPrevention = false;
           OnAccessExtraScanning = true;
-          OnAccessExcludeUname =  "clamav";
+          OnAccessExcludeUname = "clamav";
           VirusEvent = "${notify-all-users}";
           User = "clamav";
         };

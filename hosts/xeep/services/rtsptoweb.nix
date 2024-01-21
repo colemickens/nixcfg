@@ -10,7 +10,7 @@ let
       http_login = "demo";
       http_password = "demo";
       http_port = ":8083";
-      ice_servers = [ "stun:stun.l.google.com:19302"];
+      ice_servers = [ "stun:stun.l.google.com:19302" ];
       rtsp_port = ":5541";
     };
     channel_defaults = {
@@ -25,7 +25,7 @@ let
             url = "rtsp://192.168.19.37/cam1";
             on_demand = false;
             debug = true;
-            audio =  true;
+            audio = true;
             status = 0;
           };
         };

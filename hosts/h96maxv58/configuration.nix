@@ -8,6 +8,7 @@ in
   imports = [
     ./inner.nix
     ./fs.nix
+
     # ../../profiles/interactive.nix
   ];
 

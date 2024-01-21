@@ -18,7 +18,7 @@ in
             name = "snapserver";
             mode = "server";
             port = "${builtins.toString tcp_listen_port}";
-          };   
+          };
         };
         librespot = {
           type = "librespot";

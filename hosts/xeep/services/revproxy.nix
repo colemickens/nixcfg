@@ -6,7 +6,7 @@ let
   xeep_ip4 = "100.72.11.62";
   raisin_ip4 = "100.112.194.64";
   jeffhyper_ip4 = "100.103.91.27";
-  
+
   domain = "cleo.cat";
   idomain = "x.cleo.cat";
   localCidr4 = "100.0.0.0/8";
@@ -91,7 +91,7 @@ let
       auth_basic_user_file /run/secrets/htpasswd;
     '';
   };
-  
+
   localVhost = {
     useACMEHost = "${domain}";
     forceSSL = true;
@@ -202,7 +202,7 @@ in
           proxyWebsockets = true;
         };
       };
-      
+
       # EXTERNAL, PROTECTED
       virtualHosts."sd.${domain}" = protectedVhost // {
         locations."/" = {

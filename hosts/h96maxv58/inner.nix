@@ -3,8 +3,9 @@
 let
   # eth_ip = "192.168.162.69/16";
   # kernel = pkgs.callPackage ./kernel.nix { };
-  kernel = pkgs.callPackage ./kernel.nix { };
-  kernelPackages = pkgs.linuxKernel.packagesFor kernel;
+  # kernel = pkgs.callPackage ./kernel.nix { };
+  # kernelPackages = pkgs.linuxKernel.packagesFor kernel;
+  kernelPackages = pkgs.linuxPackages_latest;
   hn = "h96maxv58";
 
   krnl = config.boot.kernelPackages.kernel;
@@ -12,6 +13,8 @@ in
 {
   imports = [
     ./unfree.nix
+
+    "${modulesPath}/installer/sd-card/sd-image-aarch64.nix"
 
     ../../profiles/user-cole.nix
     ../../mixins/common.nix

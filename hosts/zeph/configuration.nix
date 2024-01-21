@@ -22,7 +22,7 @@ in
     ../../mixins/gfx-debug.nix
 
     ../../mixins/android.nix
-    ../../mixins/clamav.nix
+    # ../../mixins/clamav.nix
     ../../mixins/ledger.nix
     ../../mixins/libvirt.nix
     ../../mixins/libvirtd.nix

@@ -32,3 +32,13 @@
 ## firefox disabled extensions
 - tridactyl?
 - about sync?
+
+
+---
+
+# more blog ideas:
+- yubikey for login
+- yubikey for luks
+- cosmic on nixos
+- radxa zero as a nixos kvm
+-  

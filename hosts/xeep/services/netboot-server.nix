@@ -37,7 +37,7 @@ let
     );
 
   netbootHosts = builtins.attrNames (inputs.self.netboots);
-  nfsfirmHosts = [];
+  nfsfirmHosts = [ ];
   # nfsfirmHosts = builtins.attrNames (inputs.self.nfsfirms);
 in
 {

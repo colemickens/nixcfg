@@ -18,6 +18,10 @@
       url = "github:colemickens/tow-boot/alirock-h96maxv58";
       inputs."nixpkgs".follows = "cmpkgs";
     };
+    tow-boot-radxa-zero = {
+      url = "github:colemickens/tow-boot/radxa-zero";
+      inputs."nixpkgs".follows = "cmpkgs";
+    };
 
     # core system/inputs
     firefox-nightly = { url = "github:nix-community/flake-firefox-nightly"; inputs."nixpkgs".follows = "cmpkgs"; };
@@ -70,6 +74,9 @@
 
     # experimental/unused:
     nix-rice = { url = "github:colemickens/nix-rice"; inputs."nixpkgs".follows = "cmpkgs"; };
+
+    # ai, nvidia, testing on slynux
+    nixified-ai = { url = "github:nixified-ai/flake"; };
   };
 
   # TODO: re-investigate nixConfig, maybe it will be less soul-crushing one day
@@ -88,7 +95,6 @@
       importPkgs = npkgs: extraCfg: (lib.genAttrs defaultSystems (system: import npkgs {
         inherit system;
         overlays = [ overlays.default ];
-        # config = let cfg = ({ allowAliases = false; } // extraCfg); in (builtins.trace cfg cfg);
         config = let cfg = ({ allowAliases = false; } // extraCfg); in cfg;
       }));
       pkgs = importPkgs inputs.cmpkgs { };
@@ -108,9 +114,22 @@
       nixosConfigsEx = {
         "x86_64-linux" = rec {
           # misc
-          installer = {
+          installer-standard = {
             pkgs = inputs.cmpkgs;
-            path = ./images/installer/configuration.nix;
+            path = ./images/installer/configuration-standard.nix;
+          };
+          installer-cosmic = {
+            pkgs = inputs.cmpkgs;
+            path = ./images/installer/configuration-cosmic.nix;
+          };
+          installer-nvidia-ai = {
+            pkgs = inputs.cmpkgs;
+            path = ./images/installer/configuration-nvidia-ai.nix;
+          };
+          installer-standard-aarch64 = {
+            pkgs = inputs.cmpkgs;
+            path = ./images/installer/configuration-standard-aarch64.nix;
+            buildSys = "x86_64-linux";
           };
 
           # actual machines:
@@ -135,6 +154,16 @@
             path = ./hosts/h96maxv58/cross.nix;
             buildSys = "x86_64-linux";
           };
+          radxazero1 = {
+            pkgs = inputs.cmpkgs;
+            path = ./hosts/radxazero1/cross.nix;
+            buildSys = "x86_64-linux";
+          };
+          rock5b = {
+            pkgs = inputs.cmpkgs;
+            path = ./hosts/rock5b/cross.nix;
+            buildSys = "x86_64-linux";
+          };
         };
       };
       nixosConfigs = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues nixosConfigsEx));
@@ -145,11 +174,17 @@
       extra = {
         # must be manually included in ciAttrs
         x86_64-linux = {
-          installer = nixosConfigurations.installer.config.system.build.isoImage;
+          installer-standard = nixosConfigurations.installer-standard.config.system.build.isoImage;
+          installer-cosmic = nixosConfigurations.installer-cosmic.config.system.build.isoImage;
+          installer-nvidia-ai = nixosConfigurations.installer-nvidia-ai.config.system.build.isoImage;
+          installer-standard-aarch64 = nixosConfigurations.installer-standard-aarch64.config.system.build.isoImage;
           openstick-abootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-abootimg;
           openstick-bootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-bootimg;
           openstick-rootfs = nixosConfigurations.openstick.config.mobile.outputs.generatedFilesystems.rootfs;
           h96maxv58-uboot = inputs.tow-boot-alirock-h96maxv58.outputs.packages.aarch64-linux.radxa-rock5b.outputs.firmware;
+          h96maxv58-sdimage = nixosConfigurations.h96maxv58.config.system.build.sdImage;
+          # rock5b -> UEFI build
+          radxazero-uboot = inputs.tow-boot-radxa-zero.outputs.packages.aarch64-linux.radxa-zero.outputs.firmware;
         };
         riscv64-linux = { };
       };
@@ -182,6 +217,8 @@
               };
               rio = prev.callPackage ./pkgs/rio {
                 withX11 = false;
+              };
+              pyamlboot = prev.callPackage ./pkgs/pyamlboot {
               };
               wezterm = prev.darwin.apple_sdk_11_0.callPackage ./pkgs/wezterm {
                 doCheck = false; # TODO consider removing
@@ -245,9 +282,8 @@
                 let
                   pkgs_ = pkgs.${system};
                   tfout = import ./cloud { inherit (inputs) terranix; pkgs = pkgs_; };
-                  installer = nixosConfigurations.installer.config.system.build;
+                  installer = nixosConfigurations.installer-cosmic.config.system.build;
                   installerIso = "${installer.isoImage}/iso/${installer.isoImage.isoName}";
-                  nfb = inputs.nix-fast-build.outputs.packages.${system}.default;
                 in
                 {
                   tf = { type = "app"; program = tfout.tf.outPath; };
@@ -306,9 +342,17 @@
                       xeep
                       raisin
                       zeph
+                      
+                      h96maxv58
                       openstick
-                      openstick2/* h96maxv58 */
-                      installer
+                      openstick2
+                      radxazero1
+                      rock5b
+                      
+                      installer-standard
+                      installer-cosmic
+                      installer-nvidia-ai
+                      installer-standard-aarch64
                       ;
                   });
 

@@ -198,7 +198,7 @@ in
           set -x 
           uptime_ms="$(cat /proc/uptime | cut -d ' ' -f 1)"
           uptime_ms="$(echo $uptime_ms | cut -d '.' -f 1)"
-          if [[ ''${uptime_ms} -gt ${ toString (60 * 5) } ]]; then 
+          if [[ ''${uptime_ms} -gt ${ toString (60 * 2) } ]]; then 
             echo "workaround_wifi_issue: trigger"
             ${pkgs.systemd}/bin/systemctl restart systemd-udev-trigger
           else

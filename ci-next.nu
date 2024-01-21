@@ -34,9 +34,14 @@ rm -f $ssh_hosts
   "100.112.194.64 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICFL0c9gNJWpGPyyQgWLbao6zSNMAMFDmwQQGHeOcVCU"
   # xeep
   "100.72.11.62 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFzCYIpoxOMwsHMKGTcpmtAuu+yTfkP6ZhaF/YjWAzFI"
+  # rock5b
+  "100.118.5.4 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJzIZu1IiwNvioKhw59hmH46SfUSDBUPqoVffCEQFDOY"
+  "100.118.5.4 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCZl8BBtLiyPbM2WXUn+RTTbeQdL3bTvrR+HBVxK1yTNzFP+BlSfJ7jLDXq+jjlXSZsLrOfDED7RVPFJUV/hm+RfXi5RCxaTqA8GovN2qCAR+ghwFdigN9cKXKWOXjDNZpECWpANHROBdkWSremPb/SSmF3r6j2P2L6HGi2mYGjHrAliNHjzSNByIgmc02HMOdEhyIRmYYFhv7HqB4RS8wrcyFSwbSSRmL3KpVokzel6dMjI13mBrNIZiHsA/tseqQg8h1bT1/Jjw2B9xDRdebx1ZFsRqAAguQP14HtkF4OtwgCwOf4RUf2pyK+MaameIce54/47W50Ru2qrqxPkM3tV2iKhwFkrWuUWhNuzAOQhnXACZNKs8Q17REB2Uua7ZO2XzE+Mzr0UUVVE5YCNh/JFtaBT8YGm7CcIj/8U81MeDAQcndXFNWzbSbk6V/60LEUDDuykLSSlPvvkTILTdHhr1JYhttev8owlFZjSWsQbxfBUIRtSSRtHwTd0dtPLMzc+tglKXwgXQoRlibrUk8a/pdZLoPmAT1sAygBnlMKtADY8vh6E+TbFz1meh7qVKfp5XxPlMiYhuxSOFzHtwTogRQoLsPSPe0eYp2tlMDK+X50HnhjpyUWw8iFBnt/ObwtglZlWgP5xrQbcVzqIo6bOeEGuBoF6D49SgBNH7H16Q=="
   # openstick
   "100.121.148.102 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDUYISzsaKXXf0OTojyzpbsA8M4p9+DjQ+PHZ2aLUrT6"
   "100.121.148.102 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCfYSjPHl9PERzgJ1G5iPj431YKO1PvBGfpGfvOQekAWcdnD0s7eY/cAfTnGZ9C3+z/5stXx6XCPL683rk8SacvHVENIpfccZUyXNsruRUDiVFvJrZLX9jZDbREPxIXHRI0pckcLp4S43+ogzkD9B+7yTBe3h48vA+DMubXT3Gk72z/HUSfOFeJqRb9HpNtMa8+F6MAjk1BOaL62IJBekI5qTJV/r+6eWxfq11hIs1ADuawhqu2/c6ATMD4ILb/qa4F+sPDCHlnxz+wlOkqyKRoyf48JLJE4jJx3Vo4Za90YOAOpTxz2NRQTMzMvtTiFxg2NDLF4AB2We1dzzlGiNayi2cZsD9xQxGvmzrZhk1JW17XIcH9e04gH9GafGH74t3v5Jkrri4Q4wHD3tri8MSgMctH9cQ2SzEEQHlu02vSGIaEGR/akXzixq1ymPNUy49IdxudNCKxjEFiO95WagTD+s/bn91ex633h8/ay9JS20omsXGJYYZIzmKOTS32um0uoIhh5FozKi+yKiZ8/ZiGgnm+gC7ZzIxK91Q1OR41wfTQZ+6ABsaCcGjpjH38loTiI3dy/duBYlwLFTGsiV1GbKJuhVDKuEKzm2TADxvnv6FffYQ0tvSFTz+UTEzqzxMaFLYhFoX28Eml1cwH7+4Z7/lB9HlU4xJQbcamTEDtKQ=="
+  # radxazero1
+  "100.99.105.68 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMfVuQZf/7s1ph1xsACPnbtW47qxpjYv7An99uFzgsMg"
 ] | save -a $ssh_hosts
 
 let runid = $"($env.GITHUB_RUN_ID)-($env.GITHUB_RUN_NUMBER)-($env.GITHUB_RUN_ATTEMPT)"
@@ -58,9 +63,6 @@ def "main deploy" [host: string --activate: bool = true] {
 
   if $host == "openstick" {
     do -i {
-      ^ssh ...$sshargs $"cole@($addr)" "nix-env --profile ~/.local/state/nix/profiles/home-manager --delete-generations +1"
-      ^ssh ...$sshargs $"cole@($addr)" "sudo nix-collect-garbage -d"
-
       print -e "*force* rebooting openstick"
       ^ssh ...[...$sshargs $"cole@($xeep_addr)" 
         curl -d 'true' -X POST "http://192.168.1.166:9111/switch/wp6_sw102_relay/turn_off"]
@@ -70,7 +72,10 @@ def "main deploy" [host: string --activate: bool = true] {
       sleep 60sec
       ^ssh ...[...$sshargs $"cole@($addr)"
         uname -a] 
-      
+
+      print -e $"cleanup ($host) ahead of time"
+      ^ssh ...$sshargs $"cole@($addr)" "nix-env --profile ~/.local/state/nix/profiles/home-manager --delete-generations +1"
+      ^ssh ...$sshargs $"cole@($addr)" "sudo nix-collect-garbage -d"
     }
   }
 
@@ -206,15 +211,16 @@ def "main update" [] {
   }
 
   ## NIX-FAST-BUILD
-
+  print "::group::nfb"
   try {
     nix-fast-build ...$nfbflags
   } catch {
     ls -l result* | print -e
     ^ls -d result* | cachix push colemickens
-    print -e "nix-fast-build failed, but we cached something"
+    print -e "::warning::nix-fast-build failed, but we cached something"
     exit -1
   }
+  print "::endgroup"
 
   print "::group::cachix push"
   do {
@@ -229,7 +235,25 @@ def "main update" [] {
     mkdir .latest/
     rm -rf $gcrootdir
     mkdir $gcrootdir
-    let results = (ls -l "result-*")
+    
+    print -e "DEBUGDEBUGDEBUG1111"
+    do -i { ls -l result-* }
+
+    print -e "DEBUGDEBUGDEBUG2222"
+    do -i { ls -la | print -e }
+
+    print -e "DEBUGDEBUGDEBUG2222"
+    do -i { ls -l "result-*" | print -e }
+
+    print -e "DEBUGDEBUGDEBUG3333"
+    do -i { ^ls -la }
+
+    print -e "DEBUGDEBUGDEBUG4444"
+    do -i { ^ls -l "result-*" }
+
+    print -e "DEBUGDEBUGDEBUG DONE"
+    
+    let results = (ls -l result-*)
     for res in $results {
       let filename = $".latest/($res.name)"
       print -e $"saving ($res.target) in ($filename)"

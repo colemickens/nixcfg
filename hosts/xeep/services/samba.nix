@@ -18,9 +18,9 @@
         deps = [ ];
       };
     };
-    
+
     # TODO: use systemd.tmpfiles for configuring the share dirs properly
-    
+
     services.samba = {
       enable = true;
       enableNmbd = true;

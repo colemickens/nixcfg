@@ -37,57 +37,57 @@ let
   # };
 in
 {
-    sources = ./grm.toml;
-    shareKey = ./...; # used for sharing across builder overlays? TODO??
-    hmConfig = {
-      home-manager.users."colebot" = { ... }: {
-        git = {
-          user.name = "colebot202305";
-          user.email = "cole.mickens+colebot@gmail.com";
-        };
-        # nix probably don't bother with since we pass it around to builders anyway?
-        sops-nix = (cylib.gen.sops-nix [
-          "id_rsa_colebot202305"
-          "equinix_apikey_colemickens202305"
-          "cachix_signing_key_colemickens"
-        ]);
+  sources = ./grm.toml;
+  shareKey = ./...; # used for sharing across builder overlays? TODO??
+  hmConfig = {
+    home-manager.users."colebot" = { ... }: {
+      git = {
+        user.name = "colebot202305";
+        user.email = "cole.mickens+colebot@gmail.com";
       };
+      # nix probably don't bother with since we pass it around to builders anyway?
+      sops-nix = (cylib.gen.sops-nix [
+        "id_rsa_colebot202305"
+        "equinix_apikey_colemickens202305"
+        "cachix_signing_key_colemickens"
+      ]);
     };
-    buildsets = {
-      "x86_64-linux" = [
-        "ciJobs.x86_64-linux.default"
-      ];
-    };
-    tags = [ "update" ];
-    conflict = [ "update" ];
-    actions = [
-      {
-        name = "update-inputs";
-        type = "update-flake-overrides";
-        # TODO: maybe there's a better key to select out of grm, or use grm as a lib?
-        srcDir = "/nixcfg/main";
-        overrides = {
-          "cmpkgs" = "/nixpkgs/cmpkgs"; # TODO append suffix?
-          "home-manager" = "/home-manager/cmhm"; # TODO: same
-        };
-      }
-      {
-        name = "update-pkgs";
-        type = "update-pkgs";
-        # TODO: maybe there's a better key to select out of grm, or use grm as a lib?
-        srcDir = "/nixcfg/main";
-        extraRunSteps = [
-          [ "main" "pkgup" ]
-        ];
-      }
-      {
-        type = "git-push";
-        dirs = [
-          "/nixpkgs/cmpkgs"
-          "/home-manager/cmhm"
-          "/nixcfg/main"
-        ];
-      }
+  };
+  buildsets = {
+    "x86_64-linux" = [
+      "ciJobs.x86_64-linux.default"
     ];
-  }
+  };
+  tags = [ "update" ];
+  conflict = [ "update" ];
+  actions = [
+    {
+      name = "update-inputs";
+      type = "update-flake-overrides";
+      # TODO: maybe there's a better key to select out of grm, or use grm as a lib?
+      srcDir = "/nixcfg/main";
+      overrides = {
+        "cmpkgs" = "/nixpkgs/cmpkgs"; # TODO append suffix?
+        "home-manager" = "/home-manager/cmhm"; # TODO: same
+      };
+    }
+    {
+      name = "update-pkgs";
+      type = "update-pkgs";
+      # TODO: maybe there's a better key to select out of grm, or use grm as a lib?
+      srcDir = "/nixcfg/main";
+      extraRunSteps = [
+        [ "main" "pkgup" ]
+      ];
+    }
+    {
+      type = "git-push";
+      dirs = [
+        "/nixpkgs/cmpkgs"
+        "/home-manager/cmhm"
+        "/nixcfg/main"
+      ];
+    }
+  ];
+}
 

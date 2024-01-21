@@ -1,0 +1,8 @@
+fastboot may or may not flash boot0,boot1 right 
+
+tow-boot doesn't seem to work flashed to boot0,boot1 even from linux
+but it doesn't burned to emmc where uefi seems to work
+
+so, just build the tow-boot build, burn to SD with an offset, call it doesn
+
+-> then you can boot aarch nixos installer and do normal gpt+efi install
