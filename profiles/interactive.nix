@@ -121,6 +121,8 @@
             age # need age (Age-keygen can do priv->pub)
             sbctl
 
+            nix-top
+
             binwalk
             cpio # needed?
             usbutils
