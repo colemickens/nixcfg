@@ -26,15 +26,15 @@
 
 rustPlatform.buildRustPackage (
   let
-    version = "unstable-2024-01-19";
-    rev = "90095c72f6702f88a0833df6ecbc16907bb75109";
+    version = "unstable-2024-01-22";
+    rev = "4c5a8c1804885d368bbb0e5413c1170a81526983";
     owner = "nushell";
     pname = "nushell";
     src = fetchFromGitHub {
       owner = owner;
       repo = pname;
       rev = rev;
-      sha256 = "sha256-MSgYlzd0CwscrV7jPE/lXxNqE6KyTCec4zX1XCsCFRk=";
+      sha256 = "sha256-gxwacxwtofFceYpUCsJ+/HZ2HccWF0nEZuKOFgDo4jI=";
     };
   in
   {
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (
     cargoLock = {
       lockFile = ./Cargo.lock;
       outputHashes = {
-        "reedline-0.28.0" = "sha256-Voc9yFpdcEE/EsxHmTO/w2I1jnXKPFg0qQiLQrx/hIM=";
+        "reedline-0.28.0" = "sha256-jAGxyRU/c5lbjXt8xjJvyZ2gr51tNw7V8bofWuIw9wY=";
       };
     };
 
