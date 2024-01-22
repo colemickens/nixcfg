@@ -117,7 +117,7 @@ in
           qpwgraph
 
           # communication
-          thunderbird
+          # thunderbird
           linphone
         ])
       ];
