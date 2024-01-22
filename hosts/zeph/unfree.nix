@@ -11,6 +11,8 @@
       # trezor-suite... is unfree?
       "trezor-suite-23.12.3" # why's the version inside?
 
+      "ngrok" # ugh, dev for work
+
       ### gaming
       "steam"
       "steam-run"
