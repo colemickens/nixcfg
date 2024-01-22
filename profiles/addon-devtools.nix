@@ -16,7 +16,8 @@
           nil
           nixpkgs-fmt
 
-          ngrok
+          # ngrok
+          cloudflared
 
           # misc tools that I probably only need from primary dev machine:
           ventoy-full
