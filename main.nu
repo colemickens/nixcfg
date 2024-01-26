@@ -45,7 +45,7 @@ def header [ color: string text: string spacer="▒": string ] {
   print -e $"(ansi $color)($text)(ansi reset)"
 }
 
-def "main deploy" [ host: string, --activate: bool = true, --toplevel: string = ""] {
+def "main deploy" [ host: string, --activate = true, --toplevel: string = ""] {
   let target = (tailscale ip --4 $host | str trim)
   let toplevel = if $toplevel != "" { $toplevel } else {
     let res = main nfb --cache true $".#toplevels.($host)"
@@ -163,7 +163,7 @@ def "main lockup" [] {
   ^nix ...[ flake lock --recreate-lock-file --commit-lock-file ]
 }
 
-def "main nfb" [--download: bool = false --cache: bool = false buildable: string] {
+def "main nfb" [--download = false --cache = false buildable: string] {
   header "light_yellow_reverse" $"nfb: ($buildable)"
   # TODO: input reidrection breaks error handling: https://github.com/nushell/nushell/issues/11153
   ^nix-fast-build ...$builder.nfbargs --flake $buildable out> /tmp/x
