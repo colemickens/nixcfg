@@ -14,9 +14,9 @@ wifi:
 
 captive_portal:
 
-api:
-  encryption:
-    key: !secret api_enc_key
+# api:
+#   encryption:
+#     key: !secret api_enc_key
 
 logger:
 
