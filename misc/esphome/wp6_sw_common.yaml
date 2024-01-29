@@ -6,10 +6,10 @@ esphome:
   board: esp8285
 
 # <debug>
-  on_boot:
-    priority: 20
-    then:
-      - switch.toggle: "${device_name}_relay"
+#   on_boot:
+#     priority: 20
+#     then:
+#       - switch.toggle: "${device_name}_relay"
 
 web_server:
   port: 9111

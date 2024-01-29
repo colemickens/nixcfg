@@ -1,7 +1,7 @@
 substitutions:
   ipnum: "102"
-  device_name:  wp6_sw${ipnum}
-  friendly_name:  wp6_sw${ipnum}
+  device_name:  wp6-sw-${ipnum}
+  friendly_name:  gosund-wp6-${ipnum}
 
 <<: !include wp6_sw_common.yaml
 

@@ -9,7 +9,7 @@ wifi:
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "ESPHome Fallback ${devname}"
+    ssid: "ESPHome Fallback ${friendly_name}"
     password: "mickensfallback"
 
 captive_portal:
