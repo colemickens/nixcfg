@@ -2,7 +2,7 @@
 
 let
   firefoxFlake = inputs.firefox-nightly.packages.${pkgs.stdenv.hostPlatform.system};
-  _firefox = firefoxFlake.firefox-nightly-bin;
+  _firefoxNightly = firefoxFlake.firefox-nightly-bin;
 
   # _chrome = pkgs.ungoogled-chromium;
 
@@ -84,7 +84,8 @@ in
       home.packages = lib.mkMerge [
         (lib.mkIf (pkgs.hostPlatform.system == "x86_64-linux") (with pkgs; [
           # browsers
-          _firefox
+          _firefoxNightly
+          pkgs.firefox-bin
           _chrome
 
           # audio/video
