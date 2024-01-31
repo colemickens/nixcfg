@@ -93,6 +93,7 @@ in
 
           # communication
           nheko
+          neochat
 
           # misc tools/utils
           # wine-wayland # oof TODO: nixpkgs wine packages need some ... attention
