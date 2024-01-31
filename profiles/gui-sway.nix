@@ -28,6 +28,10 @@ let
     accel_profile = "flat";
   };
 
+  _sway = lib.meta.hiPrio (pkgs.writeShellScriptBin "sway" ''
+    exec ${pkgs.sway}/bin/sway -Dlegacy-wl-drm
+  '');
+
   screenshot = pkgs.writeShellScript "screenshot.sh" ''
     mkdir -p "''${HOME}/screenshots"
     ${pkgs.grim}/bin/grim "''${HOME}/screenshots/screenshot-$(date '+%s').png"
@@ -120,7 +124,7 @@ in
         swaymsg = "${hm.config.wayland.windowManager.sway.package}/bin/swaymsg";
       in
       {
-        home.packages = with pkgs; [ waylock ];
+        home.packages = with pkgs; [ waylock _sway ];
 
         home.sessionVariables = {
           WLR_RENDERER = "vulkan";
