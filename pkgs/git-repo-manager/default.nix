@@ -35,15 +35,15 @@ let
 in
 rustPlatform.buildRustPackage (
   let
-    version = "unstable-2023-11-06";
-    rev = "b9051d5afb389be605b421053da6bdd6aaf347a1";
+    version = "unstable-2024-02-01";
+    rev = "ea7299a14788556536e00bf0311bd5f650ad2600";
     owner = "hakoerber";
     pname = "git-repo-manager";
     src = fetchFromGitHub {
       owner = owner;
       repo = pname;
       rev = rev;
-      hash = "sha256-NSr8wWBKwT8AOO/NSHhSnYeje2hkAyjtDwooa2RqTfE=";
+      hash = "sha256-pd7MZqQngyRuOLW67lx7a22pZrQjgTvNCDxzzHjxT8g=";
     };
   in
   {
