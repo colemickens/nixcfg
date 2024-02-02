@@ -1,0 +1,96 @@
+<<: !include common.yaml
+
+esphome:
+  name: ${device_name}
+  platform: ESP8266
+  board: esp8285
+
+# <debug>
+#   on_boot:
+#     priority: 20
+#     then:
+#       - switch.toggle: "${device_name}_relay"
+
+web_server:
+  port: 9111
+
+debug:
+  update_interval: 5s
+
+
+logger:
+  level: debug
+# </debug>
+
+script:
+  - id: turn_on_for_one_hour
+    then:
+      - switch.turn_on: "${device_name}_relay"
+      - delay: 3600s
+      - switch.turn_off: "${device_name}_relay"
+
+button:
+  - platform: template
+    name: "turn on for one hour"
+    on_press:
+      - script.execute: turn_on_for_one_hour
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO03
+      mode: INPUT_PULLUP
+      inverted: True
+    name: "${friendly_name} Button"
+    id: "${device_name}_button"
+    on_press:
+      - script.execute: turn_on_for_one_hour
+  - platform: status
+    name: "${friendly_name} Status"
+    id: "${device_name}_status"
+
+switch:
+  - platform: gpio
+    name: "${friendly_name} Relay"
+    id: "${device_name}_relay"
+    pin: GPIO14
+    on_turn_on:
+      - output.turn_on: led
+    on_turn_off:
+      - output.turn_off: led
+
+status_led:
+  pin:
+    number: GPIO13
+
+output:
+  - platform: gpio
+    pin: GPIO01
+    inverted: true
+    id: led
+
+sensor:
+  - platform: wifi_signal
+    name: "${friendly_name} WiFi signal"
+    id: "${device_name}_wifi_signal"
+    update_interval: 60s
+  - platform: uptime
+    name: "${friendly_name} Uptime"
+    id: "${device_name}_uptime"
+    update_interval: 60s
+  # <more debug>
+  - platform: debug
+    free:
+      name: "Heap Free"
+    fragmentation:
+      name: "Heap Fragmentation"
+    block:
+      name: "Heap Max Block"
+    loop_time:
+      name: "Loop Time"
+  # </more debug>
+
+text_sensor:
+  - platform: version
+    name: "${friendly_name} ESPHome Version"
+    id: "${device_name}_esphome_version"
