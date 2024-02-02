@@ -93,7 +93,8 @@ in
 
           # communication
           nheko
-          neochat
+          # neochat # hmm...
+          libsForQt5.kdeGear.neochat
 
           # misc tools/utils
           # wine-wayland # oof TODO: nixpkgs wine packages need some ... attention
