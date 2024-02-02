@@ -110,6 +110,20 @@ def "main deploy" [host: string --activate = true] {
       ^ssh ...$sshargs $"cole@($addr)" "sudo nix-collect-garbage -d"
     }
   }
+  if $host == "rock5b" {
+    do -i {
+      try {
+        print -e "rock5b-predeploy: check uname directly"
+        ^ssh ...[...$sshargs $"cole@($addr)"
+          uname -a] 
+      } catch {
+        print -e "rock5b-predeploy: couldn't uname; try reboot and wait"
+        ^ssh ...[...$sshargs $"cole@($xeep_addr)"
+          curl -d 'true' -X POST "http://192.168.1.193:9111/switch/wp_sw103_relay/turn_on"]
+        sleep 60sec;
+      }
+    }
+  }
 
 
   if (not $activate) {
@@ -120,7 +134,6 @@ def "main deploy" [host: string --activate = true] {
   ^ssh ...$sshargs $"cole@($addr)" $"sudo nix build -j0 --no-link --profile /nix/var/nix/profiles/system ($out)"
   ^ssh ...$sshargs $"cole@($addr)" $"sudo ($out)/bin/switch-to-configuration switch"
 
-  # TODO: better way to do per-host post-deploy commands
   if $host == "openstick" {
     do -i {
       print -e "openstick-predeploy: garbage collect"
