@@ -28,6 +28,7 @@ jobs:
           - { "name": "rock5b" }
           - { "name": "radxazero1" }
           - { "name": "openstick" }
+          - { "name": "slynux" }
     runs-on: "raisin-default"
     needs: [ "update" ]
     steps:

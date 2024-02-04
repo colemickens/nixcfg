@@ -29,7 +29,7 @@ rm -f $ssh_hosts
   # zeph
   "100.109.239.83 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA8xzm2cJvb/6bLBjVaMsFHc50BOUQdcQv7EZgvk8QR8"
   # slynux
-  "100.85.243.118 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICWb7+dSGw/St8AGhtoSOlnDIfTjQGEJ6mWuOv49hFpA"
+  "100.81.167.123 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKtqJfWwWtcxeWHKwjbY34VHnp79PGcjS9g21WRuJKdo"
   # raisin
   "100.112.194.64 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICFL0c9gNJWpGPyyQgWLbao6zSNMAMFDmwQQGHeOcVCU"
   # xeep
@@ -95,8 +95,7 @@ def "main deploy" [host: string --activate = true] {
     let sw_nm = if $host == "openstick" { "wp6_sw102_relay" } else { "wp6_sw105_relay" }
     try {
       print -e "predeploy: check uname directly"
-      ^ssh ...[...$sshargs $"cole@($addr)"
-        uname -a] 
+      ^ssh ...[...$sshargs $"cole@($addr)" uname -a] 
     } catch {
       print -e "predeploy: couldn't uname; force reboot and wait"
       ^ssh ...[...$sshargs $"cole@($xeep_addr)" 
@@ -104,9 +103,8 @@ def "main deploy" [host: string --activate = true] {
       sleep 2sec
       ^ssh ...[...$sshargs $"cole@($xeep_addr)" 
         curl -d 'true' -X POST $"http://($sw_ip):9111/switch/($sw_nm)/turn_on"]
-      sleep 60sec
-      ^ssh ...[...$sshargs $"cole@($addr)"
-        uname -a]
+      sleep 75sec
+      ^ssh ...[...$sshargs $"cole@($addr)" uname -a]
     }
   }
 
@@ -118,6 +116,11 @@ def "main deploy" [host: string --activate = true] {
   ^ssh ...$sshargs $"cole@($addr)" $"sudo nix build -j0 --no-link --profile /nix/var/nix/profiles/system ($out)"
   ^ssh ...$sshargs $"cole@($addr)" $"sudo ($out)/bin/switch-to-configuration switch"
 
+  if $host == "openstick" {
+    ^ssh ...$sshargs $"cole@($addr)" "sudo reboot"
+    sleep 60sec;
+    ^ssh ...[...$sshargs $"cole@($addr)" uname -a]
+  }
   if $host == "openstick" {
     do -i {
       print -e "openstick-predeploy: reboot"

@@ -219,8 +219,7 @@
               rio = prev.callPackage ./pkgs/rio {
                 withX11 = false;
               };
-              pyamlboot = prev.callPackage ./pkgs/pyamlboot {
-              };
+              pyamlboot = prev.callPackage ./pkgs/pyamlboot { };
               wezterm = prev.darwin.apple_sdk_11_0.callPackage ./pkgs/wezterm {
                 doCheck = false; # TODO consider removing
                 inherit (prev.darwin.apple_sdk_11_0.frameworks)
@@ -340,16 +339,17 @@
                 c_toplevels = lib.concatMapAttrs (n: v: { "toplevel-${n}" = v; })
                   ({
                     inherit (toplevels)
-                      xeep
                       raisin
+                      slynux
+                      xeep
                       zeph
-                      
+
                       h96maxv58
                       openstick
                       openstick2
                       radxazero1
                       rock5b
-                      
+
                       installer-standard
                       installer-cosmic
                       installer-nvidia-ai

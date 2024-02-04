@@ -67,6 +67,10 @@ in
       };
     };
 
+    environment.systemPackages = with pkgs; [
+      esphome
+    ];
+
     services.tailscale.useRoutingFeatures = "client";
 
     time.timeZone = lib.mkForce null; # we're on the move

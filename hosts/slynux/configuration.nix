@@ -38,6 +38,8 @@ in
     # nixcfg.common.hostColor = "#00a2ff";
     nixcfg.common.hostColor = "blue";
 
+    networking.wireless.iwd.enable = true;
+
     nix.gc = {
       automatic = true;
       persistent = true;

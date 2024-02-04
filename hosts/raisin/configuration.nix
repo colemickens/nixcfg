@@ -80,7 +80,7 @@ in
     swapDevices = [{ device = "/dev/disk/by-partlabel/${swappart}"; }];
 
     boot = {
-      kernelModules = [ "iwlwifi" "ideapad_laptop" ];
+      kernelModules = [ "iwlwifi" "ideapad_laptop" "tp_smapi" ];
       kernelParams = [
         "ideapad_laptop.allow_v4_dytc=1"
         # "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 1024 * 8)}"
