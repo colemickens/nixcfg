@@ -95,7 +95,7 @@ def "main deploy" [host: string --activate = true] {
     let sw_nm = if $host == "openstick" { "wp6_sw102_relay" } else { "wp6_sw105_relay" }
     try {
       print -e "predeploy: check uname directly"
-      ^ssh ...[...$sshargs $"cole@($addr)" uname -a] 
+      ^timeout 15 ssh ...[...$sshargs $"cole@($addr)" uname -a] 
     } catch {
       print -e "predeploy: couldn't uname; force reboot and wait"
       ^ssh ...[...$sshargs $"cole@($xeep_addr)" 
@@ -104,7 +104,8 @@ def "main deploy" [host: string --activate = true] {
       ^ssh ...[...$sshargs $"cole@($xeep_addr)" 
         curl -d 'true' -X POST $"http://($sw_ip):9111/switch/($sw_nm)/turn_on"]
       sleep 75sec
-      ^ssh ...[...$sshargs $"cole@($addr)" uname -a]
+      print -e "predeploy: couldn't uname; force reboot and wait... now uname-check"
+      ^timeout 15 ssh ...[...$sshargs $"cole@($addr)" uname -a]
     }
   }
 
