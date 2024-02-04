@@ -49,7 +49,7 @@ def "main deploy" [ host: string, --activate = true, --toplevel: string = ""] {
   let target = (tailscale ip --4 $host | str trim)
   let toplevel = if $toplevel != "" { $toplevel } else {
     let res = main nfb --cache true $".#toplevels.($host)"
-    $res | find $host | first
+    $res | find $host | ansi strip | first
   }
   header "light_purple_reverse" $"deploy: start: ($host)"
 
@@ -206,7 +206,7 @@ def "main up" [...hosts] {
   main nfb --download true ".#devShells.x86_64-linux"
 
   let all = main nfb --cache true ".#checks.x86_64-linux"
-  main deploy zeph --toplevel ($all | find zeph | first)
+  main deploy zeph --toplevel ($all | find zeph | ansi strip | first)
 }
 
 def main [] { main up }
