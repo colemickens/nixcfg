@@ -8,8 +8,11 @@
     networking.firewall.interfaces."tailscale0".allowedTCPPorts = [
       3000
     ];
-    environment.systemPackages = with pkgs; [
-      openvscode-server
+    environment.systemPackages = [
+      (pkgs.writeShellScriptBin "start-openvscode-server" ''
+        port="$1"
+        "${pkgs.openvscode-server}" --accept-server-license-terms --host=0.0.0.0 --port=$1
+      '')
       # code-server # TODO: seems broken
     ];
     services = {
