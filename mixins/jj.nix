@@ -14,6 +14,9 @@
           ui = {
             color = "always";
           };
+          core = {
+            fsmonitor = "watchman";
+          };
         };
       };
     };
