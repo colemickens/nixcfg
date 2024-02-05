@@ -1,19 +1,19 @@
 { pkgs, config, inputs, ... }:
 
 let
-  yuzu_noQtWeb =
-    (pkgs.yuzuPackages.early-access.override { qtwebengine = null; }).overrideAttrs (old: {
-      cmakeFlags = old.cmakeFlags ++ [ "-DYUZU_USE_QT_WEB_ENGINE=OFF" ];
-    });
+  # yuzu_noQtWeb =
+  #   (pkgs.yuzuPackages.early-access.override { qtwebengine = null; }).overrideAttrs (old: {
+  #     cmakeFlags = old.cmakeFlags ++ [ "-DYUZU_USE_QT_WEB_ENGINE=OFF" ];
+  #   });
 
   # yuzu_noQtWeb2 =
   #   (pkgs.yuzuPackages.early-access.override { qtwebengine = null; }).overrideAttrs (old: {
   #     cmakeFlags = old.cmakeFlags ++ [ "-DYUZU_USE_QT_WEB_ENGINE=OFF" ];
   #   });
 
-  _yuzu = yuzu_noQtWeb;
+  # _yuzu = yuzu_noQtWeb;
   # _yuzu = yuzu_noQtWeb2;
-  # _yuzu = pkgs.yuzuPackages.early-access;
+  _yuzu = pkgs.yuzuPackages.early-access;
 
   vkdevice = "1002:73ef";
 in
@@ -79,7 +79,7 @@ in
         goverlay
 
         dolphin-emu # gamecube emu
-        # _yuzu
+        _yuzu
         xemu
 
         airshipper
