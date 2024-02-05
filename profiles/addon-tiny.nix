@@ -15,7 +15,7 @@
     documentation.nixos.enable = false;
 
     # TODO: not sure about this one
-    fonts.fontconfig.enable = false;
+    # fonts.fontconfig.enable = false;
 
     nixpkgs.overlays = [
       (final: prev: {
