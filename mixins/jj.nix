@@ -17,6 +17,10 @@
           core = {
             fsmonitor = "watchman";
           };
+          git = {
+            # abandon-unreachable-commits = true; # ? TODO: not sure if better to do manually
+            push-branch-prefix = "colemickens/push-";
+          };
         };
       };
     };
