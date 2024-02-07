@@ -79,7 +79,7 @@ in
         goverlay
 
         dolphin-emu # gamecube emu
-        _yuzu
+        # _yuzu
         xemu
 
         airshipper
