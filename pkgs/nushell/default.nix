@@ -1,41 +1,41 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  runCommand,
-  rustPlatform,
-  openssl,
-  zlib,
-  zstd,
-  pkg-config,
-  python3,
-  xorg,
-  libiconv,
-  Libsystem,
-  AppKit,
-  Security,
-  nghttp2,
-  libgit2,
-  doCheck ? true,
-  withDefaultFeatures ? true,
-  additionalFeatures ? (p: p),
-  testers,
-  nushell,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, runCommand
+, rustPlatform
+, openssl
+, zlib
+, zstd
+, pkg-config
+, python3
+, xorg
+, libiconv
+, Libsystem
+, AppKit
+, Security
+, nghttp2
+, libgit2
+, doCheck ? true
+, withDefaultFeatures ? true
+, additionalFeatures ? (p: p)
+, testers
+, nushell
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (
   let
     version = "unstable-2024-02-08";
-    rev = "84517138bcc09d3fbc6b9844960768be399f5b4e";
+    rev = "e7f1bf85350b4c2cf3e89ef39434b73c381730c8";
     owner = "nushell";
     pname = "nushell";
     src = fetchFromGitHub {
       owner = owner;
       repo = pname;
       rev = rev;
-      sha256 = "sha256-V9fW8+arTXIox72zmaU9N9Zzb3owupIyKLuYuFRa2TU=";
+      sha256 = "sha256-vSVHiDH3E8lXExGZC6r5XSJWJuUxGcu4cY2pWU/kZmQ=";
     };
   in
   {
