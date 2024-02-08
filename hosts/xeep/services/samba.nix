@@ -1,12 +1,17 @@
-{ pkgs, lib, config, inputs, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}:
 
 {
   config = {
-    environment.systemPackages = with pkgs; [
-    ];
+    environment.systemPackages = with pkgs; [ ];
     networking.firewall = {
       allowPing = true;
-      extraCommands = ''iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns'';
+      extraCommands = "iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns";
     };
     # TODO: convert this to a samba pre-start script instead
     system.activationScripts = {

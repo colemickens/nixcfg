@@ -1,4 +1,9 @@
-{ pkgs, config, inputs, ... }:
+{
+  pkgs,
+  config,
+  inputs,
+  ...
+}:
 
 let
   # yuzu_noQtWeb =
@@ -22,7 +27,14 @@ in
     networking.firewall = {
       # https://portforward.com/halo-infinite/
       allowedTCPPorts = [ 3074 ];
-      allowedUDPPorts = [ 88 500 3074 2075 3544 4500 ];
+      allowedUDPPorts = [
+        88
+        500
+        3074
+        2075
+        3544
+        4500
+      ];
     };
     hardware.opengl.extraPackages = [ pkgs.gamescope ];
     hardware.opengl.driSupport32Bit = true;
@@ -69,30 +81,32 @@ in
       # TODO: fork? test? try with regular xbox controller
       # xboxdrv.enable = true; # userspace xbox driver
     };
-    home-manager.users.cole = { pkgs, config, ... }@hm: {
-      home.packages = with pkgs; [
-        evtest # misc input debug
-        linuxConsoleTools # joystick testing
-        protonup-ng # latest and greatest proton
+    home-manager.users.cole =
+      { pkgs, config, ... }@hm:
+      {
+        home.packages = with pkgs; [
+          evtest # misc input debug
+          linuxConsoleTools # joystick testing
+          protonup-ng # latest and greatest proton
 
-        vkbasalt
-        goverlay
+          vkbasalt
+          goverlay
 
-        dolphin-emu # gamecube emu
-        # _yuzu
-        xemu
+          dolphin-emu # gamecube emu
+          # _yuzu
+          xemu
 
-        airshipper
+          airshipper
 
-        # okay, gotta see what these crazy kids are building...
-        # TODO: check out vinegar whenever it ... gets merged into nixpkgs
-        grapejuice
-      ];
-      programs = {
-        mangohud = {
-          enable = true;
+          # okay, gotta see what these crazy kids are building...
+          # TODO: check out vinegar whenever it ... gets merged into nixpkgs
+          grapejuice
+        ];
+        programs = {
+          mangohud = {
+            enable = true;
+          };
         };
       };
-    };
   };
 }

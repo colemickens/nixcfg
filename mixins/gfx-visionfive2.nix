@@ -1,4 +1,10 @@
-{ pkgs, lib, config, inputs, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}:
 
 let
   _nvtop = pkgs.nvtop.override { nvidia = false; };
@@ -9,8 +15,14 @@ in
     nixpkgs.overlays = [
       (final: prev: {
         mesa = prev.mesa.override {
-          galliumDrivers = [ "zink" "swrast" ];
-          vulkanDrivers = [ "imagination-experimental" "swrast" ];
+          galliumDrivers = [
+            "zink"
+            "swrast"
+          ];
+          vulkanDrivers = [
+            "imagination-experimental"
+            "swrast"
+          ];
         };
         eglPlatforms = [ "wayland" ];
       })

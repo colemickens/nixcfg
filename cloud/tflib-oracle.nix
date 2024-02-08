@@ -6,16 +6,34 @@ let
   tf_oci_version = "4.74.0";
 
   lib = pkgs.lib;
-  mapAttrs' = f: set:
-    builtins.listToAttrs (map (attr: f attr set.${attr}) (builtins.attrNames set));
-  mapAttrsToList = f: attrs:
-    map (name: f name attrs.${name}) (builtins.attrNames attrs);
+  mapAttrs' = f: set: builtins.listToAttrs (map (attr: f attr set.${attr}) (builtins.attrNames set));
+  mapAttrsToList = f: attrs: map (name: f name attrs.${name}) (builtins.attrNames attrs);
 
   shapes = {
-    freetier_a1flex_mini = { name = "VM.Standard.A1.Flex"; config = { ocpus = 1; mem = 6; }; };
-    freetier_a1flex_half = { name = "VM.Standard.A1.Flex"; config = { ocpus = 2; mem = 12; }; };
-    freetier_a1flex_full = { name = "VM.Standard.A1.Flex"; config = { ocpus = 4; mem = 24; }; };
-    freetier_e2_micro = { name = "VM.Standard.E2.1.Micro"; };
+    freetier_a1flex_mini = {
+      name = "VM.Standard.A1.Flex";
+      config = {
+        ocpus = 1;
+        mem = 6;
+      };
+    };
+    freetier_a1flex_half = {
+      name = "VM.Standard.A1.Flex";
+      config = {
+        ocpus = 2;
+        mem = 12;
+      };
+    };
+    freetier_a1flex_full = {
+      name = "VM.Standard.A1.Flex";
+      config = {
+        ocpus = 4;
+        mem = 24;
+      };
+    };
+    freetier_e2_micro = {
+      name = "VM.Standard.E2.1.Micro";
+    };
   };
 
   canonical_ubuntu_20_04__aarch64__20210922_0 = {
@@ -76,7 +94,11 @@ let
   };
 
   # sshpubkey = (builtins.elemAt (import ../data/sshkeys.nix) 0);
-  sshpubkey = (builtins.elemAt (import ../profiles/user-cole.nix).config.users.extraUsers."cole".openssh.authorizedKeys.keys 0);
+  sshpubkey = (
+    builtins.elemAt
+      (import ../profiles/user-cole.nix).config.users.extraUsers."cole".openssh.authorizedKeys.keys
+      0
+  );
 
   mkVm = oracle_config: name: v: {
     output."${oracle_config.uniqueid}_${name}_public_ip_addr".value = "\${oci_core_instance.${oracle_config.uniqueid}_${name}.public_ip}";
@@ -86,52 +108,74 @@ let
     # TODO: write startup initrd service that can initialize the ZFS as we wish
 
     resource.oci_core_instance."${oracle_config.uniqueid}_${name}" = [
-      ({
-        provider = "oci.${oracle_config.uniqueid}";
-        availability_domain = "\${data.oci_identity_availability_domain.${oracle_config.uniqueid}_default_ad.name}";
-        compartment_id = oracle_config.compartment_ocid;
-        create_vnic_details = [
-          {
-            assign_private_dns_record = true;
-            assign_public_ip = true;
-            display_name = "PrimaryVnic";
-            hostname_label = "${name}";
-            subnet_id = "\${oci_core_subnet.${oracle_config.uniqueid}_default_subnet.id}";
-          }
-        ];
-        display_name = "${name}";
-        metadata = {
-          ssh_authorized_keys = sshpubkey;
-        } // (if !(builtins.hasAttr "payload" v) then { } else {
-          user_data = tfutil.userdata_b64 v.payload;
-        });
-        shape = v.shape.name;
-        shape_config = if (!builtins.hasAttr "config" v.shape) then [ ] else [{
-          memory_in_gbs = v.shape.config.mem;
-          ocpus = v.shape.config.ocpus;
-        }];
-        source_details =
-          if !(builtins.hasAttr "image" v) then [
-            # TODO: this is a dummy since it seems like oracle bitches if you dont specify a boot source img id
-            { source_id = images.canonical_ubuntu_20_04__aarch64.${oracle_config.region}; source_type = "image"; }
-          ] else [{
-            source_id = v.image."${oracle_config.region}";
-            source_type = "image";
-          }];
-        timeouts = [{
-          create = "60m";
-        }];
-      } // (if !(builtins.hasAttr "ipxe_url" v) then { } else {
-        ipxe_script = ''
-          #!ipxe
-          show dns
-          set dns 1.1.1.1
-          ifstat
-          dhcp net0
+      (
+        {
+          provider = "oci.${oracle_config.uniqueid}";
+          availability_domain = "\${data.oci_identity_availability_domain.${oracle_config.uniqueid}_default_ad.name}";
+          compartment_id = oracle_config.compartment_ocid;
+          create_vnic_details = [
+            {
+              assign_private_dns_record = true;
+              assign_public_ip = true;
+              display_name = "PrimaryVnic";
+              hostname_label = "${name}";
+              subnet_id = "\${oci_core_subnet.${oracle_config.uniqueid}_default_subnet.id}";
+            }
+          ];
+          display_name = "${name}";
+          metadata =
+            {
+              ssh_authorized_keys = sshpubkey;
+            }
+            // (
+              if !(builtins.hasAttr "payload" v) then { } else { user_data = tfutil.userdata_b64 v.payload; }
+            );
+          shape = v.shape.name;
+          shape_config =
+            if (!builtins.hasAttr "config" v.shape) then
+              [ ]
+            else
+              [
+                {
+                  memory_in_gbs = v.shape.config.mem;
+                  ocpus = v.shape.config.ocpus;
+                }
+              ];
+          source_details =
+            if !(builtins.hasAttr "image" v) then
+              [
+                # TODO: this is a dummy since it seems like oracle bitches if you dont specify a boot source img id
+                {
+                  source_id = images.canonical_ubuntu_20_04__aarch64.${oracle_config.region};
+                  source_type = "image";
+                }
+              ]
+            else
+              [
+                {
+                  source_id = v.image."${oracle_config.region}";
+                  source_type = "image";
+                }
+              ];
+          timeouts = [ { create = "60m"; } ];
+        }
+        // (
+          if !(builtins.hasAttr "ipxe_url" v) then
+            { }
+          else
+            {
+              ipxe_script = ''
+                #!ipxe
+                show dns
+                set dns 1.1.1.1
+                ifstat
+                dhcp net0
 
-          chain --autofree --replace ${v.ipxe_url}
-        '';
-      }))
+                chain --autofree --replace ${v.ipxe_url}
+              '';
+            }
+        )
+      )
     ];
   };
 
@@ -140,109 +184,125 @@ in
 {
   inherit images shapes;
 
-  tfplan = oracle_config: vms:
-    mergeListToAttrs ([ ]
+  tfplan =
+    oracle_config: vms:
+    mergeListToAttrs (
+      [ ]
       ++ (lib.mapAttrsToList (mkVm oracle_config) vms)
-      ++ [{
-      terraform = {
-        required_providers = {
-          oci = {
-            source = "oracle/oci";
-            version = tf_oci_version;
+      ++ [
+        {
+          terraform = {
+            required_providers = {
+              oci = {
+                source = "oracle/oci";
+                version = tf_oci_version;
+              };
+            };
           };
-        };
-      };
-      locals = { };
-      provider = {
-        oci = [{
-          alias = oracle_config.uniqueid;
-          fingerprint = oracle_config.fingerprint;
-          private_key_path = oracle_config.key_file;
-          region = oracle_config.region;
-          tenancy_ocid = oracle_config.tenancy_id;
-          user_ocid = oracle_config.user;
-        }];
-      };
-      data = {
-        oci_identity_availability_domain."${oracle_config.uniqueid}_default_ad" = [{
-          provider = "oci.${oracle_config.uniqueid}";
-          compartment_id = oracle_config.compartment_ocid;
-          ad_number = 1;
-        }];
-        oci_objectstorage_namespace."${oracle_config.uniqueid}_os_namespace" = [{
-          provider = "oci.${oracle_config.uniqueid}";
-          compartment_id = oracle_config.compartment_ocid;
-        }];
-      };
-      resource = rec {
-        # make a bucket, store kernel+initrd here, boot from there via ipxe?
+          locals = { };
+          provider = {
+            oci = [
+              {
+                alias = oracle_config.uniqueid;
+                fingerprint = oracle_config.fingerprint;
+                private_key_path = oracle_config.key_file;
+                region = oracle_config.region;
+                tenancy_ocid = oracle_config.tenancy_id;
+                user_ocid = oracle_config.user;
+              }
+            ];
+          };
+          data = {
+            oci_identity_availability_domain."${oracle_config.uniqueid}_default_ad" = [
+              {
+                provider = "oci.${oracle_config.uniqueid}";
+                compartment_id = oracle_config.compartment_ocid;
+                ad_number = 1;
+              }
+            ];
+            oci_objectstorage_namespace."${oracle_config.uniqueid}_os_namespace" = [
+              {
+                provider = "oci.${oracle_config.uniqueid}";
+                compartment_id = oracle_config.compartment_ocid;
+              }
+            ];
+          };
+          resource = rec {
+            # make a bucket, store kernel+initrd here, boot from there via ipxe?
 
-        # oci_objectstorage_bucket."${oracle_config.uniqueid}_os_bucket" = [{
-        #   provider = "oci.${oracle_config.uniqueid}";
-        #   name = "${oracle_config.uniqueid}_bucket";
-        #   compartment_id = oracle_config.compartment_ocid;
-        #   access_type = "ObjectRead";
-        #   namespace = "\${data.oci_objectstorage_namespace.${oracle_config.uniqueid}_os_namespace.namespace}";
-        # }];
+            # oci_objectstorage_bucket."${oracle_config.uniqueid}_os_bucket" = [{
+            #   provider = "oci.${oracle_config.uniqueid}";
+            #   name = "${oracle_config.uniqueid}_bucket";
+            #   compartment_id = oracle_config.compartment_ocid;
+            #   access_type = "ObjectRead";
+            #   namespace = "\${data.oci_objectstorage_namespace.${oracle_config.uniqueid}_os_namespace.namespace}";
+            # }];
 
-        # oci_objectstorage_object."${oracle_config.uniqueid}_os_obj__kernel" = [{
-        #   provider = "oci.${oracle_config.uniqueid}";
-        #   bucket = "\${oci_objectstorage_bucket.${oracle_config.uniqueid}_os_bucket.name}";
-        #   namespace = "\${data.oci_objectstorage_namespace.${oracle_config.uniqueid}_os_namespace.namespace}";
-        #   object = "kernel";
-        #   source = "/nix/store/xj4s8wl52p7nmdrnpy3d0jahi6bapcbf-nixos-system-nixos-22.05pre339470.d87b72206aa/kernel";
-        # }];
+            # oci_objectstorage_object."${oracle_config.uniqueid}_os_obj__kernel" = [{
+            #   provider = "oci.${oracle_config.uniqueid}";
+            #   bucket = "\${oci_objectstorage_bucket.${oracle_config.uniqueid}_os_bucket.name}";
+            #   namespace = "\${data.oci_objectstorage_namespace.${oracle_config.uniqueid}_os_namespace.namespace}";
+            #   object = "kernel";
+            #   source = "/nix/store/xj4s8wl52p7nmdrnpy3d0jahi6bapcbf-nixos-system-nixos-22.05pre339470.d87b72206aa/kernel";
+            # }];
 
-        # oci_objectstorage_object."${oracle_config.uniqueid}_os_obj__initrd" = [{
-        #   provider = "oci.${oracle_config.uniqueid}";
-        #   bucket = "\${oci_objectstorage_bucket.${oracle_config.uniqueid}_os_bucket.name}";
-        #   namespace = "\${data.oci_objectstorage_namespace.${oracle_config.uniqueid}_os_namespace.namespace}";
-        #   object = "initrd";
-        #   source = "/nix/store/xj4s8wl52p7nmdrnpy3d0jahi6bapcbf-nixos-system-nixos-22.05pre339470.d87b72206aa/initrd";
-        # }];
+            # oci_objectstorage_object."${oracle_config.uniqueid}_os_obj__initrd" = [{
+            #   provider = "oci.${oracle_config.uniqueid}";
+            #   bucket = "\${oci_objectstorage_bucket.${oracle_config.uniqueid}_os_bucket.name}";
+            #   namespace = "\${data.oci_objectstorage_namespace.${oracle_config.uniqueid}_os_namespace.namespace}";
+            #   object = "initrd";
+            #   source = "/nix/store/xj4s8wl52p7nmdrnpy3d0jahi6bapcbf-nixos-system-nixos-22.05pre339470.d87b72206aa/initrd";
+            # }];
 
-        oci_core_internet_gateway."${oracle_config.uniqueid}_default_internet_gateway" = [{
-          provider = "oci.${oracle_config.uniqueid}";
-          compartment_id = oracle_config.compartment_ocid;
-          display_name = "DefaultInternetGateway";
-          vcn_id = "\${oci_core_vcn.${oracle_config.uniqueid}_default_vcn.id}";
-        }];
-        oci_core_default_route_table."${oracle_config.uniqueid}_default_route_table" = [{
-          provider = "oci.${oracle_config.uniqueid}";
-          display_name = "DefaultRouteTable";
-          manage_default_resource_id = "\${oci_core_vcn.${oracle_config.uniqueid}_default_vcn.default_route_table_id}";
-          route_rules = [
-            {
-              destination = "0.0.0.0/0";
-              destination_type = "CIDR_BLOCK";
-              network_entity_id = "\${oci_core_internet_gateway.${oracle_config.uniqueid}_default_internet_gateway.id}";
-            }
-          ];
-        }];
-        oci_core_subnet."${oracle_config.uniqueid}_default_subnet" = [{
-          provider = "oci.${oracle_config.uniqueid}";
-          availability_domain = "\${data.oci_identity_availability_domain.${oracle_config.uniqueid}_default_ad.name}";
-          cidr_block = "10.0.1.0/24";
-          compartment_id = oracle_config.compartment_ocid;
-          dhcp_options_id = "\${oci_core_vcn.${oracle_config.uniqueid}_default_vcn.default_dhcp_options_id}";
-          display_name = "DefaultSubnet";
-          dns_label = "default";
-          route_table_id = "\${oci_core_vcn.${oracle_config.uniqueid}_default_vcn.default_route_table_id}";
-          security_list_ids = [
-            "\${oci_core_vcn.${oracle_config.uniqueid}_default_vcn.default_security_list_id}"
-          ];
-          vcn_id = "\${oci_core_vcn.${oracle_config.uniqueid}_default_vcn.id}";
-        }];
-        oci_core_vcn."${oracle_config.uniqueid}_default_vcn" = [{
-          provider = "oci.${oracle_config.uniqueid}";
-          cidr_block = "10.0.0.0/16";
-          compartment_id = oracle_config.compartment_ocid;
-          display_name = "DefaultVcn";
-          dns_label = "default";
-        }];
-      };
-    }]
+            oci_core_internet_gateway."${oracle_config.uniqueid}_default_internet_gateway" = [
+              {
+                provider = "oci.${oracle_config.uniqueid}";
+                compartment_id = oracle_config.compartment_ocid;
+                display_name = "DefaultInternetGateway";
+                vcn_id = "\${oci_core_vcn.${oracle_config.uniqueid}_default_vcn.id}";
+              }
+            ];
+            oci_core_default_route_table."${oracle_config.uniqueid}_default_route_table" = [
+              {
+                provider = "oci.${oracle_config.uniqueid}";
+                display_name = "DefaultRouteTable";
+                manage_default_resource_id = "\${oci_core_vcn.${oracle_config.uniqueid}_default_vcn.default_route_table_id}";
+                route_rules = [
+                  {
+                    destination = "0.0.0.0/0";
+                    destination_type = "CIDR_BLOCK";
+                    network_entity_id = "\${oci_core_internet_gateway.${oracle_config.uniqueid}_default_internet_gateway.id}";
+                  }
+                ];
+              }
+            ];
+            oci_core_subnet."${oracle_config.uniqueid}_default_subnet" = [
+              {
+                provider = "oci.${oracle_config.uniqueid}";
+                availability_domain = "\${data.oci_identity_availability_domain.${oracle_config.uniqueid}_default_ad.name}";
+                cidr_block = "10.0.1.0/24";
+                compartment_id = oracle_config.compartment_ocid;
+                dhcp_options_id = "\${oci_core_vcn.${oracle_config.uniqueid}_default_vcn.default_dhcp_options_id}";
+                display_name = "DefaultSubnet";
+                dns_label = "default";
+                route_table_id = "\${oci_core_vcn.${oracle_config.uniqueid}_default_vcn.default_route_table_id}";
+                security_list_ids = [
+                  "\${oci_core_vcn.${oracle_config.uniqueid}_default_vcn.default_security_list_id}"
+                ];
+                vcn_id = "\${oci_core_vcn.${oracle_config.uniqueid}_default_vcn.id}";
+              }
+            ];
+            oci_core_vcn."${oracle_config.uniqueid}_default_vcn" = [
+              {
+                provider = "oci.${oracle_config.uniqueid}";
+                cidr_block = "10.0.0.0/16";
+                compartment_id = oracle_config.compartment_ocid;
+                display_name = "DefaultVcn";
+                dns_label = "default";
+              }
+            ];
+          };
+        }
+      ]
     );
 }
-
-

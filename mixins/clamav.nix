@@ -1,20 +1,20 @@
 # source: https://raw.githubusercontent.com/wimpysworld/nix-config/main/nixos/_mixins/services/clamav.nix
 # modifications: change sus-user-dirs
 
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 with lib;
 let
-  sus-user-dirs = [
-    "downloads"
-  ];
+  sus-user-dirs = [ "downloads" ];
   all-normal-users = attrsets.filterAttrs (_username: config: config.isNormalUser) config.users.users;
-  all-sus-dirs = builtins.concatMap
-    (dir:
-      attrsets.mapAttrsToList
-        (_username: config: config.home + "/" + dir)
-        all-normal-users
-    )
-    sus-user-dirs;
+  all-sus-dirs =
+    builtins.concatMap
+      (dir: attrsets.mapAttrsToList (_username: config: config.home + "/" + dir) all-normal-users)
+      sus-user-dirs;
   all-user-folders = attrsets.mapAttrsToList (_username: config: config.home) all-normal-users;
   all-system-folders = [
     "/boot"
@@ -23,23 +23,21 @@ let
     "/root"
     "/usr"
   ];
-  notify-all-users = pkgs.writeScript "notify-all-users-of-sus-file"
-    ''
-      #!/usr/bin/env bash
-      ALERT="Signature detected by clamav: $CLAM_VIRUSEVENT_VIRUSNAME in $CLAM_VIRUSEVENT_FILENAME"
-      # Send an alert to all graphical users.
-      for ADDRESS in /run/user/*; do
-          USERID=''${ADDRESS#/run/user/}
-         /run/wrappers/bin/sudo -u "#$USERID" DBUS_SESSION_BUS_ADDRESS="unix:path=$ADDRESS/bus" ${pkgs.libnotify}/bin/notify-send -i dialog-warning "Sus file" "$ALERT"
-      done
-    '';
+  notify-all-users = pkgs.writeScript "notify-all-users-of-sus-file" ''
+    #!/usr/bin/env bash
+    ALERT="Signature detected by clamav: $CLAM_VIRUSEVENT_VIRUSNAME in $CLAM_VIRUSEVENT_FILENAME"
+    # Send an alert to all graphical users.
+    for ADDRESS in /run/user/*; do
+        USERID=''${ADDRESS#/run/user/}
+       /run/wrappers/bin/sudo -u "#$USERID" DBUS_SESSION_BUS_ADDRESS="unix:path=$ADDRESS/bus" ${pkgs.libnotify}/bin/notify-send -i dialog-warning "Sus file" "$ALERT"
+    done
+  '';
 in
 {
   security.sudo = {
-    extraConfig =
-      ''
-        clamav ALL = (ALL) NOPASSWD: SETENV: ${pkgs.libnotify}/bin/notify-send
-      '';
+    extraConfig = ''
+      clamav ALL = (ALL) NOPASSWD: SETENV: ${pkgs.libnotify}/bin/notify-send
+    '';
   };
 
   services = {
@@ -116,4 +114,3 @@ in
     };
   };
 }
-

@@ -1,4 +1,11 @@
-{ config, lib, pkgs, inputs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  options,
+  ...
+}:
 
 let
   cfg = config.nixcfg.common;
@@ -72,13 +79,15 @@ in
 
   config = ({
     ## DEBLOAT ##############################################################
-    documentation = (lib.mkIf cfg.defaultNoDocs ({
-      enable = false;
-      doc.enable = false;
-      man.enable = false;
-      info.enable = false;
-      nixos.enable = false;
-    }));
+    documentation = (
+      lib.mkIf cfg.defaultNoDocs ({
+        enable = false;
+        doc.enable = false;
+        man.enable = false;
+        info.enable = false;
+        nixos.enable = false;
+      })
+    );
     # system.disableInstallerTools = lib.mkDefault true;
 
     ## BOOT #################################################################
@@ -111,10 +120,7 @@ in
       };
 
       initrd.systemd.enable = lib.mkDefault true;
-      initrd.supportedFilesystems = (
-        [ "ntfs" ] ++
-        lib.optionals (cfg.useZfs) [ "zfs" ]
-      );
+      initrd.supportedFilesystems = ([ "ntfs" ] ++ lib.optionals (cfg.useZfs) [ "zfs" ]);
 
       kernelPackages = lib.mkIf cfg.defaultKernel _kernelPackages;
       kernelParams = lib.mkIf cfg.skipMitigations [ "mitigations=off" ];
@@ -146,29 +152,35 @@ in
     boot.kernelPatches = lib.mkIf (cfg.kernelPatchHDR) [
       {
         name = "amd-hdr-patch";
-        patch = (pkgs.fetchpatch {
-          # # linux-6.4
-          # url = "https://raw.githubusercontent.com/CachyOS/kernel-patches/d792451352838e29b6b0e4a297e897bf1bb975fe/6.4/0005-HDR.patch";
-          # hash = "sha256-fGbb3NCyuryXDDtD14GDhc4AK/Ho3I0M1tLOkgJeRdQ=";
+        patch = (
+          pkgs.fetchpatch {
+            # # linux-6.4
+            # url = "https://raw.githubusercontent.com/CachyOS/kernel-patches/d792451352838e29b6b0e4a297e897bf1bb975fe/6.4/0005-HDR.patch";
+            # hash = "sha256-fGbb3NCyuryXDDtD14GDhc4AK/Ho3I0M1tLOkgJeRdQ=";
 
-          # # linux-6.5
-          # # https://github.com/CachyOS/kernel-patches/blob/master/6.5/0001-amd-hdr.patch
-          # url = "https://raw.githubusercontent.com/CachyOS/kernel-patches/ea4aa71f452203bc7be29ca8ccd2b1ca16ecee14/6.5/0001-amd-hdr.patch";
-          # hash = "sha256-/G48qHCYrsk6PQp5IaTBgfo4XjLcoJxa/LkTr2si2/4=";
+            # # linux-6.5
+            # # https://github.com/CachyOS/kernel-patches/blob/master/6.5/0001-amd-hdr.patch
+            # url = "https://raw.githubusercontent.com/CachyOS/kernel-patches/ea4aa71f452203bc7be29ca8ccd2b1ca16ecee14/6.5/0001-amd-hdr.patch";
+            # hash = "sha256-/G48qHCYrsk6PQp5IaTBgfo4XjLcoJxa/LkTr2si2/4=";
 
-          # linux-6.6
-          # https://github.com/CachyOS/kernel-patches/blob/master/6.6/0001-amd-hdr.patch
-          url = "https://raw.githubusercontent.com/CachyOS/kernel-patches/a4e5433a0da6a3a90835f55cce7a28b6119e244c/6.6/0001-amd-hdr.patch";
-          hash = "sha256-9d8agfDuIYPHmYK+MdZnM/5VaSArnC+AdxnSz13RloE=";
-        });
+            # linux-6.6
+            # https://github.com/CachyOS/kernel-patches/blob/master/6.6/0001-amd-hdr.patch
+            url = "https://raw.githubusercontent.com/CachyOS/kernel-patches/a4e5433a0da6a3a90835f55cce7a28b6119e244c/6.6/0001-amd-hdr.patch";
+            hash = "sha256-9d8agfDuIYPHmYK+MdZnM/5VaSArnC+AdxnSz13RloE=";
+          }
+        );
       }
     ];
 
     ## NETWORK + TIME #######################################################
     networking = {
-      hostId = lib.mkIf cfg.autoHostId (pkgs.lib.concatStringsSep "" (pkgs.lib.take 8
-        (pkgs.lib.stringToCharacters
-          (builtins.hashString "sha256" config.networking.hostName))));
+      hostId = lib.mkIf cfg.autoHostId (
+        pkgs.lib.concatStringsSep "" (
+          pkgs.lib.take 8 (
+            pkgs.lib.stringToCharacters (builtins.hashString "sha256" config.networking.hostName)
+          )
+        )
+      );
       firewall.enable = true;
       useDHCP = lib.mkIf (cfg.defaultNetworking) false;
       # useNetworkd = lib.mkIf (cfg.defaultNetworking) true;
@@ -198,7 +210,7 @@ in
           set -x 
           uptime_ms="$(cat /proc/uptime | cut -d ' ' -f 1)"
           uptime_ms="$(echo $uptime_ms | cut -d '.' -f 1)"
-          if [[ ''${uptime_ms} -gt ${ toString (60 * 2) } ]]; then 
+          if [[ ''${uptime_ms} -gt ${toString (60 * 2)} ]]; then 
             echo "workaround_wifi_issue: trigger"
             ${pkgs.systemd}/bin/systemctl restart systemd-udev-trigger
           else
@@ -210,76 +222,78 @@ in
       };
     };
 
-    systemd.network = (lib.mkIf (cfg.defaultNetworking) {
-      enable = true;
+    systemd.network = (
+      lib.mkIf (cfg.defaultNetworking) {
+        enable = true;
 
-      wait-online = {
-        enable = false;
-        anyInterface = true;
-        extraArgs = [ "--ipv4" ];
-      };
-
-      # leave the kernel dummy devies unmanagaed
-      networks."10-dummy" = {
-        matchConfig.Name = "dummy*";
-        networkConfig = { };
-        # linkConfig.ActivationPolicy = "always-down";
-        linkConfig.Unmanaged = "yes";
-      };
-
-      networks."20-tailscale-ignore" = {
-        matchConfig.Name = "tailscale*";
-        linkConfig = {
-          Unmanaged = "yes";
-          RequiredForOnline = false;
+        wait-online = {
+          enable = false;
+          anyInterface = true;
+          extraArgs = [ "--ipv4" ];
         };
-      };
 
-      networks."30-network-defaults-wired" = {
-        # matchConfig.Name = "en* | eth* | usb*";
-        matchConfig.Type = "ether";
-        networkConfig = {
-          DHCP = "yes";
-          IPv6AcceptRA = true;
-          # DHCPv6PrefixDelegation = "yes"; # moved to its own full section
-          IPForward = "yes";
-          # IPMasquerade = "both";
+        # leave the kernel dummy devies unmanagaed
+        networks."10-dummy" = {
+          matchConfig.Name = "dummy*";
+          networkConfig = { };
+          # linkConfig.ActivationPolicy = "always-down";
+          linkConfig.Unmanaged = "yes";
         };
-        # dhcpV4Config.ClientIdentifier = "mac";
-        dhcpV4Config.Use6RD = "yes";
-        dhcpV4Config.RouteMetric = 512;
-        # dhcpV4Config.UseDNS = false;
-        dhcpV4Config.DUIDType = "link-layer";
-        dhcpV6Config.RouteMetric = 512;
-        dhcpV6Config.PrefixDelegationHint = "::64";
-        # dhcpV6Config.UseDNS = false;
-        dhcpV6Config.DUIDType = "link-layer";
-      };
-      networks."30-network-defaults-wireless" = {
-        # matchConfig.Name = "wl*";
-        matchConfig.Type = "wlan";
-        networkConfig = {
-          DHCP = "yes";
-          IPv6AcceptRA = true;
-          # DHCPv6PrefixDelegation = "yes";
-          IPForward = "yes";
-          # IPMasquerade = "both";
+
+        networks."20-tailscale-ignore" = {
+          matchConfig.Name = "tailscale*";
+          linkConfig = {
+            Unmanaged = "yes";
+            RequiredForOnline = false;
+          };
         };
-        # dhcpV4Config.ClientIdentifier = "mac";
-        dhcpV4Config.RouteMetric = 1500;
-        # dhcpV4Config.UseDNS = false;
-        dhcpV4Config.DUIDType = "link-layer";
-        dhcpV6Config.RouteMetric = 1500;
-        # dhcpV6Config.UseDNS = false;
-        dhcpV6Config.DUIDType = "link-layer";
-        # routes = [
-        #   { routeConfig = { Gateway = "_dhcp4"; Metric = 1500; }; }
-        #   { routeConfig = { Gateway = "_ipv6ra"; Metric = 1500; }; }
-        # ];
-        dhcpV4Config.Use6RD = "yes";
-        dhcpV6Config.PrefixDelegationHint = "::64";
-      };
-    });
+
+        networks."30-network-defaults-wired" = {
+          # matchConfig.Name = "en* | eth* | usb*";
+          matchConfig.Type = "ether";
+          networkConfig = {
+            DHCP = "yes";
+            IPv6AcceptRA = true;
+            # DHCPv6PrefixDelegation = "yes"; # moved to its own full section
+            IPForward = "yes";
+            # IPMasquerade = "both";
+          };
+          # dhcpV4Config.ClientIdentifier = "mac";
+          dhcpV4Config.Use6RD = "yes";
+          dhcpV4Config.RouteMetric = 512;
+          # dhcpV4Config.UseDNS = false;
+          dhcpV4Config.DUIDType = "link-layer";
+          dhcpV6Config.RouteMetric = 512;
+          dhcpV6Config.PrefixDelegationHint = "::64";
+          # dhcpV6Config.UseDNS = false;
+          dhcpV6Config.DUIDType = "link-layer";
+        };
+        networks."30-network-defaults-wireless" = {
+          # matchConfig.Name = "wl*";
+          matchConfig.Type = "wlan";
+          networkConfig = {
+            DHCP = "yes";
+            IPv6AcceptRA = true;
+            # DHCPv6PrefixDelegation = "yes";
+            IPForward = "yes";
+            # IPMasquerade = "both";
+          };
+          # dhcpV4Config.ClientIdentifier = "mac";
+          dhcpV4Config.RouteMetric = 1500;
+          # dhcpV4Config.UseDNS = false;
+          dhcpV4Config.DUIDType = "link-layer";
+          dhcpV6Config.RouteMetric = 1500;
+          # dhcpV6Config.UseDNS = false;
+          dhcpV6Config.DUIDType = "link-layer";
+          # routes = [
+          #   { routeConfig = { Gateway = "_dhcp4"; Metric = 1500; }; }
+          #   { routeConfig = { Gateway = "_ipv6ra"; Metric = 1500; }; }
+          # ];
+          dhcpV4Config.Use6RD = "yes";
+          dhcpV6Config.PrefixDelegationHint = "::64";
+        };
+      }
+    );
 
     security = {
       sudo.enable = true;
@@ -308,11 +322,10 @@ in
 
     ## SILLY CUSTOMIZATION ##################################################
     services.getty = {
-      greetingLine = ''\l  -  (kernel: \r) (label: ${config.system.nixos.label}) (system: \m)'';
+      greetingLine = "\\l  -  (kernel: \\r) (label: ${config.system.nixos.label}) (system: \\m)";
       helpLine = ''
         -... . / --. .- -.-- --..-- / -.. --- / -.-. .-. .. -- .
       '';
     };
   });
 }
-

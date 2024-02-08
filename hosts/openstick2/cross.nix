@@ -1,9 +1,13 @@
-{ lib, pkgs, config, inputs, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  inputs,
+  ...
+}:
 
 {
-  imports = [
-    ../openstick/cross.nix
-  ];
+  imports = [ ../openstick/cross.nix ];
 
   config = {
     networking.hostName = lib.mkForce "openstick2";

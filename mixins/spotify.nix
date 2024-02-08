@@ -10,19 +10,19 @@
       };
     };
 
-    home-manager.users.cole = { pkgs, ... }: {
-      services.spotifyd = {
-        enable = true;
-        settings.global = {
-          device_name = "${config.networking.hostName}-spotifyd";
-          username = "cole.mickens";
-          password_cmd = "${pkgs.coreutils}/bin/cat ${config.sops.secrets."spotifypw.txt".path}";
+    home-manager.users.cole =
+      { pkgs, ... }:
+      {
+        services.spotifyd = {
+          enable = true;
+          settings.global = {
+            device_name = "${config.networking.hostName}-spotifyd";
+            username = "cole.mickens";
+            password_cmd = "${pkgs.coreutils}/bin/cat ${config.sops.secrets."spotifypw.txt".path}";
+          };
         };
-      };
 
-      home.packages = [
-        pkgs.spotify-tui
-      ];
-    };
+        home.packages = [ pkgs.spotify-tui ];
+      };
   };
 }

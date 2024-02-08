@@ -1,10 +1,13 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   config = {
-    networking.firewall.interfaces."tailscale0".allowedTCPPorts = [
-      8888
-    ];
+    networking.firewall.interfaces."tailscale0".allowedTCPPorts = [ 8888 ];
     services.zrepl = {
       enable = true;
       settings = {

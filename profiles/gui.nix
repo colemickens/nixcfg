@@ -1,4 +1,10 @@
-{ pkgs, lib, config, inputs, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}:
 
 let
   firefoxFlake = inputs.firefox-nightly.packages.${pkgs.stdenv.hostPlatform.system};
@@ -10,10 +16,7 @@ let
   # _chrome = pkgs.google-chrome-dev.override {
   #   commandLineArgs = [ "--force-dark-mode" ];
   # };
-  _chrome = pkgs.google-chrome.override {
-    commandLineArgs = [ "--force-dark-mode" ];
-  };
-
+  _chrome = pkgs.google-chrome.override { commandLineArgs = [ "--force-dark-mode" ]; };
 in
 {
   imports = [
@@ -54,76 +57,81 @@ in
 
     programs.noisetorch.enable = true;
 
-    home-manager.users.cole = { pkgs, config, ... }@hm: {
-      # https://github.com/nix-community/home-manager/issues/2064
-      systemd.user.targets.tray = {
-        Unit = {
-          Description = "Home Manager System Tray";
-          Requires = [ "graphical-session-pre.target" ];
+    home-manager.users.cole =
+      { pkgs, config, ... }@hm:
+      {
+        # https://github.com/nix-community/home-manager/issues/2064
+        systemd.user.targets.tray = {
+          Unit = {
+            Description = "Home Manager System Tray";
+            Requires = [ "graphical-session-pre.target" ];
+          };
         };
-      };
 
-      home.sessionVariables = {
-        BROWSER = "firefox";
-      };
-
-      services = {
-        pass-secret-service = {
-          enable = true;
-          # verbose = true;
-          # copied from profiles/interactive -> PASSWORD_STORE_DIR
-          storePath = "${hm.config.xdg.dataHome}/password-store";
+        home.sessionVariables = {
+          BROWSER = "firefox";
         };
-        gpg-agent.pinentryBinary =
-          let
-            wayprompt = "${inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system}.wayprompt}";
-          in
-          "${wayprompt}/bin/pinentry-wayprompt";
+
+        services = {
+          pass-secret-service = {
+            enable = true;
+            # verbose = true;
+            # copied from profiles/interactive -> PASSWORD_STORE_DIR
+            storePath = "${hm.config.xdg.dataHome}/password-store";
+          };
+          gpg-agent.pinentryBinary =
+            let
+              wayprompt = "${inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system}.wayprompt}";
+            in
+            "${wayprompt}/bin/pinentry-wayprompt";
+        };
+
+        home.packages = lib.mkMerge [
+          (lib.mkIf (pkgs.hostPlatform.system == "x86_64-linux") (
+            with pkgs;
+            [
+              # browsers
+              _firefoxNightly
+              pkgs.firefox-bin
+              _chrome
+
+              # audio/video
+              jamesdsp
+
+              # communication
+              nheko
+              libsForQt5.kdeGear.neochat
+              # libsForQt5.kdeGear.falkon
+
+              # misc tools/utils
+              # wine-wayland # oof TODO: nixpkgs wine packages need some ... attention
+            ]
+          ))
+          (with pkgs; [
+            # my custom GUI-related commands, might pull in extra gui packages
+            (pkgs.callPackage ../pkgs/commands-gui.nix { })
+
+            # misc tools/utils
+            brightnessctl
+            evince
+            freerdp
+            pinta
+            virt-viewer
+
+            glide-media-player
+
+            lapce
+
+            # audio/video
+            pavucontrol
+            # pw-viz # also failing to build again
+            qpwgraph
+
+            # communication
+            # thunderbird
+            linphone
+          ])
+        ];
       };
-
-      home.packages = lib.mkMerge [
-        (lib.mkIf (pkgs.hostPlatform.system == "x86_64-linux") (with pkgs; [
-          # browsers
-          _firefoxNightly
-          pkgs.firefox-bin
-          _chrome
-
-          # audio/video
-          jamesdsp
-
-          # communication
-          nheko
-          libsForQt5.kdeGear.neochat
-          # libsForQt5.kdeGear.falkon
-
-          # misc tools/utils
-          # wine-wayland # oof TODO: nixpkgs wine packages need some ... attention
-        ]))
-        (with pkgs; [
-          # my custom GUI-related commands, might pull in extra gui packages
-          (pkgs.callPackage ../pkgs/commands-gui.nix { })
-
-          # misc tools/utils
-          brightnessctl
-          evince
-          freerdp
-          pinta
-          virt-viewer
-
-          glide-media-player
-
-          lapce
-
-          # audio/video
-          pavucontrol
-          # pw-viz # also failing to build again
-          qpwgraph
-
-          # communication
-          # thunderbird
-          linphone
-        ])
-      ];
-    };
   };
 }

@@ -1,4 +1,12 @@
-{ pkgs, lib, modulesPath, inputs, config, extendModules, ... }:
+{
+  pkgs,
+  lib,
+  modulesPath,
+  inputs,
+  config,
+  extendModules,
+  ...
+}:
 
 let
   # eth_ip = "192.168.162.69/16";
@@ -28,8 +36,7 @@ in
 
     nixpkgs.overlays = [
       (final: super: {
-        makeModulesClosure = x:
-          super.makeModulesClosure (x // { allowMissing = true; });
+        makeModulesClosure = x: super.makeModulesClosure (x // { allowMissing = true; });
       })
     ];
 

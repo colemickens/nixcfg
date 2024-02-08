@@ -1,12 +1,15 @@
-{ pkgs, lib, inputs, ... }:
+{
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   secrets = import ./secretdata.nix { lib = lib; };
 in
 {
-  imports = [
-    inputs.sops-nix.nixosModules.sops
-  ];
+  imports = [ inputs.sops-nix.nixosModules.sops ];
   config = {
     sops = {
       # externalAuthVars = {

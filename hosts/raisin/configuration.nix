@@ -1,13 +1,19 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 let
   hn = "raisin";
   poolname = "raisin2pool";
   bootpart = "raisin2-boot";
   swappart = "raisin2-swap";
   lukspart = "raisin-luksroot";
-  # ugh, bad idea, zaks network doesn't have this probably:
-  # static_ip = "192.168.70.60/16";
 in
+# ugh, bad idea, zaks network doesn't have this probably:
+# static_ip = "192.168.70.60/16";
 {
   imports = [
     ./unfree.nix
@@ -72,15 +78,35 @@ in
     };
 
     fileSystems = {
-      "/" = { fsType = "zfs"; device = "${poolname}/root"; neededForBoot = true; };
-      "/home" = { fsType = "zfs"; device = "${poolname}/home"; neededForBoot = true; };
-      "/nix" = { fsType = "zfs"; device = "${poolname}/nix"; neededForBoot = true; };
-      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${bootpart}"; neededForBoot = true; };
+      "/" = {
+        fsType = "zfs";
+        device = "${poolname}/root";
+        neededForBoot = true;
+      };
+      "/home" = {
+        fsType = "zfs";
+        device = "${poolname}/home";
+        neededForBoot = true;
+      };
+      "/nix" = {
+        fsType = "zfs";
+        device = "${poolname}/nix";
+        neededForBoot = true;
+      };
+      "/boot" = {
+        fsType = "vfat";
+        device = "/dev/disk/by-partlabel/${bootpart}";
+        neededForBoot = true;
+      };
     };
-    swapDevices = [{ device = "/dev/disk/by-partlabel/${swappart}"; }];
+    swapDevices = [ { device = "/dev/disk/by-partlabel/${swappart}"; } ];
 
     boot = {
-      kernelModules = [ "iwlwifi" "ideapad_laptop" "tp_smapi" ];
+      kernelModules = [
+        "iwlwifi"
+        "ideapad_laptop"
+        "tp_smapi"
+      ];
       kernelParams = [
         "ideapad_laptop.allow_v4_dytc=1"
         # "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 1024 * 8)}"

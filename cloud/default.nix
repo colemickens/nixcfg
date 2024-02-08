@@ -2,14 +2,17 @@
 
 let
   tflib = import ./tflib.nix { inherit pkgs; };
-  tfpkg = (pkgs.terraform_1.withPlugins (p:
-    [
-      # these should be included, maybe via option/modules
-      # from the tflib-*.nix
-      p.equinix
-      p.oci
-      /* p.sops */
-    ]));
+  tfpkg = (
+    pkgs.terraform_1.withPlugins (
+      p: [
+        # these should be included, maybe via option/modules
+        # from the tflib-*.nix
+        p.equinix
+        p.oci
+        # p.sops
+      ]
+    )
+  );
   tf = "${tfpkg}/bin/terraform"; # "${tf}"
   tfstate = "./cloud/_state";
 
@@ -115,58 +118,64 @@ let
       )
     ];
   };
-  ## </terranix>
 in
+## </terranix>
 {
   # TODO: replace with lovesegfault's sanity checked saneScript writer
-  tf = (pkgs.writeShellScript "apply" ''
-    set -euo pipefail; set -x
-    export TF_STATE="${tfstate}"
-    "${tf}" "-chdir=''${TF_STATE}" "''${@}"
-  '');
-  apply = (pkgs.writeShellScript "apply" ''
-    set -euo pipefail; set -x
+  tf = (
+    pkgs.writeShellScript "apply" ''
+      set -euo pipefail; set -x
+      export TF_STATE="${tfstate}"
+      "${tf}" "-chdir=''${TF_STATE}" "''${@}"
+    ''
+  );
+  apply = (
+    pkgs.writeShellScript "apply" ''
+      set -euo pipefail; set -x
 
-    duration="1 hour"
-    export TF_VAR_termtime="$(TZ=UTC date --date="''${duration}" --iso-8601=seconds)"
-    
-    set +x
-      # TODO: retrieve from other means:
-      export METAL_AUTH_TOKEN="$(gopass show colemickens/packet.net | grep apikey | cut -d' ' -f2)"
-      
-      # TODO: actually utilize this:
-      export TF_VAR_tailscale_token="$(gopass show colemickens/packet.net | grep apikey | cut -d' ' -f2)"
-    set -x
+      duration="1 hour"
+      export TF_VAR_termtime="$(TZ=UTC date --date="''${duration}" --iso-8601=seconds)"
 
-    export TF_STATE="${tfstate}"
-    export RUN_DIR="${tfstate}/run-$(date '+%s')"
-    export TF_LOG=DEBUG
-    export TF_LOG_PATH="''${RUN_DIR}/log.txt"
-    mkdir -p "''${TF_STATE}" "''${RUN_DIR}";
+      set +x
+        # TODO: retrieve from other means:
+        export METAL_AUTH_TOKEN="$(gopass show colemickens/packet.net | grep apikey | cut -d' ' -f2)"
+        
+        # TODO: actually utilize this:
+        export TF_VAR_tailscale_token="$(gopass show colemickens/packet.net | grep apikey | cut -d' ' -f2)"
+      set -x
 
-    function tixe() { set +x; sed -i "s/''${METAL_AUTH_TOKEN}/METAL_AUTH_TOKEN_REDACTED/g" "''${TF_LOG_PATH}"; }
-    trap tixe EXIT
-    
-    cp "${terraformCfg}" "''${TF_STATE}/config.tf.json"
-    chmod -R +w "''${TF_STATE}"
+      export TF_STATE="${tfstate}"
+      export RUN_DIR="${tfstate}/run-$(date '+%s')"
+      export TF_LOG=DEBUG
+      export TF_LOG_PATH="''${RUN_DIR}/log.txt"
+      mkdir -p "''${TF_STATE}" "''${RUN_DIR}";
 
-    "${tf}" "-chdir=''${TF_STATE}" init -upgrade
-    
-    "${tf}" "-chdir=''${TF_STATE}" version > "''${RUN_DIR}/version.txt"
-    "${tf}" "-chdir=''${TF_STATE}" providers > "''${RUN_DIR}/providers.txt"
-    "${tf}" "-chdir=''${TF_STATE}" init | tee "''${RUN_DIR}/init.txt"
-    "${tf}" "-chdir=''${TF_STATE}" apply | tee "''${RUN_DIR}/apply.txt"
-  '');
+      function tixe() { set +x; sed -i "s/''${METAL_AUTH_TOKEN}/METAL_AUTH_TOKEN_REDACTED/g" "''${TF_LOG_PATH}"; }
+      trap tixe EXIT
 
-  destroy = (pkgs.writeShellScript "destroy" ''
-    set -euo pipefail; set -x
-    export METAL_AUTH_TOKEN="$(gopass show colemickens/equinix.net | grep apikey | cut -d' ' -f2)"
-    export TF_STATE="${tfstate}"
-    if [[ ! -e "''${TF_STATE}/config.tf.json" ]]; then
       cp "${terraformCfg}" "''${TF_STATE}/config.tf.json"
-    fi
-    
-    "${tf}" "-chdir=''${TF_STATE}" init
-    "${tf}" "-chdir=''${TF_STATE}" destroy
-  '');
+      chmod -R +w "''${TF_STATE}"
+
+      "${tf}" "-chdir=''${TF_STATE}" init -upgrade
+
+      "${tf}" "-chdir=''${TF_STATE}" version > "''${RUN_DIR}/version.txt"
+      "${tf}" "-chdir=''${TF_STATE}" providers > "''${RUN_DIR}/providers.txt"
+      "${tf}" "-chdir=''${TF_STATE}" init | tee "''${RUN_DIR}/init.txt"
+      "${tf}" "-chdir=''${TF_STATE}" apply | tee "''${RUN_DIR}/apply.txt"
+    ''
+  );
+
+  destroy = (
+    pkgs.writeShellScript "destroy" ''
+      set -euo pipefail; set -x
+      export METAL_AUTH_TOKEN="$(gopass show colemickens/equinix.net | grep apikey | cut -d' ' -f2)"
+      export TF_STATE="${tfstate}"
+      if [[ ! -e "''${TF_STATE}/config.tf.json" ]]; then
+        cp "${terraformCfg}" "''${TF_STATE}/config.tf.json"
+      fi
+
+      "${tf}" "-chdir=''${TF_STATE}" init
+      "${tf}" "-chdir=''${TF_STATE}" destroy
+    ''
+  );
 }

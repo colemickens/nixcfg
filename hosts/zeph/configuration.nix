@@ -1,4 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   hn = "zeph";
@@ -67,9 +73,7 @@ in
       };
     };
 
-    environment.systemPackages = with pkgs; [
-      esphome
-    ];
+    environment.systemPackages = with pkgs; [ esphome ];
 
     services.tailscale.useRoutingFeatures = "client";
 
@@ -81,31 +85,61 @@ in
 
     services.zfs.autoScrub.pools = [ poolname ];
     fileSystems = {
-      "/efi" = { fsType = "vfat"; device = "/dev/nvme0n1p1"; };
-      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${bootpart}"; };
-      "/" = { fsType = "zfs"; device = "${poolname}/root"; neededForBoot = true; };
-      "/nix" = { fsType = "zfs"; device = "${poolname}/nix"; neededForBoot = true; };
-      "/home" = { fsType = "zfs"; device = "${poolname}/home"; neededForBoot = true; };
+      "/efi" = {
+        fsType = "vfat";
+        device = "/dev/nvme0n1p1";
+      };
+      "/boot" = {
+        fsType = "vfat";
+        device = "/dev/disk/by-partlabel/${bootpart}";
+      };
+      "/" = {
+        fsType = "zfs";
+        device = "${poolname}/root";
+        neededForBoot = true;
+      };
+      "/nix" = {
+        fsType = "zfs";
+        device = "${poolname}/nix";
+        neededForBoot = true;
+      };
+      "/home" = {
+        fsType = "zfs";
+        device = "${poolname}/home";
+        neededForBoot = true;
+      };
 
       # "/mnt/data/t5" = { fsType = "zfs"; device = "${poolname}/data/t5"; };
-      "/mnt/games" = { fsType = "zfs"; device = "${poolname}/games"; neededForBoot = true; };
+      "/mnt/games" = {
+        fsType = "zfs";
+        device = "${poolname}/games";
+        neededForBoot = true;
+      };
 
-      "/efi/EFI/Linux" = { device = "/boot/EFI/Linux"; options = [ "bind" ]; };
-      "/efi/EFI/nixos" = { device = "/boot/EFI/nixos"; options = [ "bind" ]; };
-    };
-    swapDevices = [{ device = "/dev/disk/by-partlabel/${swappart}"; }];
-
-    home-manager.users.cole = { pkgs, config, ... }@hm: {
-      wayland.windowManager.sway.config = {
-        keybindings = {
-          "XF86AudioRaiseVolume" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume +2";
-          "XF86AudioLowerVolume" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume -2";
-          "XF86AudioMicMute" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --toggle-mute";
-          "XF86Launch1" = "exec ${pkgs.asusctl}/bin/rog-control-center";
-          "Mod4+XF86Launch1" = "exec ${pkgs.pavucontrol}/bin/pavucontrol";
-        };
+      "/efi/EFI/Linux" = {
+        device = "/boot/EFI/Linux";
+        options = [ "bind" ];
+      };
+      "/efi/EFI/nixos" = {
+        device = "/boot/EFI/nixos";
+        options = [ "bind" ];
       };
     };
+    swapDevices = [ { device = "/dev/disk/by-partlabel/${swappart}"; } ];
+
+    home-manager.users.cole =
+      { pkgs, config, ... }@hm:
+      {
+        wayland.windowManager.sway.config = {
+          keybindings = {
+            "XF86AudioRaiseVolume" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume +2";
+            "XF86AudioLowerVolume" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume -2";
+            "XF86AudioMicMute" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --toggle-mute";
+            "XF86Launch1" = "exec ${pkgs.asusctl}/bin/rog-control-center";
+            "Mod4+XF86Launch1" = "exec ${pkgs.pavucontrol}/bin/pavucontrol";
+          };
+        };
+      };
 
     boot = {
       # zfs = {

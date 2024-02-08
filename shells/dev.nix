@@ -1,7 +1,4 @@
-{ pkgs
-, inputs
-, ...
-}:
+{ pkgs, inputs, ... }:
 let
   minimalMkShell = import ./_minimal.nix { inherit pkgs; };
 
@@ -9,31 +6,40 @@ let
   # llvmPackages = pkgs.llvmPackages_16;
   llvmPackages = pkgs.llvmPackages_15;
 
-  gstreamerPath = ""
-    + ":" + "${pkgs.gst_all_1.gst-plugins-base}/lib/gstreamer-1.0"
-    + ":" + "${pkgs.gst_all_1.gst-plugins-good}/lib/gstreamer-1.0"
-    + ":" + "${pkgs.gst_all_1.gst-plugins-bad}/lib/gstreamer-1.0"
-    + ":" + "${pkgs.gst_all_1.gst-plugins-ugly}/lib/gstreamer-1.0"
-  ;
+  gstreamerPath =
+    ""
+    + ":"
+    + "${pkgs.gst_all_1.gst-plugins-base}/lib/gstreamer-1.0"
+    + ":"
+    + "${pkgs.gst_all_1.gst-plugins-good}/lib/gstreamer-1.0"
+    + ":"
+    + "${pkgs.gst_all_1.gst-plugins-bad}/lib/gstreamer-1.0"
+    + ":"
+    + "${pkgs.gst_all_1.gst-plugins-ugly}/lib/gstreamer-1.0";
 
-  _rustBuildFenix = (inputs.fenix.packages.${pkgs.stdenv.hostPlatform.system}.latest.withComponents [
-    "cargo"
-    "clippy"
-    "rust-src"
-    "rustc"
-    "rustfmt"
-    "rust-analyzer"
-  ]);
+  _rustBuildFenix = (
+    inputs.fenix.packages.${pkgs.stdenv.hostPlatform.system}.latest.withComponents [
+      "cargo"
+      "clippy"
+      "rust-src"
+      "rustc"
+      "rustfmt"
+      "rust-analyzer"
+    ]
+  );
 
   _rustBuildOxalica = inputs.rust-overlay.packages.${pkgs.stdenv.hostPlatform.system}.rust.override {
-    extensions = [ "rust-src" "rust-analyzer" "clippy" ];
+    extensions = [
+      "rust-src"
+      "rust-analyzer"
+      "clippy"
+    ];
   };
 
   # so far I can't tell a big difference...
   _rustBuild = _rustBuildOxalica;
-  # _rustBuild = _rustBuildFenix;
-
 in
+# _rustBuild = _rustBuildFenix;
 minimalMkShell {
   name = "cole-nixcfg-dev";
   hardeningDisable = [ "fortify" ];

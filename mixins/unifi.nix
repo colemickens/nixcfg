@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   allowedRules = {
@@ -17,7 +22,7 @@ let
     ];
   };
   allowedInterfaces = [
-    "enp57s0u1u3" #sighx2.1
+    "enp57s0u1u3" # sighx2.1
   ];
 in
 {

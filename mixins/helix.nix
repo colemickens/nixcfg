@@ -1,7 +1,8 @@
-{ pkgs
-, config
-, inputs
-, ...
+{
+  pkgs,
+  config,
+  inputs,
+  ...
 }:
 let
   tomlFormat = pkgs.formats.toml { };
@@ -13,145 +14,146 @@ in
 {
   config = {
     nixpkgs.overlays = [
-      (final: prev: {
-        helix = inputs.helix.packages.${pkgs.stdenv.hostPlatform.system}.helix;
-      })
+      (final: prev: { helix = inputs.helix.packages.${pkgs.stdenv.hostPlatform.system}.helix; })
     ];
-    home-manager.users.cole = { pkgs, ... }: {
-      # xdg.configFile."helix/languages.toml".source = gen {
-      #   languages = [
-      #     {
-      #       name = "nix";
-      #       formatter = {command = "alejandra";};
-      #     }
-      #   ];
-      # };
-      xdg.configFile."helix/themes/zed_onedark_custom.toml".text = ''
-        inherits = "zed_onedark"
+    home-manager.users.cole =
+      { pkgs, ... }:
+      {
+        # xdg.configFile."helix/languages.toml".source = gen {
+        #   languages = [
+        #     {
+        #       name = "nix";
+        #       formatter = {command = "alejandra";};
+        #     }
+        #   ];
+        # };
+        xdg.configFile."helix/themes/zed_onedark_custom.toml".text = ''
+          inherits = "zed_onedark"
 
-        "ui.statusline.inactive" = { fg = "#546178", bg = "#21252B" }
-        "ui.statusline" = { bg = "#181a1f" }
-      '';
-      # "ui.statusline" = "#000000"
-      # "ui.statusline.inactive" = "#000000"
-      xdg.configFile."helix/languages.toml".text =
-        let
+          "ui.statusline.inactive" = { fg = "#546178", bg = "#21252B" }
+          "ui.statusline" = { bg = "#181a1f" }
+        '';
+        # "ui.statusline" = "#000000"
+        # "ui.statusline.inactive" = "#000000"
+        xdg.configFile."helix/languages.toml".text =
+          let
+          in
           # lldbRustcScript = pkgs.writeShellScript "lldb-rustc-prelude.py" ''
           #   import subprocess
           #   import pathlib
           #   import lldb
-
           #   # determine the sysroot for the active rust interpreter
           #   rustlib_etc = pathlib.Path(subprocess.getoutput('rustc --print sysroot')) / 'lib' / 'rustlib' / 'etc'
           #   if not rustlib_etc.exists():
           #       raise RuntimeError('Unable to determine rustc sysroot')
-
           #   # load lldb_lookup.py and execute lldb_commands with the correct path
           #   lldb.debugger.HandleCommand(f"""command script import "{rustlib_etc / 'lldb_lookup.py'}" """)
           #   lldb.debugger.HandleCommand(f"""command source -s 0 "{rustlib_etc / 'lldb_commands'}" """)
           # '';
-        in
-        ''
-          [language-server.nu-lsp]
-          command = "nu"
-          args = [ "--lsp" ]
-        
-          [[language]]
-          name = "nix"
-          auto-format = false
-          formatter = { command = "nixpkgs-fmt" }
+          ''
+            [language-server.nu-lsp]
+            command = "nu"
+            args = [ "--lsp" ]
 
-          [[language]]
-          name = "nu"
-          language-servers = [ "nu-lsp" ]
-        '';
+            [[language]]
+            name = "nix"
+            auto-format = false
+            formatter = { command = "nixpkgs-fmt" }
 
-      # [[language]]
-      # name = "rust"
+            [[language]]
+            name = "nu"
+            language-servers = [ "nu-lsp" ]
+          '';
 
-      # [language.debugger]
-      # name = "lldb-vscode"
-      # transport = "stdio"
-      # command = "lldb-vscode"
-      #   [[langauge.debugger.templates]]
-      #   name = "binary"
-      #   request = "launch"
-      #   completion = [ { name = "binary", completion = "filename" } ]
-      #   args = { program = "{0}", initCommands = [ "command script import ${lldbRustcScript}" ] }
-      # '';
-      programs.helix = {
-        # TODO: temp workaround for cross-arch eval with cargo-nix-integration
-        enable = true;
-        package = _helixPkg;
+        # [[language]]
+        # name = "rust"
 
-        settings = {
-          # see "custom..." blah blah stuff for overriding the bar on a given theme to give extra contrast:
-          # TODO: add "Modern Dark" from modern VSCode to Helix
-          theme = "catppuccin_mocha";
+        # [language.debugger]
+        # name = "lldb-vscode"
+        # transport = "stdio"
+        # command = "lldb-vscode"
+        #   [[langauge.debugger.templates]]
+        #   name = "binary"
+        #   request = "launch"
+        #   completion = [ { name = "binary", completion = "filename" } ]
+        #   args = { program = "{0}", initCommands = [ "command script import ${lldbRustcScript}" ] }
+        # '';
+        programs.helix = {
+          # TODO: temp workaround for cross-arch eval with cargo-nix-integration
+          enable = true;
+          package = _helixPkg;
 
-          editor = {
-            auto-pairs = false;
-            bufferline = "always";
-            color-modes = true;
-            cursor-shape = {
-              normal = "block";
-              insert = "bar";
-              select = "underline";
-            };
-            cursorcolumn = true;
-            cursorline = true;
-            gutters = [
-              "diagnostics"
-              "line-numbers"
-              "spacer"
-              "diff"
-            ];
-            file-picker = {
-              hidden = false;
-            };
-            indent-guides = {
-              render = true;
-              character = "│";
-            };
-            line-number = "relative";
-            lsp = {
-              display-messages = true;
-            };
-            mouse = true;
-            rulers = [ 80 120 ];
-            statusline = {
-              left = [
-                "mode"
-                "spinner"
-                "version-control"
-                "file-name"
-                "file-modification-indicator"
-                "read-only-indicator"
-              ];
-              center = [ ];
-              right = [
-                "register"
-                "file-type"
+          settings = {
+            # see "custom..." blah blah stuff for overriding the bar on a given theme to give extra contrast:
+            # TODO: add "Modern Dark" from modern VSCode to Helix
+            theme = "catppuccin_mocha";
+
+            editor = {
+              auto-pairs = false;
+              bufferline = "always";
+              color-modes = true;
+              cursor-shape = {
+                normal = "block";
+                insert = "bar";
+                select = "underline";
+              };
+              cursorcolumn = true;
+              cursorline = true;
+              gutters = [
                 "diagnostics"
-                "selections"
-                "position"
-                "position-percentage"
+                "line-numbers"
+                "spacer"
+                "diff"
               ];
-            };
-            true-color = true;
-            whitespace = {
-              render.space = "all";
-              render.tab = "all";
-              render.newline = "all";
-              characters.space = " ";
-              characters.nbsp = "⍽";
-              characters.tab = "→";
-              characters.newline = "⏎";
-              characters.tabpad = "-";
+              file-picker = {
+                hidden = false;
+              };
+              indent-guides = {
+                render = true;
+                character = "│";
+              };
+              line-number = "relative";
+              lsp = {
+                display-messages = true;
+              };
+              mouse = true;
+              rulers = [
+                80
+                120
+              ];
+              statusline = {
+                left = [
+                  "mode"
+                  "spinner"
+                  "version-control"
+                  "file-name"
+                  "file-modification-indicator"
+                  "read-only-indicator"
+                ];
+                center = [ ];
+                right = [
+                  "register"
+                  "file-type"
+                  "diagnostics"
+                  "selections"
+                  "position"
+                  "position-percentage"
+                ];
+              };
+              true-color = true;
+              whitespace = {
+                render.space = "all";
+                render.tab = "all";
+                render.newline = "all";
+                characters.space = " ";
+                characters.nbsp = "⍽";
+                characters.tab = "→";
+                characters.newline = "⏎";
+                characters.tabpad = "-";
+              };
             };
           };
         };
       };
-    };
   };
 }

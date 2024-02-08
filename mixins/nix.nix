@@ -1,4 +1,10 @@
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 with lib;
 
@@ -51,7 +57,11 @@ in
           "https://nix-community.cachix.org"
         ];
         substituters = trusted-substituters;
-        trusted-users = [ "@wheel" "cole" "root" ];
+        trusted-users = [
+          "@wheel"
+          "cole"
+          "root"
+        ];
       };
       extraOptions = ''
         experimental-features = nix-command flakes recursive-nix
@@ -59,4 +69,3 @@ in
     };
   };
 }
-

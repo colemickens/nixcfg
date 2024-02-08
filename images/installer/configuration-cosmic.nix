@@ -1,4 +1,10 @@
-{ config, pkgs, lib, modulesPath, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  modulesPath,
+  ...
+}:
 
 let
   hn = "installer-cosmic";
@@ -17,13 +23,14 @@ in
     # probably only works with mesa-y platforms (so, no nvidia)
     hardware.opengl.enable = true;
 
-    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-      ### misc
-      "google-chrome"
-      "google-chrome-dev"
+    nixpkgs.config.allowUnfreePredicate =
+      pkg:
+      builtins.elem (lib.getName pkg) [
+        ### misc
+        "google-chrome"
+        "google-chrome-dev"
 
-      "google-chrome-120.0.6099.216" # uh, why is it suddenly making me include version?
-    ];
+        "google-chrome-120.0.6099.216" # uh, why is it suddenly making me include version?
+      ];
   };
 }
-

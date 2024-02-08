@@ -1,4 +1,12 @@
-{ pkgs, lib, modulesPath, inputs, config, extendModules, ... }:
+{
+  pkgs,
+  lib,
+  modulesPath,
+  inputs,
+  config,
+  extendModules,
+  ...
+}:
 
 let
   hn = "h96maxv58";

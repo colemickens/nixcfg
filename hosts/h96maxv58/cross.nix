@@ -1,4 +1,12 @@
-{ pkgs, lib, modulesPath, inputs, config, extendModules, ... }:
+{
+  pkgs,
+  lib,
+  modulesPath,
+  inputs,
+  config,
+  extendModules,
+  ...
+}:
 
 {
   imports = [
@@ -8,6 +16,13 @@
   ];
 
   config = {
-    boot.supportedFilesystems = lib.mkForce [ "btrfs" "ext4" "vfat" "f2fs" "xfs" "ntfs" ];
+    boot.supportedFilesystems = lib.mkForce [
+      "btrfs"
+      "ext4"
+      "vfat"
+      "f2fs"
+      "xfs"
+      "ntfs"
+    ];
   };
 }

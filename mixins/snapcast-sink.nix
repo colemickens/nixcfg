@@ -1,4 +1,11 @@
-{ pkgs, lib, modulesPath, inputs, config, ... }:
+{
+  pkgs,
+  lib,
+  modulesPath,
+  inputs,
+  config,
+  ...
+}:
 
 {
   config = {
@@ -6,7 +13,10 @@
       wantedBy = [ "basic.target" ];
       requires = [ "pipewire.service" ];
       after = [ "pipewire.service" ];
-      path = with pkgs; [ gawk pulseaudio ];
+      path = with pkgs; [
+        gawk
+        pulseaudio
+      ];
 
       # TODO: server probably needs to listen on PA and redirect itself to whatever sink snapserver makes
       script = ''

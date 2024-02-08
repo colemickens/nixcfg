@@ -1,9 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
-let cfg = config.services.tailscale-autoconnect;
-in {
+let
+  cfg = config.services.tailscale-autoconnect;
+in
+{
   meta.maintainers = with maintainers; [ colemickens ];
 
   options.services.tailscale-autoconnect = {
@@ -13,13 +20,13 @@ in {
       type = types.str;
       #default = "";
       example = "/run/keys/tailscale.key";
-      description = ''Path to the file containing the tailscale join authkey'';
+      description = "Path to the file containing the tailscale join authkey";
     };
 
     cleanupAuthkey = mkOption {
       type = types.bool;
       default = false;
-      description = ''Cleanup the authkey path after successful login.'';
+      description = "Cleanup the authkey path after successful login.";
     };
   };
 
@@ -28,8 +35,14 @@ in {
 
     systemd.services.tailscale-autoconnect = {
       description = "Automatic connection to Tailscale";
-      after = [ "network-pre.target" "tailscaled.service" ];
-      wants = [ "network-pre.target" "tailscaled.service" ];
+      after = [
+        "network-pre.target"
+        "tailscaled.service"
+      ];
+      wants = [
+        "network-pre.target"
+        "tailscaled.service"
+      ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";

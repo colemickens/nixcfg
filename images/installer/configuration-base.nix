@@ -1,4 +1,10 @@
-{ config, pkgs, lib, modulesPath, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  modulesPath,
+  ...
+}:
 
 let
   utils = import ./install-helpers.nix { inherit (pkgs) writeShellScriptBin; };
@@ -27,14 +33,16 @@ in
     ## </tailscale auto-login>
 
     ## my custom installer utils
-    environment.systemPackages = (with utils; [
-      cm-nixos-prep
-      cm-nixos-mount
-      cm-nixos-install
-    ]) ++ (with pkgs; [
-      sbctl
-      # bcachefs-tools
-    ]);
+    environment.systemPackages =
+      (with utils; [
+        cm-nixos-prep
+        cm-nixos-mount
+        cm-nixos-install
+      ])
+      ++ (with pkgs; [
+        sbctl
+        # bcachefs-tools
+      ]);
 
     nixcfg.common.skipMitigations = true;
     nixcfg.common.defaultKernel = true;
@@ -70,4 +78,3 @@ in
     systemd.services.sshd.wantedBy = pkgs.lib.mkOverride 10 [ "multi-user.target" ];
   };
 }
-

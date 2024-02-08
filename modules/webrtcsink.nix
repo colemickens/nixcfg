@@ -1,19 +1,26 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption types;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
 
   cfg = config.services.webrtcsink;
 
   servercfg = "#TODO write config file";
-  mkPubCfg = name:
-    "# TODO: write config file"
-  ;
-
-  # TODO:
-  # - how do we handle separation of webrtc/http? how does http find out
-  #   without... you know... needing ws? I guess the backend can talk ws to {ws_uri}
+  mkPubCfg = name: "# TODO: write config file";
 in
+# TODO:
+# - how do we handle separation of webrtc/http? how does http find out
+#   without... you know... needing ws? I guess the backend can talk ws to {ws_uri}
 {
   options = {
     services.webrtcsink = {
@@ -67,7 +74,6 @@ in
           };
         });
       };
-
     };
   };
 
@@ -79,36 +85,33 @@ in
           wantedBy = [ ];
           after = [ ];
           serviceConfig = {
-            ExecStart = [
-              "${pkgs.opencast}/bin/opencast-ws --config ${servercfg}"
-            ];
+            ExecStart = [ "${pkgs.opencast}/bin/opencast-ws --config ${servercfg}" ];
           };
         };
         "opencast-http@${pubname}" = {
           wantedBy = [ ];
           after = [ ];
           serviceConfig = {
-            ExecStart = [
-              "${pkgs.opencast}/bin/opencast-http --config ${servercfg}"
-            ];
+            ExecStart = [ "${pkgs.opencast}/bin/opencast-http --config ${servercfg}" ];
           };
         };
       })
-      (mkIf cfg.client.enable (lib.mkMerge [
-        (lib.mapAttrs'
-          (pubname: pubcfg: {
-            "opencast-publisher@${pubname}" = {
-              wantedBy = [ ];
-              after = [ ];
-              serviceConfig = {
-                ExecStart = [
-                  "${pkgs}/bin/opencast-publish --config ${mkPubCfg pubname}"
-                ];
+      (mkIf cfg.client.enable (
+        lib.mkMerge [
+          (lib.mapAttrs'
+            (pubname: pubcfg: {
+              "opencast-publisher@${pubname}" = {
+                wantedBy = [ ];
+                after = [ ];
+                serviceConfig = {
+                  ExecStart = [ "${pkgs}/bin/opencast-publish --config ${mkPubCfg pubname}" ];
+                };
               };
-            };
-          })
-          cfg.client.publishers)
-      ]))
+            })
+            cfg.client.publishers
+          )
+        ]
+      ))
     ];
   };
 }

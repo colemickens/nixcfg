@@ -1,4 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   hn = "xeep";
@@ -58,18 +64,27 @@ in
     services.nginx = lib.mkIf (enableNetboot) {
       enable = true;
       virtualHosts."default" = {
-        root = (pkgs.runCommand "nginx-root" { } ''
-          mkdir $out
-          ln -s "${(nb nbhost).squashfs}" "$out/${nbhost}-netboot-squashfs"
-        '').outPath;
+        root =
+          (pkgs.runCommand "nginx-root" { } ''
+            mkdir $out
+            ln -s "${(nb nbhost).squashfs}" "$out/${nbhost}-netboot-squashfs"
+          '').outPath;
         extraConfig = ''
           disable_symlinks off;
         '';
       };
     };
     # TODO: this isn't enough to get atftpd working...
-    networking.firewall.allowedTCPPorts = lib.mkIf (enableNetboot) [ 80 8099 ];
-    networking.firewall.allowedUDPPorts = lib.mkIf (enableNetboot) [ 67 69 4011 1758 ];
+    networking.firewall.allowedTCPPorts = lib.mkIf (enableNetboot) [
+      80
+      8099
+    ];
+    networking.firewall.allowedUDPPorts = lib.mkIf (enableNetboot) [
+      67
+      69
+      4011
+      1758
+    ];
     # TEMP END
 
     nixpkgs.hostPlatform.system = "x86_64-linux";
@@ -92,7 +107,13 @@ in
       enable = true;
       networks."15-eth0-static-ip" = {
         matchConfig.Driver = "r8152";
-        addresses = [{ addressConfig = { Address = static_ip; }; }];
+        addresses = [
+          {
+            addressConfig = {
+              Address = static_ip;
+            };
+          }
+        ];
         networkConfig = {
           Gateway = "192.168.1.1";
           DHCP = "no";
@@ -101,10 +122,22 @@ in
     };
 
     fileSystems = {
-      "/" = { fsType = "zfs"; device = "${poolname}/root"; };
-      "/nix" = { fsType = "zfs"; device = "${poolname}/nix"; };
-      "/home" = { fsType = "zfs"; device = "${poolname}/home"; };
-      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/${bootpart}"; };
+      "/" = {
+        fsType = "zfs";
+        device = "${poolname}/root";
+      };
+      "/nix" = {
+        fsType = "zfs";
+        device = "${poolname}/nix";
+      };
+      "/home" = {
+        fsType = "zfs";
+        device = "${poolname}/home";
+      };
+      "/boot" = {
+        fsType = "vfat";
+        device = "/dev/disk/by-partlabel/${bootpart}";
+      };
     };
     swapDevices = [ ];
 
@@ -125,9 +158,7 @@ in
         "msr"
       ];
       kernelModules = config.boot.initrd.availableKernelModules;
-      kernelParams = [
-        "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}"
-      ];
+      kernelParams = [ "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}" ];
       initrd.luks.devices = {
         "nixos-luksroot" = {
           device = "/dev/disk/by-partlabel/${lukspart}";
@@ -141,4 +172,3 @@ in
     };
   };
 }
-

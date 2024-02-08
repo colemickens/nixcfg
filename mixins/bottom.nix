@@ -1,12 +1,20 @@
-{ pkgs, lib, config, inputs, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}:
 
 {
   config = {
-    home-manager.users.cole = { pkgs, ... }: {
-      programs.bottom = {
-        enable = true;
-        # settings = {};
+    home-manager.users.cole =
+      { pkgs, ... }:
+      {
+        programs.bottom = {
+          enable = true;
+          # settings = {};
+        };
       };
-    };
   };
 }

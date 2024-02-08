@@ -1,4 +1,10 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}:
 
 {
   imports = [
@@ -12,7 +18,10 @@
     nixpkgs.hostPlatform.system = "aarch64-linux";
     system.stateVersion = "24.05";
 
-    boot.initrd.availableKernelModules = [ "nvme" "usb_storage" ];
+    boot.initrd.availableKernelModules = [
+      "nvme"
+      "usb_storage"
+    ];
     boot.initrd.kernelModules = [ ];
 
     boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;

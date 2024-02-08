@@ -3,9 +3,7 @@
 {
   config = {
 
-    boot.extraModulePackages = [
-      config.boot.kernelPackages.v4l2loopback
-    ];
+    boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
 
     environment.systemPackages = with pkgs; [
       v4l-utils
@@ -21,15 +19,17 @@
       '')
     ];
 
-    home-manager.users.cole = { pkgs, ... }: {
-      programs.obs-studio = {
-        enable = true;
+    home-manager.users.cole =
+      { pkgs, ... }:
+      {
+        programs.obs-studio = {
+          enable = true;
 
-        # TODO: is this even needed? isn't it built in?
-        plugins = with pkgs; [
-          # obs-studio-plugins.wlrobs
-        ];
+          # TODO: is this even needed? isn't it built in?
+          plugins = with pkgs; [
+            # obs-studio-plugins.wlrobs
+          ];
+        };
       };
-    };
   };
 }

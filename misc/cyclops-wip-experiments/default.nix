@@ -29,34 +29,36 @@ let
     type = "copytohost"; # enum of [update,cachix,r2nix]
     paths = [ "ciJobs.x86_64-linux.default" ];
   };
-  # _cache = {
-  #   type = "r2"; # enum of [update,cachix,r2nix]
-  #   paths = [ "ciJobs.x86_64-linux.default" ];
-  #   account_id = "ooooo";
-  #   keyPath = "/run/secrets/foobar";
-  # };
 in
+# _cache = {
+#   type = "r2"; # enum of [update,cachix,r2nix]
+#   paths = [ "ciJobs.x86_64-linux.default" ];
+#   account_id = "ooooo";
+#   keyPath = "/run/secrets/foobar";
+# };
 {
   sources = ./grm.toml;
   shareKey = ./...; # used for sharing across builder overlays? TODO??
   hmConfig = {
-    home-manager.users."colebot" = { ... }: {
-      git = {
-        user.name = "colebot202305";
-        user.email = "cole.mickens+colebot@gmail.com";
+    home-manager.users."colebot" =
+      { ... }:
+      {
+        git = {
+          user.name = "colebot202305";
+          user.email = "cole.mickens+colebot@gmail.com";
+        };
+        # nix probably don't bother with since we pass it around to builders anyway?
+        sops-nix = (
+          cylib.gen.sops-nix [
+            "id_rsa_colebot202305"
+            "equinix_apikey_colemickens202305"
+            "cachix_signing_key_colemickens"
+          ]
+        );
       };
-      # nix probably don't bother with since we pass it around to builders anyway?
-      sops-nix = (cylib.gen.sops-nix [
-        "id_rsa_colebot202305"
-        "equinix_apikey_colemickens202305"
-        "cachix_signing_key_colemickens"
-      ]);
-    };
   };
   buildsets = {
-    "x86_64-linux" = [
-      "ciJobs.x86_64-linux.default"
-    ];
+    "x86_64-linux" = [ "ciJobs.x86_64-linux.default" ];
   };
   tags = [ "update" ];
   conflict = [ "update" ];
@@ -77,7 +79,10 @@ in
       # TODO: maybe there's a better key to select out of grm, or use grm as a lib?
       srcDir = "/nixcfg/main";
       extraRunSteps = [
-        [ "main" "pkgup" ]
+        [
+          "main"
+          "pkgup"
+        ]
       ];
     }
     {
@@ -90,4 +95,3 @@ in
     }
   ];
 }
-

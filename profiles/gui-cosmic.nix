@@ -1,19 +1,31 @@
-{ pkgs, lib, config, inputs, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}:
 
 let
-  prefs = import ../mixins/_preferences.nix { inherit inputs config lib pkgs; };
+  prefs = import ../mixins/_preferences.nix {
+    inherit
+      inputs
+      config
+      lib
+      pkgs
+      ;
+  };
 in
 {
-  imports = [
-    ./gui-wayland.nix
-  ];
+  imports = [ ./gui-wayland.nix ];
 
   config = {
     services.xserver.desktopManager.cosmic = {
       enable = true;
     };
 
-    home-manager.users.cole = { pkgs, config, ... }@hm:
+    home-manager.users.cole =
+      { pkgs, config, ... }@hm:
       {
         home.packages = with pkgs; [ ];
 

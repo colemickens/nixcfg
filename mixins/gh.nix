@@ -9,10 +9,12 @@
       sopsFile = ../secrets/encrypted/gh-hosts.yml;
       format = "binary";
     };
-    home-manager.users.cole = { pkgs, ... }: {
-      programs.gh = {
-        enable = true;
+    home-manager.users.cole =
+      { pkgs, ... }:
+      {
+        programs.gh = {
+          enable = true;
+        };
       };
-    };
   };
 }

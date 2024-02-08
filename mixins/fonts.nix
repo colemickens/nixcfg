@@ -1,6 +1,19 @@
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 let
-  prefs = import ./_preferences.nix { inherit config lib pkgs inputs; };
+  prefs = import ./_preferences.nix {
+    inherit
+      config
+      lib
+      pkgs
+      inputs
+      ;
+  };
 in
 {
   config = {

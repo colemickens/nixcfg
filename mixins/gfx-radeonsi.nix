@@ -1,4 +1,10 @@
-{ pkgs, lib, config, inputs, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}:
 
 let
   _nvtop = pkgs.nvtop.override { nvidia = false; };
@@ -12,9 +18,7 @@ in
     #   utils.enable = true;
     # };
 
-    environment.systemPackages = with pkgs; [
-      _nvtop
-    ];
+    environment.systemPackages = with pkgs; [ _nvtop ];
 
     environment.sessionVariables = {
       DISABLE_LAYER_AMD_SWITCHABLE_GRAPHICS_1 = "1";

@@ -9,11 +9,12 @@
       enableGraphical = true;
     };
 
-    home-manager.users.cole = { pkgs, ... }: {
-      home.packages = with pkgs; [
-        # piper
-      ];
-    };
+    home-manager.users.cole =
+      { pkgs, ... }:
+      {
+        home.packages = with pkgs; [
+          # piper
+        ];
+      };
   };
 }
-

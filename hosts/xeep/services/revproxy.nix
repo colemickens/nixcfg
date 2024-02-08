@@ -1,4 +1,11 @@
-{ config, pkgs, lib, modulesPath, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  modulesPath,
+  inputs,
+  ...
+}:
 
 let
   carbon_ip4 = "100.122.12.36";
@@ -124,7 +131,12 @@ in
     };
 
     networking.firewall = {
-      allowedTCPPorts = [ 80 443 8000 9443 ];
+      allowedTCPPorts = [
+        80
+        443
+        8000
+        9443
+      ];
     };
 
     security.acme = {
@@ -224,7 +236,6 @@ in
         #   '';
         # };
       };
-
 
       # INTERNAL ONLY
       virtualHosts."${idomain}" = internalVhost // {

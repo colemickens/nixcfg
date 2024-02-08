@@ -1,13 +1,16 @@
-{ pkgs, config, inputs, ... }:
+{
+  pkgs,
+  config,
+  inputs,
+  ...
+}:
 
 # these are dev tools that we want available
 # system wide on my dev machine(s)
 
 {
   config = {
-    networking.firewall.interfaces."tailscale0".allowedTCPPorts = [
-      3000
-    ];
+    networking.firewall.interfaces."tailscale0".allowedTCPPorts = [ 3000 ];
     environment.systemPackages = [
       (pkgs.writeShellScriptBin "start-openvscode-server" ''
         port="$1"

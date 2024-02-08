@@ -2,10 +2,12 @@
 
 {
   config = {
-    home-manager.users.cole = { pkgs, ... }: {
-      services.easyeffects = {
-        enable = true;
+    home-manager.users.cole =
+      { pkgs, ... }:
+      {
+        services.easyeffects = {
+          enable = true;
+        };
       };
-    };
   };
 }

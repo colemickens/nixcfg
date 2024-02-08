@@ -1,8 +1,9 @@
-{ writeShellScriptBin
-, symlinkJoin
-, freerdp
-, wayland-proxy-virtwl
-, xwayland
+{
+  writeShellScriptBin,
+  symlinkJoin,
+  freerdp,
+  wayland-proxy-virtwl,
+  xwayland,
 }:
 
 # note: we intentionally don't use full paths so that these scripts
@@ -23,7 +24,7 @@ let
       --xwayland-binary=${xwayland}/bin/Xwayland \
       --x-display=2 \
       --verbose &
-    
+
     sleep 1
     echo
     echo "Ready! Example usage (in a new terminal):" >&2
@@ -32,25 +33,22 @@ let
     echo
     wait
   '';
-  # rdp-sly = writeShellScriptBin "rdp-sly" ''
-  #   RDPUSER="cole.mickens@gmail.com"
-  #   RDPPASS="$(gopass show -o "websites/microsoft.com/cole.mickens@gmail.com")"
-
-  #   RDPHOST="''${RDPHOST:-"192.168.1.11"}"
-
-  #   ${freerdp}/bin/wlfreerdp
-  #     /v:"''${RDPHOST}" \
-  #     /u:"''${RDPUSER}" \
-  #     /p:"''${RDPPASS}" \
-  #     /rfx +fonts /dynamic-resolution /compression-level:2
-  # '';
-
-  # gs = writeShellScriptBin "gs" ''
-  #   set -x
-  #   export ENABLE_GAMESCOPE_WSI=1
-  #   ${gamescope}/bin/gamescope -w 1920 -h 1080 -r 120 --hdr-enabled -- "''${@}"
-  # '';
 in
+# rdp-sly = writeShellScriptBin "rdp-sly" ''
+#   RDPUSER="cole.mickens@gmail.com"
+#   RDPPASS="$(gopass show -o "websites/microsoft.com/cole.mickens@gmail.com")"
+#   RDPHOST="''${RDPHOST:-"192.168.1.11"}"
+#   ${freerdp}/bin/wlfreerdp
+#     /v:"''${RDPHOST}" \
+#     /u:"''${RDPUSER}" \
+#     /p:"''${RDPPASS}" \
+#     /rfx +fonts /dynamic-resolution /compression-level:2
+# '';
+# gs = writeShellScriptBin "gs" ''
+#   set -x
+#   export ENABLE_GAMESCOPE_WSI=1
+#   ${gamescope}/bin/gamescope -w 1920 -h 1080 -r 120 --hdr-enabled -- "''${@}"
+# '';
 symlinkJoin {
   name = "commands-gui";
   paths = [
@@ -62,4 +60,3 @@ symlinkJoin {
     # gs
   ];
 }
-

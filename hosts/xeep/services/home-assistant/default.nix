@@ -42,12 +42,19 @@ let
     candle_1 = "switch.wp6_sw107_relay";
     candle_2 = "switch.wp6_sw108_relay";
     candle_3 = "switch.wp6_sw109_relay";
-    _all_candles = [ candle_den_bath candle_1 candle_2 candle_3 ];
+    _all_candles = [
+      candle_den_bath
+      candle_1
+      candle_2
+      candle_3
+    ];
   };
 in
 {
   config = {
-    networking.firewall = { allowedTCPPorts = [ ha_port ]; };
+    networking.firewall = {
+      allowedTCPPorts = [ ha_port ];
+    };
 
     services.home-assistant = {
       enable = true;
@@ -72,62 +79,82 @@ in
         };
 
         script = {
-          lgc1_screen_on.sequence = [{
-            service = "webostv.command";
-            target.entity_id = "media_player.lg_webos_smart_tv";
-            data.command = "com.webos.service.tvpower/power/turnOnScreen";
-          }];
-          lgc1_screen_off.sequence = [{
-            service = "webostv.command";
-            target.entity_id = "media_player.lg_webos_smart_tv";
-            data.command = "com.webos.service.tvpower/power/turnOffScreen";
-          }];
-          lgc1_open_youtube.sequence = [{
-            service = "webostv.command";
-            target.entity_id = "media_player.lg_webos_smart_tv";
-            data.payload.id = "youtube.leanback.v4";
-            data.command = "system.launcher/launch";
-          }];
-          lgc1_open_hulu.sequence = [{
-            service = "webostv.command";
-            target.entity_id = "media_player.lg_webos_smart_tv";
-            data.payload.id = "hulu";
-            data.command = "system.launcher/launch";
-          }];
-          lgc1_open_amazon.sequence = [{
-            service = "webostv.command";
-            target.entity_id = "media_player.lg_webos_smart_tv";
-            data.payload.id = "amazon";
-            data.command = "system.launcher/launch";
-          }];
-          lgc1_open_netflix.sequence = [{
-            service = "webostv.command";
-            target.entity_id = "media_player.lg_webos_smart_tv";
-            data.payload.id = "netflix";
-            data.command = "system.launcher/launch";
-          }];
-          lgc1_open_spotify.sequence = [{
-            service = "webostv.command";
-            target.entity_id = "media_player.lg_webos_smart_tv";
-            data.payload.id = "spotify-beehive";
-            data.command = "system.launcher/launch";
-          }];
-          lgc1_open_plex.sequence = [{
-            service = "webostv.command";
-            target.entity_id = "media_player.lg_webos_smart_tv";
-            data.payload.id = "cdp-30";
-            data.command = "system.launcher/launch";
-          }];
-          lgc1_open_pc.sequence = [{
-            service = "media_player.select_source";
-            entity_id = "media_player.lg_webos_smart_tv";
-            data.source = "PC";
-          }];
-          lgc1_open_switch.sequence = [{
-            service = "media_player.select_source";
-            entity_id = "media_player.lg_webos_smart_tv";
-            data.source = "Switch";
-          }];
+          lgc1_screen_on.sequence = [
+            {
+              service = "webostv.command";
+              target.entity_id = "media_player.lg_webos_smart_tv";
+              data.command = "com.webos.service.tvpower/power/turnOnScreen";
+            }
+          ];
+          lgc1_screen_off.sequence = [
+            {
+              service = "webostv.command";
+              target.entity_id = "media_player.lg_webos_smart_tv";
+              data.command = "com.webos.service.tvpower/power/turnOffScreen";
+            }
+          ];
+          lgc1_open_youtube.sequence = [
+            {
+              service = "webostv.command";
+              target.entity_id = "media_player.lg_webos_smart_tv";
+              data.payload.id = "youtube.leanback.v4";
+              data.command = "system.launcher/launch";
+            }
+          ];
+          lgc1_open_hulu.sequence = [
+            {
+              service = "webostv.command";
+              target.entity_id = "media_player.lg_webos_smart_tv";
+              data.payload.id = "hulu";
+              data.command = "system.launcher/launch";
+            }
+          ];
+          lgc1_open_amazon.sequence = [
+            {
+              service = "webostv.command";
+              target.entity_id = "media_player.lg_webos_smart_tv";
+              data.payload.id = "amazon";
+              data.command = "system.launcher/launch";
+            }
+          ];
+          lgc1_open_netflix.sequence = [
+            {
+              service = "webostv.command";
+              target.entity_id = "media_player.lg_webos_smart_tv";
+              data.payload.id = "netflix";
+              data.command = "system.launcher/launch";
+            }
+          ];
+          lgc1_open_spotify.sequence = [
+            {
+              service = "webostv.command";
+              target.entity_id = "media_player.lg_webos_smart_tv";
+              data.payload.id = "spotify-beehive";
+              data.command = "system.launcher/launch";
+            }
+          ];
+          lgc1_open_plex.sequence = [
+            {
+              service = "webostv.command";
+              target.entity_id = "media_player.lg_webos_smart_tv";
+              data.payload.id = "cdp-30";
+              data.command = "system.launcher/launch";
+            }
+          ];
+          lgc1_open_pc.sequence = [
+            {
+              service = "media_player.select_source";
+              entity_id = "media_player.lg_webos_smart_tv";
+              data.source = "PC";
+            }
+          ];
+          lgc1_open_switch.sequence = [
+            {
+              service = "media_player.select_source";
+              entity_id = "media_player.lg_webos_smart_tv";
+              data.source = "Switch";
+            }
+          ];
           # lgc1_open_gallery.sequence = [{
           #   # com.webos.app.igallery
           #   # com.webos.app.screensaver
@@ -153,11 +180,13 @@ in
               service = "light.turn_on";
               target.entity_id = nanoleaf_light;
               data.brightness_pct = 20;
-              data.rgb_color = [ 255 0 0 ];
+              data.rgb_color = [
+                255
+                0
+                0
+              ];
             }
-            {
-              delay.minutes = 20;
-            }
+            { delay.minutes = 20; }
             {
               service = "light.turn_off";
               target.entity_id = nanoleaf_light;
@@ -168,20 +197,24 @@ in
               service = "light.turn_on";
               target.entity_id = nanoleaf_light;
               data.brightness_pct = 20;
-              data.rgb_color = [ 255 255 255 ];
+              data.rgb_color = [
+                255
+                255
+                255
+              ];
             }
-            {
-              delay.minutes = 30;
-            }
+            { delay.minutes = 30; }
             {
               service = "light.turn_on";
               target.entity_id = nanoleaf_light;
               data.brightness_pct = 100;
-              data.rgb_color = [ 255 255 255 ];
+              data.rgb_color = [
+                255
+                255
+                255
+              ];
             }
-            {
-              delay.minutes = 30;
-            }
+            { delay.minutes = 30; }
             {
               service = "light.turn_on";
               target.entity_id = nanoleaf_light;
@@ -196,9 +229,7 @@ in
             #   service = "media_player.turn_on";
             #   target.entity_id = "media_player.lg_webos_smart_tv";
             # }
-            {
-              delay.seconds = 15;
-            }
+            { delay.seconds = 15; }
             # {
             #   service = "script.turn_on";
             #   entity_id = "script.lgc1_open_gallery";
@@ -217,11 +248,13 @@ in
               platform = "webostv.turn_on";
               entity_id = "media_player.lg_webos_smart_tv";
             };
-            action = [{
-              service = "wake_on_lan.send_magic_packet";
-              # data.mac = "74-E6-B8-0E-BB-38";
-              data.mac = lgtv_mac;
-            }];
+            action = [
+              {
+                service = "wake_on_lan.send_magic_packet";
+                # data.mac = "74-E6-B8-0E-BB-38";
+                data.mac = lgtv_mac;
+              }
+            ];
           }
           {
             id = "candles_on";
@@ -229,12 +262,19 @@ in
             mode = "single";
             trigger = {
               platform = "time";
-              at = [ "00:00:00" "6:00:00" "12:00:00" "18:00:00" ];
+              at = [
+                "00:00:00"
+                "6:00:00"
+                "12:00:00"
+                "18:00:00"
+              ];
             };
-            action = [{
-              service = "switch.turn_on";
-              target.entity_id = candle_switches;
-            }];
+            action = [
+              {
+                service = "switch.turn_on";
+                target.entity_id = candle_switches;
+              }
+            ];
           }
           {
             id = "candles_off";
@@ -242,12 +282,19 @@ in
             mode = "single";
             trigger = {
               platform = "time";
-              at = [ "2:00:00" "8:00:00" "14:00:00" "20:00:00" ];
+              at = [
+                "2:00:00"
+                "8:00:00"
+                "14:00:00"
+                "20:00:00"
+              ];
             };
-            action = [{
-              service = "switch.turn_off";
-              target.entity_id = candle_switches;
-            }];
+            action = [
+              {
+                service = "switch.turn_off";
+                target.entity_id = candle_switches;
+              }
+            ];
           }
         ];
         config = { };
@@ -259,7 +306,10 @@ in
           server_host = ha_host;
           server_port = ha_port;
           use_x_forwarded_for = true;
-          trusted_proxies = [ "127.0.0.1" "::1" ];
+          trusted_proxies = [
+            "127.0.0.1"
+            "::1"
+          ];
         };
         braviatv = { };
         nanoleaf = { };
@@ -425,10 +475,22 @@ in
                 title = "Candles";
                 type = "entities";
                 entities = [
-                  { name = "Bathroom-Den"; entity = "switch.wp6_sw105_relay"; }
-                  { name = "Plant Shelf"; entity = "switch.wp6_sw107_relay"; }
-                  { name = "Bedroom"; entity = "switch.wp6_sw108_relay"; }
-                  { name = "Bathroom"; entity = "switch.wp6_sw109_relay"; }
+                  {
+                    name = "Bathroom-Den";
+                    entity = "switch.wp6_sw105_relay";
+                  }
+                  {
+                    name = "Plant Shelf";
+                    entity = "switch.wp6_sw107_relay";
+                  }
+                  {
+                    name = "Bedroom";
+                    entity = "switch.wp6_sw108_relay";
+                  }
+                  {
+                    name = "Bathroom";
+                    entity = "switch.wp6_sw109_relay";
+                  }
                 ];
               }
             ];
@@ -543,7 +605,6 @@ in
           #     }
           #   ];
           # }
-
         ];
       };
     };

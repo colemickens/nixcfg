@@ -21,13 +21,15 @@
     #   SUBSYSTEMS=="usb", ATTRS{idVendor}=="2c97", ATTRS{idProduct}=="1015", MODE="0660", GROUP="plugdev"
     # '';
 
-    home-manager.users.cole = { pkgs, ... }: {
-      home.packages = with pkgs; [
-        # ledger_agent
-        ledger-live-desktop
+    home-manager.users.cole =
+      { pkgs, ... }:
+      {
+        home.packages = with pkgs; [
+          # ledger_agent
+          ledger-live-desktop
 
-        # monero-gui
-      ];
-    };
+          # monero-gui
+        ];
+      };
   };
 }

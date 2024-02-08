@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 # A temporary hack to `loginctl enable-linger $somebody` (for
 # multiplexer sessions to last), until this one is unresolved:
@@ -12,11 +17,19 @@ let
 
   dataDir = "/var/lib/systemd/linger";
 
-  lingeringUsers = map (u: u.name) (attrValues (flip filterAttrs config.users.users (n: u: u.linger)));
+  lingeringUsers = map (u: u.name) (
+    attrValues (flip filterAttrs config.users.users (n: u: u.linger))
+  );
 
-  lingeringUsersFile = builtins.toFile "lingering-users"
-    (concatStrings (map (s: "${s}\n")
-      (sort (a: b: a < b) lingeringUsers))); # this sorting is important for `comm` to work correctly
+  lingeringUsersFile = builtins.toFile "lingering-users" (
+    concatStrings (
+      map
+        (s: ''
+          ${s}
+        '')
+        (sort (a: b: a < b) lingeringUsers)
+    )
+  ); # this sorting is important for `comm` to work correctly
 
   updateLingering = ''
     mkdir -p ${dataDir}
@@ -25,20 +38,17 @@ let
       ls ${dataDir} | sort | comm -3 -2 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl  enable-linger
     fi
   '';
-
 in
 
 {
   options = {
-    users.users = mkOption {
-      options = [{
-        linger = mkEnableOption "lingering for the user";
-      }];
-    };
+    users.users = mkOption { options = [ { linger = mkEnableOption "lingering for the user"; } ]; };
   };
 
   config = {
-    system.activationScripts.update-lingering =
-      { text = updateLingering; deps = [ "users" ]; };
+    system.activationScripts.update-lingering = {
+      text = updateLingering;
+      deps = [ "users" ];
+    };
   };
 }

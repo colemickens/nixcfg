@@ -1,4 +1,10 @@
-{ pkgs, lib, config, inputs, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}:
 
 let
   wlr_renderer = "vulkan";
@@ -32,29 +38,34 @@ in
     services.getty.autologinUser = "cole";
     hardware.opengl.enable = true;
 
-    environment.systemPackages = (with pkgs; ([
-      # wezterm
-      # qt5.qtwayland
-      # qt6.qtwayland
-    ]));
+    environment.systemPackages = (
+      with pkgs;
+      ([
+        # wezterm
+        # qt5.qtwayland
+        # qt6.qtwayland
+      ])
+    );
 
-    home-manager.users.cole = { pkgs, config, ... }@hm: {
-      home.sessionVariables = {
-        XDG_SESSION_TYPE = "wayland";
-      };
-      wayland.windowManager.sway = {
-        enable = true;
-        systemd.enable = true; # beta
-        wrapperFeatures = {
-          base = false; # this should be the default (dbus activation, not sure where XDG_CURRENT_DESKTOP comes from)
-          gtk = true; # I think this is also the default...
+    home-manager.users.cole =
+      { pkgs, config, ... }@hm:
+      {
+        home.sessionVariables = {
+          XDG_SESSION_TYPE = "wayland";
         };
-        xwayland = false;
-        config = {
-          bars = [ ];
+        wayland.windowManager.sway = {
+          enable = true;
+          systemd.enable = true; # beta
+          wrapperFeatures = {
+            base = false; # this should be the default (dbus activation, not sure where XDG_CURRENT_DESKTOP comes from)
+            gtk = true; # I think this is also the default...
+          };
+          xwayland = false;
+          config = {
+            bars = [ ];
+          };
         };
       };
-    };
 
     environment.loginShellInit = ''
       [[ "$(tty)" == /dev/tty1 ]] && (
@@ -67,27 +78,31 @@ in
       )
     '';
 
-    systemd.user.services = (lib.flip lib.mapAttrs' autostarts (n: v: {
-      name = "sway-autostart-${n}";
-      value = {
-        enable = true;
-        description = "sway-autostart-${n}";
+    systemd.user.services = (
+      lib.flip lib.mapAttrs' autostarts (
+        n: v: {
+          name = "sway-autostart-${n}";
+          value = {
+            enable = true;
+            description = "sway-autostart-${n}";
 
-        wantedBy = [ "graphical-session.target" ];
-        partOf = [ "graphical-session.target" ];
+            wantedBy = [ "graphical-session.target" ];
+            partOf = [ "graphical-session.target" ];
 
-        environment = {
-          # WAYLAND_DISPLAY = "wayland-1"; # shouldn't be needed
-          # the sway startup should've imported WAYLAND_DISPLAY ahead of time
-          QT_QPA_PLATFORM = "wayland-egl";
-        };
-        script = v;
-        restartIfChanged = true;
-        serviceConfig = {
-          Restart = "always";
-          RestartSec = 3;
-        };
-      };
-    }));
+            environment = {
+              # WAYLAND_DISPLAY = "wayland-1"; # shouldn't be needed
+              # the sway startup should've imported WAYLAND_DISPLAY ahead of time
+              QT_QPA_PLATFORM = "wayland-egl";
+            };
+            script = v;
+            restartIfChanged = true;
+            serviceConfig = {
+              Restart = "always";
+              RestartSec = 3;
+            };
+          };
+        }
+      )
+    );
   };
 }

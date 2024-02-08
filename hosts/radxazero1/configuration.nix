@@ -1,4 +1,12 @@
-{ pkgs, lib, modulesPath, extendModules, inputs, config, ... }:
+{
+  pkgs,
+  lib,
+  modulesPath,
+  extendModules,
+  inputs,
+  config,
+  ...
+}:
 
 let
   eth_ip = "192.168.162.69/16";
@@ -22,9 +30,7 @@ in
   ];
 
   config = {
-    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-      "meson64-tools"
-    ];
+    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "meson64-tools" ];
 
     # try to fix hdmi audio:
     # hardware.deviceTree.overlays = [
@@ -78,12 +84,16 @@ in
     networking.wireless.iwd.enable = true;
 
     fileSystems = {
-      "/" = { fsType = "ext4"; device = "/dev/disk/by-partlabel/zero-nixos"; };
-      "/boot" = { fsType = "vfat"; device = "/dev/disk/by-partlabel/zero-boot"; };
+      "/" = {
+        fsType = "ext4";
+        device = "/dev/disk/by-partlabel/zero-nixos";
+      };
+      "/boot" = {
+        fsType = "vfat";
+        device = "/dev/disk/by-partlabel/zero-boot";
+      };
     };
-    swapDevices = [
-      { device = "/dev/disk/by-partlabel/zero-swap"; }
-    ];
+    swapDevices = [ { device = "/dev/disk/by-partlabel/zero-swap"; } ];
 
     # boot.initrd.systemd.network.networks."10-eth0".addresses =
     #   [{ addressConfig = { Address = eth_ip; }; }];

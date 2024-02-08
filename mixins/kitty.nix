@@ -1,4 +1,9 @@
-{ pkgs, config, inputs, ... }:
+{
+  pkgs,
+  config,
+  inputs,
+  ...
+}:
 
 let
   prefs = import ./_preferences.nix { inherit pkgs inputs; };
@@ -7,10 +12,12 @@ let
 in
 {
   config = {
-    home-manager.users.cole = { pkgs, ... }: {
-      programs.kitty = {
-        enable = true;
+    home-manager.users.cole =
+      { pkgs, ... }:
+      {
+        programs.kitty = {
+          enable = true;
+        };
       };
-    };
   };
 }

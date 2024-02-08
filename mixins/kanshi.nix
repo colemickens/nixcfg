@@ -1,4 +1,10 @@
-{ pkgs, lib, config, inputs, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}:
 
 let
   out_aw3418dw = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
@@ -8,44 +14,103 @@ let
 in
 {
   config = {
-    home-manager.users.cole = { pkgs, ... }: {
-      services = {
-        kanshi = {
-          enable = true;
-          systemdTarget = "graphical-session.target";
-          profiles = {
-            "zeph_undocked".outputs = [
-              { criteria = out_zeph; status = "enable"; scale = 1.7; }
-            ];
-            "zeph_docked_both".outputs = [
-              { criteria = out_zeph; status = "disable"; }
-              { criteria = out_aw3418dw; status = "enable"; position = "1920,0"; }
-              { criteria = out_aw2521h; status = "enable"; position = "0,0"; }
-            ];
-            "zeph_docked_aw25".outputs = [
-              { criteria = out_zeph; status = "disable"; }
-              { criteria = out_aw2521h; status = "enable"; position = "0,0"; }
-            ];
-            "zeph_docked_aw34".outputs = [
-              { criteria = out_zeph; status = "disable"; }
-              { criteria = out_aw3418dw; status = "enable"; position = "0,0"; }
-            ];
-            "zeph_all".outputs = [
-              { criteria = out_aw2521h; status = "enable"; position = "0,0"; }
-              { criteria = out_aw3418dw; status = "enable"; position = "1920,0"; }
-              { criteria = out_zeph; status = "enable"; position = "${builtins.toString (1920+3440)},0"; }
-            ];
-            "zeph_portable".outputs = [
-              { criteria = out_zeph; status = "enable"; position = "0,0"; }
-              { criteria = out_extdisp; status = "enable"; position = "2560,0"; }
-            ];
-            "zeph_portable2".outputs = [
-              { criteria = out_zeph; status = "enable"; position = "2560,0"; }
-              { criteria = out_extdisp; status = "enable"; position = "0,0"; }
-            ];
+    home-manager.users.cole =
+      { pkgs, ... }:
+      {
+        services = {
+          kanshi = {
+            enable = true;
+            systemdTarget = "graphical-session.target";
+            profiles = {
+              "zeph_undocked".outputs = [
+                {
+                  criteria = out_zeph;
+                  status = "enable";
+                  scale = 1.7;
+                }
+              ];
+              "zeph_docked_both".outputs = [
+                {
+                  criteria = out_zeph;
+                  status = "disable";
+                }
+                {
+                  criteria = out_aw3418dw;
+                  status = "enable";
+                  position = "1920,0";
+                }
+                {
+                  criteria = out_aw2521h;
+                  status = "enable";
+                  position = "0,0";
+                }
+              ];
+              "zeph_docked_aw25".outputs = [
+                {
+                  criteria = out_zeph;
+                  status = "disable";
+                }
+                {
+                  criteria = out_aw2521h;
+                  status = "enable";
+                  position = "0,0";
+                }
+              ];
+              "zeph_docked_aw34".outputs = [
+                {
+                  criteria = out_zeph;
+                  status = "disable";
+                }
+                {
+                  criteria = out_aw3418dw;
+                  status = "enable";
+                  position = "0,0";
+                }
+              ];
+              "zeph_all".outputs = [
+                {
+                  criteria = out_aw2521h;
+                  status = "enable";
+                  position = "0,0";
+                }
+                {
+                  criteria = out_aw3418dw;
+                  status = "enable";
+                  position = "1920,0";
+                }
+                {
+                  criteria = out_zeph;
+                  status = "enable";
+                  position = "${builtins.toString (1920 + 3440)},0";
+                }
+              ];
+              "zeph_portable".outputs = [
+                {
+                  criteria = out_zeph;
+                  status = "enable";
+                  position = "0,0";
+                }
+                {
+                  criteria = out_extdisp;
+                  status = "enable";
+                  position = "2560,0";
+                }
+              ];
+              "zeph_portable2".outputs = [
+                {
+                  criteria = out_zeph;
+                  status = "enable";
+                  position = "2560,0";
+                }
+                {
+                  criteria = out_extdisp;
+                  status = "enable";
+                  position = "0,0";
+                }
+              ];
+            };
           };
         };
       };
-    };
   };
 }

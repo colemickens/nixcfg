@@ -1,4 +1,11 @@
-{ pkgs, lib, modulesPath, inputs, config, ... }:
+{
+  pkgs,
+  lib,
+  modulesPath,
+  inputs,
+  config,
+  ...
+}:
 
 let
   host = "192.168.1.10";

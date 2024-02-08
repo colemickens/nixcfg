@@ -19,14 +19,19 @@ let
           plan = vm.plan;
           billing_cycle = "hourly";
           #termination_time = "\${vars.termtime}";
-        } // (if !(builtins.hasAttr "payload" vm) then { } else {
-          userdata = tfutil.userdata_str vm.payload;
-        }) // (if !(builtins.hasAttr "ipxe_script_url" vm) then {
-          operating_system = vm.os;
-        } else {
-          operating_system = "custom_ipxe";
-          ipxe_script_url = vm.ipxe_script_url;
-        })
+        }
+        // (
+          if !(builtins.hasAttr "payload" vm) then { } else { userdata = tfutil.userdata_str vm.payload; }
+        )
+        // (
+          if !(builtins.hasAttr "ipxe_script_url" vm) then
+            { operating_system = vm.os; }
+          else
+            {
+              operating_system = "custom_ipxe";
+              ipxe_script_url = vm.ipxe_script_url;
+            }
+        )
       );
     };
   };
@@ -56,25 +61,31 @@ in
     nixos_22_11 = "nixos_22_11";
   };
 
-  tfplan = packet_config: vms:
-    mergeListToAttrs ([ ]
+  tfplan =
+    packet_config: vms:
+    mergeListToAttrs (
+      [ ]
       ++ (lib.mapAttrsToList (mkVm packet_config) vms)
-      ++ [{
-      terraform = {
-        required_providers = {
-          "equinix" = {
-            source = "equinix/equinix";
-            version = tf_equinix_version;
+      ++ [
+        {
+          terraform = {
+            required_providers = {
+              "equinix" = {
+                source = "equinix/equinix";
+                version = tf_equinix_version;
+              };
+            };
           };
-        };
-      };
-      # TODO: finish plumbing this through:
-      # variable.termtime.description = "termination time for devices";
-      provider = {
-        equinix = [{
-          # auth_token # METAL_AUTH_TOKEN is set by 'tf-apply' wrapper script
-        }];
-      };
-    }]
+          # TODO: finish plumbing this through:
+          # variable.termtime.description = "termination time for devices";
+          provider = {
+            equinix = [
+              {
+                # auth_token # METAL_AUTH_TOKEN is set by 'tf-apply' wrapper script
+              }
+            ];
+          };
+        }
+      ]
     );
 }

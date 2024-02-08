@@ -1,8 +1,21 @@
-{ pkgs, lib, config, inputs, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}:
 
 let
 
-  prefs = import ../mixins/_preferences.nix { inherit inputs config lib pkgs; };
+  prefs = import ../mixins/_preferences.nix {
+    inherit
+      inputs
+      config
+      lib
+      pkgs
+      ;
+  };
 
   out_zeph = "Thermotrex Corporation TL140ADXP01 Unknown";
   out_aw34 = "Dell Inc. Dell AW3418DW #ASPD8psOnhPd";
@@ -28,9 +41,11 @@ let
     accel_profile = "flat";
   };
 
-  _sway = lib.meta.hiPrio (pkgs.writeShellScriptBin "sway" ''
-    exec ${pkgs.sway}/bin/sway -Dlegacy-wl-drm
-  '');
+  _sway = lib.meta.hiPrio (
+    pkgs.writeShellScriptBin "sway" ''
+      exec ${pkgs.sway}/bin/sway -Dlegacy-wl-drm
+    ''
+  );
 
   screenshot = pkgs.writeShellScript "screenshot.sh" ''
     mkdir -p "''${HOME}/screenshots"
@@ -103,28 +118,30 @@ in
   ];
   config = {
     nixpkgs.overlays = [
-      (final: prev:
+      (
+        final: prev:
         let
           nwpkgs = inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system};
         in
         {
-          inherit (nwpkgs)
-            sway-unwrapped
-            swaylock
-            xdg-desktop-portal-wlr
-            ;
-        })
+          inherit (nwpkgs) sway-unwrapped swaylock xdg-desktop-portal-wlr;
+        }
+      )
     ];
 
     security.pam.services.swaylock = { };
     security.pam.services.waylock = { }; # TODO: what is this actually doing? match binary name?
 
-    home-manager.users.cole = { pkgs, config, ... }@hm:
+    home-manager.users.cole =
+      { pkgs, config, ... }@hm:
       let
         swaymsg = "${hm.config.wayland.windowManager.sway.package}/bin/swaymsg";
       in
       {
-        home.packages = with pkgs; [ waylock _sway ];
+        home.packages = with pkgs; [
+          waylock
+          _sway
+        ];
 
         home.sessionVariables = {
           WLR_RENDERER = "vulkan";
@@ -165,11 +182,20 @@ in
         services.swayidle = {
           enable = true;
           events = [
-            { event = "before-sleep"; command = "${pkgs.swaylock}/bin/swaylock -f"; }
-            { event = "lock"; command = "${pkgs.swaylock}/bin/swaylock -f"; }
+            {
+              event = "before-sleep";
+              command = "${pkgs.swaylock}/bin/swaylock -f";
+            }
+            {
+              event = "lock";
+              command = "${pkgs.swaylock}/bin/swaylock -f";
+            }
           ];
           timeouts = [
-            { timeout = 360; command = "${pkgs.swaylock}/bin/swaylock -f"; }
+            {
+              timeout = 360;
+              command = "${pkgs.swaylock}/bin/swaylock -f";
+            }
           ];
         };
 
@@ -184,9 +210,11 @@ in
           };
           # xwayland = false;
           xwayland = true;
-          extraConfig = (lib.optionalString (prefs.cursor != null) ''
-            seat seat0 xcursor_theme "${prefs.cursor.name}" ${builtins.toString prefs.cursorSize}
-          '');
+          extraConfig = (
+            lib.optionalString (prefs.cursor != null) ''
+              seat seat0 xcursor_theme "${prefs.cursor.name}" ${builtins.toString prefs.cursorSize}
+            ''
+          );
           config = rec {
             modifier = "Mod4";
             terminal = prefs.default_term;
@@ -203,12 +231,28 @@ in
             window.commands = [
               # { criteria = { app_id = "mpv"; }; command = "sticky enable"; }
               # { criteria = { app_id = "mpv"; }; command = "floating enable"; }
-              { criteria = { title = "^(.*) Indicator"; }; command = "floating enable"; }
-              { criteria = { title = "Picture-in-Picture"; }; command = "floating enable"; }
+              {
+                criteria = {
+                  title = "^(.*) Indicator";
+                };
+                command = "floating enable";
+              }
+              {
+                criteria = {
+                  title = "Picture-in-Picture";
+                };
+                command = "floating enable";
+              }
             ];
             startup = [
-              { always = true; command = "${gsettings_auto}"; }
-              { always = true; command = "${pkgs.asusctl}/bin/rog-control-center"; }
+              {
+                always = true;
+                command = "${gsettings_auto}";
+              }
+              {
+                always = true;
+                command = "${pkgs.asusctl}/bin/rog-control-center";
+              }
             ];
             input = {
               "${in_tp_zeph}" = _touchpad;
@@ -216,9 +260,13 @@ in
               "${in_mouse_gpro}" = _mouse;
             };
             output = {
-              "*" = let b = prefs.background; in {
-                background = prefs.sway_background;
-              };
+              "*" =
+                let
+                  b = prefs.background;
+                in
+                {
+                  background = prefs.sway_background;
+                };
               "${out_aw34}" = {
                 scale = "1.0";
                 mode = "3440x1440@120Hz";

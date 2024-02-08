@@ -1,46 +1,48 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, nixosTests
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  nixosTests,
+  nix-update-script,
 
-, autoPatchelfHook
-, cmake
-, ncurses
-, pkg-config
+  autoPatchelfHook,
+  cmake,
+  ncurses,
+  pkg-config,
 
-, gcc-unwrapped
-, fontconfig
-, libGL
-, vulkan-loader
-, libxkbcommon
+  gcc-unwrapped,
+  fontconfig,
+  libGL,
+  vulkan-loader,
+  libxkbcommon,
 
-, withX11 ? true
-, libX11
-, libXcursor
-, libXi
-, libXrandr
-, libxcb
+  withX11 ? true,
+  libX11,
+  libXcursor,
+  libXi,
+  libXrandr,
+  libxcb,
 
-, withWayland ? true
-, wayland
+  withWayland ? true,
+  wayland,
 }:
 let
-  rlinkLibs = [
-    (lib.getLib gcc-unwrapped)
-    fontconfig
-    libGL
-    libxkbcommon
-    vulkan-loader
-  ] ++ lib.optionals withX11 [
-    libX11
-    libXcursor
-    libXi
-    libXrandr
-    libxcb
-  ] ++ lib.optionals withWayland [
-    wayland
-  ];
+  rlinkLibs =
+    [
+      (lib.getLib gcc-unwrapped)
+      fontconfig
+      libGL
+      libxkbcommon
+      vulkan-loader
+    ]
+    ++ lib.optionals withX11 [
+      libX11
+      libXcursor
+      libXi
+      libXrandr
+      libxcb
+    ]
+    ++ lib.optionals withWayland [ wayland ];
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
@@ -58,7 +60,10 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
   };
 
-  cargoBuildFlags = [ "-p" "rioterm" ];
+  cargoBuildFlags = [
+    "-p"
+    "rioterm"
+  ];
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -71,7 +76,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = rlinkLibs;
 
-  outputs = [ "out" "terminfo" ];
+  outputs = [
+    "out"
+    "terminfo"
+  ];
 
   buildNoDefaultFeatures = true;
   buildFeatures = [
@@ -96,7 +104,10 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex" "v([0-9.]+)" ];
+      extraArgs = [
+        "--version-regex"
+        "v([0-9.]+)"
+      ];
     };
 
     tests.test = nixosTests.terminal-emulators.rio;
@@ -106,7 +117,10 @@ rustPlatform.buildRustPackage rec {
     description = "A hardware-accelerated GPU terminal emulator powered by WebGPU";
     homepage = "https://raphamorim.io/rio";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ otavio oluceps ];
+    maintainers = with lib.maintainers; [
+      otavio
+      oluceps
+    ];
     platforms = lib.platforms.unix;
     changelog = "https://github.com/raphamorim/rio/blob/v${version}/CHANGELOG.md";
   };

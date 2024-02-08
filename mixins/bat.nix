@@ -2,13 +2,15 @@
 
 {
   config = {
-    home-manager.users.cole = { pkgs, ... }: {
-      programs.bat = {
-        enable = true;
-        config = {
-          theme = "TwoDark";
+    home-manager.users.cole =
+      { pkgs, ... }:
+      {
+        programs.bat = {
+          enable = true;
+          config = {
+            theme = "TwoDark";
+          };
         };
       };
-    };
   };
 }

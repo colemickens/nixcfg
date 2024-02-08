@@ -1,4 +1,10 @@
-{ config, pkgs, lib, modulesPath, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  modulesPath,
+  ...
+}:
 
 let
   hn = "installer-nvidia-ai";
@@ -17,10 +23,12 @@ in
     networking.hostName = hn;
     system.nixos.tags = [ "nvidia-ai" ];
 
-    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-      "nvidia-x11" # for `gfx-nvidia.nix`
-      "google-chrome" # for `gui-sway.nix`
-      "google-chrome-120.0.6099.216" # for `gui-sway.nix`
-    ];
+    nixpkgs.config.allowUnfreePredicate =
+      pkg:
+      builtins.elem (lib.getName pkg) [
+        "nvidia-x11" # for `gfx-nvidia.nix`
+        "google-chrome" # for `gui-sway.nix`
+        "google-chrome-120.0.6099.216" # for `gui-sway.nix`
+      ];
   };
 }

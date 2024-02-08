@@ -1,4 +1,11 @@
-{ pkgs, lib, modulesPath, inputs, config, ... }:
+{
+  pkgs,
+  lib,
+  modulesPath,
+  inputs,
+  config,
+  ...
+}:
 
 {
   imports = [
@@ -13,8 +20,7 @@
     # boot.initrd.systemd.network.enable = true;
     # boot.initrd.systemd.network.config =
     #   config.systemd.network.config;
-    boot.initrd.systemd.network =
-      config.systemd.network;
+    boot.initrd.systemd.network = config.systemd.network;
 
     boot.initrd.systemd.emergencyAccess = true;
 

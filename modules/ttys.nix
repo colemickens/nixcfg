@@ -1,6 +1,17 @@
-{ config, options, pkgs, lib, ... }:
+{
+  config,
+  options,
+  pkgs,
+  lib,
+  ...
+}:
 let
-  inherit (lib) mkEnableOption mkOption types mkIf;
+  inherit (lib)
+    mkEnableOption
+    mkOption
+    types
+    mkIf
+    ;
   inherit (builtins) hasAttr;
 
   # FEATURES:
@@ -28,136 +39,162 @@ let
   allTTYs = (map (n: "tty${toString n}") (lib.range 1 nAutoVTs));
 
   # getty helpers
-  gettyBaseArgs = v: [ "--login-program" "${v.loginProgram}" ]
-    ++ (lib.optionals (v.autologinUser != null) [ "--autologin" v.autologinUser ])
-    ++ (lib.optionals (v.loginOptions != null) [ "--login-options" v.loginOptions ])
+  gettyBaseArgs =
+    v:
+    [
+      "--login-program"
+      "${v.loginProgram}"
+    ]
+    ++ (lib.optionals (v.autologinUser != null) [
+      "--autologin"
+      v.autologinUser
+    ])
+    ++ (lib.optionals (v.loginOptions != null) [
+      "--login-options"
+      v.loginOptions
+    ])
     ++ v.extraArgs;
   autovtGettyArgs = "%I --keep-baud $TERM";
-  gettyCmd = k: v: args:
-    "@${pkgs.util-linux}/sbin/agetty agetty ${lib.escapeShellArgs (gettyBaseArgs v) } ${args}";
+  gettyCmd =
+    k: v: args:
+    "@${pkgs.util-linux}/sbin/agetty agetty ${lib.escapeShellArgs (gettyBaseArgs v)} ${args}";
 
-  kmsConfigDir = k: v: pkgs.writeTextFile { name = "kmscon-${k}-config"; destination = "/kmscon.conf"; text = v.extraConfig; };
+  kmsConfigDir =
+    k: v:
+    pkgs.writeTextFile {
+      name = "kmscon-${k}-config";
+      destination = "/kmscon.conf";
+      text = v.extraConfig;
+    };
   # kmscon helpers
   kmsAutologinArg = k: v: lib.optionalString (v.autologinUser != null) "-f ${v.autologinUser}";
-  kmsconCmd = k: v:
-    "${pkgs.kmscon}/bin/kmscon \"--vt=%I\" ${v.extraOptions} --seats=seat0 --no-switchvt --configdir ${kmsConfigDir k v} --login -- ${pkgs.shadow}/bin/login -p ${kmsAutologinArg k v}";
+  kmsconCmd =
+    k: v:
+    ''${pkgs.kmscon}/bin/kmscon "--vt=%I" ${v.extraOptions} --seats=seat0 --no-switchvt --configdir ${kmsConfigDir k v} --login -- ${pkgs.shadow}/bin/login -p ${kmsAutologinArg k v}'';
 
   # getty options submodule
-  gettyOpts = { name, config, ... }: {
-    options = {
-      autologinUser = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          Username of the account that will be automatically logged in at the console.
-          If unspecified, a login prompt is shown as usual.
-        '';
-      };
+  gettyOpts =
+    { name, config, ... }:
+    {
+      options = {
+        autologinUser = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            Username of the account that will be automatically logged in at the console.
+            If unspecified, a login prompt is shown as usual.
+          '';
+        };
 
-      loginProgram = mkOption {
-        type = types.path;
-        default = "${pkgs.shadow}/bin/login";
-        defaultText = lib.literalExpression ''"''${pkgs.shadow}/bin/login"'';
-        description = ''
-          Path to the login binary executed by agetty.
-        '';
-      };
+        loginProgram = mkOption {
+          type = types.path;
+          default = "${pkgs.shadow}/bin/login";
+          defaultText = lib.literalExpression ''"''${pkgs.shadow}/bin/login"'';
+          description = ''
+            Path to the login binary executed by agetty.
+          '';
+        };
 
-      loginOptions = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          Template for arguments to be passed to
-          <citerefentry><refentrytitle>login</refentrytitle>
-          <manvolnum>1</manvolnum></citerefentry>.
-      
-          See <citerefentry><refentrytitle>agetty</refentrytitle>
-          <manvolnum>1</manvolnum></citerefentry> for details,
-          including security considerations.  If unspecified, agetty
-          will not be invoked with a <option>--login-options</option>
-          option.
-        '';
-        example = "-h darkstar -- \\u";
-      };
+        loginOptions = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            Template for arguments to be passed to
+            <citerefentry><refentrytitle>login</refentrytitle>
+            <manvolnum>1</manvolnum></citerefentry>.
 
-      extraArgs = mkOption {
-        type = types.listOf types.str;
-        default = [ ];
-        description = ''
-          Additional arguments passed to agetty.
-        '';
-        example = [ "--nohostname" ];
+            See <citerefentry><refentrytitle>agetty</refentrytitle>
+            <manvolnum>1</manvolnum></citerefentry> for details,
+            including security considerations.  If unspecified, agetty
+            will not be invoked with a <option>--login-options</option>
+            option.
+          '';
+          example = "-h darkstar -- \\u";
+        };
+
+        extraArgs = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          description = ''
+            Additional arguments passed to agetty.
+          '';
+          example = [ "--nohostname" ];
+        };
       };
     };
-  };
 
   # kmscon options submodule
-  kmsconOpts = { name, config, ... }: {
-    options = {
-      hwaccel = mkOption {
-        description = "Whether to use 3D hardware acceleration to render the console.";
-        type = types.bool;
-        default = false;
-      };
+  kmsconOpts =
+    { name, config, ... }:
+    {
+      options = {
+        hwaccel = mkOption {
+          description = "Whether to use 3D hardware acceleration to render the console.";
+          type = types.bool;
+          default = false;
+        };
 
-      drm = mkOption {
-        description = "Whether to use DRM to render the console.";
-        type = types.bool;
-        default = true;
-      };
+        drm = mkOption {
+          description = "Whether to use DRM to render the console.";
+          type = types.bool;
+          default = true;
+        };
 
-      extraConfig = mkOption {
-        description = "Extra contents of the kmscon.conf file.";
-        type = types.lines;
-        default = "";
-        example = "font-size=14";
-      };
+        extraConfig = mkOption {
+          description = "Extra contents of the kmscon.conf file.";
+          type = types.lines;
+          default = "";
+          example = "font-size=14";
+        };
 
-      extraOptions = mkOption {
-        description = "Extra flags to pass to kmscon.";
-        type = types.separatedString " ";
-        default = "";
-        example = "--term xterm-256color";
-      };
+        extraOptions = mkOption {
+          description = "Extra flags to pass to kmscon.";
+          type = types.separatedString " ";
+          default = "";
+          example = "--term xterm-256color";
+        };
 
-      autologinUser = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          Username of the account that will be automatically logged in at the console.
-                  If unspecified, a login prompt is shown as usual.
-        '';
+        autologinUser = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            Username of the account that will be automatically logged in at the console.
+                    If unspecified, a login prompt is shown as usual.
+          '';
+        };
+      };
+      config = {
+        extraConfig = (
+          (lib.optionalString config.drm ''
+            drm
+          '')
+          + (lib.optionalString config.hwaccel ''
+            hwaccel
+          '')
+        );
       };
     };
-    config = {
-      extraConfig = ((lib.optionalString config.drm ''
-        drm
-      '') + (lib.optionalString config.hwaccel ''
-        hwaccel
-      ''));
-    };
-  };
 
   # top submodule mapped options ("tty1" => vtOpts)
-  vtOpts = { name, config, ... }: {
-    options = {
-      ttyType = mkOption {
-        type = types.enum [ "kmscon" "getty" ];
-        default = "getty";
+  vtOpts =
+    { name, config, ... }:
+    {
+      options = {
+        ttyType = mkOption {
+          type = types.enum [
+            "kmscon"
+            "getty"
+          ];
+          default = "getty";
+        };
+        kmscon = mkOption { type = (types.submoduleWith { modules = [ kmsconOpts ]; }); };
+        getty = mkOption { type = (types.submoduleWith { modules = [ gettyOpts ]; }); };
       };
-      kmscon = mkOption {
-        type = (types.submoduleWith { modules = [ kmsconOpts ]; });
-      };
-      getty = mkOption {
-        type = (types.submoduleWith { modules = [ gettyOpts ]; });
+      config = {
+        kmscon = lib.mkDefault name;
+        getty = lib.mkDefault name;
       };
     };
-    config = {
-      kmscon = lib.mkDefault name;
-      getty = lib.mkDefault name;
-    };
-  };
-
 in
 {
   options = {
@@ -174,43 +211,48 @@ in
       };
       vts = mkOption {
         type = types.nullOr (types.attrsOf (types.submodule vtOpts));
-        default = (lib.mapAttrs
-          (k: {
-            "${k}".ttyName = "getty";
-          })
-          allTTYs);
+        default = (lib.mapAttrs (k: { "${k}".ttyName = "getty"; }) allTTYs);
       };
     };
   };
 
-  config = mkIf enabled
-    {
-      systemd.units = (
-        # first "suppress" the autovt@ service without completely suppressing it
-        # Our getty module sets ExecStart which sets an override for autovt/getty that infects us, even
-        # if we run a different service/unit.
-        # So, just blank it out... :D.
-        {
-          "autovt@.service" = lib.mkForce { };
-        }
-        // # then map our configured/default VTs
-        (lib.mapAttrs'
-          # for each VT, presume the service we setup below and alias it to provide autovt@${tty}.service
-          # (TODO: not really sure how this suppresses getty which presumably also is still bound to autovt@.service.....
-          # maybe it's just that our units are more specific that the templatized autovt@.service)
-          (k: v: {
-            name = "${v.ttyType}vt@${k}.service";
-            value = { aliases = [ "autovt@${k}.service" ]; };
-          })
-          cfg.vts)
-      );
+  config = mkIf enabled {
+    systemd.units = (
+      # first "suppress" the autovt@ service without completely suppressing it
+      # Our getty module sets ExecStart which sets an override for autovt/getty that infects us, even
+      # if we run a different service/unit.
+      # So, just blank it out... :D.
+      {
+        "autovt@.service" = lib.mkForce { };
+      }
+      # then map our configured/default VTs
+      // (lib.mapAttrs'
+        # for each VT, presume the service we setup below and alias it to provide autovt@${tty}.service
+        # (TODO: not really sure how this suppresses getty which presumably also is still bound to autovt@.service.....
+        # maybe it's just that our units are more specific that the templatized autovt@.service)
+        (k: v: {
+          name = "${v.ttyType}vt@${k}.service";
+          value = {
+            aliases = [ "autovt@${k}.service" ];
+          };
+        })
+        cfg.vts
+      )
+    );
 
-      systemd.services = (lib.mapAttrs'
+    systemd.services = (
+      lib.mapAttrs'
         # huh, then I guess override them?
         # then just establish our "gettyvt" or "kmsconvt" (per the aliases above) service
-        (k: v:
+        (
+          k: v:
           let
-            eso = cmd: { ExecStart = [ "" cmd ]; };
+            eso = cmd: {
+              ExecStart = [
+                ""
+                cmd
+              ];
+            };
           in
           {
             name = (lib.traceVal "${v.ttyType}vt@${k}");
@@ -220,9 +262,11 @@ in
                 (lib.mkIf (v.ttyType == "getty") (eso (gettyCmd k v.getty autovtGettyArgs)))
               ];
             };
-          })
-        cfg.vts);
-      # TODO: convert to assert?
-      # hardware.opengl.enable = mkIf cfg.hwRender true;
-    };
+          }
+        )
+        cfg.vts
+    );
+    # TODO: convert to assert?
+    # hardware.opengl.enable = mkIf cfg.hwRender true;
+  };
 }

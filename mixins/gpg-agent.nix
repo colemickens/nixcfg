@@ -1,4 +1,9 @@
-{ pkgs, lib, inputs, ... }:
+{
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   # this is just so that non-GUI systems don't end up pulling in
@@ -31,32 +36,34 @@ in
     # using this requires use of `disable-ccid` in scdaemon.conf!
     services.pcscd.enable = false;
 
-    home-manager.users.cole = { pkgs, ... }@hm: {
-      programs.gpg.enable = true;
-      programs.gpg.homedir = "${hm.config.xdg.dataHome}/gnupg";
-      home.file."${hm.config.programs.gpg.homedir}/.keep".text = "";
-      home.packages = with pkgs; [
-        yubikey-personalization
-        yubikey-manager
-        # yubico-piv-tool # seems to fail to cross-compile
-      ];
+    home-manager.users.cole =
+      { pkgs, ... }@hm:
+      {
+        programs.gpg.enable = true;
+        programs.gpg.homedir = "${hm.config.xdg.dataHome}/gnupg";
+        home.file."${hm.config.programs.gpg.homedir}/.keep".text = "";
+        home.packages = with pkgs; [
+          yubikey-personalization
+          yubikey-manager
+          # yubico-piv-tool # seems to fail to cross-compile
+        ];
 
-      services.gpg-agent = {
-        enable = true;
-        enableSshSupport = true;
-        enableExtraSocket = true;
-        extraConfig = ''
-          # enable-ssh-support
-          allow-preset-passphrase
-        '';
-        # pinentryFlavor = "gnome3";
-        pinentryFlavor = null;
-        pinentryBinary = lib.mkDefault pinentryProgram;
-        defaultCacheTtl = 34560000;
-        defaultCacheTtlSsh = 34560000;
-        maxCacheTtl = 34560000;
-        maxCacheTtlSsh = 34560000;
+        services.gpg-agent = {
+          enable = true;
+          enableSshSupport = true;
+          enableExtraSocket = true;
+          extraConfig = ''
+            # enable-ssh-support
+            allow-preset-passphrase
+          '';
+          # pinentryFlavor = "gnome3";
+          pinentryFlavor = null;
+          pinentryBinary = lib.mkDefault pinentryProgram;
+          defaultCacheTtl = 34560000;
+          defaultCacheTtlSsh = 34560000;
+          maxCacheTtl = 34560000;
+          maxCacheTtlSsh = 34560000;
+        };
       };
-    };
   };
 }

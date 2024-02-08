@@ -7,34 +7,43 @@ let
   ciusername = "runner";
 in
 {
-  imports = [
-    inputs.sops-nix.outputs.homeManagerModules.sops
-  ];
+  imports = [ inputs.sops-nix.outputs.homeManagerModules.sops ];
   # nixpkgs = {
   #   config = {
   #     inherit system;
   #   };
   # };
   home = {
-    extraOutputsToInstall = [ "info" "man" "share" "icons" "doc" ];
+    extraOutputsToInstall = [
+      "info"
+      "man"
+      "share"
+      "icons"
+      "doc"
+    ];
     stateVersion = "22.11";
     username = ciusername;
     homeDirectory = "/home/${ciusername}";
   };
 
-  manual = { manpages.enable = false; };
+  manual = {
+    manpages.enable = false;
+  };
   news.display = "silent";
-  home.packages = ((with pkgs; [
-    cacert
-    cachix
-    du-dust
-    mercurial
-    nixpkgs-fmt
-    nushell
-  ]) ++ [
-    inputs.nix-eval-jobs.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
-    inputs.nix-update.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
-  ]);
+  home.packages = (
+    (with pkgs; [
+      cacert
+      cachix
+      du-dust
+      mercurial
+      nixpkgs-fmt
+      nushell
+    ])
+    ++ [
+      inputs.nix-eval-jobs.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
+      inputs.nix-update.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
+    ]
+  );
   programs = {
     home-manager.enable = true;
     git = {

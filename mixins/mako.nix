@@ -2,11 +2,13 @@
 
 {
   config = {
-    home-manager.users.cole = { pkgs, ... }: {
-      services.mako = {
-        enable = true;
-        systemd.enable = true;
+    home-manager.users.cole =
+      { pkgs, ... }:
+      {
+        services.mako = {
+          enable = true;
+          systemd.enable = true;
+        };
       };
-    };
   };
 }

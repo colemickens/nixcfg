@@ -1,4 +1,10 @@
-{ pkgs, lib, config, inputs, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}:
 
 # includes ci devshell nativeBuildInputs - see bottom
 {
@@ -13,15 +19,25 @@
       useGlobalPkgs = true;
       useUserPackages = true;
 
-      users.cole = { pkgs, ... }@hm: {
-        home.extraOutputsToInstall = [ "info" "man" "share" "icons" "doc" ];
-        home.stateVersion = "21.11";
-        manual = { manpages.enable = false; };
-        news.display = "silent";
-        programs = {
-          home-manager.enable = true;
+      users.cole =
+        { pkgs, ... }@hm:
+        {
+          home.extraOutputsToInstall = [
+            "info"
+            "man"
+            "share"
+            "icons"
+            "doc"
+          ];
+          home.stateVersion = "21.11";
+          manual = {
+            manpages.enable = false;
+          };
+          news.display = "silent";
+          programs = {
+            home-manager.enable = true;
+          };
         };
-      };
     };
   };
 }

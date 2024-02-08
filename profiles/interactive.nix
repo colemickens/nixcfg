@@ -1,4 +1,10 @@
-{ pkgs, lib, config, inputs, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}:
 
 # includes ci devshell nativeBuildInputs - see bottom
 {
@@ -54,130 +60,140 @@
       keep-derivations = true
     '';
     home-manager = {
-      users.cole = { pkgs, ... }@hm: {
-        home.sessionVariables = {
-          EDITOR = "hx";
-          CARGO_HOME = "${hm.config.xdg.dataHome}/cargo";
-          PARALLEL_HOME = "${hm.config.xdg.configHome}/parallel";
-          PASSWORD_STORE_DIR = "${hm.config.xdg.dataHome}/password-store";
-          # TODO: this is used for both zsh/bash? ???
-          # also, zsh doesn't mkdir -p on it, I guess... bleh
-          # HISTFILE = "${hm.config.xdg.stateHome}/bash/history";
+      users.cole =
+        { pkgs, ... }@hm:
+        {
+          home.sessionVariables = {
+            EDITOR = "hx";
+            CARGO_HOME = "${hm.config.xdg.dataHome}/cargo";
+            PARALLEL_HOME = "${hm.config.xdg.configHome}/parallel";
+            PASSWORD_STORE_DIR = "${hm.config.xdg.dataHome}/password-store";
+            # TODO: this is used for both zsh/bash? ???
+            # also, zsh doesn't mkdir -p on it, I guess... bleh
+            # HISTFILE = "${hm.config.xdg.stateHome}/bash/history";
+          };
+          home.file = {
+            "${hm.config.home.sessionVariables.PARALLEL_HOME}/will-cite".text = "";
+            "${hm.config.home.sessionVariables.PARALLEL_HOME}/runs-without-willing-to-cite".text = "10";
+          };
+          programs = {
+            home-manager.enable = true;
+            gpg.enable = true;
+          };
+          home.file = {
+            "${hm.config.xdg.configHome}/gdb/gdbinit".source = (
+              pkgs.writeText "gdbinit" "set auto-load safe-path /nix/store"
+            );
+          };
+          programs = {
+            git.enable = true;
+          };
+          home.packages = lib.mkMerge [
+            (lib.mkIf (pkgs.hostPlatform.system == "x86_64-linux") (
+              with pkgs;
+              [
+                # x86_64-linux only
+                zenith
+              ]
+            ))
+            (lib.mkIf (pkgs.hostPlatform.system == "aarch_64-linux") (
+              with pkgs;
+              [
+                # aarch64-linux only
+              ]
+            ))
+            # ++ inputs.self.devShells.${pkgs.stdenv.hostPlatform.system}.ci.nativeBuildInputs
+            (with pkgs; [
+              (pkgs.callPackage ../pkgs/commands.nix { })
+
+              # <rust pkgs>
+              delta
+              tealdeer
+              cfspeedtest
+              du-dust
+              dua
+              erdtree # erd - dua alternative
+              dufs # rust static file server
+              eza # eza-community replacement for exa
+              fd
+              fx
+              gitui
+              grex
+              hexyl
+              xh
+              lazygit
+              dogdns
+              ripgrep
+              jless
+              sd
+              procs
+              prs
+              pipes-rs
+              rage
+              rustscan
+              xplr
+              # </rust pkgs>
+
+              age # need age (Age-keygen can do priv->pub)
+              sbctl
+
+              nix-top
+
+              binwalk
+              cpio # needed?
+              usbutils
+              pciutils
+              dmidecode
+              lshw
+              nvme-cli
+              efibootmgr
+              mokutil
+              cryptsetup
+              wipe
+              file
+              lsof
+              unar
+              p7zip
+              sops
+              step-cli
+              gptfdisk
+              parted
+              iotop
+              which
+              binutils.bintools
+              parallel
+              unzip
+              xz
+              zip
+              picocom
+              asciinema
+              wget
+              curl
+              rsync
+              wget
+              curl
+              jq
+              openssh
+              watchman
+              watchexec
+              wireguard-tools
+              ntfsprogs
+              difftastic
+
+              powertop
+
+              linuxPackages.cpupower
+
+              yt-dlp
+              imgurbash2
+
+              mosh
+
+              # GRM
+              inputs.self.pkgs.${pkgs.stdenv.hostPlatform.system}.git-repo-manager
+            ])
+          ];
         };
-        home.file = {
-          "${hm.config.home.sessionVariables.PARALLEL_HOME}/will-cite".text = "";
-          "${hm.config.home.sessionVariables.PARALLEL_HOME}/runs-without-willing-to-cite".text = "10";
-        };
-        programs = {
-          home-manager.enable = true;
-          gpg.enable = true;
-        };
-        home.file = {
-          "${hm.config.xdg.configHome}/gdb/gdbinit".source = (pkgs.writeText "gdbinit" ''set auto-load safe-path /nix/store'');
-        };
-        programs = {
-          git.enable = true;
-        };
-        home.packages = lib.mkMerge [
-          (lib.mkIf (pkgs.hostPlatform.system == "x86_64-linux") (with pkgs; [
-            # x86_64-linux only
-            zenith
-          ]))
-          (lib.mkIf (pkgs.hostPlatform.system == "aarch_64-linux") (with pkgs; [
-            # aarch64-linux only
-          ]))
-          # ++ inputs.self.devShells.${pkgs.stdenv.hostPlatform.system}.ci.nativeBuildInputs
-          (with pkgs; [
-            (pkgs.callPackage ../pkgs/commands.nix { })
-
-            # <rust pkgs>
-            delta
-            tealdeer
-            cfspeedtest
-            du-dust
-            dua
-            erdtree # erd - dua alternative
-            dufs # rust static file server
-            eza # eza-community replacement for exa
-            fd
-            fx
-            gitui
-            grex
-            hexyl
-            xh
-            lazygit
-            dogdns
-            ripgrep
-            jless
-            sd
-            procs
-            prs
-            pipes-rs
-            rage
-            rustscan
-            xplr
-            # </rust pkgs>
-
-            age # need age (Age-keygen can do priv->pub)
-            sbctl
-
-            nix-top
-
-            binwalk
-            cpio # needed?
-            usbutils
-            pciutils
-            dmidecode
-            lshw
-            nvme-cli
-            efibootmgr
-            mokutil
-            cryptsetup
-            wipe
-            file
-            lsof
-            unar
-            p7zip
-            sops
-            step-cli
-            gptfdisk
-            parted
-            iotop
-            which
-            binutils.bintools
-            parallel
-            unzip
-            xz
-            zip
-            picocom
-            asciinema
-            wget
-            curl
-            rsync
-            wget
-            curl
-            jq
-            openssh
-            watchman
-            watchexec
-            wireguard-tools
-            ntfsprogs
-            difftastic
-
-            powertop
-
-            linuxPackages.cpupower
-
-            yt-dlp
-            imgurbash2
-
-            mosh
-
-            # GRM
-            inputs.self.pkgs.${pkgs.stdenv.hostPlatform.system}.git-repo-manager
-          ])
-        ];
-      };
     };
   };
 }

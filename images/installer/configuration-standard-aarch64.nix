@@ -1,4 +1,10 @@
-{ config, pkgs, lib, modulesPath, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  modulesPath,
+  ...
+}:
 
 let
   hn = "installer-standard";
@@ -11,15 +17,24 @@ in
 
   config = {
     networking.hostName = hn;
-    system.nixos.tags = [ "standard" "aarch64" ];
+    system.nixos.tags = [
+      "standard"
+      "aarch64"
+    ];
 
     nixcfg.common.defaultKernel = lib.mkForce false;
     nixcfg.common.useZfs = lib.mkForce false;
-    boot.supportedFilesystems = lib.mkForce [ "btrfs" "ext4" "vfat" "f2fs" "xfs" "ntfs" ];
+    boot.supportedFilesystems = lib.mkForce [
+      "btrfs"
+      "ext4"
+      "vfat"
+      "f2fs"
+      "xfs"
+      "ntfs"
+    ];
 
     boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
 
     nixpkgs.hostPlatform.system = "aarch64-linux";
   };
 }
-

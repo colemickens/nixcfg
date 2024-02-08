@@ -1,8 +1,9 @@
-{ pkgs
-, lib
-, inputs
-, modulesPath
-, ...
+{
+  pkgs,
+  lib,
+  inputs,
+  modulesPath,
+  ...
 }:
 let
   hn = "slynux";
@@ -65,7 +66,7 @@ in
         device = "${pp}pool/home";
       };
     };
-    swapDevices = [{ device = "/dev/disk/by-partlabel/${swappart}"; }];
+    swapDevices = [ { device = "/dev/disk/by-partlabel/${swappart}"; } ];
 
     boot = {
       tmp = {

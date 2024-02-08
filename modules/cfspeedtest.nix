@@ -10,8 +10,7 @@
   config = {
     systemd = {
       services."cfspeedtest" = {
-        script = ''
-        '';
+        script = "";
       };
       timers."cfspeedtest" = { };
     };
