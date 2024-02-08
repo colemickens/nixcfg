@@ -1,36 +1,33 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  rustPlatform,
-  nixosTests,
-
-  cmake,
-  installShellFiles,
-  makeWrapper,
-  ncurses,
-  pkg-config,
-  python3,
-  scdoc,
-
-  expat,
-  fontconfig,
-  freetype,
-  libGL,
-  xorg,
-  libxkbcommon,
-  wayland,
-  xdg-utils,
-
-  # Darwin Frameworks
-  AppKit,
-  CoreGraphics,
-  CoreServices,
-  CoreText,
-  Foundation,
-  libiconv,
-  OpenGL,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, rustPlatform
+, nixosTests
+, cmake
+, installShellFiles
+, makeWrapper
+, ncurses
+, pkg-config
+, python3
+, scdoc
+, expat
+, fontconfig
+, freetype
+, libGL
+, xorg
+, libxkbcommon
+, wayland
+, xdg-utils
+, # Darwin Frameworks
+  AppKit
+, CoreGraphics
+, CoreServices
+, CoreText
+, Foundation
+, libiconv
+, OpenGL
+,
 }:
 let
   rpathLibs =
@@ -53,13 +50,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "unstable-2024-02-07";
+  version = "unstable-2024-02-08";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
-    rev = "63bcc1ea88cdaa4e0f3650f4478fb28d0cf8322e";
-    hash = "sha256-Cj9PYZ5+9pOnLL4MdDnAOGPv1vKwq1zXw/9kOGdMYCY=";
+    rev = "117719b3216d60ddde4096d9b2bdccecfd214c42";
+    hash = "sha256-E6ocP+3qPOAOl4ckxcG5M4UM6KEZCXsxZz9H52aGMIw=";
   };
 
   cargoLock = {
