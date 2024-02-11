@@ -10,11 +10,12 @@
 
 {
   config = {
-    networking.firewall.interfaces."tailscale0".allowedTCPPorts = [ 3000 ];
+    networking.firewall.interfaces."tailscale0".allowedTCPPorts = [ 7777 ];
     environment.systemPackages = [
       (pkgs.writeShellScriptBin "start-openvscode-server" ''
+        set -x
         port="$1"
-        "${pkgs.openvscode-server}" --accept-server-license-terms --host=0.0.0.0 --port=$1
+        "${pkgs.openvscode-server}/bin/openvscode-server" --without-connection-token --accept-server-license-terms --host=0.0.0.0 --port=$1
       '')
       # code-server # TODO: seems broken
     ];
