@@ -34,7 +34,8 @@ in
         options = "--delete-older-than 7d";
         randomizedDelaySec = "30min";
       };
-      nixPath = lib.mkForce [ ]; # i doth protest
+      # nixPath = lib.mkForce [ ]; # i doth protest
+      nixPath = lib.mkForce [ "nixpkgs=${inputs.cmpkgs.outPath}" ]; # i doth relent
       package = _nix;
       settings = rec {
         keep-derivations = true; # this is the default (?)
