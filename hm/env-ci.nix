@@ -34,7 +34,7 @@ in
     (with pkgs; [
       cacert
       cachix
-      du-dust
+      dust
       mercurial
       nixpkgs-fmt
       nushell

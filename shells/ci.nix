@@ -14,7 +14,7 @@ minimalMkShell {
     (with pkgs; [
       cachix
       cacert
-      du-dust
+      dust
       git
       mercurial
       nushell
