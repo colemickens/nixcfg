@@ -37,15 +37,15 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "unstable-2024-02-11";
-  rev = "b61c49fa67c609683a86a8297ae62c5752b9afe5";
+  version = "unstable-2024-02-12";
+  rev = "22f9f8d288521508bd4cdc924d9f209d78b36483";
 
   src = fetchFromGitHub {
     owner = owner;
     repo = pname;
     rev = rev;
     fetchSubmodules = true;
-    sha256 = "sha256-mjprdtxGOl5cwNEgYtlaiKo7NZicR+Hx4Y1Ex7WirFs=";
+    sha256 = "sha256-rn5iGkJlhDSVW/J8Nl/8dTFgFEe3a2dYWvX30S4wiXA=";
   };
 
   postPatch = ''
