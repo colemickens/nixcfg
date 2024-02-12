@@ -21,7 +21,7 @@ in
     ../../mixins/pipewire.nix
 
     ../../profiles/addon-tiny.nix
-    ../../profiles/addon-sbc.nix
+    # ../../profiles/addon-sbc.nix
     # ../../profiles/gui-sway-auto.nix # broken, librsvg, again, lol
 
     ./unfree.nix

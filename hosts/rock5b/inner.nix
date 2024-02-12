@@ -11,7 +11,7 @@
     (modulesPath + "/installer/scan/not-detected.nix")
 
     ../../profiles/core.nix
-    ../../profiles/addon-sbc.nix
+    # ../../profiles/addon-sbc.nix
   ];
 
   config = {
