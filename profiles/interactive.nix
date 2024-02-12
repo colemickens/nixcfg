@@ -110,7 +110,7 @@
               delta
               tealdeer
               cfspeedtest
-              du-dust
+              dust
               dua
               erdtree # erd - dua alternative
               dufs # rust static file server
@@ -132,6 +132,7 @@
               rage
               rustscan
               xplr
+              miniserve
               # </rust pkgs>
 
               age # need age (Age-keygen can do priv->pub)
