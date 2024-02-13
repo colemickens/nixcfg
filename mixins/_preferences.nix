@@ -11,7 +11,7 @@ let
   colorscheme = inputs.nix-rice.colorschemes."MaterialDarker";
 
   colordefs = {
-    bold_as_bright = true;
+    bold_as_bright = false;
   };
 in
 rec {
