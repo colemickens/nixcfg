@@ -18,6 +18,13 @@ let
     fi
   '';
 
+  btcScript = pkgs.writeShellScript "btc-price.sh" ''
+    set -euo pipefail
+    usd=$(${pkgs.curl}/bin/curl -L "https://api.coinbase.com/v2/exchange-rates?currency=BTC" \
+      | ${pkgs.jq}/bin/jq -r '.data.rates.USD')
+    echo "{\"text\": \"''${usd}\"}"
+  '';
+
   pppScript = pkgs.writeShellScript "waybar-ppp.sh" ''
     set -euo pipefail
     val="$(${pkgs.coreutils}/bin/timeout 5 ${pkgs.power-profiles-daemon}/bin/powerprofilesctl get)"
@@ -120,6 +127,7 @@ in
               modules-center = [ "wlr/workspaces" ];
               modules-right =
                 [
+                  "custom/btc"
                   # "keyboard-state"
                   # "idle_inhibitor"
                   "pulseaudio"
@@ -161,6 +169,11 @@ in
                   # "custom/scale" = {
                   #   exec = "${scaleScript}";
                   # };
+                  "custom/btc" = {
+                    exec = "${btcScript}";
+                    return-type = "json";
+                    interval = 120;
+                  };
                   "wlr/taskbar" = { };
                   temperature = {
                     format = "tmp {temperatureC}";
