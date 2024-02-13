@@ -16,32 +16,22 @@ def create_left_prompt [] {
 
     let nixshell = (if ("name" in $env) { $"(ansi red)($env.name)(ansi reset)" } else { "" })
 
-    # let jj = (do -i { ^jj log --no-commit-working-copy --no-graph -T '"x"' }
-    #   | complete 
-    #   | get -i stdout
-    #   | str trim
-    #   | where ($it != $nothing)
-    #   | each { |j|
-    #     let cc =  (($j | size).chars)
-    #     let c1 = "light_yellow_bold"; let c2 = "light_yellow"
-    #     let msg = $"($cc)"
-    #     # $"(ansi $"($c)_bold")jj(ansi reset) (ansi $c)($msg)"
-    #     $"(ansi $c1)│(ansi reset)(ansi $c2)($msg)"
-    #   }
-    # )
-    # let git = (do -i { ^git branch --show-current }
-    #   | complete 
-    #   # | where $it.exit_code == 0
-    #   | get -i stdout
-    #   | str trim
-    #   | where ($it != $nothing)
-    #   | each { |branch|
-    #     let e = (^git diff-index --quiet HEAD '--' | complete | get exit_code)
-    #     let i = (if ($e == 0) { "" } else { "*" })
-    #     let c = (if ($e == 0) { "green" } else { "yellow" }); let c1 = $"light_($c)_dimmed"; let c2 = $"light_($c)_dimmed"
-    #     $"(ansi $c1)│(ansi reset)(ansi $c2)($branch)($i)"
-    #   }
-    # )
+    let jj = try {
+      with-env [ PAGER = "cat" ] {
+        let jjs = (do { ^jj log ...[
+          -r 'trunk()..@ & branches()'
+          -T 'branches.join("\n") ++ "\n"'
+          --no-graph
+          --ignore-working-copy ] } | complete)
+        if ($jjs.exit_code == 0) {
+          $"(ansi purple)($jjs.stdout | str trim | str replace --all --multiline '\n' ' ')(ansi reset)"
+        } else {
+          ""
+        }
+      }
+    } catch {
+      ""
+    }
 
     let psc = if (is-admin) { "red_bold" } else { "default_bold" }
     let pathseg = $"(ansi default_underline)(ansi $psc)($env.PWD | str replace $env.HOME "~")"
@@ -65,6 +55,7 @@ def create_left_prompt [] {
       # $jj
       # $git
       $duration
+      $jj
       $last_exit
     ] | flatten | str join $"(ansi reset) ")
     $"\n($line1)\n($line2)(ansi reset)"
