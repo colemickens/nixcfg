@@ -38,4 +38,5 @@ jobs:
         ref: main-next
     - name: deploy-${{matrix.host.name}}
       run: |
-        nix develop .#ci -c ./ci-next.nu deploy --activate true ${{matrix.host.name}}
+        timeout 600 \
+          nix develop .#ci -c ./ci-next.nu deploy --activate true ${{matrix.host.name}}
