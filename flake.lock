@@ -763,11 +763,11 @@
         "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1708362919,
-        "narHash": "sha256-g8PfThBvqzR5504Lix5Q/a99ErbA4V5OEuiktXm0xiE=",
+        "lastModified": 1708381218,
+        "narHash": "sha256-DI6TSae3/We4gPJ4GVw23SoKy2nlPTec9cNLRJZ4HzI=",
         "owner": "martinvonz",
         "repo": "jj",
-        "rev": "5ddccc649a04c4c447763857c665d17a6e28434d",
+        "rev": "a89884733360f1e758816603ff3f93ab7a81c34a",
         "type": "github"
       },
       "original": {
@@ -1099,6 +1099,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-cosmic": {
+      "locked": {
+        "lastModified": 1708370048,
+        "narHash": "sha256-MacUUodNPX+DK5JDMo8/gEcJuhbIKNGAJI+tqssbfDw=",
+        "owner": "lilyinstarlight",
+        "repo": "nixpkgs",
+        "rev": "9500886dbb0eaeb4af107394fed146ef20f7c9c5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lilyinstarlight",
+        "ref": "tmp/cosmic",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-lib": {
       "locked": {
         "lastModified": 1708217146,
@@ -1333,6 +1349,7 @@
         "nix-update": "nix-update",
         "nixified-ai": "nixified-ai",
         "nixos-hardware": "nixos-hardware",
+        "nixpkgs-cosmic": "nixpkgs-cosmic",
         "nixpkgs-stable": "nixpkgs-stable_2",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "rust-overlay": "rust-overlay_4",
