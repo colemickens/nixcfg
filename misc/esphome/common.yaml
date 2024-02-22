@@ -1,6 +1,9 @@
 wifi:
-  ssid: "GoonNet"
-  password: !secret wifi_pw
+  networks:
+  - ssid: "Mickey"
+    password: !secret wifi_pw_zak
+  - ssid: "GoonNet"
+    password: !secret wifi_pw
 
   # manual_ip:
   #   static_ip: 192.168.69.${ipnum}
@@ -14,9 +17,10 @@ wifi:
 
 captive_portal:
 
-# api:
-#   encryption:
-#     key: !secret api_enc_key
+api:
+  reboot_timeout: 0s
+  encryption:
+    key: !secret api_enc_key
 
 logger:
 

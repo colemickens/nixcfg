@@ -3,6 +3,7 @@ substitutions:
   device_name:  wp6_sw${ipnum}
   friendly_name:  wp6_sw${ipnum}
 
+<<: !include common.yaml
 <<: !include wp6_sw_common.yaml
 
 # 105 is rock5b now?

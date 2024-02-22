@@ -1,5 +1,3 @@
-<<: !include common.yaml
-
 esphome:
   name: ${device_name}
   platform: ESP8266

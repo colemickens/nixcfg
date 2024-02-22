@@ -82,81 +82,36 @@ def "main selfup" [] {
   sudo ./result/bin/switch-to-configuration switch
 }
 
-def "main inputup" [] {
-  header "light_yellow_reverse" "inputup"
-  let srcdirs = ([
-    "nixpkgs/master" "nixpkgs/nixos-unstable" "nixpkgs/cmpkgs"
-    "home-manager/master" "home-manager/cmhm"
-    "mobile-nixos/development" "mobile-nixos/development-flakes" "mobile-nixos/openstick"
-  ] | each { |it1| $it1 | each {|it| $"($env.HOME)/code/($it)" } })
+# TODO: replace with `jj run` in the future
+# def "main inputup" [] {
+#   header "light_yellow_reverse" "inputup"
+#   let srcdirs = ([
+#     "nixpkgs/master" "nixpkgs/nixos-unstable" "nixpkgs/cmpkgs"
+#     "home-manager/master" "home-manager/cmhm"
+#     "mobile-nixos/development" "mobile-nixos/development-flakes" "mobile-nixos/openstick"
+#   ] | each { |it1| $it1 | each {|it| $"($env.HOME)/code/($it)" } })
 
-  let extsrcdirs = ([
-    "linux/master"
-    # "linux/openstick"
-  ] | each {|it| $"($env.HOME)/code-ext/($it)" })
-
-  let srcdirs = ($srcdirs | append $extsrcdirs)
-
-  for dir in $srcdirs {
-    if (not ($dir | path exists)) {
-      print -e $"(ansi yellow_dimmed)inputup: skip:(ansi reset) ($dir)"
-      continue
-    }
-    print -e $"(ansi yellow_dimmed)inputup: check:(ansi reset) ($dir)"
-    do -i { ^git -C $dir rebase --abort err> /dev/null }
-    if (ls -D ([$dir ".git"] | path join) | get 0 | get type) == "dir" {
-      ^git -C $dir pull --rebase --no-gpg-sign
-    } else {
-      ^git -C $dir rebase --no-gpg-sign
-    }
-    let b = (git -C $dir rev-parse --abbrev-ref HEAD)
-    let remote = (git -C $dir rev-parse $"origin/($b)")
-    let local = (git -C $dir rev-parse $b)
-    print -e $"remote=($remote | str substring 0..6); local=($local | str substring 0..6)"
-    if ($local != $remote) {
-      ^git -C $dir push origin HEAD -f
-    }
-  }
-}
-
-def "main pkgup" [...pkglist] {
-  header "light_yellow_reverse" "pkgup"
-
-  let pkgref = $"($env.PWD)#packages.x86_64-linux"
-  let pkglist = if ($pkglist | length) == 0 {
-    ^nix ...[eval
-      --json $pkgref
-      --apply 'x: builtins.attrNames x'
-    ] | str trim | from json
-  } else { $pkglist }
-
-  print -e $pkglist
-
-  for pkgname in $pkglist {
-    header "light_yellow_reverse" $"pkgup: ($pkgname)"
-
-    let flakepkg = $"($pkgref).($pkgname)"
-    let t = $"/tmp/commit-msg-($pkgname)"
-    rm -f $t
-    ^nix-update ...[
-      --flake
-      --format
-      --version "branch"
-      --write-commit-message $t
-      $pkgname
-    ]
-
-    try {
-      main nfb --download true $flakepkg
-      if ($t | path exists) and (open $t | str trim | str length) != 0) {
-        git commit -F $t $"./pkgs/($pkgname)"
-│     }
-    } catch {
-      print -e $"pkgup: ($pkgname): restoring/undoing"
-      git restore $"./pkgs/($pkgname)"
-    }
-  }
-}
+#   for dir in $srcdirs {
+#     if (not ($dir | path exists)) {
+#       print -e $"(ansi yellow_dimmed)inputup: skip:(ansi reset) ($dir)"
+#       continue
+#     }
+#     print -e $"(ansi yellow_dimmed)inputup: check:(ansi reset) ($dir)"
+#     do -i { ^git -C $dir rebase --abort err> /dev/null }
+#     if (ls -D ([$dir ".git"] | path join) | get 0 | get type) == "dir" {
+#       ^git -C $dir pull --rebase --no-gpg-sign
+#     } else {
+#       ^git -C $dir rebase --no-gpg-sign
+#     }
+#     let b = (git -C $dir rev-parse --abbrev-ref HEAD)
+#     let remote = (git -C $dir rev-parse $"origin/($b)")
+#     let local = (git -C $dir rev-parse $b)
+#     print -e $"remote=($remote | str substring 0..6); local=($local | str substring 0..6)"
+#     if ($local != $remote) {
+#       ^git -C $dir push origin HEAD -f
+#     }
+#   }
+# }
 
 def "main lockup" [] {
   header "light_yellow_reverse" "lockup"
@@ -170,38 +125,19 @@ def "main nfb" [--download = false --cache = false buildable: string] {
   if ($env.LAST_EXIT_CODE != 0) {
     error make {msg: "nfb failed!"}
   }
-  let res = open /tmp/x | split row -r '\n'
-  let resp = ($res | str join (char newline))
+  let resp = open /tmp/x | split row -r '\n' | str join (char newline)
   if ($cache or $download) {
-    let res = $resp | ^ssh ($builder.host) "cachix push colemickens"
+    $resp | ^ssh ($builder.host) "cachix push colemickens"
   }
   if $download {
     $resp | nix build --stdin --no-link -j0
   }
-  $res
-}
-
-def "main clean" [] {
-  nix build --out-link .outputs/toplevel-installer-standard ".#toplevels.installer-standard"
-  nix build --out-link .outputs/toplevel-installer-cosmic ".#toplevels.installer-cosmic"
-  nix build --out-link .outputs/toplevel-installer-nvidia-ai ".#toplevels.installer-nvidia-ai"
-  nix build --out-link .outputs/toplevel-installer-standard-aarch64 ".#toplevels.installer-standard-aarch64"
-  nix build --out-link .outputs/toplevel-xeep ".#toplevels.xeep"
-  nix build --out-link .outputs/toplevel-raisin ".#toplevels.raisin"
-  nix build --out-link .outputs/toplevel-zeph ".#toplevels.zeph"
-  nix build --out-link .outputs/toplevel-rock5b ".#toplevels.rock5b"
-  nix build --out-link .outputs/toplevel-h96maxv58 ".#toplevels.h96maxv58"
-
-  nix-env --profile ~/.local/state/nix/profiles/home-manager --delete-generations +1
-  sudo nix-collect-garbage -d
-  sudo nix-collect-garbage
+  $resp
 }
 
 def "main up" [...hosts] {
-  main inputup
   main lockup
   main nfb --download true ".#devShells.x86_64-linux"
-  main pkgup
 
   main nfb --download true ".#devShells.x86_64-linux"
 

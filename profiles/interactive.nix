@@ -123,6 +123,7 @@
               xh
               lazygit
               dogdns
+              dig
               ripgrep
               jless
               sd

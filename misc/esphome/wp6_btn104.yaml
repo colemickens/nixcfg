@@ -3,6 +3,7 @@ substitutions:
   device_name:  wp6_btn${ipnum}
   friendly_name:  wp6_btn${ipnum}
 
+<<: !include common.yaml
 <<: !include wp6_btn_common.yaml
 
 # NOTE: 104 is the heater "button"

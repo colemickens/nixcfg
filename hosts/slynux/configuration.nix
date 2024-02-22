@@ -23,6 +23,8 @@ in
     ../../mixins/tailscale.nix
 
     ../../profiles/interactive.nix
+    ../../profiles/addon-clouddev.nix
+    ../../profiles/addon-devtools.nix
 
     inputs.nixos-hardware.nixosModules.common-cpu-amd
     inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate

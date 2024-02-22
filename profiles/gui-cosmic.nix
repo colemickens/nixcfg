@@ -19,11 +19,18 @@ in
 {
   imports = [ ./gui-wayland.nix ];
 
-  config = {
+  config = let
+    tty = "tty${toString config.systemd.services.greetd.vt}";
+  in
+  {
     services.xserver.desktopManager.cosmic = {
       enable = true;
     };
 
+    services.xserver.displayManager.cosmic-greeter = {
+      enable = true;
+    };
+ 
     home-manager.users.cole =
       { pkgs, config, ... }@hm:
       {

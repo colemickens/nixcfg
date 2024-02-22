@@ -32,6 +32,10 @@ in
           tokenFile = config.sops.secrets."github-runner-token".path;
           replace = true;
           name = runnerName;
+          serviceOverrides.StateDirectory = [
+            "github-runner/${runnerName}" # module default
+          ];
+          workDir = "/var/lib/github-runner/${runnerName}"; # TODO: make sure this works
           extraLabels = [ runnerName ];
         };
       };

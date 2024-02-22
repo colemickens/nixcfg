@@ -381,8 +381,8 @@ in
               "${modifier}+Shift+8" = "move container to workspace number 8";
               "${modifier}+Shift+9" = "move container to workspace number 9";
 
-              "${modifier}+Shift+`" = "move scratchpad";
-              "${modifier}+`" = "scratchpad show";
+              "${modifier}+Shift+grave" = "move scratchpad";
+              "${modifier}+grave" = "scratchpad show";
 
               "--locked ${modifier}+Ctrl+Alt+Home" = "output * enable";
               "--locked ${modifier}+Ctrl+Alt+End" = "output -- disable";

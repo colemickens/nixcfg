@@ -11,7 +11,7 @@ let
 in
 {
   imports = [
-    ./configuration-base.nix
+    ./configuration-base-installer.nix
     ../../profiles/addon-tiny.nix
   ];
 

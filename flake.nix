@@ -17,6 +17,9 @@
     cmpkgs = {
       url = "github:colemickens/nixpkgs/cmpkgs";
     };
+    nixpkgs-cosmic = {
+      url = "github:lilyinstarlight/nixpkgs?ref=tmp/cosmic";
+    };
 
     mobile-nixos-openstick = {
       url = "github:colemickens/mobile-nixos/openstick";
@@ -179,10 +182,6 @@
             pkgs = inputs.cmpkgs;
             path = ./images/installer/configuration-standard.nix;
           };
-          installer-cosmic = {
-            pkgs = inputs.cmpkgs;
-            path = ./images/installer/configuration-cosmic.nix;
-          };
           installer-nvidia-ai = {
             pkgs = inputs.cmpkgs;
             path = ./images/installer/configuration-nvidia-ai.nix;
@@ -191,6 +190,11 @@
             pkgs = inputs.cmpkgs;
             path = ./images/installer/configuration-standard-aarch64.nix;
             buildSys = "x86_64-linux";
+          };
+
+          vm-cosmic = {
+            pkgs = inputs.nixpkgs-cosmic;
+            path = ./images/vm/configuration-cosmic.nix;
           };
 
           # actual machines:
@@ -245,10 +249,12 @@
         # must be manually included in ciAttrs
         x86_64-linux = {
           installer-standard = nixosConfigurations.installer-standard.config.system.build.isoImage;
-          installer-cosmic = nixosConfigurations.installer-cosmic.config.system.build.isoImage;
           installer-nvidia-ai = nixosConfigurations.installer-nvidia-ai.config.system.build.isoImage;
           installer-standard-aarch64 =
             nixosConfigurations.installer-standard-aarch64.config.system.build.isoImage;
+
+          vm-cosmic = nixosConfigurations.vm-cosmic.config.system.build.isoImage;
+
           openstick-abootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-abootimg;
           openstick-bootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-bootimg;
           openstick-rootfs = nixosConfigurations.openstick.config.mobile.outputs.generatedFilesystems.rootfs;
@@ -402,7 +408,7 @@
                   program = tfout.destroy.outPath;
                 };
 
-                test-installer = {
+                test-vm = {
                   type = "app";
                   program =
                     (pkgs_.writeShellScript "test-vm" ''
@@ -412,17 +418,25 @@
                         -net user,hostfwd=tcp::10022-:22 -net nic
                     '').outPath;
                 };
-                test-installer-gui = {
+                vm-cosmic = {
                   type = "app";
                   program =
-                    (pkgs_.writeShellScript "test-vm" ''
-                      ${pkgs_.qemu}/bin/qemu-img create -f qcow2 /tmp/installer-vm-vdisk1 10G
-                      ${pkgs_.qemu}/bin/qemu-system-x86_64 -enable-kvm -m 2048 -boot d \
-                        -cdrom "${installerIso}" -hda /tmp/installer-vm-vdisk1 \
-                        -net user,hostfwd=tcp::10022-:22 -net nic
+                    (pkgs_.writeShellScript "run-vm-cosmic" ''
+                      set -x
+                      ${nixosConfigurations.vm-cosmic.config.system.build.vm}/bin/run-vm-cosmic-vm
                     '').outPath;
-                  # TODO: add a variant that uses libvirt/virsh so we can test libvirt's funshit too
                 };
+                # test-vm-gui = {
+                #   type = "app";
+                #   program =
+                #     (pkgs_.writeShellScript "test-vm" ''
+                #       ${pkgs_.qemu}/bin/qemu-img create -f qcow2 /tmp/installer-vm-vdisk1 10G
+                #       ${pkgs_.qemu}/bin/qemu-system-x86_64 -enable-kvm -m 2048 -boot d \
+                #         -cdrom "${installerIso}" -hda /tmp/installer-vm-vdisk1 \
+                #         -net user,hostfwd=tcp::10022-:22 -net nic
+                #     '').outPath;
+                #   # TODO: add a variant that uses libvirt/virsh so we can test libvirt's funshit too
+                # };
               }
             );
 
@@ -464,7 +478,7 @@
                     rock5b
 
                     installer-standard
-                    installer-cosmic
+                    # installer-cosmic
                     installer-nvidia-ai
                     installer-standard-aarch64
                     ;
