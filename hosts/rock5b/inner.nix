@@ -31,7 +31,6 @@
 
     nixcfg.common.defaultKernel = false;
     nixcfg.common.useZfs = false;
-    nixcfg.common.addLegacyboot = false;
     nixcfg.common.wifiWorkaround = true;
 
     fileSystems = {

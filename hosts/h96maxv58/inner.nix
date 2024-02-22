@@ -49,7 +49,6 @@ in
       useZfs = false;
       defaultKernel = false;
       defaultNetworking = false;
-      addLegacyboot = false;
     };
 
     # boot.initrd.systemd.enable = false;

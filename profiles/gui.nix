@@ -116,6 +116,7 @@ in
             evince
             freerdp
             pinta
+            krita
             virt-viewer
 
             glide-media-player

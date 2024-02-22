@@ -148,6 +148,19 @@ let
       sudo nix-collect-garbage
     ''
   );
+
+  ipv6ctl = (writeShellScriptBin "ipv6ctl" ''
+    set -eou pipefail
+    if [[ "''${1:-}" == "on" ]]; then
+      sysctl -w net.ipv6.conf.all.disable_ipv6=0
+      sysctl -w net.ipv6.conf.default.disable_ipv6=0
+      sysctl -w net.ipv6.conf.wlan0.disable_ipv6=0
+    elif [[ "''${1:-}" == "off" ]]; then
+      sysctl -w net.ipv6.conf.all.disable_ipv6=1
+      sysctl -w net.ipv6.conf.default.disable_ipv6=1
+      sysctl -w net.ipv6.conf.wlan0.disable_ipv6=1
+    fi
+  '');
 in
 (symlinkJoin {
   name = "cole-custom-commands";
@@ -169,5 +182,7 @@ in
 
     mickfwd
     nixclean
+
+    ipv6ctl
   ];
 })

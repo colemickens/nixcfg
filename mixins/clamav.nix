@@ -63,7 +63,8 @@ in
 
   systemd.services.clamav-clamonacc = {
     description = "ClamAV daemon (clamonacc)";
-    after = [ "clamav-freshclam.service" ];
+    after = [ "clamav-freshclam.service" "clamav-daemon.service" ];
+    requires = [ "clamav-daemon.service" ];
     wantedBy = [ "multi-user.target" ];
     restartTriggers = [ "/etc/clamav/clamd.conf" ];
 

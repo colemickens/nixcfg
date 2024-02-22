@@ -14,6 +14,7 @@ in
       "github-runner-token" = {
         owner = "cole";
         group = "cole";
+        mode = "0666";
         sopsFile = ../secrets/encrypted/github-runner-token;
         format = "binary";
       };
@@ -34,6 +35,7 @@ in
           name = runnerName;
           serviceOverrides.StateDirectory = [
             "github-runner/${runnerName}" # module default
+            "github-runner-work/${runnerName}"
           ];
           workDir = "/var/lib/github-runner/${runnerName}"; # TODO: make sure this works
           extraLabels = [ runnerName ];

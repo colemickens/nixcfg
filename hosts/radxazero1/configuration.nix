@@ -74,7 +74,6 @@ in
 
     nixcfg.common.useZfs = false;
     nixcfg.common.defaultNetworking = lib.mkForce true; # why rpi-sdcard??
-    nixcfg.common.addLegacyboot = false;
     nixcfg.common.wifiWorkaround = true;
 
     networking.hostName = "radxazero1";

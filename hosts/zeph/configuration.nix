@@ -27,13 +27,13 @@ in
     ../../mixins/gfx-debug.nix
 
     ../../mixins/android.nix
-    # ../../mixins/clamav.nix
-    ../../mixins/github-runner.nix
+    ../../mixins/clamav.nix
     ../../mixins/ledger.nix
     ../../mixins/libvirt.nix
     ../../mixins/libvirtd.nix
     ../../mixins/monero.nix
     ../../mixins/podman.nix
+    ../../mixins/spotify.nix
     ../../mixins/syncthing.nix
     ../../mixins/trezor.nix
 
@@ -63,10 +63,8 @@ in
     networking.hostName = hn;
     # nixcfg.common.hostColor = "#c17ecc"; # tango magenta
     nixcfg.common.hostColor = "magenta";
-    nixcfg.common.skipMitigations = true;
+    nixcfg.common.skipMitigations = false;
     nixcfg.common.defaultKernel = true;
-    nixcfg.common.kernelPatchHDR = true;
-    nixcfg.common.addLegacyboot = false;
 
     nix = {
       settings = {

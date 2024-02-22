@@ -47,7 +47,7 @@
       url = "github:NixOS/nixos-hardware";
     };
     nixpkgs-wayland = {
-      url = "github:nix-community/nixpkgs-wayland/master";
+      url = "github:nix-community/nixpkgs-wayland/a1ef61a4";
       inputs."nixpkgs".follows = "cmpkgs";
     };
     sops-nix = {
@@ -119,10 +119,19 @@
       url = "github:colemickens/nix-rice";
       inputs."nixpkgs".follows = "cmpkgs";
     };
+    typhon = {
+      url = "github:typhon-ci/typhon";
+    };
 
     # ai, nvidia, testing on slynux
     nixified-ai = {
       url = "github:nixified-ai/flake";
+    };
+
+    # wip replacement for nixpkgs->github-runners module
+    nixos-github-actions = {
+      url = "github:colemickens/nixos-github-actions";
+      inputs."nixpkgs".follows = "cmpkgs";
     };
   };
 
@@ -461,9 +470,6 @@
               let
                 c_packages = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") inputs.self.packages.${system};
                 c_devShells = lib.mapAttrs' (n: lib.nameValuePair "devShell-${n}") inputs.self.devShells.${system};
-                # c_toplevels = lib.mapAttrs'
-                #   (n: v: lib.nameValuePair "toplevel-${n}" toplevels.${n})
-                #   inputs.self.nixosConfigsEx.${system};
                 c_toplevels = lib.concatMapAttrs (n: v: { "toplevel-${n}" = v; }) ({
                   inherit (toplevels)
                     raisin
@@ -471,29 +477,50 @@
                     xeep
                     zeph
 
+                    # h96maxv58
+                    # openstick
+                    # openstick2
+                    # radxazero1
+                    # rock5b
+
+                    installer-standard
+                    # installer-cosmic
+                    installer-nvidia-ai
+                    # installer-standard-aarch64
+                    ;
+                });
+
+                c_extra = lib.concatMapAttrs (n: v: { "x86_64-linux-${n}" = v; }) ({
+                  inherit (extra.x86_64-linux)
+                    installer-standard
+                    ;
+                });
+              in
+              c_packages // c_devShells // c_toplevels // c_extra;
+
+            checks2 =
+              let
+                c_toplevels = lib.concatMapAttrs (n: v: { "toplevel-${n}" = v; }) ({
+                  inherit (toplevels)
                     h96maxv58
                     openstick
                     openstick2
                     radxazero1
                     rock5b
 
-                    installer-standard
-                    # installer-cosmic
-                    installer-nvidia-ai
                     installer-standard-aarch64
                     ;
                 });
 
                 c_extra = lib.concatMapAttrs (n: v: { "x86_64-linux-${n}" = v; }) ({
                   inherit (extra.x86_64-linux)
-                    # installer
                     openstick-abootimg
                     openstick-bootimg
                     # h96maxv58-uboot
                     ;
                 });
               in
-              c_packages // c_devShells // c_toplevels // c_extra;
+              c_toplevels // c_extra;
           }
         )
       );

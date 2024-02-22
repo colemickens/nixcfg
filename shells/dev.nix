@@ -62,7 +62,7 @@ minimalMkShell {
     nix
 
     ## nix lsp
-    rnix-lsp
+    # rnix-lsp # pulls in old nix (CVE)
     nil
 
     ## nix space usage / visualizers

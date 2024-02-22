@@ -139,10 +139,14 @@ def "main up" [...hosts] {
   main lockup
   main nfb --download true ".#devShells.x86_64-linux"
 
-  main nfb --download true ".#devShells.x86_64-linux"
+  do -i { main nfb --cache true ".#checks.x86_64-linux" }
 
-  let all = main nfb --cache true ".#checks.x86_64-linux"
-  main deploy zeph --toplevel ($all | find zeph | ansi strip | first)
+  main deploy zeph
+  do -i { main deploy raisin }
+  do -i { main deploy slynux }
+  do -i { main deploy xeep }
+
+  do -i { main nfb --cache true ".#checks2.x86_64-linux" }
 }
 
 def main [] { main up }

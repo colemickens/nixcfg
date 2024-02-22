@@ -27,7 +27,7 @@
             };
             ui = {
               log-synthetic-elided-nodes = true;
-              pager = ":builtin";
+              # pager = ":builtin";
             };
             template-aliases = {
               one = ''

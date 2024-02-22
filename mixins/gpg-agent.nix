@@ -57,7 +57,7 @@ in
             allow-preset-passphrase
           '';
           # pinentryFlavor = "gnome3";
-          pinentryFlavor = null;
+          # pinentryFlavor = null;
           pinentryBinary = lib.mkDefault pinentryProgram;
           defaultCacheTtl = 34560000;
           defaultCacheTtlSsh = 34560000;

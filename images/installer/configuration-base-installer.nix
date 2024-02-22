@@ -25,7 +25,7 @@ in
     ## <tailscale auto-login>
     services.tailscale = {
       enable = true;
-      # state = "mem:";
+      extraDaemonFlags = [ "--state=mem:" ];
     };
     environment.loginShellInit = ''
       [[ "$(tty)" == "/dev/tty1" || "$(tty)" == "/dev/ttyS0" ]] && (

@@ -22,7 +22,8 @@
           };
         };
 
-        home.packages = [ pkgs.spotify-tui ];
+        # home.packages = [ pkgs.spotify-tui ];
+        home.packages = [ pkgs.spotify-player ];
       };
   };
 }

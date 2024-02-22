@@ -7,7 +7,8 @@
 }:
 
 let
-  _nvtop = pkgs.nvtop.override { nvidia = false; };
+  # _nvtop = pkgs.nvtop.override { nvidia = false; };
+  _nvtop = pkgs.nvtopPackages.amd;
 in
 {
   config = {

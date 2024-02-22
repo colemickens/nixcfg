@@ -29,7 +29,7 @@ jobs:
           - { "name": "radxazero1" }
           - { "name": "openstick" }
           - { "name": "slynux" }
-    runs-on: "raisin-default"
+    runs-on: "raisin-deployer"
     needs: [ "update" ]
     steps:
     - name: checkout

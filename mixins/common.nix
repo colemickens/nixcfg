@@ -10,7 +10,6 @@
 let
   cfg = config.nixcfg.common;
   _kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
-  _zfsUnstable = false;
 in
 {
   imports = [
@@ -27,14 +26,6 @@ in
           ideally, all machines run mainline. this is mostly disabled for mobile-nixos devices
           (also, in most cases linuxPackages could just be overridden directly)
           # TODO: it would be nice if mobile-nixos didn't make me need this...
-        '';
-      };
-      kernelPatchHDR = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = ''
-          patch the kernel with amd-hdr patches
-          used to enable the patch but disable it in a specialisation
         '';
       };
       wifiWorkaround = lib.mkOption {
@@ -70,10 +61,6 @@ in
         type = lib.types.bool;
         default = true;
       };
-      addLegacyboot = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-      };
     };
   };
 
@@ -98,7 +85,6 @@ in
         useTmpfs = lib.mkDefault false;
         cleanOnBoot = true;
       };
-      zfs.enableUnstable = (cfg.useZfs && _zfsUnstable);
 
       loader = {
         efi = {
@@ -113,8 +99,8 @@ in
         systemd-boot = {
           enable = lib.mkDefault true;
           configurationLimit = 10;
-          # memtest86.enable = (pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isx86);
-          memtest86.entryFilename = "z-memtest86.conf";
+          memtest86.enable = (pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isx86);
+          memtest86.sortKey = "z_memtest86";
         };
         timeout = 3;
       };
@@ -130,47 +116,6 @@ in
         "fs.inotify.max_user_watches" = 99999999;
       };
     };
-
-    ## LEGACYBOOT - we use stage-1/systemd so have a fallback ###############
-    specialisation = {
-      "legacyboot" = lib.mkIf (config.boot.initrd.systemd.enable && config.nixcfg.common.addLegacyboot) {
-        inheritParentConfig = true;
-        configuration = {
-          boot.initrd.systemd.enable = lib.mkForce false;
-          boot.initrd.luks.devices."nixos-luksroot".fallbackToPassword = true;
-        };
-      };
-      # we've had no issues, let's get rid of an extra big eval
-      # "no-amd-hdr" = lib.mkIf cfg.kernelPatchHDR {
-      #   inheritParentConfig = true;
-      #   configuration = {
-      #     nixcfg.common.kernelPatchHDR = lib.mkForce false;
-      #   };
-      # };
-    };
-
-    boot.kernelPatches = lib.mkIf (cfg.kernelPatchHDR) [
-      {
-        name = "amd-hdr-patch";
-        patch = (
-          pkgs.fetchpatch {
-            # # linux-6.4
-            # url = "https://raw.githubusercontent.com/CachyOS/kernel-patches/d792451352838e29b6b0e4a297e897bf1bb975fe/6.4/0005-HDR.patch";
-            # hash = "sha256-fGbb3NCyuryXDDtD14GDhc4AK/Ho3I0M1tLOkgJeRdQ=";
-
-            # # linux-6.5
-            # # https://github.com/CachyOS/kernel-patches/blob/master/6.5/0001-amd-hdr.patch
-            # url = "https://raw.githubusercontent.com/CachyOS/kernel-patches/ea4aa71f452203bc7be29ca8ccd2b1ca16ecee14/6.5/0001-amd-hdr.patch";
-            # hash = "sha256-/G48qHCYrsk6PQp5IaTBgfo4XjLcoJxa/LkTr2si2/4=";
-
-            # linux-6.6
-            # https://github.com/CachyOS/kernel-patches/blob/master/6.6/0001-amd-hdr.patch
-            url = "https://raw.githubusercontent.com/CachyOS/kernel-patches/a4e5433a0da6a3a90835f55cce7a28b6119e244c/6.6/0001-amd-hdr.patch";
-            hash = "sha256-9d8agfDuIYPHmYK+MdZnM/5VaSArnC+AdxnSz13RloE=";
-          }
-        );
-      }
-    ];
 
     ## NETWORK + TIME #######################################################
     networking = {

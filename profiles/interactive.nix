@@ -28,7 +28,7 @@
     ../mixins/joshuto.nix
     ../mixins/nushell.nix
     ../mixins/pijul.nix
-    ../mixins/spotify.nix
+    # ../mixins/spotify.nix
     ../mixins/ssh.nix
     ../mixins/xdg.nix
     ../mixins/zellij.nix

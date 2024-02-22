@@ -13,7 +13,6 @@
 
     nixcfg.common.skipMitigations = true;
     nixcfg.common.defaultKernel = true;
-    nixcfg.common.addLegacyboot = false;
 
     system.stateVersion = "23.11";
 
