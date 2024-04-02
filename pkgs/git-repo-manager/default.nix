@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  runCommand,
-  makeRustPlatform,
-  # , rustPlatform
-  openssl,
-  zlib,
-  zstd,
-  pkg-config,
-  python3,
-  xorg,
-  libiconv,
-  nghttp2,
-  libgit2,
-  testers,
-  fenix,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, runCommand
+, makeRustPlatform
+, # , rustPlatform
+  openssl
+, zlib
+, zstd
+, pkg-config
+, python3
+, xorg
+, libiconv
+, nghttp2
+, libgit2
+, testers
+, fenix
+,
 }:
 
 let
@@ -30,15 +30,15 @@ let
   );
 in
 # (fenix.packages.${stdenv.hostPlatform.system}.latest.withComponents [
-# "cargo"
-# "clippy"
-# "rust-src"
-# "rustc"
-# "rustfmt"
-# ]);
+  # "cargo"
+  # "clippy"
+  # "rust-src"
+  # "rustc"
+  # "rustfmt"
+  # ]);
 rustPlatform.buildRustPackage (
   let
-    version = "unstable-2024-02-01";
+    version = "0.7.15-unstable-2024-02-01";
     rev = "ea7299a14788556536e00bf0311bd5f650ad2600";
     owner = "hakoerber";
     pname = "git-repo-manager";
