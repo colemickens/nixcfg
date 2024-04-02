@@ -1,19 +1,19 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
+{ lib
+, python3
+, fetchFromGitHub
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pyamlboot";
-  version = "unstable-2021-08-17";
+  version = "1.0.0-unstable-2024-02-22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "superna9999";
     repo = "pyamlboot";
-    rev = "ffaaad9503192ece98970b7100a03c54ba58befc";
-    hash = "sha256-2TD9UtMcxA29p3K6i5+SDSAVDiFhY1050QWx5MHne3s=";
+    rev = "90eb0c0ccfed9fd3f52016a3835122505ea35f5f";
+    hash = "sha256-lHSVi+3+bsdPhqL7pxUl3e3mdzAQknBt/h+R5hDL21U=";
   };
 
   nativeBuildInputs = [
