@@ -11,7 +11,7 @@
         mode = "0600";
       };
       "github-colebot-sshkey" = {
-        mode = "0666";
+        mode = "0600";
         sopsFile = ../secrets/encrypted/github-colebot-sshkey;
         format = "binary";
       };

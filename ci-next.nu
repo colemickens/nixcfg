@@ -1,5 +1,9 @@
 #!/usr/bin/env nu
 
+id -u
+id -g
+ls -al /run/secrets
+
 # TODO:
 # - follow up on self-hosted runners being weird about HOME + sshkeys
 # - figure out a strategy for pinning the most recent build with a gcroot so we can enable GC again
@@ -109,29 +113,29 @@ def "main deploy" [host: string --activate = true] {
     }
   }
 
-  if (not $activate) {
-    ^ssh ...$sshargs $"cole@($addr)" $"sudo nix build -j0 --no-link ($out)"
-    return
-  }
+  # if (not $activate) {
+  ^ssh ...$sshargs $"cole@($addr)" $"sudo nix build -j0 --no-link ($out)"
+  #   return
+  # }
 
-  ^ssh ...$sshargs $"cole@($addr)" $"sudo nix build -j0 --no-link --profile /nix/var/nix/profiles/system ($out)"
-  ^ssh ...$sshargs $"cole@($addr)" $"sudo ($out)/bin/switch-to-configuration switch"
+  # ^ssh ...$sshargs $"cole@($addr)" $"sudo nix build -j0 --no-link --profile /nix/var/nix/profiles/system ($out)"
+  # ^ssh ...$sshargs $"cole@($addr)" $"sudo ($out)/bin/switch-to-configuration switch"
 
-  if $host == "openstick" {
-    ^ssh ...$sshargs $"cole@($addr)" "sudo reboot"
-    sleep 60sec;
-    ^ssh ...[...$sshargs $"cole@($addr)" uname -a]
-  }
-  if $host == "openstick" {
-    do -i {
-      print -e "openstick-predeploy: reboot"
-      ^ssh ...$sshargs $"cole@($addr)" "sudo reboot"
-      sleep 60sec;
-      print -e "openstick-predeploy: garbage collect"
-      ^ssh ...$sshargs $"cole@($addr)" "nix-env --profile ~/.local/state/nix/profiles/home-manager --delete-generations +1"
-      ^ssh ...$sshargs $"cole@($addr)" "sudo nix-collect-garbage -d"
-    }
-  }
+  # if $host == "openstick" {
+  #   ^ssh ...$sshargs $"cole@($addr)" "sudo reboot"
+  #   sleep 60sec;
+  #   ^ssh ...[...$sshargs $"cole@($addr)" uname -a]
+  # }
+  # if $host == "openstick" {
+  #   do -i {
+  #     print -e "openstick-predeploy: reboot"
+  #     ^ssh ...$sshargs $"cole@($addr)" "sudo reboot"
+  #     sleep 60sec;
+  #     print -e "openstick-predeploy: garbage collect"
+  #     ^ssh ...$sshargs $"cole@($addr)" "nix-env --profile ~/.local/state/nix/profiles/home-manager --delete-generations +1"
+  #     ^ssh ...$sshargs $"cole@($addr)" "sudo nix-collect-garbage -d"
+  #   }
+  # }
 }
 
 def "main update" [] {
@@ -259,7 +263,7 @@ def "main update" [] {
 
   print "::group::cachix push"
   do {
-    ^ls -d result* | tee /dev/stderr | cachix push colemickens
+    ^ls -d result* | ^tee "/dev/stderr" | cachix push colemickens
   }
   print "::endgroup"
 
