@@ -71,7 +71,6 @@ minimalMkShell {
 
     # nix formatters
     nixpkgs-fmt
-    nixfmt
     alejandra
 
     ## nodejs

@@ -17,17 +17,21 @@ let
   };
 in
 {
-  imports = [ ./gui-wayland.nix ];
+  imports = [
+    ./gui-wayland.nix
+
+    inputs.nixos-cosmic.nixosModules.default
+  ];
 
   config = let
     tty = "tty${toString config.systemd.services.greetd.vt}";
   in
   {
-    services.xserver.desktopManager.cosmic = {
+    services.desktopManager.cosmic = {
       enable = true;
     };
 
-    services.xserver.displayManager.cosmic-greeter = {
+    services.displayManager.cosmic-greeter = {
       enable = true;
     };
  

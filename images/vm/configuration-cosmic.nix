@@ -26,7 +26,7 @@ in
       diskImage = "/tmp/${config.system.name}.qcow2";
       memorySize = 4096;
       cores = 4;
-      opengl = true;
+      # opengl = true;
     };
 
     services.timesyncd.enable = lib.mkForce false;

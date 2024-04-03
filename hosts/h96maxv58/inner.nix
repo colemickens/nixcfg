@@ -24,6 +24,7 @@ in
 
     "${modulesPath}/installer/sd-card/sd-image-aarch64.nix"
 
+    ../../profiles/core.nix
     ../../profiles/user-cole.nix
     ../../mixins/common.nix
     ../../mixins/tailscale.nix
