@@ -466,7 +466,8 @@
             # also, we're probably fine to remove ciAttrs now, nix-fast-build does recursive-ness, and ciAttrs doesn't even buildFarm anymore
             # TODO: we're still preferring local builds for somemthings, do we need to add back the wrapper?????
             # TODO: or look into the allowSubstitutesAlways new flag that lovesegfault commented about?
-            checks =
+            checks = (checks1 // checks2);
+            checks1 =
               let
                 c_packages = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") inputs.self.packages.${system};
                 c_devShells = lib.mapAttrs' (n: lib.nameValuePair "devShell-${n}") inputs.self.devShells.${system};
