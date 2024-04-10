@@ -16,6 +16,7 @@ in
 {
   imports = [
     ../../profiles/gui-sway.nix
+    ../../profiles/gui-cosmic.nix
     # ../../profiles/gui-i3.nix
 
     ../../profiles/addon-asus.nix

@@ -31,14 +31,16 @@ in
       enable = true;
     };
 
-    services.displayManager.cosmic-greeter = {
-      enable = true;
-    };
+    # services.displayManager.cosmic-greeter = {
+    #   enable = true;
+    # };
  
     home-manager.users.cole =
       { pkgs, config, ... }@hm:
       {
-        home.packages = with pkgs; [ ];
+        home.packages = with pkgs; [
+          cosmic-emoji-picker
+        ];
 
         home.sessionVariables = {
           # WLR_RENDERER = "vulkan";
