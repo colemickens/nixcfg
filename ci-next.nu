@@ -1,9 +1,5 @@
 #!/usr/bin/env nu
 
-id -u
-id -g
-ls -al /run/secrets
-
 # TODO:
 # - follow up on self-hosted runners being weird about HOME + sshkeys
 # - figure out a strategy for pinning the most recent build with a gcroot so we can enable GC again
