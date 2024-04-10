@@ -106,6 +106,9 @@
             (with pkgs; [
               (pkgs.callPackage ../pkgs/commands.nix { })
 
+              # yolo
+              appimage-run
+
               # <rust pkgs>
               delta
               tealdeer
