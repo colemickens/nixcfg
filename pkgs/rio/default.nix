@@ -42,13 +42,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "nightly-unstable-2024-03-31";
+  version = "nightly-unstable-2024-04-09";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
-    rev = "8ab7a537382a4158b9763555c1df6bf7de978868";
-    hash = "sha256-dVhvfrq2Kqo5x7mhMve2wU1RUZVdy3xq2orgBWrX5DE=";
+    rev = "b884b54af1c1a147b36d201e6c7fb509c7a3204e";
+    hash = "sha256-0S1wfKekZfVF7smN+d5O/2LiX5OYm9FEUqtLsDtNmDI=";
   };
 
   # cargoHash = "sha256-jev4fMwCygVzvrkI1nSE5tx59nGqNKQUHCNHvkr9R90=";
