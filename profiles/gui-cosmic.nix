@@ -31,9 +31,9 @@ in
       enable = true;
     };
 
-    # services.displayManager.cosmic-greeter = {
-    #   enable = true;
-    # };
+    services.displayManager.cosmic-greeter = {
+      enable = true;
+    };
  
     home-manager.users.cole =
       { pkgs, config, ... }@hm:

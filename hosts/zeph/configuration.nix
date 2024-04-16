@@ -15,7 +15,7 @@ let
 in
 {
   imports = [
-    ../../profiles/gui-sway.nix
+    # ../../profiles/gui-sway.nix
     ../../profiles/gui-cosmic.nix
     # ../../profiles/gui-i3.nix
 

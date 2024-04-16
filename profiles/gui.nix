@@ -121,8 +121,6 @@ in
 
             glide-media-player
 
-            lapce
-
             # audio/video
             pavucontrol
             # pw-viz # also failing to build again

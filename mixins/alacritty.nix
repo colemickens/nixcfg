@@ -46,6 +46,12 @@ in
                 y = 5;
               };
             };
+            hints.enabled = [{
+              # hyperlinks = false;
+              command = "true";
+              regex = "(ipfs:|ipns:|magnet:|mailto:|gemini://|gopher://|https://|http://|news:|file:|git://|ssh:|ftp://)[^\u0000-\u001F\u007F-\u009F<>\"\\\\s{-}\\\\^⟨⟩`]+";
+              mouse.enabled = false;
+            }];
             colors = rec {
               draw_bold_text_with_bright_colors = colors.bold_as_bright;
               primary.foreground = colors.foreground;

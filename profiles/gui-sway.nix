@@ -140,12 +140,16 @@ in
       {
         home.packages = with pkgs; [
           waylock
-          _sway
+          #_sway
+          (pkgs.writeShellScriptBin "start-sway" ''
+            export XDG_CURRENT_DESKTOP=sway
+            exec sway
+          '')
         ];
 
         home.sessionVariables = {
           WLR_RENDERER = "vulkan";
-          XDG_CURRENT_DESKTOP = "sway";
+          # XDG_CURRENT_DESKTOP = "sway";
         };
 
         xdg.portal = {

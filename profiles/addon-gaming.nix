@@ -92,6 +92,8 @@ in
           vkbasalt
           goverlay
 
+          legendary-gl
+
           dolphin-emu # gamecube emu
           # _yuzu
           xemu

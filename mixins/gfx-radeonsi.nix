@@ -19,7 +19,10 @@ in
     #   utils.enable = true;
     # };
 
-    environment.systemPackages = with pkgs; [ _nvtop ];
+    environment.systemPackages = with pkgs; [
+      _nvtop
+      lact
+    ];
 
     environment.sessionVariables = {
       DISABLE_LAYER_AMD_SWITCHABLE_GRAPHICS_1 = "1";
