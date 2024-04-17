@@ -139,6 +139,8 @@
               miniserve
               # </rust pkgs>
 
+              nix-inspect
+
               age # need age (Age-keygen can do priv->pub)
               sbctl
 
