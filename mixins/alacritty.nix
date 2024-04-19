@@ -22,7 +22,6 @@ in
         programs.alacritty = {
           enable = true;
           # package = alacrittyPkg;
-          forceToml = true;
           settings = {
             env = {
               TERM = "xterm-256color";
