@@ -63,7 +63,12 @@ in
     # nixcfg.common.hostColor = "#c17ecc"; # tango magenta
     nixcfg.common.hostColor = "magenta";
     nixcfg.common.skipMitigations = false;
-    nixcfg.common.defaultKernel = true;
+
+    # zfs schenanigans
+    nixcfg.common.defaultKernel = false;
+
+    boot.zfs.package = pkgs.zfs_unstable;
+    boot.kernelPackages = pkgs.linuxPackages_latest;
 
     nix = {
       settings = {
