@@ -28,7 +28,7 @@ in
     ../mixins/alacritty.nix
     ../mixins/fonts.nix
     ../mixins/mpv.nix
-    ../mixins/pam-u2f.nix
+    # ../mixins/pam-u2f.nix # separate out briefly
     ../mixins/pipewire.nix
     ../mixins/rio.nix
     ../mixins/wezterm.nix

@@ -10,6 +10,7 @@
   imports = [
     # in configuration.nix, default to sway
     ../../profiles/gui-sway.nix
+    ../../mixins/pam-u2f.nix
     ./configuration-base.nix
   ];
   config = {
