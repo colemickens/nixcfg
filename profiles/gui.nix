@@ -27,7 +27,6 @@ in
 
     ../mixins/alacritty.nix
     ../mixins/fonts.nix
-    ../mixins/gtk.nix
     ../mixins/mpv.nix
     ../mixins/pam-u2f.nix
     ../mixins/pipewire.nix

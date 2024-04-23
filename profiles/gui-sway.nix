@@ -41,12 +41,6 @@ let
     accel_profile = "flat";
   };
 
-  _sway = lib.meta.hiPrio (
-    pkgs.writeShellScriptBin "sway" ''
-      exec ${pkgs.sway}/bin/sway -Dlegacy-wl-drm
-    ''
-  );
-
   screenshot = pkgs.writeShellScript "screenshot.sh" ''
     mkdir -p "''${HOME}/screenshots"
     ${pkgs.grim}/bin/grim "''${HOME}/screenshots/screenshot-$(date '+%s').png"
@@ -112,6 +106,7 @@ in
   imports = [
     ./gui-wayland.nix
     # ../mixins/i3status-rust.nix
+    ../mixins/gtk.nix
     ../mixins/kanshi.nix
     ../mixins/mako.nix
     ../mixins/waybar.nix
@@ -141,15 +136,11 @@ in
         home.packages = with pkgs; [
           waylock
           #_sway
-          (pkgs.writeShellScriptBin "start-sway" ''
-            export XDG_CURRENT_DESKTOP=sway
-            exec sway
-          '')
         ];
 
         home.sessionVariables = {
           WLR_RENDERER = "vulkan";
-          # XDG_CURRENT_DESKTOP = "sway";
+          XDG_CURRENT_DESKTOP = "sway";
         };
 
         xdg.portal = {
@@ -205,6 +196,7 @@ in
 
         wayland.windowManager.sway = {
           enable = true;
+          extraOptions = [ "-Dlegacy-wl-drm" ];
           systemd = {
             enable = true; # beta
           };
