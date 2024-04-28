@@ -1,6 +1,4 @@
 {
-  # TODO: revisit/checkout: mic92/envfs, nickel, wfvm
-
   description = "colemickens - nixos configs, custom packges, misc";
 
   inputs = {
@@ -19,6 +17,7 @@
     };
     nixos-cosmic = {
       url = "github:lilyinstarlight/nixos-cosmic";
+      # url = "github:colemickens/nixos-cosmic";
       inputs."nixpkgs".follows = "cmpkgs";
     };
 
@@ -86,10 +85,10 @@
       inputs."flake-utils".follows = "flake-utils";
       inputs."nixpkgs".follows = "cmpkgs";
     };
-    nix-eval-jobs = {
-      url = "github:nix-community/nix-eval-jobs";
-      # inputs."nixpkgs".follows = "cmpkgs";
-    };
+    # nix-eval-jobs = {
+    #   url = "github:nix-community/nix-eval-jobs";
+    #   # inputs."nixpkgs".follows = "cmpkgs";
+    # };
     nix-update = {
       url = "github:Mic92/nix-update";
       inputs."nixpkgs".follows = "cmpkgs";
@@ -139,6 +138,11 @@
     };
     h96 = {
       url = "github:MatthewCroughan/h96-max-v58-nixos";
+    };
+
+    nheko = {
+      url = "git+https://cgit.rory.gay/matrix/thirdparty/nheko.git";
+      inputs.nixpkgs.follows = "cmpkgs";
     };
   };
 

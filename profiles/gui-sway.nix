@@ -127,6 +127,8 @@ in
     security.pam.services.swaylock = { };
     security.pam.services.waylock = { }; # TODO: what is this actually doing? match binary name?
 
+    environment.pathsToLink = [ "/share/xdg-desktop-portal" "/share/applications" ];
+
     home-manager.users.cole =
       { pkgs, config, ... }@hm:
       let

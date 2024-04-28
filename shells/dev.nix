@@ -57,7 +57,7 @@ minimalMkShell {
     _rustBuild
     llvmPackages.lldb
 
-    inputs.nix-eval-jobs.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
+    # inputs.nix-eval-jobs.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
 
     nix
 

@@ -98,7 +98,8 @@ in
               jamesdsp
 
               # communication
-              nheko
+              # nheko
+              inputs.nheko.outputs.packages.${pkgs.hostPlatform.system}.default
               libsForQt5.kdeGear.neochat
               # libsForQt5.kdeGear.falkon
 

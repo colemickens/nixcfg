@@ -18,7 +18,7 @@
         # "ripcord"
 
         # trezor-suite... is unfree?
-        "trezor-suite-24.3.2"
+        "trezor-suite"
 
         ### gaming
         "steam"
