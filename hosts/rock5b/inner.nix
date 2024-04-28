@@ -33,6 +33,8 @@
     nixcfg.common.useZfs = false;
     nixcfg.common.wifiWorkaround = true;
 
+    networking.wireless.iwd.enable = true;
+
     fileSystems = {
       "/" = {
         device = "/dev/disk/by-partlabel/rock5b-nixos";
@@ -56,7 +58,7 @@
     # (the default) this is the recommended approach. When using systemd-networkd it's
     # still possible to use this option, but it's recommended to use it in conjunction
     # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
-    networking.useDHCP = lib.mkDefault true;
+    # networking.useDHCP = lib.mkDefault true;
     # networking.interfaces.enP4p1s0.useDHCP = lib.mkDefault true;
 
     # Use the systemd-boot EFI boot loader.
