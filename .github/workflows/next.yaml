@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: '0/20 * * * *'
   workflow_dispatch:
+    inputs:
+      activate:
+        default: false
+        required: true
+        type: boolean
   push:
     branches:
       - "main"
@@ -23,12 +28,12 @@ jobs:
       fail-fast: false
       matrix:
         host:
-          - { "name": "raisin" }
-          - { "name": "xeep" }
-          - { "name": "rock5b" }
-          - { "name": "radxazero1" }
-          - { "name": "openstick" }
-          - { "name": "slynux" }
+          - name: "raisin"
+          - name: "xeep"
+          - name: "rock5b"
+          - name: "radxazero1"
+          - name: "openstick"
+          - name: "slynux"
     runs-on: "raisin-deployer"
     needs: [ "update" ]
     steps:
@@ -39,4 +44,4 @@ jobs:
     - name: deploy-${{matrix.host.name}}
       run: |
         timeout 600 \
-          nix develop .#ci -c ./ci-next.nu deploy --activate true ${{matrix.host.name}}
+          nix develop .#ci -c ./ci-next.nu deploy --activate ${{ inputs.activate }} ${{matrix.host.name}}
