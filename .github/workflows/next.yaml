@@ -16,6 +16,9 @@ jobs:
   "update":
     runs-on: "raisin-default"
     steps:
+    - name: debug
+      run: |
+        echo ${{ toJSON(inputs.activate) }}
     - name: checkout
       uses: actions/checkout@v4
       with:
@@ -45,4 +48,4 @@ jobs:
     - name: deploy-${{matrix.host.name}}
       run: |
         timeout 600 \
-          nix develop .#ci -c ./ci-next.nu deploy --activate=${{ github.event.inputs.activate }} ${{matrix.host.name}}
+          nix develop .#ci -c ./ci-next.nu deploy --activate=${{ toJSON(inputs.activate) }} ${{matrix.host.name}}
