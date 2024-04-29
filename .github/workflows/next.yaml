@@ -8,7 +8,10 @@ on:
       activate:
         default: false
         required: true
-        type: boolean
+        type: choice
+        options:
+          - "true"
+          - "false"
   push:
     branches:
       - "main"
@@ -16,12 +19,6 @@ jobs:
   "update":
     runs-on: "raisin-default"
     steps:
-    - name: debug
-      env:
-        ACTIVATE: ${{ inputs.activate }}
-      run: |
-        echo ${{ toJSON(inputs.activate) }}
-        echo $ACTIVATE
     - name: checkout
       uses: actions/checkout@v4
       with:
@@ -51,4 +48,4 @@ jobs:
     - name: deploy-${{matrix.host.name}}
       run: |
         timeout 600 \
-          nix develop .#ci -c ./ci-next.nu deploy --activate=${{ toJSON(inputs.activate) }} ${{matrix.host.name}}
+          nix develop .#ci -c ./ci-next.nu deploy --activate=${{ inputs.activate || 'false' }} ${{matrix.host.name}}
