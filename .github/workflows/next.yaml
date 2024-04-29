@@ -17,8 +17,11 @@ jobs:
     runs-on: "raisin-default"
     steps:
     - name: debug
+      env:
+        ACTIVATE: ${{ inputs.activate }}
       run: |
         echo ${{ toJSON(inputs.activate) }}
+        echo $ACTIVATE
     - name: checkout
       uses: actions/checkout@v4
       with:
