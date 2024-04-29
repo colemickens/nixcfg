@@ -44,4 +44,4 @@ jobs:
     - name: deploy-${{matrix.host.name}}
       run: |
         timeout 600 \
-          nix develop .#ci -c ./ci-next.nu deploy --activate ${{ inputs.activate }} ${{matrix.host.name}}
+          nix develop .#ci -c ./ci-next.nu deploy --activate ${{ format('{0}', inputs.activate) }} ${{matrix.host.name}}
