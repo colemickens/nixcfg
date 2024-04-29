@@ -776,15 +776,16 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1713652708,
-        "narHash": "sha256-yvEO9QyWF4B/KMEf3x9HxO62h8RYr7E2YSdqONGtR58=",
-        "owner": "MatthewCroughan",
+        "lastModified": 1714365503,
+        "narHash": "sha256-C4Gzrdcnhpm62RFnFAU9c25xZFt8MjnMS7ajdu3vl8c=",
+        "owner": "colemickens",
         "repo": "h96-max-v58-nixos",
-        "rev": "1a8f0d0879f8b28dd80dccaeeb6c77460527cb6e",
+        "rev": "6abd3241d565e4e5b7395e102db14da01ae9a152",
         "type": "github"
       },
       "original": {
-        "owner": "MatthewCroughan",
+        "owner": "colemickens",
+        "ref": "colemickens/main",
         "repo": "h96-max-v58-nixos",
         "type": "github"
       }

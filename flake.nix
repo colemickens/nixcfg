@@ -137,7 +137,7 @@
       url = "github:edolstra/flake-compat";
     };
     h96 = {
-      url = "github:MatthewCroughan/h96-max-v58-nixos";
+      url = "github:colemickens/h96-max-v58-nixos?ref=colemickens/main";
     };
 
     nheko = {
@@ -245,7 +245,7 @@
           };
           h96maxv58 = {
             pkgs = inputs.cmpkgs;
-            path = ./hosts/h96maxv58/cross.nix;
+            path = ./hosts/h96maxv58/config-cross.nix;
             buildSys = "x86_64-linux";
           };
           radxazero1 = {
