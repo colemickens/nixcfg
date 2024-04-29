@@ -23,8 +23,7 @@
             nil
             nixpkgs-fmt
 
-            # misc tools that I probably only need from primary dev machine:
-            ventoy-full
+            dfmt
           ];
           sessionVariables = {
             ENVRC_USE_FLAKE = 1;
