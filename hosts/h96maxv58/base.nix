@@ -42,7 +42,6 @@ in
     nixcfg.common = {
       useZfs = false;
       defaultKernel = false;
-      defaultNetworking = false;
     };
 
     boot.loader.systemd-boot.enable = false;
