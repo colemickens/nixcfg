@@ -35,7 +35,7 @@ jobs:
           - name: "xeep"
           - name: "rock5b"
           - name: "radxazero1"
-          - name: "openstick"
+          # - name: "openstick"
           - name: "slynux"
           - name: "h96maxv58"
     runs-on: "raisin-deployer"
