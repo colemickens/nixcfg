@@ -20,6 +20,7 @@
         imports = [
           ./configuration-base.nix
           ../../profiles/gui-cosmic.nix
+          # ../../mixins/pam-u2f.nix
         ];
       };
     };
