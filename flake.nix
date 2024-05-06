@@ -438,14 +438,14 @@
                 #         -net user,hostfwd=tcp::10022-:22 -net nic
                 #     '').outPath;
                 # };
-                # vm-cosmic = {
-                #   type = "app";
-                #   program =
-                #     (pkgs_.writeShellScript "run-vm-cosmic" ''
-                #       set -x
-                #       ${nixosConfigurations.vm-cosmic.config.system.build.vm}/bin/run-vm-cosmic-vm
-                #     '').outPath;
-                # };
+                vm-cosmic = {
+                  type = "app";
+                  program =
+                    (pkgs_.writeShellScript "run-vm-cosmic" ''
+                      set -x
+                      ${nixosConfigurations.vm-cosmic.config.system.build.vm}/bin/run-vm-cosmic-vm
+                    '').outPath;
+                };
 
                 # test-vm-gui = {
                 #   type = "app";
@@ -484,6 +484,7 @@
                 c_packages = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") inputs.self.packages.${system};
                 c_devShells = lib.mapAttrs' (n: lib.nameValuePair "devShell-${n}") inputs.self.devShells.${system};
                 c_toplevels = lib.concatMapAttrs (n: v: { "toplevel-${n}" = v; }) ({
+                  vm-cosmic-vm = nixosConfigurations.vm-cosmic.config.system.build.vm;
                   inherit (toplevels)
                     raisin
                     slynux
@@ -496,6 +497,7 @@
                     # radxazero1
                     # rock5b
 
+                    vm-cosmic
                     installer-standard
                     # installer-cosmic
                     # installer-nvidia-ai

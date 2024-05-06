@@ -44,8 +44,6 @@ in
         ### misc
         "google-chrome"
         "google-chrome-dev"
-
-        "google-chrome-120.0.6099.216" # uh, why is it suddenly making me include version?
       ];
   };
 }
