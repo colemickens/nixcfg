@@ -1,15 +1,20 @@
-{
-  config,
-  lib,
-  pkgs,
-  inputs,
-  options,
-  ...
+{ config
+, lib
+, pkgs
+, inputs
+, options
+, ...
 }:
 
 let
   cfg = config.nixcfg.common;
-  _kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+  # _kernelPackages = pkgs.linuxPackages_latest;
+  _kernelPackages =
+    if cfg.useZfs then
+      if cfg.useZfsUnstable
+      then pkgs.linuxPackages_latest
+      else pkgs.linuxKernel.packages.linux_6_6
+    else pkgs.linuxPackages_latest;
 in
 {
   imports = [
@@ -47,6 +52,10 @@ in
       useZfs = lib.mkOption {
         type = lib.types.bool;
         default = true;
+      };
+      useZfsUnstable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
       };
       autoHostId = lib.mkOption {
         type = lib.types.bool;
@@ -107,6 +116,8 @@ in
 
       initrd.systemd.enable = lib.mkDefault true;
       initrd.supportedFilesystems = ([ "ntfs" ] ++ lib.optionals (cfg.useZfs) [ "zfs" ]);
+
+      zfs.package = lib.mkIf (cfg.useZfs && cfg.useZfsUnstable) pkgs.zfs_unstable;
 
       kernelPackages = lib.mkIf cfg.defaultKernel _kernelPackages;
       kernelParams = lib.mkIf cfg.skipMitigations [ "mitigations=off" ];

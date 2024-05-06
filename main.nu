@@ -135,6 +135,21 @@ def "main nfb" [--download = false --cache = false buildable: string] {
   $resp
 }
 
+def "main loopup" [] {
+  loop {
+    try {
+      print -e "recreate lock"
+      nix flake lock --recreate-lock-file
+      
+      print -e "build checks1"
+      nix-fast-build --eval-workers 1 -j 1 -f '.#checks1.x86_64-linux'
+      print -e "build checks2"
+      nix-fast-build --eval-workers 1 -j 1 -f '.#checks2.x86_64-linux'
+    }
+    sleep 10sec;
+  }
+}
+
 def "main up" [...hosts] {
   main lockup
   main nfb --download true ".#devShells.x86_64-linux"

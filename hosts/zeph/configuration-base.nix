@@ -65,10 +65,8 @@ in
     nixcfg.common.skipMitigations = false;
 
     # zfs schenanigans
-    nixcfg.common.defaultKernel = false;
-
-    boot.zfs.package = pkgs.zfs_unstable;
-    boot.kernelPackages = pkgs.linuxPackages_latest;
+    nixcfg.common.useZfs = true;
+    nixcfg.common.useZfsUnstable = true;
 
     nix = {
       settings = {

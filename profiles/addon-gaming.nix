@@ -102,7 +102,7 @@ in
 
           # okay, gotta see what these crazy kids are building...
           # TODO: check out vinegar whenever it ... gets merged into nixpkgs
-          grapejuice
+          # grapejuice
         ];
         programs = {
           mangohud = {
