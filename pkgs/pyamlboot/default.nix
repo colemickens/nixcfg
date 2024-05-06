@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pyamlboot";
-  version = "1.0.0-unstable-2024-02-22";
+  version = "1.0.0-unstable-2024-05-01";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "superna9999";
     repo = "pyamlboot";
-    rev = "90eb0c0ccfed9fd3f52016a3835122505ea35f5f";
-    hash = "sha256-lHSVi+3+bsdPhqL7pxUl3e3mdzAQknBt/h+R5hDL21U=";
+    rev = "ab788f67c7f1ef5330f1a535f1dcb9a7b550016a";
+    hash = "sha256-Kz+5y7WUeVzdSZca4tF5EcEYJ8gvK+f40TJci/1EZng=";
   };
 
   nativeBuildInputs = [
