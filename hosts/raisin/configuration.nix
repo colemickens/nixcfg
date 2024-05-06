@@ -26,7 +26,7 @@ in
     ../../mixins/github-actions-runners.nix
 
     ../../mixins/iwd-networks.nix
-    ../../mixins/plex.nix
+    # ../../mixins/plex.nix
     ../../mixins/rclone-googledrive-mounts.nix
     ../../mixins/syncthing.nix
 
