@@ -94,8 +94,8 @@
       inputs."nixpkgs".follows = "cmpkgs";
     };
     nix-fast-build = {
-      url = "github:Mic92/nix-fast-build";
-      # url = "github:colemickens/nix-fast-build/e7c7050412040a2fe49a0011ed5e06d4b25ab863";
+      # url = "github:Mic92/nix-fast-build";
+      url = "github:colemickens/nix-fast-build/e7c7050412040a2fe49a0011ed5e06d4b25ab863";
       # inputs."nixpkgs".follows = "cmpkgs";
     };
     fast-flake-update = {
