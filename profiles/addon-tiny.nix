@@ -11,7 +11,7 @@
 
     services.fwupd.enable = lib.mkForce false;
     services.udisks2.enable = lib.mkForce false;
-    hardware.usb-modeswitch.enable = lib.mkForce false;
+    # hardware.usb-modeswitch.enable = lib.mkForce false;
 
     documentation.enable = false;
     documentation.doc.enable = false;
