@@ -155,7 +155,12 @@ def "main update" [] {
   }
 
   let url = $"git@github.com:colemickens/nixpkgs"
-  let dir = $"($ROOT)/nixpkgs/cmpkgs"
+  let dir = $"($ROOT)/nixpkgs"
+  if not ($dir | path exists) {
+    # NOTE(colemickens): new addition for nixpkgs, avoid reclone
+    cp -r /var/lib/github-stash/nixpkgs $"($ROOT)"
+  } 
+  
   mkdir $dir
   do {
     cd $dir
@@ -176,7 +181,11 @@ def "main update" [] {
   }
 
   let url = $"git@github.com:colemickens/home-manager"
-  let dir = $"($ROOT)/home-manager/cmhm"
+  let dir = $"($ROOT)/home-manager"
+  if not ($dir | path exists) {
+    # NOTE(colemickens): new addition for nixpkgs, avoid reclone
+    cp -r /var/lib/github-stash/home-manager $"($ROOT)"
+  } 
   mkdir $dir
   do {
     cd $dir
@@ -273,22 +282,6 @@ def "main update" [] {
     rm -rf $gcrootdir
     mkdir $gcrootdir
     
-    print -e "DEBUGDEBUGDEBUG1111"
-    do -i { ls -l result-* }
-
-    print -e "DEBUGDEBUGDEBUG2222"
-    do -i { ls -la | print -e }
-
-    print -e "DEBUGDEBUGDEBUG2222"
-    do -i { ls -l "result-*" | print -e }
-
-    print -e "DEBUGDEBUGDEBUG3333"
-    do -i { ^ls -la }
-
-    print -e "DEBUGDEBUGDEBUG4444"
-    do -i { ^ls -l "result-*" }
-
-    print -e "DEBUGDEBUGDEBUG DONE"
     
     let results = (ls -l result-*)
     for res in $results {
@@ -311,13 +304,13 @@ def "main update" [] {
   ## NOW UPDATE BRANCHES
   print "::group::git update branches"
   do {
-    cd $"($ROOT)/nixpkgs/cmpkgs"
+    cd $"($ROOT)/nixpkgs"
     git switch -C cmpkgs-next
     git reset --hard origin/cmpkgs-next-wip
     git push origin HEAD -f
   }
   do {
-    cd $"($ROOT)/home-manager/cmhm"
+    cd $"($ROOT)/home-manager"
     git switch -C cmhm-next
     git reset --hard origin/cmhm-next-wip
     git push origin HEAD -f
