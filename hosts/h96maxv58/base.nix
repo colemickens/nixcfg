@@ -42,10 +42,9 @@ in
       ripgrep
     ];
 
-    nixcfg.common = {
-      useZfs = false;
-      defaultKernel = false;
-    };
+    nixcfg.common.useZfs = false;
+    nixcfg.common.defaultKernel = false;
+    nixcfg.common.wifiWorkaround = true;
 
     boot.loader.systemd-boot.enable = false;
     networking.wireless.enable = lib.mkForce false;
