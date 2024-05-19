@@ -20,7 +20,7 @@ in
     ../../profiles/core.nix
     ../../profiles/user-cole.nix
 
-    ../../profiles/gui-sway-auto.nix  
+    # ../../profiles/gui-sway-auto.nix  
     
     ../../mixins/common.nix
     ../../mixins/iwd-networks.nix
