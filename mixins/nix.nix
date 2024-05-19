@@ -57,6 +57,7 @@ in
           "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4="
           "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+          "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
         ];
         trusted-substituters = [
           "https://cache.nixos.org"
@@ -64,6 +65,7 @@ in
           "https://nixpkgs-wayland.cachix.org"
           # "https://unmatched.cachix.org"
           "https://nix-community.cachix.org"
+          "https://cosmic.cachix.org"
         ];
         substituters = trusted-substituters;
         trusted-users = [
