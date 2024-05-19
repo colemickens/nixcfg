@@ -49,7 +49,8 @@ def "main deploy" [ host: string, --activate = true, --toplevel: string = ""] {
   let target = (tailscale ip --4 $host | str trim)
   let toplevel = if $toplevel != "" { $toplevel } else {
     let res = main nfb --cache true $".#toplevels.($host)"
-    $res | find $host | ansi strip | first
+    # $res | find $host | ansi strip | first
+    $res | ansi strip
   }
   header "light_purple_reverse" $"deploy: start: ($host)"
 
