@@ -79,7 +79,7 @@ let
     ''
   );
   fix-ssh-remote = (
-    writeShellScriptBin "fix-ssh" ''
+    writeShellScriptBin "fix-ssh-remote" ''
       set -x
       ent="$(ls -t /tmp/ssh-**/agent.* | head -1)"
       ln -sf $ent /run/user/1000/sshagent
