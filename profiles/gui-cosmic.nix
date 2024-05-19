@@ -20,6 +20,7 @@ in
   imports = [
     ./gui-wayland.nix
 
+    # WARNING, this enables network-manager, ew!
     inputs.nixos-cosmic.nixosModules.default
   ];
 
@@ -34,6 +35,8 @@ in
     services.displayManager.cosmic-greeter = {
       enable = true;
     };
+
+    networking.networkmanager.enable = false;
  
     home-manager.users.cole =
       { pkgs, config, ... }@hm:
