@@ -17,7 +17,7 @@ def create_left_prompt [] {
     let nixshell = (if ("name" in $env) { $"(ansi red)($env.name)(ansi reset)" } else { "" })
 
     let jj = try {
-      with-env [ PAGER = "cat" ] {
+      with-env { PAGER: "cat" } {
         let jjs = (do { ^jj log ...[
           -r 'trunk()..@ & branches()'
           -T 'branches.join("\n") ++ "\n"'
