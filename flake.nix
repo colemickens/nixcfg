@@ -317,7 +317,6 @@
                 inherit (prev.darwin.apple_sdk.frameworks) AppKit Security;
                 inherit (prev.darwin.apple_sdk_11_0) Libsystem;
               };
-              git-repo-manager = prev.callPackage ./pkgs/git-repo-manager { fenix = inputs.fenix; };
               rio = prev.callPackage ./pkgs/rio { withX11 = false; };
               pyamlboot = prev.callPackage ./pkgs/pyamlboot { };
               wezterm = prev.darwin.apple_sdk_11_0.callPackage ./pkgs/wezterm {

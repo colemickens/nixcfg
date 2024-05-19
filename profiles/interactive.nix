@@ -195,9 +195,6 @@
               imgurbash2
 
               mosh
-
-              # GRM
-              inputs.self.pkgs.${pkgs.stdenv.hostPlatform.system}.git-repo-manager
             ])
           ];
         };
