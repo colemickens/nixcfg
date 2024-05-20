@@ -37,7 +37,7 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "20240203-110809-5046fc22-unstable-2024-05-11";
+  version = "unstable-2024-05-11";
   rev = "55de5b0e4e408c2e7ff100e6acebff77000d4e78";
 
   src = fetchFromGitHub {
