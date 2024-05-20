@@ -248,11 +248,6 @@
             path = ./hosts/h96maxv58/config-cross.nix;
             buildSys = "x86_64-linux";
           };
-          radxazero1 = {
-            pkgs = inputs.cmpkgs;
-            path = ./hosts/radxazero1/cross.nix;
-            buildSys = "x86_64-linux";
-          };
           rock5b = {
             pkgs = inputs.cmpkgs;
             path = ./hosts/rock5b/cross.nix;
@@ -282,8 +277,6 @@
             inputs.tow-boot-alirock-h96maxv58.outputs.packages.aarch64-linux.radxa-rock5b.outputs.firmware;
           h96maxv58-sdimage = nixosConfigurations.h96maxv58.config.system.build.sdImage;
           # rock5b -> UEFI build
-          radxazero-uboot =
-            inputs.tow-boot-radxa-zero.outputs.packages.aarch64-linux.radxa-zero.outputs.firmware;
         };
         riscv64-linux = { };
       };
@@ -493,7 +486,6 @@
                     # h96maxv58
                     # openstick
                     # openstick2
-                    # radxazero1
                     # rock5b
 
                     vm-cosmic
@@ -519,7 +511,6 @@
                     h96maxv58
                     openstick
                     openstick2
-                    radxazero1
                     rock5b
 
                     installer-standard-aarch64
