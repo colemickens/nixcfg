@@ -50,7 +50,7 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "unstable-2024-05-16";
+  version = "alacritty_terminal_v0.24.0-unstable-2024-05-16";
 
   src = fetchFromGitHub {
     owner = "alacritty";
