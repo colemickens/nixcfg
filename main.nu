@@ -158,11 +158,11 @@ def "main up" [...hosts] {
   do -i { main nfb --cache true ".#checks.x86_64-linux" }
 
   main deploy zeph
-  do -i { main deploy raisin }
-  do -i { main deploy slynux }
-  do -i { main deploy xeep }
-
-  do -i { main nfb --cache true ".#checks2.x86_64-linux" }
+  main deploy raisin
+  main deploy slynux
+  main deploy xeep
+  main deploy rock5b
+  main deploy h96maxv58
 }
 
 def main [] { main up }
