@@ -356,6 +356,22 @@
         "type": "github"
       }
     },
+    "flake-compat_9": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1696426674,
+        "narHash": "sha256-kvjfFW7WAETZlt09AgDn1MrtKzP7t90Vf7vypd3OL1U=",
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "rev": "0f9255e01c2351cc7d116c072cb317785dd33b33",
+        "type": "github"
+      },
+      "original": {
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -1601,6 +1617,7 @@
         "tow-boot-alirock-h96maxv58": "tow-boot-alirock-h96maxv58",
         "tow-boot-radxa-zero": "tow-boot-radxa-zero",
         "typhon": "typhon",
+        "waybar": "waybar",
         "zellij": "zellij",
         "zjstatus": "zjstatus"
       }
@@ -2179,9 +2196,30 @@
         "type": "github"
       }
     },
-    "zellij": {
+    "waybar": {
       "inputs": {
         "flake-compat": "flake-compat_8",
+        "nixpkgs": [
+          "cmpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1716524201,
+        "narHash": "sha256-5+c0w1KegSmT4W2AzsW433YmmBm+SlNHlpcaXWVcg08=",
+        "owner": "Alexays",
+        "repo": "waybar",
+        "rev": "63bb338343cad3337726739704b75d1b0b13a8a5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Alexays",
+        "repo": "waybar",
+        "type": "github"
+      }
+    },
+    "zellij": {
+      "inputs": {
+        "flake-compat": "flake-compat_9",
         "flake-utils": [
           "flake-utils"
         ],

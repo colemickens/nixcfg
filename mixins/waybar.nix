@@ -88,6 +88,9 @@ in
     #   owner = "cole";
     #   group = "cole";
     # };
+    nixpkgs.overlays = [
+      (final: prev: { waybar = inputs.waybar.packages.${pkgs.stdenv.hostPlatform.system}.default; })
+    ];
 
     home-manager.users.cole =
       { pkgs, ... }:
@@ -112,7 +115,7 @@ in
         home.packages = [ pkgs.libappindicator-gtk3 ];
         programs.waybar = {
           enable = true;
-          package = inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system}.waybar;
+          # package = inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system}.waybar;
           style = pkgs.lib.readFile ./waybar.css;
           systemd.enable = true;
           settings = [
