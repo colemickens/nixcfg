@@ -158,7 +158,8 @@ def "main update" [] {
   let dir = $"($ROOT)/nixpkgs"
   if not ($dir | path exists) {
     # NOTE(colemickens): new addition for nixpkgs, avoid reclone
-    cp -r /var/lib/github-stash/nixpkgs $"($ROOT)"
+    cp -r /var/lib/github-stash/nixpkgs $"($ROOT)/nixpkgs_"
+    mv $"($ROOT)/nixpkgs_" $"($ROOT)/nixpkgs"
   } 
   
   mkdir $dir
@@ -277,6 +278,7 @@ def "main update" [] {
   # collect results
   print "::group::save results"
   do {
+    git switch -C 'main-next-results'
     rm -rf .latest/
     mkdir .latest/
     rm -rf $gcrootdir
@@ -323,7 +325,7 @@ def "main update" [] {
 
     ^nix ...[
       flake lock
-      --recreate-lock-file 
+      --recreate-lock-file
       --commit-lock-file
       --override-input cmpkgs github:colemickens/nixpkgs/cmpkgs-next
       --override-input home-manager github:colemickens/home-manager/cmhm-next
