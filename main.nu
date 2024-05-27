@@ -159,10 +159,10 @@ def "main up" [...hosts] {
 
   main deploy zeph
   main deploy raisin
-  main deploy slynux
   main deploy xeep
   main deploy rock5b
   main deploy h96maxv58
+  main deploy slynux
 }
 
 def main [] { main up }
