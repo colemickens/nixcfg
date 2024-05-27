@@ -147,6 +147,9 @@ in
       #   forceImportAll = true;
       #   extraPools = [ "zfsin" ];
       # };
+      tmp = {
+        useTmpfs = true;
+      };
       bootspec.enable = true;
       lanzaboote = {
         enable = true;
