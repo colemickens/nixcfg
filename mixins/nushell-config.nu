@@ -10,11 +10,16 @@ let carapace_completer = {|spans|
     carapace $spans.0 nushell ...$spans | from json
 }
 
-$env.config.completions.external.completer = cararpace_completer;
+let nix_direnv_hook = { ||
+    if (which direnv | is-empty) {
+        return
+    }
+    direnv export json | from json | default {} | load-env
+};
 
-$env.hooks.pre_prompt = [{ ||
-  if (which direnv | is-empty) {
-    return
-  }
-  direnv export json | from json | default {} | load-env
-}];
+# $env.config = ($env.config |
+#     upsert completions.external.completer $carapace_completer)
+
+# $env.config = ($env.config |
+#     upsert hooks.pre_prompt $nix_direnv_hook)
+$env.config.hooks.pre_prompt = [$nix_direnv_hook];
