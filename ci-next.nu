@@ -299,7 +299,7 @@ def "main update" [] {
   do {
     ^git add -f ./.latest
     ^git commit -m $".latest: latest build results ($runid)" ./.latest
-    git push origin HEAD
+    git push origin HEAD -f
   }
   print "::endgroup"
 
