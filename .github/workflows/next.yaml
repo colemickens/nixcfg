@@ -43,7 +43,7 @@ jobs:
     - name: checkout
       uses: actions/checkout@v4
       with:
-        ref: main-next
+        ref: main-next-results
     - name: deploy-${{matrix.host.name}}
       run: |
         timeout 600 \
