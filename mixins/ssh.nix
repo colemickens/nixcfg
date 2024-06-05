@@ -30,6 +30,9 @@ in
       { pkgs, lib, ... }:
       {
         home.file.".ssh/control/.keep".text = "";
+        home.sessionVariables = {
+          SSH_AUTH_SOCK = "/run/user/1000/sshagent";
+        };
         programs.ssh = {
           enable = true;
           controlPath = "/home/cole/.ssh/control/%C"; # TODO: lolwut
