@@ -21,8 +21,9 @@ in
 
     environment.systemPackages = with pkgs; [
       _nvtop
-      lact
     ];
+
+    services.lact.enable = true;
 
     environment.sessionVariables = {
       DISABLE_LAYER_AMD_SWITCHABLE_GRAPHICS_1 = "1";
