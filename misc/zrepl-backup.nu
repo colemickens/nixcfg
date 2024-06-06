@@ -9,7 +9,7 @@ def main [ job: string ] {
       # use ssd+hdr on remote to unlock, bp to import
       remote: $"(tailscale ip --4 raisin)"
       ssd: "/dev/disk/by-id/usb-Realtek_RTL9210B-CG_012345678904-0:0"
-      hdr: "/home/cole/SyncThingData/Sync/ORION_NVME_SSD/header_raisin.img"
+      hdr: "/home/cole/.local/share/SyncThingData/Sync/ORION_NVME_SSD/header_raisin.img"
       bp: "orionraisinpool"
       secret: "orionraisin_luks"
     }
@@ -20,7 +20,7 @@ def main [ job: string ] {
       # job: "push_local"
       remote: "localhost"
       ssd: "/dev/disk/by-id/usb-Realtek_RTL9210_NVME_012345678903-0:0"
-      hdr: "/home/cole/SyncThingData/Sync/ORION_NVME_SSD/header.img"
+      hdr: "/home/cole/.local/share/SyncThingData/Sync/ORION_NVME_SSD/header.img"
       bp: "orionpool"
       secret: "orion_luks"
     }
