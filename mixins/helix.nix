@@ -59,6 +59,7 @@ in
             name = "nix"
             auto-format = false
             formatter = { command = "nixpkgs-fmt" }
+            language-servers = [ "nixd" ] # TESTING
 
             [[language]]
             name = "nu"

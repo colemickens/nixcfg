@@ -21,6 +21,7 @@
           packages = with pkgs; [
             alejandra
             nil
+            nixd
             nixpkgs-fmt
 
             dfmt
