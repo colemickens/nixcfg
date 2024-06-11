@@ -1,7 +1,7 @@
 wifi:
   networks:
-  - ssid: "Mickey"
-    password: !secret wifi_pw_zak
+  # - ssid: "Mickey"
+  #   password: !secret wifi_pw_zak
   - ssid: "GoonNet"
     password: !secret wifi_pw
 

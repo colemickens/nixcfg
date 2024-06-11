@@ -43,6 +43,7 @@ switch:
       - output.turn_on: led
     on_turn_off:
       - output.turn_off: led
+    restore_mode: ${restore_mode}
 
 status_led:
   pin:
