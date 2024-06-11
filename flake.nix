@@ -237,6 +237,11 @@
             pkgs = inputs.cmpkgs;
           };
 
+          # next-gen
+          yoga7x = {
+            pkgs = inputs.cmpkgs;
+          };
+
           # TODO: decide what the future of this is, I like having a cross-compile targe
           # to tinker with, but the device is finnicky when I break it :|
           openstick = {
