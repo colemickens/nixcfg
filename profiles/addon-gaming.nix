@@ -37,7 +37,6 @@ in
       ];
     };
     hardware.opengl.extraPackages = [ pkgs.gamescope ];
-    hardware.opengl.driSupport32Bit = true;
     programs = {
       steam = {
         enable = true;
