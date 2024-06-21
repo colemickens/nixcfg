@@ -10,6 +10,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+env:
+  NIX_FLAKE_CHECKER_NIXPKGS_KEYS: ""
+
 jobs:
   DeterminateCI:
     uses: DeterminateSystems/ci/.github/workflows/workflow.yml@main
