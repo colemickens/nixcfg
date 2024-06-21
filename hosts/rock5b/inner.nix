@@ -12,6 +12,8 @@
 
     ../../profiles/core.nix
     # ../../profiles/addon-sbc.nix
+
+    ../../mixins/github-actions-runners.nix
   ];
 
   config = {
