@@ -7,8 +7,7 @@
 }:
 
 let
-  # runnerId = config.networking.hostName;
-  runnerId = "raisin";
+  runnerId = config.networking.hostName;
 in
 {
   imports = [
