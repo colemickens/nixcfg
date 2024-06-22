@@ -12,11 +12,12 @@ concurrency:
 
 jobs:
   DeterminateCI:
-    uses: DeterminateSystems/ci/.github/workflows/workflow.yml@main
+    uses: DeterminateSystems/ci/.github/workflows/workflow.yml@colemickens/expose-runs-on
     permissions:
       id-token: "write"
       contents: "read"
     with:
+      runs-on: "raisin-default"
       runner-map: |
         {
           "aarch64-linux": "rock5b-default",
