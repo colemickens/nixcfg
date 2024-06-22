@@ -23,12 +23,14 @@ let
 
   crossBuild = (pkgs.stdenv.hostPlatform.system != pkgs.stdenv.buildPlatform.system);
 
-  zellijPkg =
-    let
-      zellijFlake = inputs.zellij.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default;
-      zellijNixpkgs = pkgs.zellij;
-    in
-    (if !crossBuild then zellijFlake else zellijNixpkgs);
+  # zellijPkg =
+  #   let
+  #     zellijFlake = inputs.zellij.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  #     zellijNixpkgs = pkgs.zellij;
+  #   in
+  #   (if !crossBuild then zellijFlake else zellijNixpkgs);
+
+  zellijPkg = pkgs.zellij;
 
   _defaultShell = prefs.default_shell;
 
