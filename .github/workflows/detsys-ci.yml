@@ -10,12 +10,15 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
-env:
-  NIX_FLAKE_CHECKER_NIXPKGS_KEYS: ""
-
 jobs:
   DeterminateCI:
     uses: DeterminateSystems/ci/.github/workflows/workflow.yml@main
     permissions:
       id-token: "write"
       contents: "read"
+    with:
+      runner-map: |
+        {
+          "aarch64-linux": "rock5b-default",
+          "x86_64-linux": "ubuntu-latest"
+        }
