@@ -104,11 +104,6 @@
     };
 
     # zellij
-    zellij = {
-      url = "github:a-kenji/zellij-nix";
-      inputs."flake-utils".follows = "flake-utils";
-      inputs."nixpkgs".follows = "cmpkgs";
-    };
     zjstatus = {
       url = "github:dj95/zjstatus";
       inputs."nixpkgs".follows = "cmpkgs";
