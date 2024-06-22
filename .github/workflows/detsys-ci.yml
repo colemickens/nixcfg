@@ -20,5 +20,5 @@ jobs:
       runner-map: |
         {
           "aarch64-linux": "rock5b-default",
-          "x86_64-linux": "ubuntu-latest"
+          "x86_64-linux": "raisin-default"
         }
