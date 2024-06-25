@@ -109,9 +109,7 @@ in
         matchConfig.Driver = "r8152";
         addresses = [
           {
-            addressConfig = {
-              Address = static_ip;
-            };
+            Address = static_ip;
           }
         ];
         networkConfig = {

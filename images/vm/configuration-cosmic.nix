@@ -36,7 +36,7 @@ in
     # };
 
     # probably only works with mesa-y platforms (so, no nvidia)
-    hardware.opengl.enable = true;
+    hardware.graphics.enable = true;
 
     nixpkgs.config.allowUnfreePredicate =
       pkg:

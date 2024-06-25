@@ -11,7 +11,7 @@ let
 in
 {
   config = {
-    hardware.opengl.enable = true;
+    hardware.graphics.enable = true;
     nixpkgs.overlays = [
       (final: prev: {
         mesa = prev.mesa.override {

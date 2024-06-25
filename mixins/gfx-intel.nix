@@ -8,7 +8,7 @@
 
 {
   config = {
-    hardware.opengl.enable = true;
+    hardware.graphics.enable = true;
 
     # hardware.intelgpu = {
     #   enable = true;

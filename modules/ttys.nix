@@ -267,6 +267,6 @@ in
         cfg.vts
     );
     # TODO: convert to assert?
-    # hardware.opengl.enable = mkIf cfg.hwRender true;
+    # hardware.graphics.enable = mkIf cfg.hwRender true;
   };
 }

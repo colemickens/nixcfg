@@ -36,7 +36,7 @@ in
         4500
       ];
     };
-    hardware.opengl.extraPackages = [ pkgs.gamescope ];
+    hardware.graphics.extraPackages = [ pkgs.gamescope ];
     programs = {
       steam = {
         enable = true;

@@ -12,7 +12,7 @@ let
 in
 {
   config = {
-    hardware.opengl.enable = true;
+    hardware.graphics.enable = true;
 
     # hardware.gpu.radeon = {
     #   enable = true;
