@@ -17,7 +17,6 @@
     };
     nixos-cosmic = {
       url = "github:lilyinstarlight/nixos-cosmic";
-      # url = "github:colemickens/nixos-cosmic";
       inputs."nixpkgs".follows = "cmpkgs";
     };
 
@@ -187,7 +186,7 @@
               if (!builtins.hasAttr "buildSys" v) then
                 [ ]
               else
-                [ { config.nixpkgs.buildPlatform.system = v.buildSys; } ]
+                [{ config.nixpkgs.buildPlatform.system = v.buildSys; }]
             );
           specialArgs = {
             inherit inputs;
@@ -303,38 +302,38 @@
       overlays = {
         default = (
           final: prev:
-          # TODO: must be a better way?
-          let
-            __colemickens_nixcfg_pkgs = rec {
-              alacritty = prev.callPackage ./pkgs/alacritty {
-                inherit (prev.darwin.apple_sdk.frameworks)
-                  AppKit
-                  CoreGraphics
-                  CoreServices
-                  CoreText
-                  Foundation
-                  OpenGL
-                  ;
+            # TODO: must be a better way?
+            let
+              __colemickens_nixcfg_pkgs = rec {
+                alacritty = prev.callPackage ./pkgs/alacritty {
+                  inherit (prev.darwin.apple_sdk.frameworks)
+                    AppKit
+                    CoreGraphics
+                    CoreServices
+                    CoreText
+                    Foundation
+                    OpenGL
+                    ;
+                };
+                nushell = prev.callPackage ./pkgs/nushell {
+                  doCheck = false; # TODO consider removing
+                  inherit (prev.darwin.apple_sdk.frameworks) AppKit Security;
+                  inherit (prev.darwin.apple_sdk_11_0) Libsystem;
+                };
+                rio = prev.callPackage ./pkgs/rio { withX11 = false; };
+                pyamlboot = prev.callPackage ./pkgs/pyamlboot { };
+                wezterm = prev.darwin.apple_sdk_11_0.callPackage ./pkgs/wezterm {
+                  doCheck = false; # TODO consider removing
+                  inherit (prev.darwin.apple_sdk_11_0.frameworks)
+                    Cocoa
+                    CoreGraphics
+                    Foundation
+                    UserNotifications
+                    ;
+                };
               };
-              nushell = prev.callPackage ./pkgs/nushell {
-                doCheck = false; # TODO consider removing
-                inherit (prev.darwin.apple_sdk.frameworks) AppKit Security;
-                inherit (prev.darwin.apple_sdk_11_0) Libsystem;
-              };
-              rio = prev.callPackage ./pkgs/rio { withX11 = false; };
-              pyamlboot = prev.callPackage ./pkgs/pyamlboot { };
-              wezterm = prev.darwin.apple_sdk_11_0.callPackage ./pkgs/wezterm {
-                doCheck = false; # TODO consider removing
-                inherit (prev.darwin.apple_sdk_11_0.frameworks)
-                  Cocoa
-                  CoreGraphics
-                  Foundation
-                  UserNotifications
-                  ;
-              };
-            };
-          in
-          __colemickens_nixcfg_pkgs // { inherit __colemickens_nixcfg_pkgs; }
+            in
+            __colemickens_nixcfg_pkgs // { inherit __colemickens_nixcfg_pkgs; }
         );
       };
     in
@@ -350,6 +349,41 @@
         inherit extra;
         inherit pkgs pkgsUnfree;
         ## HM ENVS #####################################################
+
+        checks = {
+          "aarch64-linux" = {
+            inherit (toplevels)
+              h96maxv58
+              openstick
+              openstick2
+              rock5b
+
+              installer-standard-aarch64
+              openstick-abootimg
+              openstick-bootimg
+              ;
+          };
+          "x86_64-linux" = {
+            vm-cosmic-vm = nixosConfigurations.vm-cosmic.config.system.build.vm;
+            inherit (toplevels)
+              raisin
+              slynux
+              xeep
+              zeph
+
+              # h96maxv58
+              # openstick
+              # openstick2
+              # rock5b
+
+              vm-cosmic
+              installer-standard
+              # installer-cosmic
+              # installer-nvidia-ai
+              # installer-standard-aarch64
+              ;
+          };
+        };
       })
       (
         ## SYSTEM-SPECIFIC OUTPUTS ############################################
@@ -481,62 +515,12 @@
             # also, we're probably fine to remove ciAttrs now, nix-fast-build does recursive-ness, and ciAttrs doesn't even buildFarm anymore
             # TODO: we're still preferring local builds for somemthings, do we need to add back the wrapper?????
             # TODO: or look into the allowSubstitutesAlways new flag that lovesegfault commented about?
-            checks = (checks1 // checks2);
-            checks1 =
+            checks =
               let
                 c_packages = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") inputs.self.packages.${system};
                 c_devShells = lib.mapAttrs' (n: lib.nameValuePair "devShell-${n}") inputs.self.devShells.${system};
-                c_toplevels = lib.concatMapAttrs (n: v: { "toplevel-${n}" = v; }) ({
-                  vm-cosmic-vm = nixosConfigurations.vm-cosmic.config.system.build.vm;
-                  inherit (toplevels)
-                    raisin
-                    slynux
-                    xeep
-                    zeph
-
-                    # h96maxv58
-                    # openstick
-                    # openstick2
-                    # rock5b
-
-                    vm-cosmic
-                    installer-standard
-                    # installer-cosmic
-                    # installer-nvidia-ai
-                    # installer-standard-aarch64
-                    ;
-                });
-
-                c_extra = lib.concatMapAttrs (n: v: { "x86_64-linux-${n}" = v; }) ({
-                  inherit (extra.x86_64-linux)
-                    installer-standard
-                    ;
-                });
               in
-              c_packages // c_devShells // c_toplevels // c_extra;
-
-            checks2 =
-              let
-                c_toplevels = lib.concatMapAttrs (n: v: { "toplevel-${n}" = v; }) ({
-                  inherit (toplevels)
-                    h96maxv58
-                    openstick
-                    openstick2
-                    rock5b
-
-                    installer-standard-aarch64
-                    ;
-                });
-
-                c_extra = lib.concatMapAttrs (n: v: { "x86_64-linux-${n}" = v; }) ({
-                  inherit (extra.x86_64-linux)
-                    openstick-abootimg
-                    openstick-bootimg
-                    # h96maxv58-uboot
-                    ;
-                });
-              in
-              c_toplevels // c_extra;
+              c_packages // c_devShells;
           }
         )
       );
