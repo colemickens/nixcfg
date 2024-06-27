@@ -140,11 +140,6 @@
     h96 = {
       url = "github:colemickens/h96-max-v58-nixos?ref=colemickens/main";
     };
-
-    nheko = {
-      url = "git+https://cgit.rory.gay/matrix/thirdparty/nheko.git";
-      inputs.nixpkgs.follows = "cmpkgs";
-    };
   };
 
   # TODO: re-investigate nixConfig, maybe it will be less soul-crushing one day
