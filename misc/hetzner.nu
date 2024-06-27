@@ -18,10 +18,23 @@ def "main up" [name: string] {
   ]
 }
 
+def "main prov" [name: string] {
+  let server = (^hcloud server describe $name -o json | from json)
+  let server = $server.public_net.ipv4.ip
+  nix run github:nix-community/nixos-anywhere -- --flake $".#($name)" $"root@($server)" --build-on-remote
+  # nixos-anywhere --flake $".#($name)" $"root@($server)" --build-on-remote
+}
+
 def "main down" [name: string] {
   hcloud ...[
     server delete $name
   ]
+}
+
+def "main try" [name: string] {
+  do -i { main down $name }
+  main up $name
+  main prov $name
 }
 
 def main [] {
