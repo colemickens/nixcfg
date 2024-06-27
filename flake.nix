@@ -143,6 +143,11 @@
     disko = {
       url = "github:nix-community/disko";
     };
+
+    # snapdragon:
+    nixos-snapdragon-elite = {
+      url = "github:colemickens/nixos-snapdragon-elite";
+    };
   };
 
   # TODO: re-investigate nixConfig, maybe it will be less soul-crushing one day
@@ -259,6 +264,10 @@
           };
         };
         "aarch64-linux" = {
+          sevex = {
+            pkgs = inputs.cmpkgs;
+          };
+          
           hcloud-arm64-dev1 = {
             pkgs = inputs.cmpkgs;
             # buildSys = "aarch64-linux";
