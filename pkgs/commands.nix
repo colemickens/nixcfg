@@ -161,6 +161,16 @@ let
       sysctl -w net.ipv6.conf.wlan0.disable_ipv6=1
     fi
   '');
+  aw = (writeShellScriptBin "aw" ''
+    set -eou pipefail
+    if [[ "''${1:-}" == "on" ]]; then
+      adb shell svc wifi disable
+      adb shell svc usb setFunctions ncm
+    elif [[ "''${1:-}" == "off" ]]; then
+      adb shell svc usb setFunctions
+      adb shell svc wifi enable
+    fi
+  '');
 in
 (symlinkJoin {
   name = "cole-custom-commands";
@@ -184,5 +194,6 @@ in
     nixclean
 
     ipv6ctl
+    aw
   ];
 })
