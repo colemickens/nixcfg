@@ -140,6 +140,10 @@
     h96 = {
       url = "github:colemickens/h96-max-v58-nixos?ref=colemickens/main";
     };
+
+    disko = {
+      url = "github:nix-community/disko";
+    };
   };
 
   # TODO: re-investigate nixConfig, maybe it will be less soul-crushing one day
@@ -150,7 +154,7 @@
     let
       defaultSystems = [
         "x86_64-linux"
-        # "aarch64-linux"
+        "aarch64-linux"
         # "riscv64-linux"
       ];
 
@@ -227,6 +231,11 @@
             pkgs = inputs.cmpkgs;
           };
 
+          # hetzner
+          hcloud-amd64-dev1 = {
+            pkgs = inputs.cmpkgs;
+          };
+
           # TODO: decide what the future of this is, I like having a cross-compile targe
           # to tinker with, but the device is finnicky when I break it :|
           openstick = {
@@ -248,6 +257,12 @@
             pkgs = inputs.cmpkgs;
             path = ./hosts/rock5b/cross.nix;
             buildSys = "x86_64-linux";
+          };
+        };
+        "aarch64-linux" = {
+          hcloud-arm64-dev1 = {
+            pkgs = inputs.cmpkgs;
+            # buildSys = "aarch64-linux";
           };
         };
       };

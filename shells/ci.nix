@@ -21,6 +21,9 @@ minimalMkShell {
       nixpkgs-fmt
       openssh
       tailscale # so the github action job can deploy
+
+      hcloud # for hetzner management
+      nixos-anywhere # for initial hetzner deployment
     ])
     ++ [
       # maybe drop, just use NFB for now:
