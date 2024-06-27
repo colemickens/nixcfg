@@ -49,7 +49,9 @@ in
     inputs.nixos-hardware.nixosModules.asus-zephyrus-ga402
   ];
   config = {
-    nixpkgs.hostPlatform.system = "x86_64-linux";
+    # nixpkgs.hostPlatform.system = "x86_64-linux";
+    nixpkgs.hostPlatform = "x86_64-linux";
+
     # TODO: why does this cause inf recursion with mangohud?
     # nixpkgs.buildPlatform.system = "x86_64-linux";
     system.stateVersion = "23.11";
