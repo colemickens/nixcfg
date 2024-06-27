@@ -29,8 +29,12 @@ in
     };
     environment.loginShellInit = ''
       [[ "$(tty)" == "/dev/tty1" || "$(tty)" == "/dev/ttyS0" ]] && (
-        echo "trying to connect to tailscale" &>2
-        sudo tailscale login --qr
+        if curl --max-time 10 'https://tailscale.com'; then
+          echo "trying to connect to tailscale" &>2
+          sudo tailscale login --qr
+        else
+          echo "no internet connection, skipping tailscale qr login" &>2
+        fi
       )
     '';
     services.getty.autologinUser = lib.mkForce "cole";
