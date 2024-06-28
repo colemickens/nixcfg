@@ -11,11 +11,12 @@ let
 in
 {
   imports = [
-    inputs.nixos-snapdragon-elite.nixosModules.snapdragon
+    inputs.nixos-snapdragon-elite.nixosModules.default
 
-    ../../profiles/addon-asus.nix
+    ../../profiles/gui-sway.nix
+
     ../../profiles/addon-devtools.nix
-    ../../profiles/addon-gaming.nix
+    # ../../profiles/addon-gaming.nix
     ../../profiles/addon-laptop.nix
 
     ../../mixins/gfx-radeonsi.nix
@@ -23,7 +24,8 @@ in
 
     ../../mixins/android.nix
     ../../mixins/clamav.nix
-    ../../mixins/ledger.nix
+    # not available for aarch64-linux, fucking appimages
+    # ../../mixins/ledger.nix
     ../../mixins/libvirt.nix
     ../../mixins/libvirtd.nix
     ../../mixins/monero.nix
@@ -32,20 +34,16 @@ in
     ../../mixins/syncthing.nix
     ../../mixins/trezor.nix
 
-    ./zrepl.nix # TODO: make this device specific
-
-    # ../../mixins/oavm-risky.nix
-
     # ./experimental.nix
     ./unfree.nix
 
     # TODO, test this:
-    # inputs.lanzaboote.nixosModules.lanzaboote
+    inputs.lanzaboote.nixosModules.lanzaboote
   ];
 
   config = {
     nixpkgs.hostPlatform = "aarch64-linux";
-    system.stateVversion = "24.05";
+    system.stateVersion = "24.05";
 
     networking.hostName = hn;
     # nixcfg.common.hostColor = "#c17ecc"; # tango magenta
@@ -53,8 +51,9 @@ in
     nixcfg.common.skipMitigations = false;
 
     # zfs schenanigans
-    nixcfg.common.useZfs = true;
-    nixcfg.common.useZfsUnstable = true;
+    nixcfg.common.useZfs = false;
+    nixcfg.common.useZfsUnstable = false;
+    nixcfg.common.defaultKernel = false;
 
     nix = {
       settings = {
@@ -68,11 +67,12 @@ in
 
     time.timeZone = lib.mkForce null; # we're on the move
 
+    boot.supportedFilesystems = lib.mkForce [ "btrfs" "cifs" "f2fs" "jfs" "ntfs" "reiserfs" "vfat" "xfs" ];
+
     ## TODO: experimental
     services.dbus.implementation = "broker";
     ## END experimental
 
-    services.zfs.autoScrub.pools = [ poolname ];
     fileSystems = {
       "/efi" = {
         fsType = "vfat";
@@ -80,35 +80,25 @@ in
       };
       "/boot" = {
         fsType = "vfat";
-        device = "/dev/disk/by-partlabel/${bootpart}";
+        device = "/dev/disk/by-partlabel/${hn}-boot";
       };
       "/" = {
-        fsType = "zfs";
-        device = "${poolname}/root";
-        neededForBoot = true;
-      };
-      "/nix" = {
-        fsType = "bcachefs";
-        device = "${poolname}/nix";
-        neededForBoot = true;
-      };
-      "/home" = {
-        fsType = "bcachefs";
-        device = "${poolname}/home";
+        fsType = "ext4";
+        device = "/dev/disk/by-partlabel/${hn}-root";
         neededForBoot = true;
       };
 
       # TODO: only with lanzaboote
-      # "/efi/EFI/Linux" = {
-      #   device = "/boot/EFI/Linux";
-      #   options = [ "bind" ];
-      # };
-      # "/efi/EFI/nixos" = {
-      #   device = "/boot/EFI/nixos";
-      #   options = [ "bind" ];
-      # };
+      "/efi/EFI/Linux" = {
+        device = "/boot/EFI/Linux";
+        options = [ "bind" ];
+      };
+      "/efi/EFI/nixos" = {
+        device = "/boot/EFI/nixos";
+        options = [ "bind" ];
+      };
     };
-    swapDevices = [ { device = "/dev/disk/by-partlabel/${swappart}"; } ];
+    swapDevices = [ { device = "/dev/disk/by-partlabel/${hn}-swap"; } ];
 
     home-manager.users.cole =
       { pkgs, config, ... }@hm:
