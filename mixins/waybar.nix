@@ -6,17 +6,18 @@
 }:
 
 let
-  rogScript = pkgs.writeShellScript "waybar-rog.sh" ''
-    set -euo pipefail
-    val="$(${pkgs.asusctl}/bin/asusctl profile -p)"
-    if [[ "''${val}" == *"Performance"* ]]; then
-      echo $'{"text": "rog prf"}';
-    elif [[ "''${val}" == *"Balanced"* ]]; then
-      echo $'{"text": "rog bal"}';
-    elif [[ "''${val}" == *"Quiet"* ]]; then
-      echo $'{"text": "rog qui"}';
-    fi
-  '';
+  # NOTE(colemickens: disabled for aarch64 build
+  # rogScript = pkgs.writeShellScript "waybar-rog.sh" ''
+  #   set -euo pipefail
+  #   val="$(${pkgs.asusctl}/bin/asusctl profile -p)"
+  #   if [[ "''${val}" == *"Performance"* ]]; then
+  #     echo $'{"text": "rog prf"}';
+  #   elif [[ "''${val}" == *"Balanced"* ]]; then
+  #     echo $'{"text": "rog bal"}';
+  #   elif [[ "''${val}" == *"Quiet"* ]]; then
+  #     echo $'{"text": "rog qui"}';
+  #   fi
+  # '';
 
   btcScript = pkgs.writeShellScript "btc-price.sh" ''
     set -euo pipefail
@@ -41,11 +42,12 @@ let
       { }
     else
       {
-        "custom/rog" = {
-          exec = "${rogScript}";
-          return-type = "json";
-          interval = 10;
-        };
+        # NOTE(colemickens): removed for aarch64 build
+        # "custom/rog" = {
+        #   exec = "${rogScript}";
+        #   return-type = "json";
+        #   interval = 10;
+        # };
         "custom/ppp" = {
           exec = "${pppScript}";
           return-type = "json";

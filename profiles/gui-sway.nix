@@ -247,10 +247,11 @@ in
                 always = true;
                 command = "${gsettings_auto}";
               }
-              {
-                always = true;
-                command = "${pkgs.asusctl}/bin/rog-control-center";
-              }
+              # NOTE(colemickens): removed for aarch64 build
+              # {
+              #   always = true;
+              #   command = "${pkgs.asusctl}/bin/rog-control-center";
+              # }
             ];
             input = {
               "${in_tp_zeph}" = _touchpad;
@@ -326,7 +327,8 @@ in
               "XF86AudioRaiseVolume" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume +2";
               "XF86AudioLowerVolume" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume -2";
               "XF86AudioMute" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --toggle-mute";
-              "XF86Launch4" = "exec ${pkgs.asusctl}/bin/asusctl profile -n";
+              # TODO(colemickens): remove for aarch64 build
+              # "XF86Launch4" = "exec ${pkgs.asusctl}/bin/asusctl profile -n";
 
               "${modifier}+h" = "focus left";
               "${modifier}+j" = "focus down";
