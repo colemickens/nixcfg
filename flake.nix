@@ -267,7 +267,7 @@
           sevex = {
             pkgs = inputs.cmpkgs;
           };
-          
+
           hcloud-arm64-dev1 = {
             pkgs = inputs.cmpkgs;
             # buildSys = "aarch64-linux";
@@ -362,33 +362,39 @@
         checks = {
           "aarch64-linux" = {
             inherit (toplevels)
-              h96maxv58
-              openstick
-              openstick2
-              rock5b
+              sevex
 
-              installer-standard-aarch64
-              openstick-abootimg
-              openstick-bootimg
+              # TODO(colemickens): complete/test this:
+              # hcloud-arm64-dev-1
               ;
           };
           "x86_64-linux" = {
             vm-cosmic-vm = nixosConfigurations.vm-cosmic.config.system.build.vm;
             inherit (toplevels)
+              # normal x86_64-linux hosts
               raisin
               slynux
               xeep
               zeph
 
-              # h96maxv58
-              # openstick
-              # openstick2
-              # rock5b
-
+              # misc native x86_64-linux
               vm-cosmic
               installer-standard
-              # installer-cosmic
-              # installer-nvidia-ai
+
+              # cross-builds
+              h96maxv58
+              openstick
+              openstick2
+              rock5b
+
+              # TODO(colemickens): complete/test this:
+              # hcloud-amd64-dev-1
+
+              installer-standard-aarch64
+              ;
+            inherit (extra.x86_64-linux)
+              openstick-abootimg
+              openstick-bootimg
               # installer-standard-aarch64
               ;
           };
