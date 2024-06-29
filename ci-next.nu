@@ -87,7 +87,7 @@ def "main clean-actions" [] {
 def "main deploy" [host: string --activate = true] {
   ls -al .latest | print -e
 
-  let out = open $".latest/result-x86_64-linux.toplevel-($host)"
+  let out = open $".latest/result-x86_64-linux.($host)"
   let addr = ^tailscale ip --4 $host
   let xeep_addr = ^tailscale ip --4 xeep
   print -e $"deploy ($out) to ($addr)"
