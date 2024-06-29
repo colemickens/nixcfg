@@ -1,26 +1,26 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, nixosTests
-, nix-update-script
-, autoPatchelfHook
-, cmake
-, ncurses
-, pkg-config
-, gcc-unwrapped
-, fontconfig
-, libGL
-, vulkan-loader
-, libxkbcommon
-, withX11 ? true
-, libX11
-, libXcursor
-, libXi
-, libXrandr
-, libxcb
-, withWayland ? true
-, wayland
-,
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  nixosTests,
+  nix-update-script,
+  autoPatchelfHook,
+  cmake,
+  ncurses,
+  pkg-config,
+  gcc-unwrapped,
+  fontconfig,
+  libGL,
+  vulkan-loader,
+  libxkbcommon,
+  withX11 ? true,
+  libX11,
+  libXcursor,
+  libXi,
+  libXrandr,
+  libxcb,
+  withWayland ? true,
+  wayland,
 }:
 let
   rlinkLibs =
@@ -42,13 +42,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "nightly-unstable-2024-05-19";
+  version = "nightly-unstable-2024-06-28";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
-    rev = "47e8131937c0bea7ae804d9687ff4fb85dedfd20";
-    hash = "sha256-9vFL+n/ghFfJozhD5OcYH5d8bzc8hOIdksPljLs0DtA=";
+    rev = "a8ae1f7c0d0875be7680be87447b4d32f7b58425";
+    hash = "sha256-jdaZq2vfdVcTbYBUpAjftZ4Yyp4r8xDPrOlUXWGnzXs=";
   };
 
   # cargoHash = "sha256-jev4fMwCygVzvrkI1nSE5tx59nGqNKQUHCNHvkr9R90=";
