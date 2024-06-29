@@ -24,6 +24,7 @@ minimalMkShell {
 
       hcloud # for hetzner management
       nixos-anywhere # for initial hetzner deployment
+      nixfmt-rfc-style
     ])
     ++ [
       # maybe drop, just use NFB for now:
