@@ -160,7 +160,7 @@ def "main update" [] {
     # NOTE(colemickens): new addition for nixpkgs, avoid reclone
     rm -rf $"($ROOT)/nixpkgs_"
     rm -rf $"($ROOT)/nixpkgs"
-    cp -r /var/lib/github-stash/nixpkgs $"($ROOT)/nixpkgs_"
+    ^cp -r /var/lib/github-stash/nixpkgs $"($ROOT)/nixpkgs_"
     mv $"($ROOT)/nixpkgs_" $"($ROOT)/nixpkgs"
     sync
   } 
