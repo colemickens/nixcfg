@@ -21,7 +21,14 @@ def "main up" [name: string] {
 def "main prov" [name: string] {
   let server = (^hcloud server describe $name -o json | from json)
   let server = $server.public_net.ipv4.ip
-  nix run github:nix-community/nixos-anywhere -- --flake $".#($name)" $"root@($server)" --build-on-remote
+  nix run ...[
+    github:nix-community/nixos-anywhere --
+      --flake $".#($name)"
+      $"root@($server)"
+      --build-on-remote
+      --option 'extra-substituters' 'https://colemickens.cachix.org'
+      --option 'extra-trusted-public-keys' 'colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4='
+  ]
   # nixos-anywhere --flake $".#($name)" $"root@($server)" --build-on-remote
 }
 
