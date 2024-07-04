@@ -27,15 +27,15 @@
 
 rustPlatform.buildRustPackage (
   let
-    version = "0.95.0-unstable-2024-06-28";
-    rev = "153b45bc63b6b65a34e3efa966a2fb4c8af999ab";
+    version = "0.95.0-unstable-2024-07-03";
+    rev = "3fae77209a9fcfff0c9a4726ddd79432a62c3baa";
     owner = "nushell";
     pname = "nushell";
     src = fetchFromGitHub {
       owner = owner;
       repo = pname;
       rev = rev;
-      sha256 = "sha256-QCbsxFl4xbmH8AL4iawqghPsEaT4FjxtkWwhTTiJsmo=";
+      sha256 = "sha256-1XH0FuuBnS5GjennoLqQ75k1Q0/Vgly6wM8poIRLmfk=";
     };
   in
   {
