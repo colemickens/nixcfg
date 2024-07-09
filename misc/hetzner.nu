@@ -1,7 +1,15 @@
 #!/usr/bin/env nu
 
 let machines = [
-  { name: "hcloud-arm64-dev1", vol: "vol-arm64-dev1-nbg", loc: "nbg1", type: "cax41", image: "ubuntu-24.04" },
+  # unreliable, even without external disk
+  # { name: "hcloud-arm64-dev1", vol: "vol-arm64-dev1-nbg", loc: "nbg1", type: "cax41", image: "ubuntu-24.04" },
+
+  # semi-reliable without external disk:
+  # { name: "hcloud-arm64-dev1", vol: "vol-arm64-dev1-nbg", loc: "nbg1", type: "cax21", image: "ubuntu-24.04" },
+
+  # untested
+  { name: "hcloud-arm64-dev1", vol: "vol-arm64-dev1-nbg", loc: "nbg1", type: "cax31", image: "ubuntu-24.04" },
+  
   { name: "hcloud-amd64-dev1", vol: "vol-amd64-dev1-hil", loc: "hil", type: "ccx33", image: "ubuntu-24.04" },
 ]
 
