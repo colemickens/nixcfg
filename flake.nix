@@ -16,7 +16,7 @@
       url = "github:colemickens/nixpkgs/cmpkgs";
     };
     nixos-cosmic = {
-      url = "github:lilyinstarlight/nixos-cosmic";
+      url = "github:addy419/nixos-cosmic";
       inputs."nixpkgs".follows = "cmpkgs";
     };
 
