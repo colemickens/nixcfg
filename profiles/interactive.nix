@@ -144,7 +144,7 @@
               age # need age (Age-keygen can do priv->pub)
               sbctl
 
-              binwalk
+              # binwalk # TODO: pynose/nose issue?
               cpio # needed?
               usbutils
               pciutils
