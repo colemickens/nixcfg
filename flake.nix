@@ -16,10 +16,14 @@
       url = "github:colemickens/nixpkgs/cmpkgs";
     };
     nixos-cosmic = {
-      url = "github:addy419/nixos-cosmic";
+      url = "github:lilyinstarlight/nixos-cosmic";
       inputs."nixpkgs".follows = "cmpkgs";
     };
 
+    # nyx: currently used for mesa on sevex to get latest freedreno stuff
+    nyx = {
+      url = "github:chaotic-cx/nyx";
+    };
     mobile-nixos-openstick = {
       url = "github:colemickens/mobile-nixos/openstick";
       inputs."nixpkgs".follows = "cmpkgs";
@@ -146,7 +150,7 @@
 
     # snapdragon:
     nixos-snapdragon-elite = {
-      url = "github:colemickens/nixos-snapdragon-elite";
+      url = "github:colemickens/nixos-snapdragon-elite?ref=wip";
     };
   };
 

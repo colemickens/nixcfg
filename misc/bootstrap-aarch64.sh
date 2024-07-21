@@ -3,15 +3,29 @@
 set -x
 set -euo pipefail
 
-ssh "colemickens@aarch64.nixos.community" \
-  "mkdir -p ~/.config/cachix/; \
+host="colemickens@aarch64.nixos.community"
+
+ssh $host \
+  "true; \
+    mkdir -p ~/code/; \
+    mkdir -p ~/.config/cachix/; \
     nix profile install \
       nixpkgs#helix \
+      nixpkgs#cachix \
       nixpkgs#bottom \
       nixpkgs#git \
       nixpkgs#rsync \
-      nixpkgs#zellij \
+      nixpkgs#zellij
   "
 
-scp "$HOME/.config/cachix/cachix.dhall" \
-  "colemickens@aarch64.nixos.community:~/.config/cachix/cachix.dhall"
+if ! ssh "${host}" "ls ~/.config/cachix/cachix.dhall"; then
+  scp "${HOME}/.config/cachix/cachix.dhall" \
+    "${host}:~/.config/cachix/cachix.dhall"
+fi
+
+dir="~/code"
+rsync -avh --delete \
+  ~/code/nixos-snapdragon-elite \
+  ~/code/nixpkgs \
+  ~/code/nixcfg \
+  $host:$dir

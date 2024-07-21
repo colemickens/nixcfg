@@ -39,11 +39,14 @@ in
 
     # TODO, test this:
     inputs.lanzaboote.nixosModules.lanzaboote
+    inputs.nyx.nixosModules.default
   ];
 
   config = {
     nixpkgs.hostPlatform = "aarch64-linux";
     system.stateVersion = "24.05";
+
+    chaotic.mesa-git.enable = true;
 
     networking.hostName = hn;
     # nixcfg.common.hostColor = "#c17ecc"; # tango magenta
@@ -62,6 +65,10 @@ in
     };
 
     environment.systemPackages = with pkgs; [ esphome ];
+
+    environment.variables = {
+      MESA_LOADER_DRIVER_OVERRIDE = "zink";
+    };
 
     services.tailscale.useRoutingFeatures = "client";
 
@@ -88,15 +95,15 @@ in
         neededForBoot = true;
       };
 
-      # TODO: only with lanzaboote
-      "/efi/EFI/Linux" = {
-        device = "/boot/EFI/Linux";
-        options = [ "bind" ];
-      };
-      "/efi/EFI/nixos" = {
-        device = "/boot/EFI/nixos";
-        options = [ "bind" ];
-      };
+      # # TODO: only with lanzaboote
+      # "/efi/EFI/Linux" = {
+      #   device = "/boot/EFI/Linux";
+      #   options = [ "bind" ];
+      # };
+      # "/efi/EFI/nixos" = {
+      #   device = "/boot/EFI/nixos";
+      #   options = [ "bind" ];
+      # };
     };
     swapDevices = [ { device = "/dev/disk/by-partlabel/${hn}-swap"; } ];
 
