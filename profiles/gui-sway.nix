@@ -50,6 +50,12 @@ let
     ${pkgs.grim}/bin/grim -g "$(slurp)" "''${HOME}/screenshots/screenshot-$(date '+%s').png"
   '';
 
+  screenshot_sh = pkgs.writeShellScript "screenshot.sh" ''
+    ${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp -o -r -c '#ff0000ff')" - \
+      | ${pkgs.satty}/bin/satty --filename - --fullscreen \
+        --output-filename ~/screenshots/screenshot-$(date '+%Y%m%d-%H:%M:%S').png
+  '';
+
   # silly gtk/gnome wayland schenanigans
   # TODO: see if this is necessary if we get HM to do it? or our own systemd user units?
   gsettings_auto =
@@ -360,6 +366,8 @@ in
               "${modifier}+Shift+space" = "floating toggle";
               "${modifier}+Shift+Alt+space" = "sticky toggle";
               "${modifier}+space" = "focus mode_toggle";
+              
+              "${modifier}+Backspace" = "exec ${pkgs.smile}/bin/smile";
 
               "${modifier}+1" = "workspace number 1";
               "${modifier}+2" = "workspace number 2";
@@ -390,9 +398,11 @@ in
               "${modifier}+Ctrl+Alt+minus" = "exec ${outputScale} -.1";
 
               # "${modifier}+F12" = ''exec ${pkgs.grim}/bin/grim \"''${HOME}/screenshots/screenshot-$(date '+%s').png\"'';
-              # "${modifier}+Shift+F12" = ''exec ${pkgs.grim}/bin/grim  -g \"$(slurp)\" \"''${HOME}/screenshots/screenshot-$(date '+%s').png\"'';
-              "${modifier}+F12" = "exec ${screenshot}";
+              # # "${modifier}+Shift+F12" = ''exec ${pkgs.grim}/bin/grim  -g \"$(slurp)\" \"''${HOME}/screenshots/screenshot-$(date '+%s').png\"'';
+              # "${modifier}+F12" = "exec ${screenshot}";
               "${modifier}+Shift+F12" = "exec ${screenshotArea}";
+
+              "${modifier}+F12" = "exec ${screenshot_sh}";
 
               "${modifier}+Ctrl+Alt+Up" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +10";
               "${modifier}+Ctrl+Alt+Down" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 10-";
