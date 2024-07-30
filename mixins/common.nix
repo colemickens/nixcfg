@@ -211,7 +211,8 @@ in
             DHCP = "yes";
             IPv6AcceptRA = true;
             # DHCPv6PrefixDelegation = "yes"; # moved to its own full section
-            IPForward = "yes";
+            IPv4Forwarding = "yes";
+            IPv6Forwarding = "yes";
             # IPMasquerade = "both";
           };
           # dhcpV4Config.ClientIdentifier = "mac";
@@ -231,7 +232,8 @@ in
             DHCP = "yes";
             IPv6AcceptRA = true;
             # DHCPv6PrefixDelegation = "yes";
-            IPForward = "yes";
+            IPv4Forwarding = "yes";
+            IPv6Forwarding = "yes";
             # IPMasquerade = "both";
           };
           # dhcpV4Config.ClientIdentifier = "mac";

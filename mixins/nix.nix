@@ -45,7 +45,7 @@ in
       };
       # nixPath = lib.mkForce [ ]; # i doth protest
       nixPath = lib.mkForce [ "nixpkgs=${inputs.cmpkgs.outPath}" ]; # i doth relent
-      package = _nix;
+      package = lib.mkDefault _nix;
       settings = rec {
         keep-derivations = true; # this is the default (?)
         builders-use-substitutes = true;

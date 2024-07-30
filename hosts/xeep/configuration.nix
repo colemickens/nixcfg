@@ -36,6 +36,7 @@ in
     # ./services/samba.nix
 
     inputs.nixos-hardware.nixosModules.dell-xps-13-9370
+    inputs.determinate.nixosModules.default
 
     ./unfree.nix
   ];

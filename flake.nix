@@ -2,6 +2,11 @@
   description = "colemickens - nixos configs, custom packges, misc";
 
   inputs = {
+    determinate = {
+      url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1.52.tar.gz";
+            # "https://flakehub.com/f/DeterminateSystems/determinate/0.1.52"
+    };
+  
     flake-utils = {
       url = "github:numtide/flake-utils";
     };
