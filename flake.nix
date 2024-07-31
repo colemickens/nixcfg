@@ -18,7 +18,7 @@
       url = "github:nixos/nixpkgs/nixos-23.05";
     }; # any stable to use
     cmpkgs = {
-      url = "github:colemickens/nixpkgs/cmpkgs";
+      url = "github:colemickens/nixpkgs/?ref=cmpkgs";
     };
     nixos-cosmic = {
       url = "github:lilyinstarlight/nixos-cosmic";
@@ -103,7 +103,7 @@
     };
     nix-fast-build = {
       # url = "github:Mic92/nix-fast-build";
-      url = "github:colemickens/nix-fast-build/e7c7050412040a2fe49a0011ed5e06d4b25ab863";
+      url = "github:colemickens/nix-fast-build?ref=stdout-pipable";
       # inputs."nixpkgs".follows = "cmpkgs";
     };
     fast-flake-update = {

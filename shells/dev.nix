@@ -67,7 +67,7 @@ minimalMkShell {
     nixd
 
     ## nix space usage / visualizers
-    nix-du
+    # nix-du # TOOD(colemickens): broken 2024-07-30, restore later?
     nix-tree
 
     # nix formatters
