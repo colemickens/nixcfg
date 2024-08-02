@@ -14,6 +14,7 @@ ssh $host \
       nixpkgs#cachix \
       nixpkgs#bottom \
       nixpkgs#git \
+      nixpkgs#ripgrep \
       nixpkgs#rsync \
       nixpkgs#zellij
   "
