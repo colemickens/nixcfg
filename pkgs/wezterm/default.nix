@@ -1,34 +1,34 @@
-{ stdenv
-, rustPlatform
-, lib
-, fetchFromGitHub
-, ncurses
-, perl
-, pkg-config
-, python3
-, fontconfig
-, installShellFiles
-, openssl
-, libGL
-, libX11
-, libxcb
-, libxkbcommon
-, xcbutil
-, xcbutilimage
-, xcbutilkeysyms
-, xcbutilwm
-, wayland
-, zlib
-, CoreGraphics
-, Cocoa
-, Foundation
-, libiconv
-, UserNotifications
-, nixosTests
-, runCommand
-, vulkan-loader
-, doCheck ? true
-,
+{
+  stdenv,
+  rustPlatform,
+  lib,
+  fetchFromGitHub,
+  ncurses,
+  perl,
+  pkg-config,
+  python3,
+  fontconfig,
+  installShellFiles,
+  openssl,
+  libGL,
+  libX11,
+  libxcb,
+  libxkbcommon,
+  xcbutil,
+  xcbutilimage,
+  xcbutilkeysyms,
+  xcbutilwm,
+  wayland,
+  zlib,
+  CoreGraphics,
+  Cocoa,
+  Foundation,
+  libiconv,
+  UserNotifications,
+  nixosTests,
+  runCommand,
+  vulkan-loader,
+  doCheck ? true,
 }:
 
 let
@@ -37,15 +37,15 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "20240203-110809-5046fc22-unstable-2024-06-09";
-  rev = "f5e496ebc233187c076cbb34b3cd0f0c50290f51";
+  version = "20240203-110809-5046fc22-unstable-2024-07-30";
+  rev = "56a27e93a9ee50aab50ff4d78308f9b3154b5122";
 
   src = fetchFromGitHub {
     owner = owner;
     repo = pname;
     rev = rev;
     fetchSubmodules = true;
-    sha256 = "sha256-1Y/0K1xbXt85YaQMHx/YRXZbeHjsdHiz8uuH+E4172Q=";
+    sha256 = "sha256-zl0Me24ncrpXUCvkQHlbgUucf0zrkhFFI242wsSQKLw=";
   };
 
   postPatch = ''
