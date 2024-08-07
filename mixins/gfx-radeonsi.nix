@@ -23,7 +23,7 @@ in
       _nvtop
     ];
 
-    services.lact.enable = true;
+    # services.lact.enable = true;
 
     environment.sessionVariables = {
       DISABLE_LAYER_AMD_SWITCHABLE_GRAPHICS_1 = "1";
