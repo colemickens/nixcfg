@@ -42,11 +42,12 @@ in
         programs.gpg.enable = true;
         programs.gpg.homedir = "${hm.config.xdg.dataHome}/gnupg";
         home.file."${hm.config.programs.gpg.homedir}/.keep".text = "";
-        home.packages = with pkgs; [
-          yubikey-personalization
-          yubikey-manager
-          # yubico-piv-tool # seems to fail to cross-compile
-        ];
+        home.packages = [
+          pkgs.yubikey-personalization
+        ] ++ (lib.optionals (pkgs.stdenv.hostPlatform.system == pkgs.stdenv.buildPlatform.system) [
+          pkgs.yubikey-manager
+          pkgs.yubico-piv-tool
+        ]);
 
         services.gpg-agent = {
           enable = true;
