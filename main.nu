@@ -157,14 +157,21 @@ def "main up" [...hosts] {
   main lockup
   main nfb --download true ".#devShells.x86_64-linux"
 
-  do -i { main nfb --cache true ".#checks.x86_64-linux" }
+  main nfb --cache true ".#checks-native.x86_64-linux"
 
   main deploy zeph
   main deploy raisin
-  main deploy xeep
-  main deploy rock5b
-  main deploy h96maxv58
+  # main deploy xeep
+
+  do -i { main nfb --cache true ".#checks-cross.x86_64-linux" }
+  do -i {
+    main deploy rock5b
+    main deploy h96maxv58
+  }
+
+  # always deploy slynux last, it resets gpg thing? TODO: fix ?
   main deploy slynux
 }
 
 def main [] { main up }
+

@@ -23,17 +23,44 @@ jobs:
       uses: actions/checkout@v4
       with:
         ref: main
-    - name: next
+    - name: update
       run: |
         nix develop .#ci -c ./ci-next.nu update
-  "deploy":
+    - name: build-native
+      run: |
+        nix develop .#ci -c ./ci-next.nu build native
+    - name: build-cross
+      # TODO: ignore step failure
+      run: |
+        nix develop .#ci -c ./ci-next.nu build cross
+  "deploy-native":
     strategy:
       fail-fast: false
       matrix:
         host:
           - name: "raisin"
-          - name: "xeep"
+          # - name: "xeep"
           - name: "rock5b"
+          # - name: "openstick"
+          - name: "slynux"
+          - name: "h96maxv58"
+    runs-on: "raisin-deployer"
+    needs: [ "update" ]
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+      with:
+        ref: main-next-results
+    - name: deploy-${{matrix.host.name}}
+      run: |
+        timeout 600 \
+          nix develop .#ci -c ./ci-next.nu deploy --activate=${{ inputs.activate || 'false' }} ${{matrix.host.name}}
+  "deploy-cross":
+    # TODO: only run if "build-cross" step succeeded above
+    strategy:
+      fail-fast: false
+      matrix:
+        host:
           # - name: "openstick"
           - name: "slynux"
           - name: "h96maxv58"

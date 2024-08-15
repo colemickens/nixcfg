@@ -4,9 +4,9 @@
   inputs = {
     determinate = {
       url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1.52.tar.gz";
-            # "https://flakehub.com/f/DeterminateSystems/determinate/0.1.52"
+      # "https://flakehub.com/f/DeterminateSystems/determinate/0.1.52"
     };
-  
+
     flake-utils = {
       url = "github:numtide/flake-utils";
     };
@@ -15,32 +15,28 @@
     }; # TODO: boo name! "libaggregate"?
 
     nixpkgs-stable = {
-      url = "github:nixos/nixpkgs/nixos-23.05";
+      url = "github:nixos/nixpkgs?ref=nixos-23.05";
     }; # any stable to use
     cmpkgs = {
-      url = "github:colemickens/nixpkgs/?ref=cmpkgs";
+      url = "github:colemickens/nixpkgs?ref=cmpkgs";
     };
     nixos-cosmic = {
       url = "github:lilyinstarlight/nixos-cosmic";
       inputs."nixpkgs".follows = "cmpkgs";
     };
 
-    # nyx: currently used for mesa on sevex to get latest freedreno stuff
-    nyx = {
-      url = "github:chaotic-cx/nyx";
-    };
     mobile-nixos-openstick = {
-      url = "github:colemickens/mobile-nixos/openstick";
+      url = "github:colemickens/mobile-nixos?ref=colemickens/openstick-aug2024";
       inputs."nixpkgs".follows = "cmpkgs";
     };
-    tow-boot-alirock-h96maxv58 = {
-      url = "github:colemickens/tow-boot/alirock-h96maxv58";
-      inputs."nixpkgs".follows = "cmpkgs";
-    };
-    tow-boot-radxa-zero = {
-      url = "github:colemickens/tow-boot/radxa-zero";
-      inputs."nixpkgs".follows = "cmpkgs";
-    };
+    # tow-boot-alirock-h96maxv58 = {
+    #   url = "github:colemickens/tow-boot/alirock-h96maxv58";
+    #   inputs."nixpkgs".follows = "cmpkgs";
+    # };
+    # tow-boot-radxa-zero = {
+    #   url = "github:colemickens/tow-boot/radxa-zero";
+    #   inputs."nixpkgs".follows = "cmpkgs";
+    # };
 
     # core system/inputs
     firefox-nightly = {
@@ -368,7 +364,7 @@
         inherit pkgs pkgsUnfree;
         ## HM ENVS #####################################################
 
-        checks = {
+        checks-native = {
           "aarch64-linux" = {
             inherit (toplevels)
               sevex
@@ -389,17 +385,17 @@
               # misc native x86_64-linux
               vm-cosmic
               installer-standard
-
-              # cross-builds
+              ;
+          };
+        };
+        checks-cross = {
+          "x86_64-linux" = {
+            # cross-builds
+            inherit (toplevels)
               h96maxv58
               openstick
               openstick2
               rock5b
-
-              # TODO(colemickens): complete/test this:
-              # hcloud-amd64-dev-1
-
-              installer-standard-aarch64
               ;
             inherit (extra.x86_64-linux)
               openstick-abootimg
