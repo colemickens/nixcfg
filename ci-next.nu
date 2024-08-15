@@ -92,48 +92,13 @@ def "main deploy" [host: string --activate = true] {
   let xeep_addr = ^tailscale ip --4 xeep
   print -e $"deploy ($out) to ($addr)"
 
-  if $host == "openstick" or $host == "rock5b" {
-    let sw_ip = if $host == "openstick" { "192.168.1.166" } else { "192.168.1.195" }
-    let sw_nm = if $host == "openstick" { "wp6_sw102_relay" } else { "wp6_sw105_relay" }
-    try {
-      print -e "predeploy: check uname directly"
-      ^timeout 15 ssh ...[...$sshargs $"cole@($addr)" uname -a] 
-    } catch {
-      print -e "predeploy: couldn't uname; force reboot and wait"
-      ^ssh ...[...$sshargs $"cole@($xeep_addr)" 
-        curl -d 'true' -X POST $"http://($sw_ip):9111/switch/($sw_nm)/turn_off"]
-      sleep 2sec
-      ^ssh ...[...$sshargs $"cole@($xeep_addr)" 
-        curl -d 'true' -X POST $"http://($sw_ip):9111/switch/($sw_nm)/turn_on"]
-      sleep 75sec
-      print -e "predeploy: couldn't uname; force reboot and wait... now uname-check"
-      ^timeout 15 ssh ...[...$sshargs $"cole@($addr)" uname -a]
-    }
+  if (not $activate) {
+    ^ssh ...$sshargs $"cole@($addr)" $"sudo nix build -j0 --no-link ($out)"
+    return
   }
 
-  # if (not $activate) {
-  ^ssh ...$sshargs $"cole@($addr)" $"sudo nix build -j0 --no-link ($out)"
-  #   return
-  # }
-
-  # ^ssh ...$sshargs $"cole@($addr)" $"sudo nix build -j0 --no-link --profile /nix/var/nix/profiles/system ($out)"
-  # ^ssh ...$sshargs $"cole@($addr)" $"sudo ($out)/bin/switch-to-configuration switch"
-
-  # if $host == "openstick" {
-  #   ^ssh ...$sshargs $"cole@($addr)" "sudo reboot"
-  #   sleep 60sec;
-  #   ^ssh ...[...$sshargs $"cole@($addr)" uname -a]
-  # }
-  # if $host == "openstick" {
-  #   do -i {
-  #     print -e "openstick-predeploy: reboot"
-  #     ^ssh ...$sshargs $"cole@($addr)" "sudo reboot"
-  #     sleep 60sec;
-  #     print -e "openstick-predeploy: garbage collect"
-  #     ^ssh ...$sshargs $"cole@($addr)" "nix-env --profile ~/.local/state/nix/profiles/home-manager --delete-generations +1"
-  #     ^ssh ...$sshargs $"cole@($addr)" "sudo nix-collect-garbage -d"
-  #   }
-  # }
+  ^ssh ...$sshargs $"cole@($addr)" $"sudo nix build -j0 --no-link --profile /nix/var/nix/profiles/system ($out)"
+  ^ssh ...$sshargs $"cole@($addr)" $"sudo ($out)/bin/switch-to-configuration switch"
 }
 
 def "main update" [] {
