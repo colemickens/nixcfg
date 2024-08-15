@@ -13,11 +13,14 @@
     ../../profiles/core.nix
     # ../../profiles/addon-sbc.nix
 
-    ../../mixins/github-actions-runners.nix
+    # ../../mixins/github-actions-runners.nix # working, but not cross-compiling!
     # ../../mixins/github-runner.nix
   ];
 
   config = {
+    # NOTE(colemickens): mesa is not cross-compiling ATM
+    hardware.graphics.enable = false;
+  
     nixpkgs.hostPlatform.system = "aarch64-linux";
     system.stateVersion = "24.05";
 

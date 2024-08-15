@@ -1,11 +1,10 @@
-{
-  pkgs,
-  lib,
-  modulesPath,
-  inputs,
-  config,
-  extendModules,
-  ...
+{ pkgs
+, lib
+, modulesPath
+, inputs
+, config
+, extendModules
+, ...
 }:
 
 {
@@ -15,6 +14,9 @@
   ];
 
   config = {
+    # NOTE(colemickens): mesa currently failing to cross-compile
+    hardware.graphics.enable = lib.mkForce false;
+
     boot.supportedFilesystems = lib.mkForce [
       "btrfs"
       "ext4"
