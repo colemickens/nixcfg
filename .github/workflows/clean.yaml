@@ -21,4 +21,4 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        nix develop .#ci -c ./ci-next.nu clean-actions
+        nix develop .#ci -c ./ci/clean.nu
