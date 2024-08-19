@@ -122,7 +122,7 @@ in
             glide-media-player
 
             # audio/video
-            pavucontrol
+            pwvucontrol
             # pw-viz # also failing to build again
             qpwgraph
 

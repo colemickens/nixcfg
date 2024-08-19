@@ -192,7 +192,7 @@ in
                   };
                   pulseaudio = {
                     format = "vol {volume}";
-                    on-click-middle = ''${pkgs.sway}/bin/swaymsg exec "${pkgs.pavucontrol}/bin/pavucontrol"'';
+                    on-click-middle = ''${pkgs.sway}/bin/swaymsg exec "${pkgs.pwvucontrol}/bin/pwvucontrol"'';
                   };
                   network = {
                     format-wifi = "net {signalStrength}";

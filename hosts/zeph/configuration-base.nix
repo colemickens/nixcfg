@@ -139,7 +139,7 @@ in
             "XF86AudioLowerVolume" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume -2";
             "XF86AudioMicMute" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --toggle-mute";
             "XF86Launch1" = "exec ${pkgs.asusctl}/bin/rog-control-center";
-            "Mod4+XF86Launch1" = "exec ${pkgs.pavucontrol}/bin/pavucontrol";
+            "Mod4+XF86Launch1" = "exec ${pkgs.pwvucontrol}/bin/pwvucontrol";
           };
         };
       };
