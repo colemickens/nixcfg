@@ -38,11 +38,13 @@ in
                   criteria = out_aw3418dw;
                   status = "enable";
                   position = "1920,0";
+                  mode = "3440x1440@120Hz";
                 }
                 {
                   criteria = out_aw2521h;
                   status = "enable";
                   position = "0,0";
+                  mode = "1920x1080@240Hz";
                 }
               ];
               "zeph_docked_aw25".outputs = [
@@ -54,6 +56,7 @@ in
                   criteria = out_aw2521h;
                   status = "enable";
                   position = "0,0";
+                  mode = "1920x1080@240Hz";
                 }
               ];
               "zeph_docked_aw34".outputs = [
@@ -65,6 +68,7 @@ in
                   criteria = out_aw3418dw;
                   status = "enable";
                   position = "0,0";
+                  mode = "3440x1440@120Hz";
                 }
               ];
               "zeph_all".outputs = [
@@ -72,11 +76,13 @@ in
                   criteria = out_aw2521h;
                   status = "enable";
                   position = "0,0";
+                  mode = "1920x1080@240Hz";
                 }
                 {
                   criteria = out_aw3418dw;
                   status = "enable";
                   position = "1920,0";
+                  mode = "3440x1440@120Hz";
                 }
                 {
                   criteria = out_zeph;

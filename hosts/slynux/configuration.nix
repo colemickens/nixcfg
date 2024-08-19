@@ -42,6 +42,19 @@ in
 
     networking.wireless.iwd.enable = true;
 
+    services.go2rtc = {
+      enable = true;
+      settings = {
+        webrtc = {
+          listen = ":8555";
+        };
+        streams = {
+          webcam = "ffmpeg:device?video=/dev/video0&input_format=yuyv422&video_size=1920x1080#video=h264#hardware";
+        };
+      };
+    };
+
+
     nix.gc = {
       automatic = true;
       persistent = true;

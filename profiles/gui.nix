@@ -1,9 +1,8 @@
-{
-  pkgs,
-  lib,
-  config,
-  inputs,
-  ...
+{ pkgs
+, lib
+, config
+, inputs
+, ...
 }:
 
 let
@@ -118,6 +117,9 @@ in
             pinta
             krita
             virt-viewer
+
+            dissent
+            ksnip
 
             glide-media-player
 

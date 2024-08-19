@@ -1,9 +1,9 @@
-{
-  config,
-  lib,
-  pkgs,
-  modulesPath,
-  ...
+{ config
+, lib
+, pkgs
+, inputs
+, modulesPath
+, ...
 }:
 
 {
@@ -11,6 +11,7 @@
     (modulesPath + "/installer/scan/not-detected.nix")
 
     ../../profiles/core.nix
+    ../../profiles/gui-sway-auto.nix
     # ../../profiles/addon-sbc.nix
 
     # ../../mixins/github-actions-runners.nix # working, but not cross-compiling!
@@ -18,21 +19,63 @@
   ];
 
   config = {
-    # NOTE(colemickens): mesa is not cross-compiling ATM
-    hardware.graphics.enable = false;
-  
     nixpkgs.hostPlatform.system = "aarch64-linux";
     system.stateVersion = "24.05";
 
+    # specialisation = {
+    #   "devtree" = {
+    #     inheritParentConfig = true;
+    #     configuration = {
+    #       # DEVICE TREE STUFF (broke when enabled with 6.10+UEFI, not sure why)
+    #       hardware.deviceTree.enable = true;
+    #       hardware.deviceTree.name = "rockchip/rk3588-rock-5b.dtb";
+    #       boot.loader.systemd-boot.installDeviceTree = true;
+    #     };
+    #   };
+    # };
+
+    hardware.deviceTree.enable = true;
+    hardware.deviceTree.name = "rockchip/rk3588-rock-5b.dtb";
+    boot.loader.systemd-boot.installDeviceTree = true;
+
+    environment.systemPackages = with pkgs; [
+      evtest
+      ripgrep
+      picocom
+      zellij
+      pulsemixer
+      mpv
+      glxinfo
+      bottom
+    ];
+
+    nixpkgs.overlays = [
+      (final: super: {
+        mesa = inputs.h96.inputs.nixpkgs-mesa.outputs.legacyPackages.x86_64-linux.pkgsCross.aarch64-multiplatform.mesa;
+      })
+      inputs.h96.outputs.overlays.kernel
+    ];
+    services.pipewire.enable = true;
+    services.pipewire.pulse.enable = true;
+
+    # boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
+    boot.kernelPackages =
+      pkgs.linuxPackagesFor
+        pkgs.linux_h96maxv58;
+
+    boot.initrd.kernelModules = [
+      # "panthor"
+      # "panfrost"
+    ];
+    boot.kernelModules = [
+      # "panthor"
+      # "panfrost"
+    ];
     boot.initrd.availableKernelModules = [
       "nvme"
       "usb_storage"
     ];
-    boot.initrd.kernelModules = [ ];
 
-    boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
-
-    boot.kernelModules = [ ];
     boot.extraModulePackages = [ ];
 
     nixcfg.common.defaultKernel = false;
@@ -72,7 +115,7 @@
     boot.loader.efi.canTouchEfiVariables = true;
 
     boot.loader.efi.efiSysMountPoint = "/efi";
-    boot.loader.systemd-boot.xbootldrMountPoint = "/boot";
+    # boot.loader.systemd-boot.xbootldrMountPoint = "/boot";
 
     networking.hostName = "rock5b"; # Define your hostname.
 

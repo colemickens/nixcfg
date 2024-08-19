@@ -15,7 +15,7 @@
 
   config = {
     # NOTE(colemickens): mesa currently failing to cross-compile
-    hardware.graphics.enable = lib.mkForce false;
+    # hardware.graphics.enable = lib.mkForce false;
 
     boot.supportedFilesystems = lib.mkForce [
       "btrfs"

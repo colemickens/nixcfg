@@ -14,6 +14,9 @@
       url = "github:nix-community/lib-aggregate";
     }; # TODO: boo name! "libaggregate"?
 
+    nix = {
+      url = "github:nixos/nix?ref=2.24.2";
+    };
     nixpkgs-stable = {
       url = "github:nixos/nixpkgs?ref=nixos-23.05";
     }; # any stable to use
@@ -301,6 +304,14 @@
             inputs.tow-boot-alirock-h96maxv58.outputs.packages.aarch64-linux.radxa-rock5b.outputs.firmware;
           h96maxv58-sdimage = nixosConfigurations.h96maxv58.config.system.build.sdImage;
           # rock5b -> UEFI build
+
+          rock5b-uboot = pkgsUnfree.x86_64-linux.pkgsCross.aarch64-multiplatform.ubootRock5ModelB;
+          # rock5b-clearspi = {
+          #   https://dl.radxa.com/rock5/sw/images/others/zero.img.gz
+          # };
+          # rock5b-usbloader = {
+          #   https://dl.radxa.com/rock5/sw/images/loader/rk3588_spl_loader_v1.15.113.bin
+          # };
         };
         riscv64-linux = { };
       };

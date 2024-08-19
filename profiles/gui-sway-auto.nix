@@ -7,7 +7,6 @@
 }:
 
 let
-  wlr_renderer = "vulkan";
   autostarts = {
     # "vkcube" = ''
     #   export VK_INSTANCE_LAYERS='VK_LAYER_MESA_overlay'
@@ -41,6 +40,8 @@ in
     environment.systemPackages = (
       with pkgs;
       ([
+        vulkan-tools
+        glxinfo
         # wezterm
         # qt5.qtwayland
         # qt6.qtwayland
@@ -51,10 +52,13 @@ in
       { pkgs, config, ... }@hm:
       {
         home.sessionVariables = {
-          XDG_SESSION_TYPE = "wayland";
+          # XDG_SESSION_TYPE = "wayland";
+          # WLR_LIBINPUT_NO_DEVICES = "1";
+          # WLR_RENDERER = "vulkan";
         };
         wayland.windowManager.sway = {
           enable = true;
+          checkConfig = false;
           systemd.enable = true; # beta
           wrapperFeatures = {
             base = false; # this should be the default (dbus activation, not sure where XDG_CURRENT_DESKTOP comes from)
@@ -71,10 +75,10 @@ in
       [[ "$(tty)" == /dev/tty1 ]] && (
         set -x;
         sleep 1;
-        echo "wtf"
-        # export WLR_RENDER="${wlr_renderer}";
+        export XDG_SESSION_TYPE=wayland
         export WLR_LIBINPUT_NO_DEVICES=1
-        sway &> $HOME/sway.log
+        # export WLR_RENDERER=vulkan
+        exec sway &> $HOME/sway.log
       )
     '';
 
