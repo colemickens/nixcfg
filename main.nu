@@ -70,6 +70,11 @@ def "main deploy" [ host: string, --activate = true, --toplevel: string = ""] {
   ^ssh $"cole@($target)" -- $cmd
   header "light_green_reverse" $"deploy: ($host): DONE"
   print -e $"(char nl)"
+
+  let hostname = (^hostname);
+  if $hostname == $host {
+    ^fix-ssh-remote
+  }
 }
 
 ############### Internal lib #################
@@ -154,23 +159,19 @@ def "main loopup" [] {
 }
 
 def "main up" [...hosts] {
+  jj git fetch --all-remotes
   main lockup
+
   main nfb --download true ".#devShells.x86_64-linux"
+  main nfb --download true ".#checks-native.x86_64-linux"
 
-  main nfb --cache true ".#checks-native.x86_64-linux"
-
-  main deploy zeph
   main deploy raisin
-  # main deploy xeep
-
-  do -i { main nfb --cache true ".#checks-cross.x86_64-linux" }
-  do -i {
-    main deploy rock5b
-    main deploy h96maxv58
-  }
-
-  # always deploy slynux last, it resets gpg thing? TODO: fix ?
   main deploy slynux
+  main deploy xeep
+  main deploy zeph
+
+  main nfb --download true ".#checks-cross.x86_64-linux"
+  main deploy rock5b
 }
 
 def main [] { main up }
