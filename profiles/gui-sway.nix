@@ -205,6 +205,7 @@ in
         wayland.windowManager.sway = {
           enable = true;
           extraOptions = [ "-Dlegacy-wl-drm" ];
+          checkConfig = false;
           systemd = {
             enable = true; # beta
           };
