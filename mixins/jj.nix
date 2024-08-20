@@ -10,6 +10,9 @@
     home-manager.users.cole =
       { pkgs, ... }:
       {
+        home.packages = with pkgs; [
+          lazyjj
+        ];
         programs.jj = {
           enable = true;
           package = inputs.jj.outputs.packages.${pkgs.stdenv.hostPlatform.system}.jujutsu;
