@@ -98,8 +98,9 @@ in
               jamesdsp
 
               # communication
-              nheko
-              libsForQt5.kdeGear.neochat
+              # libolm fallout:
+              # nheko
+              # libsForQt5.kdeGear.neochat
               # libsForQt5.kdeGear.falkon
 
               # misc tools/utils
