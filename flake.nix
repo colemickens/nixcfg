@@ -363,7 +363,7 @@
       };
     in
     lib.recursiveUpdate
-      ({
+      (rec {
         inherit
           nixosConfigs
           nixosConfigsEx
@@ -374,6 +374,11 @@
         inherit extra;
         inherit pkgs pkgsUnfree;
         ## HM ENVS #####################################################
+
+        checks = {
+          "aarch64-linux" = checks-native.aarch64-linux; # // checks-cross.aarch64-linux;
+          "x86_64-linux" = checks-native.x86_64-linux // checks-cross.x86_64-linux;
+        };
 
         checks-native = {
           "aarch64-linux" = {
