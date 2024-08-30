@@ -15,7 +15,7 @@
     }; # TODO: boo name! "libaggregate"?
 
     nix = {
-      url = "github:nixos/nix?ref=2.24.2";
+      url = "github:nixos/nix?ref=2.24.4";
     };
     nixpkgs-stable = {
       url = "github:nixos/nixpkgs?ref=nixos-23.05";
