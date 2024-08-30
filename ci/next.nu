@@ -3,7 +3,7 @@
 # TODO:
 # - follow up on self-hosted runners being weird about HOME + sshkeys
 # - figure out a strategy for pinning the most recent build with a gcroot so we can enable GC again
-let ROOT = ([$env.FILE_PWD "../" ] | path join)
+let ROOT = ([$env.FILE_PWD "../.." ] | path join)
 let gcrootdir = $"($ROOT)/_gcroots"
 
 git config --global user.name 'Cole Botkens'
