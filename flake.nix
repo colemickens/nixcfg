@@ -272,10 +272,6 @@
           };
         };
         "aarch64-linux" = {
-          sevex = {
-            pkgs = inputs.cmpkgs;
-          };
-
           hcloud-arm64-dev1 = {
             pkgs = inputs.cmpkgs;
             # buildSys = "aarch64-linux";
@@ -383,8 +379,6 @@
         checks-native = {
           "aarch64-linux" = {
             inherit (toplevels)
-              sevex
-
               # TODO(colemickens): complete/test this:
               # hcloud-arm64-dev-1
               ;
