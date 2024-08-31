@@ -53,7 +53,7 @@ rec {
   # cursor = { name = "Bibata-Original-Amber"; package = pkgs.bibata-cursors; };
   # cursor = { name = "Catppuccin-Latte-Pink-Cursors"; package = pkgs.catppuccin-cursors.lattePink; };
   cursor = {
-    name = "macOS-BigSur-White";
+    name = "macOS-White";
     package = pkgs.apple-cursor;
   };
   cursorSize = 48;
