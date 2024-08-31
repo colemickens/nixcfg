@@ -14,7 +14,7 @@ $env.CACHIX_SIGNING_KEY = (try { open "/run/secrets/cachix_signkey_colemickens" 
 let nfbflags = [
   --no-nom
   --eval-workers 1 # we keep getting killed in the GHA (on raisin) :(
-  --eval-max-memory-size 16384
+  --eval-max-memory-size 14000
 ]
 
 let ssh_hosts = $"($env.HOME)/.ssh/known_hosts"
