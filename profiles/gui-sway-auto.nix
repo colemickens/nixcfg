@@ -41,7 +41,7 @@ in
       with pkgs;
       ([
         vulkan-tools
-        glxinfo
+        mesa-demos
         # wezterm
         # qt5.qtwayland
         # qt6.qtwayland

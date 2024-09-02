@@ -9,7 +9,7 @@
   config = {
     environment.systemPackages = with pkgs; [
       libva-utils
-      glxinfo
+      mesa-demos
       vulkan-tools
       glmark2
       mesa-demos

@@ -8,7 +8,7 @@
 
 {
   imports = [
-    (modulesPath + "/installer/scan/not-detected.nix")
+    # (modulesPath + "/installer/scan/not-detected.nix")
 
     ../../profiles/core.nix
     ../../profiles/gui-sway-auto.nix
@@ -45,32 +45,14 @@
       zellij
       pulsemixer
       mpv
-      glxinfo
+      mesa-demos
       bottom
     ];
 
-    nixpkgs.overlays = [
-      (final: super: {
-        mesa = inputs.h96.inputs.nixpkgs-mesa.outputs.legacyPackages.x86_64-linux.pkgsCross.aarch64-multiplatform.mesa;
-      })
-      inputs.h96.outputs.overlays.kernel
-    ];
     services.pipewire.enable = true;
     services.pipewire.pulse.enable = true;
 
-    # boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
-    boot.kernelPackages =
-      pkgs.linuxPackagesFor
-        pkgs.linux_h96maxv58;
-
-    boot.initrd.kernelModules = [
-      # "panthor"
-      # "panfrost"
-    ];
-    boot.kernelModules = [
-      # "panthor"
-      # "panfrost"
-    ];
+    boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
     boot.initrd.availableKernelModules = [
       "nvme"
       "usb_storage"
