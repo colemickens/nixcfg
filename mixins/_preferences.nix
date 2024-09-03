@@ -148,6 +148,7 @@ rec {
         intel-one-mono
         commit-mono
         comic-mono
+        departure-mono
         lexend
         iosevka-bin
         iosevka-comfy.comfy-fixed # always include our favesies
