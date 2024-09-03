@@ -32,11 +32,11 @@ jobs:
       matrix:
         host:
           - name: "raisin"
-          - name: "xeep"
+          # - name: "xeep"
           - name: "rock5b"
           # - name: "openstick"
           - name: "slynux"
-          - name: "h96maxv58"
+          # - name: "h96maxv58"
     runs-on: "slynux-deployer"
     needs: [ "update" ]
     steps:
