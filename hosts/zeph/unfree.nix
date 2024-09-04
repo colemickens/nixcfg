@@ -13,6 +13,7 @@
       pkg:
       builtins.elem (lib.getName pkg) [
         ### misc
+        "apple_cursor"
         "google-chrome"
         "google-chrome-dev"
         # "ripcord"
