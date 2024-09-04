@@ -236,9 +236,6 @@
           slynux = {
             pkgs = inputs.cmpkgs;
           };
-          xeep = {
-            pkgs = inputs.cmpkgs;
-          };
           zeph = {
             pkgs = inputs.cmpkgs;
           };
@@ -389,7 +386,6 @@
               # normal x86_64-linux hosts
               raisin
               slynux
-              xeep
               zeph
 
               # misc native x86_64-linux

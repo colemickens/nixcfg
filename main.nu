@@ -167,7 +167,6 @@ def "main up" [...hosts] {
 
   main deploy raisin
   main deploy slynux
-  main deploy xeep
   main deploy zeph
 
   main nfb --download true ".#checks-cross.x86_64-linux"
