@@ -42,7 +42,7 @@ in
       { pkgs, config, ... }@hm:
       {
         home.packages = with pkgs; [
-          cosmic-emoji-picker
+          # cosmic-emoji-picker
         ];
 
         home.sessionVariables = {
