@@ -25,7 +25,8 @@ let builder = if $builder_name == "local" { $builder_local } else {
     host: $host
     nfbargs: [
       --remote $host
-      --eval-workers 2
+      --eval-workers 1
+      --eval-max-memory-size 8096
       --no-nom
       --no-download
     ],
