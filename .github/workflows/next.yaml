@@ -17,7 +17,7 @@ on:
       - "main"
 jobs:
   "update":
-    runs-on: "slynux-default"
+    runs-on: "raisin-default"
     steps:
     - name: checkout
       uses: actions/checkout@v4
@@ -32,12 +32,10 @@ jobs:
       matrix:
         host:
           - name: "raisin"
-          # - name: "xeep"
           - name: "rock5b"
-          # - name: "openstick"
           - name: "slynux"
           # - name: "h96maxv58"
-    runs-on: "slynux-deployer"
+    runs-on: "raisin-deployer"
     needs: [ "update" ]
     steps:
     - name: checkout
