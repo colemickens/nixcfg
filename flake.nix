@@ -224,11 +224,6 @@
             buildSys = "x86_64-linux";
           };
 
-          vm-cosmic = {
-            pkgs = inputs.cmpkgs;
-            path = ./images/vm/configuration-cosmic.nix;
-          };
-
           # actual machines:
           raisin = {
             pkgs = inputs.cmpkgs;
@@ -287,8 +282,6 @@
           installer-nvidia-ai = nixosConfigurations.installer-nvidia-ai.config.system.build.isoImage;
           installer-standard-aarch64 =
             nixosConfigurations.installer-standard-aarch64.config.system.build.isoImage;
-
-          # vm-cosmic = nixosConfigurations.vm-cosmic.config.system.build.isoImage;
 
           openstick-abootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-abootimg;
           openstick-bootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-bootimg;
@@ -381,7 +374,6 @@
               ;
           };
           "x86_64-linux" = {
-            vm-cosmic-vm = nixosConfigurations.vm-cosmic.config.system.build.vm;
             inherit (toplevels)
               # normal x86_64-linux hosts
               raisin
@@ -389,7 +381,6 @@
               zeph
 
               # misc native x86_64-linux
-              vm-cosmic
               installer-standard
               ;
           };
@@ -474,7 +465,6 @@
                   inherit (inputs) terranix;
                   pkgs = pkgs_;
                 };
-                # installer = nixosConfigurations.installer-cosmic.config.system.build;
                 # installerIso = "${installer.isoImage}/iso/${installer.isoImage.isoName}";
               in
               {
@@ -501,14 +491,6 @@
                 #         -net user,hostfwd=tcp::10022-:22 -net nic
                 #     '').outPath;
                 # };
-                vm-cosmic = {
-                  type = "app";
-                  program =
-                    (pkgs_.writeShellScript "run-vm-cosmic" ''
-                      set -x
-                      ${nixosConfigurations.vm-cosmic.config.system.build.vm}/bin/run-vm-cosmic-vm
-                    '').outPath;
-                };
 
                 # test-vm-gui = {
                 #   type = "app";
