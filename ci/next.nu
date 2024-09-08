@@ -89,14 +89,6 @@ def "main update" [] {
 
   let url = $"git@github.com:colemickens/nixpkgs"
   let dir = $"($ROOT)/nixpkgs"
-  if not ($dir | path exists) {
-    # NOTE(colemickens): new addition for nixpkgs, avoid reclone
-    rm -rf $"($ROOT)/nixpkgs_"
-    rm -rf $"($ROOT)/nixpkgs"
-    ^cp -r /var/lib/github-stash/nixpkgs $"($ROOT)/nixpkgs_"
-    mv $"($ROOT)/nixpkgs_" $"($ROOT)/nixpkgs"
-    sync
-  } 
   
   mkdir $dir
   do {
@@ -119,10 +111,6 @@ def "main update" [] {
 
   let url = $"git@github.com:colemickens/home-manager"
   let dir = $"($ROOT)/home-manager"
-  if not ($dir | path exists) {
-    # NOTE(colemickens): new addition for nixpkgs, avoid reclone
-    cp -r /var/lib/github-stash/home-manager $"($ROOT)"
-  } 
   mkdir $dir
   do {
     cd $dir
