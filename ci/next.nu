@@ -136,7 +136,6 @@ def "main update" [] {
 
     ^nix ...[
       flake lock
-      --recreate-lock-file
       --commit-lock-file
       --override-input cmpkgs github:colemickens/nixpkgs/cmpkgs-next-wip
       --override-input home-manager github:colemickens/home-manager/cmhm-next-wip
@@ -249,7 +248,6 @@ def "main update" [] {
 
     ^nix ...[
       flake lock
-      --recreate-lock-file
       --commit-lock-file
       --override-input cmpkgs github:colemickens/nixpkgs/cmpkgs-next
       --override-input home-manager github:colemickens/home-manager/cmhm-next
