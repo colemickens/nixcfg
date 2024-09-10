@@ -85,7 +85,6 @@ in
       };
     };
 
-    hardware.graphics.enable = lib.mkForce false; ################# REMOVE
     hardware.firmware = [
       (pkgs.armbian-firmware.overrideAttrs {
         src = pkgs.fetchFromGitHub {
