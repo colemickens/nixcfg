@@ -27,6 +27,7 @@ fi
 dir="~/code"
 rsync -avh --delete \
   ~/code/nixos-snapdragon-elite \
+  ~/code/h96-max-v58-nixos \
   ~/code/nixpkgs \
   ~/code/nixcfg \
   $host:$dir

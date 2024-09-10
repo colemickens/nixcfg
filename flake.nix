@@ -32,14 +32,6 @@
       url = "github:colemickens/mobile-nixos?ref=colemickens/openstick-aug2024";
       inputs."nixpkgs".follows = "cmpkgs";
     };
-    # tow-boot-alirock-h96maxv58 = {
-    #   url = "github:colemickens/tow-boot/alirock-h96maxv58";
-    #   inputs."nixpkgs".follows = "cmpkgs";
-    # };
-    # tow-boot-radxa-zero = {
-    #   url = "github:colemickens/tow-boot/radxa-zero";
-    #   inputs."nixpkgs".follows = "cmpkgs";
-    # };
 
     # core system/inputs
     firefox-nightly = {
@@ -234,6 +226,11 @@
           zeph = {
             pkgs = inputs.cmpkgs;
           };
+          h96maxv58 = {
+            pkgs = inputs.cmpkgs;
+            path = ./hosts/h96maxv58/config-cross.nix;
+            buildSys = "x86_64-linux";
+          };
 
           # hetzner
           hcloud-amd64-dev1 = {
@@ -252,11 +249,6 @@
             path = ./hosts/openstick2/cross.nix;
             buildSys = "x86_64-linux";
           };
-          h96maxv58 = {
-            pkgs = inputs.cmpkgs;
-            path = ./hosts/h96maxv58/config-cross.nix;
-            buildSys = "x86_64-linux";
-          };
           rock5b = {
             pkgs = inputs.cmpkgs;
             path = ./hosts/rock5b/cross.nix;
@@ -264,6 +256,10 @@
           };
         };
         "aarch64-linux" = {
+          h96maxv58-bootstrap = {
+            pkgs = inputs.cmpkgs;
+            path = ./hosts/h96maxv58/config-cross.nix;
+          };
           hcloud-arm64-dev1 = {
             pkgs = inputs.cmpkgs;
             # buildSys = "aarch64-linux";
@@ -286,11 +282,11 @@
           openstick-abootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-abootimg;
           openstick-bootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-bootimg;
           openstick-rootfs = nixosConfigurations.openstick.config.mobile.outputs.generatedFilesystems.rootfs;
-          h96maxv58-uboot =
-            inputs.tow-boot-alirock-h96maxv58.outputs.packages.aarch64-linux.radxa-rock5b.outputs.firmware;
-          h96maxv58-sdimage = nixosConfigurations.h96maxv58.config.system.build.sdImage;
-          # rock5b -> UEFI build
 
+          # build, boot to maskrom, flash whole uncompressed image to 0x0
+          h96maxv58-image= nixosConfigurations.h96maxv58.config.diskoImages;
+          
+          # rock5b -> UEFI build
           rock5b-uboot = pkgsUnfree.x86_64-linux.pkgsCross.aarch64-multiplatform.ubootRock5ModelB;
           # rock5b-clearspi = {
           #   https://dl.radxa.com/rock5/sw/images/others/zero.img.gz

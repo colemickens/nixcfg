@@ -9,27 +9,83 @@
 
 let
   hn = "h96maxv58";
+  ubootH96 = inputs.h96.outputs.packages.aarch64-linux.ubootH96MaxV58;
 in
 {
   imports = [
-    inputs.h96.outputs.nixosModules.base-config
+    # inputs.h96.outputs.nixosModules.base-config
+    inputs.h96.outputs.nixosModules.kernel-config
     inputs.h96.outputs.nixosModules.device-tree
-    inputs.h96.outputs.nixosModules.mesa-24_2
 
     ../../profiles/core.nix
     ../../profiles/user-cole.nix
 
-    ../../profiles/gui-sway-auto.nix
+    # ../../profiles/gui-sway-auto.nix
 
     ../../mixins/common.nix
     ../../mixins/iwd-networks.nix
     ../../mixins/tailscale.nix
     ../../mixins/sshd.nix
+
+    inputs.disko.nixosModules.disko
   ];
 
   config = {
+    # nixpkgs.hostPlatform = "aarch64-linux";
     nixpkgs.hostPlatform.system = "aarch64-linux";
 
+    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+      "armbian-firmware"
+    ];
+
+    disko.memSize = 326768; # TODO: fix make-disk-image.nix to output script that defaults to this, so annoying!!!!1111 or warn if used with impure!
+    disko.extraPostVM = ''
+      (
+        set -x
+        # TODO: GROSS TO HARDCODE, GROSSER THAT THE EXAMPLE WOULD CLOBBER HOME/*.RAW if it worked...
+        disk=$out/disk0.raw
+        ${pkgs.coreutils}/bin/dd if=${ubootH96}/u-boot-rockchip.bin of=$disk seek=64 bs=512 conv=notrunc
+        ${pkgs.zstd}/bin/zstd --compress $disk
+        rm $disk
+      )
+    '';
+    disko.devices = {
+      disk = {
+        disk0 = {
+          type = "disk";
+          imageSize = "4G";
+          content = {
+            type = "gpt";
+            partitions = {
+              firmware = {
+                start = "64";
+                alignment = 1;
+                end = "61440";
+              };
+              ESP = {
+                start = "64M";
+                end = "512M";
+                type = "EF00";
+                content = {
+                  type = "filesystem";
+                  format = "vfat";
+                  mountpoint = "/boot";
+                };
+              };
+              rootfs = {
+                content = {
+                  type = "filesystem";
+                  format = "ext4";
+                  mountpoint = "/";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+
+    hardware.graphics.enable = lib.mkForce false; ################# REMOVE
     hardware.firmware = [
       (pkgs.armbian-firmware.overrideAttrs {
         src = pkgs.fetchFromGitHub {
@@ -59,7 +115,7 @@ in
     nixpkgs.overlays = [
       (final: super: {
         makeModulesClosure = x: super.makeModulesClosure (x // { allowMissing = true; });
-        mesa = inputs.h96.inputs.nixpkgs-mesa.outputs.legacyPackages.x86_64-linux.pkgsCross.aarch64-multiplatform.mesa;
+        # mesa = inputs.h96.inputs.nixpkgs-mesa.outputs.legacyPackages.x86_64-linux.pkgsCross.aarch64-multiplatform.mesa;
       })
     ];
 
@@ -71,8 +127,6 @@ in
       pulsemixer
     ];
 
-    hardware.graphics.enable = lib.mkForce false;
-
     services.pipewire.enable = true;
     services.pipewire.pulse.enable = true;
 
@@ -80,7 +134,11 @@ in
     nixcfg.common.defaultKernel = false;
     nixcfg.common.wifiWorkaround = true;
 
-    boot.loader.systemd-boot.enable = false;
+    boot.loader.systemd-boot.enable = true;
+    boot.loader.systemd-boot.installDeviceTree = true;
+
+    # add hardware device tree
+
     networking.wireless.enable = lib.mkForce false;
     networking.wireless.iwd.enable = true;
 
