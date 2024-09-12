@@ -175,7 +175,7 @@ def "main up" [...hosts] {
 
   main nfb --download true ".#checks-cross.x86_64-linux"
   main deploy h96maxv58
-  # main deploy rock5b
+  main deploy rock5b
 }
 
 def main [] { main up }

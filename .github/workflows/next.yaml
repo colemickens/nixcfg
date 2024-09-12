@@ -32,7 +32,7 @@ jobs:
       matrix:
         host:
           - name: "raisin"
-          # - name: "rock5b"
+          - name: "rock5b"
           - name: "slynux"
           - name: "h96maxv58"
     runs-on: "raisin-deployer"
