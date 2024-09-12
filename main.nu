@@ -135,9 +135,6 @@ def "main nfb" [--download = false --cache = false buildable: string] {
   }
   let resp = open $tmpfile | split row -r '\n' | str join (char newline)
   rm $tmpfile
-  print -e "fooo"
-  print -e $resp
-  print -e "fooo"
   if ($cache or $download) {
     $resp | ^ssh ($builder.host) "cachix push colemickens"
   }
