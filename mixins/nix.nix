@@ -20,7 +20,7 @@ let
   # _nix = pkgs.nixVersions.unstable;
   # _nix = pkgs.nixVersions.nix_2_18;
   # _nix = inputs.nix.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default;
-  _nix = pkgs.nix;
+  _nix = pkgs.nixVersions.latest;
 in
 {
   config = {
