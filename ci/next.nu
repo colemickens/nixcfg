@@ -181,6 +181,7 @@ def "main update" [] {
   ## NIX-FAST-BUILD
   print "::group::nfb"
   try {
+    env NIXPKGS_ALLOW_UNFREE=1 nix build --impure '.#pkgs.x86_64-linux.pkgsCross.aarch64-multiplatform.mongodb-6_0' --option cores 4
     nix-fast-build ...$nfbflags
   } catch {
     ls -l result* | print -e
