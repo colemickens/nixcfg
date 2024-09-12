@@ -21,25 +21,22 @@ let
       10001 # Port used for device discovery.
     ];
   };
-  allowedInterfaces = [
-    "enp57s0u1u3" # sighx2.1
-  ];
+  # allowedInterfaces = [
+  #   "enp57s0u1u3" # sighx2.1
+  # ];
 in
 {
   config = {
     users.users.unifi.group = "unifi";
     users.groups.unifi = { };
 
-    # environment.systemPackages = [
-    #   pkgs.mongodb-3_6
-    #   pkgs.mongodb-4_0
-    # ];
     services.unifi = {
       enable = true;
       openFirewall = false;
-      unifiPackage = pkgs.unifi6;
-      jrePackage = pkgs.jdk8_headless;
-      # mongodbPackage = pkgs.mongodb-3_4;
+      unifiPackage = pkgs.unifi8;
+      # jrePackage = pkgs.temurin-jre-bin;
+      jrePackage = pkgs.temurin-bin-17;
+      mongodbPackage = pkgs.mongodb-6_0;
       maximumJavaHeapSize = 256;
     };
 

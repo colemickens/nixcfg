@@ -19,26 +19,29 @@ in
 
     ../../profiles/core.nix
     ../../profiles/user-cole.nix
+    ../../profiles/user-jeff.nix
 
     # ../../profiles/gui-sway-auto.nix
 
     ../../mixins/common.nix
     ../../mixins/iwd-networks.nix
-    ../../mixins/tailscale.nix
     ../../mixins/sshd.nix
+    ../../mixins/tailscale.nix
+    ../../mixins/unifi.nix
 
     inputs.disko.nixosModules.disko
   ];
 
   config = {
-    # nixpkgs.hostPlatform = "aarch64-linux";
     nixpkgs.hostPlatform.system = "aarch64-linux";
 
     nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
       "armbian-firmware"
+      "unifi-controller"
+      "mongodb"
     ];
 
-    disko.memSize = 326768; # TODO: fix make-disk-image.nix to output script that defaults to this, so annoying!!!!1111 or warn if used with impure!
+    disko.memSize = 4096; # TODO: fix make-disk-image.nix to output script that defaults to this, so annoying!!!!1111 or warn if used with impure!
     disko.extraPostVM = ''
       (
         set -x
@@ -114,7 +117,6 @@ in
     nixpkgs.overlays = [
       (final: super: {
         makeModulesClosure = x: super.makeModulesClosure (x // { allowMissing = true; });
-        # mesa = inputs.h96.inputs.nixpkgs-mesa.outputs.legacyPackages.x86_64-linux.pkgsCross.aarch64-multiplatform.mesa;
       })
     ];
 
@@ -124,6 +126,7 @@ in
       picocom
       zellij
       pulsemixer
+      bottom
     ];
 
     services.pipewire.enable = true;
@@ -142,6 +145,6 @@ in
     networking.wireless.iwd.enable = true;
 
     networking.hostName = hn;
-    system.stateVersion = "23.11";
+    system.stateVersion = "24.05";
   };
 }

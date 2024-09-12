@@ -122,7 +122,7 @@ def "main selfup" [] {
 
 def "main lockup" [] {
   header "light_yellow_reverse" "lockup"
-  ^nix ...[ flake lock --recreate-lock-file --commit-lock-file ]
+  ^nix ...[ flake lock --recreate-lock-file --commit-lock-fil ]
 }
 
 def "main nfb" [--download = false --cache = false buildable: string] {
@@ -151,7 +151,7 @@ def "main loopup" [] {
   loop {
     try {
       print -e "recreate lock"
-      nix flake lock --recreate-lock-file
+      nix flake update
       
       print -e "build checks1"
       nix-fast-build --eval-workers 1 -j 1 -f '.#checks1.x86_64-linux'
@@ -164,7 +164,6 @@ def "main loopup" [] {
 
 def "main up" [...hosts] {
   jj git fetch --all-remotes
-  main lockup
 
   main nfb --download true ".#devShells.x86_64-linux"
   main nfb --download true ".#checks-native.x86_64-linux"
@@ -178,5 +177,7 @@ def "main up" [...hosts] {
   main deploy rock5b
 }
 
-def main [] { main up }
+def main [] {
+  print -e "run a command!"
+}
 
