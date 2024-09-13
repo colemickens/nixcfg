@@ -170,7 +170,6 @@
               unzip
               xz
               zip
-              picocom
               asciinema
               wget
               curl

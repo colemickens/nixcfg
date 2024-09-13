@@ -249,7 +249,7 @@
         "aarch64-linux" = {
           h96maxv58-bootstrap = {
             pkgs = inputs.cmpkgs;
-            path = ./hosts/h96maxv58/config-cross.nix;
+            path = ./hosts/h96maxv58/base.nix;
           };
           hcloud-arm64-dev1 = {
             pkgs = inputs.cmpkgs;
@@ -273,17 +273,16 @@
           openstick-bootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-bootimg;
           openstick-rootfs = nixosConfigurations.openstick.config.mobile.outputs.generatedFilesystems.rootfs;
 
-          # build, boot to maskrom, flash whole uncompressed image to 0x0
-          h96maxv58-image= nixosConfigurations.h96maxv58.config.diskoImages;
-          
-          # rock5b -> UEFI build
           rock5b-uboot = pkgsUnfree.x86_64-linux.pkgsCross.aarch64-multiplatform.ubootRock5ModelB;
-          # rock5b-clearspi = {
-          #   https://dl.radxa.com/rock5/sw/images/others/zero.img.gz
-          # };
-          # rock5b-usbloader = {
-          #   https://dl.radxa.com/rock5/sw/images/loader/rk3588_spl_loader_v1.15.113.bin
-          # };
+          # rock5b-clearspi = https://dl.radxa.com/rock5/sw/images/others/zero.img.gz
+          # rock5b-usbloader = https://dl.radxa.com/rock5/sw/images/loader/rk3588_spl_loader_v1.15.113.bin
+          # rkdeveloptool rd 3 (reboot loader->maskrom)
+          # flash FULL disk image to 0x0 in maskroom, or flash uboot to 0x40 in maskrom
+        };
+        aarch64-linux = {
+          # build, boot to maskrom, flash whole uncompressed image to 0x0
+          # ~/result-h96maxv58-image-script --build-memory 4096
+          h96maxv58-image-builder = nixosConfigurations.h96maxv58-bootstrap.config.system.build.diskoImagesScript;
         };
         riscv64-linux = { };
       };

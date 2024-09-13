@@ -41,7 +41,6 @@
     environment.systemPackages = with pkgs; [
       evtest
       ripgrep
-      picocom
       zellij
       pulsemixer
       mpv

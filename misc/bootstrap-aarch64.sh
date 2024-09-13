@@ -24,10 +24,8 @@ if ! ssh "${host}" "ls ~/.config/cachix/cachix.dhall"; then
     "${host}:~/.config/cachix/cachix.dhall"
 fi
 
-dir="~/code"
+dir="~/"
 rsync -avh --delete \
-  ~/code/nixos-snapdragon-elite \
-  ~/code/h96-max-v58-nixos \
-  ~/code/nixpkgs \
-  ~/code/nixcfg \
+  --exclude='*/target/debug' \
+  ~/code \
   $host:$dir
