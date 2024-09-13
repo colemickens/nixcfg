@@ -123,11 +123,6 @@
       url = "github:typhon-ci/typhon";
     };
 
-    # ai, nvidia, testing on slynux
-    nixified-ai = {
-      url = "github:nixified-ai/flake";
-    };
-
     # wip replacement for nixpkgs->github-runners module
     nixos-github-actions = {
       url = "github:colemickens/nixos-github-actions";
@@ -206,10 +201,6 @@
             pkgs = inputs.cmpkgs;
             path = ./images/installer/configuration-standard.nix;
           };
-          installer-nvidia-ai = {
-            pkgs = inputs.cmpkgs;
-            path = ./images/installer/configuration-nvidia-ai.nix;
-          };
           installer-standard-aarch64 = {
             pkgs = inputs.cmpkgs;
             path = ./images/installer/configuration-standard-aarch64.nix;
@@ -275,7 +266,6 @@
         # must be manually included in ciAttrs
         x86_64-linux = {
           installer-standard = nixosConfigurations.installer-standard.config.system.build.isoImage;
-          installer-nvidia-ai = nixosConfigurations.installer-nvidia-ai.config.system.build.isoImage;
           installer-standard-aarch64 =
             nixosConfigurations.installer-standard-aarch64.config.system.build.isoImage;
 
