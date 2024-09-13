@@ -72,6 +72,12 @@ in
               mountpoint = "/boot";
             };
           };
+          swap = {
+            size = "8G";
+            content = {
+              type = "swap";
+            };
+          };
           rootfs = {
             content = {
               type = "filesystem";
