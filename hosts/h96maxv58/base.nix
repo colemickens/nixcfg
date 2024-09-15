@@ -72,8 +72,9 @@ in
         )
       '';
       devices.disk.disk0 = {
+        # NOTE: imageSize must be large enough for swap size + rootfs closure
         type = "disk";
-        imageSize = "4G";
+        imageSize = "14G";
         content = {
           type = "gpt";
           partitions = {
@@ -93,12 +94,15 @@ in
               };
             };
             swap = {
+              start = "513M";
               size = "8G";
+              type = "8200";
               content = {
                 type = "swap";
               };
             };
             rootfs = {
+              start = "9216M"; # = (9*1024)
               content = {
                 type = "filesystem";
                 format = "ext4";
