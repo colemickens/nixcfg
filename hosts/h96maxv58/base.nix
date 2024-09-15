@@ -78,14 +78,21 @@ in
         content = {
           type = "gpt";
           partitions = {
-            firmware = {
-              start = "64";
+            empty = {
+              priority = 1;
+              start = "34";
               alignment = 1;
-              end = "61440";
+              end = "63";
+            };
+            firmware = {
+              priority = 2;
+              start = "64";
+              size = "64M";
+              alignment = 1;
             };
             ESP = {
-              start = "64M";
-              end = "512M";
+              priority = 3;
+              size = "512M";
               type = "EF00";
               content = {
                 type = "filesystem";
@@ -94,7 +101,7 @@ in
               };
             };
             swap = {
-              start = "513M";
+              priority = 4;
               size = "8G";
               type = "8200";
               content = {
@@ -102,7 +109,7 @@ in
               };
             };
             rootfs = {
-              start = "9216M"; # = (9*1024)
+              priority = 5;
               content = {
                 type = "filesystem";
                 format = "ext4";
