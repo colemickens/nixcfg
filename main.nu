@@ -159,7 +159,32 @@ def "main loopup" [] {
   }
 }
 
+def check_jj_clean [] {
+  let head_is_empty = ((^jj log -T empty --no-graph -r @) == "true")
+  if not $head_is_empty {
+    error make { msg: $"head not clean (^pwd)" }
+  }
+}
+
+def "main deps" [] {
+  cd ~/code/home-manager
+  let b = "cmhm"
+  check_jj_clean
+  jj git fetch --all-remotes; jj bookmark set $b -r $"($b)-next@origin" --allow-backwards; jj new $b; jj git push -b $b
+
+  cd ~/code/nixpkgs
+  let b = "cmpkgs"
+  check_jj_clean
+  jj git fetch --all-remotes; jj bookmark set $b -r $"($b)-next@origin" --allow-backwards; jj new $b; jj git push -b $b
+}
+
 def "main up" [...hosts] {
+  main deps
+
+  check_jj_clean
+  nix flake update --commit-lock-file
+  jj branch set main -r @-
+
   jj git fetch --all-remotes
 
   main nfb --download true ".#devShells.x86_64-linux"
