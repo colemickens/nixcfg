@@ -178,6 +178,20 @@ def "main deps" [] {
   jj git fetch --all-remotes; jj bookmark set $b -r $"($b)-next@origin" --allow-backwards; jj new $b; jj git push -b $b
 }
 
+def "main next" [] {
+  nix build ...[
+    --keep-going
+    --print-out-paths
+    --override-input cmpkgs github:colemickens/nixpkgs?ref=cmpkgs-next-wip 
+    --override-input home-manager github:colemickens/home-manager?ref=cmhm-next-wip
+    '.#toplevels.zeph'
+    '.#toplevels.slynux'
+    '.#toplevels.raisin'
+    '.#toplevels.rock5b'
+    '.#toplevels.h96maxv58'
+  ] | cachix push colemickens
+}
+
 def "main up" [...hosts] {
   main deps
 
