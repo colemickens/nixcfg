@@ -90,10 +90,6 @@ in
     #   owner = "cole";
     #   group = "cole";
     # };
-    nixpkgs.overlays = [
-      (final: prev: { waybar = inputs.waybar.packages.${pkgs.stdenv.hostPlatform.system}.default; })
-    ];
-
     home-manager.users.cole =
       { pkgs, ... }:
       {

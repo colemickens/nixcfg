@@ -108,12 +108,6 @@
       inputs."nixpkgs".follows = "cmpkgs";
     };
 
-    # misc software
-    waybar = {
-      url = "github:Alexays/waybar";
-      inputs.nixpkgs.follows = "cmpkgs";
-    };
-
     # experimental/unused:
     nix-rice = {
       url = "github:colemickens/nix-rice";

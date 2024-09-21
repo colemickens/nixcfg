@@ -354,22 +354,6 @@
         "type": "github"
       }
     },
-    "flake-compat_10": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1696426674,
-        "narHash": "sha256-kvjfFW7WAETZlt09AgDn1MrtKzP7t90Vf7vypd3OL1U=",
-        "owner": "edolstra",
-        "repo": "flake-compat",
-        "rev": "0f9255e01c2351cc7d116c072cb317785dd33b33",
-        "type": "github"
-      },
-      "original": {
-        "owner": "edolstra",
-        "repo": "flake-compat",
-        "type": "github"
-      }
-    },
     "flake-compat_2": {
       "locked": {
         "lastModified": 1717312683,
@@ -1933,7 +1917,6 @@
         "sops-nix": "sops-nix",
         "terranix": "terranix",
         "typhon": "typhon",
-        "waybar": "waybar",
         "zjstatus": "zjstatus"
       }
     },
@@ -2397,27 +2380,6 @@
       "original": {
         "owner": "typhon-ci",
         "repo": "typhon",
-        "type": "github"
-      }
-    },
-    "waybar": {
-      "inputs": {
-        "flake-compat": "flake-compat_10",
-        "nixpkgs": [
-          "cmpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1726759867,
-        "narHash": "sha256-zmHHyEUqbCK93NP/LULHpqIZVQ1PYkz0ae2VSJhpKwA=",
-        "owner": "Alexays",
-        "repo": "waybar",
-        "rev": "21af48fdc95b21ad067e627abb96655757c48b36",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Alexays",
-        "repo": "waybar",
         "type": "github"
       }
     },
