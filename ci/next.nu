@@ -127,7 +127,7 @@ def "main update" [] {
     cd $"($ROOT)/nixcfg"
 
     ^nix ...[
-      flake lock
+      flake update
       --commit-lock-file
       --override-input cmpkgs github:colemickens/nixpkgs/cmpkgs-next-wip
       --override-input home-manager github:colemickens/home-manager/cmhm-next-wip
