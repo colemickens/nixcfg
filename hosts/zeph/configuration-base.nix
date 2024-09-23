@@ -32,7 +32,6 @@ in
     ../../mixins/libvirtd.nix
     ../../mixins/monero.nix
     ../../mixins/podman.nix
-    ../../mixins/spotify.nix
     ../../mixins/syncthing.nix
     ../../mixins/trezor.nix
 
