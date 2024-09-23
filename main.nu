@@ -18,7 +18,7 @@ let builder_local = {
   host: "localhost",
   nfbargs: [ --no-nom ],
 }
-let builder_name = (if "NIXCFG_BUILDER" in $env { $env.NIXCFG_BUILDER } else { "raisin" })
+let builder_name = (if "NIXCFG_BUILDER" in $env { $env.NIXCFG_BUILDER } else { "slynux" })
 let builder = if $builder_name == "local" { $builder_local } else {
   let host = ^tailscale ip --4 $builder_name
   {
