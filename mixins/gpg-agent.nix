@@ -33,8 +33,8 @@ in
     # TODO: hardware.gpgSmartcards should maybe cover this?
     services.udev.packages = [ pkgs.yubikey-personalization ];
 
-    # using this requires use of `disable-ccid` in scdaemon.conf!
-    services.pcscd.enable = false;
+    # NOTE(colemickens): enable pcscd for CCID
+    services.pcscd.enable = true;
 
     home-manager.users.cole =
       { pkgs, ... }@hm:
@@ -48,6 +48,10 @@ in
           pkgs.yubikey-manager
           pkgs.yubico-piv-tool
         ]);
+
+        programs.gpg.scdaemonSettings = {
+          disable-ccid = true;
+        };
 
         services.gpg-agent = {
           enable = true;
