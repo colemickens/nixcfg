@@ -26,7 +26,6 @@
             };
             git = {
               # abandon-unreachable-commits = true; # ? TODO: not sure if better to do manually
-              push-branch-prefix = "colemickens/push-";
             };
             ui = {
               log-synthetic-elided-nodes = true;
