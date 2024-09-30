@@ -197,7 +197,7 @@ def "main up" [...hosts] {
 
   check_jj_clean
   nix flake update --commit-lock-file
-  jj branch set main -r @-
+  jj bookmark set main -r @-
 
   jj git fetch --all-remotes
 
