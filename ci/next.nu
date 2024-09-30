@@ -1,5 +1,8 @@
 #!/usr/bin/env nu
 
+let nixver = (^nix --version)
+print -e $"!!!!!!! nix version = ($nixver)"
+
 # TODO:
 # - follow up on self-hosted runners being weird about HOME + sshkeys
 # - figure out a strategy for pinning the most recent build with a gcroot so we can enable GC again
