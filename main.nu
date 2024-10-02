@@ -170,12 +170,12 @@ def "main deps" [] {
   cd ~/code/home-manager
   let b = "cmhm"
   check_jj_clean
-  jj git fetch --all-remotes; jj bookmark set $b -r $"($b)-next@origin" --allow-backwards; jj new $b; jj git push -b $b
+  jj git fetch --all-remotes; jj rebase -b $b -d $"($b)-next@origin"; jj new $b; jj git push -b $b
 
   cd ~/code/nixpkgs
   let b = "cmpkgs"
   check_jj_clean
-  jj git fetch --all-remotes; jj bookmark set $b -r $"($b)-next@origin" --allow-backwards; jj new $b; jj git push -b $b
+  jj git fetch --all-remotes; jj rebase -b $b -d $"($b)-next@origin"; jj new $b; jj git push -b $b
 }
 
 def "main next" [] {
