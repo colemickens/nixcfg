@@ -20,7 +20,6 @@ in
 
     ../../profiles/interactive.nix
     ../../profiles/addon-laptop.nix
-    ../../profiles/addon-clouddev.nix
 
     # ../../mixins/typhon.nix
     # ../../mixins/github-actions-runners.nix
