@@ -124,6 +124,13 @@ in
 
             glide-media-player
 
+            gg-jj
+
+            mission-center
+
+            vokoscreen-ng
+            wayfarer
+
             # audio/video
             pwvucontrol
             # pw-viz # also failing to build again
