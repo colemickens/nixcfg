@@ -174,7 +174,7 @@
       },
       "original": {
         "type": "tarball",
-        "url": "https://flakehub.com/f/DeterminateSystems/determinate/0.1.52.tar.gz"
+        "url": "https://flakehub.com/f/DeterminateSystems/determinate/0.1.tar.gz"
       }
     },
     "determinate-nixd-aarch64-darwin": {
@@ -303,11 +303,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1728390712,
-        "narHash": "sha256-YPDJqDlR2awXfdB4vrM+SqrDFSzYmMmHACmsicxp8Xo=",
+        "lastModified": 1728418710,
+        "narHash": "sha256-Wbq1B6OlX/FAkUeps52UlZSKX/UWkeLl0DvQcuPDSUg=",
         "owner": "nix-community",
         "repo": "flake-firefox-nightly",
-        "rev": "0b7e6768544b6a2afa8f2fdd969bad8dc7445bef",
+        "rev": "f45c237508e75389748c358f51d411c93fd4ae67",
         "type": "github"
       },
       "original": {
@@ -938,11 +938,11 @@
         "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1728361263,
-        "narHash": "sha256-lBxIV/hiXRzh2A7mCxer3fmFC03x1bPA68I62Q2nP/c=",
+        "lastModified": 1728406865,
+        "narHash": "sha256-p13JSENKdUefLuaKCBisUjVXkjY1yTkg7eAdUCy0aC8=",
         "owner": "martinvonz",
         "repo": "jj",
-        "rev": "760134f9c1045a5718bcb64b40c7eae13ce63f69",
+        "rev": "4fe8d89a10228a93a951eb505f6cefc084ccd817",
         "type": "github"
       },
       "original": {

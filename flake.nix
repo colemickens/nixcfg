@@ -2,11 +2,6 @@
   description = "colemickens - nixos configs, custom packges, misc";
 
   inputs = {
-    determinate = {
-      url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1.52.tar.gz";
-      # "https://flakehub.com/f/DeterminateSystems/determinate/0.1.52"
-    };
-
     flake-utils = {
       url = "github:numtide/flake-utils";
     };
@@ -137,6 +132,11 @@
     nixos-snapdragon-elite = {
       url = "github:colemickens/nixos-snapdragon-elite?ref=wip";
     };
+
+    # for work
+    determinate = {
+      url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1.tar.gz";
+    };
   };
 
   # TODO: re-investigate nixConfig, maybe it will be less soul-crushing one day
@@ -199,6 +199,11 @@
             pkgs = inputs.cmpkgs;
             path = ./images/installer/configuration-standard-aarch64.nix;
             buildSys = "x86_64-linux";
+          };
+
+          # work cloud machine:
+          ds-ws-colemickens = {
+            pkgs = inputs.cmpkgs;
           };
 
           # actual machines:
