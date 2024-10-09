@@ -172,13 +172,25 @@ let
     fi
   '');
 
-  update-work-machine = (
-    writeShellScriptBin "update-work-machine" ''
+  ## WORK RELATED
+
+  work-update-machine = (
+    writeShellScriptBin "work-update-machine" ''
       set -x
+      set -euo pipefail
       export ref="$(git ls-remote https://github.com/colemickens/nixcfg -b main | cut -f 1)"
       export toplevel="$(nix build github:colemickens/nixcfg?ref=''${ref}#toplevels.ds-ws-colemickens --print-out-paths)"
       sudo nix build --profile /nix/var/nix/profiles/system "''${toplevel}"
       sudo "''${toplevel}/bin/switch-to-configuration" switch
+    ''
+  );
+  work-port-forward = (
+    writeShellScriptBin "work-port-forward" ''
+      set -x
+      set -euo pipefail
+      ssh -N -L 8234:localhost:8234 -L 8250:localhost:8250 \
+        -L 8080:localhost:8080 -L 3000:localhost:3000 \
+          $"cole@(tailscale ip --4 ds-ws-colemickens)"
     ''
   );
 
@@ -191,7 +203,8 @@ in
     fix-gpg
     fix-gpg-key
 
-    update-work-machine
+    work-update-machine
+    work-port-forward
 
     fix-ssh
     fix-ssh-remote
