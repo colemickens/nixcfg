@@ -82,8 +82,8 @@ let
     writeShellScriptBin "fix-ssh-remote" ''
       set -x
       ent="$(ls -t /tmp/ssh-**/agent.* | head -1)"
-      ln -sf $ent /run/user/1000/sshagent
-      export SSH_AUTH_SOCK="/run/user/1000/sshagent"
+      ln -sf $ent "/run/user/$(id -u)/sshagent"
+      export SSH_AUTH_SOCK="/run/user/$(id -u)/sshagent"
       ssh-add -L | ssh-add -T /dev/stdin
       ssh-add -l
     ''
