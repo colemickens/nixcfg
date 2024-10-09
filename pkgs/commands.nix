@@ -179,9 +179,10 @@ let
       set -x
       set -euo pipefail
       export ref="$(git ls-remote https://github.com/colemickens/nixcfg -b main | cut -f 1)"
-      export toplevel="$(nix build github:colemickens/nixcfg?ref=''${ref}#toplevels.ds-ws-colemickens --print-out-paths)"
-      sudo nix build --profile /nix/var/nix/profiles/system "''${toplevel}"
-      sudo "''${toplevel}/bin/switch-to-configuration" switch
+      sudo nix build --no-link \
+        --profile /nix/var/nix/profiles/system \
+        github:colemickens/nixcfg?ref=''${ref}#toplevels.ds-ws-colemickens
+      sudo /nix/var/nix/profiles/system/bin/switch-to-configuration switch
     ''
   );
   work-port-forward = (
