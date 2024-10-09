@@ -10,7 +10,6 @@
   imports = [
     # in configuration.nix, default to cosmic
     ../../profiles/gui-cosmic.nix
-    ../../mixins/pam-u2f-cosmic.nix
     ./configuration-base.nix
   ];
   config = {
