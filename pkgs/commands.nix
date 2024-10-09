@@ -171,6 +171,17 @@ let
       adb shell svc wifi enable
     fi
   '');
+
+  update-work-machine = (
+    writeShellScriptBin "update-work-machine" ''
+      set -x
+      export ref="$(git ls-remote https://github.com/colemickens/nixcfg -b main | cut -f 1)"
+      export toplevel="$(nix build github:colemickens/nixcfg?ref=''${ref}#toplevels.ds-ws-colemickens --print-out-paths)"
+      sudo nix build --profile /nix/var/nix/profiles/system "''${toplevel}"
+      sudo "''${toplevel}/bin/switch-to-configuration" switch
+    ''
+  );
+
 in
 (symlinkJoin {
   name = "cole-custom-commands";
@@ -179,6 +190,8 @@ in
     gpg-relearn
     fix-gpg
     fix-gpg-key
+
+    update-work-machine
 
     fix-ssh
     fix-ssh-remote
