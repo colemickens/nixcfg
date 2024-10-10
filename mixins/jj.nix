@@ -32,26 +32,6 @@
               # pager = ":builtin";
             };
             template-aliases = {
-              one = ''
-                if(root,
-                  builtin_log_root(change_id, commit_id),
-                  label(if(current_working_copy, "working_copy"),
-                    concat(
-                      separate(" ",
-                        builtin_change_id_with_hidden_and_divergent_info,
-                        if(conflict, label("conflict", "conflict")),
-                        if(empty, label("empty", "(empty)")),
-                        if(description, description.first_line(), description_placeholder),
-                        format_short_commit_id(commit_id),
-                        git_head,
-                        branches,
-                        tags,
-                        working_copies,
-                      ) ++ "\n",
-                    ),
-                  )
-                )
-              '';
             };
           };
         };
