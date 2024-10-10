@@ -35,7 +35,7 @@ let
       ssh \
           -o "RemoteForward $rpath:$lpath.extra" \
           -o StreamLocalBindUnlink=yes \
-          -A "$host" -t 'ssh-fix || true; which zsh >/dev/null && exec zsh -l || exec bash -l'
+          -A "$host" -t 'fix-ssh-remote || true; which zsh >/dev/null && exec zsh -l || exec bash -l'
     ''
   );
   gssh = (
@@ -179,9 +179,9 @@ let
       set -x
       set -euo pipefail
       export ref="$(git ls-remote https://github.com/colemickens/nixcfg -b main | cut -f 1)"
-      sudo nix build --no-link \
-        --profile /nix/var/nix/profiles/system \
-        github:colemickens/nixcfg?ref=''${ref}#toplevels.ds-ws-colemickens
+      export toplevel="$(nix build --no-link --print-out-paths github:colemickens/nixcfg?ref=''${ref}#toplevels.ds-ws-colemickens)"
+      readlink -f "$toplevel" | cachix push colemickens
+      sudo nix build --no-link --profile /nix/var/nix/profiles/system "$toplevel"
       sudo /nix/var/nix/profiles/system/bin/switch-to-configuration switch
     ''
   );
