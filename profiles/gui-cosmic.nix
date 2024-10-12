@@ -36,6 +36,15 @@ in
       enable = true;
     };
 
+    environment.systemPackages = with pkgs; [
+      cosmic-player
+      cosmic-reader
+      cosmic-ext-applet-clipboard-manager
+      cosmic-ext-applet-emoji-selector
+      cosmic-ext-examine
+      cosmic-ext-tweaks
+    ];
+
     networking.networkmanager.enable = false;
  
     home-manager.users.cole =
