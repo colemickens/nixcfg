@@ -13,7 +13,7 @@
       url = "github:nixos/nix?ref=2.24.9";
     };
     nixpkgs-stable = {
-      url = "github:nixos/nixpkgs?ref=nixos-23.05";
+      url = "github:nixos/nixpkgs?ref=nixos-24.05";
     }; # any stable to use
     cmpkgs = {
       url = "github:colemickens/nixpkgs?ref=cmpkgs";
@@ -77,7 +77,7 @@
     jj = {
       url = "github:martinvonz/jj";
       inputs."flake-utils".follows = "flake-utils";
-      inputs."nixpkgs".follows = "cmpkgs";
+      # inputs."nixpkgs".follows = "cmpkgs";
     };
     # nix-eval-jobs = {
     #   url = "github:nix-community/nix-eval-jobs";
