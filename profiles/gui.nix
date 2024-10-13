@@ -129,8 +129,6 @@ in
 
             glide-media-player
 
-            gg-jj
-
             mission-center
 
             vokoscreen-ng

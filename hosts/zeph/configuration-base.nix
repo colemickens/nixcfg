@@ -25,6 +25,8 @@ in
     ../../mixins/gfx-radeonsi.nix
     ../../mixins/gfx-debug.nix
 
+    ../../mixins/pam-u2f.nix
+
     ../../mixins/android.nix
     ../../mixins/clamav.nix
     ../../mixins/ledger.nix

@@ -13,15 +13,23 @@
     ./configuration-base.nix
   ];
   config = {
-    specialisation."cosmic" = {
+    specialisation."sway" = {
       inheritParentConfig = false;
       configuration = {
         imports = [
           ./configuration-base.nix
           ../../profiles/gui-sway.nix
-          ../../mixins/pam-u2f.nix
         ];
       };
     };
+    # specialisation."gamescope" = {
+    #   inheritParentConfig = false;
+    #   configuration = {
+    #     imports = [
+    #       ./configuration-base.nix
+    #       ../../profiles/gui-gamescope.nix
+    #     ];
+    #   };
+    # };
   };
 }
