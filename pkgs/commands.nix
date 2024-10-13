@@ -191,7 +191,7 @@ let
       set -euo pipefail
       ssh -N -L 8234:localhost:8234 -L 8250:localhost:8250 \
         -L 8080:localhost:8080 -L 3000:localhost:3000 \
-          $"cole@(tailscale ip --4 ds-ws-colemickens)"
+          "cole@$(tailscale ip --4 ds-ws-colemickens)"
     ''
   );
 
