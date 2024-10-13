@@ -1,5 +1,6 @@
 { pkgs, inputs, ... }:
 let
+  lib = pkgs.lib;
   minimalMkShell = import ./_minimal.nix { inherit pkgs; };
 
   # 16 is broken: https://github.com/NixOS/nixpkgs/issues/244609
@@ -40,7 +41,7 @@ let
   _rustBuild = _rustBuildOxalica;
 in
 # _rustBuild = _rustBuildFenix;
-minimalMkShell {
+minimalMkShell rec {
   name = "cole-nixcfg-dev";
   hardeningDisable = [ "fortify" ];
 
@@ -48,7 +49,7 @@ minimalMkShell {
     exec nu
   '';
 
-  LD_LIBRARY_PATH = "${pkgs.libglvnd}/lib";
+  LD_LIBRARY_PATH = "${lib.makeLibraryPath buildInputs}";
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   RUST_BACKTRACE = 1;
   GST_PLUGIN_SYSTEM_PATH = gstreamerPath;
@@ -101,6 +102,8 @@ minimalMkShell {
 
     # not a good sign
     dos2unix
+
+    wayland-scanner
   ];
 
   buildInputs = with pkgs; [
