@@ -29,11 +29,6 @@ in
                 style = "Regular";
                 weight = 400;
               };
-              bold = {
-                family = font;
-                style = "Bold";
-                weight = 800;
-              };
               italic = {
                 family = font;
                 style = "Italic";
