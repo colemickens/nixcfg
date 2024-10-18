@@ -50,13 +50,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "alacritty_terminal_v0.24.0-unstable-2024-09-22";
+  version = "0.14.0-rc2-unstable-2024-10-18";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
-    rev = "4a7728bf7fac06a35f27f6c4f31e0d9214e5152b";
-    hash = "sha256-ZbARlFGJsqtOF0Iv/8uY4tHPKKOx+NON5d/qa9fZQCk=";
+    rev = "6dbd785bc0063109fcf8105bdf7e4d5673892abf";
+    hash = "sha256-/3FFkA8RH4x9yESOFrW4IpgAI4S59s+qEduXNjnqqW4=";
   };
 
   cargoLock = {
