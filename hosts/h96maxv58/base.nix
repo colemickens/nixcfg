@@ -83,12 +83,14 @@ in
               start = "34";
               alignment = 1;
               end = "63";
+              type = "0000";
             };
             firmware = {
               priority = 2;
               start = "64";
               size = "64M";
               alignment = 1;
+              type = "0000";
             };
             ESP = {
               priority = 3;
