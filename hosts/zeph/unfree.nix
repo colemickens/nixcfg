@@ -25,6 +25,7 @@
         "steam"
         "steam-run"
         "steam-original"
+        "steam-unwrapped"
         # "xow_dongle-firmware"
       ];
   };
