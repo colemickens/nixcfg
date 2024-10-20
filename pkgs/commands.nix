@@ -180,7 +180,7 @@ let
       set -euo pipefail
       export ref="$(git ls-remote https://github.com/colemickens/nixcfg -b main | cut -f 1)"
       export toplevel="$(nix build --no-link --print-out-paths github:colemickens/nixcfg?ref=''${ref}#toplevels.ds-ws-colemickens)"
-      readlink -f "$toplevel" | cachix push colemickens
+      echo "$toplevel" | cachix push colemickens
       sudo nix build --no-link --profile /nix/var/nix/profiles/system "$toplevel"
       sudo /nix/var/nix/profiles/system/bin/switch-to-configuration switch
     ''
