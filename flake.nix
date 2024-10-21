@@ -128,11 +128,6 @@
       url = "github:nix-community/disko";
     };
 
-    # snapdragon:
-    nixos-snapdragon-elite = {
-      url = "github:colemickens/nixos-snapdragon-elite?ref=wip";
-    };
-
     # for work
     determinate = {
       url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1.tar.gz";

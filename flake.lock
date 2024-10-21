@@ -310,22 +310,6 @@
         "type": "github"
       }
     },
-    "firmware": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1721077782,
-        "narHash": "sha256-dhfplH0MdKupdgaxM0GOecNzw9Vp0PE+8b/KaQUP+/I=",
-        "owner": "Seraphin-",
-        "repo": "linux-firmware-x1e80100-lenovo-yoga-slim7x",
-        "rev": "2719d51f904b7312f61115c0461e59b4bbe9909d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Seraphin-",
-        "repo": "linux-firmware-x1e80100-lenovo-yoga-slim7x",
-        "type": "github"
-      }
-    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -1059,23 +1043,6 @@
         "type": "github"
       }
     },
-    "linux": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1722266711,
-        "narHash": "sha256-7RYZNYlDY2+ileDQAMvsrvhBgUelx4hsqGlU9uRyJrw=",
-        "owner": "jhovold",
-        "repo": "linux",
-        "rev": "e92057c615fec749fefcca4ab28ee5c425e3691b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jhovold",
-        "ref": "wip/x1e80100-6.11-rc1",
-        "repo": "linux",
-        "type": "github"
-      }
-    },
     "mobile-nixos-openstick": {
       "inputs": {
         "flake-compat": "flake-compat_5",
@@ -1136,7 +1103,7 @@
       "inputs": {
         "flake-parts": "flake-parts_7",
         "nix-github-actions": "nix-github-actions",
-        "nixpkgs": "nixpkgs_12",
+        "nixpkgs": "nixpkgs_11",
         "treefmt-nix": "treefmt-nix_4"
       },
       "locked": {
@@ -1342,28 +1309,6 @@
       "original": {
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "type": "github"
-      }
-    },
-    "nixos-snapdragon-elite": {
-      "inputs": {
-        "firmware": "firmware",
-        "linux": "linux",
-        "nixpkgs": "nixpkgs_11",
-        "nixpkgs-unstable": "nixpkgs-unstable"
-      },
-      "locked": {
-        "lastModified": 1722623370,
-        "narHash": "sha256-eCsVMyifn9XJvUwbCOfIM/jYLXOE83UOV9H+zHz+YjI=",
-        "owner": "colemickens",
-        "repo": "nixos-snapdragon-elite",
-        "rev": "f772ebb4d21e780d08690db1f08f323cf0b5083c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "ref": "wip",
-        "repo": "nixos-snapdragon-elite",
         "type": "github"
       }
     },
@@ -1580,22 +1525,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-unstable": {
-      "locked": {
-        "lastModified": 1722421184,
-        "narHash": "sha256-/DJBI6trCeVnasdjUo9pbnodCLZcFqnVZiLUfqLH4jA=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "9f918d616c5321ad374ae6cb5ea89c9e04bf3e58",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-wayland": {
       "inputs": {
         "flake-compat": "flake-compat_8",
@@ -1637,22 +1566,6 @@
     },
     "nixpkgs_11": {
       "locked": {
-        "lastModified": 1722572749,
-        "narHash": "sha256-wBOZPOHYyynfEUFuLUhnRKgUCijpDpaAKCP8WE4MKqQ=",
-        "owner": "colemickens",
-        "repo": "nixpkgs",
-        "rev": "5f64dc2026703db74dc702eb9c87aa0ab4301416",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "ref": "cmpkgs",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_12": {
-      "locked": {
         "lastModified": 1723221148,
         "narHash": "sha256-7pjpeQlZUNQ4eeVntytU3jkw9dFK3k1Htgk2iuXjaD8=",
         "owner": "NixOS",
@@ -1667,7 +1580,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_13": {
+    "nixpkgs_12": {
       "locked": {
         "lastModified": 1727348695,
         "narHash": "sha256-J+PeFKSDV+pHL7ukkfpVzCOO7mBSrrpJ3svwBFABbhI=",
@@ -1857,7 +1770,6 @@
         "nixos-cosmic": "nixos-cosmic",
         "nixos-github-actions": "nixos-github-actions",
         "nixos-hardware": "nixos-hardware",
-        "nixos-snapdragon-elite": "nixos-snapdragon-elite",
         "nixpkgs-stable": "nixpkgs-stable_3",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "rust-overlay": "rust-overlay_5",
@@ -2270,7 +2182,7 @@
         "crane": "crane_3",
         "flake-compat": "flake-compat_9",
         "flake-schemas": "flake-schemas",
-        "nixpkgs": "nixpkgs_13"
+        "nixpkgs": "nixpkgs_12"
       },
       "locked": {
         "lastModified": 1727819760,
