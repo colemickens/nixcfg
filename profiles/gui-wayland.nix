@@ -14,18 +14,6 @@
     ../mixins/sirula.nix
   ];
   config = {
-    nixpkgs.overlays = [
-      (
-        final: prev:
-        let
-          nwPkgs = inputs.nixpkgs-wayland.packages.${pkgs.stdenv.hostPlatform.system};
-        in
-        {
-          inherit (nwPkgs) drm_info;
-        }
-      )
-    ];
-
     programs = {
       wshowkeys.enable = true;
     };
@@ -42,8 +30,6 @@
         home.packages = with pkgs; [
           qt5.qtwayland
           qt6.qtwayland
-
-          drm_info
 
           oculante # image viewer (rust)
           grim # area selection
