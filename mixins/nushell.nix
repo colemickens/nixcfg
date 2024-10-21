@@ -21,9 +21,9 @@ let
 in
 {
   config = {
-    nixpkgs.overlays = [
-      (final: prev: { nushell = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.nushell; })
-    ];
+    # nixpkgs.overlays = [
+    #   (final: prev: { nushell = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.nushell; })
+    # ];
     home-manager.users.cole =
       { pkgs, ... }@hm:
       let

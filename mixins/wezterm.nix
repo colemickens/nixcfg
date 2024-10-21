@@ -12,13 +12,13 @@ let
   enable_wayland = "true";
 
   # weztermPkg = pkgs.wezterm;
-  weztermPkg = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.wezterm;
+  # weztermPkg = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.wezterm;
 in
 {
   config = {
-    nixpkgs.overlays = [
-      (final: prev: { wezterm = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.wezterm; })
-    ];
+    # nixpkgs.overlays = [
+    #   (final: prev: { wezterm = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.wezterm; })
+    # ];
     home-manager.users.cole =
       { pkgs, ... }@hm:
       {

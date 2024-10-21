@@ -11,7 +11,7 @@ let
   colors = prefs.themes.alacritty;
 
   # alacrittyPkg = pkgs.alacritty;
-  alacrittyPkg = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.alacritty;
+  # alacrittyPkg = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.alacritty;
 in
 {
   config = {
