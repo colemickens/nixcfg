@@ -91,7 +91,7 @@ in
         };
 
         home.packages = lib.mkMerge [
-          (lib.mkIf (pkgs.hostPlatform.system == "x86_64-linux") (
+          (lib.mkIf (pkgs.stdenv.hostPlatform.system == "x86_64-linux") (
             with pkgs;
             [
               # browsers

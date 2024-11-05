@@ -89,14 +89,14 @@
             git.enable = true;
           };
           home.packages = lib.mkMerge [
-            (lib.mkIf (pkgs.hostPlatform.system == "x86_64-linux") (
+            (lib.mkIf (pkgs.stdenv.hostPlatform.system == "x86_64-linux") (
               with pkgs;
               [
                 # x86_64-linux only
                 zenith
               ]
             ))
-            (lib.mkIf (pkgs.hostPlatform.system == "aarch_64-linux") (
+            (lib.mkIf (pkgs.stdenv.hostPlatform.system == "aarch_64-linux") (
               with pkgs;
               [
                 # aarch64-linux only
