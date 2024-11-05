@@ -12,9 +12,9 @@ let
   _kernelPackages =
     if cfg.useZfs then
       if cfg.useZfsUnstable
-      then pkgs.linuxKernel.packages.linux_6_10
+      then pkgs.linuxKernel.packages.linux_6_11
       else pkgs.linuxKernel.packages.linux_6_6
-    else pkgs.linuxKernel.packages.linux_6_10;
+    else pkgs.linuxKernel.packages.linux_6_11;
 in
 {
   imports = [
@@ -271,8 +271,8 @@ in
     services.zfs.autoScrub.enable = cfg.useZfs;
     hardware.enableRedistributableFirmware = true;
     hardware.usb-modeswitch.enable = true; # dual role usb/cdrom stick thing
-    hardware.cpu.amd.updateMicrocode = (pkgs.hostPlatform.system == "x86_64-linux");
-    hardware.cpu.intel.updateMicrocode = (pkgs.hostPlatform.system == "x86_64-linux");
+    hardware.cpu.amd.updateMicrocode = (pkgs.stdenv.hostPlatform.system == "x86_64-linux");
+    hardware.cpu.intel.updateMicrocode = (pkgs.stdenv.hostPlatform.system == "x86_64-linux");
 
     environment = {
       systemPackages = with pkgs; [ coreutils ];
