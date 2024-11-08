@@ -36,6 +36,8 @@ in
       enable = true;
     };
 
+    services.supergfxd.enable = false;
+
     environment.systemPackages = with pkgs; [
       cosmic-player
       cosmic-reader
