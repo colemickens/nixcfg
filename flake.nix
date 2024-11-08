@@ -294,34 +294,7 @@
           final: prev:
             # TODO: must be a better way?
             let
-              __colemickens_nixcfg_pkgs = rec {
-                alacritty = prev.callPackage ./pkgs/alacritty {
-                  inherit (prev.darwin.apple_sdk.frameworks)
-                    AppKit
-                    CoreGraphics
-                    CoreServices
-                    CoreText
-                    Foundation
-                    OpenGL
-                    ;
-                };
-                nushell = prev.callPackage ./pkgs/nushell {
-                  doCheck = false; # TODO consider removing
-                  inherit (prev.darwin.apple_sdk.frameworks) AppKit Security;
-                  inherit (prev.darwin.apple_sdk_11_0) Libsystem;
-                };
-                rio = prev.callPackage ./pkgs/rio { withX11 = false; };
-                pyamlboot = prev.callPackage ./pkgs/pyamlboot { };
-                wezterm = prev.darwin.apple_sdk_11_0.callPackage ./pkgs/wezterm {
-                  doCheck = false; # TODO consider removing
-                  inherit (prev.darwin.apple_sdk_11_0.frameworks)
-                    Cocoa
-                    CoreGraphics
-                    Foundation
-                    UserNotifications
-                    ;
-                };
-              };
+              __colemickens_nixcfg_pkgs = rec { };
             in
             __colemickens_nixcfg_pkgs // { inherit __colemickens_nixcfg_pkgs; }
         );
