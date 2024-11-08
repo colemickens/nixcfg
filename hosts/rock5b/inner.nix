@@ -46,6 +46,7 @@
       mpv
       mesa-demos
       bottom
+      usbutils
     ];
 
     services.pipewire.enable = true;

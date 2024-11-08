@@ -44,6 +44,10 @@ in
       "armbian-firmware-unstable"
     ];
 
+    environment.systemPackages = with pkgs; [
+      usbutils
+    ];
+
     hardware.graphics.enable = lib.mkForce false;
 
     services.pipewire.enable = true;
