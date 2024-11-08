@@ -329,6 +329,8 @@
               slynux
               zeph
 
+              ds-ws-colemickens
+
               # misc native x86_64-linux
               installer-standard
               ;
