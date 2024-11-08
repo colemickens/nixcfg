@@ -47,6 +47,7 @@
     lanzaboote = {
       url = "github:nix-community/lanzaboote";
     };
+    ucodenix.url = "github:e-tho/ucodenix";
 
     # devtools:
     crate2nix = {

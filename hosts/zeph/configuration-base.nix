@@ -48,6 +48,8 @@ in
 
     inputs.nixos-hardware.nixosModules.common-hidpi
     inputs.nixos-hardware.nixosModules.asus-zephyrus-ga402
+
+    inputs.ucodenix.nixosModules.ucodenix
   ];
   config = {
     # nixpkgs.hostPlatform.system = "x86_64-linux";
@@ -86,6 +88,11 @@ in
     ## TODO: experimental
     services.dbus.implementation = "broker";
     ## END experimental
+
+    services.ucodenix = {
+      enable = true;
+      cpuSerialNumber = "00A4-0F41-0000-0000-0000-0000"; # Replace with your processor's serial number
+    };
 
     services.zfs.autoScrub.pools = [ poolname ];
     fileSystems = {

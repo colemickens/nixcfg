@@ -146,6 +146,7 @@
 
               # binwalk # TODO: pynose/nose issue?
               cpio # needed?
+              cpuid
               usbutils
               pciutils
               dmidecode
