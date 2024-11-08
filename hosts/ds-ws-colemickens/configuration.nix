@@ -35,7 +35,7 @@ in
   ];
 
   config = {
-    nixpkgs.hostPlatform.system = "aarch64-linux";
+    nixpkgs.hostPlatform.system = "x86_64-linux";
     system.stateVersion = "24.05";
 
     networking.hostName = hn;
@@ -53,9 +53,9 @@ in
     users.extraUsers."cole".uid = lib.mkForce 2000;
 
     # TODO: GROSS: caused by mixins/common.nix being presumptive
-    boot.loader.efi.canTouchEfiVariables = lib.mkForce false;
-    boot.loader.systemd-boot.enable = lib.mkForce false;
-    boot.loader.grub.enable = lib.mkForce true;
+    # boot.loader.efi.canTouchEfiVariables = lib.mkForce false;
+    # boot.loader.systemd-boot.enable = lib.mkForce false;
+    # boot.loader.grub.enable = lib.mkForce true;
 
     boot = {
       tmp = {
