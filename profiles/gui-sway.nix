@@ -143,6 +143,7 @@ in
       {
         home.packages = with pkgs; [
           waylock
+          alacritty
           #_sway
         ];
 
@@ -174,6 +175,8 @@ in
           #     })
           #   ];
         };
+
+        xdg.configFile."gtk-4.0/gtk.css".force = true;
 
         programs.swaylock = {
           enable = true;
