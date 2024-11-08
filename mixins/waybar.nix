@@ -113,7 +113,6 @@ in
         home.packages = [ pkgs.libappindicator-gtk3 ];
         programs.waybar = {
           enable = true;
-          # package = inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system}.waybar;
           style = pkgs.lib.readFile ./waybar.css;
           systemd.enable = true;
           settings = [

@@ -40,10 +40,6 @@
     nixos-hardware = {
       url = "github:NixOS/nixos-hardware";
     };
-    nixpkgs-wayland = {
-      url = "github:nix-community/nixpkgs-wayland";
-      inputs."nixpkgs".follows = "cmpkgs";
-    };
     sops-nix = {
       url = "github:Mic92/sops-nix/master";
       inputs."nixpkgs".follows = "cmpkgs";

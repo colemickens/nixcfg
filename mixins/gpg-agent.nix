@@ -8,13 +8,6 @@
 let
   # this is just so that non-GUI systems don't end up pulling in
   # gui stuff. My GUI configuration overrides the pinentry HM config elsewhere.
-  # -- from `profiles-gui.nix:
-  #  # I use `wayprompt` to not pull in qt/gtk:
-  #  gpg-agent.pinentryBinary =
-  #    let
-  #      wayprompt = "${inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system}.wayprompt}";
-  #    in
-  #    "${wayprompt}/bin/pinentry-wayprompt";
 
   pinentryProgram = null;
 in

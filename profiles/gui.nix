@@ -83,11 +83,6 @@ in
             storePath = "${hm.config.xdg.dataHome}/password-store";
           };
           gpg-agent.pinentryBinary = "${pkgs.wayprompt}/bin/pinentry-wayprompt";
-          # The overlay vesion is older, might drop it, fine with stable for pinentry...
-          # let
-          #   wayprompt = "${inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system}.wayprompt}";
-          # in
-          # "${wayprompt}/bin/pinentry-wayprompt";
         };
 
         home.packages = lib.mkMerge [

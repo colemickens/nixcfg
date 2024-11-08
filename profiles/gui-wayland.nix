@@ -42,7 +42,7 @@
           wev # event viewer
           wtype # virtual keystroke insertion
 
-          inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system}.wl-gammarelay-rs
+          wl-gammarelay-rs
         ];
       };
   };

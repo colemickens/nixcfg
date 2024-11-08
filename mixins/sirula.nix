@@ -11,18 +11,6 @@ let
 in
 {
   config = {
-    nixpkgs.overlays = [
-      (
-        final: prev:
-        let
-          nwPkgs = inputs.nixpkgs-wayland.packages.${pkgs.stdenv.hostPlatform.system};
-        in
-        {
-          inherit (nwPkgs) sirula;
-        }
-      )
-    ];
-
     home-manager.users.cole =
       { pkgs, ... }:
       {

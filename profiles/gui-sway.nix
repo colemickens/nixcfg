@@ -118,18 +118,6 @@ in
     ../mixins/waybar.nix
   ];
   config = {
-    nixpkgs.overlays = [
-      (
-        final: prev:
-        let
-          nwpkgs = inputs.nixpkgs-wayland.outputs.packages.${pkgs.stdenv.hostPlatform.system};
-        in
-        {
-          inherit (nwpkgs) sway-unwrapped swaylock xdg-desktop-portal-wlr;
-        }
-      )
-    ];
-
     security.pam.services.swaylock = { };
     security.pam.services.waylock = { }; # TODO: what is this actually doing? match binary name?
 
