@@ -13,6 +13,8 @@
     ./core.nix # (common + bottom,ssh,sshd,tailscale)
     ./hm.nix
 
+    ./commands.nix
+
     ../mixins/aria2.nix
     ../mixins/bash.nix
     ../mixins/bat.nix
@@ -104,8 +106,6 @@
             ))
             # ++ inputs.self.devShells.${pkgs.stdenv.hostPlatform.system}.ci.nativeBuildInputs
             (with pkgs; [
-              (pkgs.callPackage ../pkgs/commands.nix { })
-
               # yolo
               appimage-run
 

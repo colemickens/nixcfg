@@ -20,6 +20,7 @@ in
 {
   imports = [
     ./interactive.nix # includes core.nix (which imports hm)
+    ./commands-gui.nix
 
     ../mixins/hw-logitech-mice.nix
     ../mixins/hw-steelseries-aerox3.nix
@@ -108,9 +109,6 @@ in
             ]
           ))
           (with pkgs; [
-            # my custom GUI-related commands, might pull in extra gui packages
-            (pkgs.callPackage ../pkgs/commands-gui.nix { })
-
             # misc tools/utils
             brightnessctl
             evince

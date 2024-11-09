@@ -1,27 +1,25 @@
 {
-  writeShellScriptBin,
-  symlinkJoin,
-  freerdp,
-  wayland-proxy-virtwl,
-  xwayland,
+  pkgs,
+  config,
+  ...
 }:
 
 # note: we intentionally don't use full paths so that these scripts
 # don't accidentallly pull in crap (for example, asus-dgpu is only relevant
 # for 'zeph', etc)
 let
-  asus-dgpu = writeShellScriptBin "asus-dgpu" ''
+  asus-dgpu = pkgs.writeShellScriptBin "asus-dgpu" ''
     sudo asusctl bios -D 0; sudo efibootmgr --bootnext 0000
   '';
-  asus-igpu = writeShellScriptBin "asus-igpu" ''
+  asus-igpu = pkgs.writeShellScriptBin "asus-igpu" ''
     sudo asusctl bios -D 1; sudo efibootmgr --bootnext 0000
   '';
 
-  wlproxylaunch = writeShellScriptBin "wlproxylaunch" ''
+  wlproxylaunch = pkgs.writeShellScriptBin "wlproxylaunch" ''
     pkill -9 -f wayland-proxy-virtwl
-    ${wayland-proxy-virtwl}/bin/wayland-proxy-virtwl \
+    ${pkgs.wayland-proxy-virtwl}/bin/wayland-proxy-virtwl \
       --wayland-display=wayland-2 \
-      --xwayland-binary=${xwayland}/bin/Xwayland \
+      --xwayland-binary=${pkgs.xwayland}/bin/Xwayland \
       --x-display=2 \
       --verbose &
 
@@ -33,30 +31,36 @@ let
     echo
     wait
   '';
-in
-# rdp-sly = writeShellScriptBin "rdp-sly" ''
+# rdp-sly = pkgs.writeShellScriptBin "rdp-sly" ''
 #   RDPUSER="cole.mickens@gmail.com"
 #   RDPPASS="$(gopass show -o "websites/microsoft.com/cole.mickens@gmail.com")"
 #   RDPHOST="''${RDPHOST:-"192.168.1.11"}"
-#   ${freerdp}/bin/wlfreerdp
+#   ${pkgs.freerdp}/bin/wlfreerdp
 #     /v:"''${RDPHOST}" \
 #     /u:"''${RDPUSER}" \
 #     /p:"''${RDPPASS}" \
 #     /rfx +fonts /dynamic-resolution /compression-level:2
 # '';
-# gs = writeShellScriptBin "gs" ''
+# gs = pkgs.writeShellScriptBin "gs" ''
 #   set -x
 #   export ENABLE_GAMESCOPE_WSI=1
 #   ${gamescope}/bin/gamescope -w 1920 -h 1080 -r 120 --hdr-enabled -- "''${@}"
 # '';
-symlinkJoin {
-  name = "commands-gui";
-  paths = [
-    wlproxylaunch
+in {
+  config = {
+    environment.systemPackages = [
+      (pkgs.symlinkJoin {
+        name = "commands-gui";
+        paths = [
+          wlproxylaunch
 
-    asus-dgpu
-    asus-igpu
-    # rdp-sly
-    # gs
-  ];
+          asus-dgpu
+          asus-igpu
+          # rdp-sly
+          # gs
+        ];
+      })
+    ];
+  };
 }
+

@@ -1,9 +1,9 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 let
-  cole_uid = config.users.user.cole.uid;
-  fixedSshAgentSocket = "/run/user/${cole_uuid}/sshagent";
-  effectiveGpgDir = "/run/user/${cole_uuid}/gnupg/d.kbocp7uc7zjy47nnek3436ij/"; # TODO: get this from gpg-agent module
+  cole_uid = config.users.users.cole.uid;
+  fixedSshAgentSocket = "/run/user/${builtins.toString cole_uid}/sshagent";
+  effectiveGpgDir = "/run/user/${builtins.toString cole_uid}/gnupg/d.kbocp7uc7zjy47nnek3436ij/"; # TODO: get this from gpg-agent module
   gpgSshSock = "${effectiveGpgDir}/S.gpg-agent.ssh";
 in
 {
