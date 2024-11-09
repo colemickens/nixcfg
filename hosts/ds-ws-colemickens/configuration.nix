@@ -1,6 +1,6 @@
 { pkgs, lib, modulesPath, inputs, ... }:
 
-# export toplevel="$(result_from_builder)
+# export toplevel="/nix/store/pas2djg5n06h6g7qb7dyngp0wpc1slx2-nixos-system-ds-ws-colemickens-24.11.20241109.07247a0"
 # sudo nix build \
 #  --option 'extra-trusted-public-keys' 'colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4=' \
 #  --option 'extra-substituters' 'https://colemickens.cachix.org' \
@@ -53,9 +53,8 @@ in
     users.extraUsers."cole".uid = lib.mkForce 2000;
 
     # TODO: GROSS: caused by mixins/common.nix being presumptive
-    # boot.loader.efi.canTouchEfiVariables = lib.mkForce false;
-    # boot.loader.systemd-boot.enable = lib.mkForce false;
-    # boot.loader.grub.enable = lib.mkForce true;
+    boot.loader.systemd-boot.enable = lib.mkForce false;
+    boot.loader.grub.enable = lib.mkForce true;
 
     boot = {
       tmp = {
