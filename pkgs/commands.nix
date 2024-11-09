@@ -8,9 +8,10 @@
 }:
 
 let
+  cole_uid = config.users.user.cole.uid;
   gpgKeyId = "0x9758078DE5308308";
   gpgCardId = "D2760001240100000006071267080000";
-  gpgSshSocket = "/run/user/1000/gnupg/d.kbocp7uc7zjy47nnek3436ij/S.gpg-agent.ssh";
+  gpgSshSocket = "/run/user/${cole_uid}/gnupg/d.kbocp7uc7zjy47nnek3436ij/S.gpg-agent.ssh";
 
   gpg-relearn = (
     writeShellScriptBin "gpg-relearn" ''
@@ -75,7 +76,8 @@ let
   fix-ssh = (
     writeShellScriptBin "fix-ssh" ''
       set -x
-      ln -sf ${gpgSshSocket} /run/user/1000/sshagent
+      cole_uid=$(id -u cole)
+      ln -sf ${gpgSshSocket} "/run/user/''${cole_uuid}/sshagent"
     ''
   );
   fix-ssh-remote = (
@@ -92,7 +94,8 @@ let
   fix-gpg = (
     writeShellScriptBin "fix-gpg" ''
       set -x
-      ln -sf ${gpgSshSocket} /run/user/1000/sshagent
+      cole_uid=$(id -u cole)
+      ln -sf ${gpgSshSocket} /run/user/''${cole_uuid}/sshagent
       gpg --card-status >/dev/null
       echo "foo" | gpg --sign &>/dev/null # somehow fixes some weird cases where remote gpg gets hung up when it hasn't been used locally
       ssh localhost true

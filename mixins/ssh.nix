@@ -1,8 +1,9 @@
 { pkgs, ... }:
 
 let
-  fixedSshAgentSocket = "/run/user/1000/sshagent";
-  effectiveGpgDir = "/run/user/1000/gnupg/d.kbocp7uc7zjy47nnek3436ij/"; # TODO: get this from gpg-agent module
+  cole_uid = config.users.user.cole.uid;
+  fixedSshAgentSocket = "/run/user/${cole_uuid}/sshagent";
+  effectiveGpgDir = "/run/user/${cole_uuid}/gnupg/d.kbocp7uc7zjy47nnek3436ij/"; # TODO: get this from gpg-agent module
   gpgSshSock = "${effectiveGpgDir}/S.gpg-agent.ssh";
 in
 {
@@ -31,7 +32,7 @@ in
       {
         home.file.".ssh/control/.keep".text = "";
         home.sessionVariables = {
-          SSH_AUTH_SOCK = "/run/user/1000/sshagent";
+          SSH_AUTH_SOCK = fixedSshAgentSocket;
         };
         programs.ssh = {
           enable = true;
