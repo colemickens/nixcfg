@@ -161,7 +161,7 @@
               unar
               p7zip
               sops
-              step-cli
+              # step-cli
               gptfdisk
               parted
               iotop
