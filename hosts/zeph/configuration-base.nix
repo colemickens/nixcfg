@@ -91,7 +91,8 @@ in
 
     services.ucodenix = {
       enable = true;
-      cpuSerialNumber = "00A4-0F41-0000-0000-0000-0000"; # Replace with your processor's serial number
+      cpuModelId = "00A40F41";
+      #cpuSerialNumber = "00A4-0F41-0000-0000-0000-0000"; # Replace with your processor's serial number
     };
 
     services.zfs.autoScrub.pools = [ poolname ];
