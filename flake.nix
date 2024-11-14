@@ -119,6 +119,7 @@
     };
     h96 = {
       url = "github:colemickens/h96-max-v58-nixos?ref=colemickens/main";
+      inputs."nixpkgs".follows = "cmpkgs";
     };
 
     disko = {
