@@ -36,7 +36,7 @@ in
 
   config = {
     nixpkgs.hostPlatform.system = "x86_64-linux";
-    system.stateVersion = "24.05";
+    system.stateVersion = "24.11";
 
     networking.hostName = hn;
     # https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/alacritty/Tango%20Adapted.yml
