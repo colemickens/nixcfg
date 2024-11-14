@@ -26,6 +26,9 @@ in
     ../../mixins/frigate.nix
     ../../mixins/iwd-networks.nix
     ../../mixins/sshd.nix
+
+    ../../mixins/tailscale.nix
+    ../../mixins/unifi.nix
   ];
 
   config = {
@@ -40,12 +43,20 @@ in
       })
     ];
     nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+      # TODO: wtf, why do I have to duplicate these from base.nix?
       "armbian-firmware"
       "armbian-firmware-unstable"
+      "unifi-controller"
+      "mongodb"
     ];
 
     environment.systemPackages = with pkgs; [
-      usbutils
+      evtest
+      ripgrep
+      zellij
+      pulsemixer
+      bottom
+      cyme
     ];
 
     services.udev.packages = with pkgs; [ libedgetpu ];

@@ -209,43 +209,28 @@
           zeph = {
             pkgs = inputs.cmpkgs;
           };
-          h96maxv58 = {
-            pkgs = inputs.cmpkgs;
-            path = ./hosts/h96maxv58/config-cross.nix;
-            buildSys = "x86_64-linux";
-          };
 
           # hetzner
           hcloud-amd64-dev1 = {
             pkgs = inputs.cmpkgs;
           };
-
-          # TODO: decide what the future of this is, I like having a cross-compile targe
-          # to tinker with, but the device is finnicky when I break it :|
+        };
+        "aarch64-linux" = {
+          h96maxv58 = {
+            pkgs = inputs.cmpkgs;
+            path = ./hosts/h96maxv58/base.nix;
+          };
           openstick = {
             pkgs = inputs.cmpkgs;
             path = ./hosts/openstick/cross.nix;
-            buildSys = "x86_64-linux";
           };
           openstick2 = {
             pkgs = inputs.cmpkgs;
             path = ./hosts/openstick2/cross.nix;
-            buildSys = "x86_64-linux";
           };
           rock5b = {
             pkgs = inputs.cmpkgs;
             path = ./hosts/rock5b/cross.nix;
-            buildSys = "x86_64-linux";
-          };
-        };
-        "aarch64-linux" = {
-          h96maxv58-bootstrap = {
-            pkgs = inputs.cmpkgs;
-            path = ./hosts/h96maxv58/base.nix;
-          };
-          hcloud-arm64-dev1 = {
-            pkgs = inputs.cmpkgs;
-            # buildSys = "aarch64-linux";
           };
         };
       };
