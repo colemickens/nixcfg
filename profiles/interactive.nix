@@ -140,6 +140,7 @@
               # </rust pkgs>
 
               nix-inspect
+              nix-output-monitor
 
               age # need age (Age-keygen can do priv->pub)
               sbctl
