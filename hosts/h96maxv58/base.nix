@@ -23,7 +23,7 @@ in
     ../../profiles/user-jeff.nix
 
     ../../mixins/common.nix
-    # ../../mixins/frigate.nix
+    ../../mixins/frigate.nix
     ../../mixins/iwd-networks.nix
     ../../mixins/sshd.nix
   ];
@@ -47,6 +47,8 @@ in
     environment.systemPackages = with pkgs; [
       usbutils
     ];
+
+    services.udev.packages = with pkgs; [ libedgetpu ];
 
     hardware.graphics.enable = lib.mkForce false;
 
