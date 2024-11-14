@@ -55,6 +55,7 @@ in
     # TODO: GROSS: caused by mixins/common.nix being presumptive
     boot.loader.systemd-boot.enable = lib.mkForce false;
     boot.loader.grub.enable = lib.mkForce true;
+    boot.loader.efi.canTouchEfiVariables = lib.mkForce false;
 
     boot = {
       tmp = {
