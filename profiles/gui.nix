@@ -122,7 +122,8 @@ in
 
             glide-media-player
 
-            mission-center
+            # broken, again:
+            # mission-center
 
             vokoscreen-ng
             wayfarer
