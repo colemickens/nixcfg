@@ -18,12 +18,8 @@ minimalMkShell {
       git
       mercurial
       nushell
-      nixpkgs-fmt
       openssh
-      tailscale # so the github action job can deploy
 
-      hcloud # for hetzner management
-      nixos-anywhere # for initial hetzner deployment
       nixfmt-rfc-style
     ])
     ++ [
@@ -31,9 +27,6 @@ minimalMkShell {
       # inputs.nix-eval-jobs.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
       inputs.nix-update.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
       inputs.nix-fast-build.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
-      inputs.fast-flake-update.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
-
-      inputs.nix.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
     ]
   );
 }

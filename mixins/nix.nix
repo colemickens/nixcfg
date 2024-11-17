@@ -19,8 +19,7 @@ let
   # });
   # _nix = pkgs.nixVersions.unstable;
   # _nix = pkgs.nixVersions.nix_2_18;
-  # _nix = inputs.nix.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default;
-  _nix = pkgs.nixVersions.latest;
+  # _nix = pkgs.nixVersions.latest;
 in
 {
   config = {
@@ -33,11 +32,7 @@ in
       };
     };
 
-    environment.systemPackages = [ _nix ];
     nixpkgs = {
-      overlays = [
-        inputs.nix.overlays.default
-      ];
       config = {
         allowAliases = false;
       };
@@ -50,7 +45,6 @@ in
       };
       # nixPath = lib.mkForce [ ]; # i doth protest
       nixPath = lib.mkForce [ "nixpkgs=${inputs.cmpkgs.outPath}" ]; # i doth relent
-      package = lib.mkDefault _nix;
       settings = rec {
         keep-derivations = true; # this is the default (?)
         builders-use-substitutes = true;
@@ -60,15 +54,12 @@ in
         trusted-public-keys = [
           "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
           "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4="
-          "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
           "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
         ];
         trusted-substituters = [
           "https://cache.nixos.org"
           "https://colemickens.cachix.org"
-          "https://nixpkgs-wayland.cachix.org"
-          # "https://unmatched.cachix.org"
           "https://nix-community.cachix.org"
           "https://cosmic.cachix.org"
         ];

@@ -50,7 +50,6 @@ in
     zramSwap.enable = true;
 
     nix = {
-      package = inputs.nix.outputs.packages.${pkgs.stdenv.hostPlatform.system}.nix;
       gc = {
         automatic = true;
         persistent = true;

@@ -9,11 +9,8 @@
       url = "github:nix-community/lib-aggregate";
     }; # TODO: boo name! "libaggregate"?
 
-    nix = {
-      url = "github:nixos/nix?ref=2.24.9";
-    };
     nixpkgs-stable = {
-      url = "github:nixos/nixpkgs?ref=nixos-24.05";
+      url = "github:nixos/nixpkgs?ref=nixos-24.11";
     }; # any stable to use
     cmpkgs = {
       url = "github:colemickens/nixpkgs?ref=cmpkgs";
@@ -89,24 +86,11 @@
       url = "github:colemickens/nix-fast-build?ref=stdout-pipable";
       # inputs."nixpkgs".follows = "cmpkgs";
     };
-    fast-flake-update = {
-      url = "github:Mic92/fast-flake-update";
-      inputs."nixpkgs".follows = "cmpkgs";
-    };
 
     # zellij
     zjstatus = {
       url = "github:dj95/zjstatus";
       inputs."nixpkgs".follows = "cmpkgs";
-    };
-
-    # experimental/unused:
-    nix-rice = {
-      url = "github:colemickens/nix-rice";
-      inputs."nixpkgs".follows = "cmpkgs";
-    };
-    typhon = {
-      url = "github:typhon-ci/typhon";
     };
 
     # wip replacement for nixpkgs->github-runners module
