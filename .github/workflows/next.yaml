@@ -25,24 +25,48 @@ jobs:
         ref: main
     - name: update
       run: |
-        nix develop .#ci -c ./ci/next.nu update
-  "deploy":
+        nix develop .#ci -c ./ci/next.nu
+  "build-cache":
+    needs: [ "update" ]
     strategy:
       fail-fast: false
       matrix:
-        host:
-          - name: "raisin"
-          - name: "rock5b"
-          - name: "slynux"
-          - name: "h96maxv58"
-    runs-on: "slynux-deployer"
-    needs: [ "update" ]
+        job:
+        - {"runs-on": "slynux-default", "bundle": "x86_64-linux"}
+        - {"runs-on": "rock5b-default", "bundle": "aarch64-linux"}
+    runs-on: ${{ matrix.job.runs-on }}
     steps:
     - name: checkout
       uses: actions/checkout@v4
       with:
-        ref: main-next-results
-    - name: deploy-${{matrix.host.name}}
+        ref: main-next-wip
+    - name: build-cache
       run: |
-        timeout 600 \
-          nix develop .#ci -c ./ci/next.nu deploy --activate=${{ inputs.activate || 'false' }} ${{matrix.host.name}}
+        nix develop .#ci -c ./ci/build.nu
+        # bundle is implicit... could remove from matrix ? 
+        # ${{ matrix.job.bundle }}
+  # "finalize":
+  #   # TODO: must finalize/promote the built branch after "build"
+  #   # completes, basically into the results branch
+  #   # this is... painfully I  guess needed to merge results, we could just
+  #   # drop all of this for now, since we never activate these generations from CI
+  # "deploy":
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       host:
+  #         - name: "raisin"
+  #         - name: "rock5b"
+  #         - name: "slynux"
+  #         - name: "h96maxv58"
+  #   runs-on: "slynux-deployer"
+  #   needs: [ "update" ]
+  #   steps:
+  #   - name: checkout
+  #     uses: actions/checkout@v4
+  #     with:
+  #       ref: main-next-results
+  #   - name: deploy-${{matrix.host.name}}
+  #     run: |
+  #       timeout 600 \
+  #         nix develop .#ci -c ./ci/next.nu deploy --activate=${{ inputs.activate || 'false' }} ${{matrix.host.name}}
