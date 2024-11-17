@@ -20,11 +20,6 @@
       inputs."nixpkgs".follows = "cmpkgs";
     };
 
-    mobile-nixos-openstick = {
-      url = "github:colemickens/mobile-nixos?ref=colemickens/openstick-aug2024";
-      inputs."nixpkgs".follows = "cmpkgs";
-    };
-
     # core system/inputs
     firefox-nightly = {
       url = "github:nix-community/flake-firefox-nightly";
@@ -203,14 +198,6 @@
           h96maxv58 = {
             pkgs = inputs.cmpkgs;
           };
-          openstick = {
-            pkgs = inputs.cmpkgs;
-            path = ./hosts/openstick/cross.nix;
-          };
-          openstick2 = {
-            pkgs = inputs.cmpkgs;
-            path = ./hosts/openstick2/cross.nix;
-          };
           rock5b = {
             pkgs = inputs.cmpkgs;
           };
@@ -227,10 +214,6 @@
           installer-standard = nixosConfigurations.installer-standard.config.system.build.isoImage;
           installer-standard-aarch64 =
             nixosConfigurations.installer-standard-aarch64.config.system.build.isoImage;
-
-          openstick-abootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-abootimg;
-          openstick-bootimg = nixosConfigurations.openstick.config.mobile.outputs.android.android-bootimg;
-          openstick-rootfs = nixosConfigurations.openstick.config.mobile.outputs.generatedFilesystems.rootfs;
 
           rock5b-uboot = pkgsUnfree.x86_64-linux.pkgsCross.aarch64-multiplatform.ubootRock5ModelB;
           # rock5b-clearspi = https://dl.radxa.com/rock5/sw/images/others/zero.img.gz
@@ -290,8 +273,6 @@
               # TODO(colemickens): complete/test this:
               # hcloud-arm64-dev-1
               h96maxv58
-              openstick
-              openstick2
               rock5b
               ;
           };
@@ -314,11 +295,9 @@
             # # cross-builds
             # inherit (toplevels)
             #   ;
-            inherit (extra.x86_64-linux)
-              openstick-abootimg
-              openstick-bootimg
-              # installer-standard-aarch64
-              ;
+            # inherit (extra.x86_64-linux)
+            #   # installer-standard-aarch64
+            #   ;
           };
         };
       })
