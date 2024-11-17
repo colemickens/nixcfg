@@ -14,7 +14,7 @@
     ../../profiles/gui-sway-auto.nix
     # ../../profiles/addon-sbc.nix
 
-    # ../../mixins/github-actions-runners.nix # working, but not cross-compiling!
+    ../../mixins/github-actions-runners.nix
     # ../../mixins/github-runner.nix
   ];
 
