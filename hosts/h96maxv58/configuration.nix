@@ -24,12 +24,13 @@ in
     ../../profiles/user-jeff.nix
 
     ../../mixins/common.nix
-    ../../mixins/frigate.nix
     ../../mixins/iwd-networks.nix
     ../../mixins/sshd.nix
 
     ../../mixins/tailscale.nix
     ../../mixins/unifi.nix
+
+    ./frigate.nix
   ];
 
   config = {
