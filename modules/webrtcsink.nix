@@ -98,18 +98,15 @@ in
       })
       (mkIf cfg.client.enable (
         lib.mkMerge [
-          (lib.mapAttrs'
-            (pubname: pubcfg: {
-              "opencast-publisher@${pubname}" = {
-                wantedBy = [ ];
-                after = [ ];
-                serviceConfig = {
-                  ExecStart = [ "${pkgs}/bin/opencast-publish --config ${mkPubCfg pubname}" ];
-                };
+          (lib.mapAttrs' (pubname: pubcfg: {
+            "opencast-publisher@${pubname}" = {
+              wantedBy = [ ];
+              after = [ ];
+              serviceConfig = {
+                ExecStart = [ "${pkgs}/bin/opencast-publish --config ${mkPubCfg pubname}" ];
               };
-            })
-            cfg.client.publishers
-          )
+            };
+          }) cfg.client.publishers)
         ]
       ))
     ];

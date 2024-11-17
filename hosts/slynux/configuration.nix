@@ -55,7 +55,6 @@ in
       };
     };
 
-
     nix.gc = {
       automatic = true;
       persistent = true;

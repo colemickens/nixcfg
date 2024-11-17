@@ -31,8 +31,9 @@
               log-synthetic-elided-nodes = true;
               # pager = ":builtin";
             };
-            template-aliases = {
-            };
+            template-aliases =
+              {
+              };
           };
         };
       };

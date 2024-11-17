@@ -3,15 +3,13 @@
 let
   tflib = import ./tflib.nix { inherit pkgs; };
   tfpkg = (
-    pkgs.terraform_1.withPlugins (
-      p: [
-        # these should be included, maybe via option/modules
-        # from the tflib-*.nix
-        p.equinix
-        p.oci
-        # p.sops
-      ]
-    )
+    pkgs.terraform_1.withPlugins (p: [
+      # these should be included, maybe via option/modules
+      # from the tflib-*.nix
+      p.equinix
+      p.oci
+      # p.sops
+    ])
   );
   tf = "${tfpkg}/bin/terraform"; # "${tf}"
   tfstate = "./cloud/_state";

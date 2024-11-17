@@ -1,9 +1,10 @@
-{ config
-, lib
-, pkgs
-, inputs
-, options
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  options,
+  ...
 }:
 
 let
@@ -11,10 +12,12 @@ let
   # _kernelPackages = pkgs.linuxPackages_latest;
   _kernelPackages =
     if cfg.useZfs then
-      if cfg.useZfsUnstable
-      then pkgs.linuxKernel.packages.linux_6_11
-      else pkgs.linuxKernel.packages.linux_6_6
-    else pkgs.linuxKernel.packages.linux_6_11;
+      if cfg.useZfsUnstable then
+        pkgs.linuxKernel.packages.linux_6_11
+      else
+        pkgs.linuxKernel.packages.linux_6_6
+    else
+      pkgs.linuxKernel.packages.linux_6_11;
 in
 {
   imports = [

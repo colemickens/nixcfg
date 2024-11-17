@@ -21,10 +21,10 @@ let
       10001 # Port used for device discovery.
     ];
   };
-  # allowedInterfaces = [
-  #   "enp57s0u1u3" # sighx2.1
-  # ];
 in
+# allowedInterfaces = [
+#   "enp57s0u1u3" # sighx2.1
+# ];
 {
   config = {
     users.users.unifi.group = "unifi";

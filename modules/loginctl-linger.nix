@@ -23,11 +23,9 @@ let
 
   lingeringUsersFile = builtins.toFile "lingering-users" (
     concatStrings (
-      map
-        (s: ''
-          ${s}
-        '')
-        (sort (a: b: a < b) lingeringUsers)
+      map (s: ''
+        ${s}
+      '') (sort (a: b: a < b) lingeringUsers)
     )
   ); # this sorting is important for `comm` to work correctly
 

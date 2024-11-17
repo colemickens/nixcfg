@@ -35,12 +35,14 @@ in
         programs.gpg.enable = true;
         programs.gpg.homedir = "${hm.config.xdg.dataHome}/gnupg";
         home.file."${hm.config.programs.gpg.homedir}/.keep".text = "";
-        home.packages = [
-          pkgs.yubikey-personalization
-        ] ++ (lib.optionals (pkgs.stdenv.hostPlatform.system == pkgs.stdenv.buildPlatform.system) [
-          pkgs.yubikey-manager
-          pkgs.yubico-piv-tool
-        ]);
+        home.packages =
+          [
+            pkgs.yubikey-personalization
+          ]
+          ++ (lib.optionals (pkgs.stdenv.hostPlatform.system == pkgs.stdenv.buildPlatform.system) [
+            pkgs.yubikey-manager
+            pkgs.yubico-piv-tool
+          ]);
 
         programs.gpg.scdaemonSettings = {
           disable-ccid = true;

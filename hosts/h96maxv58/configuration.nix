@@ -1,10 +1,11 @@
-{ pkgs
-, lib
-, modulesPath
-, inputs
-, config
-, extendModules
-, ...
+{
+  pkgs,
+  lib,
+  modulesPath,
+  inputs,
+  config,
+  extendModules,
+  ...
 }:
 
 let
@@ -42,13 +43,15 @@ in
         makeModulesClosure = x: super.makeModulesClosure (x // { allowMissing = true; });
       })
     ];
-    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-      # TODO: wtf, why do I have to duplicate these from base.nix?
-      "armbian-firmware"
-      "armbian-firmware-unstable"
-      "unifi-controller"
-      "mongodb"
-    ];
+    nixpkgs.config.allowUnfreePredicate =
+      pkg:
+      builtins.elem (lib.getName pkg) [
+        # TODO: wtf, why do I have to duplicate these from base.nix?
+        "armbian-firmware"
+        "armbian-firmware-unstable"
+        "unifi-controller"
+        "mongodb"
+      ];
 
     environment.systemPackages = with pkgs; [
       evtest

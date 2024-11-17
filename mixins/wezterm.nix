@@ -11,9 +11,9 @@ let
 
   enable_wayland = "true";
 
-  # weztermPkg = pkgs.wezterm;
-  # weztermPkg = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.wezterm;
 in
+# weztermPkg = pkgs.wezterm;
+# weztermPkg = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.wezterm;
 {
   config = {
     # nixpkgs.overlays = [

@@ -121,7 +121,10 @@ in
     security.pam.services.swaylock = { };
     security.pam.services.waylock = { }; # TODO: what is this actually doing? match binary name?
 
-    environment.pathsToLink = [ "/share/xdg-desktop-portal" "/share/applications" ];
+    environment.pathsToLink = [
+      "/share/xdg-desktop-portal"
+      "/share/applications"
+    ];
 
     home-manager.users.cole =
       { pkgs, config, ... }@hm:
@@ -358,7 +361,7 @@ in
               "${modifier}+Shift+space" = "floating toggle";
               "${modifier}+Shift+Alt+space" = "sticky toggle";
               "${modifier}+space" = "focus mode_toggle";
-              
+
               "${modifier}+Backspace" = "exec ${pkgs.smile}/bin/smile";
 
               "${modifier}+1" = "workspace number 1";

@@ -95,9 +95,8 @@ let
 
   # sshpubkey = (builtins.elemAt (import ../data/sshkeys.nix) 0);
   sshpubkey = (
-    builtins.elemAt
-      (import ../profiles/user-cole.nix).config.users.extraUsers."cole".openssh.authorizedKeys.keys
-      0
+    builtins.elemAt (import ../profiles/user-cole.nix)
+      .config.users.extraUsers."cole".openssh.authorizedKeys.keys 0
   );
 
   mkVm = oracle_config: name: v: {

@@ -11,7 +11,7 @@
       enable = true;
       hostname = "frigate.mickens.us";
       settings = {
-        cameras = {};
+        cameras = { };
       };
     };
   };

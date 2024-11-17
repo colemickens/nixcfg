@@ -154,28 +154,32 @@ let
     ''
   );
 
-  ipv6ctl = (pkgs.writeShellScriptBin "ipv6ctl" ''
-    set -eou pipefail
-    if [[ "''${1:-}" == "on" ]]; then
-      sysctl -w net.ipv6.conf.all.disable_ipv6=0
-      sysctl -w net.ipv6.conf.default.disable_ipv6=0
-      sysctl -w net.ipv6.conf.wlan0.disable_ipv6=0
-    elif [[ "''${1:-}" == "off" ]]; then
-      sysctl -w net.ipv6.conf.all.disable_ipv6=1
-      sysctl -w net.ipv6.conf.default.disable_ipv6=1
-      sysctl -w net.ipv6.conf.wlan0.disable_ipv6=1
-    fi
-  '');
-  aw = (pkgs.writeShellScriptBin "aw" ''
-    set -eou pipefail
-    if [[ "''${1:-}" == "on" ]]; then
-      adb shell svc wifi disable
-      adb shell svc usb setFunctions ncm
-    elif [[ "''${1:-}" == "off" ]]; then
-      adb shell svc usb setFunctions
-      adb shell svc wifi enable
-    fi
-  '');
+  ipv6ctl = (
+    pkgs.writeShellScriptBin "ipv6ctl" ''
+      set -eou pipefail
+      if [[ "''${1:-}" == "on" ]]; then
+        sysctl -w net.ipv6.conf.all.disable_ipv6=0
+        sysctl -w net.ipv6.conf.default.disable_ipv6=0
+        sysctl -w net.ipv6.conf.wlan0.disable_ipv6=0
+      elif [[ "''${1:-}" == "off" ]]; then
+        sysctl -w net.ipv6.conf.all.disable_ipv6=1
+        sysctl -w net.ipv6.conf.default.disable_ipv6=1
+        sysctl -w net.ipv6.conf.wlan0.disable_ipv6=1
+      fi
+    ''
+  );
+  aw = (
+    pkgs.writeShellScriptBin "aw" ''
+      set -eou pipefail
+      if [[ "''${1:-}" == "on" ]]; then
+        adb shell svc wifi disable
+        adb shell svc usb setFunctions ncm
+      elif [[ "''${1:-}" == "off" ]]; then
+        adb shell svc usb setFunctions
+        adb shell svc wifi enable
+      fi
+    ''
+  );
 
   ## WORK RELATED
 
@@ -235,4 +239,3 @@ in
     ];
   };
 }
-

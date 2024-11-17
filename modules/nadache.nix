@@ -78,11 +78,9 @@ in
               resolver 8.8.8.8;
             ''
             + (lib.strings.concatStringsSep "\n" (
-              lib.attrsets.mapAttrsToList
-                (n: v: ''
-                  set $upstream_endpoint_${san n} ${v};
-                '')
-                cfg.substituterMirrorMap
+              lib.attrsets.mapAttrsToList (n: v: ''
+                set $upstream_endpoint_${san n} ${v};
+              '') cfg.substituterMirrorMap
             ));
           # TODO locations should probably use concatMapAttrs
           locations = lib.attrsets.mergeAttrsList (

@@ -1,4 +1,10 @@
-{ pkgs, lib, modulesPath, inputs, ... }:
+{
+  pkgs,
+  lib,
+  modulesPath,
+  inputs,
+  ...
+}:
 
 # export toplevel="/nix/store/pas2djg5n06h6g7qb7dyngp0wpc1slx2-nixos-system-ds-ws-colemickens-24.11.20241109.07247a0"
 # sudo nix build \
@@ -14,7 +20,7 @@ in
 {
   imports = [
     "${modulesPath}/../maintainers/scripts/ec2/amazon-image.nix"
-    
+
     # TODO: evaluate if we want this, does it conflict with 'determinate'?
     # ../../mixins/common.nix
     # common includes too many assumptions (nix, efi boot, networking, etc)

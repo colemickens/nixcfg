@@ -17,7 +17,7 @@ let
   env_nu = _nu "env";
   config_nu = _nu "config";
   prompt_nu = _nu "prompt";
-  stock_nu= _nu "stock";
+  stock_nu = _nu "stock";
 in
 {
   config = {

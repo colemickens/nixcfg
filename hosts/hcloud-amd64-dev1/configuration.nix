@@ -1,4 +1,12 @@
-{ modulesPath, config, lib, pkgs, inputs, ... }: {
+{
+  modulesPath,
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
+{
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
@@ -17,12 +25,14 @@
     };
     services.openssh.enable = true;
 
-    system.build.diskoScript = lib.mkForce (pkgs.writeScript "disko-without-wipe" ''
-      ${pkgs.util-linux}/bin/wipefs --all --force ${config.disko.devices.disk.disk1.device}
-      ${pkgs.coreutils}/bin/dd if=/dev/zero bs=1M count=512 of=${config.disko.devices.disk.disk1.device}
-      ${config.system.build.formatScript}
-      ${config.system.build.mountScript}
-    '');
+    system.build.diskoScript = lib.mkForce (
+      pkgs.writeScript "disko-without-wipe" ''
+        ${pkgs.util-linux}/bin/wipefs --all --force ${config.disko.devices.disk.disk1.device}
+        ${pkgs.coreutils}/bin/dd if=/dev/zero bs=1M count=512 of=${config.disko.devices.disk.disk1.device}
+        ${config.system.build.formatScript}
+        ${config.system.build.mountScript}
+      ''
+    );
 
     environment.systemPackages = map lib.lowPrio [
       pkgs.curl

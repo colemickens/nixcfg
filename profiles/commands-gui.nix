@@ -31,6 +31,7 @@ let
     echo
     wait
   '';
+in
 # rdp-sly = pkgs.writeShellScriptBin "rdp-sly" ''
 #   RDPUSER="cole.mickens@gmail.com"
 #   RDPPASS="$(gopass show -o "websites/microsoft.com/cole.mickens@gmail.com")"
@@ -46,7 +47,7 @@ let
 #   export ENABLE_GAMESCOPE_WSI=1
 #   ${gamescope}/bin/gamescope -w 1920 -h 1080 -r 120 --hdr-enabled -- "''${@}"
 # '';
-in {
+{
   config = {
     environment.systemPackages = [
       (pkgs.symlinkJoin {
@@ -63,4 +64,3 @@ in {
     ];
   };
 }
-

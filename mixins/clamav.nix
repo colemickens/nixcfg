@@ -11,10 +11,9 @@ with lib;
 let
   sus-user-dirs = [ "downloads" ];
   all-normal-users = attrsets.filterAttrs (_username: config: config.isNormalUser) config.users.users;
-  all-sus-dirs =
-    builtins.concatMap
-      (dir: attrsets.mapAttrsToList (_username: config: config.home + "/" + dir) all-normal-users)
-      sus-user-dirs;
+  all-sus-dirs = builtins.concatMap (
+    dir: attrsets.mapAttrsToList (_username: config: config.home + "/" + dir) all-normal-users
+  ) sus-user-dirs;
   all-user-folders = attrsets.mapAttrsToList (_username: config: config.home) all-normal-users;
   all-system-folders = [
     "/boot"
@@ -63,7 +62,10 @@ in
 
   systemd.services.clamav-clamonacc = {
     description = "ClamAV daemon (clamonacc)";
-    after = [ "clamav-freshclam.service" "clamav-daemon.service" ];
+    after = [
+      "clamav-freshclam.service"
+      "clamav-daemon.service"
+    ];
     requires = [ "clamav-daemon.service" ];
     wantedBy = [ "multi-user.target" ];
     restartTriggers = [ "/etc/clamav/clamd.conf" ];

@@ -1,4 +1,12 @@
-{ modulesPath, config, lib, pkgs, inputs, ... }: {
+{
+  modulesPath,
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
+{
 
   imports = [
     ../hcloud-amd64-dev1/configuration.nix
