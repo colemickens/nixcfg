@@ -173,7 +173,7 @@
               if (!builtins.hasAttr "buildSys" v) then
                 [ ]
               else
-                [{ config.nixpkgs.buildPlatform.system = v.buildSys; }]
+                [ { config.nixpkgs.buildPlatform.system = v.buildSys; } ]
             );
           specialArgs = {
             inherit inputs;
@@ -218,7 +218,6 @@
         "aarch64-linux" = {
           h96maxv58 = {
             pkgs = inputs.cmpkgs;
-            path = ./hosts/h96maxv58/base.nix;
           };
           openstick = {
             pkgs = inputs.cmpkgs;
@@ -230,7 +229,6 @@
           };
           rock5b = {
             pkgs = inputs.cmpkgs;
-            path = ./hosts/rock5b/cross.nix;
           };
         };
       };
@@ -259,7 +257,8 @@
         aarch64-linux = {
           # build, boot to maskrom, flash whole uncompressed image to 0x0
           # ~/result-h96maxv58-image-script --build-memory 4096
-          h96maxv58-image-builder = nixosConfigurations.h96maxv58-bootstrap.config.system.build.diskoImagesScript;
+          h96maxv58-image-builder =
+            nixosConfigurations.h96maxv58-bootstrap.config.system.build.diskoImagesScript;
         };
         riscv64-linux = { };
       };
@@ -275,11 +274,11 @@
       overlays = {
         default = (
           final: prev:
-            # TODO: must be a better way?
-            let
-              __colemickens_nixcfg_pkgs = rec { };
-            in
-            __colemickens_nixcfg_pkgs // { inherit __colemickens_nixcfg_pkgs; }
+          # TODO: must be a better way?
+          let
+            __colemickens_nixcfg_pkgs = rec { };
+          in
+          __colemickens_nixcfg_pkgs // { inherit __colemickens_nixcfg_pkgs; }
         );
       };
     in
@@ -306,6 +305,10 @@
             inherit (toplevels)
               # TODO(colemickens): complete/test this:
               # hcloud-arm64-dev-1
+              h96maxv58
+              openstick
+              openstick2
+              rock5b
               ;
           };
           "x86_64-linux" = {
@@ -324,13 +327,9 @@
         };
         checks-cross = {
           "x86_64-linux" = {
-            # cross-builds
-            inherit (toplevels)
-              h96maxv58
-              openstick
-              openstick2
-              rock5b
-              ;
+            # # cross-builds
+            # inherit (toplevels)
+            #   ;
             inherit (extra.x86_64-linux)
               openstick-abootimg
               openstick-bootimg
@@ -402,8 +401,8 @@
                   inherit (inputs) terranix;
                   pkgs = pkgs_;
                 };
-                # installerIso = "${installer.isoImage}/iso/${installer.isoImage.isoName}";
               in
+              # installerIso = "${installer.isoImage}/iso/${installer.isoImage.isoName}";
               {
                 tf = {
                   type = "app";
