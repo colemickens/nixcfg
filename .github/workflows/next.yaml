@@ -17,7 +17,7 @@ on:
       - "main"
 jobs:
   "update":
-    runs-on: "slynux-default"
+    runs-on: "raisin-default"
     steps:
     - name: checkout
       uses: actions/checkout@v4
@@ -32,7 +32,7 @@ jobs:
       fail-fast: false
       matrix:
         job:
-        - {"runs-on": "slynux-default", "bundle": "x86_64-linux"}
+        - {"runs-on": "raisin-default", "bundle": "x86_64-linux"}
         - {"runs-on": "rock5b-default", "bundle": "aarch64-linux"}
     runs-on: ${{ matrix.job.runs-on }}
     steps:
