@@ -22,7 +22,7 @@ in
     ../../profiles/addon-laptop.nix
 
     # ../../mixins/typhon.nix
-    # ../../mixins/github-actions-runners.nix
+    ../../mixins/github-actions-runners.nix
 
     ../../mixins/iwd-networks.nix
     # ../../mixins/plex.nix
