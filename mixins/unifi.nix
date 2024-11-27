@@ -33,7 +33,7 @@ in
     services.unifi = {
       enable = true;
       openFirewall = false;
-      unifiPackage = pkgs.unifi8;
+      unifiPackage = pkgs.unifi;
       # jrePackage = pkgs.temurin-jre-bin;
       jrePackage = pkgs.temurin-bin-17;
       mongodbPackage = pkgs.mongodb-6_0;
