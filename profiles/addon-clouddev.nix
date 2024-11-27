@@ -46,15 +46,21 @@
     };
 
     services.nginx.virtualHosts."ds-ws-colemickens.mickens.us" = {
-        listen = [{port = 7778;  addr="0.0.0.0"; ssl = true;}];
+      listen = [
+        {
+          port = 7778;
+          addr = "0.0.0.0";
+          ssl = true;
+        }
+      ];
 
-        addSSL = true;
-        enableACME = true;
-        #root = "/var/www/ds-ws-colemickens.mickens.us";
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:7777/";
-          proxyWebsockets = true;
-        };
+      addSSL = true;
+      enableACME = true;
+      #root = "/var/www/ds-ws-colemickens.mickens.us";
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:7777/";
+        proxyWebsockets = true;
+      };
     };
     security.acme = {
       acceptTerms = true;
@@ -69,8 +75,8 @@
     # acme-ds-ws-colemickens.mickens.us.timer
     systemd.timers."acme-ds-ws-colemickens.mickens.us" = {
       enable = false;
-      timerConfig = lib.mkForce {};
-      wantedBy = lib.mkForce [];
+      timerConfig = lib.mkForce { };
+      wantedBy = lib.mkForce [ ];
     };
   };
 }
