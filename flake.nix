@@ -359,26 +359,15 @@
             ## APPS ###########################################################
             apps = lib.recursiveUpdate { } (
               let
-                pkgs_ = pkgs.${system};
                 tfout = import ./cloud {
                   inherit (inputs) terranix;
-                  pkgs = pkgs_;
+                  pkgs = pkgsUnfree.${system};
                 };
               in
               # installerIso = "${installer.isoImage}/iso/${installer.isoImage.isoName}";
               {
-                tf = {
-                  type = "app";
-                  program = tfout.tf.outPath;
-                };
-                tf-apply = {
-                  type = "app";
-                  program = tfout.apply.outPath;
-                };
-                tf-destroy = {
-                  type = "app";
-                  program = tfout.destroy.outPath;
-                };
+                tf-apply = tfout.apply;
+                tf-destroy = tfout.destroy;
 
                 # test-vm = {
                 #   type = "app";

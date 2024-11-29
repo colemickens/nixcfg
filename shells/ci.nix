@@ -19,6 +19,7 @@ minimalMkShell {
       mercurial
       nushell
       openssh
+      awscli2
 
       nixfmt-rfc-style
     ])
