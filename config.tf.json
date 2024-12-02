@@ -1,0 +1,129 @@
+{
+  "provider": {
+    "aws": {
+      "region": "us-west-2"
+    }
+  },
+  "resource": {
+    "aws_instance": {
+      "ozarm": {
+        "ami": "ami-0171c94647389312c",
+        "associate_public_ip_address": true,
+        "instance_type": "m8g.2xlarge",
+        "key_name": "colemickens-yubikey-pubkey",
+        "root_block_device": {
+          "encrypted": true,
+          "volume_size": "256",
+          "volume_type": "gp3"
+        },
+        "subnet_id": "${resource.aws_subnet.oz-subnet1.id}",
+        "tags": {
+          "Name": "ozarm"
+        },
+        "vpc_security_group_ids": [
+          "${resource.aws_security_group.oz-main-sg.id}"
+        ]
+      },
+      "ozex": {
+        "ami": "ami-07b76928ebb374b39",
+        "associate_public_ip_address": true,
+        "instance_type": "m7i.2xlarge",
+        "key_name": "colemickens-yubikey-pubkey",
+        "root_block_device": {
+          "encrypted": true,
+          "volume_size": "256",
+          "volume_type": "gp3"
+        },
+        "subnet_id": "${resource.aws_subnet.oz-subnet1.id}",
+        "tags": {
+          "Name": "ozex"
+        },
+        "vpc_security_group_ids": [
+          "${resource.aws_security_group.oz-main-sg.id}"
+        ]
+      }
+    },
+    "aws_internet_gateway": {
+      "oz-gw": {
+        "vpc_id": "${resource.aws_vpc.oz-main.id}"
+      }
+    },
+    "aws_key_pair": {
+      "colemickens": {
+        "key_name": "colemickens-yubikey-pubkey",
+        "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC9YAN+P0umXeSP/Cgd5ZvoD5gpmkdcrOjmHdonvBbptbMUbI/Zm0WahBDK0jO5vfJ/C6A1ci4quMGCRh98LRoFKFRoWdwlGFcFYcLkuG/AbE8ObNLHUxAwqrdNfIV6z0+zYi3XwVjxrEqyJ/auZRZ4JDDBha2y6Wpru8v9yg41ogeKDPgHwKOf/CKX77gCVnvkXiG5ltcEZAamEitSS8Mv8Rg/JfsUUwULb6yYGh+H6RECKriUAl9M+V11SOfv8MAdkXlYRrcqqwuDAheKxNGHEoGLBk+Fm+orRChckW1QcP89x6ioxpjN9VbJV0JARF+GgHObvvV+dGHZZL1N3jr8WtpHeJWxHPdBgTupDIA5HeL0OCoxgSyyfJncMl8odCyUqE+lqXVz+oURGeRxnIbgJ07dNnX6rFWRgQKrmdV4lt1i1F5Uux9IooYs/42sKKMUQZuBLTN4UzipPQM/DyDO01F0pdcaPEcIO+tp2U6gVytjHhZqEeqAMaUbq7a6ucAuYzczGZvkApc85nIo9jjW+4cfKZqV8BQfJM1YnflhAAplIq6b4Tzayvw1DLXd2c5rae+GlVCsVgpmOFyT6bftSon/HfxwBE4wKFYF7fo7/j6UbAeXwLafDhX+S5zSNR6so1epYlwcMLshXqyJePJNhtsRhpGLd9M3UqyGDAFoOQ== cardno:17_928_325"
+      }
+    },
+    "aws_route": {
+      "igw-ipv4": {
+        "destination_cidr_block": "0.0.0.0/0",
+        "gateway_id": "${resource.aws_internet_gateway.oz-gw.id}",
+        "route_table_id": "${resource.aws_route_table.oz-rt.id}"
+      },
+      "igw-ipv6": {
+        "destination_ipv6_cidr_block": "::/0",
+        "gateway_id": "${resource.aws_internet_gateway.oz-gw.id}",
+        "route_table_id": "${resource.aws_route_table.oz-rt.id}"
+      }
+    },
+    "aws_route_table": {
+      "oz-rt": {
+        "vpc_id": "${resource.aws_vpc.oz-main.id}"
+      }
+    },
+    "aws_route_table_association": {
+      "subnet-rt-as": {
+        "route_table_id": "${resource.aws_route_table.oz-rt.id}",
+        "subnet_id": "${resource.aws_subnet.oz-subnet1.id}"
+      }
+    },
+    "aws_security_group": {
+      "oz-main-sg": {
+        "name": "oz-main-sg",
+        "vpc_id": "${resource.aws_vpc.oz-main.id}"
+      }
+    },
+    "aws_subnet": {
+      "oz-subnet1": {
+        "cidr_block": "172.18.0.0/24",
+        "vpc_id": "${resource.aws_vpc.oz-main.id}"
+      }
+    },
+    "aws_vpc": {
+      "oz-main": {
+        "cidr_block": "172.18.0.0/16",
+        "tags": {
+          "Name": "oz-main"
+        }
+      }
+    },
+    "aws_vpc_security_group_egress_rule": {
+      "oz-main-sg-allow-out-ipv4": {
+        "cidr_ipv4": "0.0.0.0/0",
+        "ip_protocol": -1,
+        "security_group_id": "${resource.aws_security_group.oz-main-sg.id}"
+      },
+      "oz-main-sg-allow-out-ipv6": {
+        "cidr_ipv6": "::/0",
+        "ip_protocol": -1,
+        "security_group_id": "${resource.aws_security_group.oz-main-sg.id}"
+      }
+    },
+    "aws_vpc_security_group_ingress_rule": {
+      "oz-main-sg-allow-in-ipv4": {
+        "cidr_ipv4": "0.0.0.0/0",
+        "from_port": 22,
+        "ip_protocol": "tcp",
+        "security_group_id": "${resource.aws_security_group.oz-main-sg.id}",
+        "to_port": 22
+      },
+      "oz-main-sg-allow-in-ipv6": {
+        "cidr_ipv6": "::/0",
+        "from_port": 22,
+        "ip_protocol": "tcp",
+        "security_group_id": "${resource.aws_security_group.oz-main-sg.id}",
+        "to_port": 22
+      }
+    }
+  }
+}
