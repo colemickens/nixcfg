@@ -177,6 +177,9 @@
           ds-ws-colemickens = {
             pkgs = inputs.cmpkgs;
           };
+          ozex = {
+            pkgs = inputs.cmpkgs;
+          };
 
           # actual machines:
           raisin = {
@@ -199,6 +202,9 @@
             pkgs = inputs.cmpkgs;
           };
           rock5b = {
+            pkgs = inputs.cmpkgs;
+          };
+          ozarm = {
             pkgs = inputs.cmpkgs;
           };
         };
