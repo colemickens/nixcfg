@@ -9,16 +9,16 @@
 {
   imports = [
     # in configuration.nix, default to cosmic
-    ../../profiles/gui-sway.nix
+    ../../profiles/gui-cosmic.nix
     ./configuration-base.nix
   ];
   config = {
-    specialisation."cosmic" = {
+    specialisation."sway" = {
       inheritParentConfig = false;
       configuration = {
         imports = [
           ./configuration-base.nix
-          ../../profiles/gui-cosmic.nix
+          ../../profiles/gui-sway.nix
         ];
       };
     };
