@@ -22,7 +22,7 @@
             alejandra
             nil
             nixd
-            nixpkgs-fmt
+            nixfmt-rfc-style
 
             dfmt
           ];

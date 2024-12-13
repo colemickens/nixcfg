@@ -58,7 +58,7 @@ in
             [[language]]
             name = "nix"
             auto-format = false
-            formatter = { command = "nixpkgs-fmt" }
+            formatter = { command = "nixfmt-rfc-style" }
             language-servers = [ "nixd" ] # TESTING
 
             [[language]]

@@ -36,7 +36,7 @@ in
       cachix
       dust
       mercurial
-      nixpkgs-fmt
+      nixfmt-rfc-style
       nushell
     ])
     ++ [
