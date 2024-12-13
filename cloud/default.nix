@@ -16,20 +16,22 @@ in
 {
   apply = {
     type = "app";
-    program = (pkgs.writeShellScript "apply" ''
-      if [[ -e config.tf.json ]]; then rm -f config.tf.json; fi
-      cp ${terraformConfiguration} config.tf.json \
-        && ${terraform}/bin/terraform init \
-        && ${terraform}/bin/terraform apply
-    '').outPath;
+    program =
+      (pkgs.writeShellScript "apply" ''
+        if [[ -e config.tf.json ]]; then rm -f config.tf.json; fi
+        cp ${terraformConfiguration} config.tf.json \
+          && ${terraform}/bin/terraform init \
+          && ${terraform}/bin/terraform apply
+      '').outPath;
   };
   destroy = {
     type = "app";
-    program = (pkgs.writeShellScript "destroy" ''
-      if [[ -e config.tf.json ]]; then rm -f config.tf.json; fi
-      cp ${terraformConfiguration} config.tf.json \
-        && ${terraform}/bin/terraform init \
-        && ${terraform}/bin/terraform destroy
-    '').outPath;
+    program =
+      (pkgs.writeShellScript "destroy" ''
+        if [[ -e config.tf.json ]]; then rm -f config.tf.json; fi
+        cp ${terraformConfiguration} config.tf.json \
+          && ${terraform}/bin/terraform init \
+          && ${terraform}/bin/terraform destroy
+      '').outPath;
   };
 }

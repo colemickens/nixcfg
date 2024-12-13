@@ -1,4 +1,9 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 let
   nixos_ami_x86_uswest2 = "ami-07b76928ebb374b39";
   nixos_ami_a64_uswest2 = "ami-0171c94647389312c";
@@ -43,7 +48,6 @@ in
     cidr_ipv6 = "::/0";
     ip_protocol = -1;
   };
-  
 
   # network
   resource.aws_vpc."oz-main" = {

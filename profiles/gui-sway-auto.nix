@@ -25,7 +25,7 @@ let
     # '';
 
     # wezterm doesn't work:
-    # wezterm_gui::frontend > Failed to create window ...    # 
+    # wezterm_gui::frontend > Failed to create window ...    #
   };
 in
 {
