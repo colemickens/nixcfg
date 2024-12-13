@@ -13,11 +13,11 @@ let
   _kernelPackages =
     if cfg.useZfs then
       if cfg.useZfsUnstable then
-        pkgs.linuxKernel.packages.linux_6_11
+        pkgs.linuxKernel.packages.linux_6_12
       else
         pkgs.linuxKernel.packages.linux_6_6
     else
-      pkgs.linuxKernel.packages.linux_6_11;
+      pkgs.linuxKernel.packages.linux_6_12;
 in
 {
   imports = [
