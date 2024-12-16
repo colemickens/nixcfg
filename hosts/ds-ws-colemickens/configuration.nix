@@ -38,6 +38,8 @@ in
     ../../profiles/interactive.nix
     ../../profiles/addon-clouddev.nix
     ../../profiles/addon-devtools.nix
+
+    ./work-test-netrc.nix
   ];
 
   config = {
