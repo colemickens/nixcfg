@@ -63,6 +63,13 @@ in
             # XDG_CURRENT_DESKTOP = "sway";
           };
 
+          xdg.configFile = {
+            "autostart/rog-control-center.desktop" = {
+              source = config.lib.file.mkOutOfStoreSymlink "/run/current-system/sw/share/applications/rog-control-center.desktop";
+              # target = "/run/current-system/sw/share/applications/rog-control-center.desktop";
+            };
+          };
+
           # xdg.portal = {
           #   enable = true;
           #   extraPortals = with pkgs; [
