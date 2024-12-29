@@ -96,6 +96,8 @@ in
               pkgs.firefox-bin
               _chrome
 
+              inputs.daedalus.outputs.packages.x86_64-linux.daedalus-mainnet
+
               # audio/video
               jamesdsp
 
