@@ -23,7 +23,7 @@ in
     ../../mixins/tailscale.nix
 
     ../../profiles/interactive.nix
-    ../../profiles/addon-clouddev.nix
+    (import ../../profiles/addon-clouddev.nix { hostname = "slynux.mickens.us"; })
     ../../profiles/addon-devtools.nix
 
     inputs.nixos-hardware.nixosModules.common-cpu-amd

@@ -36,7 +36,7 @@ in
     ../../mixins/tailscale.nix
 
     ../../profiles/interactive.nix
-    ../../profiles/addon-clouddev.nix
+    (import ../../profiles/addon-clouddev.nix { hostname = "ds-ws-colemickens.mickens.us"; })
     ../../profiles/addon-devtools.nix
 
     ./work-test-netrc.nix
