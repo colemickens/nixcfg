@@ -109,6 +109,11 @@
     determinate = {
       url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1.tar.gz";
     };
+
+    # crypto junk
+    daedalus = {
+      url = "github:input-output-hk/daedalus";
+    };
   };
 
   # TODO: re-investigate nixConfig, maybe it will be less soul-crushing one day
