@@ -39,6 +39,11 @@ in
 
     boot.loader.timeout = lib.mkForce 3;
 
+    services.logind.extraConfig = ''
+      IdleAction=poweroff
+      IdleActionSec=60
+    '';
+
     # TODO: GROSS: caused my 'ssm-user' squatting on uid=1000
     users.extraGroups."cole".gid = lib.mkForce 2000;
     users.extraUsers."cole".uid = lib.mkForce 2000;
