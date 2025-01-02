@@ -22,6 +22,8 @@ in
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
 
+    ../../mixins/rclone-googledrive-mounts.nix
+
     ../../profiles/interactive.nix
     (import ../../profiles/addon-clouddev.nix { hostname = "slynux.mickens.us"; })
     ../../profiles/addon-devtools.nix

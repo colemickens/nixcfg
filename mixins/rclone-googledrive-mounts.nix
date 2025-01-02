@@ -108,6 +108,9 @@ in
     rclone-movies = mkMount "movies" true;
     rclone-music = mkMount "music" true;
 
+
+    rclone-testenc1 = mkMount "testenc1" false;
+
     rclone-archives = mkMount "archives" true;
     rclone-backups = mkMount "backups" true;
 
