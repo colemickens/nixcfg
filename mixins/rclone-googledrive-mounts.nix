@@ -89,32 +89,43 @@ in
     sopsFile = ../secrets/encrypted/rclone.conf;
     format = "binary";
   };
-  sops.secrets."rclone-reader-sa.json" = {
+  # sops.secrets."rclone-reader-sa.json" = {
+  #   owner = "cole";
+  #   group = "cole";
+  #   sopsFile = ../secrets/encrypted/rclone-reader-sa.json;
+  #   format = "binary";
+  # };
+  # sops.secrets."rclone-writer-sa.json" = {
+  #   owner = "cole";
+  #   group = "cole";
+  #   sopsFile = ../secrets/encrypted/rclone-writer-sa.json;
+  #   format = "binary";
+  # };
+  sops.secrets."rclone-personal-reader-sa.json" = {
     owner = "cole";
     group = "cole";
-    sopsFile = ../secrets/encrypted/rclone-reader-sa.json;
+    sopsFile = ../secrets/encrypted/rclone-personal-writer-sa.json;
     format = "binary";
   };
-  sops.secrets."rclone-writer-sa.json" = {
+  sops.secrets."rclone-personal-writer-sa.json" = {
     owner = "cole";
     group = "cole";
-    sopsFile = ../secrets/encrypted/rclone-writer-sa.json;
+    sopsFile = ../secrets/encrypted/rclone-personal-writer-sa.json;
     format = "binary";
   };
 
   systemd.services = {
-    rclone-misc = mkMount "misc" true;
-    rclone-tvshows = mkMount "tvshows" true;
-    rclone-movies = mkMount "movies" true;
-    rclone-music = mkMount "music" true;
-
+    # rclone-tvshows = mkMount "tvshows" true;
+    # rclone-movies = mkMount "movies" true;
+    # rclone-music = mkMount "music" true;
 
     rclone-testenc1 = mkMount "testenc1" false;
 
+    rclone-misc = mkMount "misc" true;
     rclone-archives = mkMount "archives" true;
     rclone-backups = mkMount "backups" true;
 
     # TODO: finish
-    rclone-incoming = mkMount "incoming" false;
+    # rclone-incoming = mkMount "incoming" false;
   };
 }
