@@ -30,11 +30,11 @@ jobs:
     needs: [ "update" ]
     strategy:
       fail-fast: false
-      matrix:
-        job:
-        - {"runs-on": "raisin-default", "bundle": "x86_64-linux"}
-        - {"runs-on": "rock5b-default", "bundle": "aarch64-linux"}
-    runs-on: ${{ matrix.job.runs-on }}
+    #   matrix:
+    #     job:
+    #     - {"runs-on": "raisin-default", "bundle": "x86_64-linux"}
+    #     - {"runs-on": "rock5b-default", "bundle": "aarch64-linux"}
+    # runs-on: ${{ matrix.job.runs-on }}
     steps:
     - name: checkout
       uses: actions/checkout@v4
