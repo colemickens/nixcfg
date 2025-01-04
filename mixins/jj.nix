@@ -11,7 +11,7 @@
       { pkgs, ... }:
       {
         home.packages = with pkgs; [
-          lazyjj
+          # lazyjj # 2025-01-04: disable, broken due to newer jj again
         ];
         programs.jj = {
           enable = true;
