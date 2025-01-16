@@ -15,7 +15,7 @@ let
       if cfg.useZfsUnstable then
         pkgs.linuxKernel.packages.linux_6_12
       else
-        pkgs.linuxKernel.packages.linux_6_6
+        pkgs.linuxKernel.packages.linux_6_12 # new LTS
     else
       pkgs.linuxKernel.packages.linux_6_12;
 in
