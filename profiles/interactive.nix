@@ -143,6 +143,8 @@
               nix-inspect
               nix-output-monitor
 
+              erdtree
+
               age # need age (Age-keygen can do priv->pub)
               sbctl
 
