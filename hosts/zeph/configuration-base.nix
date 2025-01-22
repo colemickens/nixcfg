@@ -59,17 +59,6 @@ in
     # nixpkgs.buildPlatform.system = "x86_64-linux";
     system.stateVersion = "23.11";
 
-    boot.kernelPatches = [
-      {
-        name = "max-surface-page-fault";
-        patch = ./0001-drm-amd-display-fix-page-fault-due-to-max-surface-de.patch;
-      }
-      {
-        name = "increase-max-surfaces";
-        patch = ./0002-drm-amd-display-increase-MAX_SURFACES-to-the-value-s.patch;
-      }
-    ];
-
     # TODO: evaluate if this is worth the cost in closure size
     # https://linus.schreibt.jetzt/posts/include-build-dependencies.html
     # TODO: re-evaluate, too much to shove through cachix, and slow internetzzz
