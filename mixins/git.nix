@@ -34,7 +34,7 @@
             };
             core = {
               untrackedCache = true;
-              fsmonitor = "${pkgs.rs-git-fsmonitor}/bin/rs-git-fsmonitor";
+              # fsmonitor = "${pkgs.rs-git-fsmonitor}/bin/rs-git-fsmonitor";
             };
             safe = {
               directory = "/home/cole/code/nixcfg";
