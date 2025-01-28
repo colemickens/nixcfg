@@ -28,6 +28,7 @@ in
 
     # ../mixins/alacritty.nix
     ../mixins/fonts.nix
+    ../mixins/ghostty.nix
     ../mixins/mpv.nix
     # ../mixins/pam-u2f.nix # separate out briefly
     ../mixins/pipewire.nix
