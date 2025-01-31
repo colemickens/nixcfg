@@ -117,6 +117,7 @@ in
             freerdp
             pinta
             krita
+            pinta
             virt-viewer
 
             dissent
@@ -134,8 +135,9 @@ in
 
             # audio/video
             pwvucontrol
-            # pw-viz # also failing to build again
+            pw-viz # also failing to build again
             qpwgraph
+            helvum
 
             # communication
             # thunderbird
