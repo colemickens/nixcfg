@@ -39,14 +39,25 @@ in
 
       services.supergfxd.enable = false;
 
+      environment.sessionVariables = {
+        COSMIC_DATA_CONTROL_ENABLED = "1";
+      };
       environment.systemPackages = with pkgs; [
         cosmic-player
         cosmic-reader
+        cosmic-ext-ctl
         cosmic-ext-applet-clipboard-manager
         cosmic-ext-applet-emoji-selector
         cosmic-ext-applet-external-monitor-brightness
-        cosmic-ext-examine
         cosmic-ext-tweaks
+
+        andromeda
+        chronos
+        examine
+        forecast
+        tasks
+        stellarshot
+        observatory
       ];
 
       networking.networkmanager.enable = false;
