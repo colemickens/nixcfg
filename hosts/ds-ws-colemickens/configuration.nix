@@ -51,6 +51,8 @@ in
     # nixcfg.common.hostColor = "#00a2ff";
     nixcfg.common.hostColor = "green";
 
+    ec2.efi = true;
+
     services.tailscale.useRoutingFeatures = "server";
     services.udisks2.enable = lib.mkForce false;
 
