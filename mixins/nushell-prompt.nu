@@ -5,8 +5,6 @@ def create_left_prompt [] {
     let hc = "@host_color@"
 
     let hsc = { # host slug color
-      # fg: "#000000"
-      # bg: $hc
       fg: $"($hc)_reverse"
       attr: "br"
     }
@@ -36,24 +34,17 @@ def create_left_prompt [] {
     let psc = if (is-admin) { "red_bold" } else { "default_bold" }
     let pathseg = $"(ansi default_underline)(ansi $psc)($env.PWD | str replace $env.HOME "~")"
 
-    # let duration = (($env.CMD_DURATION_MS + "ms") | into duration --convert sec | str replace " sec" "s" | str trim) # TODO?
-    let duration = (($env.CMD_DURATION_MS + "ms") | into duration | str trim)
+    let duration = (($env.CMD_DURATION_MS + "ms") | into duration)
     let duration = $"(ansi dark_gray_italic)($duration)"
 
-    # let builder1 = $"x86:($env.BUILDER_X86 | string split "." | string replace "(.+)@" "")"
-    # let builder2 = $"a64:($env.BUILDER_A64 | string split "." | string replace "(.+)@" "")"
-    # let builder = $"($builder1) ($builder2)"
-    
     let last_exit = if ($env.LAST_EXIT_CODE == 0) { [] } else {
-      [ $"(ansi light_red_bold)✘($env.LAST_EXIT_CODE | str trim)" ]
+      [ $"(ansi light_red_bold)✘($env.LAST_EXIT_CODE)" ]
     }
     
     let line1 = ([
       $line1
       $pathseg
       $nixshell
-      # $jj
-      # $git
       $duration
       $jj
       $last_exit

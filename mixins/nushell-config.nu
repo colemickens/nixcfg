@@ -1,7 +1,5 @@
 # Nushell Config File
 
-source-env ~/.config/nushell/stock.nu
-
 $env.config.show_banner = false;
 
 let carapace_completer = {|spans|
@@ -18,3 +16,4 @@ let nix_direnv_hook = { ||
 
 $env.config = ($env.config | upsert hooks.pre_prompt { append $nix_direnv_hook })
 
+source ~/.config/nushell/prompt.nu

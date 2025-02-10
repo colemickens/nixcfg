@@ -14,10 +14,8 @@ let
       src = ./nushell-${n}.nu;
       inherit host_color;
     }).outPath;
-  env_nu = _nu "env";
   config_nu = _nu "config";
   prompt_nu = _nu "prompt";
-  stock_nu = _nu "stock";
 in
 {
   config = {
@@ -30,10 +28,7 @@ in
         configDir = "${hm.config.xdg.configHome}/nushell";
       in
       {
-        home.file."${configDir}/env.nu".source = env_nu;
         home.file."${configDir}/config.nu".source = config_nu;
-        home.file."${configDir}/stock.nu".source = stock_nu;
-
         home.file."${configDir}/prompt.nu".source = prompt_nu;
 
         programs.nushell = {
