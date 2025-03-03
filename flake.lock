@@ -67,17 +67,17 @@
     "cpu-microcodes": {
       "flake": false,
       "locked": {
-        "lastModified": 1740351392,
-        "narHash": "sha256-1N8CQ15j5m345BlNVNTNjU1z1VkKUJm5HLw72EC1Y7A=",
+        "lastModified": 1740920267,
+        "narHash": "sha256-OzItboxMQdjBZGYgggTeUMlKD3u5egpQxs2zLZ+IPmM=",
         "owner": "platomav",
         "repo": "CPUMicrocodes",
-        "rev": "0be0bd7b6a3ec1f1b59562729f1ce14b9569b697",
+        "rev": "f22581017de2d0a67b9fb4109ea04b5fda649966",
         "type": "github"
       },
       "original": {
         "owner": "platomav",
         "repo": "CPUMicrocodes",
-        "rev": "0be0bd7b6a3ec1f1b59562729f1ce14b9569b697",
+        "rev": "f22581017de2d0a67b9fb4109ea04b5fda649966",
         "type": "github"
       }
     },
@@ -684,11 +684,11 @@
         "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1740964714,
-        "narHash": "sha256-nHNDzYG1ZdtcjAncu/oSdpDHxjZSt2x9O5KDVzgcco8=",
+        "lastModified": 1741025987,
+        "narHash": "sha256-tWQPzDONaH3RR9uUBQxSaaPwsf9f8mxkQG1vK1ZIuF8=",
         "owner": "martinvonz",
         "repo": "jj",
-        "rev": "7e8dba8d94e42340ec5e056b8a1912ce4370eece",
+        "rev": "cf3b45878eb39789453045833aefba314c16a7e6",
         "type": "github"
       },
       "original": {
@@ -1487,11 +1487,11 @@
         "cpu-microcodes": "cpu-microcodes"
       },
       "locked": {
-        "lastModified": 1740521135,
-        "narHash": "sha256-G506cmGf9f6/RNztMZqhr8j5OQD6tOY8xx8Es7jsl4g=",
+        "lastModified": 1741024244,
+        "narHash": "sha256-nuyOvpKTqpE0dQjqtm17C/QEXhIXUpsmosuzDhSAe/c=",
         "owner": "e-tho",
         "repo": "ucodenix",
-        "rev": "825d8fafcd6950250a1839366458178333ade750",
+        "rev": "2fb0f8ad462f3233ef91b471ee6f1f7c2689a4f9",
         "type": "github"
       },
       "original": {
