@@ -91,6 +91,7 @@ in
 
               # audio/video
               jamesdsp
+              easyeffects
 
               # communication
               # libolm fallout:
