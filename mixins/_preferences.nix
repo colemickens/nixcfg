@@ -148,6 +148,7 @@ rec {
         intel-one-mono
         commit-mono
         comic-mono
+        open-sans
         departure-mono
         lexend
         iosevka-bin
