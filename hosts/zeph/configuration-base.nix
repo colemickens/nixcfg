@@ -79,7 +79,12 @@ in
       };
     };
 
-    environment.systemPackages = with pkgs; [ esphome ];
+    hardware.cpu.amd.ryzen-smu.enable = true;
+    
+    environment.systemPackages = with pkgs; [
+      esphome
+      ryzenadj
+    ];
 
     services.tailscale.useRoutingFeatures = "client";
 
