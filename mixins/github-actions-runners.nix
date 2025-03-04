@@ -39,27 +39,27 @@ in
           replace = true;
           extraLabels = [ "${runnerId}-default" ]; # TODO: remove runnerID?
         };
-        "${runnerId}-deployer1" = {
-          enable = true;
-          url = "https://github.com/colemickens/nixcfg";
-          tokenFile = config.sops.secrets."github-runner-token".path;
-          replace = true;
-          extraLabels = [ "${runnerId}-deployer" ];
-        };
-        "${runnerId}-deployer2" = {
-          enable = true;
-          url = "https://github.com/colemickens/nixcfg";
-          tokenFile = config.sops.secrets."github-runner-token".path;
-          replace = true;
-          extraLabels = [ "${runnerId}-deployer" ];
-        };
-        "${runnerId}-deployer3" = {
-          enable = true;
-          url = "https://github.com/colemickens/nixcfg";
-          tokenFile = config.sops.secrets."github-runner-token".path;
-          replace = true;
-          extraLabels = [ "${runnerId}-deployer" ];
-        };
+        # "${runnerId}-deployer1" = {
+        #   enable = true;
+        #   url = "https://github.com/colemickens/nixcfg";
+        #   tokenFile = config.sops.secrets."github-runner-token".path;
+        #   replace = true;
+        #   extraLabels = [ "${runnerId}-deployer" ];
+        # };
+        # "${runnerId}-deployer2" = {
+        #   enable = true;
+        #   url = "https://github.com/colemickens/nixcfg";
+        #   tokenFile = config.sops.secrets."github-runner-token".path;
+        #   replace = true;
+        #   extraLabels = [ "${runnerId}-deployer" ];
+        # };
+        # "${runnerId}-deployer3" = {
+        #   enable = true;
+        #   url = "https://github.com/colemickens/nixcfg";
+        #   tokenFile = config.sops.secrets."github-runner-token".path;
+        #   replace = true;
+        #   extraLabels = [ "${runnerId}-deployer" ];
+        # };
       };
     };
   };
