@@ -106,12 +106,8 @@
     };
 
     # for work
-    nix-priv = {
-      url = "https://flakehub.com/f/DeterminateSystems/nix-priv/0.38.1.tar.gz";
-    };
     determinate = {
-      url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1.tar.gz";
-      inputs."nix".follows = "nix-priv";
+      url = "https://flakehub.com/f/DeterminateSystems/determinate/3.tar.gz";
     };
   };
 
