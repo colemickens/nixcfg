@@ -34,11 +34,11 @@
     },
     "cmpkgs": {
       "locked": {
-        "lastModified": 1742822707,
-        "narHash": "sha256-j3Ke9/XXgSSopoY/sZhmTQE56hB5kjC0+h3fl1RsqkQ=",
+        "lastModified": 1742992376,
+        "narHash": "sha256-1daDBtl6dd8uoi2ESjcORUfpuR2PD2sHveY1x7F3ct4=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "9b944b7a99f4b3b734a82d12cf10a51a79431182",
+        "rev": "5254932842569653276b84e7483a6fdcbc37f17a",
         "type": "github"
       },
       "original": {
@@ -238,11 +238,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1742951773,
-        "narHash": "sha256-RcmILY9o0k2VSSodcwzloQXeIrthi60IVOgwTGIrzqU=",
+        "lastModified": 1742987640,
+        "narHash": "sha256-9NCSsw6g4spIDM3NumA08QUV33AuRvsQCZVWKjmikvU=",
         "owner": "nix-community",
         "repo": "flake-firefox-nightly",
-        "rev": "aceb09357c2e9c0c6677da229a3a1ba81af3fbd5",
+        "rev": "57475e1df3dbdcace64bf46240c35548a9548e81",
         "type": "github"
       },
       "original": {
@@ -653,11 +653,11 @@
         "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1742931648,
-        "narHash": "sha256-Ex1ALF7D+CURUGThT60vq3kN4lvr/Lu43m4YKxazyeY=",
+        "lastModified": 1742987226,
+        "narHash": "sha256-IjHtxvkgX4TwZOp2hH7X9+krNnWOGIuE2HHy7l3mvoI=",
         "owner": "martinvonz",
         "repo": "jj",
-        "rev": "056d2acaffe8040d88d47e64dad250b8805ffb77",
+        "rev": "02722eae5405b74b7d8062a956f9f2e1540968cd",
         "type": "github"
       },
       "original": {
