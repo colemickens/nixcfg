@@ -96,10 +96,6 @@
     flake-compat = {
       url = "github:edolstra/flake-compat";
     };
-    h96 = {
-      url = "github:colemickens/h96-max-v58-nixos?ref=colemickens/main";
-      inputs."nixpkgs".follows = "cmpkgs";
-    };
 
     disko = {
       url = "github:nix-community/disko";
@@ -195,9 +191,6 @@
           };
         };
         "aarch64-linux" = {
-          h96maxv58 = {
-            pkgs = inputs.cmpkgs;
-          };
           rock5b = {
             pkgs = inputs.cmpkgs;
           };
@@ -221,12 +214,7 @@
           # rkdeveloptool rd 3 (reboot loader->maskrom)
           # flash FULL disk image to 0x0 in maskroom, or flash uboot to 0x40 in maskrom
         };
-        aarch64-linux = {
-          # build, boot to maskrom, flash whole uncompressed image to 0x0
-          # ~/result-h96maxv58-image-script --build-memory 4096
-          h96maxv58-image-builder =
-            nixosConfigurations.h96maxv58-bootstrap.config.system.build.diskoImagesScript;
-        };
+        aarch64-linux = { };
         riscv64-linux = { };
       };
 
@@ -272,7 +260,6 @@
             inherit (toplevels)
               # TODO(colemickens): complete/test this:
               # hcloud-arm64-dev-1
-              h96maxv58
               rock5b
               ;
           };
