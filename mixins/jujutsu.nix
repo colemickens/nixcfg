@@ -13,7 +13,7 @@
         home.packages = with pkgs; [
           lazyjj
         ];
-        programs.jj = {
+        programs.jujutsu = {
           enable = true;
           package = inputs.jj.outputs.packages.${pkgs.stdenv.hostPlatform.system}.jujutsu;
           settings = {
