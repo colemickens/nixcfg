@@ -22,7 +22,7 @@
               email = "cole.mickens@gmail.com";
             };
             core = {
-              fsmonitor = "watchman";
+              # fsmonitor = "watchman"; NOOOOO caused serious confusing issues
             };
             git = {
               # abandon-unreachable-commits = true; # ? TODO: not sure if better to do manually
