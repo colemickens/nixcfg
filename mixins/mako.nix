@@ -7,7 +7,6 @@
       {
         services.mako = {
           enable = true;
-          systemd.enable = true;
         };
       };
   };
