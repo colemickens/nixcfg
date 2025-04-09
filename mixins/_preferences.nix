@@ -149,6 +149,7 @@ rec {
         commit-mono
         comic-mono
         open-sans
+        nebula-sans
         departure-mono
         lexend
         iosevka-bin
