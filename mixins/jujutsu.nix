@@ -25,10 +25,11 @@
               # fsmonitor = "watchman"; NOOOOO caused serious confusing issues
             };
             signing = {
-              behavior = "own";
+              behavior = "drop";
               backend = "gpg";
             };
             git = {
+              sign-on-push = true;
               # abandon-unreachable-commits = true; # ? TODO: not sure if better to do manually
             };
             ui = {
@@ -37,6 +38,13 @@
             };
             template-aliases = {
             };
+            "--scope" = [
+              {
+                "--when.repositories" = [ "~/work/" ];
+                user.email = "cole.mickens@determinate.systems";
+                gpg.key = config.sops.secrets."github-signingkey-detsys".path;
+              }
+            ];
           };
         };
       };
