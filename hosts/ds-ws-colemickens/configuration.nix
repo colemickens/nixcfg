@@ -31,6 +31,8 @@ in
 
     ../../mixins/clamav.nix
 
+    ../../mixins/docker.nix
+
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
