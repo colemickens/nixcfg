@@ -24,6 +24,10 @@
             core = {
               # fsmonitor = "watchman"; NOOOOO caused serious confusing issues
             };
+            signing = {
+              behavior = "own";
+              backend = "gpg";
+            };
             git = {
               # abandon-unreachable-commits = true; # ? TODO: not sure if better to do manually
             };
