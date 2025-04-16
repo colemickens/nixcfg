@@ -40,9 +40,10 @@
             };
             "--scope" = [
               {
-                "--when.repositories" = [ "~/work/" ];
+                "--when"."repositories" = [ "~/work/" ];
                 user.email = "cole.mickens@determinate.systems";
-                gpg.key = config.sops.secrets."github-signingkey-detsys".path;
+                signing.backend = "ssh";
+                signing.key = config.sops.secrets."github-signingkey-detsys".path;
               }
             ];
           };
