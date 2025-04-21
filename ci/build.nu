@@ -6,8 +6,11 @@ source _common.nu
 def "main" [] {
   print "::group::nfb"
   try {
-    # env NIXPKGS_ALLOW_UNFREE=1 nix build --impure '.#pkgs.x86_64-linux.pkgsCross.aarch64-multiplatform.mongodb-6_0' --option cores 4
-    nix-fast-build ...$nfbflags
+    do -i { ^nix-fast-build ...$nfbflags }
+    # NOTE(colemickens): Just try to build it again, but with a single core.
+    # This is in case we ran out of memory due to too many concurrent jobs.
+    # This adds some re-eval time, but whatever, it's CI.
+    ^nix-fast-build ...$nfbflags -j1
   } catch {
     ls -l result* | print -e
     ^ls -d result* | cachix push colemickens
