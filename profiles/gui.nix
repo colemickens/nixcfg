@@ -77,7 +77,8 @@ in
             # copied from profiles/interactive -> PASSWORD_STORE_DIR
             storePath = "${hm.config.xdg.dataHome}/password-store";
           };
-          gpg-agent.pinentryBinary = "${pkgs.wayprompt}/bin/pinentry-wayprompt";
+          gpg-agent.pinentry.package = pkgs.wayprompt;
+          gpg-agent.pinentry.program = "pinentry-wayprompt";
         };
 
         home.packages = lib.mkMerge [

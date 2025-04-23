@@ -5,12 +5,6 @@
   ...
 }:
 
-let
-  # this is just so that non-GUI systems don't end up pulling in
-  # gui stuff. My GUI configuration overrides the pinentry HM config elsewhere.
-
-  pinentryProgram = null;
-in
 {
   config = {
     # try to enable gnupg's udev rules
@@ -58,7 +52,6 @@ in
           '';
           # pinentryFlavor = "gnome3";
           # pinentryFlavor = null;
-          pinentryBinary = lib.mkDefault pinentryProgram;
           defaultCacheTtl = 34560000;
           defaultCacheTtlSsh = 34560000;
           maxCacheTtl = 34560000;
