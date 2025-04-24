@@ -48,6 +48,9 @@ in
   ];
 
   config = {
+    # TEMP DetNix hack, hopefully to be removed soon
+    environment.etc."nix/nix.conf".target = "nix/nix.custom.conf";
+
     nixpkgs.hostPlatform.system = "x86_64-linux";
     system.stateVersion = "24.11";
 
