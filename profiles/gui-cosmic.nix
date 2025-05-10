@@ -20,7 +20,6 @@ in
   imports = [
     ./gui-wayland.nix
 
-    # WARNING, this enables network-manager, ew!
     inputs.nixos-cosmic.nixosModules.default
   ];
 
@@ -60,8 +59,6 @@ in
         stellarshot
         observatory
       ];
-
-      networking.networkmanager.enable = false;
 
       home-manager.users.cole =
         { pkgs, config, ... }@hm:

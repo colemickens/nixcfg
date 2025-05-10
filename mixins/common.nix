@@ -144,6 +144,11 @@ in
       useDHCP = lib.mkIf (cfg.defaultNetworking) false;
       # useNetworkd = lib.mkIf (cfg.defaultNetworking) true;
 
+      networkmanager = {
+        wifi.backend = "iwd";
+        enable = true;
+      };
+
       resolvconf.dnsExtensionMechanism = false;
 
       firewall.logRefusedConnections = false;
