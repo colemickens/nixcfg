@@ -12,6 +12,7 @@
       {
         home.packages = with pkgs; [
           lazyjj
+          jjui
         ];
         programs.jujutsu = {
           enable = true;
