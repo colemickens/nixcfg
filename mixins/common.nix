@@ -13,7 +13,7 @@ let
   _kernelPackages =
     if cfg.useZfs then
       if cfg.useZfsUnstable then
-        pkgs.linuxKernel.packages.linux_6_13
+        pkgs.linuxKernel.packages.linux_6_14
       else
         pkgs.linuxKernel.packages.linux_6_12 # new LTS
     else
