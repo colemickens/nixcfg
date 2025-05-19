@@ -80,6 +80,7 @@ in
         ];
       };
       extraOptions = ''
+        netrc-file = /nix/var/determinate/netrc
         experimental-features = nix-command flakes
         !include ${config.sops.secrets.nix-access-tokens.path}
       '';
