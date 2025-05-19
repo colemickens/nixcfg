@@ -88,7 +88,8 @@ let
       ent="$(ls -t /tmp/ssh-**/agent.* | head -1)"
       ln -sf $ent "/run/user/$(id -u)/sshagent"
       export SSH_AUTH_SOCK="/run/user/$(id -u)/sshagent"
-      ssh-add -L | ssh-add -T /dev/stdin
+      # wtf is this even for
+      # ssh-add -L | ssh-add -T /dev/stdin
       ssh-add -l
     ''
   );
