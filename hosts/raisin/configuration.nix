@@ -32,6 +32,8 @@ in
     ./zrepl.nix
     # ./services/monitoring.nix
 
+    inputs.determinate.nixosModules.default
+
     inputs.nixos-hardware.nixosModules.common-cpu-amd
     inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
     inputs.nixos-hardware.nixosModules.common-gpu-amd

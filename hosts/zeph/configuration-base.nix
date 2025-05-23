@@ -39,6 +39,8 @@ in
 
     ./zrepl.nix # TODO: make this device specific
 
+    inputs.determinate.nixosModules.default
+
     # ../../mixins/oavm-risky.nix
 
     # ./experimental.nix
