@@ -63,24 +63,24 @@
           # '';
 
           plugins = [
-            {
-              name = "powerlevel10k-config";
-              src = pkgs.substituteAll {
-                src = ./zsh-p10k.zsh;
-                dir = "bin";
-              };
-              file = "bin/zsh-p10k.zsh";
-            }
-            {
-              name = "powerlevel10k";
-              src = pkgs.zsh-powerlevel10k;
-              file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-            }
-            {
-              name = "zsh-fast-syntax-highlighting";
-              src = pkgs.zsh-fast-syntax-highlighting;
-              file = "share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh";
-            }
+            # {
+            #   name = "powerlevel10k-config";
+            #   src = pkgs.substituteAll {
+            #     src = ./zsh-p10k.zsh;
+            #     dir = "bin";
+            #   };
+            #   file = "bin/zsh-p10k.zsh";
+            # }
+            # {
+            #   name = "powerlevel10k";
+            #   src = pkgs.zsh-powerlevel10k;
+            #   file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+            # }
+            # {
+            #   name = "zsh-fast-syntax-highlighting";
+            #   src = pkgs.zsh-fast-syntax-highlighting;
+            #   file = "share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh";
+            # }
           ];
 
           # initExtraBeforeCompInit = ''
