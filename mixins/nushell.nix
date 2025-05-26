@@ -9,10 +9,10 @@ let
   host_color = config.nixcfg.common.hostColor;
   _nu =
     n:
-    (pkgs.substituteAll {
+    (pkgs.substitute {
       name = "nushell-${n}-subbed.nu";
       src = ./nushell-${n}.nu;
-      inherit host_color;
+      substitutions = [ "--replace" "@host_color@" host_color ];
     }).outPath;
   config_nu = _nu "config";
   prompt_nu = _nu "prompt";
