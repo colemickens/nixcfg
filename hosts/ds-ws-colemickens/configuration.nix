@@ -40,8 +40,6 @@ in
     ../../profiles/interactive.nix
     (import ../../profiles/addon-clouddev.nix { hostname = "ds-ws-colemickens.mickens.us"; })
     ../../profiles/addon-devtools.nix
-
-    ./work-test-netrc.nix
   ];
 
   config = {
