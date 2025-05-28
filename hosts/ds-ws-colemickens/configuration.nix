@@ -42,9 +42,6 @@ in
     ../../profiles/addon-devtools.nix
 
     ./work-test-netrc.nix
-
-    # more work testing: to test a flow:
-    ../../mixins/rclone-googledrive-mounts.nix
   ];
 
   config = {
