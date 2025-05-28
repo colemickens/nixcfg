@@ -51,16 +51,13 @@
           # replace initExtra with initContent,
           # but uh, I don't use this anyway?
           # maybe time to drdop this entirely?
-          # initExtra = ''
-          #   # surely something else has these defaults?
-          #   bindkey "^[[H"    beginning-of-line
-          #   bindkey "^[[F"    end-of-line
-          #   bindkey "^[[3~"   delete-char
-          #   bindkey "^[[1;5C" forward-word
-          #   bindkey "^[[1;5D" backward-word
-
-          #   # autoload -U compinit && compinit
-          # '';
+          initExtra = ''
+            bindkey "^[[H"    beginning-of-line
+            bindkey "^[[F"    end-of-line
+            bindkey "^[[3~"   delete-char
+            bindkey "^[[1;5C" forward-word
+            bindkey "^[[1;5D" backward-word
+          '';
 
           plugins = [
             # {
