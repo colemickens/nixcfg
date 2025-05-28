@@ -63,22 +63,6 @@
         "type": "github"
       }
     },
-    "crate2nix": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1739473963,
-        "narHash": "sha256-ItAhpjNUzEWd/cgZVyW/jvoGbCec4TK29e1Mnmn1oJE=",
-        "owner": "kolloch",
-        "repo": "crate2nix",
-        "rev": "be31feae9a82c225c0fd1bdf978565dc452a483a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "kolloch",
-        "repo": "crate2nix",
-        "type": "github"
-      }
-    },
     "determinate": {
       "inputs": {
         "determinate-nixd-aarch64-darwin": "determinate-nixd-aarch64-darwin",
@@ -158,27 +142,6 @@
         "type": "github"
       }
     },
-    "fenix": {
-      "inputs": {
-        "nixpkgs": [
-          "cmpkgs"
-        ],
-        "rust-analyzer-src": "rust-analyzer-src"
-      },
-      "locked": {
-        "lastModified": 1748414334,
-        "narHash": "sha256-pWLq78fWssxiRAvLQZnxKupUogR25u+28XS4lfxMMoE=",
-        "owner": "nix-community",
-        "repo": "fenix",
-        "rev": "1c050d9008ff9e934f8bb5298c902259ea2cb3f7",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "fenix",
-        "type": "github"
-      }
-    },
     "firefox-nightly": {
       "inputs": {
         "flake-compat": "flake-compat_2",
@@ -188,11 +151,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1748435884,
-        "narHash": "sha256-i68zAJ3TNvfJOBzFrHdbq8MDrIPrsrpi9jtZHGcmHzo=",
+        "lastModified": 1748456680,
+        "narHash": "sha256-6YveR+z5F6WA8rjMBG5XzSdJfdRQ2NzfVdm4r6TDjLM=",
         "owner": "nix-community",
         "repo": "flake-firefox-nightly",
-        "rev": "43c955f347a736772094d04c9264faeee8c43ba5",
+        "rev": "ab11013ab6afcbd78d28e1662aa7414701decf82",
         "type": "github"
       },
       "original": {
@@ -361,27 +324,6 @@
         "type": "github"
       }
     },
-    "flake-parts_5": {
-      "inputs": {
-        "nixpkgs-lib": [
-          "terranix",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1736143030,
-        "narHash": "sha256-+hu54pAoLDEZT9pjHlqL9DNzWz0NbUn8NEAHP7PQPzU=",
-        "owner": "hercules-ci",
-        "repo": "flake-parts",
-        "rev": "b905f6fc23a9051a6e1b741e1438dbfc0634c6de",
-        "type": "github"
-      },
-      "original": {
-        "owner": "hercules-ci",
-        "repo": "flake-parts",
-        "type": "github"
-      }
-    },
     "flake-utils": {
       "inputs": {
         "systems": "systems"
@@ -438,7 +380,7 @@
     },
     "flake-utils_4": {
       "inputs": {
-        "systems": "systems_5"
+        "systems": "systems_4"
       },
       "locked": {
         "lastModified": 1731533236,
@@ -559,11 +501,11 @@
         "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1748432626,
-        "narHash": "sha256-/QE9SdkfolgRCBFoaCrE0g3wDP6RLaidF95yb5mfkkU=",
+        "lastModified": 1748462511,
+        "narHash": "sha256-vqvFBZZRMWa8aoHmytckILxdAwnEkfO+qndHm3PHVQg=",
         "owner": "martinvonz",
         "repo": "jj",
-        "rev": "a3ae4d0e34e29c22ca71092a4ac7dcf58ea693eb",
+        "rev": "98d884827e2b9db72d480bb0c3610e51f103b7d4",
         "type": "github"
       },
       "original": {
@@ -984,10 +926,8 @@
     "root": {
       "inputs": {
         "cmpkgs": "cmpkgs",
-        "crate2nix": "crate2nix",
         "determinate": "determinate",
         "disko": "disko",
-        "fenix": "fenix",
         "firefox-nightly": "firefox-nightly",
         "flake-compat": "flake-compat_3",
         "flake-utils": "flake-utils_2",
@@ -1002,28 +942,9 @@
         "nixos-github-actions": "nixos-github-actions",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs-stable": "nixpkgs-stable_2",
-        "rust-overlay": "rust-overlay_5",
         "sops-nix": "sops-nix",
-        "terranix": "terranix",
         "ucodenix": "ucodenix",
         "zjstatus": "zjstatus"
-      }
-    },
-    "rust-analyzer-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1748389118,
-        "narHash": "sha256-5QJCzMtA2lBFNGou2dbFrGgWXxfL2O92oJoUnqeoNjI=",
-        "owner": "rust-lang",
-        "repo": "rust-analyzer",
-        "rev": "4f7af13637a77ce1dc21e58fcd3f635efbfb43a7",
-        "type": "github"
-      },
-      "original": {
-        "owner": "rust-lang",
-        "ref": "nightly",
-        "repo": "rust-analyzer",
-        "type": "github"
       }
     },
     "rust-overlay": {
@@ -1111,26 +1032,6 @@
       }
     },
     "rust-overlay_5": {
-      "inputs": {
-        "nixpkgs": [
-          "cmpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1748399823,
-        "narHash": "sha256-kahD8D5hOXOsGbNdoLLnqCL887cjHkx98Izc37nDjlA=",
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "rev": "d68a69dc71bc19beb3479800392112c2f6218159",
-        "type": "github"
-      },
-      "original": {
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "type": "github"
-      }
-    },
-    "rust-overlay_6": {
       "inputs": {
         "nixpkgs": [
           "zjstatus",
@@ -1232,43 +1133,6 @@
         "type": "github"
       }
     },
-    "systems_5": {
-      "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
-        "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-systems",
-        "repo": "default",
-        "type": "github"
-      }
-    },
-    "terranix": {
-      "inputs": {
-        "flake-parts": "flake-parts_5",
-        "nixpkgs": [
-          "cmpkgs"
-        ],
-        "systems": "systems_4"
-      },
-      "locked": {
-        "lastModified": 1747386897,
-        "narHash": "sha256-mShlhcRElxiuJ7/rpd2yduqsom21wB3GuZUYIVGolEE=",
-        "owner": "terranix",
-        "repo": "terranix",
-        "rev": "b259af31a70c734db377a5b5a8ce3bf7f2c02fe4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "terranix",
-        "repo": "terranix",
-        "type": "github"
-      }
-    },
     "treefmt-nix": {
       "inputs": {
         "nixpkgs": [
@@ -1337,7 +1201,7 @@
         "nixpkgs": [
           "cmpkgs"
         ],
-        "rust-overlay": "rust-overlay_6"
+        "rust-overlay": "rust-overlay_5"
       },
       "locked": {
         "lastModified": 1745230073,
