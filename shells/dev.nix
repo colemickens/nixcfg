@@ -18,27 +18,6 @@ let
     + ":"
     + "${pkgs.gst_all_1.gst-plugins-ugly}/lib/gstreamer-1.0";
 
-  _rustBuildFenix = (
-    inputs.fenix.packages.${pkgs.stdenv.hostPlatform.system}.latest.withComponents [
-      "cargo"
-      "clippy"
-      "rust-src"
-      "rustc"
-      "rustfmt"
-      "rust-analyzer"
-    ]
-  );
-
-  _rustBuildOxalica = inputs.rust-overlay.packages.${pkgs.stdenv.hostPlatform.system}.rust.override {
-    extensions = [
-      "rust-src"
-      "rust-analyzer"
-      "clippy"
-    ];
-  };
-
-  # so far I can't tell a big difference...
-  _rustBuild = _rustBuildOxalica;
 in
 # _rustBuild = _rustBuildFenix;
 minimalMkShell rec {
@@ -55,7 +34,6 @@ minimalMkShell rec {
   GST_PLUGIN_SYSTEM_PATH = gstreamerPath;
 
   nativeBuildInputs = with pkgs; [
-    _rustBuild
     llvmPackages.lldb
 
     # inputs.nix-eval-jobs.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default

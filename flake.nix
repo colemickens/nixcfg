@@ -42,22 +42,6 @@
     ucodenix.url = "github:e-tho/ucodenix";
 
     # devtools:
-    crate2nix = {
-      url = "github:kolloch/crate2nix";
-      flake = false;
-    };
-    terranix = {
-      url = "github:terranix/terranix";
-      inputs."nixpkgs".follows = "cmpkgs";
-    }; # packet/terraform deployments
-    fenix = {
-      url = "github:nix-community/fenix";
-      inputs."nixpkgs".follows = "cmpkgs";
-    }; # used for nightly rust devtools
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs."nixpkgs".follows = "cmpkgs";
-    };
     # also, there's crane, crates2nix, cargo2nix, ??
     helix = {
       url = "github:helix-editor/helix";
@@ -68,10 +52,6 @@
       inputs."flake-utils".follows = "flake-utils";
       # inputs."nixpkgs".follows = "cmpkgs";
     };
-    # nix-eval-jobs = {
-    #   url = "github:nix-community/nix-eval-jobs";
-    #   # inputs."nixpkgs".follows = "cmpkgs";
-    # };
     nix-update = {
       url = "github:Mic92/nix-update";
       inputs."nixpkgs".follows = "cmpkgs";
@@ -81,7 +61,6 @@
       url = "github:colemickens/nix-fast-build?ref=stdout-pipable";
       # inputs."nixpkgs".follows = "cmpkgs";
     };
-
     # zellij
     zjstatus = {
       url = "github:dj95/zjstatus";
@@ -191,9 +170,6 @@
           };
         };
         "aarch64-linux" = {
-          rock5b = {
-            pkgs = inputs.cmpkgs;
-          };
         };
       };
       nixosConfigs = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues nixosConfigsEx));
@@ -207,12 +183,6 @@
           installer-standard = nixosConfigurations.installer-standard.config.system.build.isoImage;
           installer-standard-aarch64 =
             nixosConfigurations.installer-standard-aarch64.config.system.build.isoImage;
-
-          rock5b-uboot = pkgsUnfree.x86_64-linux.pkgsCross.aarch64-multiplatform.ubootRock5ModelB;
-          # rock5b-clearspi = https://dl.radxa.com/rock5/sw/images/others/zero.img.gz
-          # rock5b-usbloader = https://dl.radxa.com/rock5/sw/images/loader/rk3588_spl_loader_v1.15.113.bin
-          # rkdeveloptool rd 3 (reboot loader->maskrom)
-          # flash FULL disk image to 0x0 in maskroom, or flash uboot to 0x40 in maskrom
         };
         aarch64-linux = { };
         riscv64-linux = { };
@@ -258,9 +228,6 @@
         checks-native = {
           "aarch64-linux" = {
             inherit (toplevels)
-              # TODO(colemickens): complete/test this:
-              # hcloud-arm64-dev-1
-              rock5b
               ;
           };
           "x86_64-linux" = {
