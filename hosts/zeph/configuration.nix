@@ -13,15 +13,15 @@
     ./configuration-base.nix
   ];
   config = {
-    specialisation."sway" = {
-      inheritParentConfig = false;
-      configuration = {
-        imports = [
-          ./configuration-base.nix
-          ../../profiles/gui-sway.nix
-        ];
-      };
-    };
+    # specialisation."sway" = {
+    #   inheritParentConfig = false;
+    #   configuration = {
+    #     imports = [
+    #       ./configuration-base.nix
+    #       ../../profiles/gui-sway.nix
+    #     ];
+    #   };
+    # };
     # specialisation."gamescope" = {
     #   inheritParentConfig = false;
     #   configuration = {

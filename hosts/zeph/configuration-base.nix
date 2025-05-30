@@ -190,12 +190,13 @@ in
         "asus_wmi"
         "hid_asus"
       ];
-      # extraModprobeConfig = ''
-      #   options iwlwifi power_save=0
-      #   options iwlmvm power_scheme=1
-      # '';
       kernelParams = [
+        # restrict hungry zfs arc:
         # "zfs.zfs_arc_max=${builtins.toString (1023 * 1024 * (1024 * 6))}"
+
+        # ucode-nix: disable sig checking, though this machine doesn't have a new
+        # bios, so it might not apply?
+        "microcode.amd_sha_check=off"
       ];
       initrd.availableKernelModules = [
         "xhci_pci"
