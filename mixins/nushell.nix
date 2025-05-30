@@ -12,7 +12,11 @@ let
     (pkgs.substitute {
       name = "nushell-${n}-subbed.nu";
       src = ./nushell-${n}.nu;
-      substitutions = [ "--replace" "@host_color@" host_color ];
+      substitutions = [
+        "--replace"
+        "@host_color@"
+        host_color
+      ];
     }).outPath;
   config_nu = _nu "config";
   prompt_nu = _nu "prompt";

@@ -48,7 +48,7 @@
             bindkey "^[[1;5D" backward-word
           '';
 
-          plugins = [];
+          plugins = [ ];
         };
       };
   };

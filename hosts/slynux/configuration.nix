@@ -27,7 +27,7 @@ in
     ../../profiles/interactive.nix
     (import ../../profiles/addon-clouddev.nix { hostname = "slynux.mickens.us"; })
     ../../profiles/addon-devtools.nix
-    
+
     inputs.determinate.nixosModules.default
 
     inputs.nixos-hardware.nixosModules.common-cpu-amd
