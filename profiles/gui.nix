@@ -118,6 +118,7 @@ in
             ksnip
 
             glide-media-player
+            vlc
 
             # broken, again:
             # mission-center
