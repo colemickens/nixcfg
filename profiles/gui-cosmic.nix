@@ -29,6 +29,11 @@ in
       tty = "tty${toString config.systemd.services.greetd.vt}";
     in
     {
+      nixpkgs.overlays = [(final: prev: {
+        cosmic-player = prev.cosmic-player.overrideAttrs(old: {
+          buildInputs = old.buildInputs ++ [ prev.gst_all_1.gst-plugins-ugly ];
+        });
+      })];
       services.desktopManager.cosmic = {
         enable = true;
       };
