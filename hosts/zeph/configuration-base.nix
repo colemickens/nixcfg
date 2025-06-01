@@ -75,6 +75,9 @@ in
     nixcfg.common.useZfs = true;
     nixcfg.common.useZfsUnstable = true;
 
+    hardware.amdgpu.overdrive.enable = true;
+    hardware.amdgpu.initrd.enable = true;
+
     nix = {
       settings = {
         max-jobs = lib.mkForce 4;
