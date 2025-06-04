@@ -16,7 +16,9 @@
         "apple_cursor"
         "google-chrome"
         "google-chrome-dev"
-        # "ripcord"
+        
+        "firefox-bin"
+        "firefox-release-bin-unwrapped"
 
         # trezor-suite... is unfree?
         "trezor-suite"
