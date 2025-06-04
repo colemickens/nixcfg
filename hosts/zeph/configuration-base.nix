@@ -171,7 +171,7 @@ in
       bootspec.enable = true;
       lanzaboote = {
         enable = true;
-        pkiBundle = "/etc/secureboot";
+        pkiBundle = "/var/lib/sbctl";
         configurationLimit = 50;
       };
       loader = {
