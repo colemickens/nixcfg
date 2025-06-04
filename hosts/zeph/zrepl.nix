@@ -8,7 +8,7 @@
 let
   _pushSettings = {
     filesystems = {
-      "zephpool/data<" = true;
+      "zephpool/root<" = true;
       "zephpool/home<" = true;
     };
     replication = {
@@ -52,7 +52,7 @@ in
             name = "snaplocal";
             type = "snap";
             filesystems = {
-              "zephpool/data<" = true;
+              "zephpool/root<" = true;
               "zephpool/home<" = true;
             };
             snapshotting = {
