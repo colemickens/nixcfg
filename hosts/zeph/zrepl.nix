@@ -68,7 +68,7 @@ in
                   # keep 168 (24*7) hourly snapshots
                   # keep 30 daily snapshots
                   # we can handle all of this locally, we can probably do more on the external drive sink
-                  grid = "1x1h(keep=all) | 168x1h | 30x1d | 26x1w";
+                  grid = "1x1h(keep=all) | 168x1h | 30x1d | 52x1w";
                   regex = "^zrepl_snaplocal_.*";
                 }
                 {
