@@ -115,6 +115,7 @@ in
     ../mixins/gtk.nix
     ../mixins/kanshi.nix
     ../mixins/mako.nix
+    ../mixins/sirula.nix
     ../mixins/waybar.nix
   ];
   config = {

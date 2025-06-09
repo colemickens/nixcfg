@@ -11,7 +11,6 @@
     ./gui.nix
 
     ../mixins/obs.nix
-    ../mixins/sirula.nix
   ];
   config = {
     programs = {
