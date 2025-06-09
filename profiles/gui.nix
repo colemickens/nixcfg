@@ -119,7 +119,6 @@ in
             with pkgs;
             [
               # browsers
-              _firefoxNightly
               pkgs.firefox-bin
               _chrome
 
