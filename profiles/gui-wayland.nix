@@ -9,8 +9,6 @@
 {
   imports = [
     ./gui.nix
-
-    ../mixins/obs.nix
   ];
   config = {
     programs = {
