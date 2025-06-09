@@ -21,10 +21,6 @@
     };
 
     # core system/inputs
-    firefox-nightly = {
-      url = "github:nix-community/flake-firefox-nightly";
-      inputs."nixpkgs".follows = "cmpkgs";
-    };
     home-manager = {
       url = "github:colemickens/home-manager/cmhm";
       inputs."nixpkgs".follows = "cmpkgs";
