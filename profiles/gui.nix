@@ -33,9 +33,6 @@ in
   ];
 
   config = {
-    # hm, not sure about new name, does it convery that GUI is enabled with it?
-    # hardware.drivers.enable = true;
-
     hardware.bluetooth = {
       enable = true;
       powerOnBoot = true;
@@ -123,17 +120,10 @@ in
               _chrome
 
               # audio/video
-              jamesdsp
+              # jamesdsp
               easyeffects
 
-              # communication
-              # libolm fallout:
-              nheko
-              # libsForQt5.kdeGear.neochat
-              # libsForQt5.kdeGear.falkon
-
-              # misc tools/utils
-              # wine-wayland # oof TODO: nixpkgs wine packages need some ... attention
+              # nheko
             ]
           ))
           (with pkgs; [
@@ -143,32 +133,15 @@ in
             freerdp
             pinta
             krita
-            pinta
-            virt-viewer
-
-            dissent
-            ksnip
 
             glide-media-player
             vlc
 
-            # broken, again:
-            # mission-center
-
-            zed-editor
-
-            vokoscreen-ng
-            wayfarer
-
             # audio/video
             pwvucontrol
-            pw-viz # also failing to build again
-            qpwgraph
-            helvum
-
-            # communication
-            # thunderbird
-            linphone
+            # pw-viz
+            # qpwgraph
+            # helvum
           ])
         ];
       };
