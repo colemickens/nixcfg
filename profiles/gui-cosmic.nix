@@ -51,19 +51,19 @@ in
         cosmic-player
         cosmic-reader
         cosmic-ext-ctl
-        cosmic-ext-applet-clipboard-manager
+        # cosmic-ext-applet-clipboard-manager
         cosmic-ext-applet-emoji-selector
         cosmic-ext-applet-external-monitor-brightness
         cosmic-ext-applet-caffeine
-        cosmic-ext-tweaks
+        # cosmic-ext-tweaks
 
-        andromeda
-        chronos
-        examine
-        forecast
-        tasks
-        stellarshot
-        observatory
+        # andromeda
+        # chronos
+        # examine
+        # forecast
+        # tasks
+        # stellarshot
+        # observatory
       ];
 
       networking.networkmanager.enable = false;
