@@ -37,14 +37,14 @@ in
       ];
     };
     hardware.graphics.extraPackages = [ pkgs.gamescope ];
-    security.wrappers = {
-      xemu = {
-        owner = "root";
-        group = "root";
-        source = "${pkgs.xemu}/bin/xemu";
-        capabilities = "cap_net_raw,cap_net_admin=eip";
-      };
-    };
+    # security.wrappers = {
+    #   xemu = {
+    #     owner = "root";
+    #     group = "root";
+    #     source = "${pkgs.xemu}/bin/xemu";
+    #     capabilities = "cap_net_raw,cap_net_admin=eip";
+    #   };
+    # };
     programs = {
       steam = {
         enable = true;
@@ -101,15 +101,9 @@ in
 
           legendary-gl
 
-          dolphin-emu # gamecube emu
+          # dolphin-emu # gamecube emu
           # _yuzu
-          xemu
-
-          airshipper
-
-          # okay, gotta see what these crazy kids are building...
-          # TODO: check out vinegar whenever it ... gets merged into nixpkgs
-          # grapejuice
+          # xemu
         ];
         programs = {
           mangohud = {
