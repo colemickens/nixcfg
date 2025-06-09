@@ -26,14 +26,10 @@ in
     ../mixins/hw-logitech-mice.nix
     ../mixins/hw-steelseries-aerox3.nix
 
-    # ../mixins/alacritty.nix
     ../mixins/fonts.nix
-    ../mixins/ghostty.nix
     ../mixins/mpv.nix
     # ../mixins/pam-u2f.nix # separate out briefly
     ../mixins/pipewire.nix
-    # ../mixins/rio.nix
-    # ../mixins/wezterm.nix
   ];
 
   config = {
