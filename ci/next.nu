@@ -24,6 +24,9 @@ def "main" [] {
     git push origin HEAD -f
   }
 
+
+  print -e ">>> next: nixpkgs (cmpkgs)"
+
   let url = $"git@github.com:colemickens/nixpkgs"
   let dir = $"($ROOT)/nixpkgs"
   
@@ -45,6 +48,8 @@ def "main" [] {
 
     git push origin HEAD -f
   }
+
+  print -e ">>> next: home-manager (cmhm)"
 
   let url = $"git@github.com:colemickens/home-manager"
   let dir = $"($ROOT)/home-manager"
@@ -71,6 +76,9 @@ def "main" [] {
   do {
     cd $"($ROOT)/nixcfg"
 
+    let start = (date now)
+    print -e $">>> nix flake update \(start\) ($start)"
+
     ^nix ...[
       flake update
       --accept-flake-config
@@ -78,6 +86,9 @@ def "main" [] {
       --override-input cmpkgs github:colemickens/nixpkgs/cmpkgs-next-wip
       --override-input home-manager github:colemickens/home-manager/cmhm-next-wip
     ]
+
+    let duration = (date now) - $start
+    print -e $">>> nix flake update \(done\) (date now) - ($duration)"
 
     git push origin HEAD
   }

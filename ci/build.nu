@@ -7,11 +7,14 @@ let thing = ".#bundle.x86_64-linux"
 def "main" [] {
   print "::group::nfb"
   mut success = false
+
+  print -e $"::warning::success=($success)"
+
   try {
     print -e "::warning::first build attempt"
 
-    nix build --keep-going --accept-flake-config --print-out-paths $thing | cachix push colemickens
-    echo "LAST_EXIT_CODE=($env.LAST_EXIT_CODE)"
+    nix build -L --keep-going --accept-flake-config $thing
+    ^ls -d result* | cachix push colemickens
     $success = true
   }
 
@@ -20,8 +23,8 @@ def "main" [] {
   if not $success {
     try {
       print -e "::warning::we failed to build the first time, trying again"
-      nix build -j1 --keep-going --accept-flake-config --print-out-paths $thing | cachix push colemickens
-      echo "LAST_EXIT_CODE=($env.LAST_EXIT_CODE)"
+      nix build -L -j1 --keep-going --accept-flake-config $thing
+      ^ls -d result* | cachix push colemickens
       $success = true
     }
   }
