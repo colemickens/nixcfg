@@ -25,7 +25,7 @@ jobs:
         ref: main
     - name: update
       run: |
-        nix develop .#ci -c ./ci/next.nu
+        nix develop --accept-flake-config .#ci -c ./ci/next.nu
     - name: build-cache
       run: |
-        nix develop .#ci -c ./ci/build.nu
+        nix develop --accept-flake-config .#ci -c ./ci/build.nu
