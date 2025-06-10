@@ -8,9 +8,11 @@ def "main" [] {
   print "::group::nfb"
   mut success = false
   try {
-      nix build --keep-going --accept-flake-config --print-out-paths $thing | cachix push colemickens
-      echo "LAST_EXIT_CODE=($env.LAST_EXIT_CODE)"
-      $success = true
+    print -e "::warning::first build attempt"
+
+    nix build --keep-going --accept-flake-config --print-out-paths $thing | cachix push colemickens
+    echo "LAST_EXIT_CODE=($env.LAST_EXIT_CODE)"
+    $success = true
   }
   if not $success {
     try {
