@@ -14,6 +14,9 @@ def "main" [] {
     echo "LAST_EXIT_CODE=($env.LAST_EXIT_CODE)"
     $success = true
   }
+
+  print -e $"::warning::success=($success)"
+
   if not $success {
     try {
       print -e "::warning::we failed to build the first time, trying again"
@@ -22,6 +25,10 @@ def "main" [] {
       $success = true
     }
   }
+  
+  print -e $"::warning::success=($success)"
+
+
   if not $success {
     # NOTE: this is probably useless now that we're back to builing the whole bundle
     # instead of how nix-eval-jobs recurses
@@ -31,6 +38,9 @@ def "main" [] {
     exit -1
   }
   print "::endgroup"
+
+  print -e $"::warning::success=($success)"
+
 
   print "::group::cachix push"
   do {
