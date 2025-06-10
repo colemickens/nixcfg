@@ -76,7 +76,7 @@
   nixConfig = {
     builers-use-substitutes = true;
     build-cores = 0;
-    narinfo-cache-negative-ttl = 0;
+    # narinfo-cache-negative-ttl = 0;
     extra-substituters = "https://colemickens.cachix.org https://cache.flakehub.com";
     extra-trusted-public-keys = "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM= cache.flakehub.com-4:Asi8qIv291s0aYLyH6IOnr5Kf6+OF14WVjkE6t3xMio= cache.flakehub.com-5:zB96CRlL7tiPtzA9/WKyPkp3A2vqxqgdgyTVNGShPDU= cache.flakehub.com-6:W4EGFwAGgBj3he7c5fNh9NkOXw0PUVaxygCVKeuvaqU= cache.flakehub.com-7:mvxJ2DZVHn/kRxlIaxYNMuDG1OvMckZu32um1TadOR8= cache.flakehub.com-8:moO+OVS0mnTjBTcOUh2kYLQEd59ExzyoW1QgQ8XAARQ= cache.flakehub.com-9:wChaSeTI6TeCuV/Sg2513ZIM9i0qJaYsF+lZCXg0J6o= cache.flakehub.com-10:2GqeNlIp6AKp4EF2MVbE1kBOp9iBSyo0UPR9KoR0o1Y=";
     always-allow-substitutes = true;
@@ -157,14 +157,8 @@
           zeph = {
             pkgs = inputs.cmpkgs;
           };
-
-          # hetzner
-          hcloud-amd64-dev1 = {
-            pkgs = inputs.cmpkgs;
-          };
         };
-        "aarch64-linux" = {
-        };
+        "aarch64-linux" = { };
       };
       nixosConfigs = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues nixosConfigsEx));
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);
@@ -175,19 +169,13 @@
         # must be manually included in ciAttrs
         x86_64-linux = {
           installer-standard = nixosConfigurations.installer-standard.config.system.build.isoImage;
-          installer-standard-aarch64 =
-            nixosConfigurations.installer-standard-aarch64.config.system.build.isoImage;
+          installer-standard-aarch64 = nixosConfigurations.installer-standard-aarch64.config.system.build.isoImage;
         };
         aarch64-linux = { };
         riscv64-linux = { };
       };
 
-      ## NIXOS_MODULES # TODO: we don't use these? #############################
-      nixosModules = {
-        loginctl-linger = import ./modules/loginctl-linger.nix;
-        ttys = import ./modules/ttys.nix;
-        other-arch-vm = import ./modules/other-arch-vm.nix;
-      };
+      nixosModules = {};
 
       ## OVERLAY ###############################################################
       overlays = {
@@ -212,42 +200,6 @@
         inherit nixosModules overlays;
         inherit extra;
         inherit pkgs pkgsUnfree;
-        ## HM ENVS #####################################################
-
-        checks = {
-          "aarch64-linux" = checks-native.aarch64-linux; # // checks-cross.aarch64-linux;
-          "x86_64-linux" = checks-native.x86_64-linux // checks-cross.x86_64-linux;
-        };
-
-        checks-native = {
-          "aarch64-linux" = {
-            inherit (toplevels)
-              ;
-          };
-          "x86_64-linux" = {
-            inherit (toplevels)
-              # normal x86_64-linux hosts
-              raisin
-              slynux
-              zeph
-
-              ds-ws-colemickens
-
-              # misc native x86_64-linux
-              installer-standard
-              ;
-          };
-        };
-        checks-cross = {
-          "x86_64-linux" = {
-            # # cross-builds
-            # inherit (toplevels)
-            #   ;
-            # inherit (extra.x86_64-linux)
-            #   # installer-standard-aarch64
-            #   ;
-          };
-        };
       })
       (
         ## SYSTEM-SPECIFIC OUTPUTS ############################################
@@ -343,28 +295,26 @@
             );
 
             ## PACKAGES #######################################################
-            packages = (pkgs.${system}.__colemickens_nixcfg_pkgs);
-            legacyPackages = pkgs;
+            # TODO: holy shit I think flake-utils shoves the toplevels into pkgs
+            legacyPackages = (pkgs.${system}.__colemickens_nixcfg_pkgs);
 
             ## CI (sorta) #####################################################
-            bundle = pkgs.${system}.buildEnv {
-              name = "nixcfg-bundle";
-              paths = builtins.attrValues checks;
-            };
+            bundle = pkgs.${system}.linkFarmFromDrvs "nixcfg-bundle"
+              (builtins.attrValues checks);
 
             ## CHECKS #########################################################
-            # TODO: ask mic92 about this pattern, he doesn't just build .${system} even though these checks are persystem
-            # TODO: also: we don't filter out toplevels... maybe toplevels.zeph should actually be toplevels.x86_64-linux.zeph ?
-            # ??? revisit...
-            # also, we're probably fine to remove ciAttrs now, nix-fast-build does recursive-ness, and ciAttrs doesn't even buildFarm anymore
-            # TODO: we're still preferring local builds for somemthings, do we need to add back the wrapper?????
-            # TODO: or look into the allowSubstitutesAlways new flag that lovesegfault commented about?
             checks =
               let
-                c_packages = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") inputs.self.packages.${system};
+                c_packages = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") inputs.self.legacyPackages.${system};
                 c_devShells = lib.mapAttrs' (n: v: lib.nameValuePair "devShell-${n}" v.inputDerivation) inputs.self.devShells.${system};
+                c_toplevels = lib.mapAttrs' (n: v: (lib.nameValuePair "toplevel-${n}" v.config.system.build.toplevel))
+                  (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigsEx.${system});
               in
-              c_packages // c_devShells;
+                {}
+                // c_packages
+                // c_toplevels
+                // c_devShells
+              ;
           }
         )
       );
