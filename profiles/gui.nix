@@ -74,6 +74,7 @@ in
         Type=Application
         Version=1.4
         Hidden=${builtins.toString hidden}
+        NoDisplay=${builtins.toString hidden}
 
         [Desktop Action new-private-window]
         Exec=firefox-nightly --private-window %U
