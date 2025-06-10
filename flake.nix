@@ -362,7 +362,7 @@
             checks =
               let
                 c_packages = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") inputs.self.packages.${system};
-                c_devShells = lib.mapAttrs' (n: lib.nameValuePair "devShell-${n}") inputs.self.devShells.${system};
+                c_devShells = lib.mapAttrs' (n: v: lib.nameValuePair "devShell-${n}" v.inputDerivation) inputs.self.devShells.${system};
               in
               c_packages // c_devShells;
           }
