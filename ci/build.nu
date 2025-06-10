@@ -9,12 +9,14 @@ def "main" [] {
   mut success = false
   try {
       nix build --keep-going --accept-flake-config --print-out-paths $thing | cachix push colemickens
+      echo "LAST_EXIT_CODE=($env.LAST_EXIT_CODE)"
       $success = true
   }
   if not $success {
     try {
       print -e "::warning::we failed to build the first time, trying again"
       nix build -j1 --keep-going --accept-flake-config --print-out-paths $thing | cachix push colemickens
+      echo "LAST_EXIT_CODE=($env.LAST_EXIT_CODE)"
       $success = true
     }
   }
