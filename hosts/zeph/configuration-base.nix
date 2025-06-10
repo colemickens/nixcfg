@@ -30,8 +30,6 @@ in
     ../../mixins/android.nix
     ../../mixins/clamav.nix
     ../../mixins/ledger.nix
-    ../../mixins/libvirt.nix
-    ../../mixins/libvirtd.nix
     ../../mixins/monero.nix
     ../../mixins/podman.nix
     ../../mixins/syncthing.nix
