@@ -3,6 +3,10 @@
 source _common.nu
 
 def "main" [] {
+  print "::group::info"
+  nix --version
+  print "::endgroup"
+
   let url = $"git@github.com:colemickens/nixcfg"
   let dir = $"($ROOT)/nixcfg"
   mkdir $dir
