@@ -2,16 +2,18 @@
 
 source _common.nu
 
+let thing = ".#bundle.x86_64-linux"
+
 def "main" [] {
   print "::group::nfb"
   mut success = false
   try {
-      nix build --keep-going --accept-flake-config --print-out-paths '.#bundle' | cachix push colemickens
+      nix build --keep-going --accept-flake-config --print-out-paths $thing | cachix push colemickens
       $success = true
   }
   if not $success {
     try {
-      nix build -j1 --keep-going --accept-flake-config --print-out-paths '.#bundle' | cachix push colemickens
+      nix build -j1 --keep-going --accept-flake-config --print-out-paths $thing | cachix push colemickens
       $success = true
     }
   }
