@@ -8,29 +8,18 @@ def "main" [] {
   print "::group::nfb"
   mut success = false
 
-  print -e $"::warning::success=($success)"
-
   try {
-    print -e "::warning::first build attempt"
-
-    nix build -L --keep-going --accept-flake-config $thing
-    ^ls -d result* | cachix push colemickens
+    nix build -v -L --keep-going --accept-flake-config $thing
     $success = true
   }
-
-  print -e $"::warning::success=($success)"
 
   if not $success {
     try {
       print -e "::warning::we failed to build the first time, trying again"
-      nix build -L -j1 --keep-going --accept-flake-config $thing
-      ^ls -d result* | cachix push colemickens
+      nix build -v -L -j1 --keep-going --accept-flake-config $thing
       $success = true
     }
   }
-  
-  print -e $"::warning::success=($success)"
-
 
   if not $success {
     # NOTE: this is probably useless now that we're back to builing the whole bundle
@@ -41,9 +30,6 @@ def "main" [] {
     exit -1
   }
   print "::endgroup"
-
-  print -e $"::warning::success=($success)"
-
 
   print "::group::cachix push"
   do {
