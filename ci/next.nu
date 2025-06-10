@@ -85,30 +85,20 @@ def "main" [] {
 
     let pkgref = $"($env.PWD)#packages.x86_64-linux"
     let pkglist = ^nix ...[
-      eval
-      --accept-flake-config
-      --json $pkgref
-      --apply "x: builtins.attrNames x"
+      eval --accept-flake-config --json $pkgref --apply "x: builtins.attrNames x"
     ] | str trim | from json
 
     for pkgname in $pkglist {
       print -e $"::group::pkgup ($pkgname)"
       do {
         try {
-          ^nix-update ...[
-            --flake
-            --build
-            --commit
-            --format
-            --version branch
-            $pkgname
-          ]
-  
+          ^nix-update --flake --build --commit --format --version branch $pkgname
+          
           git push origin HEAD
-          print -e $"pushed ($pkgname)"
+          print -e $"pkgup: ($pkgname): PASS: pushed"
         } catch {
           git restore $"./pkgs/($pkgname)"
-          print -e $"pkgup: ($pkgname): restoring/undoing"
+          print -e $"pkgup: ($pkgname): FAI: restoring/undoing"
         }
       }
       print "::endgroup"
