@@ -2,16 +2,20 @@
 
 source _common.nu
 
-## NIX-FAST-BUILD
 def "main" [] {
   print "::group::nfb"
+  mut success = false
   try {
-    do -i { ^nix-fast-build ...$nfbflags }
-    # NOTE(colemickens): Just try to build it again, but with a single core.
-    # This is in case we ran out of memory due to too many concurrent jobs.
-    # This adds some re-eval time, but whatever, it's CI.
-    ^nix-fast-build ...$nfbflags -j1
-  } catch {
+      nix build --keep-going --accept-flake-config --print-out-paths '.#bundle' | cachix push colemickens
+      $success = true
+  }
+  if not $success {
+    try {
+      nix build -j1 --keep-going --accept-flake-config --print-out-paths '.#bundle' | cachix push colemickens
+      $success = true
+    }
+  }
+  if not $success {
     ls -l result* | print -e
     ^ls -d result* | cachix push colemickens
     print -e "::warning::nix-fast-build failed, but we cached something"
