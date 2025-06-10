@@ -23,6 +23,10 @@ def "main deploy" [ host: string, --toplevel: string = ""] {
 
   header "light_green_reverse" $"deploy: ($host): DONE"
   print -e $"(char nl)"
+
+  if $"(^hostname)" == $host {
+    ^fix-ssh-remote
+  }
 }
 
 def "main selfup" [] {
