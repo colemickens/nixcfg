@@ -69,6 +69,7 @@ def "main" [] {
 
     ^nix ...[
       flake update
+      --accept-flake-config
       --commit-lock-file
       --override-input cmpkgs github:colemickens/nixpkgs/cmpkgs-next-wip
       --override-input home-manager github:colemickens/home-manager/cmhm-next-wip
@@ -85,6 +86,7 @@ def "main" [] {
     let pkgref = $"($env.PWD)#packages.x86_64-linux"
     let pkglist = ^nix ...[
       eval
+      --accept-flake-config
       --json $pkgref
       --apply "x: builtins.attrNames x"
     ] | str trim | from json
