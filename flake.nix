@@ -48,15 +48,6 @@
       inputs."flake-utils".follows = "flake-utils";
       # inputs."nixpkgs".follows = "cmpkgs";
     };
-    nix-update = {
-      url = "github:Mic92/nix-update";
-      inputs."nixpkgs".follows = "cmpkgs";
-    };
-    nix-fast-build = {
-      # url = "github:Mic92/nix-fast-build";
-      url = "github:colemickens/nix-fast-build?ref=stdout-pipable";
-      # inputs."nixpkgs".follows = "cmpkgs";
-    };
     # zellij
     zjstatus = {
       url = "github:dj95/zjstatus";
