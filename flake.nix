@@ -10,7 +10,7 @@
     }; # TODO: boo name! "libaggregate"?
 
     nixpkgs-stable = {
-      url = "github:nixos/nixpkgs?ref=nixos-24.11";
+      url = "github:nixos/nixpkgs?ref=nixos-25.05";
     }; # any stable to use
     cmpkgs = {
       url = "github:colemickens/nixpkgs?ref=cmpkgs";
