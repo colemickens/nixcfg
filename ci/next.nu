@@ -77,31 +77,4 @@ def "main" [] {
 
     git push origin HEAD
   }
-
-  ## PKGUP
-
-  do {
-    cd $"($ROOT)/nixcfg"
-
-    let pkgref = $"($env.PWD)#packages.x86_64-linux"
-    let pkglist = ^nix ...[
-      eval --accept-flake-config --json $pkgref --apply "x: builtins.attrNames x"
-    ] | str trim | from json
-
-    for pkgname in $pkglist {
-      print -e $"::group::pkgup ($pkgname)"
-      do {
-        try {
-          ^nix-update --flake --build --commit --format --version branch $pkgname
-          
-          git push origin HEAD
-          print -e $"pkgup: ($pkgname): PASS: pushed"
-        } catch {
-          git restore $"./pkgs/($pkgname)"
-          print -e $"pkgup: ($pkgname): FAI: restoring/undoing"
-        }
-      }
-      print "::endgroup"
-    }
-  }
 }
