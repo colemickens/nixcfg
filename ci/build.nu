@@ -9,14 +9,14 @@ def "main" [] {
   mut success = false
 
   try {
-    nix build -v -L --keep-going --accept-flake-config $thing
+    nix build -L --keep-going --accept-flake-config $thing
     $success = true
   }
 
   if not $success {
     try {
       print -e "::warning::we failed to build the first time, trying again"
-      nix build -v -L -j1 --keep-going --accept-flake-config $thing
+      nix build -L -j1 --keep-going --accept-flake-config $thing
       $success = true
     }
   }
