@@ -6,16 +6,6 @@
   ...
 }:
 
-let
-  prefs = import ../mixins/_preferences.nix {
-    inherit
-      inputs
-      config
-      lib
-      pkgs
-      ;
-  };
-in
 {
   imports = [
     ./gui-wayland.nix
@@ -72,44 +62,14 @@ in
         { pkgs, config, ... }@hm:
         {
           home.packages = with pkgs; [
-            # cosmic-emoji-picker
+            adw-gtk3
           ];
 
-          home.sessionVariables = {
-            # WLR_RENDERER = "vulkan";
-            # XDG_CURRENT_DESKTOP = "sway";
-          };
-
-          xdg.configFile = {
-            "autostart/rog-control-center.desktop" = {
-              source = config.lib.file.mkOutOfStoreSymlink "/run/current-system/sw/share/applications/rog-control-center.desktop";
-              # target = "/run/current-system/sw/share/applications/rog-control-center.desktop";
-            };
-          };
-
-          # xdg.portal = {
-          #   enable = true;
-          #   extraPortals = with pkgs; [
-          #     xdg-desktop-portal-gtk
-          #     xdg-desktop-portal-wlr
-          #   ];
-          #   config = {
-          #     common = {
-          #       default = [ "gtk" ];
-          #     };
-          #     sway = {
-          #       default = [ "gtk" ];
-          #       "org.freedesktop.impl.portal.Screencast" = [ "wlr" ];
-          #       "org.freedesktop.impl.portal.Screenshot" = [ "wlr" ];
-          #     };
-          #   };
-          #   #   extraPortal = with pkgs; [
-          #   #     xdg-desktop-portal-wlr
-          #   #     (xdg-desktop-portal-gtk.override {
-          #   #       buildPortalsInGnome = false;
-          #   #     })
-          #   #   ];
-          # };
+          # WIP: trying to get cosmic to style gtk3 apps
+          xdg.configFile."gtk-3.0/settings.ini".text = ''
+            [Settings]
+            gtk-theme-name=adw-gtk3
+          '';
         };
     };
 }
