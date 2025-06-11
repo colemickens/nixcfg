@@ -95,9 +95,11 @@ in
         };
         
         xdg.dataFile."applications/firefox-default.desktop".text =
-          xdgFirefoxApp "personal" "firefox" false;
+          xdgFirefoxApp "default" "firefox" false;
         xdg.dataFile."applications/firefox-detsys.desktop".text =
           xdgFirefoxApp "detsys" "web-browser" false;
+        xdg.dataFile."applications/firefox-private.desktop".text =
+          xdgFirefoxApp "private" "web-browser" false;
         xdg.dataFile."applications/firefox.desktop".text =
           xdgFirefoxApp "none" "firefox" true;
 
