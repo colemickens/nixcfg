@@ -15,10 +15,6 @@
     cmpkgs = {
       url = "github:colemickens/nixpkgs?ref=cmpkgs";
     };
-    nixos-cosmic = {
-      url = "github:lilyinstarlight/nixos-cosmic";
-      inputs."nixpkgs".follows = "cmpkgs";
-    };
 
     # core system/inputs
     home-manager = {
