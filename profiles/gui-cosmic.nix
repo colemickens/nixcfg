@@ -9,9 +9,6 @@
 {
   imports = [
     ./gui-wayland.nix
-
-    # WARNING, this enables network-manager, ew!
-    inputs.nixos-cosmic.nixosModules.default
   ];
 
   config =
@@ -39,12 +36,12 @@
       };
       environment.systemPackages = with pkgs; [
         cosmic-player
-        cosmic-reader
+        # cosmic-reader
         cosmic-ext-ctl
         # cosmic-ext-applet-clipboard-manager
-        cosmic-ext-applet-emoji-selector
-        cosmic-ext-applet-external-monitor-brightness
-        cosmic-ext-applet-caffeine
+        # cosmic-ext-applet-emoji-selector
+        # cosmic-ext-applet-external-monitor-brightness
+        # cosmic-ext-applet-caffeine
         # cosmic-ext-tweaks
 
         # andromeda
