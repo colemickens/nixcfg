@@ -139,6 +139,8 @@ in
 
             glide-media-player
             vlc
+            psst
+            spot
 
             # audio/video
             pwvucontrol
