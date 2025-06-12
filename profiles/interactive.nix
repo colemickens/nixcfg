@@ -29,7 +29,6 @@
     ../mixins/jujutsu.nix
     ../mixins/joshuto.nix
     ../mixins/nushell.nix
-    # ../mixins/spotify.nix
     ../mixins/ssh.nix
     ../mixins/xdg.nix
     ../mixins/zellij.nix

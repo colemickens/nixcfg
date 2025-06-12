@@ -33,6 +33,7 @@ in
     ../../mixins/monero.nix
     ../../mixins/obs.nix # fucking Android can't _rotate it's webcam feed_
     ../../mixins/podman.nix
+    ../../mixins/spotify.nix
     ../../mixins/syncthing.nix
     ../../mixins/trezor.nix
 
