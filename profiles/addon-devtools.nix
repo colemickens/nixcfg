@@ -21,6 +21,8 @@
             nixfmt-rfc-style
 
             dfmt
+
+            mergiraf
           ];
           sessionVariables = {
             ENVRC_USE_FLAKE = 1;
