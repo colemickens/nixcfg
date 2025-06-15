@@ -69,7 +69,7 @@ in
               pane size=2 borderless=true {
                 plugin location="file:${plugin_zjstatus}/bin/zjstatus.wasm" {
                   format_left  "{mode} #[fg=${hostColor},bold]{session} {tabs}"
-                  format_right "{datetime}"
+                  format_right ""
                   format_space "|"
 
                   hide_frame_for_single_pane "false"
@@ -90,10 +90,6 @@ in
                   tab_active              "#[bg=#6C7086,fg=#000000,bold] {name} "
                   tab_active_fullscreen   "#[bg=#6C7086,fg=#000000] {name} [] "
                   tab_active_sync         "#[bg=#6C7086,fg=#000000,bold] {name} <> "
-
-                  datetime          "#[fg=#6C7086] {format} "
-                  datetime_format   "%Y-%m-%d %H:%M"
-                  datetime_timezone "America/Cancun"
                 }
               }
             }
