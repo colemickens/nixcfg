@@ -5,7 +5,6 @@ source _common.nu
 let thing = ".#bundle.x86_64-linux"
 
 def "main" [] {
-  print "::group::nfb"
   mut success = false
 
   try {
@@ -29,11 +28,8 @@ def "main" [] {
     print -e "::warning::build failed, but we cached something"
     exit -1
   }
-  print "::endgroup"
 
-  print "::group::cachix push"
   do {
     ^ls -d result* | ^tee "/dev/stderr" | cachix push colemickens
   }
-  print "::endgroup"
 }
