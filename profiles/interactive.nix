@@ -39,19 +39,6 @@
     users.users.cole.linger = true;
     users.users.cole.shell = pkgs.zsh;
 
-    sops.secrets = {
-      "oraclecloud_colemickens_privkey" = {
-        owner = "cole";
-        sopsFile = ../secrets/encrypted/oraclecloud_colemickens_privkey;
-        format = "binary";
-      };
-      "oraclecloud_colemickens2_privkey" = {
-        owner = "cole";
-        sopsFile = ../secrets/encrypted/oraclecloud_colemickens2_privkey;
-        format = "binary";
-      };
-    };
-
     programs.bandwhich.enable = true;
 
     services.dbus.packages = with pkgs; [ pkgs.dconf ];
