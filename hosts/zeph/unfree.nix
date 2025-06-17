@@ -18,7 +18,7 @@
         "google-chrome-dev"
         
         "firefox-bin"
-        "firefox-release-bin-unwrapped"
+        "firefox-bin-unwrapped"
 
         # trezor-suite... is unfree?
         "trezor-suite"
