@@ -16,7 +16,7 @@
         "apple_cursor"
         "google-chrome"
         "google-chrome-dev"
-        
+
         "firefox-bin"
         "firefox-bin-unwrapped"
 

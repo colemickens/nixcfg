@@ -1,27 +1,5 @@
-{
-  pkgs,
-  config,
-  inputs,
-  ...
-}:
+{ pkgs, ... }:
 
-let
-  # yuzu_noQtWeb =
-  #   (pkgs.yuzuPackages.early-access.override { qtwebengine = null; }).overrideAttrs (old: {
-  #     cmakeFlags = old.cmakeFlags ++ [ "-DYUZU_USE_QT_WEB_ENGINE=OFF" ];
-  #   });
-
-  # yuzu_noQtWeb2 =
-  #   (pkgs.yuzuPackages.early-access.override { qtwebengine = null; }).overrideAttrs (old: {
-  #     cmakeFlags = old.cmakeFlags ++ [ "-DYUZU_USE_QT_WEB_ENGINE=OFF" ];
-  #   });
-
-  # _yuzu = yuzu_noQtWeb;
-  # _yuzu = yuzu_noQtWeb2;
-  _yuzu = pkgs.yuzuPackages.early-access;
-
-  vkdevice = "1002:73ef";
-in
 {
   config = {
     networking.firewall = {
@@ -48,30 +26,6 @@ in
     programs = {
       steam = {
         enable = true;
-        gamescopeSession = {
-          enable = true;
-          env = {
-            WLR_RENDERER = "vulkan";
-            DXVK_HDR = "1";
-            ENABLE_GAMESCOPE_WSI = "1";
-            WINE_FULLSCREEN_FSR = "1";
-          };
-          args = [
-            "--hdr-enabled"
-            "--output-width"
-            "1920"
-            "--output-height"
-            "1080"
-            "--adaptive-sync"
-            "--steam"
-            "--hdr-enabled"
-            "--hdr-itm-enable"
-            "--prefer-output"
-            "HDMI-A-1"
-            "--prefer-vk-device"
-            vkdevice
-          ];
-        };
       };
       gamescope = {
         enable = true;
@@ -106,10 +60,6 @@ in
           goverlay
 
           legendary-gl
-
-          # dolphin-emu # gamecube emu
-          # _yuzu
-          # xemu
         ];
         programs = {
           mangohud = {

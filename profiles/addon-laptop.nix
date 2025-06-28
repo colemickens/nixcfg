@@ -1,10 +1,4 @@
-{
-  pkgs,
-  lib,
-  config,
-  inputs,
-  ...
-}:
+{ pkgs, ... }:
 
 {
   config = {
@@ -12,10 +6,6 @@
       power-profiles-daemon.enable = true;
       upower.enable = true;
     };
-    # unused, and not available for aarch64-linux:
-    # programs = {
-    #   coolercontrol.enable = true;
-    # };
     networking.wireless.iwd.enable = true;
     environment.systemPackages = with pkgs; [
       impala

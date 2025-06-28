@@ -1,10 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  modulesPath,
-  ...
-}:
+{ pkgs, lib, ... }:
 
 {
   imports = [ ../../profiles/core.nix ];

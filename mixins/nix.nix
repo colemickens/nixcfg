@@ -1,29 +1,12 @@
 {
   config,
   lib,
-  pkgs,
   inputs,
   ...
 }:
 
-with lib;
-
-let
-in
-# _nixUnstableXdg = pkgs.nixUnstable.overrideAttrs (old: {
-#   src = pkgs.fetchFromGitHub {
-#     owner = "Artturin";
-#     repo = "nix";
-#     rev = "0c4a30eecc22a7e10cddba4612df484ade3e291f";
-#     sha256 = "sha256-HNU+jltYw3gdt9ApI21zUoojy0aJ4y1x7kidkWZkKg0=";
-#   };
-# });
-# _nix = pkgs.nixVersions.unstable;
-# _nix = pkgs.nixVersions.nix_2_18;
-# _nix = pkgs.nixVersions.latest;
 {
   config = {
-
     sops.secrets = {
       "nix-access-tokens" = {
         owner = "cole";

@@ -46,10 +46,14 @@ def "main selfup" [] {
 
 def "main up" [...hosts] {
   nix flake update --commit-lock-file
-  nix build --accept-flake-config --print-out-paths '.#toplevels.zeph' '.#toplevels.slynux' '.#toplevels.raisin' | cachix push colemickens
+  nix build --accept-flake-config --print-out-paths --keep-going '.#toplevels.zeph' '.#toplevels.slynux' '.#toplevels.raisin' | cachix push colemickens
   main deploy raisin
   main deploy slynux
   main deploy zeph
+
+  header "light_purple_reverse" $"optimistic: build bundle"
+  nix build --accept-flake-config --print-out-paths --keep-going '.#bundle.x86_64-linux'
+  header "light_purple_reverse" $"optimistic: build bundle: DONE"
 }
 
 def "main nix" [...args] {

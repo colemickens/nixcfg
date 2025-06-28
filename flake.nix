@@ -2,71 +2,33 @@
   description = "colemickens - nixos configs, custom packges, misc";
 
   inputs = {
-    flake-utils = {
-      url = "github:numtide/flake-utils";
-    };
-    lib-aggregate = {
-      url = "github:nix-community/lib-aggregate";
-    }; # TODO: boo name! "libaggregate"?
+    flake-utils.url = "github:numtide/flake-utils";
+    lib-aggregate.url = "github:nix-community/lib-aggregate";
+    nixpkgs-stable.url = "github:nixos/nixpkgs?ref=nixos-25.05";
+    cmpkgs.url = "github:colemickens/nixpkgs?ref=cmpkgs";
+    home-manager.url = "github:colemickens/home-manager/cmhm";
+    home-manager.inputs."nixpkgs".follows = "cmpkgs";
+    nixos-hardware.url = "github:NixOS/nixos-hardware";
+    sops-nix.url = "github:Mic92/sops-nix/master";
+    sops-nix.inputs."nixpkgs".follows = "cmpkgs";
+    lanzaboote.url = "github:nix-community/lanzaboote";
 
-    nixpkgs-stable = {
-      url = "github:nixos/nixpkgs?ref=nixos-25.05";
-    }; # any stable to use
-    cmpkgs = {
-      url = "github:colemickens/nixpkgs?ref=cmpkgs";
-    };
-
-    # core system/inputs
-    home-manager = {
-      url = "github:colemickens/home-manager/cmhm";
-      inputs."nixpkgs".follows = "cmpkgs";
-    };
-    nixos-hardware = {
-      url = "github:NixOS/nixos-hardware";
-    };
-    sops-nix = {
-      url = "github:Mic92/sops-nix/master";
-      inputs."nixpkgs".follows = "cmpkgs";
-    };
-    lanzaboote = {
-      url = "github:nix-community/lanzaboote";
-    };
     ucodenix.url = "github:e-tho/ucodenix";
 
     # devtools:
-    # also, there's crane, crates2nix, cargo2nix, ??
-    helix = {
-      url = "github:helix-editor/helix";
-      inputs."nixpkgs".follows = "cmpkgs";
-    };
-    jj = {
-      url = "github:martinvonz/jj";
-      inputs."flake-utils".follows = "flake-utils";
-      # inputs."nixpkgs".follows = "cmpkgs";
-    };
-    # zellij
-    zjstatus = {
-      url = "github:dj95/zjstatus";
-      inputs."nixpkgs".follows = "cmpkgs";
-    };
+    helix.url = "github:helix-editor/helix";
+    helix.inputs."nixpkgs".follows = "cmpkgs";
+    jj.url = "github:martinvonz/jj";
+    jj.inputs."flake-utils".follows = "flake-utils";
+    zjstatus.url = "github:dj95/zjstatus";
+    zjstatus.inputs."nixpkgs".follows = "cmpkgs";
 
     # wip replacement for nixpkgs->github-runners module
-    nixos-github-actions = {
-      url = "github:colemickens/nixos-github-actions";
-      inputs."nixpkgs".follows = "cmpkgs";
-    };
-    flake-compat = {
-      url = "github:edolstra/flake-compat";
-    };
-
-    disko = {
-      url = "github:nix-community/disko";
-    };
+    nixos-github-actions.url = "github:colemickens/nixos-github-actions";
+    nixos-github-actions.inputs."nixpkgs".follows = "cmpkgs";
 
     # for work
-    determinate = {
-      url = "https://flakehub.com/f/DeterminateSystems/determinate/3.tar.gz";
-    };
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/3.tar.gz";
   };
 
   nixConfig = {
@@ -85,7 +47,6 @@
       defaultSystems = [
         "x86_64-linux"
         "aarch64-linux"
-        # "riscv64-linux"
       ];
 
       lib = inputs.lib-aggregate.lib;
@@ -96,12 +57,7 @@
           system:
           import npkgs {
             inherit system;
-            overlays = [ overlays.default ];
-            config =
-              let
-                cfg = ({ allowAliases = false; } // extraCfg);
-              in
-              cfg;
+            config = ({ allowAliases = false; } // extraCfg);
           }
         ));
       pkgs = importPkgs inputs.cmpkgs { };
@@ -119,14 +75,12 @@
               else
                 [ { config.nixpkgs.buildPlatform.system = v.buildSys; } ]
             );
-          specialArgs = {
-            inherit inputs;
-          };
+          specialArgs.inputs = inputs;
         });
 
       ## NIXOS CONFIGS + TOPLEVELS ############################################
       nixosConfigsEx = {
-        "x86_64-linux" = rec {
+        "x86_64-linux" = {
           # misc
           installer-standard = {
             pkgs = inputs.cmpkgs;
@@ -165,28 +119,18 @@
         # must be manually included in ciAttrs
         x86_64-linux = {
           installer-standard = nixosConfigurations.installer-standard.config.system.build.isoImage;
-          installer-standard-aarch64 = nixosConfigurations.installer-standard-aarch64.config.system.build.isoImage;
+          installer-standard-aarch64 =
+            nixosConfigurations.installer-standard-aarch64.config.system.build.isoImage;
         };
         aarch64-linux = { };
         riscv64-linux = { };
       };
 
-      nixosModules = {};
-
-      ## OVERLAY ###############################################################
-      overlays = {
-        default = (
-          final: prev:
-          # TODO: must be a better way?
-          let
-            __colemickens_nixcfg_pkgs = rec { };
-          in
-          __colemickens_nixcfg_pkgs // { inherit __colemickens_nixcfg_pkgs; }
-        );
-      };
+      nixosModules = { };
+      overlays = { };
     in
     lib.recursiveUpdate
-      (rec {
+      ({
         inherit
           nixosConfigs
           nixosConfigsEx
@@ -209,21 +153,12 @@
                 pkgs = pkgs.${system};
               }
             );
-            mkAppScript = (
-              name: script: {
-                type = "app";
-                program = (pkgsStable.${system}.writeScript "${name}.sh" script).outPath;
-              }
-            );
           in
           rec {
-            ## FORMATTER ######################################################
+            ## FORMATTER #######################################################
             formatter = pkgs.${system}.nixfmt-rfc-style;
-            # formatter = pkgs.${system}.nixpkgs-fmt;
-            # formatter = pkgs.${system}.nixfmt;
-            # formatter = pkgs.${system}.alejandra;
 
-            ## DEVSHELLS # some of 'em kinda compose ##########################
+            ## DEVSHELLS #######################################################
             devShells =
               (lib.flip lib.genAttrs mkShell [
                 "ci"
@@ -234,83 +169,29 @@
                 default = devShells.ci;
               };
 
-            ## TODO: coercion is still so silly, I should be able to put
-            #        this at `outputs.homeConfigurations.x86_64-linux.env-ci`
-            ## HM ENVS ########################################################
+            ## PKGS ############################################################
+            legacyPackages = { };
 
-            homeConfigurations = (
-              lib.genAttrs [ "env-ci" ] (
-                h:
-                inputs.home-manager.lib.homeManagerConfiguration {
-                  pkgs = pkgs.${system};
-                  modules = [ ./hm/${h}.nix ];
-                  extraSpecialArgs = {
-                    inherit inputs;
-                  };
-                }
-              )
-            );
-            tophomes = (lib.mapAttrs (_: v: v.activation-script) homeConfigurations);
-
-            ## APPS ###########################################################
-            apps = lib.recursiveUpdate { } (
-              let
-                tfout = import ./cloud {
-                  inherit (inputs) terranix;
-                  pkgs = pkgsUnfree.${system};
-                };
-              in
-              # installerIso = "${installer.isoImage}/iso/${installer.isoImage.isoName}";
-              {
-                tf-apply = tfout.apply;
-                tf-destroy = tfout.destroy;
-
-                # test-vm = {
-                #   type = "app";
-                #   program =
-                #     (pkgs_.writeShellScript "test-vm" ''
-                #       ${pkgs_.qemu}/bin/qemu-img create -f qcow2 /tmp/installer-vm-vdisk1 10G
-                #       ${pkgs_.qemu}/bin/qemu-system-x86_64 -enable-kvm -nographic -m 2048 -boot d \
-                #         -cdrom "${installerIso}" -hda /tmp/installer-vm-vdisk1 \
-                #         -net user,hostfwd=tcp::10022-:22 -net nic
-                #     '').outPath;
-                # };
-
-                # test-vm-gui = {
-                #   type = "app";
-                #   program =
-                #     (pkgs_.writeShellScript "test-vm" ''
-                #       ${pkgs_.qemu}/bin/qemu-img create -f qcow2 /tmp/installer-vm-vdisk1 10G
-                #       ${pkgs_.qemu}/bin/qemu-system-x86_64 -enable-kvm -m 2048 -boot d \
-                #         -cdrom "${installerIso}" -hda /tmp/installer-vm-vdisk1 \
-                #         -net user,hostfwd=tcp::10022-:22 -net nic
-                #     '').outPath;
-                #   # TODO: add a variant that uses libvirt/virsh so we can test libvirt's funshit too
-                # };
-              }
-            );
-
-            ## PACKAGES #######################################################
-            # TODO: holy shit I think flake-utils shoves the toplevels into pkgs
-            legacyPackages = (pkgs.${system}.__colemickens_nixcfg_pkgs);
+            ## APPS ############################################################
+            apps = lib.recursiveUpdate { } ({ });
 
             ## CI (sorta) #####################################################
-            bundle = pkgs.${system}.linkFarmFromDrvs "nixcfg-bundle"
-              (builtins.attrValues checks);
+            bundle = pkgs.${system}.linkFarmFromDrvs "nixcfg-bundle" (builtins.attrValues checks);
 
-            ## CHECKS #########################################################
+            ## CHECKS ##########################################################
             checks =
               let
-                c_packages = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") inputs.self.legacyPackages.${system};
-                c_devShells = lib.mapAttrs' (n: v: lib.nameValuePair "devShell-${n}" v.inputDerivation) inputs.self.devShells.${system};
-                c_toplevels = lib.mapAttrs' (n: v: (lib.nameValuePair "toplevel-${n}" v.config.system.build.toplevel))
-                  (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigsEx.${system});
+                c_packages = lib.mapAttrs' (
+                  n: lib.nameValuePair "package-${n}"
+                ) inputs.self.legacyPackages.${system};
+                c_devShells = lib.mapAttrs' (
+                  n: v: lib.nameValuePair "devShell-${n}" v.inputDerivation
+                ) inputs.self.devShells.${system};
+                c_toplevels = lib.mapAttrs' (
+                  n: v: (lib.nameValuePair "toplevel-${n}" v.config.system.build.toplevel)
+                ) (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigsEx.${system});
               in
-                {}
-                // c_packages
-                // c_toplevels
-                // c_devShells
-              ;
+              { } // c_packages // c_toplevels // c_devShells;
           }
         )
       );

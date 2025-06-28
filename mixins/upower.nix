@@ -1,11 +1,4 @@
-{
-  pkgs,
-  lib,
-  config,
-  modulesPath,
-  inputs,
-  ...
-}:
+{ ... }:
 
 {
   config = {

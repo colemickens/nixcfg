@@ -1,10 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  modulesPath,
-  ...
-}:
+{ pkgs, lib, ... }:
 
 let
   hn = "installer-standard";
@@ -12,7 +6,6 @@ in
 {
   imports = [
     ./configuration-base-installer.nix
-    ../../profiles/addon-tiny.nix
   ];
 
   config = {

@@ -1,11 +1,10 @@
 { pkgs, inputs, ... }:
+
 let
   lib = pkgs.lib;
   minimalMkShell = import ./_minimal.nix { inherit pkgs; };
 
-  # 16 is broken: https://github.com/NixOS/nixpkgs/issues/244609
-  # llvmPackages = pkgs.llvmPackages_16;
-  llvmPackages = pkgs.llvmPackages_15;
+  llvmPackages = pkgs.llvmPackages_20;
 
   gstreamerPath =
     ""

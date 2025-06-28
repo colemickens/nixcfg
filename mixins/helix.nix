@@ -1,9 +1,5 @@
-{
-  pkgs,
-  config,
-  inputs,
-  ...
-}:
+{ pkgs, inputs, ... }:
+
 let
   tomlFormat = pkgs.formats.toml { };
   gen = cfg: (tomlFormat.generate "helix-languages.toml" cfg);

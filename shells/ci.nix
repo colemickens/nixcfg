@@ -10,8 +10,9 @@ minimalMkShell {
   #   # activate secrets?
   # '';
 
-  nativeBuildInputs =
-    (with pkgs; [
+  nativeBuildInputs = (
+    with pkgs;
+    [
       cachix
       cacert
       dust
@@ -21,5 +22,6 @@ minimalMkShell {
       openssh
 
       nixfmt-rfc-style
-    ]);
+    ]
+  );
 }

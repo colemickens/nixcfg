@@ -1,12 +1,5 @@
-{
-  pkgs,
-  lib,
-  config,
-  inputs,
-  ...
-}:
+{ pkgs, inputs, ... }:
 
-# includes ci devshell nativeBuildInputs - see bottom
 {
   imports = [
     inputs.home-manager.nixosModules.default # "home-manager"
@@ -14,7 +7,7 @@
   ];
 
   config = {
-    services.dbus.packages = with pkgs; [ pkgs.dconf ];
+    services.dbus.packages = [ pkgs.dconf ];
     home-manager = {
       useGlobalPkgs = true;
       useUserPackages = true;

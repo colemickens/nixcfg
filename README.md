@@ -1,64 +1,67 @@
 # nixcfg
 *Nix rules everything around me*
 
-<!--[![builds.sr.ht status](https://builds.sr.ht/~colemickens/nixcfg.svg)](https://builds.sr.ht/~colemickens/nixcfg?)-->
-
-- [Overview](#overview)
-- [Components](#components)
-- [Repo Layout](#repo-layout)
-- [Secrets](#secrets)
-- [Other Interesting Nix Repos](#other-interesting-nix-repos)
+- [nixcfg](#nixcfg)
+  - [Overview](#overview)
+  - [Components Used](#components-used)
+    - [Extra Flake Inputs](#extra-flake-inputs)
+  - [What I Use](#what-i-use)
+  - [Repo Layout](#repo-layout)
 
 ## Overview
 
-* nix configuration for my laptop~s~, ~desktops~, ~sbcs~, ~phones~, and cloud servers
-* **nix flake**-powered
+* nix configuration for my laptop, and old desktop server
+* [**Determinate Nix**](https://docs.determinate.systems/determinate-nix/)-powered
 * guaranteed to be **reproducible**
 * **immutable** *full* system configuration (**dotfiles**, but on steroids)
 
-#### notes
 
-* some commits may have empty commit messages, this is from me attempting to
-  use and learn [`jj`](https://github.com/martinvonz/jj).
+## Components Used
 
-## Components
+* [`home-manager`](https://github.com/nix-community/home-manager) for user-based app/desktop configuration
+* [`sops-nix`](https://github.com/Mic92/sops-nix) for secrets (encrypted at rest, per-host encryption)
+* [`lanzaboote`](https://github.com/nix-community/lanzaboote) for bootloader configuration
+* **[`determinate`](https://github.com/DeterminateSystems/determinate) for getting the best version of Nix with robust defaults**
 
-* `home-manager` for user-based app/desktop configuration
-* `sops-nix` for secrets (encrypted at rest, per-host encryption)
-* `terranix` for cloud server creation/deletion automation
-* custom commands for easy gpg-over-ssh usage (`pkgs/commands.nix`)
+### Extra Flake Inputs
+* [`ucodenix`](https://github.com/e-tho/ucodenix) to try to upgrade microcode
+* [`helix`](https://github.com/helix-editor/helix) for latest buids of [helix](https://github.com/helix-editor/helix) (rust-y modal TUI editor)
+* [`jj`](https://github.com/jj-vcs/jj) for latest buids of [jj (jujutsu)](https://github.com/jj-vcs/jj) (`git` but actually good)
+* [`zjstatus`](https://github.com/dj95/zjstatus) a nice plugin for [zellij](https://github.com/zellij-org/zellij) (rust-y user-friendly, powerful `tmux`-replacement)
+
+## What I Use
+* `helix`: my go-to editor; TUI, Rust, modal, built-in LSP, etc
+* `zelij`: `tmux` but better, with excellent UX for beginners
+* `firefox`: because Google should not own the web, and Sideberry is essential for tree-style tabs
+* `openvscode-server`: VSCodium-based editor; used for work and sometimes personal stuff
+
+* [`COSMIC`](https://github.com/pop-os/cosmic-epoch) for my desktop environment:
+![screenshot of machine 'zeph' running the Cosmic desktop environment](./misc/zeph-cosmic.png)
 
 ## Repo Layout
 
-(this sometimes drifts, but should be roughly accurate as of April 2023)
-
-* `cloud`
-  * automation and configuration for cloud servers
-  * powered by `terranix`
-* `docs`
-  * notes to self
-  * who knows what "great" ideas and tidbits it contains
 * `hosts` 
-  * toplevel machine definitions
-  * `openstick`
-    * configuration for a $10USD LTE USB Modem Stick
-    * utilizes:
-      * [my fork of mobile-nixos](https://github.com/colemickens/mobile-nixos/tree/openstick)
-      * [my forked/hacked up copy of openstick's lk2nd with patches for my stick](https://github.com/colemickens/openstick-lk2nd)
-      * [my forked/hacked up copy of openstick's linux, can't remember why I have my own fork](https://github.com/colemickens/linux/tree/openstick)
+  * toplevel machine definitions:
+  * `zeph`
+    * **ASUS Zephyrus G14 (2022) - GA402RJ**
+    * current daily-driver
+    * favorite, all-AMD, laptop ever
+    * dual-booting NixOS, of course, and Windows 11 for casual 120Hz/1600p gaming
+  * `slynux`
+    * **(custom, retired gaming PC)**
+    * primary personal Nix CI server
+    * primary SyncThing target
+  * `raisin`
+    * **Lenovo "Yoga Slim 7 Pro-14ACH5 Laptop (ideapad) - Type 82MS"**
+    * retired laptop
+    * now an unused "backup" server
+    * backup SyncThing target
+    * occassional Tailscale exit node
+* `images/`
   * `installer` (meta, iso)
     * configuration for a custom `x86_64-linux` installer image
     * includes my SSH key and `sshd` enabled and most used programs
     * see: `nix build .#extra.x86_64-linux.installer`
-  * `raisin` (laptop)
-    * former-daily-driver
-    * **Lenovo "Yoga Slim 7 Pro-14ACH5 Laptop (ideapad) - Type 82MS"**
-    * remote (KS, USA) `zrepl` (`zfs`) and `syncthing` backup target
-  * `zeph` (laptop)
-    * current daily-driver
-    * favorite, all-AMD, laptop ever
-    * **ASUS Zephyrus G14 (2022) - GA402RJ**
-    * dual-booting NixOS, of course, and Windows 11 for casual 120Hz/1600p gaming
 * `misc/`
   * misc scripts
   * buyer beware
@@ -66,14 +69,6 @@
   * individual application configuration (mostly via `home-manager`)
   * mix of `home-manager` and `nixos` configuration
   * (`libvirt`, `prs`/`gopass`, `git`, `gnupg`, `spotifyd`, `tailscale`, `wezterm`, etc)
-* `pkgs/`
-  * my own "packages"
-  * custom shell commands (gpg+ssh wrapper, etc)
-  * tip-of-tree package overrides for:
-    * `git-repo-manager`
-    * `nushell`
-    * `rio`
-    * `wezterm`
 * `profiles/`
   * bits that compose machine "personas"
   * `core.nix` - core bits, see also `mixins/common.nix`
@@ -96,26 +91,4 @@
     * `devenv.nix` - complete set of tools for Go/Rust/Nix development
     * `uutils.nix` - experimentation with rust-based coreutils
 * `main.nu`
-  * a homegrown `nushell` (❤️) script for managing this repo
-  * updates/rebases my flake inputs
-  * updates/rebases my custom packages to tip-of-branch
-  * updates the lock file
-  * handles remote building and caching (without using nix's "remote builders")
-
-## Other Interesting Nix Repos
-
-- jtojnar: https://github.com/jtojnar/nixfiles
-  - particularly of note:
-    - use of NixGL to use GUI apps built with Nix on other Linuxes:
-      https://github.com/jtojnar/nixfiles/blob/522466da4dd5206c7b444ba92c8d387eedf32a22/hosts/brian/profile.nix#L10-L12
-- Mic92: https://github.com/Mic92/dotfiles
-  - in particular:
-    - https://github.com/Mic92/dotfiles/tree/master/nixos/images
-      - kexec stuff is neat
-      - base-config does a Hidden Service + announces over IRC, very cool
-- cole-h: https://github.com/cole-h/nixos-config
-- bqv: https://github.com/bqv/nixos
-- nixos-org-configurations:
-  - in particular:
-    - configs for building NixOS images containing MacOS VM guests
-      - https://github.com/NixOS/nixos-org-configurations/tree/master/macs/host
+  * custom script for builds, deploys, etc

@@ -68,6 +68,8 @@ rec {
 
   bgcolor = "#00807F";
   sway_background = "${bgcolor} solid_color";
+
+  # migrate this to Cosmic config...
   swaylock_background =
     let
       gruvbox_rainbow = {

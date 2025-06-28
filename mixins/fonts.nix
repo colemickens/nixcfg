@@ -5,6 +5,7 @@
   inputs,
   ...
 }:
+
 let
   prefs = import ./_preferences.nix {
     inherit

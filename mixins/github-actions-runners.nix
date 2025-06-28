@@ -1,10 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  inputs,
-  ...
-}:
+{ config, inputs, ... }:
 
 let
   runnerId = config.networking.hostName;

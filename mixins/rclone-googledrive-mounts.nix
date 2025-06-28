@@ -1,9 +1,4 @@
-{
-  lib,
-  pkgs,
-  config,
-  ...
-}:
+{ pkgs, config, ... }:
 
 let
   rcloneConfPath = config.sops.secrets."rclone.conf".path;

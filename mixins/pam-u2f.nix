@@ -1,9 +1,4 @@
-{
-  pkgs,
-  lib,
-  inputs,
-  ...
-}:
+{ pkgs, ... }:
 
 let
   ykDisconnect = pkgs.writeShellScript "yk-disconnect.sh" ''

@@ -1,7 +1,6 @@
 {
   pkgs,
   lib,
-  config,
   inputs,
   ...
 }:
@@ -27,7 +26,6 @@
     ../mixins/gpg-agent.nix
     ../mixins/helix.nix
     ../mixins/jujutsu.nix
-    ../mixins/joshuto.nix
     ../mixins/nushell.nix
     ../mixins/ssh.nix
     ../mixins/xdg.nix
@@ -41,7 +39,7 @@
 
     programs.bandwhich.enable = true;
 
-    services.dbus.packages = with pkgs; [ pkgs.dconf ];
+    services.dbus.packages = [ pkgs.dconf ];
     nix.extraOptions = ''
       keep-outputs = true
       keep-derivations = true
@@ -55,9 +53,6 @@
             CARGO_HOME = "${hm.config.xdg.dataHome}/cargo";
             PARALLEL_HOME = "${hm.config.xdg.configHome}/parallel";
             PASSWORD_STORE_DIR = "${hm.config.xdg.dataHome}/password-store";
-            # TODO: this is used for both zsh/bash? ???
-            # also, zsh doesn't mkdir -p on it, I guess... bleh
-            # HISTFILE = "${hm.config.xdg.stateHome}/bash/history";
           };
           home.file = {
             "${hm.config.home.sessionVariables.PARALLEL_HOME}/will-cite".text = "";
@@ -67,11 +62,11 @@
             home-manager.enable = true;
             gpg.enable = true;
           };
-          home.file = {
-            "${hm.config.xdg.configHome}/gdb/gdbinit".source = (
-              pkgs.writeText "gdbinit" "set auto-load safe-path /nix/store"
-            );
-          };
+
+          xdg.configFile."gdb/gdbinit".text = ''
+            set auto-load safe-path /nix/store
+          '';
+
           programs = {
             git.enable = true;
           };

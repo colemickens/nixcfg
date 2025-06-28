@@ -1,18 +1,8 @@
-{
-  pkgs,
-  config,
-  ...
-}:
+{ pkgs, ... }:
 
-# note: we intentionally don't use full paths so that these scripts
-# don't accidentallly pull in crap (for example, asus-dgpu is only relevant
-# for 'zeph', etc)
 let
-  asus-dgpu = pkgs.writeShellScriptBin "asus-dgpu" ''
-    sudo asusctl bios -D 0; sudo efibootmgr --bootnext 0000
-  '';
-  asus-igpu = pkgs.writeShellScriptBin "asus-igpu" ''
-    sudo asusctl bios -D 1; sudo efibootmgr --bootnext 0000
+  reboot-linux = pkgs.writeShellScriptBin "reboot-linux" ''
+    sudo ${pkgs.efibootmgr}/bin/efibootmgr --bootnext 0000
   '';
 
   wlproxylaunch = pkgs.writeShellScriptBin "wlproxylaunch" ''
@@ -32,33 +22,14 @@ let
     wait
   '';
 in
-# rdp-sly = pkgs.writeShellScriptBin "rdp-sly" ''
-#   RDPUSER="cole.mickens@gmail.com"
-#   RDPPASS="$(gopass show -o "websites/microsoft.com/cole.mickens@gmail.com")"
-#   RDPHOST="''${RDPHOST:-"192.168.1.11"}"
-#   ${pkgs.freerdp}/bin/wlfreerdp
-#     /v:"''${RDPHOST}" \
-#     /u:"''${RDPUSER}" \
-#     /p:"''${RDPPASS}" \
-#     /rfx +fonts /dynamic-resolution /compression-level:2
-# '';
-# gs = pkgs.writeShellScriptBin "gs" ''
-#   set -x
-#   export ENABLE_GAMESCOPE_WSI=1
-#   ${gamescope}/bin/gamescope -w 1920 -h 1080 -r 120 --hdr-enabled -- "''${@}"
-# '';
 {
   config = {
     environment.systemPackages = [
       (pkgs.symlinkJoin {
         name = "commands-gui";
         paths = [
+          reboot-linux
           wlproxylaunch
-
-          asus-dgpu
-          asus-igpu
-          # rdp-sly
-          # gs
         ];
       })
     ];

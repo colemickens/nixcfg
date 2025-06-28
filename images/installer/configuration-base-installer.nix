@@ -1,14 +1,10 @@
 {
-  config,
   pkgs,
   lib,
   modulesPath,
   ...
 }:
 
-let
-  utils = import ./install-helpers.nix { inherit (pkgs) writeShellScriptBin; };
-in
 {
   imports = [
     "${modulesPath}/installer/cd-dvd/installation-cd-minimal.nix"
@@ -42,15 +38,12 @@ in
     boot.loader.timeout = lib.mkOverride 10 10;
 
     ## my custom installer utils
-    environment.systemPackages =
-      (with utils; [
-        cm-nixos-prep
-        cm-nixos-mount
-        cm-nixos-install
-      ])
-      ++ (with pkgs; [
+    environment.systemPackages = (
+      with pkgs;
+      [
         sbctl
         # bcachefs-tools
-      ]);
+      ]
+    );
   };
 }

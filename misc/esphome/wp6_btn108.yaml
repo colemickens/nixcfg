@@ -1,7 +1,0 @@
-substitutions:
-  ipnum: "108"
-  device_name:  wp6_sw${ipnum}
-  friendly_name:  wp6_sw${ipnum}
-
-<<: !include common.yaml
-<<: !include wp6_btn_common.yaml

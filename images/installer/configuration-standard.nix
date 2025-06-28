@@ -1,10 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  modulesPath,
-  ...
-}:
+{ lib, ... }:
 
 let
   hn = "installer-standard";

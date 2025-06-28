@@ -1,10 +1,5 @@
-{
-  config,
-  pkgs,
-  lib,
-  inputs,
-  ...
-}:
+{ pkgs, inputs, ... }:
+
 let
   hn = "raisin";
   poolname = "raisin2pool";
@@ -12,8 +7,6 @@ let
   swappart = "raisin2-swap";
   lukspart = "raisin-luksroot";
 in
-# ugh, bad idea, zaks network doesn't have this probably:
-# static_ip = "192.168.70.60/16";
 {
   imports = [
     ./unfree.nix
@@ -21,16 +14,10 @@ in
     ../../profiles/interactive.nix
     ../../profiles/addon-laptop.nix
 
-    # ../../mixins/typhon.nix
-    # ../../mixins/github-actions-runners.nix
-
     ../../mixins/iwd-networks.nix
-    # ../../mixins/plex.nix
-    # ../../mixins/rclone-googledrive-mounts.nix
     ../../mixins/syncthing.nix
 
     ./zrepl.nix
-    # ./services/monitoring.nix
 
     inputs.determinate.nixosModules.default
 
@@ -45,21 +32,10 @@ in
     system.stateVersion = "23.11";
 
     networking.hostName = hn;
-    # nixcfg.common.hostColor = "#59d600";
     nixcfg.common.hostColor = "green";
     nixcfg.common.wifiWorkaround = true;
 
     zramSwap.enable = true;
-
-    nix = {
-      gc = {
-        automatic = true;
-        persistent = true;
-      };
-      settings = {
-        max-jobs = lib.mkForce 2;
-      };
-    };
 
     services.tailscale.useRoutingFeatures = "server";
 
@@ -70,17 +46,7 @@ in
       HandleLidSwitch=ignore
     '';
 
-    systemd.network = {
-      enable = true;
-      # networks."15-eth0-static-ip" = {
-      #   matchConfig.Path = "pci-0000:03:00.3-usb-0:1:1.0";
-      #   addresses = [{ addressConfig = { Address = static_ip; }; }];
-      #   networkConfig = {
-      #     Gateway = "192.168.1.1";
-      #     DHCP = "no";
-      #   };
-      # };
-    };
+    systemd.network.enable = true;
 
     fileSystems = {
       "/" = {

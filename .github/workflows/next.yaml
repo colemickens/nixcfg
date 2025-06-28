@@ -23,9 +23,12 @@ jobs:
       uses: actions/checkout@v4
       with:
         ref: main
+    - name: info
+      run: |
+        nix develop --accept-flake-config .#ci -c ./.github/ci.nu info
     - name: update
       run: |
-        nix develop --accept-flake-config .#ci -c ./ci/next.nu
+        nix develop --accept-flake-config .#ci -c ./.github/ci.nu next
     - name: build-cache
       run: |
-        nix develop --accept-flake-config .#ci -c ./ci/build.nu
+        nix develop --accept-flake-config .#ci -c ./.github/ci.nu build

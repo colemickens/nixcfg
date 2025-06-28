@@ -1,11 +1,5 @@
-{
-  config,
-  pkgs,
-  lib,
-  inputs,
-  modulesPath,
-  ...
-}:
+{ pkgs, inputs, ... }:
+
 let
   hn = "slynux";
   pp = "slynux"; # ?

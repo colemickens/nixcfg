@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  inputs,
-  ...
-}@args:
+{ config, pkgs, ... }:
 
 let
   host_color = config.nixcfg.common.hostColor;

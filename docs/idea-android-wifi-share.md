@@ -1,2 +1,0 @@
-- share wifi credentials from Linux to Android
-- or vice-versa, or both?

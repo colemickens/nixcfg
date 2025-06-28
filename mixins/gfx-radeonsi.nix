@@ -1,10 +1,4 @@
-{
-  pkgs,
-  lib,
-  config,
-  inputs,
-  ...
-}:
+{ pkgs, ... }:
 
 let
   # _nvtop = pkgs.nvtop.override { nvidia = false; };

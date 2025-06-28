@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ config, lib, ... }:
 
 let
   nvStable = config.boot.kernelPackages.nvidiaPackages.stable;

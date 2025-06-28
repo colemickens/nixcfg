@@ -1,9 +1,0 @@
-substitutions:
-  ipnum: "102"
-  device_name:  wp6_sw${ipnum}
-  friendly_name:  wp6_sw${ipnum}
-
-<<: !include wp6_sw_common.yaml
-
-# NOTE: 102 is currently the openstick
-# it gets switched on and off by github actions job: `nixcfg-next`

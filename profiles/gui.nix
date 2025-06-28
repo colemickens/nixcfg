@@ -1,21 +1,6 @@
-{
-  pkgs,
-  lib,
-  config,
-  inputs,
-  ...
-}:
+{ pkgs, lib, ... }:
 
 let
-  firefoxFlake = inputs.firefox-nightly.packages.${pkgs.stdenv.hostPlatform.system};
-  _firefoxNightly = firefoxFlake.firefox-nightly-bin;
-
-  # _chrome = pkgs.ungoogled-chromium;
-
-  # we need stable chrome for work:
-  # _chrome = pkgs.google-chrome-dev.override {
-  #   commandLineArgs = [ "--force-dark-mode" ];
-  # };
   _chrome = pkgs.google-chrome.override { commandLineArgs = [ "--force-dark-mode" ]; };
 in
 {
@@ -23,12 +8,10 @@ in
     ./interactive.nix # includes core.nix (which imports hm)
     ./commands-gui.nix
 
-    ../mixins/hw-logitech-mice.nix
     ../mixins/hw-steelseries-aerox3.nix
 
     ../mixins/fonts.nix
     ../mixins/mpv.nix
-    # ../mixins/pam-u2f.nix # separate out briefly
     ../mixins/pipewire.nix
   ];
 
@@ -59,49 +42,50 @@ in
     home-manager.users.cole =
       { pkgs, config, ... }@hm:
 
-      let xdgFirefoxApp = profile: icon: hidden: ''
-        [Desktop Entry]
-        Actions=new-private-window;new-window;profile-manager-window
-        Categories=Network;WebBrowser
-        Exec=firefox -P ${profile} --name firefox %U
-        GenericName=Web Browser
-        Icon=${icon}
-        MimeType=text/html;text/xml;application/xhtml+xml;application/vnd.mozilla.xul+xml;x-scheme-handler/http;x-scheme-handler/https
-        Name=${profile}
-        StartupNotify=true
-        StartupWMClass=firefox
-        Terminal=false
-        Type=Application
-        Version=1.4
-        Hidden=${builtins.toString hidden}
-        NoDisplay=${builtins.toString hidden}
+      let
+        xdgFirefoxApp = profile: icon: hidden: ''
+          [Desktop Entry]
+          Actions=new-private-window;new-window;profile-manager-window
+          Categories=Network;WebBrowser
+          Exec=firefox -P ${profile} --name firefox %U
+          GenericName=Web Browser
+          Icon=${icon}
+          MimeType=text/html;text/xml;application/xhtml+xml;application/vnd.mozilla.xul+xml;x-scheme-handler/http;x-scheme-handler/https
+          Name=${profile}
+          StartupNotify=true
+          StartupWMClass=firefox
+          Terminal=false
+          Type=Application
+          Version=1.4
+          Hidden=${builtins.toString hidden}
+          NoDisplay=${builtins.toString hidden}
 
-        [Desktop Action new-private-window]
-        Exec=firefox-nightly --private-window %U
-        Name=New Private Window
+          [Desktop Action new-private-window]
+          Exec=firefox-nightly --private-window %U
+          Name=New Private Window
 
-        [Desktop Action new-window]
-        Exec=firefox-nightly --new-window %U
-        Name=New Window
+          [Desktop Action new-window]
+          Exec=firefox-nightly --new-window %U
+          Name=New Window
 
-        [Desktop Action profile-manager-window]
-        Exec=firefox-nightly --ProfileManager
-        Name=Profile Manager
-      '';
+          [Desktop Action profile-manager-window]
+          Exec=firefox-nightly --ProfileManager
+          Name=Profile Manager
+        '';
       in
       {
         home.sessionVariables = {
           BROWSER = "firefox";
         };
-        
-        xdg.dataFile."applications/firefox-default.desktop".text =
-          xdgFirefoxApp "default" "firefox" false;
+
+        xdg.dataFile."applications/firefox-default.desktop".text = xdgFirefoxApp "default" "firefox" false;
         xdg.dataFile."applications/firefox-detsys.desktop".text =
-          xdgFirefoxApp "detsys" "web-browser" false;
+          xdgFirefoxApp "detsys" "web-browser"
+            false;
         xdg.dataFile."applications/firefox-private.desktop".text =
-          xdgFirefoxApp "private" "web-browser" false;
-        xdg.dataFile."applications/firefox.desktop".text =
-          xdgFirefoxApp "none" "firefox" true;
+          xdgFirefoxApp "private" "web-browser"
+            false;
+        xdg.dataFile."applications/firefox.desktop".text = xdgFirefoxApp "none" "firefox" true;
 
         services = {
           pass-secret-service = {
@@ -144,7 +128,6 @@ in
 
             # audio/video
             pwvucontrol
-            # pw-viz
             # qpwgraph
             # helvum
           ])

@@ -1,12 +1,4 @@
-{
-  pkgs,
-  config,
-  inputs,
-  ...
-}:
-
-# these are dev tools that we want available
-# system wide on my dev machine(s)
+{ ... }:
 
 {
   config = {
