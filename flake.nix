@@ -23,6 +23,10 @@
     zjstatus.url = "github:dj95/zjstatus";
     zjstatus.inputs."nixpkgs".follows = "cmpkgs";
 
+    # more dev tools:
+    rust-overlay.url = "github:oxalica/rust-overlay";
+    rust-overlay.inputs.nixpkgs.follows = "cmpkgs";
+
     # wip replacement for nixpkgs->github-runners module
     nixos-github-actions.url = "github:colemickens/nixos-github-actions";
     nixos-github-actions.inputs."nixpkgs".follows = "cmpkgs";
@@ -162,7 +166,7 @@
             devShells =
               (lib.flip lib.genAttrs mkShell [
                 "ci"
-                "dev"
+                "devenv"
                 "uutils"
               ])
               // {

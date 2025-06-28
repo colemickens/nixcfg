@@ -61,7 +61,7 @@ let
 
   devenv = (
     pkgs.writeShellScriptBin "devenv" ''
-      nix develop $HOME/code/nixcfg#dev "''${@}"
+      nix develop $HOME/code/nixcfg#devenv"''${@}"
     ''
   );
 

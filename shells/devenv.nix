@@ -17,10 +17,18 @@ let
     + ":"
     + "${pkgs.gst_all_1.gst-plugins-ugly}/lib/gstreamer-1.0";
 
+  _rustBuildOxalica = inputs.rust-overlay.packages.${pkgs.stdenv.hostPlatform.system}.rust.override {
+    extensions = [
+      "rust-src"
+      "rust-analyzer"
+      "clippy"
+    ];
+  };
+  _rustBuild = _rustBuildOxalica;
 in
 # _rustBuild = _rustBuildFenix;
 minimalMkShell rec {
-  name = "cole-nixcfg-dev";
+  name = "cole-nixcfg-devenv";
   hardeningDisable = [ "fortify" ];
 
   shellHook = ''
@@ -33,6 +41,7 @@ minimalMkShell rec {
   GST_PLUGIN_SYSTEM_PATH = gstreamerPath;
 
   nativeBuildInputs = with pkgs; [
+    _rustBuild
     llvmPackages.lldb
 
     # inputs.nix-eval-jobs.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default
