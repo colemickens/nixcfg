@@ -29,7 +29,7 @@
       cosmic-ext-ctl
       cosmic-ext-applet-caffeine
       cosmic-ext-applet-emoji-selector
-      # cosmic-ext-applet-external-monitor-brightness # unpackaged
+      cosmic-ext-applet-external-monitor-brightness
 
       # cosmic-ext-applet-clipboard-manager # unused
       # cosmic-ext-tweaks # unused
