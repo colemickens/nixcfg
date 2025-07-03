@@ -65,48 +65,38 @@
       pkgsUnfree = importPkgs inputs.cmpkgs { allowUnfree = true; };
 
       mkSystem =
-        n: v:
+        n: _v:
+        let
+          defaults = {
+            pkgs = inputs.cmpkgs;
+            path = ./hosts/${n}/configuration.nix;
+            extraConfig = [ { } ];
+          };
+          v = defaults // _v;
+        in
         (v.pkgs.lib.nixosSystem {
-          modules =
-            [ (v.path or (./hosts/${n}/configuration.nix)) ]
-            ++ (
-              if (!builtins.hasAttr "buildSys" v) then
-                [ ]
-              else
-                [ { config.nixpkgs.buildPlatform.system = v.buildSys; } ]
-            );
+          modules = [ v.path ] ++ v.extraConfig;
           specialArgs.inputs = inputs;
         });
 
       ## NIXOS CONFIGS + TOPLEVELS ############################################
       nixosConfigsEx = {
         "x86_64-linux" = {
-          # misc
           installer-standard = {
-            pkgs = inputs.cmpkgs;
             path = ./images/installer/configuration-standard.nix;
           };
           installer-standard-aarch64 = {
-            pkgs = inputs.cmpkgs;
             path = ./images/installer/configuration-standard-aarch64.nix;
-            buildSys = "x86_64-linux";
+            extraConfig = [
+              {
+                config.nixpkgs.buildPlatform.system = "x86_64-linux";
+              }
+            ];
           };
-
-          # work cloud machine:
-          ds-ws-colemickens = {
-            pkgs = inputs.cmpkgs;
-          };
-
-          # actual machines:
-          raisin = {
-            pkgs = inputs.cmpkgs;
-          };
-          slynux = {
-            pkgs = inputs.cmpkgs;
-          };
-          zeph = {
-            pkgs = inputs.cmpkgs;
-          };
+          ds-ws-colemickens = { };
+          raisin = { };
+          slynux = { };
+          zeph = { };
         };
         "aarch64-linux" = { };
       };
@@ -139,20 +129,19 @@
           ;
         inherit nixosModules overlays;
         inherit extra;
-        inherit pkgs pkgsUnfree;
+        inherit pkgs pkgsStable pkgsUnfree;
       })
       (
         ## SYSTEM-SPECIFIC OUTPUTS ############################################
         lib.flake-utils.eachSystem defaultSystems (
           system:
           let
-            mkShell = (
+            mkShell =
               name:
               import ./shells/${name}.nix {
                 inherit inputs;
                 pkgs = pkgs.${system};
-              }
-            );
+              };
           in
           rec {
             ## FORMATTER #######################################################
