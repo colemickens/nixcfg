@@ -36,7 +36,8 @@
 * `openvscode-server`: VSCodium-based editor; used for work and sometimes personal stuff
 
 * [`COSMIC`](https://github.com/pop-os/cosmic-epoch) for my desktop environment:
-![screenshot of machine 'zeph' running the Cosmic desktop environment](./misc/zeph-cosmic.png)
+  
+  ![screenshot of machine 'zeph' running the Cosmic desktop environment](./misc/zeph-cosmic.png)
 
 ## Repo Layout
 
@@ -68,22 +69,20 @@
 * `mixins/`
   * individual application configuration (mostly via `home-manager`)
   * mix of `home-manager` and `nixos` configuration
-  * (`libvirt`, `prs`/`gopass`, `git`, `gnupg`, `spotifyd`, `tailscale`, `wezterm`, etc)
+  * (`prs`, `jj`, `git`, `ssh`, `zsh`, `nushell`, `gnupg`, `helix`, etc)
 * `profiles/`
   * bits that compose machine "personas"
   * `core.nix` - core bits, see also `mixins/common.nix`
   * `interactive.nix` - headless systems
   * `gui.nix` - baseline for GUI systems
   * `gui-wayland.nix` - common tools for wayland/wlroots compositors
-  * `gui-sway.nix` - the start of my `sway` GUI configuration
+  * `gui-cosmic.nix` - bare COSMIC configuration (maybe `cosmic-manager` in the future?)
   * `addon-dev.nix` - pull devtool's shell deps into system
   * `addon-laptop.nix` - common laptop bits, power management, etc
   * `addon-asus.nix` - extras for my ASUS laptop
   * `user-cole.nix` - my base `cole` user configuration
 * `secrets/`
-  * scripts to manage `sops` for `sops-nix`
-  * `sops-nix` is great...
-  * but `sops` is questionable-code-quality near-abandonware
+  * script to manage `sops` for `sops-nix`
 * `shells/`
   * nix shells for various scenarios
     * `_minimal.nix` - minimal shell base
