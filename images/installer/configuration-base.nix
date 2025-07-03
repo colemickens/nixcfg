@@ -10,6 +10,8 @@
 
     system.stateVersion = "23.11";
 
+    system.nixos.label = "default";
+
     boot.swraid.enable = lib.mkForce false;
 
     nixpkgs.hostPlatform.system = "x86_64-linux";
