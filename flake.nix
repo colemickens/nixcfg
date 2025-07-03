@@ -2,7 +2,6 @@
   description = "colemickens - nixos configs, custom packges, misc";
 
   inputs = {
-    flake-utils.url = "github:numtide/flake-utils";
     lib-aggregate.url = "github:nix-community/lib-aggregate";
     nixpkgs-stable.url = "github:nixos/nixpkgs?ref=nixos-25.05";
     cmpkgs.url = "github:colemickens/nixpkgs?ref=cmpkgs";
