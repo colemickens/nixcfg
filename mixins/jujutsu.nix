@@ -11,7 +11,6 @@
         ];
         programs.jujutsu = {
           enable = true;
-          package = inputs.jj.outputs.packages.${pkgs.stdenv.hostPlatform.system}.jujutsu;
           settings = {
             user = {
               name = "Cole Mickens";

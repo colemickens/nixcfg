@@ -16,10 +16,6 @@
     ucodenix.url = "github:e-tho/ucodenix";
 
     # devtools:
-    helix.url = "github:helix-editor/helix";
-    helix.inputs."nixpkgs".follows = "cmpkgs";
-    jj.url = "github:martinvonz/jj";
-    jj.inputs."flake-utils".follows = "flake-utils";
     zjstatus.url = "github:dj95/zjstatus";
     zjstatus.inputs."nixpkgs".follows = "cmpkgs";
 

@@ -1,17 +1,7 @@
-{ pkgs, inputs, ... }:
+{ ... }:
 
-let
-  tomlFormat = pkgs.formats.toml { };
-  gen = cfg: (tomlFormat.generate "helix-languages.toml" cfg);
-  # helixUnstable = inputs.helix.outputs.packages.${pkgs.stdenv.hostPlatform.system}.helix;
-  # _helixPkg = helixUnstable;
-  _helixPkg = pkgs.helix;
-in
 {
   config = {
-    nixpkgs.overlays = [
-      (final: prev: { helix = inputs.helix.packages.${pkgs.stdenv.hostPlatform.system}.helix; })
-    ];
     home-manager.users.cole =
       { pkgs, ... }:
       {
@@ -76,9 +66,7 @@ in
         #   args = { program = "{0}", initCommands = [ "command script import ${lldbRustcScript}" ] }
         # '';
         programs.helix = {
-          # TODO: temp workaround for cross-arch eval with cargo-nix-integration
           enable = true;
-          package = _helixPkg;
 
           settings = {
             # see "custom..." blah blah stuff for overriding the bar on a given theme to give extra contrast:
