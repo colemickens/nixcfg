@@ -21,7 +21,7 @@
       };
     };
     nix = {
-      nixPath = lib.mkForce [ "nixpkgs=${inputs.cmpkgs.outPath}" ];
+      nixPath = lib.mkForce [ "cmpkgs=${inputs.cmpkgs.outPath}" ];
       settings = {
         keep-derivations = true; # this is the default (?)
         builders-use-substitutes = true;
