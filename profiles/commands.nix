@@ -96,8 +96,8 @@ let
       cole_uid=$(id -u cole)
       ln -sf ${gpgSshSocket} /run/user/''${cole_uid}/sshagent
       gpg --card-status >/dev/null
-      echo "foo" | gpg --sign &>/dev/null # somehow fixes some weird cases where remote gpg gets hung up when it hasn't been used locally
       ssh localhost true
+      echo "foo" | gpg --sign &>/dev/null # somehow fixes some weird cases where remote gpg gets hung up when it hasn't been used locally
     ''
   );
 
