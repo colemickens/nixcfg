@@ -2,11 +2,11 @@
   "nodes": {
     "cmpkgs": {
       "locked": {
-        "lastModified": 1751469655,
-        "narHash": "sha256-BfiAfWJ1YI+oHmDv7Fzn4isglRZpVVHQ2j3Zs/KZDmI=",
+        "lastModified": 1751507586,
+        "narHash": "sha256-mXrQmYiVGPHMt2uCYqmtHIhuSlxtg4x++EsoQuF+CiU=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "f7edca3107df32b67fd30cdd715391ff7998eb25",
+        "rev": "87da9a30121bb80ff80f8a749d78a199e3a395d2",
         "type": "github"
       },
       "original": {
@@ -308,11 +308,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1751378814,
-        "narHash": "sha256-pdYjEgdVYEerzxxmrM0GJAFGZ+J50NRD0rtDZ16SuTM=",
+        "lastModified": 1751496088,
+        "narHash": "sha256-KqVurHe12Z9FDCcENBq3y0mW5KAx2qek81DQsiTjGhQ=",
         "owner": "helix-editor",
         "repo": "helix",
-        "rev": "6a090471a800b1001bdfd2b6e0b710c1cd439a4e",
+        "rev": "bcb6c20a84b6ac6697bf2a4b5d0b78832bcfea62",
         "type": "github"
       },
       "original": {
@@ -351,11 +351,11 @@
         "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1751456431,
-        "narHash": "sha256-tAsH35Q/FcwyA2PeFjZ23eW4/n8HjPLqMh9IzNG3U3I=",
+        "lastModified": 1751501531,
+        "narHash": "sha256-TdmsxwR5JJqrbMpKiv28Ber4eohm4glMwTWcbs3l7+c=",
         "owner": "martinvonz",
         "repo": "jj",
-        "rev": "a3c81ea3eb2f2250ef768f3d2356ac259b06f2e9",
+        "rev": "2ee0cdfa24c44b5df52540f269dc6220670815eb",
         "type": "github"
       },
       "original": {
