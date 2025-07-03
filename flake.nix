@@ -179,8 +179,14 @@
                 c_toplevels = lib.mapAttrs' (
                   n: v: (lib.nameValuePair "toplevel-${n}" v.config.system.build.toplevel)
                 ) (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigsEx.${system});
+                c_extras = lib.mapAttrs' (n: v: lib.nameValuePair "extra-${n}" v) inputs.self.extra.${system};
               in
-              { } // c_packages // c_toplevels // c_devShells;
+              { }
+              // c_packages
+              // c_toplevels
+              // c_devShells
+              // c_extras
+              ;
           }
         )
       );
