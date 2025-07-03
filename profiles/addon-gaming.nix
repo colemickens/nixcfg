@@ -55,6 +55,7 @@
           # proton-rs looks over-engineered and is _also_ broken
           # so, wtf, I guess qt gets a turn
           protonup-qt
+          protonplus
 
           vkbasalt
           goverlay
