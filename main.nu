@@ -8,35 +8,34 @@ def header [ color: string text: string spacer="▒": string ] {
 def "main deploy" [ host: string, --toplevel: string = ""] {
   let target = (tailscale ip --4 $host | str trim)
   let toplevel = if $toplevel != "" { $toplevel } else {
-    print -e "need to build, building"
+    header "light_purple_reverse" $"deploy\(($host)\): build"
     let pth = (mktemp -d)
     mut res = ""
     try {
       $res = (^nix build -L --out-link $"($pth)/result" $".#toplevels.($host)")
       $res = (readlink -f $"($pth)/result")
-      glob $"($pth)/result*" | cachix push colemickens
+      glob $"($pth)/result*" | to text | cachix push colemickens
       rm -rf $pth
     } catch {
-      print -e $"warning: something failed. may not have cachix push'd \(check $pth\)"
+      error make {msg: $"warning: something failed. may not have cachix push'd \(check ($pth)\)"}
     }
     $res | ansi strip
   }
-  header "light_purple_reverse" $"deploy: start: ($host)"
+  header "light_purple_reverse" $"deploy\(($host)\): start"
 
-  header "light_blue_reverse" $"deploy: profile dl: ($host): ($toplevel)"
+  header "light_blue_reverse" $"deploy\(($host)\): deploy ($toplevel)"
   let dl_cmd = (^printf "'%s' " ...[$"sudo" "nix" "build" "--no-link" "--accept-flake-config" "--option" "narinfo-cache-negative-ttl" "0" $"--profile" "/nix/var/nix/profiles/system" $toplevel ])
   let switch_cmd = (^printf "'%s' " ...[ "sudo" $"($toplevel)/bin/switch-to-configuration" "switch" ])
   let cmd = $"($dl_cmd) && ($switch_cmd)"
-
-  print -e $"(ansi grey)running cmd: ($cmd)(ansi reset)"
   ^ssh $"cole@($target)" -- $cmd
 
-  header "light_green_reverse" $"deploy: ($host): DONE"
-  print -e $"(char nl)"
-
   if $"(^hostname)" == $host {
+    header "light_green_reverse" $"deploy\(($host)\): fix-ssh-remote \(local\)"
     ^fix-ssh-remote
   }
+
+  header "light_green_reverse" $"deploy\(($host)\): done"
+  print -e $"(char nl)"
 }
 
 def "main selfup" [] {
@@ -46,18 +45,13 @@ def "main selfup" [] {
 
 def "main up" [...hosts] {
   nix flake update --commit-lock-file
-  nix build --accept-flake-config --print-out-paths --keep-going '.#toplevels.zeph' '.#toplevels.slynux' '.#toplevels.raisin' | cachix push colemickens
+  nix build --accept-flake-config --print-out-paths --keep-going '.#toplevels.zeph' '.#toplevels.slynux' '.#toplevels.raisin' '.#toplevels.ds-ws-colemickens' | cachix push colemickens
   main deploy raisin
   main deploy slynux
   main deploy zeph
 
   header "light_purple_reverse" $"optimistic: build bundle"
   nix build --accept-flake-config --print-out-paths --keep-going '.#bundle.x86_64-linux'
-  header "light_purple_reverse" $"optimistic: build bundle: DONE"
-}
-
-def "main nix" [...args] {
-  ^nix $args
 }
 
 def main [] {
