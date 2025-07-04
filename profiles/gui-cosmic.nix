@@ -30,6 +30,11 @@
       cosmic-ext-applet-caffeine
       cosmic-ext-applet-emoji-selector
       cosmic-ext-applet-external-monitor-brightness
+      cosmic-ext-applet-minimon
+      cosmic-ext-applet-privacy-indicator
+      cosmic-ext-applet-sysinfo
+      cosmic-ext-applet-weather
+      gui-scale-applet
 
       # cosmic-ext-applet-clipboard-manager # unused
       # cosmic-ext-tweaks # unused
