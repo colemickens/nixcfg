@@ -96,11 +96,11 @@ in
     services.dbus.implementation = "broker";
     ## END experimental
 
-    services.ucodenix = {
-      enable = true;
-      cpuModelId = "00A40F41";
-      #cpuSerialNumber = "00A4-0F41-0000-0000-0000-0000"; # Replace with your processor's serial number
-    };
+    # services.ucodenix = {
+    #   enable = true;
+    #   cpuModelId = "00A40F41";
+    #   #cpuSerialNumber = "00A4-0F41-0000-0000-0000-0000"; # Replace with your processor's serial number
+    # };
 
     services.zfs.autoScrub.pools = [ poolname ];
     fileSystems = {
@@ -196,7 +196,7 @@ in
 
         # ucode-nix: disable sig checking, though this machine doesn't have a new
         # bios, so it might not apply?
-        "microcode.amd_sha_check=off"
+        # "microcode.amd_sha_check=off"
       ];
       initrd.availableKernelModules = [
         "xhci_pci"
