@@ -127,6 +127,7 @@
 
               age # need age (Age-keygen can do priv->pub)
               sbctl
+              btop
 
               # binwalk # TODO: pynose/nose issue?
               cpio # needed?
