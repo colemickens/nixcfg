@@ -2,11 +2,11 @@
   "nodes": {
     "cmpkgs": {
       "locked": {
-        "lastModified": 1751855666,
-        "narHash": "sha256-cMX8Oowh7ziaP70mrIALB5lJPom0Mn2CGZtaiicdpkk=",
+        "lastModified": 1751911730,
+        "narHash": "sha256-T6W3H5bymakG4pj65ehFwk3Ez5+bEUf8Z16o22WJ0ZA=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "38114d89eb22cdeeab1e293a65a35fdcfedad756",
+        "rev": "cdec361d0cafff7b4141e03f41956993f2b93a99",
         "type": "github"
       },
       "original": {
@@ -578,11 +578,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1751769931,
-        "narHash": "sha256-QR2Rp/41NkA5YxcpvZEKD1S2QE1Pb9U415aK8M/4tJc=",
+        "lastModified": 1751856221,
+        "narHash": "sha256-/QE1eV0ckFvgRMcKjZqgdJDoXFNwSMepwRoBjaw2MCk=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "3ac4f630e375177ea8317e22f5c804156de177e8",
+        "rev": "34cae4b56929c5b340e1c5b10d9a98a425b2a51e",
         "type": "github"
       },
       "original": {
