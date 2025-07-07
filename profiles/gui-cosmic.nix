@@ -48,9 +48,6 @@
       # observatory # unused
     ];
 
-    # fuck networkmanager relentlessly - deleted hundreds of saved networks
-    networking.networkmanager.enable = false;
-
     home-manager.users.cole =
       { pkgs, config, ... }@hm:
       {

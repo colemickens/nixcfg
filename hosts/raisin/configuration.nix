@@ -14,7 +14,6 @@ in
     ../../profiles/interactive.nix
     ../../profiles/addon-laptop.nix
 
-    ../../mixins/iwd-networks.nix
     ../../mixins/syncthing.nix
 
     ./zrepl.nix

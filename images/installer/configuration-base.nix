@@ -16,9 +16,6 @@
 
     nixpkgs.hostPlatform.system = "x86_64-linux";
 
-    networking.wireless.enable = lib.mkForce false;
-    networking.wireless.iwd.enable = true;
-
     documentation.enable = lib.mkOverride 10 false;
     documentation.info.enable = lib.mkOverride 10 false;
     documentation.man.enable = lib.mkOverride 10 false;

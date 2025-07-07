@@ -39,8 +39,6 @@ in
     # nixcfg.common.hostColor = "#00a2ff";
     nixcfg.common.hostColor = "blue";
 
-    networking.wireless.iwd.enable = true;
-
     services.go2rtc = {
       enable = true;
       settings = {
