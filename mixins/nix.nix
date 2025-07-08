@@ -21,7 +21,6 @@
       };
     };
     nix = {
-      nixPath = lib.mkForce [ "cmpkgs=${inputs.cmpkgs.outPath}" ];
       settings = {
         keep-derivations = true; # this is the default (?)
         builders-use-substitutes = true;
@@ -42,6 +41,16 @@
           "cole"
           "root"
         ];
+      };
+      registry = {
+        self = {
+          flake = inputs.self;
+        };
+
+        cmpkgs = {
+          from = { id = "cmpkgs"; type = "indirect"; };
+          flake = inputs.cmpkgs;
+        };
       };
       extraOptions = ''
         !include ${config.sops.secrets.nix-access-tokens.path}
