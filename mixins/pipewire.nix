@@ -5,13 +5,11 @@
   nixpkgs.config.pulseaudio = true; # ????
 
   environment.systemPackages = with pkgs; [
-    #helvum
     alsa-utils # ignore for now cross-compile problem
     pipewire
     pulseaudio
     pulsemixer
     wiremix
-    # pw-viz
   ];
 
   programs.dconf.enable = true;

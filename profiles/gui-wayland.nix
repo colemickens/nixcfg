@@ -29,13 +29,10 @@
           qt6.qtwayland
 
           oculante # image viewer (rust)
-          grim # area selection
-          slurp # screen capture
-          way-displays # wayland output management
+          slurp # area selection
           wl-clipboard # wl-{copy,paste}
           wf-recorder # screen record
           wl-screenrec # screen record (vaapi + rust)
-          wlay # Graphical output management for Wayland.
           wev # event viewer
           wtype # virtual keystroke insertion
 

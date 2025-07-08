@@ -38,9 +38,6 @@ in
 
     inputs.determinate.nixosModules.default
 
-    # ../../mixins/oavm-risky.nix
-
-    # ./experimental.nix
     ./unfree.nix
 
     inputs.lanzaboote.nixosModules.lanzaboote
@@ -51,29 +48,17 @@ in
     inputs.ucodenix.nixosModules.ucodenix
   ];
   config = {
-    # nixpkgs.hostPlatform.system = "x86_64-linux";
     nixpkgs.hostPlatform = "x86_64-linux";
 
-    # TODO: why does this cause inf recursion with mangohud?
-    # nixpkgs.buildPlatform.system = "x86_64-linux";
     system.stateVersion = "23.11";
 
-    # TODO: evaluate if this is worth the cost in closure size
-    # https://linus.schreibt.jetzt/posts/include-build-dependencies.html
-    # TODO: re-evaluate, too much to shove through cachix, and slow internetzzz
-    # system.includeBuildDependencies = true;
-
     networking.hostName = hn;
-    # nixcfg.common.hostColor = "#c17ecc"; # tango magenta
+
     nixcfg.common.hostColor = "magenta";
     nixcfg.common.skipMitigations = false;
 
-    # zfs schenanigans
     nixcfg.common.useZfs = true;
     nixcfg.common.useZfsUnstable = true;
-
-    # hardware.amdgpu.overdrive.enable = true;
-    # hardware.amdgpu.initrd.enable = true;
 
     nix = {
       settings = {
@@ -84,7 +69,6 @@ in
     hardware.cpu.amd.ryzen-smu.enable = true;
 
     environment.systemPackages = with pkgs; [
-      esphome
       ryzenadj
     ];
 
@@ -145,20 +129,6 @@ in
       };
     };
     swapDevices = [ { device = "/dev/disk/by-partlabel/${swappart}"; } ];
-
-    home-manager.users.cole =
-      { pkgs, config, ... }@hm:
-      {
-        wayland.windowManager.sway.config = {
-          keybindings = {
-            "XF86AudioRaiseVolume" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume +2";
-            "XF86AudioLowerVolume" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --change-volume -2";
-            "XF86AudioMicMute" = "exec ${pkgs.pulsemixer}/bin/pulsemixer --toggle-mute";
-            "XF86Launch1" = "exec ${pkgs.asusctl}/bin/rog-control-center";
-            "Mod4+XF86Launch1" = "exec ${pkgs.pwvucontrol}/bin/pwvucontrol";
-          };
-        };
-      };
 
     boot = {
       # zfs = {

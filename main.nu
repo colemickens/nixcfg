@@ -48,7 +48,8 @@ def "main up" [...hosts] {
   nix build --accept-flake-config --print-out-paths --keep-going '.#toplevels.zeph' '.#toplevels.slynux' '.#toplevels.raisin' '.#toplevels.ds-ws-colemickens' | cachix push colemickens
   main deploy raisin
   main deploy slynux
-  main deploy zeph
+  try { main deploy zeph }
+  try { main deploy ds-ws-colemickens }
 
   header "light_purple_reverse" $"optimistic: build bundle"
   nix build --accept-flake-config --print-out-paths --keep-going '.#bundle.x86_64-linux'

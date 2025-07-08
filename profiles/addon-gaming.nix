@@ -49,12 +49,6 @@
           evtest # misc input debug
           linuxConsoleTools # joystick testing
 
-          # jesus christ
-          # protonup-ng doesn't do the rigth thing and is abandoned
-          # i'm not about to try to deal with switching/packaging protonup
-          # proton-rs looks over-engineered and is _also_ broken
-          # so, wtf, I guess qt gets a turn
-          protonup-qt
           protonplus
 
           vkbasalt

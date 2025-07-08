@@ -106,11 +106,7 @@ in
               pkgs.firefox-bin
               _chrome
 
-              # audio/video
-              # jamesdsp
               easyeffects
-
-              # nheko
             ]
           ))
           (with pkgs; [
@@ -121,12 +117,13 @@ in
             pinta
             krita
 
+            # video/audio
             glide-media-player
             vlc
             psst
             spot
 
-            # audio/video
+            # pipewire/pulseaudio
             pwvucontrol
             # qpwgraph
             # helvum
