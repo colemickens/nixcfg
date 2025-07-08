@@ -55,6 +55,10 @@ in
 
     ec2.efi = true;
 
+    nix.extraOptions = ''
+      lazy-trees = true
+    '';
+
     services.tailscale.useRoutingFeatures = "server";
     services.udisks2.enable = lib.mkForce false;
 
