@@ -117,6 +117,8 @@ in
             pinta
             krita
 
+            gg-jj
+
             # video/audio
             glide-media-player
             vlc
