@@ -154,6 +154,7 @@ rec {
         nebula-sans
         departure-mono
         lexend
+        maple-mono.truetype-autohint
         iosevka-bin
         iosevka-comfy.comfy-fixed # always include our favesies
         iosevka-comfy.comfy-motion # always include our favesies
