@@ -4,17 +4,14 @@
 - [nixcfg](#nixcfg)
   - [Overview](#overview)
   - [Components Used](#components-used)
-    - [Extra Flake Inputs](#extra-flake-inputs)
   - [What I Use](#what-i-use)
   - [Repo Layout](#repo-layout)
 
 ## Overview
 
-* nix configuration for my laptop, and old desktop server
+* NixOS configurations for my laptop, and old desktop server
 * [**Determinate Nix**](https://docs.determinate.systems/determinate-nix/)-powered
-* guaranteed to be **reproducible**
-* **immutable** *full* system configuration (**dotfiles**, but on steroids)
-
+* **reproducible**, and **immutable** *full* system configuration (think **dotfiles**, but better)
 
 ## Components Used
 
@@ -23,17 +20,12 @@
 * [`lanzaboote`](https://github.com/nix-community/lanzaboote) for bootloader configuration
 * **[`determinate`](https://github.com/DeterminateSystems/determinate) for getting the best version of Nix with robust defaults**
 
-### Extra Flake Inputs
-* [`ucodenix`](https://github.com/e-tho/ucodenix) to try to upgrade microcode
-* [`helix`](https://github.com/helix-editor/helix) for latest buids of [helix](https://github.com/helix-editor/helix) (rust-y modal TUI editor)
-* [`jj`](https://github.com/jj-vcs/jj) for latest buids of [jj (jujutsu)](https://github.com/jj-vcs/jj) (`git` but actually good)
-* [`zjstatus`](https://github.com/dj95/zjstatus) a nice plugin for [zellij](https://github.com/zellij-org/zellij) (rust-y user-friendly, powerful `tmux`-replacement)
 
 ## What I Use
-* `helix`: my go-to editor; TUI, Rust, modal, built-in LSP, etc
-* `zelij`: `tmux` but better, with excellent UX for beginners
-* `firefox`: because Google should not own the web, and Sideberry is essential for tree-style tabs
-* `openvscode-server`: VSCodium-based editor; used for work and sometimes personal stuff
+* `firefox`: because Google should not own the web, and [Sideberry](https://addons.mozilla.org/en-US/firefox/addon/sidebery/) is essential for tree-style tabs
+* [`helix`](https://helix-editor.com/): my go-to editor; TUI, Rust, modal, built-in LSP, etc
+* [`zelij`](https://zellij.dev/): `tmux` but better, with excellent UX for beginners
+* [`openvscode-server`](https://github.com/gitpod-io/openvscode-server): VSCodium-based editor; used for work and sometimes personal stuff
 
 * [`COSMIC`](https://github.com/pop-os/cosmic-epoch) for my desktop environment:
   
