@@ -48,7 +48,10 @@
         };
 
         cmpkgs = {
-          from = { id = "cmpkgs"; type = "indirect"; };
+          from = {
+            id = "cmpkgs";
+            type = "indirect";
+          };
           flake = inputs.cmpkgs;
         };
       };
