@@ -2,6 +2,7 @@
 
 {
   config = {
+    boot.kernelModules = [ "ntsync" ];
     networking.firewall = {
       # https://portforward.com/halo-infinite/
       allowedTCPPorts = [ 3074 ];
