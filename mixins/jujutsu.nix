@@ -75,6 +75,14 @@
                 signing.key = config.sops.secrets."github-signingkey-detsys".path;
               }
             ];
+
+            fix.tools.nix-fmt = {
+              command = [
+                "nix"
+                "fmt"
+              ];
+              patterns = [ "glob:'**/*.nix'" ];
+            };
           };
         };
       };
