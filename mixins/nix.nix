@@ -56,6 +56,7 @@
         };
       };
       extraOptions = ''
+        lazy-trees = true
         !include ${config.sops.secrets.nix-access-tokens.path}
       '';
     };
