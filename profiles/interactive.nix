@@ -124,6 +124,7 @@
               nix-output-monitor
 
               erdtree
+              msedit
 
               age # need age (Age-keygen can do priv->pub)
               sbctl
