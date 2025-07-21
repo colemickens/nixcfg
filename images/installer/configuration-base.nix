@@ -1,7 +1,15 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 {
-  imports = [ ../../profiles/core.nix ];
+  imports = [
+    inputs.determinate.nixosModules.default
+    ../../profiles/core.nix
+  ];
 
   config = {
 
