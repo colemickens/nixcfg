@@ -10,7 +10,7 @@
             alejandra
             nil
             nixd
-            nixfmt-rfc-style
+            nixfmt
 
             dfmt
 

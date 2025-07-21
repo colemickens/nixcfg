@@ -58,7 +58,7 @@ minimalMkShell rec {
     nix-tree
 
     # nix formatters
-    nixfmt-rfc-style
+    nixfmt
     alejandra
 
     ## nodejs

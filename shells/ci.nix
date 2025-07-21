@@ -21,7 +21,7 @@ minimalMkShell {
       nushell
       openssh
 
-      nixfmt-rfc-style
+      nixfmt
     ]
   );
 }

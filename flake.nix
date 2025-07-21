@@ -150,7 +150,7 @@
           in
           rec {
             ## FORMATTER #######################################################
-            formatter = pkgs.${system}.nixfmt-rfc-style;
+            formatter = pkgs.${system}.nixfmt;
 
             ## DEVSHELLS #######################################################
             devShells =
