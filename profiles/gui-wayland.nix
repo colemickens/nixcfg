@@ -28,6 +28,8 @@
           qt5.qtwayland
           qt6.qtwayland
 
+          gradia
+
           oculante # image viewer (rust)
           slurp # area selection
           wl-clipboard # wl-{copy,paste}
