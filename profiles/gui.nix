@@ -118,6 +118,7 @@ in
             krita
 
             gg-jj
+            zed-editor
 
             # video/audio
             glide-media-player
