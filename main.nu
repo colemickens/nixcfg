@@ -44,6 +44,15 @@ def "main selfup" [] {
 }
 
 def "main up" [...hosts] {
+  {
+    cd ../nixpkgs
+    jj git fetch --all-remotes; jj rebase -b cmpkgs -d master@nixos --ignore-immutable; jj git push -b cmpkgs
+  }
+  {
+    os ../home-manager
+    jj git fetch --all-remotes; jj rebase -b cmhm -d master@nix-community --ignore-immutable; jj git push -b cmhm
+  }
+
   nix flake update --commit-lock-file
   nix build --accept-flake-config --print-out-paths --keep-going '.#toplevels.zeph' '.#toplevels.slynux' '.#toplevels.raisin' '.#toplevels.ds-ws-colemickens' | cachix push colemickens
   main deploy raisin
