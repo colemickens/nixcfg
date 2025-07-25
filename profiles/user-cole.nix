@@ -51,6 +51,8 @@ in
         "flashrom"
         "rtkit" # rtkit stuff
         "adbusers"
+
+        "ydotool"
       ];
       uid = idno;
       group = user;
