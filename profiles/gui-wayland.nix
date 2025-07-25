@@ -15,6 +15,12 @@
       wshowkeys.enable = true;
     };
 
+    services.input-remapper.enable = true;
+    programs.ydotool = {
+      enable = true;
+      group = "ydotool";
+    };
+
     home-manager.users.cole =
       { pkgs, ... }:
       {
