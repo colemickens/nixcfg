@@ -61,7 +61,7 @@ def "main up" [...hosts] {
   try { main deploy ds-ws-colemickens }
 
   header "light_purple_reverse" $"optimistic: build bundle"
-  nix build --accept-flake-config --print-out-paths --keep-going '.#bundle.x86_64-linux'
+  nix build --accept-flake-config --print-out-paths --keep-going '.#bundles.x86_64-linux.extra'
 }
 
 def main [] {

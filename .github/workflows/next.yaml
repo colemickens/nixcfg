@@ -4,14 +4,6 @@ on:
   schedule:
     - cron: '0/20 * * * *'
   workflow_dispatch:
-    inputs:
-      activate:
-        default: false
-        required: true
-        type: choice
-        options:
-          - "true"
-          - "false"
   push:
     branches:
       - "main"
@@ -29,6 +21,9 @@ jobs:
     - name: update
       run: |
         nix develop --accept-flake-config .#ci -c ./.github/ci.nu next
-    - name: build-cache
+    - name: build-cache-default
       run: |
-        nix develop --accept-flake-config .#ci -c ./.github/ci.nu build
+        nix develop --accept-flake-config .#ci -c ./.github/ci.nu build '.#bundles.x86_64-linux.default'
+    - name: build-cache-extra
+      run: |
+        nix develop --accept-flake-config .#ci -c ./.github/ci.nu build '.#bundles.x86_64-linux.extra'

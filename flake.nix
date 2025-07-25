@@ -87,17 +87,6 @@
       ## NIXOS CONFIGS + TOPLEVELS ############################################
       nixosConfigsEx = {
         "x86_64-linux" = {
-          installer-standard = {
-            path = ./images/installer/configuration-standard.nix;
-          };
-          installer-standard-aarch64 = {
-            path = ./images/installer/configuration-standard-aarch64.nix;
-            extraConfig = [
-              {
-                config.nixpkgs.buildPlatform.system = "x86_64-linux";
-              }
-            ];
-          };
           ds-ws-colemickens = { };
           raisin = { };
           slynux = { };
@@ -111,11 +100,18 @@
 
       ## SPECIAL OUTPUTS ######################################################
       extra = {
-        # must be manually included in ciAttrs
         x86_64-linux = {
-          installer-standard = nixosConfigurations.installer-standard.config.system.build.isoImage;
-          installer-standard-aarch64 =
-            nixosConfigurations.installer-standard-aarch64.config.system.build.isoImage;
+          installer-standard = (mkSystem "installer-standard-x86_864" {
+            path = ./images/installer/configuration-standard.nix;
+          }).config.system.build.isoImage;
+          installer-standard-aarch64 = (mkSystem "installer-standard-aarch64" {
+            path = ./images/installer/configuration-standard-aarch64.nix;
+            extraConfig = [
+              {
+                config.nixpkgs.buildPlatform.system = "x86_64-linux";
+              }
+            ];
+          }).config.system.build.isoImage;
         };
         aarch64-linux = { };
         riscv64-linux = { };
@@ -170,23 +166,30 @@
             apps = lib.recursiveUpdate { } ({ });
 
             ## CI (sorta) #####################################################
-            bundle = pkgs.${system}.linkFarmFromDrvs "nixcfg-bundle" (builtins.attrValues checks);
+            bundles = {
+              default = pkgs.${system}.linkFarmFromDrvs "bundle-nixcfg-default" (
+                builtins.attrValues checks.default
+              );
+              extra = pkgs.${system}.linkFarmFromDrvs "bundle-nixcfg-extra" (builtins.attrValues checks.extra);
+            };
 
             ## CHECKS ##########################################################
-            checks =
-              let
-                c_packages = lib.mapAttrs' (
-                  n: lib.nameValuePair "package-${n}"
-                ) inputs.self.legacyPackages.${system};
-                c_devShells = lib.mapAttrs' (
-                  n: v: lib.nameValuePair "devShell-${n}" v.inputDerivation
-                ) inputs.self.devShells.${system};
-                c_toplevels = lib.mapAttrs' (
-                  n: v: (lib.nameValuePair "toplevel-${n}" v.config.system.build.toplevel)
-                ) (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigsEx.${system});
-                c_extras = lib.mapAttrs' (n: v: lib.nameValuePair "extra-${n}" v) inputs.self.extra.${system};
-              in
-              { } // c_packages // c_toplevels // c_devShells // c_extras;
+            checks = {
+              default =
+                let
+                  c_packages = lib.mapAttrs' (
+                    n: lib.nameValuePair "package-${n}"
+                  ) inputs.self.legacyPackages.${system};
+                  c_devShells = lib.mapAttrs' (
+                    n: v: lib.nameValuePair "devShell-${n}" v.inputDerivation
+                  ) inputs.self.devShells.${system};
+                  c_toplevels = lib.mapAttrs' (
+                    n: v: (lib.nameValuePair "toplevel-${n}" v.config.system.build.toplevel)
+                  ) (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigsEx.${system});
+                in
+                { } // c_packages // c_toplevels // c_devShells;
+              extra = lib.mapAttrs' (n: v: lib.nameValuePair "extra-${n}" v) inputs.self.extra.${system};
+            };
           }
         )
       );
