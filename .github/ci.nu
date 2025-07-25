@@ -29,9 +29,7 @@ def "main info" [] {
   nix --version
 }
 
-def "main build" [] {
-  let thing = ".#bundle.x86_64-linux"
-
+def "main build" [ $thing: string = ".#bundles.x86_64-linux" ] {
   mut success = false
 
   try {
