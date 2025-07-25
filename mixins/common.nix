@@ -87,6 +87,8 @@ in
     );
     # system.disableInstallerTools = lib.mkDefault true;
 
+    system.nixos.version = "latest"; # try to prevent drv churn from rapid rebuilds
+
     ## BOOT #################################################################
     console.earlySetup = true; # needed for LUKS
     boot = {
