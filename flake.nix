@@ -33,7 +33,15 @@
     nixos-github-actions.inputs."nixpkgs".follows = "cmpkgs";
 
     # for work
+    # (stable)
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/3.tar.gz";
+    # (and ... newer...)
+    determinate-main-dnixd.url = "https://install.determinate.systems/determinate-nixd/branch/main/x86_64-linux";
+    determinate-main-dnixd.flake = false;
+    determinate-main-nixsrc.url = "github:DeterminateSystems/nix-src?ref=detsys-main";
+    determinate-main.url = "https://flakehub.com/f/DeterminateSystems/determinate/3.tar.gz";
+    determinate-main.inputs.nix.follows = "determinate-main-nixsrc";
+    determinate-main.inputs.determinate-nixd-x86_64-linux.follows = "determinate-main-dnixd";
   };
 
   nixConfig = {
