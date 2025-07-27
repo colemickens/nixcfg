@@ -10,9 +10,14 @@
 
 {
   config = {
+    sops.secrets."cloudflare_apitoken" = {
+      owner = "nginx";
+      group = "nginx";
+      sopsFile = ../secrets/encrypted/cloudflare_apitoken;
+      format = "binary";
+    };
+
     networking.firewall.interfaces."tailscale0".allowedTCPPorts = [
-      # 7777
-      # 7778
       443
     ];
     services = {
@@ -45,13 +50,14 @@
       ];
 
       addSSL = true;
-      enableACME = true;
+      useACMEHost = "${hostname}";
       #root = "/var/www/${hostname}";
       locations."/" = {
         proxyPass = "http://127.0.0.1:7777/";
         proxyWebsockets = true;
       };
     };
+
     services.nginx.virtualHosts."zj.${hostname}" = {
       listen = [
         {
@@ -60,41 +66,65 @@
           ssl = true;
         }
       ];
-
+      
       addSSL = true;
-      enableACME = true;
+      useACMEHost = "${hostname}";
       #root = "/var/www/${hostname}";
       locations."/" = {
         proxyPass = "http://127.0.0.1:8082/";
         proxyWebsockets = true;
       };
     };
+
+    # VAULT WARDEN
+    services.vaultwarden = {
+      enable = true;
+      config = {
+        ROCKET_PORT = "7077";
+        DOMAIN = "https://vw.slynux.mickens.us";
+      };
+    };
+    services.nginx.virtualHosts."vw.${hostname}" = {
+      listen = [
+        {
+          port = 443;
+          addr = "0.0.0.0";
+          ssl = true;
+        }
+      ];
+      
+      addSSL = true;
+      useACMEHost = "${hostname}";
+      #root = "/var/www/${hostname}";
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:7077/";
+        proxyWebsockets = true;
+      };
+    };
+    # END VAULT WARDEN
+
     security.acme = {
       acceptTerms = true;
-      defaults.email = "foo@bar.com";
-      defaults.server = "https://acme-staging-v02.api.letsencrypt.org/directory";
-    };
-    # block actually attempts to get cert, leaving us with whatever minica self-signed
-    # note: seems like for the initial setup these need to be unmasked?
-    systemd.services."acme-code.${hostname}" = {
-      enable = false;
-      wantedBy = lib.mkForce [ ];
-    };
-    # acme-${hostname}.timer
-    systemd.timers."acme-code.${hostname}" = {
-      enable = false;
-      timerConfig = lib.mkForce { };
-      wantedBy = lib.mkForce [ ];
-    };
-    systemd.services."acme-zj.${hostname}" = {
-      enable = false;
-      wantedBy = lib.mkForce [ ];
-    };
-    # acme-${hostname}.timer
-    systemd.timers."acme-zj.${hostname}" = {
-      enable = false;
-      timerConfig = lib.mkForce { };
-      wantedBy = lib.mkForce [ ];
+      defaults = {
+        #server = "https://acme-staging-v02.api.letsencrypt.org/directory";
+        email = "cole.mickens@gmail.com";
+        dnsProvider = "cloudflare";
+        credentialFiles =
+          let
+            s = config.sops.secrets;
+          in
+          {
+            CLOUDFLARE_DNS_API_TOKEN_FILE = s.cloudflare_apitoken.path;
+            CLOUDFLARE_EMAIL_FILE = pkgs.writeText "cloudflare_email" "cole.mickens@gmail.com";
+          };
+        dnsResolver = "1.1.1.1:53";
+      };
+      certs."${hostname}" = {
+        dnsPropagationCheck = true;
+        domain = "${hostname}";
+        extraDomainNames = [ "*.${hostname}" ];
+        group = "nginx";
+      };
     };
   };
 }
