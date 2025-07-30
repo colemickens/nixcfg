@@ -25,7 +25,7 @@ in
     # common includes too many assumptions (nix, efi boot, networking, etc)
     # TODO: common gets included regardless!!!! eeeek
 
-    inputs.determinate.nixosModules.default
+    inputs.determinate-main.nixosModules.default
     ../../profiles/user-cole.nix
 
     ../../mixins/clamav.nix
