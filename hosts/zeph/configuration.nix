@@ -36,7 +36,7 @@ in
 
     ./zrepl.nix # TODO: make this device specific
 
-    inputs.determinate.nixosModules.default
+    inputs.determinate-main.nixosModules.default
 
     ./unfree.nix
 
