@@ -13,7 +13,7 @@
           autosuggestion.enable = true;
           enableCompletion = true;
           defaultKeymap = "viins";
-          dotDir = ".config/zsh";
+          dotDir = "${hm.config.xdg.configHome}/zsh";
           shellAliases = {
             "ls" = "ls --color --group-directories-first";
             "exa" = "exa --group-directories-first";
