@@ -25,5 +25,6 @@ jobs:
       run: |
         nix develop --accept-flake-config .#ci -c ./.github/ci.nu build '.#bundles.x86_64-linux.default'
     - name: build-cache-extra
+      continue-on-error: true
       run: |
         nix develop --accept-flake-config .#ci -c ./.github/ci.nu build '.#bundles.x86_64-linux.extra'
