@@ -120,7 +120,7 @@
     "determinate-main-dnixd": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-WewOOmK0rZ7yDBaA1xie1wHYTMkB96scY4Fjt6MPxfQ=",
+        "narHash": "sha256-biIBLV+1efkhn2JqiBuRZuUyriCe4+gRDiv+u7/OVZU=",
         "type": "file",
         "url": "https://install.determinate.systems/determinate-nixd/branch/main/x86_64-linux"
       },
@@ -138,11 +138,11 @@
         "nixpkgs-regression": "nixpkgs-regression_2"
       },
       "locked": {
-        "lastModified": 1754059237,
-        "narHash": "sha256-fH257BA1/05NXTW/oVB9KcJIh4f/nscsmLFvftMSZYc=",
+        "lastModified": 1754406738,
+        "narHash": "sha256-TNYQeWAyLKkCwFbN0ngAtvXWs7jHB0PedsUkJtWW16E=",
         "owner": "DeterminateSystems",
         "repo": "nix-src",
-        "rev": "3ca1e5b11d532628dc29fbf2a36a023a29cfbc6f",
+        "rev": "b1561172b567086b8609a6ca97d0079ec4149ac7",
         "type": "github"
       },
       "original": {
@@ -841,11 +841,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1754276100,
-        "narHash": "sha256-VmYP9Jo0U234xtGTGtihqNHfGy1JZ1h9WaaJlIuzgCk=",
+        "lastModified": 1754362243,
+        "narHash": "sha256-QHNTUdI6oIYuuazGuKGhVk5RCOM1nIzDUc/AGgL7Szw=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "dc2d2489572fa8a3b86c15ff9fd01f99b90cb90d",
+        "rev": "3ec3244ffb877f1b7f5d2dbff19241982ab25ff2",
         "type": "github"
       },
       "original": {
@@ -1011,11 +1011,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1754205590,
-        "narHash": "sha256-vTD7i707QEMGx8SdDgI/XulDGTXFdG6hZ7fvfmBv/o4=",
+        "lastModified": 1754358881,
+        "narHash": "sha256-UP/8nUccNcLS3wG4i9BtEjWzBJpYJlmZ+YZFXz5DJcc=",
         "owner": "a-kenji",
         "repo": "zellij-nix",
-        "rev": "42f51ad11eb0d4d3f910113b9ef1f138b73f3edf",
+        "rev": "1ba9aa9f548d67631e481e504c78944ed61384e3",
         "type": "github"
       },
       "original": {
