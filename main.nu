@@ -44,16 +44,21 @@ def "main selfup" [] {
 }
 
 def "main up" [...hosts] {
-  {
+  do {
+    header "light_yellow_reverse" "update: cmpkgs"
     cd ../nixpkgs
-    jj git fetch --all-remotes; jj rebase -b cmpkgs -d master@nixos --ignore-immutable; jj git push -b cmpkgs
+    jj git fetch --all-remotes; jj rebase -b cmpkgs -d nixos-unstable@nixos --ignore-immutable; jj git push -b cmpkgs
   }
-  {
-    os ../home-manager
+  do {
+    header "light_yellow_reverse" "update: cmhm"
+    cd ../home-manager
     jj git fetch --all-remotes; jj rebase -b cmhm -d master@nix-community --ignore-immutable; jj git push -b cmhm
   }
 
+  header "light_yellow_reverse" "update: flake lock"
   nix flake update --commit-lock-file
+
+  header "light_yellow_reverse" "update: bulk build"
   nix build --accept-flake-config --print-out-paths --keep-going '.#toplevels.zeph' '.#toplevels.slynux' '.#toplevels.raisin' '.#toplevels.ds-ws-colemickens' | cachix push colemickens
   main deploy raisin
   main deploy slynux
