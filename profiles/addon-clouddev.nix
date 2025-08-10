@@ -66,7 +66,7 @@
           ssl = true;
         }
       ];
-      
+
       addSSL = true;
       useACMEHost = "${hostname}";
       #root = "/var/www/${hostname}";
@@ -92,7 +92,7 @@
           ssl = true;
         }
       ];
-      
+
       addSSL = true;
       useACMEHost = "${hostname}";
       #root = "/var/www/${hostname}";
