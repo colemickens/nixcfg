@@ -70,6 +70,7 @@ in
 
     environment.systemPackages = with pkgs; [
       ryzenadj
+      qemu
     ];
 
     services.tailscale.useRoutingFeatures = "client";
