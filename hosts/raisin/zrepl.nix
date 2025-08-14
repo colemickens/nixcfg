@@ -22,7 +22,8 @@
               listen_freebind = true;
               clients = {
                 # TODO: source from data/
-                "100.109.239.83" = "zeph";
+                "100.93.96.66" = "zeph"; 
+                "100.81.167.123" = "slynux";
               };
             };
           }

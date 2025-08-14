@@ -22,6 +22,8 @@ in
     (import ../../profiles/addon-clouddev.nix { hostname = "slynux.mickens.us"; })
     ../../profiles/addon-devtools.nix
 
+    ./zrepl.nix
+
     inputs.determinate-main.nixosModules.default
 
     inputs.nixos-hardware.nixosModules.common-cpu-amd
@@ -41,15 +43,15 @@ in
 
     zramSwap.enable = true;
 
-    services.go2rtc = {
-      enable = true;
-      settings = {
-        # api/webui = :1984
-        streams = {
-          webcam = "ffmpeg:device?video=/dev/video0&input_format=yuyv422&video_size=1920x1080#video=h264#hardware";
-        };
-      };
-    };
+    # services.go2rtc = {
+    #   enable = true;
+    #   settings = {
+    #     # api/webui = :1984
+    #     streams = {
+    #       webcam = "ffmpeg:device?video=/dev/video0&input_format=yuyv422&video_size=1920x1080#video=h264#hardware";
+    #     };
+    #   };
+    # };
 
     nix.gc = {
       automatic = true;
