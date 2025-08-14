@@ -2,11 +2,11 @@
   "nodes": {
     "cmpkgs": {
       "locked": {
-        "lastModified": 1754845440,
-        "narHash": "sha256-g1RNreQTmpJe46G3RzYe7cQxOwMTn2odZ3aqOBVqYPc=",
+        "lastModified": 1755183227,
+        "narHash": "sha256-g79LuaAN6cYbKNbxXocUHViCp5KA09kk/wgYXE81igU=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "653f9d21ac0a141c7aacf008008b272ebd675f24",
+        "rev": "3f3a9b93dee1dc9f92cd61b8ad17cf233d2577be",
         "type": "github"
       },
       "original": {
@@ -471,11 +471,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1755014578,
-        "narHash": "sha256-YrBCU7bJU/9nYV1YFjajZpCvenKanqKBlrGaG3H17zs=",
+        "lastModified": 1755183235,
+        "narHash": "sha256-/NSRFo+sSvFAX7K7yV8NtJd5/pAfoZivP85XaMezn2A=",
         "owner": "colemickens",
         "repo": "home-manager",
-        "rev": "4a60e36edd243441c726aeb11ff904ba21b102b5",
+        "rev": "0169ed77f6f60fa0b056cad465ced70faf5f4ed4",
         "type": "github"
       },
       "original": {
@@ -841,11 +841,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1754966322,
-        "narHash": "sha256-7f/LH60DnjjQVKbXAsHIniGaU7ixVM7eWU3hyjT24YI=",
+        "lastModified": 1755139244,
+        "narHash": "sha256-SN1BFA00m+siVAQiGLtTwjv9LV9TH5n8tQcSziV6Nv4=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "7c13cec2e3828d964b9980d0ffd680bd8d4dce90",
+        "rev": "aeae248beb2a419e39d483dd9b7fec924aba8d4d",
         "type": "github"
       },
       "original": {
