@@ -59,6 +59,8 @@ in
       lazy-trees = true
     '';
 
+    zramSwap.enable = true;
+
     services.tailscale.useRoutingFeatures = "server";
     services.udisks2.enable = lib.mkForce false;
 
