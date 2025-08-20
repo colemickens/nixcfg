@@ -11,6 +11,7 @@ in
     ../mixins/hw-steelseries-aerox3.nix
 
     ../mixins/fonts.nix
+    ../mixins/ghostty.nix
     ../mixins/mpv.nix
     ../mixins/pipewire.nix
   ];
