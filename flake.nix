@@ -23,6 +23,10 @@
     zjstatus.url = "github:dj95/zjstatus";
     zjstatus.inputs."nixpkgs".follows = "cmpkgs";
 
+    # random dev tools:
+    ghostty.url = "github:ghostty-org/ghostty";
+    ghostty.inputs."nixpkgs".follows = "cmpkgs";
+
     # more dev tools:
     rust-overlay.url = "github:oxalica/rust-overlay";
     rust-overlay.inputs.nixpkgs.follows = "cmpkgs";
