@@ -7,30 +7,15 @@
 
 let
   prefs = import ./_preferences.nix { inherit pkgs inputs; };
-  convert =
-    color:
-    let
-      c = inputs.nix-rice.lib.${pkgs.stdenv.hostPlatform.system}.color.hexToRgba color;
-    in
-    [
-      c.r
-      c.g
-      c.b
-    ];
-  colors = prefs.themes.zellij;
 
   hostColor = config.nixcfg.common.hostColor;
 
   crossBuild = (pkgs.stdenv.hostPlatform.system != pkgs.stdenv.buildPlatform.system);
 
-  zellijPkg =
-    let
-      zellijFlake = inputs.zellij-nix.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default;
-      zellijNixpkgs = pkgs.zellij;
-    in
-    (if !crossBuild then zellijFlake else zellijNixpkgs);
-
-  # zellijPkg = pkgs.zellij;
+  # zellijFlake = inputs.zellij-nix.outputs.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  # zellijNixpkgs = pkgs.zellij;
+  # zellijPkg = (if !crossBuild then zellijFlake else zellijNixpkgs);
+  zellijPkg = pkgs.zellij;
 
   _defaultShell = prefs.default_shell;
 
@@ -38,10 +23,6 @@ let
 in
 {
   config = {
-    # this didn't work any better for cross-compilation
-    # nixpkgs.overlays = [
-    #   inputs.zellij.overlays.default
-    # ];
     home-manager.users.cole =
       { pkgs, lib, ... }@hm:
       {
