@@ -14,13 +14,12 @@
 
     ucodenix.url = "github:e-tho/ucodenix";
 
-    # devtools:
-
-    zellij.url = "github:zellij-org/zellij?ref=web-client-preview";
-    zellij.flake = false;
-    zellij-nix.url = "github:a-kenji/zellij-nix";
-    zellij-nix.inputs."nixpkgs".follows = "cmpkgs";
-    zellij-nix.inputs."zellij".follows = "zellij";
+    # zellij:
+    # zellij.url = "github:zellij-org/zellij?ref=web-client-preview";
+    # zellij.flake = false;
+    # zellij-nix.url = "github:a-kenji/zellij-nix";
+    # zellij-nix.inputs."nixpkgs".follows = "cmpkgs";
+    # zellij-nix.inputs."zellij".follows = "zellij";
     zjstatus.url = "github:dj95/zjstatus";
     zjstatus.inputs."nixpkgs".follows = "cmpkgs";
 
