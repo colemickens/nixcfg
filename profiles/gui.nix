@@ -34,11 +34,6 @@ in
 
     programs.noisetorch.enable = true;
 
-    # TODO: REMOVE SOON(?)
-    nixpkgs.config.permittedInsecurePackages = [
-      "olm-3.2.16"
-    ];
-
     home-manager.users.cole =
       { pkgs, config, ... }@hm:
 
