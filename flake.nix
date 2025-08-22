@@ -23,6 +23,12 @@
     zjstatus.url = "github:dj95/zjstatus";
     zjstatus.inputs."nixpkgs".follows = "cmpkgs";
 
+    # cosmic-nightly
+    cosmic-nightly = {
+      url = "github:busyboredom/cosmic-nightly-flake";
+      inputs.nixpkgs.follows = "cmpkgs";
+    };
+
     # random dev tools:
     ghostty.url = "github:ghostty-org/ghostty";
     ghostty.inputs."nixpkgs".follows = "cmpkgs";
