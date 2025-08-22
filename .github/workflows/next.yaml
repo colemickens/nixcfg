@@ -9,7 +9,7 @@ on:
       - "main"
 jobs:
   "update":
-    runs-on: "slynux-default"
+    runs-on: "slynux-nixcfg-default"
     steps:
     - name: checkout
       uses: actions/checkout@v4

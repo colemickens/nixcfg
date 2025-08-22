@@ -26,12 +26,19 @@ in
     };
     services = {
       github-actions-runners = {
-        "${runnerId}-default" = {
+        "${runnerId}-nixcfg-default" = {
           enable = true;
           url = "https://github.com/colemickens/nixcfg";
           tokenFile = config.sops.secrets."github-runner-token".path;
           replace = true;
-          extraLabels = [ "${runnerId}-default" ]; # TODO: remove runnerID?
+          extraLabels = [ "${runnerId}-nixcfg-default" ]; # TODO: remove runnerID?
+        };
+        "${runnerId}-cosmic-default" = {
+          enable = true;
+          url = "https://github.com/colemickens/cosmic-nightly-flake";
+          tokenFile = config.sops.secrets."github-runner-token".path;
+          replace = true;
+          extraLabels = [ "${runnerId}-cosmic-default" ]; # TODO: remove runnerID?
         };
         # "${runnerId}-deployer1" = {
         #   enable = true;

@@ -9,7 +9,7 @@ on:
   #     - "main"
 jobs:
   "test":
-    runs-on: "slynux-default"
+    runs-on: "slynux-nixcfg-default"
     steps:
     - name: next
       run: |
