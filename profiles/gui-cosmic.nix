@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   imports = [
@@ -7,11 +7,13 @@
 
   config = {
     nixpkgs.overlays = [
-      (final: prev: {
-        cosmic-player = prev.cosmic-player.overrideAttrs (old: {
-          buildInputs = old.buildInputs ++ [ prev.gst_all_1.gst-plugins-ugly ];
-        });
-      })
+      # (final: prev: {
+      #   cosmic-player = prev.cosmic-player.overrideAttrs (old: {
+      #     buildInputs = old.buildInputs ++ [ prev.gst_all_1.gst-plugins-ugly ];
+      #   });
+      # })
+
+      inputs.cosmic-nightly.overlay
     ];
 
     services.desktopManager.cosmic.enable = true;
@@ -24,7 +26,7 @@
     environment.systemPackages = with pkgs; [
       pop-wallpapers
 
-      cosmic-player
+      # cosmic-player # broken on nightly
       cosmic-reader
       cosmic-ext-ctl
       cosmic-ext-applet-caffeine
