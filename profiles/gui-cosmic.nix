@@ -13,7 +13,7 @@
       #   });
       # })
 
-      inputs.cosmic-nightly.overlay
+      inputs.cosmic-nightly.overlays.default
     ];
 
     services.desktopManager.cosmic.enable = true;
