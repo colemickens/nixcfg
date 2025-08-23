@@ -25,7 +25,7 @@
 
     # cosmic-nightly
     cosmic-nightly = {
-      url = "github:busyboredom/cosmic-nightly-flake";
+      url = "github:colemickens/cosmic-nightly-flake";
       inputs.nixpkgs.follows = "cmpkgs";
     };
 
