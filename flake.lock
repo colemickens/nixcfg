@@ -952,6 +952,28 @@
         "type": "github"
       }
     },
+    "helix": {
+      "inputs": {
+        "nixpkgs": [
+          "cmpkgs"
+        ],
+        "rust-overlay": "rust-overlay"
+      },
+      "locked": {
+        "lastModified": 1752423399,
+        "narHash": "sha256-8cvEH2QCBZTwZO9r3fUaASFi1a8Dgi7PFzVlP/TJhH8=",
+        "owner": "helix-editor",
+        "repo": "helix",
+        "rev": "4dab0b54061a020a25413a69b6cbec075c32c5d6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "helix-editor",
+        "ref": "termina",
+        "repo": "helix",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -980,7 +1002,7 @@
         "flake-parts": "flake-parts_3",
         "nixpkgs": "nixpkgs_6",
         "pre-commit-hooks-nix": "pre-commit-hooks-nix",
-        "rust-overlay": "rust-overlay"
+        "rust-overlay": "rust-overlay_2"
       },
       "locked": {
         "lastModified": 1754297745,
@@ -1302,19 +1324,41 @@
         "determinate-main-dnixd": "determinate-main-dnixd",
         "determinate-main-nixsrc": "determinate-main-nixsrc",
         "ghostty": "ghostty",
+        "helix": "helix",
         "home-manager": "home-manager",
         "lanzaboote": "lanzaboote",
         "lib-aggregate": "lib-aggregate",
         "nixos-github-actions": "nixos-github-actions",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs-stable": "nixpkgs-stable",
-        "rust-overlay": "rust-overlay_2",
+        "rust-overlay": "rust-overlay_3",
         "sops-nix": "sops-nix",
         "ucodenix": "ucodenix",
         "zjstatus": "zjstatus"
       }
     },
     "rust-overlay": {
+      "inputs": {
+        "nixpkgs": [
+          "helix",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1740623427,
+        "narHash": "sha256-3SdPQrZoa4odlScFDUHd4CUPQ/R1gtH4Mq9u8CBiK8M=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "d342e8b5fd88421ff982f383c853f0fc78a847ab",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "rust-overlay_2": {
       "inputs": {
         "nixpkgs": [
           "lanzaboote",
@@ -1335,7 +1379,7 @@
         "type": "github"
       }
     },
-    "rust-overlay_2": {
+    "rust-overlay_3": {
       "inputs": {
         "nixpkgs": [
           "cmpkgs"
@@ -1355,7 +1399,7 @@
         "type": "github"
       }
     },
-    "rust-overlay_3": {
+    "rust-overlay_4": {
       "inputs": {
         "nixpkgs": [
           "zjstatus",
@@ -1512,7 +1556,7 @@
         "nixpkgs": [
           "cmpkgs"
         ],
-        "rust-overlay": "rust-overlay_3"
+        "rust-overlay": "rust-overlay_4"
       },
       "locked": {
         "lastModified": 1754932774,

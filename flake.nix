@@ -23,6 +23,10 @@
     zjstatus.url = "github:dj95/zjstatus";
     zjstatus.inputs."nixpkgs".follows = "cmpkgs";
 
+    # helix
+    helix.url = "github:helix-editor/helix?ref=termina";
+    helix.inputs.nixpkgs.follows = "cmpkgs";
+
     # cosmic-nightly
     cosmic-nightly = {
       url = "github:colemickens/cosmic-nightly-flake";
