@@ -1,5 +1,15 @@
-{ ... }:
+{
+  pkgs,
+  config,
+  inputs,
+  ...
+}:
 
+let
+  helixPkg =
+    # pkgs.helix;
+    inputs.helix.packages.x86_64-linux.default;
+in
 {
   config = {
     home-manager.users.cole =
@@ -67,6 +77,7 @@
         # '';
         programs.helix = {
           enable = true;
+          package = helixPkg;
 
           settings = {
             # see "custom..." blah blah stuff for overriding the bar on a given theme to give extra contrast:
