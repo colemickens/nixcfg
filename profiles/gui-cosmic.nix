@@ -24,10 +24,11 @@
     environment.sessionVariables = { };
 
     environment.systemPackages = with pkgs; [
-      pop-wallpapers
+      
 
-      # cosmic-player # broken on nightly
+      cosmic-player
       cosmic-reader
+      cosmic-wallpapers
       cosmic-ext-ctl
       cosmic-ext-applet-caffeine
       cosmic-ext-applet-emoji-selector
