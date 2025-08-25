@@ -68,10 +68,10 @@
               term = "xterm-256color";
               window-decoration = false;
 
-              theme = "light:ayu_light,dark:ayu";
+              # theme = "light:ayu_light,dark:ayu";
 
               # cosmic
-              # theme = "light:cosmic-light,dark:cosmic-dark";
+              theme = "light:cosmic-light,dark:cosmic-dark";
               # background-opacity = "0.85";
               # misc:
               # theme = "light:Adwaita,dark:Adwaita Dark";
