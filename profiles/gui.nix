@@ -128,6 +128,8 @@ in
             psst
             spot
 
+            qbittorrent
+
             # pipewire/pulseaudio
             pwvucontrol
             # qpwgraph
