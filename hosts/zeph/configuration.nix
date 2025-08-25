@@ -34,6 +34,7 @@ in
     ../../mixins/spotify.nix
     ../../mixins/syncthing.nix
 
+    ./preservation.nix
     ./zrepl.nix # TODO: make this device specific
 
     inputs.determinate-main.nixosModules.default
