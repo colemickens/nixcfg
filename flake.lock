@@ -1315,6 +1315,21 @@
         "type": "github"
       }
     },
+    "preservation": {
+      "locked": {
+        "lastModified": 1751384068,
+        "narHash": "sha256-xGq+Om1ReXcQy6h57yj9V5nOM84g/GBJ3m6oxe1a3js=",
+        "owner": "nix-community",
+        "repo": "preservation",
+        "rev": "286737ba485f30c1687c833e66f5901a6c8dc019",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "preservation",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "cmpkgs": "cmpkgs",
@@ -1331,6 +1346,7 @@
         "nixos-github-actions": "nixos-github-actions",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs-stable": "nixpkgs-stable",
+        "preservation": "preservation",
         "rust-overlay": "rust-overlay_3",
         "sops-nix": "sops-nix",
         "ucodenix": "ucodenix",

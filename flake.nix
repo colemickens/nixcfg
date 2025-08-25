@@ -27,6 +27,9 @@
     helix.url = "github:helix-editor/helix?ref=termina";
     helix.inputs.nixpkgs.follows = "cmpkgs";
 
+    # preservation
+    preservation.url = "github:nix-community/preservation";
+
     # cosmic-nightly
     cosmic-nightly = {
       url = "github:colemickens/cosmic-nightly-flake";
