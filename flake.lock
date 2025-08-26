@@ -2,11 +2,11 @@
   "nodes": {
     "cmpkgs": {
       "locked": {
-        "lastModified": 1755717187,
-        "narHash": "sha256-Worfm154EYQcKHKXvyxUeCGmmCT1lG7iap40NLHsG1c=",
+        "lastModified": 1756221689,
+        "narHash": "sha256-Abx6PJ/FaY1Q00ZvgkmjSUYCZVnD0v7RBaq+igUkUe8=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "09d5b167db32a6b2f4daa327e300017b4875b59d",
+        "rev": "7672188e8b73b533ef152f5141bef5a16290395a",
         "type": "github"
       },
       "original": {
@@ -832,11 +832,11 @@
         "zon2nix": "zon2nix"
       },
       "locked": {
-        "lastModified": 1756161176,
-        "narHash": "sha256-zLetZrleZUwThD7tdpjN1iZ5h1IOiDpo43aCBbNm+8Y=",
+        "lastModified": 1756197898,
+        "narHash": "sha256-0X6qBT9lbKlQPZH5PRopNyJcdsgh6NU8rxQf2DK47EM=",
         "owner": "ghostty-org",
         "repo": "ghostty",
-        "rev": "9a56e779374a522ca5503cf51426d16172bf4c65",
+        "rev": "4630369f874fe8fab0607c7e4f2b375d7ab78741",
         "type": "github"
       },
       "original": {
@@ -1351,11 +1351,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1756089517,
-        "narHash": "sha256-KGinVKturJFPrRebgvyUB1BUNqf1y9FN+tSJaTPlnFE=",
+        "lastModified": 1756197489,
+        "narHash": "sha256-S16rPaBH1TnMbDyL5NlGSJcYd7wPlOEWTStdBDL7BHw=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "44774c8c83cd392c50914f86e1ff75ef8619f1cd",
+        "rev": "8ec04f46f1edeeed3f870da62191745b93975da7",
         "type": "github"
       },
       "original": {
