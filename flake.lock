@@ -200,26 +200,23 @@
         "cosmic-settings-src": "cosmic-settings-src",
         "cosmic-store-src": "cosmic-store-src",
         "cosmic-term-src": "cosmic-term-src",
-        "cosmic-text-src": "cosmic-text-src",
-        "cosmic-theme-editor-src": "cosmic-theme-editor-src",
         "cosmic-wallpapers-src": "cosmic-wallpapers-src",
         "cosmic-workspaces-epoch-src": "cosmic-workspaces-epoch-src",
-        "libcosmic-src": "libcosmic-src",
         "nixpkgs": [
           "cmpkgs"
         ],
         "xdg-desktop-portal-cosmic-src": "xdg-desktop-portal-cosmic-src"
       },
       "locked": {
-        "lastModified": 1756003149,
-        "narHash": "sha256-AQjmT1sz61Ptm4fbpVZi0uhjIBXlDKAOqW65S8AKLLA=",
-        "owner": "colemickens",
+        "lastModified": 1756164342,
+        "narHash": "sha256-wboilTqqobjJ5PADcC6BIKPTHJZeK7nC5iyxK9Y3R9w=",
+        "owner": "busyboredom",
         "repo": "cosmic-nightly-flake",
-        "rev": "e204597761c63700097ecb0dd693d7c6168980f7",
+        "rev": "e7630b5c32d91e1a0939be6390e11c673e4fd734",
         "type": "github"
       },
       "original": {
-        "owner": "colemickens",
+        "owner": "busyboredom",
         "repo": "cosmic-nightly-flake",
         "type": "github"
       }
@@ -413,38 +410,6 @@
       "original": {
         "owner": "pop-os",
         "repo": "cosmic-term",
-        "type": "github"
-      }
-    },
-    "cosmic-text-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1754943420,
-        "narHash": "sha256-ux1d3CAaziXkqMDfgH+mUHE2iDbhFs1yhMxHsN8Ccc4=",
-        "owner": "pop-os",
-        "repo": "cosmic-text",
-        "rev": "f7033bb0433f6a9ba109007027781ba46ea9ba27",
-        "type": "github"
-      },
-      "original": {
-        "owner": "pop-os",
-        "repo": "cosmic-text",
-        "type": "github"
-      }
-    },
-    "cosmic-theme-editor-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1677780465,
-        "narHash": "sha256-DGcb+FZ7GkxK15sjeacvD1MS89I3RN43ohii2k+r8KM=",
-        "owner": "pop-os",
-        "repo": "cosmic-theme-editor",
-        "rev": "024bd9b3e49685a0083d744bf823072b58cc4957",
-        "type": "github"
-      },
-      "original": {
-        "owner": "pop-os",
-        "repo": "cosmic-theme-editor",
         "type": "github"
       }
     },
@@ -1034,22 +999,6 @@
       "original": {
         "owner": "nix-community",
         "repo": "lib-aggregate",
-        "type": "github"
-      }
-    },
-    "libcosmic-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1755902971,
-        "narHash": "sha256-Frq4ZfbOydQlAFdKiGd74oXZ1rW5EbHdUij7GaOq3f0=",
-        "owner": "pop-os",
-        "repo": "libcosmic",
-        "rev": "66a2632e2ee72a1e3a9888cd5638821f6af2f861",
-        "type": "github"
-      },
-      "original": {
-        "owner": "pop-os",
-        "repo": "libcosmic",
         "type": "github"
       }
     },
