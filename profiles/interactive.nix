@@ -101,7 +101,6 @@
               eza # eza-community replacement for exa
               fd
               fx
-              gitui
               grex
               hexyl
               xh
