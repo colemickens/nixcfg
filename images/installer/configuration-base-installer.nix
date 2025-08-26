@@ -12,8 +12,7 @@
   ];
 
   config = {
-    # TODO: remove when not debugging:
-    # isoImage.squashfsCompression = null;
+    isoImage.squashfsCompression = null;
 
     ## <tailscale auto-login>
     services.tailscale = {
