@@ -17,6 +17,7 @@ in
 
     # jesus christ, gobject-inspection, gpgme, ruby? fuck no
     services.udisks2.enable = lib.mkForce false;
+    networking.modemmanager.enable = lib.mkForce false;
 
     nixcfg.common.defaultKernel = lib.mkForce false;
     nixcfg.common.useZfs = lib.mkForce false;
