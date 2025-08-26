@@ -549,7 +549,7 @@
     "determinate-main-dnixd": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-nVHKcSRKxA+5s3ZU8IBUs4K/LUZbIjX5wyrzLC+y6oI=",
+        "narHash": "sha256-wUh/TEjTXxSKjrSfUpS0I/1eZOnKF7B+WCZIZ2sHMDE=",
         "type": "file",
         "url": "https://install.determinate.systems/determinate-nixd/branch/main/x86_64-linux"
       },
@@ -567,11 +567,11 @@
         "nixpkgs-regression": "nixpkgs-regression_2"
       },
       "locked": {
-        "lastModified": 1756137374,
-        "narHash": "sha256-8KuOE0+pNTE74dRTdAt3jHa9Z976WqwuhxD4a2pCiK0=",
+        "lastModified": 1756239084,
+        "narHash": "sha256-tsIUbBCarBIJ8GBP7MBlBaEjwS7uOkkfQcnfIjakFVk=",
         "owner": "DeterminateSystems",
         "repo": "nix-src",
-        "rev": "cfce3c59f9b0f97f33c3638d2768c47cea87dd55",
+        "rev": "ba6ef81c014a4b8435e79025a86009e52e76ead6",
         "type": "github"
       },
       "original": {
