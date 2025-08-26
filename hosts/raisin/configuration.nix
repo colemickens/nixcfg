@@ -40,10 +40,10 @@ in
 
     services.zfs.autoScrub.pools = [ poolname ];
 
-    services.logind.extraConfig = ''
-      HandlePowerKey=ignore
-      HandleLidSwitch=ignore
-    '';
+    services.logind.settings.Login = {
+      HandlePowerKey = "ignore";
+      HandleLidSwitch = "ignore";
+    };
 
     systemd.network.enable = true;
 
