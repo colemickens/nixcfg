@@ -2,11 +2,11 @@
   "nodes": {
     "cmpkgs": {
       "locked": {
-        "lastModified": 1756315889,
-        "narHash": "sha256-CSsumA7QZznnkQf2FBOjcgO+R6rHg9V9gw5csNhHXjE=",
+        "lastModified": 1756324459,
+        "narHash": "sha256-e5Ux3DRpTsHHitP0uSS/D3nGcIOh5Dupt8+uSAfUg88=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "639a834678463e9b28134784187e6959c69e1330",
+        "rev": "e14ee705657756fbbb6ee9b617029609e6d4d9a4",
         "type": "github"
       },
       "original": {
@@ -567,11 +567,11 @@
         "nixpkgs-regression": "nixpkgs-regression_2"
       },
       "locked": {
-        "lastModified": 1756296548,
-        "narHash": "sha256-MlsWX1sAE0191wlYYM1bjktIsQyFDywNvN3XeH92VHI=",
+        "lastModified": 1756321786,
+        "narHash": "sha256-/60LzUbWw9W9Icbo6TiwghSyKpSnp4zzs7IKT72L/HI=",
         "owner": "DeterminateSystems",
         "repo": "nix-src",
-        "rev": "e74f285aee67143b3b5055c8411b0d3072e0ba4d",
+        "rev": "bdb727a4d33bc824579071c0eaff23f718f16678",
         "type": "github"
       },
       "original": {
