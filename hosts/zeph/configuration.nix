@@ -128,6 +128,12 @@ in
         neededForBoot = true;
       };
 
+      "/mnt/media" = {
+        fsType = "zfs";
+        device = "${poolname}/media";
+        neededForBoot = true;
+      };
+
       "/efi/EFI/Linux" = {
         device = "/boot/EFI/Linux";
         options = [ "bind" ];
