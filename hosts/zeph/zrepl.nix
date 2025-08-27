@@ -10,6 +10,7 @@ let
     filesystems = {
       "zephpool/root<" = true;
       "zephpool/home<" = true;
+      "zephpool/persistent<" = true;
     };
     replication = {
       protection = {
@@ -54,6 +55,7 @@ in
             filesystems = {
               "zephpool/root<" = true;
               "zephpool/home<" = true;
+              "zephpool/persistent<" = true;
             };
             snapshotting = {
               type = "periodic";

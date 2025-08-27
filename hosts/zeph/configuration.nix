@@ -114,6 +114,11 @@ in
         device = "${poolname}/home";
         neededForBoot = true;
       };
+      "/persistent" = {
+        fsType = "zfs";
+        device = "${poolname}/persistent";
+        neededForBoot = true;
+      };
 
       # "/mnt/data/t5" = { fsType = "zfs"; device = "${poolname}/data/t5"; };
       "/mnt/games" = {
