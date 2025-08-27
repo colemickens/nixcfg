@@ -120,8 +120,6 @@ in
             gg-jj
             zed-editor
 
-            goldwarden
-
             # video/audio
             glide-media-player
             vlc
