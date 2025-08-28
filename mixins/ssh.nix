@@ -30,24 +30,12 @@ in
     home-manager.users.cole =
       { pkgs, lib, ... }:
       {
-        home.file.".ssh/control/.keep".text = "";
         home.sessionVariables = {
           SSH_AUTH_SOCK = fixedSshAgentSocket;
         };
         programs.ssh = {
           enable = true;
-          controlPath = "/home/cole/.ssh/control/%C"; # TODO: lolwut
-          # just no... this shit does not work well
-          #controlMaster = "auto";
-          #controlPersist = "1m";
-          #serverAliveInterval = 5;
-          #serverAliveCountMax = 2;
           matchBlocks = {
-            "localhost2222" = {
-              hostname = "localhost";
-              port = 2222;
-              identityAgent = fixedSshAgentSocket;
-            };
             "*" = {
               # everything sucks about SSH_AUTH_SOCK, so let's just control
               # it and what it points to directly
