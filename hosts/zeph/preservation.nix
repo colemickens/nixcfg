@@ -21,52 +21,53 @@
       # other stuff without making a mess
       preserveAt."/persistent/preservation" = {
 
-      #   # preserve system directories
-      #   directories = [
-      #     "/etc/secureboot"
-      #     "/var/lib/bluetooth"
-      #     "/var/lib/fprint"
-      #     "/var/lib/fwupd"
-      #     "/var/lib/libvirt"
-      #     "/var/lib/power-profiles-daemon"
-      #     "/var/lib/systemd/coredump"
-      #     "/var/lib/systemd/rfkill"
-      #     "/var/lib/systemd/timers"
-      #     "/var/log"
-      #     {
-      #       directory = "/var/lib/nixos";
-      #       inInitrd = true;
-      #     }
-      #   ];
+        #   # preserve system directories
+        directories = [
+          #     "/etc/secureboot"
+          #     "/var/lib/bluetooth"
+          #     "/var/lib/fprint"
+          #     "/var/lib/fwupd"
+          #     "/var/lib/libvirt"
+          #     "/var/lib/power-profiles-daemon"
+          #     "/var/lib/systemd/coredump"
+          #     "/var/lib/systemd/rfkill"
+          #     "/var/lib/systemd/timers"
+          #     "/var/log"
+          #     {
+          #       directory = "/var/lib/nixos";
+          #       inInitrd = true;
+          #     }
+          "/etc/NetworkManager/system-connections"
+        ];
 
-      #   # preserve system files
-      #   files = [
-      #     {
-      #       file = "/etc/machine-id";
-      #       inInitrd = true;
-      #     }
-      #     {
-      #       file = "/etc/ssh/ssh_host_rsa_key";
-      #       how = "symlink";
-      #       configureParent = true;
-      #     }
-      #     {
-      #       file = "/etc/ssh/ssh_host_ed25519_key";
-      #       how = "symlink";
-      #       configureParent = true;
-      #     }
-      #     # "/var/lib/usbguard/rules.conf"
+        #   # preserve system files
+        files = [
+          #     {
+          #       file = "/etc/machine-id";
+          #       inInitrd = true;
+          #     }
+          {
+            file = "/etc/ssh/ssh_host_rsa_key";
+            how = "symlink";
+            configureParent = true;
+          }
+          {
+            file = "/etc/ssh/ssh_host_ed25519_key";
+            how = "symlink";
+            configureParent = true;
+          }
+          #     # "/var/lib/usbguard/rules.conf"
 
-      #     # creates a symlink on the volatile root
-      #     # creates an empty directory on the persistent volume, i.e. /persistent/var/lib/systemd
-      #     # does not create an empty file at the symlink's target (would require `createLinkTarget = true`)
-      #     {
-      #       file = "/var/lib/systemd/random-seed";
-      #       how = "symlink";
-      #       inInitrd = true;
-      #       configureParent = true;
-      #     }
-      #   ];
+          #     # creates a symlink on the volatile root
+          #     # creates an empty directory on the persistent volume, i.e. /persistent/var/lib/systemd
+          #     # does not create an empty file at the symlink's target (would require `createLinkTarget = true`)
+          #     {
+          #       file = "/var/lib/systemd/random-seed";
+          #       how = "symlink";
+          #       inInitrd = true;
+          #       configureParent = true;
+          #     }
+        ];
 
         # preserve user-specific files, implies ownership
         users = {
@@ -76,53 +77,32 @@
             ];
             directories = [
               # imperative/stateful config
-              # ".android"
-              # ".config/Ledger Live"
-              # ".config/cosmic"
-              # ".config/syncthing"
-              
-              # gamesaves (lol?)
-              # ".config/FEZ"
-              # ".config/unity3d"
-              
-              # gamesaves (lol?)
-              # ".local/share/AlexanderBruce" # Antichamber
-              # ".local/share/Baba_Is_You"
-              # ".local/share/bash"
-              # ".local/share/direnv"
-              # ".local/share/FEZ"
-              # ".local/share/keyrings"
-              # ".local/share/krita"
-              # ".local/share/mozilla-chrome"
-              # ".local/share/nix"
-              # ".local/share/nvim"
-              # ".local/share/oculante"
-              # ".local/share/password-store"
-              # ".local/share/ProtonPlus"
-              # ".local/share/syncthing"
-              # ".local/share/SyncThingData" # TODO: PRUNE XBOX FIRST
-              # ".local/share/vlc"
-              # ".local/share/vulkan"
-              # ".local/share/zed"
-              # ".local/share/zsh"
+              ".android"
 
-              # ".local/state/home-manager"
-              # ".local/state/wireplumber"
-              # ".local/state/nix"
-              # ".local/state/pop-launcher"
+              # TODO: "nonvolatile" instead of "persistent"
+              # for things we need, but don't want to version
 
-              # ".mozilla"
+              ".config/Ledger Live"
 
-              # {
-              #   directory = ".ssh";
-              #   mode = "0700";
-              # }
-              
-              # "code"
-              # "desktop"
-              # "documents"
-              # "downloads"
-              # "work"
+              # gamesaves (that indeed don't have steam cloud files inside)
+              ".local/share/AlexanderBruce" # Antichamber
+              ".local/share/FEZ"
+
+              ".local/share/SyncThingData"
+
+              ".mozilla"
+
+              {
+                directory = ".ssh";
+                mode = "0700";
+              }
+
+              "code"
+              "desktop"
+              "documents"
+
+              "work/code"
+              "work/documents"
             ];
             # files = [
             #   ".histfile"
@@ -172,6 +152,11 @@
         mode = "0755";
       };
       "/home/cole/.local/state".d = {
+        user = "cole";
+        group = "cole";
+        mode = "0755";
+      };
+      "/home/cole/work".d = {
         user = "cole";
         group = "cole";
         mode = "0755";
