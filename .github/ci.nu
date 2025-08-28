@@ -49,7 +49,7 @@ def "main build" [ $thing: string = ".#bundles.x86_64-linux" ] {
     # NOTE: this is probably useless now that we're back to builing the whole bundle
     # instead of how nix-eval-jobs recurses
     ls -l result* | print -e
-    ^ls -d result* | cachix push colemickens
+    ^ls -d result* | rg -v '\.iso' | cachix push colemickens
     print -e "::warning::build failed, but we cached something"
     exit -1
   }
