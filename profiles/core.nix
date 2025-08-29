@@ -10,6 +10,8 @@
     ../mixins/sshd.nix
     ../mixins/gpg-agent.nix
     ../mixins/tailscale.nix
+
+    ../mixins/cargo.nix
   ];
 
   config = { };
