@@ -24,7 +24,7 @@
     zjstatus.inputs."nixpkgs".follows = "cmpkgs";
 
     # helix
-    helix.url = "github:helix-editor/helix?ref=termina";
+    helix.url = "github:helix-editor/helix";
     helix.inputs.nixpkgs.follows = "cmpkgs";
 
     # preservation
