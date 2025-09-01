@@ -63,7 +63,7 @@
             };
             settings = {
               font-family = "Iosevka Term";
-              font-style = "Regular";
+              # font-style = "Regular";
               font-size = 10;
               term = "xterm-256color";
               window-decoration = false;
