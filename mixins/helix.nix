@@ -80,9 +80,10 @@ in
           package = helixPkg;
 
           settings = {
-            # see "custom..." blah blah stuff for overriding the bar on a given theme to give extra contrast:
-            # TODO: add "Modern Dark" from modern VSCode to Helix
-            theme = "catppuccin_mocha";
+            theme = {
+              dark = "catppuccin_mocha";
+              light = "catppuccin_latte";
+            };
 
             editor = {
               auto-pairs = false;
