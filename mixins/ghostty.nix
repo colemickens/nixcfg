@@ -63,8 +63,10 @@
             };
             settings = {
               font-family = "Iosevka Term";
-              # font-style = "Regular";
-              font-size = 10;
+              font-style = "Medium";
+              font-size = 11;
+              adjust-cell-width = "-5%";
+              background-opacity = "0.85";
               term = "xterm-256color";
               window-decoration = false;
 
