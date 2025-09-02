@@ -1,0 +1,21 @@
+@-moz-document url(chrome://browser/content/browser.xul),
+               url(chrome://browser/content/browser.xhtml)
+{
+  #TabsToolbar > * {
+    visibility: collapse;
+  }
+
+  #sidebar-box[sidebarcommand="_3c078156-979c-498b-8990-85f7987dd929_-sidebar-action"]
+    #sidebar-header {
+      display: none
+    }
+
+  #sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"]
+    #sidebar-header {
+      display: none;
+    }
+
+  #personal-bookmarks .bookmark-item[container="true"] .toolbarbutton-icon {
+    display:none!important;
+  }
+}
