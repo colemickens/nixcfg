@@ -126,7 +126,7 @@
           installer-standard =
             (mkSystem "installer-standard-x86_864" {
               path = ./images/installer/configuration-standard.nix;
-            }).config.system.build.isoImage;
+            }).config.system.build.toplevel;
           installer-standard-aarch64 =
             (mkSystem "installer-standard-aarch64" {
               path = ./images/installer/configuration-standard-aarch64.nix;
@@ -135,7 +135,7 @@
                   config.nixpkgs.buildPlatform.system = "x86_64-linux";
                 }
               ];
-            }).config.system.build.isoImage;
+            }).config.system.build.toplevel;
         };
         aarch64-linux = { };
         riscv64-linux = { };
