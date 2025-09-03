@@ -117,7 +117,6 @@ in
             pinta
             krita
 
-            gg-jj
             zed-editor
 
             # video/audio
