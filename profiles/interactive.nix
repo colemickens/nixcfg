@@ -122,6 +122,8 @@
               nix-inspect
               nix-output-monitor
 
+              hyperfine
+
               erdtree
               msedit
 
