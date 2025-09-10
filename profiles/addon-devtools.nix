@@ -11,6 +11,7 @@
             nil
             nixd
             nixfmt
+            nixpkgs-review
 
             dfmt
 
