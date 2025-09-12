@@ -1297,6 +1297,7 @@
         "nixpkgs-stable": "nixpkgs-stable",
         "preservation": "preservation",
         "rust-overlay": "rust-overlay_3",
+        "secure-pkgs": "secure-pkgs",
         "sops-nix": "sops-nix",
         "ucodenix": "ucodenix",
         "zjstatus": "zjstatus"
@@ -1383,6 +1384,20 @@
         "owner": "oxalica",
         "repo": "rust-overlay",
         "type": "github"
+      }
+    },
+    "secure-pkgs": {
+      "locked": {
+        "lastModified": 1757347588,
+        "narHash": "sha256-fiHmPz0Zxw1D0NenulooCHHZlLLXY+9/2HCkYWc4LVY=",
+        "rev": "a3d0ae9407e9dd6f499cfff7f49d586bde49d58d",
+        "revCount": 858212,
+        "type": "tarball",
+        "url": "https://api.flakehub.com/f/pinned/DeterminateSystems/secure/0.858212.32/01993f4d-e625-7585-9108-a190d4122d54/source.tar.gz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://flakehub.com/f/DeterminateSystems/secure/%2A"
       }
     },
     "sops-nix": {

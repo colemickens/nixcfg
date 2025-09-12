@@ -12,6 +12,8 @@
     sops-nix.inputs."nixpkgs".follows = "cmpkgs";
     lanzaboote.url = "github:nix-community/lanzaboote";
 
+    secure-pkgs.url = "https://flakehub.com/f/DeterminateSystems/secure/*";
+
     ucodenix.url = "github:e-tho/ucodenix";
 
     # zellij:
