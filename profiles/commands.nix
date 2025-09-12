@@ -8,7 +8,6 @@ let
 
   gnupg = pkgs.gnupg;
   openssh = pkgs.openssh;
-  tailscale = pkgs.tailscale;
   asciinema = pkgs.asciinema;
 
   gpg-relearn = (
@@ -42,7 +41,7 @@ let
       [[ -z "''${DEBUG_GPGSSH}" ]] || set -x
       set -euo pipefail
       host="''${1}"; shift
-      ip="$(${tailscale}/bin/tailscale ip --6 "$host")"
+      ip="$(tailscale ip --6 "$host")"
       ${_gpgssh}/bin/gpgssh cole@"$ip"
     ''
   );
@@ -120,7 +119,7 @@ let
       ipver="''${1}"; shift
       host="''${1}"; shift
       while true; do
-        if ip="$(${tailscale}/bin/tailscale ip $ipver "$host")"; then break; fi
+        if ip="$(tailscale ip $ipver "$host")"; then break; fi
       done
       while true; do
         set +e
