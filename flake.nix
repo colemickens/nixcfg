@@ -111,7 +111,9 @@
       ## NIXOS CONFIGS + TOPLEVELS ############################################
       nixosConfigsEx = {
         "x86_64-linux" = {
-          ds-ws-colemickens = { };
+          ds-ws-colemickens = {
+            pkgs = inputs.secure-pkgs;
+          };
           raisin = { };
           slynux = { };
           zeph = { };
