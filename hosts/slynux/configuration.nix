@@ -39,7 +39,8 @@ in
     # nixcfg.common.hostColor = "#00a2ff";
     nixcfg.common.hostColor = "blue";
 
-    zramSwap.enable = true;
+    # jesus christ, nothing but a pain
+    # zramSwap.enable = true;
 
     services.go2rtc = {
       enable = true;
