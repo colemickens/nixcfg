@@ -832,11 +832,11 @@
         "zon2nix": "zon2nix"
       },
       "locked": {
-        "lastModified": 1757995992,
-        "narHash": "sha256-5r2hDhQioC1+CKh+DETQAR9UlQzcn9jH+EYxw4csinI=",
+        "lastModified": 1758065851,
+        "narHash": "sha256-4yQjtJnX3tyDASjZTVRZWOBADrjJCaXMESFzM2uMvXQ=",
         "owner": "ghostty-org",
         "repo": "ghostty",
-        "rev": "79f8ea07a173ae17aba1e59ff677eb8889560967",
+        "rev": "0f0a61c38dbebbd70979afbd3df81bf143efca9d",
         "type": "github"
       },
       "original": {
@@ -946,11 +946,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1758007526,
-        "narHash": "sha256-zaMuxTf2omlSL4ZJCnW22QDf6dv4uqE10Q9pt8SUTHM=",
+        "lastModified": 1758103775,
+        "narHash": "sha256-Yp6g8tV+nr1Yv7G/VYwrKd0BAwejcV7GjyP4HapZAiM=",
         "owner": "colemickens",
         "repo": "home-manager",
-        "rev": "2a7101f224f11ebd67efb547cca1ca21cba6c36e",
+        "rev": "eeb8accf687d4d4b75555a4586856740ac8c55cb",
         "type": "github"
       },
       "original": {
@@ -1352,11 +1352,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1757989933,
-        "narHash": "sha256-9cpKYWWPCFhgwQTww8S94rTXgg8Q8ydFv9fXM6I8xQM=",
+        "lastModified": 1758076341,
+        "narHash": "sha256-ZKi6pyRDw2/3xU7qxd+2+lneQXUOe92TiF+10DflolM=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "8249aa3442fb9b45e615a35f39eca2fe5510d7c3",
+        "rev": "562fb6f14678eb9b8a36829140f6a4d0737776d2",
         "type": "github"
       },
       "original": {
@@ -1389,11 +1389,11 @@
     "secure-pkgs": {
       "locked": {
         "lastModified": 1757347588,
-        "narHash": "sha256-fiHmPz0Zxw1D0NenulooCHHZlLLXY+9/2HCkYWc4LVY=",
-        "rev": "a3d0ae9407e9dd6f499cfff7f49d586bde49d58d",
+        "narHash": "sha256-QsdUxsRrPYc+6TbpyZD70hPQRfOc/71gI8fiwR3Hs8s=",
+        "rev": "e1ac4a2efe84d0476446a833294f046d5875874a",
         "revCount": 858212,
         "type": "tarball",
-        "url": "https://api.flakehub.com/f/pinned/DeterminateSystems/secure/0.858212.32/01993f4d-e625-7585-9108-a190d4122d54/source.tar.gz"
+        "url": "https://api.flakehub.com/f/pinned/DeterminateSystems/secure/0.858212.65/019954b2-3def-75dc-871f-155e2c25d899/source.tar.gz"
       },
       "original": {
         "type": "tarball",
