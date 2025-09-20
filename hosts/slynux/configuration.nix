@@ -52,6 +52,10 @@ in
       };
     };
 
+    environment.systemPackages = with pkgs; [
+      qemu
+    ];
+
     nix.gc = {
       automatic = true;
       persistent = true;
