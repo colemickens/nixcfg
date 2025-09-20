@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, lib, inputs, ... }:
 
 {
   imports = [
@@ -6,15 +6,9 @@
   ];
 
   config = {
-    nixpkgs.overlays = [
-      # (final: prev: {
-      #   cosmic-player = prev.cosmic-player.overrideAttrs (old: {
-      #     buildInputs = old.buildInputs ++ [ prev.gst_all_1.gst-plugins-ugly ];
-      #   });
-      # })
-
+    nixpkgs.overlays = (lib.mkIf (inputs ? "cosmic-nightly") [
       inputs.cosmic-nightly.overlays.default
-    ];
+    ]);
 
     services.desktopManager.cosmic.enable = true;
     services.displayManager.cosmic-greeter.enable = true;
@@ -24,23 +18,19 @@
     environment.sessionVariables = { };
 
     environment.systemPackages = with pkgs; [
-      
-
       cosmic-player
       cosmic-reader
       cosmic-wallpapers
       cosmic-ext-ctl
       cosmic-ext-applet-caffeine
-      cosmic-ext-applet-emoji-selector
       cosmic-ext-applet-external-monitor-brightness
-      cosmic-ext-applet-minimon
-      cosmic-ext-applet-privacy-indicator
-      cosmic-ext-applet-sysinfo
-      cosmic-ext-applet-weather
-      gui-scale-applet
-
-      # cosmic-ext-applet-clipboard-manager # unused
-      # cosmic-ext-tweaks # unused
+      
+      # cosmic-ext-applet-emoji-selector
+      # cosmic-ext-applet-minimon
+      # cosmic-ext-applet-privacy-indicator
+      # cosmic-ext-applet-sysinfo
+      # cosmic-ext-applet-weather
+      # gui-scale-applet
 
       # andromeda # unused
       # chronos # unused
