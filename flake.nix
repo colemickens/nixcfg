@@ -26,7 +26,7 @@
     zjstatus.inputs."nixpkgs".follows = "cmpkgs";
 
     # helix
-    helix.url = "github:helix-editor/helix?ref=mode-2031";
+    helix.url = "github:helix-editor/helix";
     helix.inputs.nixpkgs.follows = "cmpkgs";
 
     # preservation
