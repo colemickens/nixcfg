@@ -30,6 +30,7 @@
     ../mixins/ssh.nix
     ../mixins/xdg.nix
     ../mixins/zellij.nix
+    ../mixins/zoxide.nix
     ../mixins/zsh.nix
   ];
 
