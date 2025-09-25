@@ -66,7 +66,7 @@
               font-style = "Medium";
               font-size = 11;
               adjust-cell-width = "-5%";
-              background-opacity = "0.85";
+              background-opacity = "1";
               term = "xterm-256color";
               window-decoration = false;
 
