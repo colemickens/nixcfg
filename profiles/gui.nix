@@ -122,7 +122,6 @@ in
             # video/audio
             glide-media-player
             vlc
-            psst
             spot
 
             qbittorrent
