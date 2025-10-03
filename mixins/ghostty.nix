@@ -62,6 +62,7 @@
               };
             };
             settings = {
+              app-notifications = false;
               font-family = "Iosevka Term";
               font-style = "Medium";
               font-size = 11;
