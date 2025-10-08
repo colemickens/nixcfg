@@ -2,11 +2,11 @@
   "nodes": {
     "cmpkgs": {
       "locked": {
-        "lastModified": 1759851389,
-        "narHash": "sha256-G89BgHCRfANzOICoIaBQLxRA/2jaE9GsHlALwItsYjk=",
+        "lastModified": 1759931117,
+        "narHash": "sha256-fP0/7R7QkR8WptQJi9sc9tvJYnEj9Yy+VvU+7Dg0dTw=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "e6717539764e0ceb45fae27c21bacd0300d41856",
+        "rev": "a6f4e869071228feac9763a8ff2bc57273f0a4c2",
         "type": "github"
       },
       "original": {
@@ -120,7 +120,7 @@
     "determinate-main-dnixd": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-Lw1pDTn3iRA+1fmrVSv7/JO1SGKbmbQl7vo0KQLBea8=",
+        "narHash": "sha256-Abs8OjXgo098px6tmSQMBA1oqhjZIiV/AbjxgLd25Is=",
         "type": "file",
         "url": "https://install.determinate.systems/determinate-nixd/branch/main/x86_64-linux"
       },
@@ -921,11 +921,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1759804383,
-        "narHash": "sha256-jPz0K8xsT2eNSratkw8bfPwSlTuOXGeUvz+bd9wq/vY=",
+        "lastModified": 1759890791,
+        "narHash": "sha256-KN1xkrQ4x6u8plgg43ZiYbQmESxeCKKOzALKjqbn4LM=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "dec08d5dfeca099b0058f0cc61264b04f33db42c",
+        "rev": "74fcbc183aa6685f86008606bb7824bf2f40adbd",
         "type": "github"
       },
       "original": {
