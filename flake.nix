@@ -16,15 +16,6 @@
 
     ucodenix.url = "github:e-tho/ucodenix";
 
-    # zellij:
-    # zellij.url = "github:zellij-org/zellij?ref=web-client-preview";
-    # zellij.flake = false;
-    # zellij-nix.url = "github:a-kenji/zellij-nix";
-    # zellij-nix.inputs."nixpkgs".follows = "cmpkgs";
-    # zellij-nix.inputs."zellij".follows = "zellij";
-    zjstatus.url = "github:dj95/zjstatus";
-    zjstatus.inputs."nixpkgs".follows = "cmpkgs";
-
     # helix
     helix.url = "github:helix-editor/helix";
     helix.inputs.nixpkgs.follows = "cmpkgs";
