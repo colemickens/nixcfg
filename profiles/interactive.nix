@@ -120,6 +120,8 @@
               miniserve
               # </rust pkgs>
 
+              isd
+
               nix-inspect
               nix-output-monitor
 
