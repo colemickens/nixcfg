@@ -30,7 +30,7 @@
       # cosmic-ext-applet-privacy-indicator
       # cosmic-ext-applet-sysinfo
       # cosmic-ext-applet-weather
-      # gui-scale-applet
+      gui-scale-applet
 
       # andromeda # unused
       # chronos # unused
