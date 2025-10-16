@@ -370,11 +370,11 @@
         "zon2nix": "zon2nix"
       },
       "locked": {
-        "lastModified": 1760583877,
-        "narHash": "sha256-zbmESqyuNf6M4jno2+dvpXsorq1QHJNQtnNZ9LP2R3g=",
+        "lastModified": 1760651807,
+        "narHash": "sha256-w8PiguxevMIopLefKGI+CBsrvEUcfet9d6Wh9F7nVfY=",
         "owner": "ghostty-org",
         "repo": "ghostty",
-        "rev": "5a9bd0e49ef11499eb0ccb63725cc882b93356e0",
+        "rev": "58699c79920b8925603602bd86a2c6c9228310d0",
         "type": "github"
       },
       "original": {
@@ -903,11 +903,11 @@
     "secure-pkgs": {
       "locked": {
         "lastModified": 1757347588,
-        "narHash": "sha256-5VCSk9mWfZov78WLg2ajVI+I8+NDl3d9g91fNfoddCU=",
-        "rev": "811b577b5adac25eb40fae52cf7e3b4b928729b5",
+        "narHash": "sha256-iP5o+E45MGs9/xpndkfnYQ2ueSninXiiDD8IHtEnSSs=",
+        "rev": "cf5cf9d7ced6d0f7873902c496113d98fd8ed322",
         "revCount": 858212,
         "type": "tarball",
-        "url": "https://api.flakehub.com/f/pinned/DeterminateSystems/secure/0.858212.131/0199e942-acf8-7f2c-b3e2-123decc59228/source.tar.gz"
+        "url": "https://api.flakehub.com/f/pinned/DeterminateSystems/secure/0.858212.132/0199eef2-adc0-78d4-aaca-3159828aa669/source.tar.gz"
       },
       "original": {
         "type": "tarball",
