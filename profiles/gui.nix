@@ -1,8 +1,5 @@
 { pkgs, lib, ... }:
 
-let
-  _chrome = pkgs.google-chrome.override { commandLineArgs = [ "--force-dark-mode" ]; };
-in
 {
   imports = [
     ./interactive.nix # includes core.nix (which imports hm)
@@ -104,7 +101,7 @@ in
             [
               # browsers
               pkgs.firefox-bin
-              _chrome
+              google-chrome
 
               easyeffects
             ]
