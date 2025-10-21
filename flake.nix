@@ -23,10 +23,6 @@
     # preservation
     preservation.url = "github:nix-community/preservation";
 
-    # # cosmic-nightly
-    # cosmic-nightly.url = "github:busyboredom/cosmic-nightly-flake";
-    # cosmic-nightly.inputs.nixpkgs.follows = "cmpkgs";
-
     # random dev tools:
     ghostty.url = "github:ghostty-org/ghostty";
     ghostty.inputs."nixpkgs".follows = "cmpkgs";
