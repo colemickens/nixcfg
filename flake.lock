@@ -667,22 +667,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-stable": {
-      "locked": {
-        "lastModified": 1760725957,
-        "narHash": "sha256-tdoIhL/NlER290HfSjOkgi4jfmjeqmqrzgnmiMtGepE=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "81b927b14b7b3988334d5282ef9cba802e193fe1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-25.05",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1759632233,
@@ -808,7 +792,6 @@
         "lib-aggregate": "lib-aggregate",
         "nixos-github-actions": "nixos-github-actions",
         "nixos-hardware": "nixos-hardware",
-        "nixpkgs-stable": "nixpkgs-stable",
         "preservation": "preservation",
         "rust-overlay": "rust-overlay_2",
         "secure-pkgs": "secure-pkgs",

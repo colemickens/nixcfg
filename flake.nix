@@ -3,7 +3,7 @@
 
   inputs = {
     lib-aggregate.url = "github:nix-community/lib-aggregate";
-    nixpkgs-stable.url = "github:nixos/nixpkgs?ref=nixos-25.05";
+
     cmpkgs.url = "github:colemickens/nixpkgs?ref=cmpkgs";
     home-manager.url = "github:colemickens/home-manager/cmhm";
     home-manager.inputs."nixpkgs".follows = "cmpkgs";
@@ -73,7 +73,6 @@
           }
         ));
       pkgs = importPkgs inputs.cmpkgs { };
-      pkgsStable = importPkgs inputs.nixpkgs-stable { };
       pkgsUnfree = importPkgs inputs.cmpkgs { allowUnfree = true; };
 
       mkSystem =
@@ -138,7 +137,7 @@
           ;
         inherit nixosModules overlays;
         inherit extra;
-        inherit pkgs pkgsStable pkgsUnfree;
+        inherit pkgs pkgsUnfree;
       })
       (
         ## SYSTEM-SPECIFIC OUTPUTS ############################################
