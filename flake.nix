@@ -160,7 +160,6 @@
               (lib.flip lib.genAttrs mkShell [
                 "ci"
                 "devenv"
-                "uutils"
               ])
               // {
                 default = devShells.ci;
