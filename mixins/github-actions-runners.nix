@@ -34,14 +34,6 @@ in
           extraLabels = [ "${runnerId}-nixcfg-default" ]; # TODO: remove runnerID?
         };
 
-        "${runnerId}-lmamp-default" = {
-          enable = true;
-          url = "https://github.com/colemickens/lm-amp";
-          tokenFile = config.sops.secrets."github-runner-token".path;
-          replace = true;
-          extraLabels = [ "${runnerId}-lmamp-default" ]; # TODO: remove runnerID?
-        };
-
         # "${runnerId}-deployer1" = {
         #   enable = true;
         #   url = "https://github.com/colemickens/nixcfg";
