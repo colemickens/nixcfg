@@ -2,11 +2,11 @@
   "nodes": {
     "cmpkgs": {
       "locked": {
-        "lastModified": 1761520354,
+        "lastModified": 1761576227,
         "narHash": "sha256-tWGRMHSTzyCQo4/89CgXpO06cH7S6U4DVi5BjusFTq4=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "5c650d2d445bb34138b6a721522383b624d443b0",
+        "rev": "8b25600ae419d2560b43810b48e6bd8ffe733537",
         "type": "github"
       },
       "original": {
@@ -370,11 +370,11 @@
         "zon2nix": "zon2nix"
       },
       "locked": {
-        "lastModified": 1761509995,
-        "narHash": "sha256-43mdFtqYlVR/9uVlb68RxZgB8bWxwWSPQC5yzEsUVm4=",
+        "lastModified": 1761581215,
+        "narHash": "sha256-P/9qus5lVSkMMO4ZmuxIxyx1dkOrvYN1EOlIrw6FSFo=",
         "owner": "ghostty-org",
         "repo": "ghostty",
-        "rev": "7d7c0bf5cdb591238225d33c0b5088b94a8a65bc",
+        "rev": "86ec29237cb2db6564f3f19c213ee8ec033e640d",
         "type": "github"
       },
       "original": {
@@ -462,11 +462,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1761520359,
-        "narHash": "sha256-iemEabgBuDSRrC1AhhV0hkrmeI8omMKMTd58vqsX9LY=",
+        "lastModified": 1761582480,
+        "narHash": "sha256-VuCfkjkiVAoyCDrp+tax3p0NVsKdTOdaSMc6uKytqfg=",
         "owner": "colemickens",
         "repo": "home-manager",
-        "rev": "0166fb705bf6ea8b9b5639758d21099b324b19cf",
+        "rev": "d0cf0f809f2c0c5f4a8e9cded7e74177f25eb56b",
         "type": "github"
       },
       "original": {
@@ -827,11 +827,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1761446259,
-        "narHash": "sha256-JNNOtIIVIX+yBIsh1rq1Nxhc1LZq168vuQB5sqrZbCY=",
+        "lastModified": 1761532837,
+        "narHash": "sha256-78mCSQgC/a6/0vWYrvE/g9E3gGsJLyBBGtmHe3ZOLG4=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "95098bb4d55ebe167c082fc40705a73ef76b58e4",
+        "rev": "4f5f89f1cfd8553b1285a4a0879ea1b2b05ad286",
         "type": "github"
       },
       "original": {
