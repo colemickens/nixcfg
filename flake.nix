@@ -16,6 +16,10 @@
 
     ucodenix.url = "github:e-tho/ucodenix";
 
+    # helix
+    helix.url = "github:helix-editor/helix";
+    helix.inputs.nixpkgs.follows = "cmpkgs";
+
     # preservation
     preservation.url = "github:nix-community/preservation";
 
