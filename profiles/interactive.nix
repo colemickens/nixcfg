@@ -27,7 +27,6 @@
     ../mixins/helix.nix
     ../mixins/jujutsu.nix
     ../mixins/nushell.nix
-    ../mixins/ssh.nix
     ../mixins/xdg.nix
     ../mixins/zellij.nix
     ../mixins/zoxide.nix
@@ -62,6 +61,7 @@
           programs = {
             home-manager.enable = true;
             gpg.enable = true;
+            ssh.enable = true;
           };
 
           xdg.configFile."gdb/gdbinit".text = ''
