@@ -816,7 +816,6 @@
         "nixos-hardware": "nixos-hardware",
         "preservation": "preservation",
         "rust-overlay": "rust-overlay_3",
-        "secure-pkgs": "secure-pkgs",
         "sops-nix": "sops-nix",
         "ucodenix": "ucodenix"
       }
@@ -881,20 +880,6 @@
         "owner": "oxalica",
         "repo": "rust-overlay",
         "type": "github"
-      }
-    },
-    "secure-pkgs": {
-      "locked": {
-        "lastModified": 1758427187,
-        "narHash": "sha256-SZvYkUkIGGjgAqAUkE2VoSmeD6b7Ggd5FmDfaiesPZ8=",
-        "rev": "4253f2dfcbc4406573b782bf44da927fe6515e13",
-        "revCount": 864611,
-        "type": "tarball",
-        "url": "https://api.flakehub.com/f/pinned/DeterminateSystems/secure/0.864611.227/019a31ec-2d3a-71b8-beb8-bbeb0e5f392e/source.tar.gz"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://flakehub.com/f/DeterminateSystems/secure/%2A"
       }
     },
     "sops-nix": {
