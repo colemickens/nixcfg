@@ -59,11 +59,10 @@ def "main up" [...hosts] {
   nix flake update --commit-lock-file
 
   header "light_yellow_reverse" "update: bulk build"
-  nix build --accept-flake-config --print-out-paths --keep-going '.#toplevels.zeph' '.#toplevels.slynux' '.#toplevels.raisin' '.#toplevels.ds-ws-colemickens' | cachix push colemickens
+  nix build --accept-flake-config --print-out-paths --keep-going '.#toplevels.zeph' '.#toplevels.slynux' '.#toplevels.raisin' | cachix push colemickens
   main deploy raisin
   main deploy slynux
-  try { timeout 20 ./main.nu deploy zeph }
-  try { main deploy ds-ws-colemickens }
+  main deploy zeph
 
   header "light_purple_reverse" $"optimistic: build bundle"
   nix build --accept-flake-config --print-out-paths --keep-going '.#bundles.x86_64-linux.extra'
