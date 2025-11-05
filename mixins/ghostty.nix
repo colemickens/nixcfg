@@ -1,5 +1,37 @@
 { inputs, ... }:
 
+let
+  macSettings = {
+    app-notifications = false;
+    font-family = "Iosevka Term";
+    font-style = "Medium";
+    font-size = 16;
+    adjust-cell-width = "-5%";
+    background-opacity = ".8";
+    background-blur-radius = 40;
+    term = "xterm-256color";
+    theme = "dark:Catppuccin Frappe,light:Catppuccin Latte";
+  };
+  linuxSettings = {
+    app-notifications = false;
+    font-family = "Iosevka Term";
+    font-style = "Medium";
+    font-size = 11;
+    adjust-cell-width = "-5%";
+    background-opacity = "1";
+    term = "xterm-256color";
+    window-decoration = false;
+
+    # theme = "light:ayu_light,dark:ayu";
+
+    # cosmic
+    theme = "light:cosmic-light,dark:cosmic-dark";
+    # background-opacity = "0.85";
+    # misc:
+    # theme = "light:Adwaita,dark:Adwaita Dark";
+    # theme = "light:Builtin Tango Light,dark:Builtin Tango Dark";
+  };
+in
 {
   config = {
     home-manager.users.cole =
@@ -8,7 +40,7 @@
         programs = {
           ghostty = {
             enable = true;
-            package = inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default;
+            package = (if pkgs.stdenv.hostPlatform.system == "aarch64-darwin" then null else inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default);
             themes = {
               cosmic-dark = {
                 palette = [
@@ -61,25 +93,7 @@
                 selection-foreground = "808080";
               };
             };
-            settings = {
-              app-notifications = false;
-              font-family = "Iosevka Term";
-              font-style = "Medium";
-              font-size = 11;
-              adjust-cell-width = "-5%";
-              background-opacity = "1";
-              term = "xterm-256color";
-              window-decoration = false;
-
-              # theme = "light:ayu_light,dark:ayu";
-
-              # cosmic
-              theme = "light:cosmic-light,dark:cosmic-dark";
-              # background-opacity = "0.85";
-              # misc:
-              # theme = "light:Adwaita,dark:Adwaita Dark";
-              # theme = "light:Builtin Tango Light,dark:Builtin Tango Dark";
-            };
+            settings = (if pkgs.stdenv.hostPlatform.system == "aarch64-darwin" then macSettings else linuxSettings);
           };
         };
       };

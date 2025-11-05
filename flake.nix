@@ -14,6 +14,9 @@
 
     ucodenix.url = "github:e-tho/ucodenix";
 
+    nix-darwin.url = "github:nix-darwin/nix-darwin";
+    nix-darwin.inputs.nixpkgs.follows = "cmpkgs";
+
     # helix
     helix.url = "github:helix-editor/helix";
     helix.inputs.nixpkgs.follows = "cmpkgs";
@@ -45,15 +48,6 @@
     determinate-main.inputs.determinate-nixd-x86_64-linux.follows = "determinate-main-dnixd";
   };
 
-  nixConfig = {
-    builers-use-substitutes = true;
-    build-cores = 0;
-    # narinfo-cache-negative-ttl = 0;
-    extra-substituters = "https://colemickens.cachix.org https://cache.flakehub.com";
-    extra-trusted-public-keys = "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4= cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM= cache.flakehub.com-4:Asi8qIv291s0aYLyH6IOnr5Kf6+OF14WVjkE6t3xMio= cache.flakehub.com-5:zB96CRlL7tiPtzA9/WKyPkp3A2vqxqgdgyTVNGShPDU= cache.flakehub.com-6:W4EGFwAGgBj3he7c5fNh9NkOXw0PUVaxygCVKeuvaqU= cache.flakehub.com-7:mvxJ2DZVHn/kRxlIaxYNMuDG1OvMckZu32um1TadOR8= cache.flakehub.com-8:moO+OVS0mnTjBTcOUh2kYLQEd59ExzyoW1QgQ8XAARQ= cache.flakehub.com-9:wChaSeTI6TeCuV/Sg2513ZIM9i0qJaYsF+lZCXg0J6o= cache.flakehub.com-10:2GqeNlIp6AKp4EF2MVbE1kBOp9iBSyo0UPR9KoR0o1Y=";
-    always-allow-substitutes = true;
-  };
-
   ## OUTPUTS ##################################################################
   outputs =
     inputs:
@@ -61,7 +55,24 @@
       defaultSystems = [
         "x86_64-linux"
         "aarch64-linux"
+        "aarch64-darwin"
       ];
+      forAllSystems =
+        f:
+        inputs.nixpkgs.lib.genAttrs defaultSystems (
+          system:
+          f {
+            inherit system;
+            pkgs = import inputs.nixpkgs {
+              inherit system;
+              overlays = [
+                inputs.self.overlays.default
+              ];
+              config.allowAliases = false;
+              config.allowUnfree = true;
+            };
+          }
+        );
 
       lib = inputs.lib-aggregate.lib;
 
@@ -92,6 +103,22 @@
           specialArgs.inputs = inputs;
         });
 
+      ## NIX-DARWN
+      darwinConfigurationsEx = {
+        "aarch64-darwin" = {
+          manzana = inputs.nix-darwin.lib.darwinSystem {
+            system = "aarch64-darwin";
+            modules = [
+              ./darwinConfigs/manzana/configuration.nix
+            ];
+            specialArgs = { inherit inputs; };
+          };
+        };
+        "aarch64-linux" = {};
+        "x86_64-linux" = {};
+      };
+      darwinConfigurations = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues darwinConfigurationsEx));
+
       ## NIXOS CONFIGS + TOPLEVELS ############################################
       nixosConfigsEx = {
         "x86_64-linux" = {
@@ -100,6 +127,7 @@
           zeph = { };
         };
         "aarch64-linux" = { };
+        "aarch64-darwin" = { };
       };
       nixosConfigs = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues nixosConfigsEx));
       nixosConfigurations = (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigs);
@@ -108,21 +136,18 @@
       ## SPECIAL OUTPUTS ######################################################
       extra = {
         x86_64-linux = {
-          installer-standard =
-            (mkSystem "installer-standard-x86_864" {
+          installer =
+            (mkSystem "installer-standard-x86_64" {
               path = ./images/installer/configuration-standard.nix;
             }).config.system.build.toplevel;
-          installer-standard-aarch64 =
+        };
+        aarch64-linux = {
+          installer =
             (mkSystem "installer-standard-aarch64" {
               path = ./images/installer/configuration-standard-aarch64.nix;
-              extraConfig = [
-                {
-                  config.nixpkgs.buildPlatform.system = "x86_64-linux";
-                }
-              ];
             }).config.system.build.toplevel;
         };
-        aarch64-linux = { };
+        aarch64-darwin = { };
         riscv64-linux = { };
       };
 
@@ -132,6 +157,8 @@
     lib.recursiveUpdate
       ({
         inherit
+          darwinConfigurations
+          darwinConfigurationsEx
           nixosConfigs
           nixosConfigsEx
           nixosConfigurations
@@ -154,50 +181,34 @@
               };
           in
           rec {
-            ## FORMATTER #######################################################
             formatter = pkgs.${system}.nixfmt;
 
-            ## DEVSHELLS #######################################################
             devShells =
               (lib.flip lib.genAttrs mkShell [
                 "ci"
-                "devenv"
+                # "devenv"
               ])
               // {
                 default = devShells.ci;
               };
 
-            ## PKGS ############################################################
-            legacyPackages = { };
-
-            ## APPS ############################################################
-            apps = lib.recursiveUpdate { } ({ });
-
-            ## CI (sorta) #####################################################
-            bundles = {
-              default = pkgs.${system}.linkFarmFromDrvs "bundle-nixcfg-default" (
-                builtins.attrValues checks.default
-              );
-              extra = pkgs.${system}.linkFarmFromDrvs "bundle-nixcfg-extra" (builtins.attrValues checks.extra);
-            };
-
-            ## CHECKS ##########################################################
-            checks = {
-              default =
+            checks = 
                 let
-                  c_packages = lib.mapAttrs' (
-                    n: lib.nameValuePair "package-${n}"
-                  ) inputs.self.legacyPackages.${system};
+                  # c_packages = lib.mapAttrs' (
+                  #   n: lib.nameValuePair "package-${n}"
+                  # ) inputs.self.legacyPackages.${system};
                   c_devShells = lib.mapAttrs' (
                     n: v: lib.nameValuePair "devShell-${n}" v.inputDerivation
                   ) inputs.self.devShells.${system};
                   c_toplevels = lib.mapAttrs' (
                     n: v: (lib.nameValuePair "toplevel-${n}" v.config.system.build.toplevel)
                   ) (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigsEx.${system});
+                  c_darwinConfigs = lib.mapAttrs' (
+                    n: v: (lib.nameValuePair "darwinConfig-${n}" v.system)
+                  ) darwinConfigurationsEx.${system};
+                  c_extra = lib.mapAttrs' (n: v: lib.nameValuePair "extra-${n}" v) inputs.self.extra.${system};
                 in
-                { } // c_packages // c_toplevels // c_devShells;
-              extra = lib.mapAttrs' (n: v: lib.nameValuePair "extra-${n}" v) inputs.self.extra.${system};
-            };
+                (/*c_packages // */ c_devShells // c_toplevels // c_darwinConfigs // c_extra);
           }
         )
       );

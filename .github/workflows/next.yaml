@@ -7,12 +7,13 @@ on:
   push:
     branches:
       - "main"
+      - "colemickens/macos-wip"
 jobs:
   "update":
     runs-on: "slynux-nixcfg-default"
     steps:
     - name: checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         ref: main
     - name: info
@@ -21,10 +22,47 @@ jobs:
     - name: update
       run: |
         nix develop --accept-flake-config .#ci -c ./.github/ci.nu next
-    - name: build-cache-default
+    # - name: build-cache-default
+    #   run: |
+    #     nix develop --accept-flake-config .#ci -c ./.github/ci.nu build '.#bundles.x86_64-linux.default'
+    # - name: build-cache-extra
+    #   continue-on-error: true
+    #   run: |
+    #     nix develop --accept-flake-config .#ci -c ./.github/ci.nu build '.#bundles.x86_64-linux.extra'
+  "builds":
+    needs: "update"
+    permissions:
+      id-token: "write"
+      contents: "read"
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+        - "ubuntu-24.04"
+        - "ubuntu-24.04-arm"
+        - "macos-26"
+    runs-on: ${{ matrix.runner }}
+    steps:
+    - uses: actions/checkout@v5
+      with:
+        ref: main-next-wip
+    - uses: endersonmenezes/free-disk-space@v3
+      with:
+        remove_android: true
+        remove_dotnet: true
+        remove_tool_cache: true
+        remove_packages: "azure-cli google-cloud-cli microsoft-edge-stable google-chrome-stable firefox postgresql* temurin-* *llvm* mysql* dotnet-sdk-*"
+        remove_packages_one_command: true
+        remove_folders: "/usr/share/swift /usr/share/miniconda /usr/share/az* /usr/local/lib/node_modules /usr/local/share/chromium /usr/local/share/powershell /usr/local/julia /usr/local/aws-cli /usr/local/aws-sam-cli /usr/share/gradle /usr/lib/jvm /home/runner/.rust /usr/local/.ghcup"
+        rm_cmd: "rmz"        # NEW: Faster deletion
+        rmz_version: "3.1.1" # NEW: Specify rmz version
+    - uses: "DeterminateSystems/determinate-nix-action@main"
+      # TODO: remove this entire `with` block after I've cross-pollinated from cachix to flakehub cache, lul
+      with:
+        extra-conf: |
+          extra-trusted-substituters = https://colemickens.cachix.org
+          extra-trusted-public-keys = colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4=
+    - uses: "DeterminateSystems/magic-nix-cache-action@main"
+    - name: build + cache
       run: |
-        nix develop --accept-flake-config .#ci -c ./.github/ci.nu build '.#bundles.x86_64-linux.default'
-    - name: build-cache-extra
-      continue-on-error: true
-      run: |
-        nix develop --accept-flake-config .#ci -c ./.github/ci.nu build '.#bundles.x86_64-linux.extra'
+        nix flake check --keep-going

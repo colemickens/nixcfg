@@ -8,7 +8,7 @@
 let
   helixPkg =
     # pkgs.helix;
-    inputs.helix.packages.x86_64-linux.default;
+    inputs.helix.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in
 {
   config = {

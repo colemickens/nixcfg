@@ -14,7 +14,6 @@ let
       ];
     }).outPath;
   config_nu = _nu "config";
-  prompt_nu = _nu "prompt";
 in
 {
   config = {
@@ -23,12 +22,8 @@ in
     # ];
     home-manager.users.cole =
       { pkgs, ... }@hm:
-      let
-        configDir = "${hm.config.xdg.configHome}/nushell";
-      in
       {
-        home.file."${configDir}/config.nu".source = config_nu;
-        home.file."${configDir}/prompt.nu".source = prompt_nu;
+        programs.nushell.configFile.source = config_nu;
 
         programs.nushell = {
           enable = true;
