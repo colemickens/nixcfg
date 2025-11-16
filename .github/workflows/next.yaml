@@ -7,28 +7,22 @@ on:
   push:
     branches:
       - "main"
-      - "colemickens/macos-wip"
 jobs:
   "update":
-    runs-on: "slynux-nixcfg-default"
+    permissions:
+      id-token: "write"
+      contents: "read"
+    runs-on: "ubuntu-24.04"
     steps:
     - name: checkout
       uses: actions/checkout@v5
       with:
         ref: main
-    - name: info
-      run: |
-        nix develop --accept-flake-config .#ci -c ./.github/ci.nu info
+    - uses: "DeterminateSystems/determinate-nix-action@main"
+    - name: prep
+      run: ./.github/prep.sh
     - name: update
-      run: |
-        nix develop --accept-flake-config .#ci -c ./.github/ci.nu next
-    # - name: build-cache-default
-    #   run: |
-    #     nix develop --accept-flake-config .#ci -c ./.github/ci.nu build '.#bundles.x86_64-linux.default'
-    # - name: build-cache-extra
-    #   continue-on-error: true
-    #   run: |
-    #     nix develop --accept-flake-config .#ci -c ./.github/ci.nu build '.#bundles.x86_64-linux.extra'
+      run: ./.github/update.sh
   "builds":
     needs: "update"
     permissions:
@@ -57,11 +51,6 @@ jobs:
         rm_cmd: "rmz"        # NEW: Faster deletion
         rmz_version: "3.1.1" # NEW: Specify rmz version
     - uses: "DeterminateSystems/determinate-nix-action@main"
-      # TODO: remove this entire `with` block after I've cross-pollinated from cachix to flakehub cache, lul
-      with:
-        extra-conf: |
-          extra-trusted-substituters = https://colemickens.cachix.org
-          extra-trusted-public-keys = colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4=
     - uses: "DeterminateSystems/magic-nix-cache-action@main"
     - name: build + cache
       run: |
