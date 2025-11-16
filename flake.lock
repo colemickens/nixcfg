@@ -555,7 +555,7 @@
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
-          "cmpkgs"
+          "nixpkgs-unstable"
         ]
       },
       "locked": {
@@ -700,6 +700,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-unstable": {
+      "locked": {
+        "lastModified": 1763191728,
+        "narHash": "sha256-esRhOS0APE6k40Hs/jjReXg+rx+J5LkWw7cuWFKlwYA=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "1d4c88323ac36805d09657d13a5273aea1b34f0c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1762482733,
@@ -827,6 +843,7 @@
         "nix-darwin": "nix-darwin",
         "nixos-github-actions": "nixos-github-actions",
         "nixos-hardware": "nixos-hardware",
+        "nixpkgs-unstable": "nixpkgs-unstable",
         "preservation": "preservation",
         "rust-overlay": "rust-overlay_3",
         "sops-nix": "sops-nix",

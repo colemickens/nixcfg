@@ -5,6 +5,8 @@
     lib-aggregate.url = "github:nix-community/lib-aggregate";
 
     cmpkgs.url = "github:colemickens/nixpkgs?ref=cmpkgs";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs?ref=nixpkgs-unstable";
+
     home-manager.url = "github:colemickens/home-manager/cmhm";
     home-manager.inputs."nixpkgs".follows = "cmpkgs";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
@@ -15,7 +17,7 @@
     ucodenix.url = "github:e-tho/ucodenix";
 
     nix-darwin.url = "github:nix-darwin/nix-darwin";
-    nix-darwin.inputs.nixpkgs.follows = "cmpkgs";
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     # helix
     helix.url = "github:helix-editor/helix";
