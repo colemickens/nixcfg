@@ -11,7 +11,7 @@ jobs:
   "update":
     permissions:
       id-token: "write"
-      contents: "read"
+      contents: "write"
     runs-on: "ubuntu-24.04"
     steps:
     - name: checkout
