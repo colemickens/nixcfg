@@ -2,16 +2,16 @@
   "nodes": {
     "cmpkgs": {
       "locked": {
-        "lastModified": 1762995347,
-        "narHash": "sha256-kh+nu2Ef4zNxeDTb18Fl5X7T/fXU/g5P8LUo5NFDFEM=",
-        "owner": "colemickens",
+        "lastModified": 1762977756,
+        "narHash": "sha256-4PqRErxfe+2toFJFgcRKZ0UI9NSIOJa+7RXVtBhy4KE=",
+        "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "f6c0644a30378ee24e7a1f65166e1f90556cf041",
+        "rev": "c5ae371f1a6a7fd27823bc500d9390b38c05fa55",
         "type": "github"
       },
       "original": {
-        "owner": "colemickens",
-        "ref": "cmpkgs",
+        "owner": "nixos",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }

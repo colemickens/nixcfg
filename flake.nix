@@ -4,7 +4,7 @@
   inputs = {
     lib-aggregate.url = "github:nix-community/lib-aggregate";
 
-    cmpkgs.url = "github:colemickens/nixpkgs?ref=cmpkgs";
+    cmpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     nixpkgs-unstable.url = "github:nixos/nixpkgs?ref=nixpkgs-unstable";
 
     home-manager.url = "github:colemickens/home-manager/cmhm";
