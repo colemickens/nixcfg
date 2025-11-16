@@ -13,7 +13,6 @@ minimalMkShell {
   nativeBuildInputs = (
     with pkgs;
     [
-      cachix
       cacert
       dust
       git
