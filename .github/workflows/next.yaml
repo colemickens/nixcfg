@@ -54,4 +54,8 @@ jobs:
     - uses: "DeterminateSystems/magic-nix-cache-action@main"
     - name: build + cache
       run: |
+        nix flake check --keep-going || true
+    - name: build + cache
+      run: |
+        # run it again, hopefully this time the output is easier to read
         nix flake check --keep-going
