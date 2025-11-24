@@ -7,7 +7,7 @@
     cmpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     nixpkgs-unstable.url = "github:nixos/nixpkgs?ref=nixpkgs-unstable";
 
-    home-manager.url = "github:colemickens/home-manager/cmhm";
+    home-manager.url = "github:nix-community/home-manager?ref=master";
     home-manager.inputs."nixpkgs".follows = "cmpkgs";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     sops-nix.url = "github:Mic92/sops-nix/master";
