@@ -3,6 +3,7 @@
 {
   imports = [
     ./user-cole.nix
+    ./user-deploy.nix
     ./hm.nix
 
     ../mixins/common.nix

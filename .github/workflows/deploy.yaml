@@ -1,0 +1,33 @@
+name: "nixcfg-deploy"
+concurrency: "nixcfg-deploy"
+on:
+  workflow_dispatch:
+  # TODO(colemickens): maybe someday...
+  # push:
+  #   branches:
+  #     - "main"
+jobs:
+  "deploy":
+    permissions:
+      id-token: "write"
+      contents: "read"
+    strategy:
+      fail-fast: false
+      matrix:
+        hostname:
+        - "slynux"
+        - "raisin"
+    runs-on: "ubuntu-24.04"
+    steps:
+    - name: checkout
+      uses: actions/checkout@v5
+      with:
+        ref: main
+    - uses: "DeterminateSystems/determinate-nix-action@main"
+    - name: eval
+      run: |
+        out="$(nix eval --raw .#toplevels.${{ matrix.hostname }})"
+        ssh "deploy@${{ matrix.hostname }}" \
+          sudo nix build -j0 "${out}"
+        ssh "deploy@${{ matrix.hostname }}" \
+          sudo nix build -j0 --profile "/nix/var/nix/profiles/system" "${out}"
