@@ -31,6 +31,8 @@
       gnupg
       bitwarden-cli
       fd
+      restic
+      sops
     ]
     ++ lib.optionals stdenv.isDarwin [
       m-cli # useful macOS CLI commands
