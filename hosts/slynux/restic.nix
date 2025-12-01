@@ -2,6 +2,23 @@
 
 {
   config = {
+    sops.secrets = {
+      "azure-cmvwbackups-restic-env" = {
+        owner = "restic";
+        group = "restic";
+        mode = "0666";
+        sopsFile = ../secrets/encrypted/azure-cmvwbackups-restic-env;
+        format = "binary";
+      };
+      "azure-cmvwbackups-restic-password" = {
+        owner = "restic";
+        group = "restic";
+        mode = "0666";
+        sopsFile = ../secrets/encrypted/azure-cmvwbackups-restic-password;
+        format = "binary";
+      };
+    };
+
     users = {
       users.restic = {
         group = "restic";
