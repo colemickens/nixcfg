@@ -40,6 +40,7 @@
 
     environment.systemPackages = with pkgs; [
       kitty
+      gnused
     ];
 
     # https://github.com/nix-community/home-manager/issues/423
