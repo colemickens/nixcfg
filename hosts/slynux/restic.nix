@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, config, lib, ... }:
 
 {
   config = {
@@ -7,14 +7,14 @@
         owner = "restic";
         group = "restic";
         mode = "0666";
-        sopsFile = ../secrets/encrypted/azure-cmvwbackups-restic-env;
+        sopsFile = ../../secrets/encrypted/azure-cmvwbackups-restic-env;
         format = "binary";
       };
       "azure-cmvwbackups-restic-password" = {
         owner = "restic";
         group = "restic";
         mode = "0666";
-        sopsFile = ../secrets/encrypted/azure-cmvwbackups-restic-password;
+        sopsFile = ../../secrets/encrypted/azure-cmvwbackups-restic-password;
         format = "binary";
       };
     };
@@ -45,8 +45,8 @@
       package = pkgs.writeShellScriptBin "restic" ''
         exec /run/wrappers/bin/restic "$@"
       '';
-      environmentFile = config.sops."azure-cmvwbackups-restic-env";
-      passwordFile = config.sops."azure-cmvwbackups-restic-password";
+      environmentFile = config.sops.secrets."azure-cmvwbackups-restic-env".path;
+      passwordFile = config.sops.secrets."azure-cmvwbackups-restic-password".path;
       paths = [ "/var/lib/bitwarden_rs" ];
     };
   };

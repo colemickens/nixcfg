@@ -16,6 +16,8 @@ in
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
 
+    ./restic.nix
+
     # ../../mixins/rclone-googledrive-mounts.nix
 
     ../../profiles/interactive.nix
