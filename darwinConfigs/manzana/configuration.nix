@@ -41,6 +41,8 @@
     environment.systemPackages = with pkgs; [
       kitty
       gnused
+      helix
+      flow-control
     ];
 
     # https://github.com/nix-community/home-manager/issues/423
