@@ -1,30 +1,11 @@
-name: "nixcfg-next"
-concurrency: "nixcfg-next"
+name: "nixcfg-build"
+concurrency: "nixcfg-build"
 on:
-  schedule:
-    - cron: '0/20 * * * *'
-  workflow_dispatch:
   push:
     branches:
       - "main"
 jobs:
-  "update":
-    permissions:
-      id-token: "write"
-      contents: "write"
-    runs-on: "ubuntu-24.04"
-    steps:
-    - name: checkout
-      uses: actions/checkout@v5
-      with:
-        ref: main
-    - uses: "DeterminateSystems/determinate-nix-action@main"
-    - name: prep
-      run: ./.github/prep.sh
-    - name: update
-      run: ./.github/update.sh
   "builds":
-    needs: "update"
     permissions:
       id-token: "write"
       contents: "read"
@@ -38,8 +19,6 @@ jobs:
     runs-on: ${{ matrix.runner }}
     steps:
     - uses: actions/checkout@v5
-      with:
-        ref: main-next-wip
     - uses: endersonmenezes/free-disk-space@v3
       with:
         remove_android: true
