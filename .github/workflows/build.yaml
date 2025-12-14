@@ -1,0 +1,61 @@
+name: "nixcfg-next"
+concurrency: "nixcfg-next"
+on:
+  schedule:
+    - cron: '0/20 * * * *'
+  workflow_dispatch:
+  push:
+    branches:
+      - "main"
+jobs:
+  "update":
+    permissions:
+      id-token: "write"
+      contents: "write"
+    runs-on: "ubuntu-24.04"
+    steps:
+    - name: checkout
+      uses: actions/checkout@v5
+      with:
+        ref: main
+    - uses: "DeterminateSystems/determinate-nix-action@main"
+    - name: prep
+      run: ./.github/prep.sh
+    - name: update
+      run: ./.github/update.sh
+  "builds":
+    needs: "update"
+    permissions:
+      id-token: "write"
+      contents: "read"
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+        - "ubuntu-24.04"
+        - "ubuntu-24.04-arm"
+        - "macos-26"
+    runs-on: ${{ matrix.runner }}
+    steps:
+    - uses: actions/checkout@v5
+      with:
+        ref: main-next-wip
+    - uses: endersonmenezes/free-disk-space@v3
+      with:
+        remove_android: true
+        remove_dotnet: true
+        remove_tool_cache: true
+        remove_packages: "azure-cli google-cloud-cli microsoft-edge-stable google-chrome-stable firefox postgresql* temurin-* *llvm* mysql* dotnet-sdk-*"
+        remove_packages_one_command: true
+        remove_folders: "/usr/share/swift /usr/share/miniconda /usr/share/az* /usr/local/lib/node_modules /usr/local/share/chromium /usr/local/share/powershell /usr/local/julia /usr/local/aws-cli /usr/local/aws-sam-cli /usr/share/gradle /usr/lib/jvm /home/runner/.rust /usr/local/.ghcup"
+        rm_cmd: "rmz"        # NEW: Faster deletion
+        rmz_version: "3.1.1" # NEW: Specify rmz version
+    - uses: "DeterminateSystems/determinate-nix-action@main"
+    - uses: "DeterminateSystems/magic-nix-cache-action@main"
+    - name: build + cache
+      run: |
+        nix flake check --keep-going || true
+    - name: build + cache
+      run: |
+        # run it again, hopefully this time the output is easier to read
+        nix flake check --keep-going
