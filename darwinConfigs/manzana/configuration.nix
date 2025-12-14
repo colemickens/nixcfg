@@ -38,6 +38,10 @@
     nix.enable = false;
     programs.zsh.enable = true;
 
+    environment.variables = {
+      EDITOR = "hx"; # TODOOOOOOOOO
+    };
+
     environment.systemPackages = with pkgs; [
       kitty
       gnused
