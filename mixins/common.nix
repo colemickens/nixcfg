@@ -11,9 +11,9 @@ let
   _kernelPackages =
     if cfg.useZfs then
       if cfg.useZfsUnstable then
-        pkgs.linuxKernel.packages.linux_6_17
+        pkgs.linuxKernel.packages.linux_6_18
       else
-        pkgs.linuxKernel.packages.linux_6_12 # new LTS
+        pkgs.linuxKernel.packages.linux_6_18 # new LTS
     else
       pkgs.linuxKernel.packages.linux_latest;
 in
