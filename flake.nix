@@ -208,9 +208,9 @@
                   c_darwinConfigs = lib.mapAttrs' (
                     n: v: (lib.nameValuePair "darwinConfig-${n}" v.system)
                   ) darwinConfigurationsEx.${system};
-                  c_extra = lib.mapAttrs' (n: v: lib.nameValuePair "extra-${n}" v) inputs.self.extra.${system};
+                  # c_extra = lib.mapAttrs' (n: v: lib.nameValuePair "extra-${n}" v) inputs.self.extra.${system};
                 in
-                (/*c_packages // */ c_devShells // c_toplevels // c_darwinConfigs // c_extra);
+                (/*c_packages // */ c_devShells // c_toplevels // c_darwinConfigs /*// c_extra*/);
           }
         )
       );
