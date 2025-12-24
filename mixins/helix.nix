@@ -5,11 +5,6 @@
   ...
 }:
 
-let
-  helixPkg =
-    # pkgs.helix;
-    inputs.helix.packages.${pkgs.stdenv.hostPlatform.system}.default;
-in
 {
   config = {
     home-manager.users.cole =
@@ -77,7 +72,6 @@ in
         # '';
         programs.helix = {
           enable = true;
-          package = helixPkg;
 
           settings = {
             theme = {
