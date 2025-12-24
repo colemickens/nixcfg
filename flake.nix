@@ -19,10 +19,6 @@
     nix-darwin.url = "github:nix-darwin/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
-    # helix
-    helix.url = "github:helix-editor/helix";
-    helix.inputs.nixpkgs.follows = "cmpkgs";
-
     # preservation
     preservation.url = "github:nix-community/preservation";
 
