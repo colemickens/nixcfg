@@ -9,20 +9,18 @@ in
 {
   imports = [
     ./unfree.nix
+    ../../profiles/interactive.nix
+    ../../profiles/addon-devtools.nix
+    (import ../../profiles/addon-clouddev.nix { hostname = "slynux.mickens.us"; })
     ../../mixins/common.nix
 
-    #../../mixins/github-actions-runners.nix
+    # ../../mixins/rclone-googledrive-mounts.nix
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
 
+    #./go2rtc.nix
     ./restic.nix
-
-    # ../../mixins/rclone-googledrive-mounts.nix
-
-    ../../profiles/interactive.nix
-    (import ../../profiles/addon-clouddev.nix { hostname = "slynux.mickens.us"; })
-    ../../profiles/addon-devtools.nix
 
     inputs.determinate-main.nixosModules.default
 
@@ -37,31 +35,7 @@ in
     system.stateVersion = "23.11";
 
     networking.hostName = hn;
-    # https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/alacritty/Tango%20Adapted.yml
-    # nixcfg.common.hostColor = "#00a2ff";
     nixcfg.common.hostColor = "blue";
-
-    # jesus christ, nothing but a pain
-    # zramSwap.enable = true;
-
-    services.go2rtc = {
-      enable = true;
-      settings = {
-        # api/webui = :1984
-        streams = {
-          webcam = "ffmpeg:device?video=/dev/video0&input_format=yuyv422&video_size=1920x1080#video=h264#hardware";
-        };
-      };
-    };
-
-    environment.systemPackages = with pkgs; [
-      qemu
-    ];
-
-    nix.gc = {
-      automatic = true;
-      persistent = true;
-    };
 
     services.tailscale.useRoutingFeatures = "server";
 
