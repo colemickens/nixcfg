@@ -27,7 +27,6 @@ in
     ../../mixins/pam-u2f.nix
 
     ../../mixins/android.nix
-    ../../mixins/clamav.nix
     ../../mixins/ledger.nix
     ../../mixins/obs.nix # fucking Android can't _rotate it's webcam feed_
     ../../mixins/podman.nix
