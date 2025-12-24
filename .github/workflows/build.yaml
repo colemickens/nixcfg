@@ -31,6 +31,9 @@ jobs:
         rmz_version: "3.1.1" # NEW: Specify rmz version
     - uses: "DeterminateSystems/determinate-nix-action@main"
     - uses: "DeterminateSystems/magic-nix-cache-action@main"
+    - name: prefetch inputs
+      run: |
+        nix flake prefetch-inputs
     - name: build + cache
       run: |
         nix flake check --keep-going || true
