@@ -34,8 +34,6 @@ in
     nixcfg.common.hostColor = "green";
     nixcfg.common.wifiWorkaround = true;
 
-    zramSwap.enable = true;
-
     services.tailscale.useRoutingFeatures = "server";
 
     services.zfs.autoScrub.pools = [ poolname ];
@@ -79,9 +77,7 @@ in
       ];
       kernelParams = [
         "ideapad_laptop.allow_v4_dytc=1"
-        # "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 1024 * 8)}"
       ];
-      # kernelParams = [ "zfs.zfs_arc_max=${builtins.toString (1024 * 1024 * 2048)}" ];
       initrd.availableKernelModules = [
         "xhci_pci"
         "xhci_hcd" # usb
