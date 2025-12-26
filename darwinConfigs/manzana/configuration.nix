@@ -47,6 +47,7 @@
       gnused
       helix
       flow-control
+      hexyl
     ];
 
     # https://github.com/nix-community/home-manager/issues/423
