@@ -1,5 +1,3 @@
-{ hostname }:
-
 {
   pkgs,
   lib,
@@ -8,12 +6,15 @@
   ...
 }:
 
+let
+  hostname = "slynux";
+in
 {
   config = {
     sops.secrets."cloudflare_apitoken" = {
       owner = "nginx";
       group = "nginx";
-      sopsFile = ../secrets/encrypted/cloudflare_apitoken;
+      sopsFile = ../../secrets/encrypted/cloudflare_apitoken;
       format = "binary";
     };
 

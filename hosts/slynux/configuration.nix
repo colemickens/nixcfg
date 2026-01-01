@@ -11,7 +11,6 @@ in
     ./unfree.nix
     ../../profiles/interactive.nix
     ../../profiles/addon-devtools.nix
-    (import ../../profiles/addon-clouddev.nix { hostname = "slynux.mickens.us"; })
     ../../mixins/common.nix
 
     # ../../mixins/rclone-googledrive-mounts.nix
@@ -21,6 +20,7 @@ in
 
     #./go2rtc.nix
     ./restic.nix
+    ./nginx-vaultwarden.nix
 
     inputs.determinate-main.nixosModules.default
 
