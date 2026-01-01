@@ -58,24 +58,6 @@
       };
     };
 
-    services.nginx.virtualHosts."zj.${hostname}" = {
-      listen = [
-        {
-          port = 443;
-          addr = "0.0.0.0";
-          ssl = true;
-        }
-      ];
-
-      addSSL = true;
-      useACMEHost = "${hostname}";
-      #root = "/var/www/${hostname}";
-      locations."/" = {
-        proxyPass = "http://127.0.0.1:8082/";
-        proxyWebsockets = true;
-      };
-    };
-
     # VAULT WARDEN
     services.vaultwarden = {
       enable = true;
