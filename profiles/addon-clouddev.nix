@@ -20,17 +20,6 @@
     networking.firewall.interfaces."tailscale0".allowedTCPPorts = [
       443
     ];
-    services = {
-      openvscode-server = {
-        enable = true;
-        user = "cole";
-        group = "cole";
-        host = "0.0.0.0";
-        withoutConnectionToken = true;
-        telemetryLevel = "off";
-        port = 7777;
-      };
-    };
 
     services.nginx = {
       enable = true;
@@ -38,24 +27,6 @@
       recommendedOptimisation = true;
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
-    };
-
-    services.nginx.virtualHosts."code.${hostname}" = {
-      listen = [
-        {
-          port = 443;
-          addr = "0.0.0.0";
-          ssl = true;
-        }
-      ];
-
-      addSSL = true;
-      useACMEHost = "${hostname}";
-      #root = "/var/www/${hostname}";
-      locations."/" = {
-        proxyPass = "http://127.0.0.1:7777/";
-        proxyWebsockets = true;
-      };
     };
 
     # VAULT WARDEN
