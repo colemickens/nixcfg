@@ -11,13 +11,13 @@ def "main deploy" [ host: string ] {
   print -e $"(char nl)"
 }
 
-def "main nixos selfup" [] {
+def "main selfup" [] {
   sudo nix build --accept-flake-config --profile "/nix/var/nix/profiles/system" $".#toplevels.(^hostname | str trim)"
   sudo ./result/bin/switch-to-configuration switch
 }
 
-def "main darwin selfup" [] {
-  sudo darwin-rebuild --flake /Users/cole/code/nixcfg
+def "main darwinup" [] {
+  sudo darwin-rebuild switch --option narinfo-cache-negative-ttl 0 --flake /Users/cole/code/nixcfg
 }
 
 def main [] {
