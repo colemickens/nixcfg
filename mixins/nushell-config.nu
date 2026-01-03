@@ -1,6 +1,8 @@
-# Nushell Config File
+
+# host_color injected above here ^
 
 $env.config.show_banner = false;
+
 
 let carapace_completer = {|spans|
     carapace $spans.0 nushell ...$spans | from json
