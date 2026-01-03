@@ -56,9 +56,6 @@ in
     nixcfg.common.hostColor = "magenta";
     nixcfg.common.skipMitigations = false;
 
-    nixcfg.common.useZfs = true;
-    nixcfg.common.useZfsUnstable = true;
-
     nix = {
       settings = {
         max-jobs = lib.mkForce 4;

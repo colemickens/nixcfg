@@ -7,15 +7,11 @@
 
 let
   cfg = config.nixcfg.common;
-  # _kernelPackages = pkgs.linuxPackages_latest;
   _kernelPackages =
-    if cfg.useZfs then
-      if cfg.useZfsUnstable then
-        pkgs.linuxKernel.packages.linux_6_18
-      else
-        pkgs.linuxKernel.packages.linux_6_18 # new LTS
-    else
-      pkgs.linuxKernel.packages.linux_latest;
+    if cfg.useZfs
+    then pkgs.linuxKernel.packages.linux_6_18
+    else pkgs.linux_latest;
+  _zfsPackage = pkgs.zfs_2_4;
 in
 {
   imports = [
@@ -53,10 +49,6 @@ in
       useZfs = lib.mkOption {
         type = lib.types.bool;
         default = true;
-      };
-      useZfsUnstable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
       };
       autoHostId = lib.mkOption {
         type = lib.types.bool;
@@ -120,9 +112,9 @@ in
       initrd.systemd.enable = lib.mkDefault true;
       initrd.supportedFilesystems = ([ "ntfs" ] ++ lib.optionals (cfg.useZfs) [ "zfs" ]);
 
-      zfs.package = lib.mkIf (cfg.useZfs && cfg.useZfsUnstable) pkgs.zfs_unstable;
+      zfs.package = _zfsPackage;
 
-      kernelPackages = lib.mkIf cfg.defaultKernel _kernelPackages;
+      kernelPackages = _kernelPackages;
       kernelParams = lib.mkIf cfg.skipMitigations [ "mitigations=off" ];
       kernel.sysctl = {
         "fs.file-max" = 100000;
