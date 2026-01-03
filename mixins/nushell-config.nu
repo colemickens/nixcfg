@@ -1,4 +1,5 @@
-# Nushell Config File
+
+# host_color injected above here ^
 
 $env.config.show_banner = false;
 
@@ -21,15 +22,13 @@ $env.config = ($env.config | upsert hooks.pre_prompt { append $nix_direnv_hook }
 ##
 
 def create_left_prompt [] {
-    let hc = "@host_color@"
-
     let hsc = { # host slug color
-      fg: $"($hc)_reverse"
+      fg: $"($host_color)_reverse"
       attr: "br"
     }
 
-    let line1 = $"(ansi reset)(ansi $hc)╭(ansi $hsc) (hostname) (ansi reset)";
-    let line2 = $"(ansi reset)(ansi $hc)╰🡒 (ansi reset)";
+    let line1 = $"(ansi reset)(ansi $host_color)╭(ansi $hsc) (hostname) (ansi reset)";
+    let line2 = $"(ansi reset)(ansi $host_color)╰🡒 (ansi reset)";
 
     let nixshell = (if ("name" in $env) { $"(ansi red)($env.name)(ansi reset)" } else { "" })
 
