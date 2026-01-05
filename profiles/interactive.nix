@@ -106,7 +106,7 @@
               hexyl
               xh
               lazygit
-              dogdns
+              dogedns
               dig
               ripgrep
               jless
