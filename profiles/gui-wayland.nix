@@ -36,7 +36,6 @@
 
           gradia
 
-          oculante # image viewer (rust)
           slurp # area selection
           wl-clipboard # wl-{copy,paste}
           wf-recorder # screen record
