@@ -48,6 +48,7 @@
       helix
       flow-control
       hexyl
+      zstd
     ];
 
     # https://github.com/nix-community/home-manager/issues/423
