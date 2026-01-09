@@ -40,7 +40,8 @@
 
     # for work
     # (stable)
-    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/3.tar.gz";
+    # determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/3.tar.gz";
+    determinate.url = "github:DeterminateSystems/determinate";
     # (and ... newer...)
     determinate-main-dnixd.url = "https://install.determinate.systems/determinate-nixd/branch/main/x86_64-linux";
     determinate-main-dnixd.flake = false;

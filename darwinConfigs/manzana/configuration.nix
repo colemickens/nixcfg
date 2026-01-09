@@ -7,6 +7,7 @@
 {
   imports = [
     inputs.home-manager.darwinModules.home-manager
+    inputs.determinate.darwinModules.default
     ../../mixins/ghostty.nix
     ../../mixins/git.nix
     ../../mixins/helix.nix
@@ -33,9 +34,12 @@
     home-manager.useGlobalPkgs = true;
     home-manager.useUserPackages = true;
 
+    determinateNix = {
+      enable = true;
+    };
+
     system.stateVersion = 6;
 
-    nix.enable = false;
     programs.zsh.enable = true;
 
     environment.variables = {

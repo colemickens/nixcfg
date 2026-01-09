@@ -57,16 +57,17 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1766549083,
-        "narHash": "sha256-G1Hljg7vIBt8n9cxO382YAZWtZU/mYfQcg3icdNG8RQ=",
-        "rev": "ba8999fac986e70f52b4cba15047be7bbb7b6346",
-        "revCount": 318,
-        "type": "tarball",
-        "url": "https://api.flakehub.com/f/pinned/DeterminateSystems/determinate/3.15.1/019b4e8a-dc22-75db-aef5-a447efbb1a13/source.tar.gz"
+        "lastModified": 1767988042,
+        "narHash": "sha256-l1Tq+xx/RilnsYaAE9ZXRI0Ie5Zgfh++coNs2e8oXvo=",
+        "owner": "DeterminateSystems",
+        "repo": "determinate",
+        "rev": "4df6b4539dfaca0792d8c6123962f3786d1eaabc",
+        "type": "github"
       },
       "original": {
-        "type": "tarball",
-        "url": "https://flakehub.com/f/DeterminateSystems/determinate/3.tar.gz"
+        "owner": "DeterminateSystems",
+        "repo": "determinate",
+        "type": "github"
       }
     },
     "determinate-main": {
