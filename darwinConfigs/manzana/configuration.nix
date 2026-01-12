@@ -8,6 +8,7 @@
   imports = [
     inputs.home-manager.darwinModules.home-manager
     inputs.determinate.darwinModules.default
+    ../../mixins/carapace.nix
     ../../mixins/ghostty.nix
     ../../mixins/git.nix
     ../../mixins/helix.nix
