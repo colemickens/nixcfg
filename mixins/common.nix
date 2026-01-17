@@ -142,10 +142,7 @@ in
     };
     services.resolved = {
       enable = true;
-      extraConfig = ''
-        [Resolve]
-        DNSSEC=false
-      '';
+      settings.Resolve.DNSSEC = false;
     };
     services.timesyncd.enable = true;
     time.timeZone = lib.mkDefault "America/Los_Angeles";
