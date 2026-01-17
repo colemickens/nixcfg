@@ -54,6 +54,7 @@
       flow-control
       hexyl
       zstd
+      bottom
     ];
 
     # https://github.com/nix-community/home-manager/issues/423
