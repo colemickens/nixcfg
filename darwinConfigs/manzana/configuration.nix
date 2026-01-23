@@ -55,6 +55,7 @@
       hexyl
       zstd
       bottom
+      unar
     ];
 
     # https://github.com/nix-community/home-manager/issues/423
