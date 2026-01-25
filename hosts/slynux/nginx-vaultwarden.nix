@@ -7,7 +7,7 @@
 }:
 
 let
-  hostname = "slynux";
+  hostname = "slynux.mickens.us";
 in
 {
   config = {
