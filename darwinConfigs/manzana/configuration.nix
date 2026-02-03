@@ -37,6 +37,13 @@
 
     determinateNix = {
       enable = true;
+      determinateNixd = {
+        builder = {
+          state = "enabled";
+          memoryBytes = (8589934592*2);
+          cpuCount = 2;
+        };
+      };
     };
 
     system.stateVersion = 6;
