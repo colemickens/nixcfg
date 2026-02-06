@@ -35,7 +35,7 @@ in
     ./preservation.nix
     ./zrepl.nix # TODO: make this device specific
 
-    inputs.determinate-main.nixosModules.default
+    inputs.determinate.nixosModules.default
 
     ./unfree.nix
 
