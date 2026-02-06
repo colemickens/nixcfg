@@ -13,9 +13,9 @@
           # REVISIT: disable nix-direnv, since it uses a specific nix, that hits issues with lastModified
           nix-direnv = {
             enable = true;
-            package = (pkgs.nix-direnv.override {
-              nix = inputs.determinate-main-nixsrc.packages.${pkgs.stdenv.hostPlatform.system}.default;
-            });
+            # package = (pkgs.nix-direnv.override {
+            #   nix = inputs.determinate-nix-src.packages.${pkgs.stdenv.hostPlatform.system}.default;
+            # });
           };
 
           # use global gitignore so we keep GC roots per-project instead
