@@ -58,7 +58,6 @@
       kitty
       gnused
       helix
-      flow-control
       hexyl
       zstd
       bottom
