@@ -62,6 +62,8 @@
       zstd
       bottom
       unar
+      gh
+      eza
     ];
 
     # https://github.com/nix-community/home-manager/issues/423
