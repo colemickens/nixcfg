@@ -1,12 +1,18 @@
 #!/usr/bin/env bash
 
-git switch -C main-next-wip
+set -x
+set -euo pipefail
+
+git fetch --all
+git switch main-next-wip
 git reset --hard origin/main
-git push origin HEAD -f
 
 nix flake update --commit-lock-file
 
-# TODO(colemickens): confirm this puts nix flake inputs into cache?
-nix flake archive
+if git diff --exit-code HEAD origin/main-next-wip; then
+  echo "no material flake.lock diff"
+  echo "abandoning"
+  exit 0
+fi
 
-git push --set-upstream origin main-next-wip
+git push --force-with-lease origin main-next-wip
