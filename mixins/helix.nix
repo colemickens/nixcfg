@@ -87,6 +87,7 @@ in
 
             editor = {
               auto-pairs = false;
+              rainbow-brackets = true;
               bufferline = "always";
               color-modes = true;
               cursor-shape = {
