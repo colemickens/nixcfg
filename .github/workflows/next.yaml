@@ -54,8 +54,11 @@ jobs:
     - uses: "DeterminateSystems/magic-nix-cache-action@main"
     - name: build + cache
       run: |
-        nix flake check --keep-going || true
+        ulimit -a
+        nix flake check --keep-going
     - name: build + cache
+      if: ${{ success() || failure() }}
       run: |
         # run it again, hopefully this time the output is easier to read
+        ulimit -a
         nix flake check --keep-going
