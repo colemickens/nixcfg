@@ -5,7 +5,7 @@ let
     app-notifications = false;
     font-family = "Iosevka Term";
     font-style = "Medium";
-    font-size = 16;
+    font-size = 14;
     adjust-cell-width = "-5%";
     background-opacity = ".8";
     background-blur-radius = 40;
