@@ -169,7 +169,6 @@
               curl
               jq
               openssh
-              watchman
               watchexec
               wireguard-tools
               ntfsprogs
