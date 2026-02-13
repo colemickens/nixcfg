@@ -64,6 +64,7 @@
       unar
       gh
       eza
+      dua
     ];
 
     # https://github.com/nix-community/home-manager/issues/423
