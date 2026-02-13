@@ -48,6 +48,9 @@ jobs:
         rm_cmd: "rmz"        # NEW: Faster deletion
         rmz_version: "3.1.1" # NEW: Specify rmz version
     - uses: "DeterminateSystems/determinate-nix-action@main"
+    - name: Upgrade determinate-nixd to latest
+      run: |
+        sudo determinate-nixd upgrade --tools branch/main --daemon branch/main
     - uses: "DeterminateSystems/magic-nix-cache-action@main"
     - name: build + cache
       run: |
