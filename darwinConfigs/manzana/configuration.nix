@@ -65,6 +65,8 @@
       gh
       eza
       dua
+      tio
+      usbutils
     ];
 
     # https://github.com/nix-community/home-manager/issues/423
