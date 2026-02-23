@@ -69,7 +69,6 @@
       usbutils
     ];
 
-    # https://github.com/nix-community/home-manager/issues/423
     environment.variables = {
       TERMINFO_DIRS = [ "${pkgs.kitty.terminfo.outPath}/share/terminfo" ];
     };
@@ -78,13 +77,7 @@
     # Fonts
     fonts.packages = with pkgs; [
       iosevka-bin
-      #  recursive
-      #  (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
     ];
-
-    # Keyboard
-    # system.keyboard.enableKeyMapping = true;
-    # system.keyboard.remapCapsLockToEscape = true;
 
     # Add ability to used TouchID for sudo authentication
     security.pam.services.sudo_local.touchIdAuth = true;
