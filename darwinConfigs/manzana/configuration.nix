@@ -8,7 +8,10 @@
   imports = [
     inputs.home-manager.darwinModules.home-manager
     inputs.determinate.darwinModules.default
+
+    ../../mixins/bat.nix
     ../../mixins/carapace.nix
+    ../../mixins/cargo.nix
     ../../mixins/ghostty.nix
     ../../mixins/git.nix
     ../../mixins/helix.nix
@@ -40,7 +43,7 @@
       determinateNixd = {
         builder = {
           state = "enabled";
-          memoryBytes = (8589934592*2);
+          memoryBytes = (8589934592 * 2);
           cpuCount = 2;
         };
       };
@@ -67,6 +70,9 @@
       dua
       tio
       usbutils
+
+      android-tools
+      scrcpy
     ];
 
     environment.variables = {
