@@ -428,26 +428,6 @@
         "type": "github"
       }
     },
-    "nixos-github-actions": {
-      "inputs": {
-        "nixpkgs": [
-          "cmpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1725956591,
-        "narHash": "sha256-ZR/E+qgVNsdxby3oU21wtjJdeLLX+F/HtCsgcs3y0t4=",
-        "owner": "colemickens",
-        "repo": "nixos-github-actions",
-        "rev": "9d52f1a70cdf158b33eadc0fa7bcf3542f49ac13",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "repo": "nixos-github-actions",
-        "type": "github"
-      }
-    },
     "nixos-hardware": {
       "locked": {
         "lastModified": 1771969195,
@@ -618,7 +598,6 @@
         "lanzaboote": "lanzaboote",
         "lib-aggregate": "lib-aggregate",
         "nix-darwin": "nix-darwin",
-        "nixos-github-actions": "nixos-github-actions",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "preservation": "preservation",

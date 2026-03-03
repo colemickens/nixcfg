@@ -30,10 +30,6 @@
     ghostty.url = "github:ghostty-org/ghostty";
     ghostty.inputs."nixpkgs".follows = "cmpkgs";
 
-    # wip replacement for nixpkgs->github-runners module
-    nixos-github-actions.url = "github:colemickens/nixos-github-actions";
-    nixos-github-actions.inputs."nixpkgs".follows = "cmpkgs";
-
     # determinate
     determinate.url = "github:DeterminateSystems/determinate";
   };
