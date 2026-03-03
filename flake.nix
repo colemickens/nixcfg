@@ -177,23 +177,14 @@
           rec {
             formatter = pkgs.${system}.nixfmt;
 
-            devShells =
-              (lib.flip lib.genAttrs mkShell [
-                "ci"
-                # "devenv"
-              ])
-              // {
-                default = devShells.ci;
-              };
-
             checks = 
                 let
                   # c_packages = lib.mapAttrs' (
                   #   n: lib.nameValuePair "package-${n}"
                   # ) inputs.self.legacyPackages.${system};
-                  c_devShells = lib.mapAttrs' (
-                    n: v: lib.nameValuePair "devShell-${n}" v.inputDerivation
-                  ) inputs.self.devShells.${system};
+                  # c_devShells = lib.mapAttrs' (
+                  #   n: v: lib.nameValuePair "devShell-${n}" v.inputDerivation
+                  # ) inputs.self.devShells.${system};
                   c_toplevels = lib.mapAttrs' (
                     n: v: (lib.nameValuePair "toplevel-${n}" v.config.system.build.toplevel)
                   ) (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigsEx.${system});
@@ -202,7 +193,7 @@
                   ) darwinConfigurationsEx.${system};
                   # c_extra = lib.mapAttrs' (n: v: lib.nameValuePair "extra-${n}" v) inputs.self.extra.${system};
                 in
-                (/*c_packages // */ c_devShells // c_toplevels // c_darwinConfigs /*// c_extra*/);
+                (/*c_packages // c_devShells // */ c_toplevels // c_darwinConfigs /*// c_extra*/);
           }
         )
       );
