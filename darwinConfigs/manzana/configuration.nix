@@ -19,6 +19,8 @@
     ../../mixins/nushell.nix
     # ../../mixins/ssh.nix
     ../../mixins/zellij.nix
+
+    ../../profiles/addon-devtools.nix
   ];
   options = {
     nixcfg.common = {
