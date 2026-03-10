@@ -16,6 +16,7 @@ in
 {
   imports = [
     ./nix.nix
+    ./ssh.nix
     ../profiles/user-cole.nix
   ];
 
