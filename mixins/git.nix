@@ -7,6 +7,7 @@
       {
         programs.git = {
           enable = true;
+
           signing.key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIK7kPNqHXubFXq4k+15xz9ICn7IBd3Qfz7cawBsRzEO colemickens-sshkey";
           signing.format = "ssh";
           signing.signByDefault = false;
@@ -15,18 +16,12 @@
             export SSH_AUTH_SOCK=/Users/cole/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock
             exec ${pkgs.openssh}/bin/ssh-keygen "''${@}"
           '').outPath;
+
           settings = {
             user.email = "cole.mickens@gmail.com";
             user.name = "Cole Mickens";
-          };
-
-          extraConfig = {
-            init = {
-              defaultBranch = "main";
-            };
-            core = {
-              untrackedCache = true;
-            };
+            core.untrackedCache = true;
+            init.defaultBranch = "main";
           };
 
           ignores = [
