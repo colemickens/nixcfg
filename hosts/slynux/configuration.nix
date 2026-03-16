@@ -18,7 +18,6 @@ in
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
 
-    #./go2rtc.nix
     ./restic.nix
     ./nginx-vaultwarden.nix
 
