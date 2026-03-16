@@ -24,12 +24,12 @@ in
 
     ../../mixins/gfx-radeonsi.nix
 
-    ../../mixins/pam-u2f.nix
+    # ../../mixins/pam-u2f.nix
 
-    ../../mixins/android.nix
-    ../../mixins/ledger.nix
-    ../../mixins/obs.nix # fucking Android can't _rotate it's webcam feed_
-    ../../mixins/podman.nix
+    # ../../mixins/android.nix
+    # ../../mixins/ledger.nix
+    # ../../mixins/obs.nix # fucking Android can't _rotate it's webcam feed_
+    # ../../mixins/podman.nix
     ../../mixins/syncthing.nix
 
     ./preservation.nix

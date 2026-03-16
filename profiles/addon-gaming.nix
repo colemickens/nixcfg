@@ -55,7 +55,7 @@
           vkbasalt
           goverlay
           # vkpost # ??
-          heroic
+          # heroic
 
           legendary-gl
         ];
