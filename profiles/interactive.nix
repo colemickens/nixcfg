@@ -135,6 +135,8 @@
               btop
               xxd
 
+              libtypec
+
               # binwalk # TODO: pynose/nose issue?
               cpio # needed?
               usbutils
