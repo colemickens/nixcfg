@@ -127,8 +127,6 @@
             pwvucontrol
             # qpwgraph
             # helvum
-
-            bitwarden-desktop
           ])
         ];
       };
