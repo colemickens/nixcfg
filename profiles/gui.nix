@@ -122,6 +122,7 @@
             spot
 
             qbittorrent
+            lxqt.pcmanfm-qt
 
             # pipewire/pulseaudio
             pwvucontrol
