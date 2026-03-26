@@ -35,6 +35,8 @@ in
     ./preservation.nix
     ./zrepl.nix # TODO: make this device specific
 
+    ../../mixins/rclone-googledrive-mounts.nix
+
     inputs.determinate.nixosModules.default
 
     ./unfree.nix
