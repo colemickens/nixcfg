@@ -118,7 +118,7 @@ in
 
     rclone-misc = mkMount "misc" true;
     rclone-archives = mkMount "archives" true;
-    rclone-backups = mkMount "backups" true;
+    rclone-backups = mkMount "backups" false;
 
     # TODO: finish
     # rclone-incoming = mkMount "incoming" false;
