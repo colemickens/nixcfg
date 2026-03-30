@@ -14,6 +14,8 @@
     sops-nix.inputs."nixpkgs".follows = "cmpkgs";
     lanzaboote.url = "github:nix-community/lanzaboote";
 
+    harmonia.url = "github:nix-community/harmonia";
+
     ucodenix.url = "github:e-tho/ucodenix";
 
     nix-darwin.url = "github:nix-darwin/nix-darwin";

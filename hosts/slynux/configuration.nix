@@ -20,6 +20,7 @@ in
 
     ./restic.nix
     ./nginx-vaultwarden.nix
+    ./nginx-harmonia.nix
 
     inputs.determinate.nixosModules.default
 
