@@ -83,6 +83,8 @@
     };
     programs.nix-index.enable = false;
 
+    services.iss.enable = true;
+
     # Fonts
     fonts.packages = with pkgs; [
       iosevka-bin
