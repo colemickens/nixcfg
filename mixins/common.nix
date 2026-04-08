@@ -208,12 +208,14 @@ in
             IPv6Forwarding = "yes";
             # IPMasquerade = "both";
           };
+          ipv6AcceptRAConfig = {
+            RouteMetric = 512;
+          };
           # dhcpV4Config.ClientIdentifier = "mac";
           dhcpV4Config.Use6RD = "yes";
           dhcpV4Config.RouteMetric = 512;
           # dhcpV4Config.UseDNS = false;
           dhcpV4Config.DUIDType = "link-layer";
-          dhcpV6Config.RouteMetric = 512;
           dhcpV6Config.PrefixDelegationHint = "::64";
           # dhcpV6Config.UseDNS = false;
           dhcpV6Config.DUIDType = "link-layer";
@@ -229,11 +231,13 @@ in
             IPv6Forwarding = "yes";
             # IPMasquerade = "both";
           };
+          ipv6AcceptRAConfig = {
+            RouteMetric = 1500;
+          };
           # dhcpV4Config.ClientIdentifier = "mac";
           dhcpV4Config.RouteMetric = 1500;
           # dhcpV4Config.UseDNS = false;
           dhcpV4Config.DUIDType = "link-layer";
-          dhcpV6Config.RouteMetric = 1500;
           # dhcpV6Config.UseDNS = false;
           dhcpV6Config.DUIDType = "link-layer";
           # routes = [
