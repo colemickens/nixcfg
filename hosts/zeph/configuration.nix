@@ -134,10 +134,12 @@ in
       };
 
       "/efi/EFI/Linux" = {
+        fsType = "bind";
         device = "/boot/EFI/Linux";
         options = [ "bind" ];
       };
       "/efi/EFI/nixos" = {
+        fsType = "bind";
         device = "/boot/EFI/nixos";
         options = [ "bind" ];
       };
