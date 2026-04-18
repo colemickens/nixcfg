@@ -75,6 +75,7 @@
 
       android-tools
       scrcpy
+      yt-dlp
     ];
 
     environment.variables = {
