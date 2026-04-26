@@ -18,6 +18,9 @@ in
 
     ./zrepl.nix
 
+    # ./restic.nix
+    ./nginx-vaultwarden.nix
+
     inputs.determinate.nixosModules.default
 
     inputs.nixos-hardware.nixosModules.common-cpu-amd
