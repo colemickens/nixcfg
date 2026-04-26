@@ -17,8 +17,6 @@ in
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
 
-    ./zrepl.nix
-
     # ./restic.nix
     ./nginx-vaultwarden.nix
 
