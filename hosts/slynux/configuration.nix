@@ -8,7 +8,6 @@ let
 in
 {
   imports = [
-    ./unfree.nix
     ../../profiles/interactive.nix
     ../../profiles/addon-devtools.nix
     ../../mixins/common.nix
@@ -17,10 +16,6 @@ in
     ../../mixins/sshd.nix
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
-
-    ./restic.nix
-    ./nginx-vaultwarden.nix
-    ./nginx-harmonia.nix
 
     inputs.determinate.nixosModules.default
 
