@@ -32,6 +32,8 @@ in
     nixpkgs.hostPlatform.system = "x86_64-linux";
     system.stateVersion = "23.11";
 
+    time.timeZone = "America/Chicago";
+
     networking.hostName = hn;
     nixcfg.common.hostColor = "green";
     nixcfg.common.wifiWorkaround = true;
