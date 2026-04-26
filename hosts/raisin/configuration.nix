@@ -15,6 +15,7 @@ in
     ../../profiles/addon-laptop.nix
 
     ../../mixins/syncthing.nix
+    ../../mixins/tailscale.nix
 
     ./zrepl.nix
 
