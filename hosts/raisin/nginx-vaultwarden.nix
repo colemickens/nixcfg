@@ -30,6 +30,23 @@ in
       recommendedTlsSettings = true;
     };
 
+    services.nginx.virtualHosts."${hostname}" = {
+      listen = [
+        {
+          port = 443;
+          addr = "0.0.0.0";
+          ssl = true;
+        }
+      ];
+
+      addSSL = true;
+      useACMEHost = "${hostname}";
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:9000/";
+        proxyWebsockets = true;
+      };
+    };
+
     # VAULT WARDEN
     services.vaultwarden = {
       enable = true;
