@@ -7,7 +7,7 @@
 }:
 
 let
-  hostname = "slynux.mickens.us";
+  hostname = "mickens.us";
 in
 {
   config = {
@@ -35,7 +35,7 @@ in
       enable = true;
       config = {
         ROCKET_PORT = "7077";
-        DOMAIN = "https://vw.slynux.mickens.us";
+        DOMAIN = "https://vw.${hostname}";
       };
     };
     services.nginx.virtualHosts."vw.${hostname}" = {
