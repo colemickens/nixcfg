@@ -22,11 +22,14 @@
               behavior = "drop";
               backend = "ssh";
               key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIK7kPNqHXubFXq4k+15xz9ICn7IBd3Qfz7cawBsRzEO colemickens-sshkey";
-              backends.ssh.program = (pkgs.writeShellScript "sign-colemickens_gmail" ''
-                #!/usr/bin/env sh
-                export SSH_AUTH_SOCK=/Users/cole/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock
-                exec ${pkgs.openssh}/bin/ssh-keygen "''${@}"
-              '');
+              backends.ssh.program = (
+                pkgs.writeShellScript "sign-colemickens_gmail" ''
+                  #!/usr/bin/env sh
+                  # TODO: WIP: keepassxc uses macos's default ssh-agent... :/
+                  # export SSH_AUTH_SOCK=/Users/cole/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock
+                  exec ${pkgs.openssh}/bin/ssh-keygen "''${@}"
+                ''
+              );
             };
             git = {
               sign-on-push = true;
@@ -78,11 +81,12 @@
                 user.email = "cole.mickens@determinate.systems";
                 signing.backend = "ssh";
                 signing.key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILgyMox3ncUMQo9zNCpnh1lWuTJNLuEPWrRHmzAUZl9G  colemickens-detsys-ssh";
-                signing.backends.ssh.program = (pkgs.writeShellScript "sign-colemickens_determinate_systems" ''
-                  #!/usr/bin/env sh
-                  export SSH_AUTH_SOCK=/Users/cole/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
-                  exec ${pkgs.openssh}/bin/ssh-keygen "''${@}"
-                '').outPath;
+                signing.backends.ssh.program =
+                  (pkgs.writeShellScript "sign-colemickens_determinate_systems" ''
+                    #!/usr/bin/env sh
+                    export SSH_AUTH_SOCK=/Users/cole/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
+                    exec ${pkgs.openssh}/bin/ssh-keygen "''${@}"
+                  '').outPath;
               }
             ];
 
