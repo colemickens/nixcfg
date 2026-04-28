@@ -55,10 +55,10 @@ jobs:
     - name: build + cache
       run: |
         ulimit -a
-        nix flake check --keep-going
+        nix flake check --keep-going --build-all -L
     - name: build + cache
       if: ${{ success() || failure() }}
       run: |
         # run it again, hopefully this time the output is easier to read
         ulimit -a
-        nix flake check --keep-going
+        nix flake check --keep-going --build-all -L
