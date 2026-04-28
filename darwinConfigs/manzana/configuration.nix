@@ -86,6 +86,7 @@
     # Fonts
     fonts.packages = with pkgs; [
       iosevka-bin
+      fira-sans
     ];
 
     # Add ability to used TouchID for sudo authentication
