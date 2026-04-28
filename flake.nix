@@ -102,16 +102,17 @@
             specialArgs = { inherit inputs; };
           };
         };
-        "aarch64-linux" = {};
-        "x86_64-linux" = {};
+        "aarch64-linux" = { };
+        "x86_64-linux" = { };
       };
-      darwinConfigurations = (lib.foldl' (op: nul: nul // op) { } (lib.attrValues darwinConfigurationsEx));
+      darwinConfigurations = (
+        lib.foldl' (op: nul: nul // op) { } (lib.attrValues darwinConfigurationsEx)
+      );
 
       ## NIXOS CONFIGS + TOPLEVELS ############################################
       nixosConfigsEx = {
         "x86_64-linux" = {
           raisin = { };
-          slynux = { };
           zeph = { };
         };
         "aarch64-linux" = { };
@@ -171,23 +172,26 @@
           rec {
             formatter = pkgs.${system}.nixfmt;
 
-            checks = 
-                let
-                  # c_packages = lib.mapAttrs' (
-                  #   n: lib.nameValuePair "package-${n}"
-                  # ) inputs.self.legacyPackages.${system};
-                  # c_devShells = lib.mapAttrs' (
-                  #   n: v: lib.nameValuePair "devShell-${n}" v.inputDerivation
-                  # ) inputs.self.devShells.${system};
-                  c_toplevels = lib.mapAttrs' (
-                    n: v: (lib.nameValuePair "toplevel-${n}" v.config.system.build.toplevel)
-                  ) (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigsEx.${system});
-                  c_darwinConfigs = lib.mapAttrs' (
-                    n: v: (lib.nameValuePair "darwinConfig-${n}" v.system)
-                  ) darwinConfigurationsEx.${system};
-                  # c_extra = lib.mapAttrs' (n: v: lib.nameValuePair "extra-${n}" v) inputs.self.extra.${system};
-                in
-                (/*c_packages // c_devShells // */ c_toplevels // c_darwinConfigs /*// c_extra*/);
+            checks =
+              let
+                # c_packages = lib.mapAttrs' (
+                #   n: lib.nameValuePair "package-${n}"
+                # ) inputs.self.legacyPackages.${system};
+                # c_devShells = lib.mapAttrs' (
+                #   n: v: lib.nameValuePair "devShell-${n}" v.inputDerivation
+                # ) inputs.self.devShells.${system};
+                c_toplevels = lib.mapAttrs' (
+                  n: v: (lib.nameValuePair "toplevel-${n}" v.config.system.build.toplevel)
+                ) (lib.mapAttrs (n: v: (mkSystem n v)) nixosConfigsEx.${system});
+                c_darwinConfigs = lib.mapAttrs' (
+                  n: v: (lib.nameValuePair "darwinConfig-${n}" v.system)
+                ) darwinConfigurationsEx.${system};
+                # c_extra = lib.mapAttrs' (n: v: lib.nameValuePair "extra-${n}" v) inputs.self.extra.${system};
+              in
+              # c_packages // c_devShells //
+              (
+                c_toplevels // c_darwinConfigs # // c_extra
+              );
           }
         )
       );

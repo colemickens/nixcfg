@@ -40,16 +40,12 @@
     * current daily-driver
     * favorite, all-AMD, laptop ever
     * dual-booting NixOS, of course, and Windows 11 for casual 120Hz/1600p gaming
-  * `slynux`
-    * **(custom, retired gaming PC)**
-    * primary personal Nix CI server
-    * primary SyncThing target
   * `raisin`
     * **Lenovo "Yoga Slim 7 Pro-14ACH5 Laptop (ideapad) - Type 82MS"**
     * retired laptop
-    * now an unused "backup" server
-    * backup SyncThing target
-    * occassional Tailscale exit node
+    * SyncThing node
+    * Vaultwarden (though I'm migrating to KeePass{XC,DX})
+    * Tailscale exit node
 * `images/`
   * `installer` (meta, iso)
     * configuration for a custom `x86_64-linux` installer image
