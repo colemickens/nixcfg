@@ -12,7 +12,7 @@ jobs:
     runs-on: "ubuntu-24.04"
     steps:
     - name: checkout
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         ref: main
     - uses: "DeterminateSystems/determinate-nix-action@main"
@@ -34,7 +34,7 @@ jobs:
         - "macos-26"
     runs-on: ${{ matrix.runner }}
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         ref: main-next-wip
     - uses: endersonmenezes/free-disk-space@v3

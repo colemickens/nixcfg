@@ -18,7 +18,7 @@ jobs:
         - "macos-26"
     runs-on: ${{ matrix.runner }}
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: endersonmenezes/free-disk-space@v3
       with:
         remove_android: true
