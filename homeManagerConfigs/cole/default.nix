@@ -17,7 +17,6 @@
       coreutils
       curl
       wget
-      zellij
       jq
       ripgrep
       prs
