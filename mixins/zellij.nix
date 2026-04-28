@@ -18,7 +18,9 @@
             default_shell = "nu";
             pane_frames = false;
             scrollback_editor = "hx";
-            theme = "tokyo-night-storm";
+            theme = "catppuccin-frappe";
+            theme_dark = "catppuccin-frappe";
+            theme_light = "catppuccin-latte";
             session_serialization = false;
           };
           extraConfig = builtins.readFile ./zellij.keybindings.kdl;
