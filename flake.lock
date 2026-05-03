@@ -35,21 +35,6 @@
     },
     "crane": {
       "locked": {
-        "lastModified": 1777149905,
-        "narHash": "sha256-WMC5ktOHtCyJL/jtlf46P+I4Vhw938+oLlSpM8gwQwU=",
-        "owner": "ipetkov",
-        "repo": "crane",
-        "rev": "60c829383710f7e26454e6677c4d3adbc56dd3b8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ipetkov",
-        "repo": "crane",
-        "type": "github"
-      }
-    },
-    "crane_2": {
-      "locked": {
         "lastModified": 1777242778,
         "narHash": "sha256-VWTeqWeb8Sel/QiWyaPvCa9luAbcGawR+Rw09FJoHz0=",
         "owner": "ipetkov",
@@ -281,27 +266,6 @@
         "type": "github"
       }
     },
-    "harmonia": {
-      "inputs": {
-        "crane": "crane",
-        "nix": "nix_2",
-        "nixpkgs": "nixpkgs_3",
-        "treefmt-nix": "treefmt-nix"
-      },
-      "locked": {
-        "lastModified": 1777376887,
-        "narHash": "sha256-hn0+X+XVycwDgyopa//IP/r3MhI23MdBYvkE5mVlY1o=",
-        "owner": "nix-community",
-        "repo": "harmonia",
-        "rev": "76dfd8bf9978708c046f7842ffd1fe27f174d4e0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "harmonia",
-        "type": "github"
-      }
-    },
     "helix": {
       "inputs": {
         "nixpkgs": [
@@ -367,8 +331,8 @@
     },
     "lanzaboote": {
       "inputs": {
-        "crane": "crane_2",
-        "nixpkgs": "nixpkgs_4",
+        "crane": "crane",
+        "nixpkgs": "nixpkgs_3",
         "pre-commit": "pre-commit",
         "rust-overlay": "rust-overlay_2"
       },
@@ -443,22 +407,6 @@
       "original": {
         "owner": "nix-darwin",
         "repo": "nix-darwin",
-        "type": "github"
-      }
-    },
-    "nix_2": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1777213846,
-        "narHash": "sha256-y6gvpExbfUO1uAGTX8ppxaZtLQHzCpN0JY1vmF/XZ3Q=",
-        "owner": "nixos",
-        "repo": "nix",
-        "rev": "de52c42b2a1323128c5db0860ef209ba5037cef1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "repo": "nix",
         "type": "github"
       }
     },
@@ -570,23 +518,6 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1776949667,
-        "narHash": "sha256-GMSVw35Q+294GlrTUKlx087E31z7KurReQ1YHSKp5iw=",
-        "ref": "nixpkgs-unstable",
-        "rev": "01fbdeef22b76df85ea168fbfe1bfd9e63681b30",
-        "shallow": true,
-        "type": "git",
-        "url": "https://github.com/NixOS/nixpkgs"
-      },
-      "original": {
-        "ref": "nixpkgs-unstable",
-        "shallow": true,
-        "type": "git",
-        "url": "https://github.com/NixOS/nixpkgs"
-      }
-    },
-    "nixpkgs_4": {
-      "locked": {
         "lastModified": 1776877367,
         "narHash": "sha256-EHq1/OX139R1RvBzOJ0aMRT3xnWyqtHBRUBuO1gFzjI=",
         "owner": "NixOS",
@@ -644,7 +575,6 @@
         "cmpkgs": "cmpkgs",
         "determinate": "determinate",
         "ghostty": "ghostty",
-        "harmonia": "harmonia",
         "helix": "helix",
         "home-manager": "home-manager_2",
         "lanzaboote": "lanzaboote",
@@ -748,27 +678,6 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
-        "type": "github"
-      }
-    },
-    "treefmt-nix": {
-      "inputs": {
-        "nixpkgs": [
-          "harmonia",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1775636079,
-        "narHash": "sha256-pc20NRoMdiar8oPQceQT47UUZMBTiMdUuWrYu2obUP0=",
-        "owner": "numtide",
-        "repo": "treefmt-nix",
-        "rev": "790751ff7fd3801feeaf96d7dc416a8d581265ba",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "treefmt-nix",
         "type": "github"
       }
     },
