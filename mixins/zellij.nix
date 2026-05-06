@@ -12,7 +12,6 @@
       {
         programs.zellij = {
           enable = true;
-          package = pkgs.callPackage ./zellij-package.nix {};
           settings = {
             default_mode = "locked";
             default_shell = "nu";
