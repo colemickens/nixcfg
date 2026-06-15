@@ -1,0 +1,34 @@
+name: "nixcfg-risky"
+concurrency: "nixcfg-risky"
+on:
+  push:
+    branches:
+      - "main"
+jobs:
+  "builds":
+    permissions:
+      id-token: "write"
+      contents: "read"
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+        - "ubuntu-24.04"
+    runs-on: ${{ matrix.runner }}
+    steps:
+    - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+    - uses: endersonmenezes/free-disk-space@7901478139cff6e9d44df5972fd8ab8fcade4db1 # v3.2.2
+      with:
+        remove_android: true
+        remove_dotnet: true
+        remove_tool_cache: true
+        remove_packages: "azure-cli google-cloud-cli microsoft-edge-stable google-chrome-stable firefox postgresql* temurin-* *llvm* mysql* dotnet-sdk-*"
+        remove_packages_one_command: true
+        remove_folders: "/usr/share/swift /usr/share/miniconda /usr/share/az* /usr/local/lib/node_modules /usr/local/share/chromium /usr/local/share/powershell /usr/local/julia /usr/local/aws-cli /usr/local/aws-sam-cli /usr/share/gradle /usr/lib/jvm /home/runner/.rust /usr/local/.ghcup"
+        rm_cmd: "rmz"        # NEW: Faster deletion
+        rmz_version: "3.1.1" # NEW: Specify rmz version
+    - uses: "DeterminateSystems/determinate-nix-action@main"
+    - uses: "DeterminateSystems/magic-nix-cache-action@main"
+    - name: build + cache
+      run: |
+        nix build .#toplevels.jupitertwo -L --keep-going
