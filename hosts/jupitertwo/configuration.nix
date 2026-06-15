@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, lib, inputs, ... }:
 
 let
   hn = "jupitertwo";
@@ -19,6 +19,11 @@ in
     system.stateVersion = "26.05";
 
     time.timeZone = "America/Chicago";
+
+    # <workarounds>
+    services.fwupd.enable = lib.mkForce false;
+    services.udisks2.enable = lib.mkForce false;
+    # </workarounds>
 
     networking.hostName = hn;
     nixcfg.common.hostColor = "blue";
