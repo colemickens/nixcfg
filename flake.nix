@@ -115,6 +115,11 @@
           raisin = { };
           zeph = { };
         };
+        "riscv64-linux" = {
+          jupitertwo = {
+            extraConfig = [ { nixpkgs.buildPlatform.system = "x86_64-linux"; } ];
+          };
+        };
         "aarch64-linux" = { };
         "aarch64-darwin" = { };
       };
