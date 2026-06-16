@@ -18,6 +18,10 @@ in
     nixpkgs.hostPlatform.system = "riscv64-linux";
     system.stateVersion = "26.05";
 
+    environment.systemPackages = with pkgs; [
+      buildkite-agent
+    ];
+
     time.timeZone = "America/Chicago";
 
     # <workarounds>
