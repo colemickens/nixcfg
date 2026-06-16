@@ -37,7 +37,10 @@
             };
             ui = {
               log-synthetic-elided-nodes = true;
-              default-command = "log -s";
+              default-command = [
+                "log"
+                "-s"
+              ];
               # pager = ":builtin";
             };
             template-aliases = {
