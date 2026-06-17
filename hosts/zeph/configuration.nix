@@ -154,7 +154,6 @@ in
       tmp = {
         useTmpfs = true;
       };
-      bootspec.enable = true;
       lanzaboote = {
         enable = true;
         pkiBundle = "/var/lib/sbctl";
