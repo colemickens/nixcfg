@@ -22,6 +22,7 @@
       prs
       gnupg
       fd
+      sd
       restic
       sops
     ]
