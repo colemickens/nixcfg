@@ -119,6 +119,10 @@
           jupitertwo = {
             extraConfig = [ { nixpkgs.buildPlatform.system = "x86_64-linux"; } ];
           };
+          installer-riscv64 = {
+            path = ./images/installer/configuration-base-riscv64.nix;
+            extraConfig = [ { nixpkgs.buildPlatform.system = "x86_64-linux"; } ];
+          };
         };
         "aarch64-linux" = { };
         "aarch64-darwin" = { };
@@ -137,12 +141,17 @@
         };
         aarch64-linux = {
           installer =
-            (mkSystem "installer-standard-aarch64" {
-              path = ./images/installer/configuration-standard-aarch64.nix;
+            (mkSystem "installer-base-aarch64" {
+              path = ./images/installer/configuration-base-aarch64.nix;
             }).config.system.build.toplevel;
         };
         aarch64-darwin = { };
-        riscv64-linux = { };
+        riscv64-linux = {
+          installer =
+            (mkSystem "installer-base-aarch64" {
+              path = ./images/installer/configuration-base-aarch64.nix;
+            }).config.system.build.toplevel;
+        };
       };
 
       nixosModules = { };

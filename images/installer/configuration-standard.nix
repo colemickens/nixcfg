@@ -1,10 +1,12 @@
-{ lib, ... }:
+{ lib, inputs, ... }:
 
 let
   hn = "installer-standard";
 in
 {
   imports = [
+    inputs.determinate.nixosModules.default
+
     ./configuration-base-installer.nix
 
     ../../profiles/interactive.nix

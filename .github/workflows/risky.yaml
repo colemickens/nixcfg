@@ -29,6 +29,13 @@ jobs:
         rmz_version: "3.1.1" # NEW: Specify rmz version
     - uses: "DeterminateSystems/determinate-nix-action@main"
     - uses: "DeterminateSystems/magic-nix-cache-action@main"
-    - name: build + cache
+    - name: build + cache (jupitertwo)
+      if: success() || failure()
       run: |
-        nix build .#toplevels.jupitertwo -L --keep-going
+        nix build -L --keep-going \
+          .#toplevels.jupitertwo
+    - name: build + cache (riscv64 iso bits)
+      if: success() || failure()
+      run: |
+        nix build -L --keep-going \
+          .#extra.riscv64-linux.installer

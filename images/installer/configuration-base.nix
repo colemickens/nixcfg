@@ -7,7 +7,6 @@
 
 {
   imports = [
-    inputs.determinate.nixosModules.default
     ../../profiles/core.nix
   ];
 
