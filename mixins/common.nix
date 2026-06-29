@@ -8,9 +8,7 @@
 let
   cfg = config.nixcfg.common;
   _kernelPackages =
-    if cfg.useZfs
-    then pkgs.linuxKernel.packages.linux_6_18
-    else pkgs.linux_latest;
+    if cfg.useZfs then pkgs.linuxKernel.packages.linux_6_18 else pkgs.linuxPackages_latest;
   _zfsPackage = pkgs.zfs_2_4;
 in
 {

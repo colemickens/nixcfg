@@ -124,7 +124,7 @@
             extraConfig = [ { nixpkgs.buildPlatform.system = "x86_64-linux"; } ];
           };
           installer-riscv64 = {
-            path = ./images/installer/configuration-base-riscv64.nix;
+            path = ./images/installer/configuration-riscv64.nix;
             extraConfig = [ { nixpkgs.buildPlatform.system = "x86_64-linux"; } ];
           };
         };
@@ -139,22 +139,19 @@
       extra = {
         x86_64-linux = {
           installer =
-            (mkSystem "installer-standard-x86_64" {
-              path = ./images/installer/configuration-standard.nix;
+            (mkSystem "installer-x86_64" {
+              path = ./images/installer/configuration-x86_64.nix;
             }).config.system.build.toplevel;
         };
         aarch64-linux = {
           installer =
-            (mkSystem "installer-base-aarch64" {
-              path = ./images/installer/configuration-base-aarch64.nix;
+            (mkSystem "installer-aarch64" {
+              path = ./images/installer/configuration-aarch64.nix;
             }).config.system.build.toplevel;
         };
         aarch64-darwin = { };
         riscv64-linux = {
-          installer =
-            (mkSystem "installer-base-aarch64" {
-              path = ./images/installer/configuration-base-aarch64.nix;
-            }).config.system.build.toplevel;
+          installer = nixosConfigurations.installer-riscv64.config.system.build.toplevel;
           iso-bits = nixosConfigurations.installer-riscv64.config.system.build.isoImage.inputDerivation;
         };
       };
