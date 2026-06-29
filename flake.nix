@@ -151,6 +151,7 @@
             (mkSystem "installer-base-aarch64" {
               path = ./images/installer/configuration-base-aarch64.nix;
             }).config.system.build.toplevel;
+          iso-bits = nixosConfigurations.installer-riscv64.config.system.build.isoImage.inputDerivation;
         };
       };
 

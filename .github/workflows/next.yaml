@@ -68,8 +68,13 @@ jobs:
       run: |
         nix build -L --keep-going \
           .#toplevels.jupitertwo
-    - name: build + cache (riscv64 iso bits)
+    - name: build + cache (riscv64 installer)
       if: (success() || failure()) && matrix.runner == 'ubuntu-24.04'
       run: |
         nix build -L --keep-going \
           .#extra.riscv64-linux.installer
+    - name: build + cache (riscv64 iso-bits)
+      if: (success() || failure()) && matrix.runner == 'ubuntu-24.04'
+      run: |
+        nix build -L --keep-going \
+          .#extra.riscv64-linux.iso-bits
