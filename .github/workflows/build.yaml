@@ -35,9 +35,6 @@ jobs:
         sudo determinate-nixd upgrade --tools branch/main --daemon branch/main
     - uses: "DeterminateSystems/magic-nix-cache-action@main"
     - name: build + cache
+      if: success() || failure()
       run: |
-        nix flake check --keep-going --build-all -L || true
-    - name: build + cache
-      run: |
-        # run it again, hopefully this time the output is easier to read
         nix flake check --keep-going --build-all -L
