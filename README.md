@@ -1,4 +1,9 @@
 # nixcfg
+
+find this repo on radicle:
+  * https://radicle.network/nodes/iris.radicle.network/rad:z2EyQm4sTaK1NfEKBYZoiUGF76xvH
+  * or: `rad checkout rad:z2EyQm4sTaK1NfEKBYZoiUGF76xvH`
+
 *Nix rules everything around me*
 
 - [nixcfg](#nixcfg)
