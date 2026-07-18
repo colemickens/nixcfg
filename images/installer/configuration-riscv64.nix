@@ -1,8 +1,10 @@
-{ lib, ... }:
+{ lib, inputs, ... }:
 
 {
   imports = [
     ./configuration-base.nix
+
+    "${inputs.nixos-hardware-k3}/spacemit/k3-pico-itx"
   ];
 
   config = {
@@ -10,6 +12,8 @@
 
     nixcfg.common.defaultKernel = lib.mkForce true;
     nixcfg.common.useZfs = lib.mkForce false;
+
+    system.nixos-init.enable = false;
 
     boot.supportedFilesystems = lib.mkForce [
       "btrfs"
