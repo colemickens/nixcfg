@@ -1,9 +1,7 @@
 name: "nixcfg-build"
-concurrency: "nixcfg-build"
+concurrency: "nixcfg-build-${{ github.head_ref || github.ref_name }}"
 on:
   push:
-    branches:
-      - "main"
 jobs:
   "builds":
     permissions:
