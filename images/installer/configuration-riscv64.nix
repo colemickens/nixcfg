@@ -2,6 +2,8 @@
 
 {
   imports = [
+    ../../profiles/addon-riscv64-fixes.nix
+
     ./configuration-base.nix
 
     "${inputs.nixos-hardware-k3}/spacemit/k3-pico-itx"

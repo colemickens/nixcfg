@@ -5,6 +5,8 @@ let
 in
 {
   imports = [
+    ../../profiles/addon-riscv64-fixes.nix
+
     #../../profiles/interactive.nix
     ../../profiles/core.nix
     ../../mixins/common.nix
