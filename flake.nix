@@ -14,8 +14,6 @@
     sops-nix.inputs."nixpkgs".follows = "cmpkgs";
     lanzaboote.url = "github:nix-community/lanzaboote";
 
-    nixos-hardware-k3.url = "github:liberodark/nixos-hardware?ref=spacemit-k3";
-
     ucodenix.url = "github:e-tho/ucodenix";
 
     nix-darwin.url = "github:nix-darwin/nix-darwin";
@@ -151,6 +149,7 @@
         aarch64-darwin = { };
         riscv64-linux = {
           installer = nixosConfigurations.installer-riscv64.config.system.build.toplevel;
+          installer-iso = nixosConfigurations.installer-riscv64.config.system.build.isoImage;
           iso-bits = nixosConfigurations.installer-riscv64.config.system.build.isoImage.inputDerivation;
         };
       };

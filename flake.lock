@@ -503,22 +503,6 @@
         "type": "github"
       }
     },
-    "nixos-hardware-k3": {
-      "locked": {
-        "lastModified": 1781809708,
-        "narHash": "sha256-b6NpVl+Fg0hcxY2Pb5nVK3k2BKUFeKuK76E4xNrtaaM=",
-        "owner": "liberodark",
-        "repo": "nixos-hardware",
-        "rev": "57abfe19b2b7b649b400b8ffbf569c5cf5359047",
-        "type": "github"
-      },
-      "original": {
-        "owner": "liberodark",
-        "ref": "spacemit-k3",
-        "repo": "nixos-hardware",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1782767157,
@@ -705,7 +689,6 @@
         "llm-agents": "llm-agents",
         "nix-darwin": "nix-darwin",
         "nixos-hardware": "nixos-hardware",
-        "nixos-hardware-k3": "nixos-hardware-k3",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "preservation": "preservation",
         "sops-nix": "sops-nix",
