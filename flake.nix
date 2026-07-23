@@ -20,7 +20,7 @@
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     # helix
-    helix.url = "github:helix-editor/helix";
+    helix.url = "github:RossSmyth/helix?ref=clean-grammars";
     helix.inputs.nixpkgs.follows = "cmpkgs";
 
     # preservation
