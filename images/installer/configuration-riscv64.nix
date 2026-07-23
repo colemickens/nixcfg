@@ -6,7 +6,7 @@
 
     ./configuration-base.nix
 
-    "${inputs.nixos-hardware-k3}/spacemit/k3-pico-itx"
+    "${inputs.nixos-hardware}/spacemit/k3-pico-itx"
   ];
 
   config = {

@@ -13,7 +13,7 @@ in
 
     #inputs.determinate.nixosModules.default
 
-    "${inputs.nixos-hardware-k3}/spacemit/k3-pico-itx"
+    "${inputs.nixos-hardware}/spacemit/k3-pico-itx"
   ];
 
   config = {
@@ -24,10 +24,10 @@ in
       buildkite-agent
 
       # other firmware/sdcard bits; prebuild for when HW arrives
-      (pkgs.callPackage "${inputs.nixos-hardware-k3}/spacemit/k3-pico-itx/edk2.nix" {})
-      (pkgs.callPackage "${inputs.nixos-hardware-k3}/spacemit/k3-pico-itx/fsbl.nix" {})
-      (pkgs.callPackage "${inputs.nixos-hardware-k3}/spacemit/k3-pico-itx/opensbi.nix" {})
-      (pkgs.callPackage "${inputs.nixos-hardware-k3}/spacemit/k3-pico-itx/uboot.nix" {})
+      (pkgs.callPackage "${inputs.nixos-hardware}/spacemit/k3-pico-itx/edk2.nix" {})
+      (pkgs.callPackage "${inputs.nixos-hardware}/spacemit/k3-pico-itx/fsbl.nix" {})
+      (pkgs.callPackage "${inputs.nixos-hardware}/spacemit/k3-pico-itx/opensbi.nix" {})
+      (pkgs.callPackage "${inputs.nixos-hardware}/spacemit/k3-pico-itx/uboot.nix" {})
     ];
 
     time.timeZone = "America/Chicago";
