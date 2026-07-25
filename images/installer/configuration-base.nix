@@ -14,9 +14,6 @@
   config = {
     networking.hostName = "installer";
 
-    nixcfg.common.skipMitigations = true;
-    nixcfg.common.defaultKernel = true;
-
     system.stateVersion = "26.05";
 
     boot.swraid.enable = lib.mkForce false;

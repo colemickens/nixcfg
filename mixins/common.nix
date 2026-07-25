@@ -7,9 +7,6 @@
 
 let
   cfg = config.nixcfg.common;
-  _kernelPackages =
-    if cfg.useZfs then pkgs.linuxKernel.packages.linux_6_18 else pkgs.linuxPackages_latest;
-  _zfsPackage = pkgs.zfs_2_4;
 in
 {
   imports = [
@@ -20,15 +17,6 @@ in
 
   options = {
     nixcfg.common = {
-      defaultKernel = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = ''
-          ideally, all machines run mainline. this is mostly disabled for mobile-nixos devices
-          (also, in most cases linuxPackages could just be overridden directly)
-          # TODO: it would be nice if mobile-nixos didn't make me need this...
-        '';
-      };
       wifiWorkaround = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -57,10 +45,6 @@ in
         type = lib.types.str;
         default = "cyan";
         description = "this is used as a hostname-hint-accent in zellij/waybar/shell prompts";
-      };
-      skipMitigations = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
       };
     };
   };
@@ -111,10 +95,6 @@ in
       initrd.systemd.enable = lib.mkDefault true;
       initrd.supportedFilesystems = ([ "ntfs" ] ++ lib.optionals (cfg.useZfs) [ "zfs" ]);
 
-      zfs.package = _zfsPackage;
-
-      kernelPackages = _kernelPackages;
-      kernelParams = lib.mkIf cfg.skipMitigations [ "mitigations=off" ];
       kernel.sysctl = {
         "fs.file-max" = 100000;
         "fs.inotify.max_user_instances" = 256;

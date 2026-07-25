@@ -56,7 +56,6 @@ in
     networking.hostName = hn;
 
     nixcfg.common.hostColor = "magenta";
-    nixcfg.common.skipMitigations = false;
 
     nix = {
       settings = {
