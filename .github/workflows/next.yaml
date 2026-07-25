@@ -77,4 +77,4 @@ jobs:
       if: (success() || failure()) && matrix.runner == 'ubuntu-24.04'
       run: |
         nix build -L --keep-going \
-          .#extra.riscv64-linux.iso-bits
+          .#extra.riscv64-linux.installer-sdimage-bits

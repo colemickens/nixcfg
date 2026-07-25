@@ -40,6 +40,7 @@ in
     networking.hostName = hn;
     nixcfg.common.hostColor = "blue";
     nixcfg.common.wifiWorkaround = true;
+    nixcfg.common.defaultKernel = lib.mkForce false;
 
     services.tailscale.useRoutingFeatures = "server";
 

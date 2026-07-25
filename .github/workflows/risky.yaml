@@ -43,4 +43,4 @@ jobs:
       if: success() || failure()
       run: |
         nix build -L --keep-going \
-          .#extra.riscv64-linux.iso-bits
+          .#extra.riscv64-linux.installer-sdimage-bits

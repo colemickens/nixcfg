@@ -6,13 +6,13 @@
 
     ./configuration-base.nix
 
-    "${inputs.nixos-hardware}/spacemit/k3-pico-itx"
+    "${inputs.nixos-hardware}/spacemit/k3-pico-itx/sd-image.nix"
   ];
 
   config = {
     nixpkgs.hostPlatform.system = "riscv64-linux";
 
-    nixcfg.common.defaultKernel = lib.mkForce true;
+    nixcfg.common.defaultKernel = lib.mkForce false;
     nixcfg.common.useZfs = lib.mkForce false;
 
     system.nixos-init.enable = false;

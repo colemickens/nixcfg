@@ -147,10 +147,10 @@
             }).config.system.build.toplevel;
         };
         aarch64-darwin = { };
-        riscv64-linux = {
+        riscv64-linux = rec {
           installer = nixosConfigurations.installer-riscv64.config.system.build.toplevel;
-          installer-iso = nixosConfigurations.installer-riscv64.config.system.build.isoImage;
-          iso-bits = nixosConfigurations.installer-riscv64.config.system.build.isoImage.inputDerivation;
+          installer-sdimage = nixosConfigurations.installer-riscv64.config.system.build.sdImage;
+          installer-sdimage-bits = installer-sdimage.inputDerivation;
         };
       };
 
