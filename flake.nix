@@ -9,7 +9,7 @@
 
     home-manager.url = "github:nix-community/home-manager?ref=master";
     home-manager.inputs."nixpkgs".follows = "cmpkgs";
-    nixos-hardware.url = "github:NixOS/nixos-hardware";
+    nixos-hardware.url = "github:colemickens/nixos-hardware?ref=colemickens/k3-cross";
     sops-nix.url = "github:Mic92/sops-nix/master";
     sops-nix.inputs."nixpkgs".follows = "cmpkgs";
     lanzaboote.url = "github:nix-community/lanzaboote";
