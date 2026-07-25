@@ -7,7 +7,7 @@ in
   imports = [
     ../../profiles/addon-riscv64-fixes.nix
 
-    #../../profiles/interactive.nix
+    # ../../profiles/interactive.nix
     ../../profiles/core.nix
     ../../mixins/common.nix
 
@@ -48,12 +48,12 @@ in
     fileSystems = {
       "/" = {
         fsType = "ext4";
-        device = "/dev/disk/by-partlabel/root";
+        device = "/dev/disk/by-partlabel/nixos-rootfs";
         neededForBoot = true;
       };
       "/boot" = {
         fsType = "vfat";
-        device = "/dev/disk/by-partlabel/boot";
+        device = "/dev/disk/by-partlabel/ESP";
         neededForBoot = true;
       };
     };

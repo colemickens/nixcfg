@@ -121,7 +121,7 @@
             extraConfig = [ { nixpkgs.buildPlatform.system = "x86_64-linux"; } ];
           };
           installer-riscv64 = {
-            path = ./images/installer/configuration-riscv64.nix;
+            path = ./images/installer/configuration-sdcard-riscv64.nix;
             extraConfig = [ { nixpkgs.buildPlatform.system = "x86_64-linux"; } ];
           };
         };
@@ -137,13 +137,13 @@
         x86_64-linux = {
           installer =
             (mkSystem "installer-x86_64" {
-              path = ./images/installer/configuration-x86_64.nix;
+              path = ./images/installer/configuration-iso-x86_64.nix;
             }).config.system.build.toplevel;
         };
         aarch64-linux = {
           installer =
             (mkSystem "installer-aarch64" {
-              path = ./images/installer/configuration-aarch64.nix;
+              path = ./images/installer/configuration-iso-aarch64.nix;
             }).config.system.build.toplevel;
         };
         aarch64-darwin = { };

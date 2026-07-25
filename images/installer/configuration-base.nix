@@ -7,7 +7,6 @@
 
 {
   imports = [
-    "${modulesPath}/installer/cd-dvd/installation-cd-minimal.nix"
     ../../profiles/core.nix
   ];
 

@@ -12,7 +12,11 @@
   config = {
     nixpkgs.hostPlatform.system = "riscv64-linux";
 
-    system.nixos-init.enable = false;
+    sdImage.compressImage = false;
+
+    # system.etc.overlay.enable = lib.mkForce false;
+    # system.nixos-init.enable = lib.mkForce false;
+    # boot.initrd.systemd.enable = lib.mkForce false;
 
     boot.supportedFilesystems = lib.mkForce [
       "btrfs"
