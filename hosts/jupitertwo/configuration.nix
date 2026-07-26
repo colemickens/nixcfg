@@ -16,6 +16,11 @@ in
     ../../profiles/core.nix
     ../../mixins/common.nix
 
+    ../../mixins/bottom.nix
+    ../../mixins/helix.nix
+    ../../mixins/nushell.nix
+    ../../mixins/zellij.nix
+
     #inputs.determinate.nixosModules.default
 
     "${inputs.nixos-hardware}/spacemit/k3-pico-itx"
@@ -50,8 +55,6 @@ in
     environment.systemPackages = with pkgs; [
       buildkite-agent
       github-act-runner
-      helix
-      btm
 
       # other firmware/sdcard bits; prebuild for when HW arrives
       (pkgs.callPackage "${inputs.nixos-hardware}/spacemit/k3-pico-itx/edk2.nix" { })
