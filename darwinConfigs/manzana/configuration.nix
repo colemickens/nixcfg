@@ -42,6 +42,7 @@
 
     determinateNix = {
       enable = true;
+      customSettings.trusted-users = [ "cole" "@admin" ];
       determinateNixd = {
         builder = {
           state = "enabled";
