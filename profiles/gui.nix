@@ -91,8 +91,8 @@
             # copied from profiles/interactive -> PASSWORD_STORE_DIR
             storePath = "${hm.config.xdg.dataHome}/password-store";
           };
-          gpg-agent.pinentry.package = pkgs.wayprompt;
-          gpg-agent.pinentry.program = "pinentry-wayprompt";
+          gpg-agent.pinentry.package = pkgs.pinentry-egui;
+          gpg-agent.pinentry.program = "pinentry-egui";
         };
 
         home.packages = lib.mkMerge [
