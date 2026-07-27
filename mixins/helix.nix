@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   config,
   inputs,
   ...
@@ -77,7 +78,7 @@ in
         # '';
         programs.helix = {
           enable = true;
-          package = helixPkg;
+          package = lib.mkIf (pkgs.stdenv.hostPlatform.system != "riscv64-linux") helixPkg;
 
           settings = {
             theme = {
