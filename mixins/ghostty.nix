@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, lib, ... }:
 
 let
   macSettings = {
@@ -11,6 +11,7 @@ let
     background-blur-radius = 40;
     term = "xterm-256color";
     theme = "dark:Catppuccin Frappe,light:Catppuccin Latte";
+    auto-update-channel = "tip";
   };
   linuxSettings = {
     app-notifications = false;
