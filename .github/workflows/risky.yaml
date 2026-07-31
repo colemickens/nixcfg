@@ -27,8 +27,12 @@ jobs:
     - name: build + cache (jupitertwo) (dump)
       if: success() || failure()
       run: |
+        set -x
         x="$(nix eval --raw .#toplevels.jupitertwo)"
+
+        # but like, this shouldn't be needed, the step before DID SUCCEED ???
         echo $x
+        nix build -j0 $x
         nix-store -q --graph $x
     - name: build + cache (riscv64 installer)
       if: success() || failure()
