@@ -24,6 +24,7 @@
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.opencode
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.omp
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.hermes-agent
+            kraken-cli
           ];
           sessionVariables = {
             ENVRC_USE_FLAKE = 1;
