@@ -44,7 +44,7 @@
       },
       "original": {
         "owner": "colemickens",
-        "ref": "cmpkgs",
+        "ref": "colemickens/nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -545,16 +545,16 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1785301185,
-        "narHash": "sha256-eoS3KQTO0aPWXZvIaRbRAzSSHW3l5wdMFXtT1ISfoKA=",
-        "owner": "nixos",
+        "lastModified": 1785468501,
+        "narHash": "sha256-MS58CHeixI2/i6Ujy37NnQ9GGexCwxkugXuaqG8FJWY=",
+        "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "9bc02893134c733dd85de46ee4fb2fac696b5529",
+        "rev": "d328edbfa9204c04d5e35fd14be978f810e6cb46",
         "type": "github"
       },
       "original": {
-        "owner": "nixos",
-        "ref": "nixpkgs-unstable",
+        "owner": "colemickens",
+        "ref": "colemickens/nixpkgs-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
