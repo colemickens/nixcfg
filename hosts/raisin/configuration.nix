@@ -13,6 +13,7 @@ in
 
     ../../profiles/interactive.nix
     ../../profiles/addon-laptop.nix
+    ../../profiles/addon-devtools.nix
 
     ../../mixins/syncthing.nix
     ../../mixins/tailscale.nix
