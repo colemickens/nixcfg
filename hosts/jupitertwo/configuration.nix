@@ -21,6 +21,8 @@ in
     ../../mixins/nushell.nix
     ../../mixins/zellij.nix
 
+    ./extra.nix
+
     #inputs.determinate.nixosModules.default
 
     "${inputs.nixos-hardware}/spacemit/k3-pico-itx"
