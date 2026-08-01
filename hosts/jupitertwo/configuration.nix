@@ -50,6 +50,7 @@ in
       extra-substituters = [ "https://cache.flakehub.com" ];
       extra-trusted-substituters = [ "https://cache.flakehub.com" ];
       netrc-file = "/nix/var/determinate/netrc";
+      extra-experimental-features = [ "nix-command" "flakes" ];
     };
 
     environment.systemPackages = with pkgs; [
