@@ -77,6 +77,10 @@ in
     nixcfg.common.hostColor = "blue";
     nixcfg.common.wifiWorkaround = false;
 
+    networking.networkmanager.enable = true;
+    networking.useDHCP = false;
+    networking.dhcpcd.enable = false;
+
     services.tailscale.useRoutingFeatures = "server";
 
     systemd.network.enable = true;
