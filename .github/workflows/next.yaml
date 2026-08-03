@@ -16,7 +16,7 @@ jobs:
       with:
         ref: main
     - uses: "DeterminateSystems/determinate-nix-action@main"
-    - uses: webfactory/ssh-agent@v0.9.0
+    - uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
     - name: prep
