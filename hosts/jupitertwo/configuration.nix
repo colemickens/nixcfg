@@ -58,6 +58,7 @@ in
     environment.systemPackages = with pkgs; [
       buildkite-agent
       github-act-runner
+      ripgrep
 
       # other firmware/sdcard bits; prebuild for when HW arrives
       (pkgs.callPackage "${inputs.nixos-hardware}/spacemit/k3-pico-itx/edk2.nix" { })
