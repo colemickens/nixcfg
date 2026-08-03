@@ -1,11 +1,21 @@
 name: "nixcfg-risky"
-concurrency: "nixcfg-risky-${{ github.head_ref || github.ref_name }}"
+# TODO: this ... still isn't right now though :thinking: :
+concurrency: "nixcfg-risky-${{ inputs.key || github.head_ref || github.ref_name }}"
 on:
   push:
     branches: [ "main" ]
   workflow_call:
+    inputs:
+      key:
+        required: true
+        type: string
+      git_ref:
+        required: true
+        type: string
 jobs:
   "builds":
+    env:
+      GIT_REF: ${{ inputs.git_ref || github.sha }}
     permissions:
       id-token: "write"
       contents: "read"
@@ -17,6 +27,8 @@ jobs:
     runs-on: ${{ matrix.runner }}
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        ref: ${{ env.GIT_REF }}
     - uses: "DeterminateSystems/determinate-nix-action@main"
     - uses: "DeterminateSystems/magic-nix-cache-action@main"
     - name: build + cache (jupitertwo)
@@ -24,23 +36,8 @@ jobs:
       run: |
         nix build -L --keep-going \
           .#toplevels.jupitertwo
-    - name: build + cache (jupitertwo) (dump)
-      if: success() || failure()
-      run: |
-        set -x
-        x="$(nix eval --raw .#toplevels.jupitertwo)"
-
-        # but like, this shouldn't be needed, the step before DID SUCCEED ???
-        echo $x
-        nix build -j0 $x
-        nix-store -q --graph $x
     - name: build + cache (riscv64 installer)
       if: success() || failure()
       run: |
         nix build -L --keep-going \
           .#extra.riscv64-linux.installer
-    - name: build + cache (riscv64 iso bits)
-      if: success() || failure()
-      run: |
-        nix build -L --keep-going \
-          .#extra.riscv64-linux.installer-sdimage-bits

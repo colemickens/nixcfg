@@ -1,11 +1,20 @@
 name: "nixcfg-build"
-concurrency: "nixcfg-build-${{ github.head_ref || github.ref_name }}"
+concurrency: "nixcfg-build-${{ inputs.key || github.head_ref || github.ref_name }}"
 on:
   push:
     branches: [ "main" ]
   workflow_call:
+    inputs:
+      key:
+        required: true
+        type: string
+      git_ref:
+        required: true
+        type: string
 jobs:
   "builds":
+    env:
+      GIT_REF: ${{ inputs.git_ref || github.sha }}
     permissions:
       id-token: "write"
       contents: "read"
@@ -19,6 +28,8 @@ jobs:
     runs-on: ${{ matrix.runner }}
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        ref: ${{ env.GIT_REF }}
     - uses: endersonmenezes/free-disk-space@7901478139cff6e9d44df5972fd8ab8fcade4db1 # v3.2.2
       with:
         remove_android: true
@@ -39,24 +50,3 @@ jobs:
       run: |
         ulimit -a
         nix flake check --keep-going --build-all -L
-    - name: build + cache
-      if: ${{ success() || failure() }}
-      run: |
-        # run it again, hopefully this time the output is easier to read
-        ulimit -a
-        nix flake check --keep-going --build-all -L
-    - name: build + cache (jupitertwo)
-      if: (success() || failure()) && matrix.runner == 'ubuntu-24.04'
-      run: |
-        nix build -L --keep-going \
-          .#toplevels.jupitertwo
-    - name: build + cache (riscv64 installer)
-      if: (success() || failure()) && matrix.runner == 'ubuntu-24.04'
-      run: |
-        nix build -L --keep-going \
-          .#extra.riscv64-linux.installer
-    - name: build + cache (riscv64 iso-bits)
-      if: (success() || failure()) && matrix.runner == 'ubuntu-24.04'
-      run: |
-        nix build -L --keep-going \
-          .#extra.riscv64-linux.installer-sdimage-bits

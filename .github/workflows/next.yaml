@@ -10,6 +10,8 @@ jobs:
       id-token: "write"
       contents: "write"
     runs-on: "ubuntu-24.04"
+    outputs:
+      next_git_ref: ${{ steps.update.outputs.next_git_ref }}
     steps:
     - name: checkout
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -22,10 +24,17 @@ jobs:
     - name: prep
       run: nix shell nixpkgs#jujutsu -c ./.github/prep.sh
     - name: update
+      id: update
       run: nix shell nixpkgs#jujutsu -c ./.github/update.sh
   "builds":
     needs: "update"
     uses: ./.github/workflows/build.yaml
+    with:
+      git_ref: ${{needs.update.outputs.next_git_ref}}
+      key: main-next-wip
   "risky":
     needs: "update"
     uses: ./.github/workflows/risky.yaml
+    with:
+      git_ref: ${{needs.update.outputs.next_git_ref}}
+      key: main-next-wip

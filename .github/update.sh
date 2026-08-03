@@ -44,10 +44,10 @@ jj bookmark track colemickens/nixos-unstable --remote origin
 jj bookmark track colemickens/nixpkgs-unstable --remote origin
 
 # 6. Rebase (Note the `-d` flag required for the destination in recent jj versions)
-jj rebase -b colemickens/nixos-unstable -d nixos-unstable@nixos
-jj rebase -b colemickens/nixpkgs-unstable -d nixpkgs-unstable@nixos
-jj bookmark set colemickens/wip/nixos-unstable -r colemickens/nixos-unstable
-jj bookmark set colemickens/wip/nixpkgs-unstable -r colemickens/nixpkgs-unstable
+jj bookmark set colemickens/wip/nixos-unstable -r colemickens/nixos-unstable --allow-backwards
+jj bookmark set colemickens/wip/nixpkgs-unstable -r colemickens/nixpkgs-unstable --allow-backwards
+jj rebase -b colemickens/wip/nixos-unstable -d nixos-unstable@nixos
+jj rebase -b colemickens/wip/nixpkgs-unstable -d nixpkgs-unstable@nixos
 
 # 7. Push explicitly to avoid pushing unintended local state
 jj git push --remote origin -b colemickens/wip/nixos-unstable -b colemickens/wip/nixpkgs-unstable
@@ -66,6 +66,10 @@ if git diff --exit-code HEAD origin/main-next-wip; then
   exit 0
 fi
 
-# we want to push as colebot tho
+# we want to push as colebot tho, so:
 git remote set-url --push origin git@github.com:colemickens/nixcfg
+
 git push --force-with-lease origin main-next-wip
+
+next_git_ref="$(git rev-parse main-next-wip)"
+echo "next_git_ref=${next_git_ref}" >> "$GITHUB_OUTPUT"
