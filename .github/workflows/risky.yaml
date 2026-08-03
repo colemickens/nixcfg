@@ -1,9 +1,9 @@
 name: "nixcfg-risky"
-concurrency: "nixcfg-risky"
+concurrency: "nixcfg-risky-${{ github.head_ref || github.ref_name }}"
 on:
   push:
-    branches:
-      - "main"
+    branches: [ "main" ]
+  workflow_call:
 jobs:
   "builds":
     permissions:

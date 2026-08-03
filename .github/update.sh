@@ -3,6 +3,7 @@ set -x
 set -euo pipefail
 
 git switch main-next-wip
+git reset --hard origin/main
 
 mkdir -p /tmp/nixpkgs-ci
 pushd /tmp/nixpkgs-ci
@@ -13,8 +14,16 @@ git init /tmp/nixpkgs-ci
 
 # 2. Add remotes and restrict them to ONLY the branches you care about
 git remote add origin git@github.com:colemickens/nixpkgs
+# uh, somehow this was waaaay slower:
+# git remote add origin https://github.com/colemickens/nixpkgs
+# git remote set-url --push origin git@github.com:colemickens/nixpkgs
+
 git config remote.origin.promisor true
-git remote set-branches origin colemickens/wip/nixos-unstable colemickens/wip/nixpkgs-unstable
+git remote set-branches origin \
+  colemickens/wip/nixos-unstable \
+  colemickens/wip/nixpkgs-unstable \
+  colemickens/nixos-unstable \
+  colemickens/nixpkgs-unstable
 
 git remote add nixos https://github.com/NixOS/nixpkgs.git
 git config remote.nixos.promisor true
@@ -47,8 +56,8 @@ jj git push --remote origin -b colemickens/wip/nixos-unstable -b colemickens/wip
 popd
 
 nix flake update \
-  --override-input cmpkgs colemickens/wip/nixos-unstable \
-  --override-input nixpkgs-unstable colemickens/wip/nixpkgs-unstable \
+  --override-input cmpkgs github:colemickens/nixpkgs?ref=colemickens/wip/nixos-unstable \
+  --override-input nixpkgs-unstable github:colemickens/nixpkgs?ref=colemickens/wip/nixpkgs-unstable \
   --commit-lock-file
 
 if git diff --exit-code HEAD origin/main-next-wip; then
@@ -57,4 +66,6 @@ if git diff --exit-code HEAD origin/main-next-wip; then
   exit 0
 fi
 
+# we want to push as colebot tho
+git remote set-url --push origin git@github.com:colemickens/nixcfg
 git push --force-with-lease origin main-next-wip

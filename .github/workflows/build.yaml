@@ -2,6 +2,8 @@ name: "nixcfg-build"
 concurrency: "nixcfg-build-${{ github.head_ref || github.ref_name }}"
 on:
   push:
+    branches: [ "main" ]
+  workflow_call:
 jobs:
   "builds":
     permissions:
@@ -33,6 +35,28 @@ jobs:
         sudo determinate-nixd upgrade --tools branch/main --daemon branch/main
     - uses: "DeterminateSystems/magic-nix-cache-action@main"
     - name: build + cache
-      if: success() || failure()
+      if: ${{ success() || failure() }}
       run: |
+        ulimit -a
         nix flake check --keep-going --build-all -L
+    - name: build + cache
+      if: ${{ success() || failure() }}
+      run: |
+        # run it again, hopefully this time the output is easier to read
+        ulimit -a
+        nix flake check --keep-going --build-all -L
+    - name: build + cache (jupitertwo)
+      if: (success() || failure()) && matrix.runner == 'ubuntu-24.04'
+      run: |
+        nix build -L --keep-going \
+          .#toplevels.jupitertwo
+    - name: build + cache (riscv64 installer)
+      if: (success() || failure()) && matrix.runner == 'ubuntu-24.04'
+      run: |
+        nix build -L --keep-going \
+          .#extra.riscv64-linux.installer
+    - name: build + cache (riscv64 iso-bits)
+      if: (success() || failure()) && matrix.runner == 'ubuntu-24.04'
+      run: |
+        nix build -L --keep-going \
+          .#extra.riscv64-linux.installer-sdimage-bits
