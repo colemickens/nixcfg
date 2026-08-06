@@ -469,16 +469,16 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1785010432,
-        "narHash": "sha256-YXPYgmzWUL6QJLk4Ew31Z+IQBzeMdL5Byd9xEu2zDwU=",
+        "lastModified": 1785989404,
+        "narHash": "sha256-Ft4dP9T7R9MswKRhd7grDdVcbdksU/qQZsODLv5ftU4=",
         "owner": "colemickens",
         "repo": "nixos-hardware",
-        "rev": "e37920a6351f39b417c2be7afcc92b7bdbdfb910",
+        "rev": "d1e7ca852c3711314d26efff82f6c214ce5454fd",
         "type": "github"
       },
       "original": {
         "owner": "colemickens",
-        "ref": "colemickens/k3-cross",
+        "ref": "colemickens/main",
         "repo": "nixos-hardware",
         "type": "github"
       }
