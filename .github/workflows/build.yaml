@@ -50,4 +50,9 @@ jobs:
       if: ${{ success() || failure() }}
       run: |
         ulimit -a
+        nix flake archive
+    - name: build + cache
+      if: ${{ success() || failure() }}
+      run: |
+        ulimit -a
         nix flake check --keep-going --build-all -L
