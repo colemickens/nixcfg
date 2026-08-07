@@ -120,6 +120,7 @@
           jupitertwo = {
             extraConfig = [ { nixpkgs.buildPlatform.system = "x86_64-linux"; } ];
           };
+          jupitertwo-native = {};
           installer-riscv64 = {
             path = ./images/installer/configuration-sdcard-riscv64.nix;
             extraConfig = [ { nixpkgs.buildPlatform.system = "x86_64-linux"; } ];
