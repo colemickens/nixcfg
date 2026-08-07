@@ -14,6 +14,8 @@
 
     sdImage.compressImage = false;
 
+    nixcfg.common.useZfs = false;
+
     # system.etc.overlay.enable = lib.mkForce false;
     # system.nixos-init.enable = lib.mkForce false;
     # boot.initrd.systemd.enable = lib.mkForce false;
