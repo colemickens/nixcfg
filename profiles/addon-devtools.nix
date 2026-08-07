@@ -20,6 +20,7 @@
             radicle-node
 
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.antigravity-cli
+            inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.goose-cli
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.pi
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.nanocoder
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.opencode
