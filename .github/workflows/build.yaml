@@ -22,7 +22,8 @@ jobs:
       fail-fast: false
       matrix:
         runner:
-        - "ubuntu-24.04"
+        #- "ubuntu-24.04"
+        - "namespace-profile-amd64"
         - "ubuntu-24.04-arm"
         - "macos-26"
     runs-on: ${{ matrix.runner }}
