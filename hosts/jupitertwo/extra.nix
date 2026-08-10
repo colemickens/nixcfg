@@ -15,8 +15,6 @@
       ];
       extra-substituters = [ "https://cache.cum.navy" ];
       extra-trusted-substituters = [ "https://cache.cum.navy" ];
-      netrc-file = "/nix/var/determinate/netrc";
-      extra-experimental-features = [ "nix-command" "flakes" ];
     };
   };
 }
