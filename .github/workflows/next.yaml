@@ -26,6 +26,12 @@ jobs:
     - name: update
       id: update
       run: nix shell nixpkgs#jujutsu -c ./.github/update.sh
+    - name: archive
+      if: ${{ success() || failure() }}
+      run: |
+        set -x; set -euo pipefail
+        ulimit -a
+        nix flake archive
   "builds":
     needs: "update"
     uses: ./.github/workflows/build.yaml
