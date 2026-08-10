@@ -28,6 +28,7 @@
             ".direnv"
             ".vscode"
             ".DS_Store"
+            ".claude"
           ];
 
           includes = [
