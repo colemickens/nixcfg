@@ -6,6 +6,7 @@
 
     nixos-unstable.url = "github:colemickens/nixpkgs?ref=colemickens/nixos-unstable";
     nixpkgs-unstable.url = "github:colemickens/nixpkgs?ref=colemickens/nixpkgs-unstable";
+    nixpkgs-riscv.url = "github:colemickens/nixpkgs?ref=colemickens/riscv";
 
     home-manager.url = "github:nix-community/home-manager?ref=master";
     home-manager.inputs."nixpkgs".follows = "nixos-unstable";
@@ -119,13 +120,24 @@
         "riscv64-linux" = {
           jupitertwo-cross = {
             path = ./hosts/jupitertwo/cross.nix;
+            pkgs = inputs.nixpkgs-riscv;
             extraConfig = [ { nixpkgs.buildPlatform.system = "x86_64-linux"; } ];
+          };
+          jupitertwo-cross-determinate = {
+            path = ./hosts/jupitertwo/cross.nix;
+            pkgs = inputs.nixpkgs-riscv;
+            extraConfig = [
+              { nixpkgs.buildPlatform.system = "x86_64-linux"; }
+              { imports = [ inputs.determinate.nixosModules.default ]; }
+            ];
           };
           jupitertwo-native = {
             path = ./hosts/jupitertwo/native.nix;
+            pkgs = inputs.nixpkgs-riscv;
           };
           installer-riscv64 = {
             path = ./images/installer/configuration-sdcard-riscv64.nix;
+            pkgs = inputs.nixpkgs-riscv;
             extraConfig = [ { nixpkgs.buildPlatform.system = "x86_64-linux"; } ];
           };
         };

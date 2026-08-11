@@ -9,7 +9,8 @@ nixremote="ssh-ng://cole@jupitertwo"
 export SSH_AUTH_SOCK="/var/run/com.apple.launchd.7mZ89cs5gV/Listeners"
 
 overrides=(
-  --override-input nixos-unstable ~/code/nixpkgs
+  --inputs-from .
+  # --override-input nixpkgs-riscv ~/code/nixpkgs
   --override-input determinate ~/work/code/determinate
   --override-input determinate/determinate-nixd ~/work/code/determinate-nixd
   --override-input determinate/determinate-nixd/fenix ~/work/code/fenix

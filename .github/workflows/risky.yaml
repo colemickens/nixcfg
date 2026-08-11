@@ -30,6 +30,11 @@ jobs:
       with:
         ref: ${{ env.GIT_REF }}
     - uses: "DeterminateSystems/determinate-nix-action@main"
+      with:
+        extra-conf: |
+          extra-trusted-public-keys = cache.cum.navy-1:IFGBSHhUYM3c+2sJj0MMwcCG+9bOr5UahzdnPsV9JKA=
+          extra-substituters = https://cache.cum.navy
+          extra-trusted-substituters = https://cache.cum.navy
     - uses: "DeterminateSystems/magic-nix-cache-action@main"
     - name: Breakpoint
       if: github.event_name == 'workflow_dispatch'

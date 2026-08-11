@@ -42,6 +42,11 @@ jobs:
         rm_cmd: "rmz"        # NEW: Faster deletion
         rmz_version: "3.2.0" # NEW: Specify rmz version
     - uses: "DeterminateSystems/determinate-nix-action@main"
+      with:
+        extra-conf: |
+          extra-trusted-public-keys = cache.cum.navy-1:IFGBSHhUYM3c+2sJj0MMwcCG+9bOr5UahzdnPsV9JKA=
+          extra-substituters = https://cache.cum.navy
+          extra-trusted-substituters = https://cache.cum.navy
     - name: Upgrade determinate-nixd to latest
       run: |
         sudo determinate-nixd upgrade --tools branch/main --daemon branch/main
