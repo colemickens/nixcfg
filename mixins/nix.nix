@@ -47,12 +47,12 @@
           flake = inputs.self;
         };
 
-        cmpkgs = {
+        nixos-unstable = {
           from = {
-            id = "cmpkgs";
+            id = "nixos-unstable";
             type = "indirect";
           };
-          flake = inputs.cmpkgs;
+          flake = inputs.nixos-unstable;
         };
       };
       extraOptions = ''

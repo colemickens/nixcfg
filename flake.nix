@@ -4,14 +4,14 @@
   inputs = {
     lib-aggregate.url = "github:nix-community/lib-aggregate";
 
-    cmpkgs.url = "github:colemickens/nixpkgs?ref=colemickens/nixos-unstable";
+    nixos-unstable.url = "github:colemickens/nixpkgs?ref=colemickens/nixos-unstable";
     nixpkgs-unstable.url = "github:colemickens/nixpkgs?ref=colemickens/nixpkgs-unstable";
 
     home-manager.url = "github:nix-community/home-manager?ref=master";
-    home-manager.inputs."nixpkgs".follows = "cmpkgs";
+    home-manager.inputs."nixpkgs".follows = "nixos-unstable";
     nixos-hardware.url = "github:colemickens/nixos-hardware?ref=colemickens/main";
     sops-nix.url = "github:Mic92/sops-nix/master";
-    sops-nix.inputs."nixpkgs".follows = "cmpkgs";
+    sops-nix.inputs."nixpkgs".follows = "nixos-unstable";
     lanzaboote.url = "github:nix-community/lanzaboote";
 
     ucodenix.url = "github:e-tho/ucodenix";
@@ -21,14 +21,14 @@
 
     # helix
     helix.url = "github:RossSmyth/helix?ref=clean-grammars";
-    helix.inputs.nixpkgs.follows = "cmpkgs";
+    helix.inputs.nixpkgs.follows = "nixos-unstable";
 
     # preservation
     preservation.url = "github:nix-community/preservation";
 
     # random dev tools:
     ghostty.url = "github:ghostty-org/ghostty";
-    ghostty.inputs."nixpkgs".follows = "cmpkgs";
+    ghostty.inputs."nixpkgs".follows = "nixos-unstable";
 
     # determinate
     determinate.url = "github:DeterminateSystems/determinate";
@@ -74,14 +74,14 @@
             config = ({ allowAliases = false; } // extraCfg);
           }
         ));
-      pkgs = importPkgs inputs.cmpkgs { };
-      pkgsUnfree = importPkgs inputs.cmpkgs { allowUnfree = true; };
+      pkgs = importPkgs inputs.nixos-unstable { };
+      pkgsUnfree = importPkgs inputs.nixos-unstable { allowUnfree = true; };
 
       mkSystem =
         n: _v:
         let
           defaults = {
-            pkgs = inputs.cmpkgs;
+            pkgs = inputs.nixos-unstable;
             path = ./hosts/${n}/configuration.nix;
             extraConfig = [ { } ];
           };

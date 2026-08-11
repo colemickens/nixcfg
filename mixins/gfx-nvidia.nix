@@ -26,7 +26,7 @@ in
       EGL_PLATFORM = "wayland";
     };
 
-    # this requires "cmpkgs-opengl" which ... you know...
+    # this requires "nixos-unstable-opengl" which ... you know...
     # hardware.gpu.nvidia = {
     #   enable = true;
     #   package = nvidiaPkg;
