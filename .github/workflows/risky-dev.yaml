@@ -1,0 +1,26 @@
+name: "nixcfg-risky-dev"
+concurrency: "nixcfg-risky-dev"
+on:
+  workflow_dispatch:
+jobs:
+  "dev":
+    env:
+      GIT_REF: ${{ inputs.git_ref || github.sha }}
+    permissions:
+      id-token: "write"
+      contents: "read"
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+        - "namespace-profile-amd64"
+    runs-on: ${{ matrix.runner }}
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        ref: ${{ env.GIT_REF }}
+    - uses: "DeterminateSystems/determinate-nix-action@main"
+    - uses: "DeterminateSystems/magic-nix-cache-action@main"
+    - name: Breakpoint
+      if: github.event_name == 'workflow_dispatch'
+      uses: namespacelabs/breakpoint-action@18b8b1dc6ac651288cfffb20bee1a447632997a1 # v0.0.16
