@@ -39,11 +39,6 @@ jobs:
       run: |
         nix build -L --keep-going \
           .#toplevels.jupitertwo-cross
-    # - name: build + cache (jupitertwo-cross-determinate)
-    #   if: success() || failure()
-    #   run: |
-    #     nix build -L --keep-going \
-    #       .#toplevels.jupitertwo-cross
     - name: build + cache (riscv64 installer)
       if: success() || failure()
       run: |
