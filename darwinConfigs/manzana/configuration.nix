@@ -58,6 +58,7 @@
 
     environment.variables = {
       EDITOR = "hx"; # TODOOOOOOOOO
+      NH_FLAKE = "/Users/cole/code/nixcfg";
     };
 
     environment.systemPackages = with pkgs; [
@@ -73,6 +74,8 @@
       dua
       tio
       usbutils
+
+      nh
 
       android-tools
       scrcpy
