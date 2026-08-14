@@ -36,8 +36,17 @@ in
     nixpkgs.hostPlatform.system = "riscv64-linux";
     system.stateVersion = "26.05";
 
+    system.nixos-init.enable = true;
+    system.tools.nixos-build-vms.enable = false;
+    system.tools.nixos-enter.enable = false;
+    system.tools.nixos-generate-config.enable = false;
+    system.tools.nixos-install.enable = false;
+    system.tools.nixos-option.enable = false;
+    system.tools.nixos-rebuild.enable = false;
+    system.tools.nixos-version.enable = false;
+
     environment.systemPackages = with pkgs; [
-      buildkite-agent
+      # buildkite-agent (one instance of perl)
       github-act-runner
       ripgrep
 
