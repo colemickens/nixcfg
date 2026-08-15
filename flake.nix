@@ -118,22 +118,9 @@
           zeph = { };
         };
         "riscv64-linux" = {
-          jupitertwo-cross = {
+          jupitertwo = {
             path = ./hosts/jupitertwo/cross.nix;
-            pkgs = inputs.nixpkgs-riscv;
             extraConfig = [ { nixpkgs.buildPlatform.system = "x86_64-linux"; } ];
-          };
-          jupitertwo-cross-determinate = {
-            path = ./hosts/jupitertwo/cross.nix;
-            pkgs = inputs.nixpkgs-riscv;
-            extraConfig = [
-              { nixpkgs.buildPlatform.system = "x86_64-linux"; }
-              { imports = [ inputs.determinate.nixosModules.default ]; }
-            ];
-          };
-          jupitertwo-native = {
-            path = ./hosts/jupitertwo/native.nix;
-            pkgs = inputs.nixpkgs-riscv;
           };
           installer-riscv64 = {
             path = ./images/installer/configuration-sdcard-riscv64.nix;

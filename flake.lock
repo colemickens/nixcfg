@@ -540,22 +540,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-riscv": {
-      "locked": {
-        "lastModified": 1786590924,
-        "narHash": "sha256-K23dPdONbuZmJ9nMa/1QUKuuqaXF/xTQKWc96vfwz2E=",
-        "owner": "colemickens",
-        "repo": "nixpkgs",
-        "rev": "3f8e1b63a24fc20d0a209495ca7df37197a34477",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "ref": "colemickens/riscv",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-unstable": {
       "locked": {
         "lastModified": 1786573616,
@@ -680,7 +664,6 @@
         "nix-darwin": "nix-darwin",
         "nixos-hardware": "nixos-hardware",
         "nixos-unstable": "nixos-unstable",
-        "nixpkgs-riscv": "nixpkgs-riscv",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "preservation": "preservation",
         "sops-nix": "sops-nix",
