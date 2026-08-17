@@ -30,26 +30,15 @@ find this repo on radicle:
 * `firefox`: because Google should not own the web, and [Sideberry](https://addons.mozilla.org/en-US/firefox/addon/sidebery/) is essential for tree-style tabs
 * [`helix`](https://helix-editor.com/): my go-to editor; TUI, Rust, modal, built-in LSP, etc
 * [`zelij`](https://zellij.dev/): `tmux` but better, with excellent UX for beginners
-* [`openvscode-server`](https://github.com/gitpod-io/openvscode-server): VSCodium-based editor; used for work and sometimes personal stuff
-
-* [`COSMIC`](https://github.com/pop-os/cosmic-epoch) for my desktop environment:
-  
-  ![screenshot of machine 'zeph' running the Cosmic desktop environment](./misc/zeph-cosmic.png)
 
 ## Repo Layout
 
 * `hosts` 
   * toplevel machine definitions:
-  * `zeph`
-    * **ASUS Zephyrus G14 (2022) - GA402RJ**
-    * current daily-driver
-    * favorite, all-AMD, laptop ever
-    * dual-booting NixOS, of course, and Windows 11 for casual 120Hz/1600p gaming
   * `raisin`
     * **Lenovo "Yoga Slim 7 Pro-14ACH5 Laptop (ideapad) - Type 82MS"**
     * retired laptop
     * SyncThing node
-    * Vaultwarden (though I'm migrating to KeePass{XC,DX})
     * Tailscale exit node
 * `images/`
   * `installer` (meta, iso)
