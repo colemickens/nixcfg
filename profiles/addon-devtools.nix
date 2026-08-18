@@ -24,6 +24,7 @@
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.copilot-cli
             
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.antigravity-cli
+            inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.dsh
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.goose-cli
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.herdr
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.pi
