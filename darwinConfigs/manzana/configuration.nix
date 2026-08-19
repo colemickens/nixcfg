@@ -2,6 +2,7 @@
   inputs,
   pkgs,
   lib,
+  config,
   ...
 }:
 {
@@ -18,7 +19,6 @@
     ../../mixins/git.nix
     ../../mixins/helix.nix
     ../../mixins/jujutsu.nix
-    ../../mixins/nix.nix
     ../../mixins/nushell.nix
     # ../../mixins/ssh.nix
     ../../mixins/zellij.nix
@@ -43,9 +43,20 @@
     home-manager.useGlobalPkgs = true;
     home-manager.useUserPackages = true;
 
+    sops.secrets = {
+      "nix-access-tokens" = {
+        owner = "cole";
+        sopsFile = ../../secrets/encrypted/nix-access-tokens;
+        format = "binary";
+      };
+    };
+
     determinateNix = {
       enable = true;
-      customSettings.trusted-users = [ "cole" "@admin" ];
+      customSettings = {
+        trusted-users = [ "cole" "@admin" ];
+        access-tokens = "!include ${config.sops.secrets.nix-access-tokens.path}";
+      };
       determinateNixd = {
         builder = {
           state = "enabled";
