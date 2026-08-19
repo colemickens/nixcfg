@@ -9,6 +9,8 @@
     inputs.home-manager.darwinModules.home-manager
     inputs.determinate.darwinModules.default
 
+    inputs.sops-nix.darwinModules.sops
+
     ../../mixins/bat.nix
     ../../mixins/carapace.nix
     ../../mixins/cargo.nix
@@ -16,6 +18,7 @@
     ../../mixins/git.nix
     ../../mixins/helix.nix
     ../../mixins/jujutsu.nix
+    ../../mixins/nix.nix
     ../../mixins/nushell.nix
     # ../../mixins/ssh.nix
     ../../mixins/zellij.nix

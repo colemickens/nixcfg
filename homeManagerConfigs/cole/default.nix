@@ -26,7 +26,7 @@
       restic
       sops
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
       m-cli # useful macOS CLI commands
     ];
 }
