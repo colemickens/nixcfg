@@ -10,7 +10,7 @@
 
     home-manager.url = "github:nix-community/home-manager?ref=master";
     home-manager.inputs."nixpkgs".follows = "nixos-unstable";
-    nixos-hardware.url = "github:colemickens/nixos-hardware?ref=colemickens/main";
+    nixos-hardware.url = "github:NixOS/nixos-hardware";
     sops-nix.url = "github:Mic92/sops-nix/master";
     sops-nix.inputs."nixpkgs".follows = "nixos-unstable";
     lanzaboote.url = "github:nix-community/lanzaboote";
