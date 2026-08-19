@@ -39,11 +39,11 @@ jobs:
     - name: Breakpoint
       if: github.event_name == 'workflow_dispatch'
       uses: namespacelabs/breakpoint-action@18b8b1dc6ac651288cfffb20bee1a447632997a1 # v0.0.16
-    - name: build + cache (jupitertwo-cross)
+    - name: build + cache (jupitertwo)
       if: success() || failure()
       run: |
         nix build -L --keep-going \
-          .#toplevels.jupitertwo-cross
+          .#toplevels.jupitertwo
     - name: build + cache (riscv64 installer)
       if: success() || failure()
       run: |
