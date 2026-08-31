@@ -34,6 +34,10 @@
     # determinate
     determinate.url = "github:DeterminateSystems/determinate";
 
+    # microvm
+    microvm.url = "github:microvm-nix/microvm.nix";
+    microvm.inputs."nixpkgs".follows = "nixos-unstable";
+
     # llm-agents
     llm-agents.url = "github:numtide/llm-agents.nix";
   };

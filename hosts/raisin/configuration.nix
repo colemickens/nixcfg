@@ -19,6 +19,7 @@ in
 
     # ./restic.nix
     ./nginx-vaultwarden.nix
+    ./microvm-tailscale.nix
 
     inputs.determinate.nixosModules.default
 
