@@ -123,6 +123,7 @@
         "riscv64-linux" = {
           jupitertwo = {
             path = ./hosts/jupitertwo/cross.nix;
+            pkgs = inputs.nixpkgs-riscv;
             extraConfig = [ { nixpkgs.buildPlatform.system = "x86_64-linux"; } ];
           };
           installer-riscv64 = {
