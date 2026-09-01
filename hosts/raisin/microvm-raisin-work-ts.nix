@@ -13,7 +13,7 @@
 
 let
   hostCfg = config;
-  vmName = "raisin-ts";
+  vmName = "raisin-work-ts";
   vmLink = "vm-${vmName}";
   guestMac = "02:00:00:52:41:01";
 in
