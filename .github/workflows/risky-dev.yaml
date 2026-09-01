@@ -21,6 +21,16 @@ jobs:
         ref: ${{ env.GIT_REF }}
     - uses: "DeterminateSystems/determinate-nix-action@main"
     - uses: "DeterminateSystems/magic-nix-cache-action@main"
+    - name: build + cache (jupitertwo)
+      if: success() || failure()
+      run: |
+        nix build -L --keep-going \
+          .#toplevels.jupitertwo
+    - name: build + cache (riscv64 installer)
+      if: success() || failure()
+      run: |
+        nix build -L --keep-going \
+          .#extra.riscv64-linux.installer
     - name: Breakpoint
       if: github.event_name == 'workflow_dispatch'
       uses: namespacelabs/breakpoint-action@18b8b1dc6ac651288cfffb20bee1a447632997a1 # v0.0.16
