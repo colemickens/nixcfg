@@ -14,6 +14,7 @@
             nixpkgs-review
 
             dfmt
+            jless
 
             mergiraf
 
