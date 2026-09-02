@@ -33,7 +33,7 @@
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.omp
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.opencode
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.opencode2
-            inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.hermes-agent
+            # inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.hermes-agent
 
             # mcp servers
             kraken-cli
