@@ -20,6 +20,8 @@
     nix-darwin.url = "github:nix-darwin/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
+    nh.url = "github:nix-community/nh";
+
     # helix
     helix.url = "github:RossSmyth/helix?ref=clean-grammars";
     helix.inputs.nixpkgs.follows = "nixos-unstable";

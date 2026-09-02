@@ -90,11 +90,11 @@
       tio
       usbutils
 
-      nh
-
       android-tools
       scrcpy
       yt-dlp
+
+      inputs.nh.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
 
     environment.variables = {
