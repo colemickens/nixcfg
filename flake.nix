@@ -42,6 +42,9 @@
 
     # llm-agents
     llm-agents.url = "github:numtide/llm-agents.nix";
+    
+    # chock
+    chock.url = "github:LilithSemi/chock";
   };
 
   ## OUTPUTS ##################################################################

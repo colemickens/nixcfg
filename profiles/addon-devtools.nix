@@ -35,6 +35,8 @@
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.omp
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.opencode
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.opencode2
+            
+            inputs.chock.packages.${pkgs.stdenv.hostPlatform.system}.default
 
             # mcp servers
             kraken-cli
