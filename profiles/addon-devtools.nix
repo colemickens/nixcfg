@@ -38,6 +38,8 @@
             
             inputs.chock.packages.${pkgs.stdenv.hostPlatform.system}.default
 
+            worktrunk
+
             # mcp servers
             kraken-cli
             lunchmoney-mcp
