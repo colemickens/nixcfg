@@ -47,6 +47,7 @@
 
             # separate tooling:
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.mercat
+            inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.workmux
 
             worktrunk
 
