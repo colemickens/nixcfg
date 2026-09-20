@@ -187,15 +187,7 @@
         ## SYSTEM-SPECIFIC OUTPUTS ############################################
         lib.flake-utils.eachSystem defaultSystems (
           system:
-          let
-            mkShell =
-              name:
-              import ./shells/${name}.nix {
-                inherit inputs;
-                pkgs = pkgs.${system};
-              };
-          in
-          rec {
+          {
             formatter = pkgs.${system}.nixfmt;
 
             checks =
