@@ -184,7 +184,6 @@
               imgurbash2
 
               mosh
-              tmate
               zmate
             ])
           ];
