@@ -57,3 +57,9 @@ jobs:
         set -x; set -euo pipefail
         ulimit -a
         nix flake check --keep-going --build-all -L
+    - name: Breakpoint if tests failed
+      if: failure()
+      uses: namespacelabs/breakpoint-action@v0
+      with:
+        duration: 30m
+        authorized-users: edolstra
