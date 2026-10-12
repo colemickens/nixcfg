@@ -1,8 +1,8 @@
 name: "nixcfg-risky"
 concurrency: "nixcfg-risky-${{ inputs.key || github.head_ref || github.ref_name }}"
 on:
-  # push:
-  #   branches: [ "main" ]
+  push:
+    branches: [ "main" ]
   workflow_call:
     inputs:
       key:
@@ -42,10 +42,10 @@ jobs:
     - name: build + cache (jupitertwo)
       if: success() || failure()
       run: |
-        nix build -L --keep-going \
+        nix build -L --keep-going -j1 \
           .#toplevels.jupitertwo
     - name: build + cache (riscv64 installer)
       if: success() || failure()
       run: |
-        nix build -L --keep-going \
+        nix build -L --keep-going -j1 \
           .#extra.riscv64-linux.installer
