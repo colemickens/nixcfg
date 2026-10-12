@@ -35,7 +35,7 @@
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.opencode2
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.pi
 
-            inputs.chock.packages.${pkgs.stdenv.hostPlatform.system}.default
+            # inputs.chock.packages.${pkgs.stdenv.hostPlatform.system}.default
 
             worktrunk
 
