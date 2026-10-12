@@ -59,7 +59,7 @@ jobs:
         nix flake check --keep-going --build-all -L
     - name: Breakpoint if tests failed
       if: failure()
-      uses: namespacelabs/breakpoint-action@v0
+      uses: namespacelabs/breakpoint-action@18b8b1dc6ac651288cfffb20bee1a447632997a1 # v0.0.16
       with:
         duration: 30m
         authorized-users: edolstra
