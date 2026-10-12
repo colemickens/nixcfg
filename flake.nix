@@ -22,9 +22,9 @@
 
     nh.url = "github:nix-community/nh";
 
-    # helix
-    helix.url = "github:RossSmyth/helix?ref=clean-grammars";
-    helix.inputs.nixpkgs.follows = "nixos-unstable";
+    # mitos (fork of helix)
+    mitos.url = "github:mitos-editor/mitos";
+    mitos.inputs.nixpkgs.follows = "nixos-unstable";
 
     # preservation
     preservation.url = "github:nix-community/preservation";

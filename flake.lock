@@ -330,28 +330,6 @@
         "url": "https://flakehub.com/f/cachix/git-hooks.nix/0.1.941"
       }
     },
-    "helix": {
-      "inputs": {
-        "nixpkgs": [
-          "nixos-unstable"
-        ],
-        "rust-overlay": "rust-overlay"
-      },
-      "locked": {
-        "lastModified": 1785784207,
-        "narHash": "sha256-L0J9r6YSfOxT4OxaucyMkPHdLAmUZiGXBX/Le2DG36w=",
-        "owner": "RossSmyth",
-        "repo": "helix",
-        "rev": "ab842412c4cc1241802deb59a4a77a44754a43cf",
-        "type": "github"
-      },
-      "original": {
-        "owner": "RossSmyth",
-        "ref": "clean-grammars",
-        "repo": "helix",
-        "type": "github"
-      }
-    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -399,7 +377,7 @@
         "crane": "crane",
         "nixpkgs": "nixpkgs_4",
         "pre-commit": "pre-commit",
-        "rust-overlay": "rust-overlay_2"
+        "rust-overlay": "rust-overlay"
       },
       "locked": {
         "lastModified": 1791795551,
@@ -474,6 +452,26 @@
       "original": {
         "owner": "microvm-nix",
         "repo": "microvm.nix",
+        "type": "github"
+      }
+    },
+    "mitos": {
+      "inputs": {
+        "nixpkgs": [
+          "nixos-unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791837946,
+        "narHash": "sha256-ESk29mDOVrb+aw+JJOUT6RbfIYlDBtS+PW2XyeNs+hc=",
+        "owner": "mitos-editor",
+        "repo": "mitos",
+        "rev": "06ef1d5c9b1b2a0e02192b911f1f27b7538de1ae",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mitos-editor",
+        "repo": "mitos",
         "type": "github"
       }
     },
@@ -794,12 +792,12 @@
         "chock": "chock",
         "determinate": "determinate",
         "ghostty": "ghostty",
-        "helix": "helix",
         "home-manager": "home-manager_2",
         "lanzaboote": "lanzaboote",
         "lib-aggregate": "lib-aggregate",
         "llm-agents": "llm-agents",
         "microvm": "microvm",
+        "mitos": "mitos",
         "nh": "nh",
         "nix-darwin": "nix-darwin",
         "nixos-hardware": "nixos-hardware",
@@ -812,27 +810,6 @@
       }
     },
     "rust-overlay": {
-      "inputs": {
-        "nixpkgs": [
-          "helix",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1775358767,
-        "narHash": "sha256-f2eC+WIfhjevCPQILuV08i/kmKZzYZpUvkom/33VxCA=",
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "rev": "20fd44bc663daa53a2575e01293e24e681d62244",
-        "type": "github"
-      },
-      "original": {
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "type": "github"
-      }
-    },
-    "rust-overlay_2": {
       "inputs": {
         "nixpkgs": [
           "lanzaboote",
