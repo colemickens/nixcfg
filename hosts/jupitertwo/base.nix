@@ -46,6 +46,8 @@ in
     system.tools.nixos-rebuild.enable = false;
     system.tools.nixos-version.enable = false;
 
+    boot.loader.systemd-boot.configurationLimit = lib.mkForce 3;
+
     environment.systemPackages = with pkgs; [
       # buildkite-agent (one instance of perl)
       github-act-runner
