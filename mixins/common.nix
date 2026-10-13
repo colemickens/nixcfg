@@ -68,6 +68,8 @@ in
     console.earlySetup = true; # needed for LUKS
     boot = {
       enableContainers = false;
+      zfs.forceImportRoot = false; # safer, I guess... but probably will suck if I forget to zfs export, etc
+
       tmp = {
         useTmpfs = lib.mkDefault false;
         cleanOnBoot = true;
