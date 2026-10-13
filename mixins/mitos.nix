@@ -7,16 +7,16 @@
 }:
 
 let
-  helixPkg =
-    # pkgs.helix;
-    inputs.helix.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  mitosPkg =
+    # pkgs.mitos;
+    inputs.mitos.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in
 {
   config = {
     home-manager.users.cole =
       { pkgs, ... }:
       {
-        # xdg.configFile."helix/languages.toml".source = gen {
+        # xdg.configFile."mitos/languages.toml".source = gen {
         #   languages = [
         #     {
         #       name = "nix";
@@ -24,7 +24,7 @@ in
         #     }
         #   ];
         # };
-        xdg.configFile."helix/themes/zed_onedark_custom.toml".text = ''
+        xdg.configFile."mitos/themes/zed_onedark_custom.toml".text = ''
           inherits = "zed_onedark"
 
           "ui.statusline.inactive" = { fg = "#546178", bg = "#21252B" }
@@ -32,7 +32,7 @@ in
         '';
         # "ui.statusline" = "#000000"
         # "ui.statusline.inactive" = "#000000"
-        xdg.configFile."helix/languages.toml".text =
+        xdg.configFile."mitos/languages.toml".text =
           let
           in
           # lldbRustcScript = pkgs.writeShellScript "lldb-rustc-prelude.py" ''
@@ -76,9 +76,9 @@ in
         #   completion = [ { name = "binary", completion = "filename" } ]
         #   args = { program = "{0}", initCommands = [ "command script import ${lldbRustcScript}" ] }
         # '';
-        programs.helix = {
+        programs.mitos = {
           enable = true;
-          package = lib.mkIf (pkgs.stdenv.hostPlatform.system != "riscv64-linux") helixPkg;
+          package = lib.mkIf (pkgs.stdenv.hostPlatform.system != "riscv64-linux") mitosPkg;
 
           settings = {
             theme = {
@@ -124,12 +124,10 @@ in
                 left = [
                   "mode"
                   "spinner"
-                  "version-control"
                   "file-name"
                   "file-modification-indicator"
                   "read-only-indicator"
                 ];
-                center = [ ];
                 right = [
                   "register"
                   "file-type"
