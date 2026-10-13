@@ -22,7 +22,6 @@ in
           tokenFile = config.sops.secrets."github-runner-token".path;
           replace = true;
           name = runnerName;
-          workDir = "/var/lib/github-runner/${runnerName}"; # TODO: make sure this works
           extraLabels = [ runnerName ];
         };
       };
