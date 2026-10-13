@@ -24,8 +24,8 @@
     ../mixins/gh.nix
     ../mixins/git.nix
     ../mixins/gpg-agent.nix
-    ../mixins/helix.nix
     ../mixins/jujutsu.nix
+    ../mixins/mitos.nix
     ../mixins/nushell.nix
     ../mixins/xdg.nix
     ../mixins/zellij.nix

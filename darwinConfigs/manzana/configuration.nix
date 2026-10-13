@@ -17,8 +17,8 @@
     ../../mixins/cargo.nix
     ../../mixins/ghostty.nix
     ../../mixins/git.nix
-    ../../mixins/helix.nix
     ../../mixins/jujutsu.nix
+    ../../mixins/mitos.nix
     ../../mixins/nushell.nix
     # ../../mixins/ssh.nix
     ../../mixins/zellij.nix

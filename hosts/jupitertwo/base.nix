@@ -17,8 +17,8 @@ in
     ../../mixins/common.nix
 
     ../../mixins/bottom.nix
-    ../../mixins/helix.nix
     ../../mixins/github-runner.nix
+    ../../mixins/mitos.nix
     ../../mixins/nushell.nix
     ../../mixins/zellij.nix
 
