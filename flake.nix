@@ -8,7 +8,7 @@
     nixpkgs-unstable.url = "github:colemickens/nixpkgs?ref=colemickens/nixpkgs-unstable";
     nixpkgs-riscv.url = "github:colemickens/nixpkgs?ref=colemickens/riscv";
 
-    home-manager.url = "github:nix-community/home-manager?ref=master";
+    home-manager.url = "github:colemickens/home-manager?ref=colemickens/main";
     home-manager.inputs."nixpkgs".follows = "nixos-unstable";
     nixos-hardware.url = "github:colemickens/nixos-hardware?ref=colemickens/main";
     sops-nix.url = "github:Mic92/sops-nix/master";
