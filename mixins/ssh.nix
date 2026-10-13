@@ -20,14 +20,6 @@ in
         programs.ssh = {
           enable = true;
           enableDefaultConfig = false;
-          matchBlocks = {
-            "*" = {
-              # everything sucks about SSH_AUTH_SOCK, so let's just control
-              # it and what it points to directly
-              # identityAgent = cole_sock;
-              # serverAliveInterval = 11;
-            };
-          };
         };
       };
   };
