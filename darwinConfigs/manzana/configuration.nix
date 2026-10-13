@@ -79,7 +79,6 @@
       tmux
       kitty
       gnused
-      helix
       hexyl
       zstd
       bottom
