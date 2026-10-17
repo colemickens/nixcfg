@@ -20,6 +20,7 @@
     ../../mixins/jujutsu.nix
     ../../mixins/mitos.nix
     ../../mixins/nushell.nix
+    ../../mixins/rio.nix
     # ../../mixins/ssh.nix
     ../../mixins/zellij.nix
 
