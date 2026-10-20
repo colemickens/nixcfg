@@ -49,7 +49,7 @@
         { pkgs, ... }@hm:
         {
           home.sessionVariables = {
-            EDITOR = "hx";
+            EDITOR = "ms";
             CARGO_HOME = "${hm.config.xdg.dataHome}/cargo";
             PARALLEL_HOME = "${hm.config.xdg.configHome}/parallel";
             PASSWORD_STORE_DIR = "${hm.config.xdg.dataHome}/password-store";

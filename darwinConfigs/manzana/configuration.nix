@@ -72,7 +72,7 @@
     programs.zsh.enable = true;
 
     environment.variables = {
-      EDITOR = "hx"; # TODOOOOOOOOO
+      EDITOR = "ms";
       NH_FLAKE = "/Users/cole/code/nixcfg";
     };
 
