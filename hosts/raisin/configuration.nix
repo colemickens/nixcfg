@@ -11,6 +11,8 @@ in
   imports = [
     ./unfree.nix
 
+    ../../mixins/security.nix
+
     ../../profiles/interactive.nix
     ../../profiles/addon-laptop.nix
 

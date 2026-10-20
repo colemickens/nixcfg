@@ -12,6 +12,8 @@
 
     inputs.sops-nix.darwinModules.sops
 
+    ../../mixins/security.nix
+
     ../../mixins/bat.nix
     ../../mixins/carapace.nix
     ../../mixins/cargo.nix
