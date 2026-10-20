@@ -3,10 +3,10 @@
 let
   macSettings = {
     fonts = {
-      regular.family = "Iosevka Fixed";
-      bold.family = "Iosevka Fixed";
-      italic.family = "Iosevka Fixed";
-      bold-italic.family = "Iosevka Fixed";
+      regular.family = "Iosevka Term";
+      bold.family = "Iosevka Term";
+      italic.family = "Iosevka Term";
+      bold-italic.family = "Iosevka Term";
     };
   };
   linuxSettings = {};
