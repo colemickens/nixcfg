@@ -295,11 +295,11 @@
         "zon2nix": "zon2nix"
       },
       "locked": {
-        "lastModified": 1792526745,
-        "narHash": "sha256-vzucLBLn+za+aroGb+BaHy/D7aLdr2ZpCat5//SF180=",
+        "lastModified": 1792594102,
+        "narHash": "sha256-TKWQK2zmv1zwoUasT9ESAZX3xulgmVX5AvGj0hBS7NI=",
         "owner": "ghostty-org",
         "repo": "ghostty",
-        "rev": "96a5131a15281765aff5835dbd9e1c714cddcd3f",
+        "rev": "521cf2c5d30bd48028ca61546c64e7913764073d",
         "type": "github"
       },
       "original": {
@@ -358,11 +358,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792524838,
-        "narHash": "sha256-9iEtnqN2cfyJX/OKImOCP3v4MX76xl/Wtqclb3XnNGQ=",
+        "lastModified": 1792607238,
+        "narHash": "sha256-6cPMEleOXdxwq/VcOf/Itnz/rCJBmX7Ha8C9qtOICXM=",
         "owner": "colemickens",
         "repo": "home-manager",
-        "rev": "63babf71d334b09342e1e1d8631fbbd713f669b9",
+        "rev": "1bfda896d82abd2cca58fdce4a75d164812b4fff",
         "type": "github"
       },
       "original": {
@@ -421,11 +421,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1792527991,
-        "narHash": "sha256-mscDkbXtRY6H9Z/Z2acpyUEOZqSF4LuOy1dVjVn+7GU=",
+        "lastModified": 1792577217,
+        "narHash": "sha256-YRvnXVnyZGr6+v118Lb4pTtzLzeJet2Y69qf00katjQ=",
         "owner": "numtide",
         "repo": "llm-agents.nix",
-        "rev": "1dbf6c1260b33850a4e933836c35d07e842c2298",
+        "rev": "4c0e549dab7167b1fe7433af15adf892a299fb83",
         "type": "github"
       },
       "original": {
@@ -462,11 +462,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792525582,
-        "narHash": "sha256-qRkVzjIKdbu9Z7R80IBItiO2J1yGyjstOFqq+toWUW8=",
+        "lastModified": 1792583986,
+        "narHash": "sha256-b37ls2MWhsm1vn6gX39z7MQSAiNS7SAtwNC5JllO++s=",
         "owner": "mitos-editor",
         "repo": "mitos",
-        "rev": "cb76b731d5c947a27d015c57f1675aafac2228e0",
+        "rev": "7d9bb12d1105119bf3a0c040fd7b50bee7565f10",
         "type": "github"
       },
       "original": {
@@ -522,11 +522,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792366139,
-        "narHash": "sha256-jto4pdsl0bgErQ5vaMc3gOyj//PILLRJuqX3I7fUk6s=",
+        "lastModified": 1792603717,
+        "narHash": "sha256-rGPhon9BPrx8/suy0Vz6/xH28AOPvWfbcBPYJYP6FNA=",
         "owner": "nix-darwin",
         "repo": "nix-darwin",
-        "rev": "f0ec2b3fae4df92ea7788359aef9e07bb88d720f",
+        "rev": "b2f8c5cabf046fccc55bda9375643684c7fd2acd",
         "type": "github"
       },
       "original": {
@@ -650,11 +650,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1792522458,
-        "narHash": "sha256-aG73CGK/+ts1j5nXH0CPojWNbR858mRyp9uzb8WBd9c=",
+        "lastModified": 1792605013,
+        "narHash": "sha256-ptlUzTC8bdZV319kZWj+FUwZC+Wo571kfypiYdB8CS0=",
         "owner": "colemickens",
         "repo": "nixpkgs",
-        "rev": "04b775c6cb012d4e2ef0e1ccd74d8f726f0afc8f",
+        "rev": "9f757db621086a887e6a7be98b5cf67ddc0dd463",
         "type": "github"
       },
       "original": {
@@ -1002,71 +1002,23 @@
         "type": "github"
       }
     },
-    "zig_2": {
-      "inputs": {
-        "nixpkgs": [
-          "ghostty",
-          "zon2nix",
-          "nixpkgs"
-        ],
-        "zon2nix": "zon2nix_2"
-      },
-      "locked": {
-        "lastModified": 1791058473,
-        "narHash": "sha256-D5RPUNznXdjaJowpWBU/PsUy0Wf0GKeYam2AgncVBtQ=",
-        "ref": "refs/heads/main",
-        "rev": "37d17efdfa349f71f687e08746c19f67e0192b19",
-        "revCount": 1735,
-        "type": "git",
-        "url": "https://git.jcollie.dev/jeff/zig-overlay.git"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://git.jcollie.dev/jeff/zig-overlay.git"
-      }
-    },
     "zon2nix": {
       "inputs": {
         "nixpkgs": [
           "ghostty",
           "nixpkgs"
-        ],
-        "zig": "zig_2"
-      },
-      "locked": {
-        "lastModified": 1790983378,
-        "narHash": "sha256-RB1SiCcumk7Y9NkBKJDq/Hg0NLyCmX/TX02EXp7QRco=",
-        "owner": "jcollie",
-        "repo": "zon2nix",
-        "rev": "d1c869946e98c380ff474c6bd30e2fe2f5110473",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jcollie",
-        "repo": "zon2nix",
-        "type": "github"
-      }
-    },
-    "zon2nix_2": {
-      "inputs": {
-        "nixpkgs": [
-          "ghostty",
-          "zon2nix",
-          "zig",
-          "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1790583033,
-        "narHash": "sha256-Eo3hR521Yc2Gsqw7m/aqd5sn3/qi0XoSpJBIPPIYKkg=",
+        "lastModified": 1791779206,
+        "narHash": "sha256-2eQfccAcXv3LX5wN6ducp5CCcWRnrxgu9PI4y09IkDA=",
         "owner": "jcollie",
         "repo": "zon2nix",
-        "rev": "8e91c0d44aa49d0ac415f7e3046662e9aa754335",
+        "rev": "50f67839e45548957a1e924db1fdea7ef4dc5a55",
         "type": "github"
       },
       "original": {
         "owner": "jcollie",
-        "ref": "v0.9.0",
         "repo": "zon2nix",
         "type": "github"
       }
