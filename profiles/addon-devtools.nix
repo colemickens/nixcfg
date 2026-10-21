@@ -26,6 +26,7 @@
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.cursor-agent
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.dsh
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.goose-cli
+            inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.jcode
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.herdr
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.hermes-agent
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.maki
