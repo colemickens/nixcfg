@@ -14,6 +14,7 @@ in
     ../../mixins/security.nix
 
     ../../profiles/interactive.nix
+    ../../profiles/addon-devtools.nix
     ../../profiles/addon-laptop.nix
 
     ../../mixins/syncthing.nix
