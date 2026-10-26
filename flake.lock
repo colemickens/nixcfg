@@ -659,6 +659,26 @@
         "type": "github"
       }
     },
+    "niri": {
+      "inputs": {
+        "nixpkgs": [
+          "nixos-unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793024357,
+        "narHash": "sha256-dHwH5pN9jK+m8CUSBaCztMEX4g0qwH5kIODpNaBgKyE=",
+        "owner": "niri-wm",
+        "repo": "niri",
+        "rev": "9d8f4f89f6a075a04ed24af5f13829d0bdba5b85",
+        "type": "github"
+      },
+      "original": {
+        "owner": "niri-wm",
+        "repo": "niri",
+        "type": "github"
+      }
+    },
     "nix": {
       "inputs": {
         "bdwgc": "bdwgc",
@@ -1075,6 +1095,7 @@
         "microvm": "microvm",
         "mitos": "mitos",
         "nh": "nh",
+        "niri": "niri",
         "nix-darwin": "nix-darwin",
         "nixos-hardware": "nixos-hardware",
         "nixos-unstable": "nixos-unstable",
