@@ -144,7 +144,7 @@ rec {
       ])
       ++ (with pkgs; [
         liberation_ttf # free corefonts-metric-compatible replacement
-        ttf_bitstream_vera
+        ttf-bitstream-vera
         gelasio # metric-compatible with Georgia
         powerline-symbols
         intel-one-mono
