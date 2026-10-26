@@ -48,6 +48,10 @@
 
     # underclass
     underclass.url = "github:ghuntley/underclass";
+
+    # new desktop setup maybe?
+    niri.url = "github:niri-wm/niri";
+    niri.inputs."nixpkgs".follows = "nixos-unstable";
   };
 
   ## OUTPUTS ##################################################################
