@@ -94,7 +94,6 @@ in
         timeout = 3;
       };
 
-      initrd.systemd.enable = lib.mkDefault true;
       initrd.supportedFilesystems = ([ "ntfs" ] ++ lib.optionals (cfg.useZfs) [ "zfs" ]);
 
       kernel.sysctl = {
