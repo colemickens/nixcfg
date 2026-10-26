@@ -34,6 +34,7 @@
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.omp
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.opencode2
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.pi
+            inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.tuicr
 
             # NAUGHTY LIST
             # inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.jcode
