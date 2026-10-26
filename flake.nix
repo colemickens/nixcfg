@@ -45,6 +45,9 @@
     
     # chock
     chock.url = "github:LilithSemi/chock";
+
+    # underclass
+    underclass.url = "github:ghuntley/underclass";
   };
 
   ## OUTPUTS ##################################################################
