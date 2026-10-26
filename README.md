@@ -31,6 +31,9 @@
 
 * `hosts` 
   * toplevel machine definitions:
+  * `zeph`
+    * **ASUS Zephyrus G14 (2022) - GA402RJ**
+    * builder, remote agent runner, whatever box
   * `raisin`
     * **Lenovo "Yoga Slim 7 Pro-14ACH5 Laptop (ideapad) - Type 82MS"**
     * retired laptop

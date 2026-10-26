@@ -127,6 +127,7 @@
       nixosConfigsEx = {
         "x86_64-linux" = {
           raisin = { };
+          zeph = { };
         };
         "riscv64-linux" = {
           jupitertwo = {
