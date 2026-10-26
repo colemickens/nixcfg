@@ -1,11 +1,30 @@
-{ pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
+let
+  cfg = config.nixcfg.desktop.cosmic;
+in
 {
   imports = [
     ./gui-wayland.nix
   ];
 
-  config = {
+  options = {
+    nixcfg.desktop.cosmic = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Whether to enable the Cosmic desktop environment profile.";
+      };
+    };
+  };
+
+  config = lib.mkIf cfg.enable {
     nixpkgs.overlays = (lib.mkIf (inputs ? "cosmic-nightly") [
       inputs.cosmic-nightly.overlays.default
     ]);
