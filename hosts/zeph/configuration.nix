@@ -59,6 +59,15 @@ in
 
     nixcfg.common.hostColor = "magenta";
 
+    specialisation = {
+      niri-gpui-shell.configuration = {
+        imports = [
+          ../../profiles/gui-niri-gpui-shell.nix
+        ];
+        nixcfg.desktop.cosmic.enable = false;
+      };
+    };
+
     nix = {
       settings = {
         max-jobs = lib.mkForce 4;
