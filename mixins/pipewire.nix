@@ -2,7 +2,6 @@
 
 {
   security.rtkit.enable = true; # ????
-  nixpkgs.config.pulseaudio = true; # ????
 
   environment.systemPackages = with pkgs; [
     alsa-utils # ignore for now cross-compile problem
