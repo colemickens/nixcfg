@@ -52,6 +52,8 @@
     # new desktop setup maybe?
     niri.url = "github:niri-wm/niri";
     niri.inputs."nixpkgs".follows = "nixos-unstable";
+    gpui-shell.url = "github:andre-brandao/gpui-shell";
+    gpui-shell.inputs."nixpkgs".follows = "nixos-unstable";
   };
 
   ## OUTPUTS ##################################################################
