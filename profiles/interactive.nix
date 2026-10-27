@@ -185,6 +185,8 @@
 
               mosh
               zmate
+
+              inputs.nh.packages.${pkgs.stdenv.hostPlatform.system}.default
             ])
           ];
         };
