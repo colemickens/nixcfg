@@ -63,7 +63,7 @@ in
           settings = {
             default = {
               path = pkgs.fetchurl {
-                name = "a_colorful_swirls_of_paint.jpg";
+                name = "wallpaper.jpg";
                 url = "https://github.com/dharmx/walls/blob/main/abstract/a_colorful_swirls_of_paint.jpg?raw=true";
                 hash = "sha256-jOA4DZX3bEV+7Bmi+uAnVvOLxaSrbqPeJMyzcSSiVNo=";
               };
@@ -73,11 +73,12 @@ in
 
         xdg.configFile."gpuishell/config.toml".text = ''
           [bar]
-          size = 32.0
+          size = 36.0
           position = "top"
-          start = ["LauncherBtn", "Workspaces", "SysInfo"]
+          start = ["Workspaces", "SysInfo"]
           center = ["ActiveWindow"]
           end = ["Clock", "Mpris", "Notifications", "Systray", "KeyboardLayout", "Battery", "Settings"]
+          style = "attached"
 
           [launcher]
           width = 600.0
@@ -90,14 +91,6 @@ in
           [osd]
           position = "right"
 
-          [dock]
-          position = "bottom"
-          monitors = "primaryonly"
-          visibility = "intelligent-hide"
-          hover_effect = "lift"
-          icon_size = 40.0
-          pinned = ["firefox-default.desktop", "com.mitchellh.ghostty.desktop"]
-
           [control_center.power_actions]
           sleep = "systemctl suspend"
           reboot = "systemctl reboot"
@@ -106,6 +99,7 @@ in
 
         xdg.configFile."niri/config.kdl".text = ''
           input {
+              focus-follows-mouse max-scroll-amount="10%"
               keyboard {
                   xkb {
                   }
@@ -115,6 +109,9 @@ in
               touchpad {
                   tap
                   natural-scroll
+                  click-method "clickfinger"
+                  dwt
+                  middle-emulation
               }
 
               mouse {
@@ -124,8 +121,9 @@ in
               }
           }
 
+          prefer-no-csd
           layout {
-              gaps 16
+              gaps 12
               center-focused-column "never"
 
               preset-column-widths {
@@ -160,7 +158,13 @@ in
 
           spawn-at-startup "gpuishell"
 
-          screenshot-path "~/documents/pictures/Screenshot from %Y-%m-%d %H-%M-%S.png"
+          screenshot-path "~/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+          window-rule {
+              geometry-corner-radius 12
+              clip-to-geometry true
+              draw-border-with-background false
+          }
 
           window-rule {
               match app-id=r#"^org\.wezfurlong\.wezterm$"#
