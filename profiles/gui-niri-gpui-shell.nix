@@ -54,6 +54,23 @@ in
     home-manager.users.cole =
       { pkgs, ... }:
       {
+        home.packages = with pkgs; [
+          wpaperd
+        ];
+
+        services.wpaperd = {
+          enable = true;
+          settings = {
+            default = {
+              path = pkgs.fetchurl {
+                name = "a_colorful_swirls_of_paint.jpg";
+                url = "https://github.com/dharmx/walls/blob/main/abstract/a_colorful_swirls_of_paint.jpg?raw=true";
+                hash = "sha256-jOA4DZX3bEV+7Bmi+uAnVvOLxaSrbqPeJMyzcSSiVNo=";
+              };
+            };
+          };
+        };
+
         xdg.configFile."gpuishell/config.toml".text = ''
           [bar]
           size = 32.0
