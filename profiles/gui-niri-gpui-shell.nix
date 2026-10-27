@@ -98,6 +98,9 @@ in
         '';
 
         xdg.configFile."niri/config.kdl".text = ''
+              output "Thermotrex Corporation TL140ADXP01 Unknown" {
+              scale 1.4
+          }
           input {
               focus-follows-mouse max-scroll-amount="10%"
               keyboard {
