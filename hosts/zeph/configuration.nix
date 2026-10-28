@@ -65,6 +65,7 @@ in
           ../../profiles/gui-niri-gpui-shell.nix
         ];
         nixcfg.desktop.cosmic.enable = false;
+        nixcfg.desktop.niri-gpui-shell.enable = true;
       };
     };
 

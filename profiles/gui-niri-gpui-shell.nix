@@ -20,7 +20,7 @@ in
     nixcfg.desktop.niri-gpui-shell = {
       enable = lib.mkOption {
         type = lib.types.bool;
-        default = true;
+        default = false;
         description = "Whether to enable the Niri + gpui-shell desktop profile.";
       };
     };
