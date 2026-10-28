@@ -42,6 +42,7 @@
           wl-screenrec # screen record (vaapi + rust)
           wev # event viewer
           wtype # virtual keystroke insertion
+          waypipe
 
           wl-gammarelay-rs
         ];
