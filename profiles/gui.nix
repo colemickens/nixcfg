@@ -128,6 +128,8 @@
             pwvucontrol
             # qpwgraph
             # helvum
+
+            keepassxc
           ])
         ];
       };
