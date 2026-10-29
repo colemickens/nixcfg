@@ -45,6 +45,9 @@
 
             inputs.chock.packages.${pkgs.stdenv.hostPlatform.system}.default
 
+            # separate tooling:
+            inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.mercat
+
             worktrunk
 
             # mcp servers
