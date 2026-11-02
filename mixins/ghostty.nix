@@ -3,7 +3,7 @@
 let
   macSettings = {
     app-notifications = false;
-    font-family = "Iosevka Term";
+    font-family = "Iosevka Fixed";
     font-style = "Medium";
     font-size = 14;
     adjust-cell-width = "-5%";
@@ -15,7 +15,7 @@ let
   };
   linuxSettings = {
     app-notifications = false;
-    font-family = "Iosevka Term";
+    font-family = "Iosevka Fixed";
     font-style = "Medium";
     font-size = 11;
     adjust-cell-width = "-5%";
