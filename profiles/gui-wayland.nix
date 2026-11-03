@@ -9,8 +9,11 @@
 {
   imports = [
     ./gui.nix
+    inputs.cardwire.nixosModules.default
   ];
   config = {
+    services.cardwire.enable = true;
+
     programs = {
       wshowkeys.enable = true;
     };
