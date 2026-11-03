@@ -5,7 +5,9 @@
     nixcfg.common.defaultNetworking = false;
 
     services = {
+      asusd.enable = false;
       power-profiles-daemon.enable = true;
+      supergfxd.enable = false;
       upower.enable = true;
     };
 
