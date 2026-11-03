@@ -8,14 +8,13 @@
 
 let
   cfg = config.nixcfg.desktop.umbriel-noctalia;
-  umbrielPkg = inputs.umbriel.packages.${pkgs.stdenv.hostPlatform.system}.default;
   noctaliaPkg = inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in
 {
   imports = [
     ./gui-wayland.nix
-    inputs.umbriel.nixosModules.default
     ../mixins/greetd.nix
+    ../mixins/umbriel.nix
   ];
 
   options = {
@@ -29,12 +28,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    programs.umbriel = {
-      enable = true;
-    };
-
     environment.systemPackages = with pkgs; [
-      umbrielPkg
       noctaliaPkg
     ];
 
@@ -42,7 +36,6 @@ in
       { pkgs, ... }:
       {
         imports = [
-          inputs.umbriel.homeModules.default
           inputs.noctalia.homeModules.default
         ];
 
@@ -58,27 +51,39 @@ in
         };
 
         programs.umbriel = {
-          enable = true;
           settings = {
             general = {
               autostart = [ "noctalia" ];
             };
-            input = {
-              focus_follows_mouse = true;
-              touchpad = {
-                natural_scroll = true;
-                tap_to_click = true;
-              };
-            };
+            layer_rule = [
+              {
+                match.namespace = "^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd|desktop-widget-[^\"]*)$";
+                blur = true;
+                blur_ignore_alpha = 0.5;
+                blur_popups = true;
+              }
+              {
+                match.namespace = "^noctalia-(notification|dock|panel|attached-panel|osd)$";
+                blur_optimized = false;
+              }
+            ];
             keybinds = {
-              "Mod+T" = "spawn:ghostty";
-              "Mod+Return" = "spawn:ghostty";
-              "Mod+D" = "spawn:noctalia msg panel-toggle launcher";
-              "Mod+Space" = "spawn:noctalia msg panel-toggle launcher";
-              "Mod+S" = "spawn:noctalia msg panel-toggle control-center";
-              "Super+Alt+L" = "spawn:noctalia msg session lock";
-              "Mod+Q" = "window-close";
-              "Alt+F4" = "window-close";
+              "Mod+D" = {
+                action = "spawn noctalia msg panel-toggle launcher";
+                repeat = false;
+              };
+              "Mod+Space" = {
+                action = "spawn noctalia msg panel-toggle launcher";
+                repeat = false;
+              };
+              "Mod+S" = {
+                action = "spawn noctalia msg panel-toggle control-center";
+                repeat = false;
+              };
+              "Super+Alt+L" = {
+                action = "spawn noctalia msg session lock";
+                repeat = false;
+              };
             };
           };
         };
