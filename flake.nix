@@ -54,6 +54,8 @@
     niri.inputs."nixpkgs".follows = "nixos-unstable";
     gpui-shell.url = "github:andre-brandao/gpui-shell";
     gpui-shell.inputs."nixpkgs".follows = "nixos-unstable";
+    cardwire.url = "github:OpenGamingCollective/cardwire";
+    cardwire.inputs."nixpkgs".follows = "nixos-unstable";
   };
 
   ## OUTPUTS ##################################################################
