@@ -36,9 +36,6 @@ in
     environment.systemPackages = with pkgs; [
       umbrielPkg
       gpuiShellPkg
-      xwayland-satellite
-      playerctl
-      swaylock
     ];
 
     home-manager.users.cole =
