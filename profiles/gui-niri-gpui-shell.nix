@@ -14,6 +14,7 @@ in
 {
   imports = [
     ./gui-wayland.nix
+    ../mixins/greetd.nix
   ];
 
   options = {
@@ -30,16 +31,6 @@ in
     programs.niri = {
       enable = true;
       package = niriPkg;
-    };
-
-    services.greetd = {
-      enable = true;
-      settings = {
-        default_session = {
-          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd ${niriPkg}/bin/niri-session";
-          user = "greeter";
-        };
-      };
     };
 
     environment.systemPackages = with pkgs; [

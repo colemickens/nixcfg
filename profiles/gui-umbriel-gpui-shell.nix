@@ -15,6 +15,7 @@ in
   imports = [
     ./gui-wayland.nix
     inputs.umbriel.nixosModules.default
+    ../mixins/greetd.nix
   ];
 
   options = {
@@ -30,16 +31,6 @@ in
   config = lib.mkIf cfg.enable {
     programs.umbriel = {
       enable = true;
-    };
-
-    services.greetd = {
-      enable = true;
-      settings = {
-        default_session = {
-          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd ${umbrielPkg}/bin/start-umbriel";
-          user = "greeter";
-        };
-      };
     };
 
     environment.systemPackages = with pkgs; [
