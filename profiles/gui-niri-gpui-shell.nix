@@ -42,8 +42,6 @@ in
       };
     };
 
-    services.supergfxd.enable = false;
-
     environment.systemPackages = with pkgs; [
       gpuiShellPkg
       xwayland-satellite

@@ -93,8 +93,6 @@ in
 
     hardware.cpu.amd.ryzen-smu.enable = true;
 
-    services.asusd.enable = false;
-
     environment.systemPackages = with pkgs; [
       ryzenadj
       qemu
