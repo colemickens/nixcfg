@@ -2,6 +2,8 @@
 
 {
   config = {
+    nixcfg.common.defaultNetworking = false;
+
     services = {
       power-profiles-daemon.enable = true;
       upower.enable = true;

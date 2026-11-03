@@ -19,7 +19,7 @@ in
 
     ../../profiles/gui-cosmic.nix
 
-    ../../profiles/addon-asus.nix
+    # ../../profiles/addon-asus.nix
     ../../profiles/addon-devtools.nix
     ../../profiles/addon-gaming.nix
     ../../profiles/addon-laptop.nix
@@ -85,6 +85,8 @@ in
     boot.zfs.requestEncryptionCredentials = [];
 
     hardware.cpu.amd.ryzen-smu.enable = true;
+
+    services.asusd.enable = false;
 
     environment.systemPackages = with pkgs; [
       ryzenadj
@@ -194,6 +196,8 @@ in
         "hid_asus"
       ];
       kernelParams = [
+        "pcie_aspm.policy=default"
+
         # restrict hungry zfs arc:
         # "zfs.zfs_arc_max=${builtins.toString (1023 * 1024 * (1024 * 6))}"
 
