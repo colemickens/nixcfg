@@ -13,7 +13,7 @@ def "main deploy" [ host: string ] {
 
 def "main selfup" [] {
   sudo nix build --accept-flake-config --profile "/nix/var/nix/profiles/system" $".#toplevels.(^hostname | str trim)"
-  sudo ./result/bin/switch-to-configuration switch
+  sudo ./result/bin/switch-to-configuration boot
 }
 
 def "main darwinup" [] {
