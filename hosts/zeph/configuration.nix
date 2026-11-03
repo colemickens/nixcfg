@@ -67,6 +67,13 @@ in
         nixcfg.desktop.cosmic.enable = false;
         nixcfg.desktop.niri-gpui-shell.enable = true;
       };
+      umbriel-noctalia.configuration = {
+        imports = [
+          ../../profiles/gui-umbriel-noctalia.nix
+        ];
+        nixcfg.desktop.cosmic.enable = false;
+        nixcfg.desktop.umbriel-noctalia.enable = true;
+      };
     };
 
     nix = {
