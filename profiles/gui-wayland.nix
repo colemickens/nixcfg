@@ -12,7 +12,7 @@
     inputs.cardwire.nixosModules.default
   ];
   config = {
-    services.cardwire.enable = true;
+    services.cardwire.enable = false;
 
     programs = {
       wshowkeys.enable = true;
