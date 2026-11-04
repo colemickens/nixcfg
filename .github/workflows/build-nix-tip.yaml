@@ -44,9 +44,9 @@ jobs:
     - uses: "DeterminateSystems/determinate-nix-action@main"
       with:
         extra-conf: |
-          extra-trusted-public-keys = cache.cum.navy-1:IFGBSHhUYM3c+2sJj0MMwcCG+9bOr5UahzdnPsV9JKA=
-          extra-substituters = https://cache.cum.navy
-          extra-trusted-substituters = https://cache.cum.navy
+          extra-trusted-public-keys = cache.cum.navy-1:IFGBSHhUYM3c+2sJj0MMwcCG+9bOr5UahzdnPsV9JKA= niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g=
+          extra-substituters = https://cache.cum.navy https://cache.numtide.com
+          extra-trusted-substituters = https://cache.cum.navy https://cache.numtide.com
     - name: Upgrade determinate-nixd to latest
       run: |
         sudo determinate-nixd upgrade --tools branch/main --daemon branch/main
