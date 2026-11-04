@@ -28,6 +28,7 @@
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.fx
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.goose-cli
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.herdr
+            inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.herdr-core
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.hermes-agent
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.maki
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.mistral-vibe
