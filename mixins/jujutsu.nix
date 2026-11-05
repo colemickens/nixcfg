@@ -44,6 +44,7 @@
               # pager = ":builtin";
             };
             revsets = {
+              bookmark-advance-to = "@-";
               git-sign-on-push = "~signed() & mine()";
             };
             template-aliases = {
