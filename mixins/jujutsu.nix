@@ -32,7 +32,7 @@
               );
             };
             git = {
-              sign-on-push = true;
+              sign-on-push = true; # deprecated in 0.47.1
               # abandon-unreachable-commits = true; # ? TODO: not sure if better to do manually
             };
             ui = {
@@ -42,6 +42,9 @@
                 "-s"
               ];
               # pager = ":builtin";
+            };
+            revsets = {
+              git-sign-on-push = "~signed() & mine()";
             };
             template-aliases = {
             };
