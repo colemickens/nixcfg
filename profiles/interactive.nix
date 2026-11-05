@@ -101,7 +101,7 @@
               dufs # rust static file server
               eza # eza-community replacement for exa
               fd
-              fx
+              # fx # disable due to vercel's hubris, for now...
               grex
               hexyl
               xh
