@@ -2,7 +2,7 @@ name: "nixcfg-build"
 concurrency: "nixcfg-build-${{ inputs.key || github.head_ref || github.ref_name }}"
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "**" ]
   workflow_call:
     inputs:
       key:
