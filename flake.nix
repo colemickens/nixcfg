@@ -60,6 +60,10 @@
     noctalia.inputs."nixpkgs".follows = "nixos-unstable";
     cardwire.url = "github:OpenGamingCollective/cardwire";
     cardwire.inputs."nixpkgs".follows = "nixos-unstable";
+
+    # bootvine
+    bootvine.url = "git+https://codeberg.org/wvhulle/bootvine";
+    bootvine.inputs."nixpkgs".follows = "nixos-unstable";
   };
 
   ## OUTPUTS ##################################################################
