@@ -49,6 +49,8 @@ in
     inputs.nixos-hardware.nixosModules.asus-zephyrus-ga402
 
     inputs.ucodenix.nixosModules.ucodenix
+
+    inputs.bootvine.nixosModules.default
   ];
   config = {
     nixpkgs.hostPlatform = "x86_64-linux";
@@ -113,6 +115,8 @@ in
       cpuModelId = "00A40F41";
       #cpuSerialNumber = "00A4-0F41-0000-0000-0000-0000"; # Replace with your processor's serial number
     };
+
+    services.bootvine.enable = true;
 
     services.zfs.autoScrub.pools = [ poolname ];
     fileSystems = {
