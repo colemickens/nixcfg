@@ -57,7 +57,10 @@
     determinateNix = {
       enable = true;
       customSettings = {
-        trusted-users = [ "cole" "@admin" ];
+        trusted-users = [
+          "cole"
+          "@admin"
+        ];
         access-tokens = "!include ${config.sops.secrets.nix-access-tokens.path}";
       };
       determinateNixd = {
@@ -80,7 +83,6 @@
 
     environment.systemPackages = with pkgs; [
       tmux
-      kitty
       gnused
       hexyl
       zstd
@@ -100,7 +102,7 @@
     ];
 
     environment.variables = {
-      TERMINFO_DIRS = [ "${pkgs.kitty.terminfo.outPath}/share/terminfo" ];
+      TERMINFO_DIRS = [ ];
     };
     programs.nix-index.enable = false;
 
