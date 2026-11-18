@@ -37,9 +37,9 @@
 
             inputs.chock.packages.${pkgs.stdenv.hostPlatform.system}.default
 
-            # separate tooling:
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.cli-proxy-api
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.cliproxy-rs
+            inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.magpie-cli
 
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.mercat
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.workmux

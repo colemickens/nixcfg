@@ -91,7 +91,6 @@ in
         dnsResolver = "1.1.1.1:53";
       };
       certs."${hostname}" = {
-        dnsPropagationCheck = true;
         domain = "${hostname}";
         extraDomainNames = [ "*.${hostname}" ];
         group = "nginx";
