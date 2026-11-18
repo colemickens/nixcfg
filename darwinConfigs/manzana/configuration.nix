@@ -109,6 +109,7 @@
     # Fonts
     fonts.packages = with pkgs; [
       iosevka-bin
+      sarasa-gothic
       fira-sans
     ];
 
