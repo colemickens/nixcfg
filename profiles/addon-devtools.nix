@@ -5,6 +5,12 @@
     home-manager.users.cole =
       { pkgs, config, ... }@hm:
       {
+        programs.gh = {
+          enable = true;
+          extensions = [
+            pkgs.gh-actions-lock
+          ];
+        };
         home = {
           packages = with pkgs; [
             alejandra
@@ -14,7 +20,6 @@
             nixpkgs-review
 
             gh
-            gh-actions-lock
 
             dfmt
             jless
