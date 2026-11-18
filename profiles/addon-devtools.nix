@@ -25,28 +25,21 @@
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.copilot-cli
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.cursor-agent
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.dsh
-            inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.fx
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.goose-cli
-            inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.herdr
-            inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.herdr-core
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.hermes-agent
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.maki
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.mistral-vibe
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.muse-code
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.omp
-            inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.opencode2
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.pi
-            inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.tuicr
 
-            # NAUGHTY LIST
-            # inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.jcode
-            # - no, jcode behaves like god-damned spyware, auto-updating, copying itself around. NO!
-            # inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.opencode
-            # - replaced by opencode2
+            inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.tuicr
 
             inputs.chock.packages.${pkgs.stdenv.hostPlatform.system}.default
 
             # separate tooling:
+            inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.cli-proxy-api
+            # inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.cliproxy-rs
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.mercat
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.workmux
 
