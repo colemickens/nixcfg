@@ -88,7 +88,6 @@
       zstd
       bottom
       unar
-      gh
       eza
       dua
       tio
