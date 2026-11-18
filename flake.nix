@@ -41,7 +41,7 @@
     microvm.inputs."nixpkgs".follows = "nixos-unstable";
 
     # llm-agents
-    llm-agents.url = "github:numtide/llm-agents.nix";
+    llm-agents.url = "github:colemickens/llm-agents.nix?ref=colemickens/main";
     
     # chock
     chock.url = "github:LilithSemi/chock";
