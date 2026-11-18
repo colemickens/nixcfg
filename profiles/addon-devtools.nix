@@ -13,6 +13,9 @@
             nixfmt
             nixpkgs-review
 
+            gh
+            gh-actions-lock
+
             dfmt
             jless
             frogmouth
