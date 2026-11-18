@@ -27,10 +27,10 @@ jobs:
         - "macos-26"
     runs-on: ${{ matrix.runner }}
     steps:
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - uses: actions/checkout@v7.0.1
       with:
         ref: ${{ env.GIT_REF }}
-    - uses: wimpysworld/nothing-but-nix@b2574ec1cf1462bee0a34de0fb6ff11ad3c43cb2 # v12
+    - uses: wimpysworld/nothing-but-nix@v12
     - uses: "DeterminateSystems/determinate-nix-action@main"
       with:
         extra-conf: |
@@ -49,7 +49,7 @@ jobs:
         nix flake check --keep-going --build-all -L
     - name: Breakpoint if tests failed
       if: failure()
-      uses: namespacelabs/breakpoint-action@18b8b1dc6ac651288cfffb20bee1a447632997a1 # v0.0.16
+      uses: namespacelabs/breakpoint-action@v0.0.16
       with:
         duration: 30m
         authorized-users: edolstra

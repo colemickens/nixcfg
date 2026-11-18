@@ -26,7 +26,7 @@ jobs:
         - "ubuntu-24.04"
     runs-on: ${{ matrix.runner }}
     steps:
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - uses: actions/checkout@v7.0.1
       with:
         ref: ${{ env.GIT_REF }}
     - uses: "DeterminateSystems/determinate-nix-action@main"
@@ -38,7 +38,7 @@ jobs:
     - uses: "DeterminateSystems/magic-nix-cache-action@main"
     - name: Breakpoint
       if: github.event_name == 'workflow_dispatch'
-      uses: namespacelabs/breakpoint-action@18b8b1dc6ac651288cfffb20bee1a447632997a1 # v0.0.16
+      uses: namespacelabs/breakpoint-action@v0.0.16
     - name: build + cache (jupitertwo)
       if: success() || failure()
       run: |
