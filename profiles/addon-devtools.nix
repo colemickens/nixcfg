@@ -28,6 +28,7 @@
             mergiraf
 
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.antigravity-cli
+            inputs.autolith.packages.${pkgs.stdenv.hostPlatform.system}.default
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.claude-code
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.codex
             inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.copilot-cli
