@@ -48,6 +48,9 @@
 
     # underclass
     underclass.url = "github:ghuntley/underclass";
+
+    # autolith
+    autolith.url = "github:lambda-symbolics/autolith";
   };
 
   ## OUTPUTS ##################################################################
