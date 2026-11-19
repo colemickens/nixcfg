@@ -54,6 +54,10 @@
       };
     };
 
+    environment.etc."nix/nix.custom.conf".text = ''
+      access-tokens = "!include ${config.sops.secrets.nix-access-tokens.path}"
+    '';
+
     determinateNix = {
       enable = true;
       customSettings = {
@@ -61,7 +65,6 @@
           "cole"
           "@admin"
         ];
-        access-tokens = "!include ${config.sops.secrets.nix-access-tokens.path}";
       };
       determinateNixd = {
         builder = {
