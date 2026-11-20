@@ -21,9 +21,9 @@ in
     ../../mixins/tailscale.nix
 
     # ./restic.nix
-    ./nginx-vaultwarden.nix
-    ./microvm-raisin-work-ts.nix
-    ./ai-services.nix
+    # ./nginx-vaultwarden.nix
+    # ./microvm-raisin-work-ts.nix
+    # ./ai-services.nix
 
     inputs.determinate.nixosModules.default
 
