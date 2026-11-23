@@ -20,6 +20,7 @@
             nixpkgs-review
 
             gh
+            keepass-diff
 
             dfmt
             jless
